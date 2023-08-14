@@ -10,21 +10,21 @@ namespace gamboamartin\inmuebles\controllers;
 
 use base\controller\init;
 use gamboamartin\errores\errores;
-use gamboamartin\inmuebles\html\inm_producto_infonavit_html;
-use gamboamartin\inmuebles\models\inm_producto_infonavit;
+use gamboamartin\inmuebles\html\inm_tipo_credito_html;
+use gamboamartin\inmuebles\models\inm_tipo_credito;
 use gamboamartin\system\_ctl_base;
 use gamboamartin\system\links_menu;
 use gamboamartin\template\html;
 use PDO;
 use stdClass;
 
-class controlador_inm_producto_infonavit extends _ctl_base {
+class controlador_inm_tipo_credito extends _ctl_base {
 
     public function __construct(PDO      $link, html $html = new \gamboamartin\template_1\html(),
                                 stdClass $paths_conf = new stdClass())
     {
-        $modelo = new inm_producto_infonavit(link: $link);
-        $html_ = new inm_producto_infonavit_html(html: $html);
+        $modelo = new inm_tipo_credito(link: $link);
+        $html_ = new inm_tipo_credito_html(html: $html);
         $obj_link = new links_menu(link: $link, registro_id:  $this->registro_id);
 
         $datatables = $this->init_datatable();
@@ -113,17 +113,16 @@ class controlador_inm_producto_infonavit extends _ctl_base {
     /**
      * Inicializa los elementos mostrables para datatables
      * @return stdClass
-     * @version 1.2.0
      */
     private function init_datatable(): stdClass
     {
-        $columns["inm_producto_infonavit_id"]["titulo"] = "Id";
-        $columns["inm_producto_infonavit_descripcion"]["titulo"] = "Descripcion";
-        $columns["inm_producto_infonavit_x"]["titulo"] = "X";
-        $columns["inm_producto_infonavit_y"]["titulo"] = "Y";
+        $columns["inm_tipo_credito_id"]["titulo"] = "Id";
+        $columns["inm_tipo_credito_descripcion"]["titulo"] = "Descripcion";
+        $columns["inm_tipo_credito_x"]["titulo"] = "X";
+        $columns["inm_tipo_credito_y"]["titulo"] = "Y";
 
-        $filtro = array("inm_producto_infonavit.id","inm_producto_infonavit.descripcion",
-            "inm_producto_infonavit.x",'inm_producto_infonavit.y');
+        $filtro = array("inm_tipo_credito.id","inm_tipo_credito.descripcion", "inm_tipo_credito.x",
+            'inm_tipo_credito.y');
 
         $datatables = new stdClass();
         $datatables->columns = $columns;
