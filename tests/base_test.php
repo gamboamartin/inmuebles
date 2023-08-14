@@ -1,5 +1,5 @@
 <?php
-namespace gamboamartin\inmobiliaria\tests;
+namespace gamboamartin\inmuebles\tests;
 use base\orm\modelo_base;
 
 
@@ -20,6 +20,6 @@ class base_test{
         }
         return $del;
     }
-    
+
 
 }
