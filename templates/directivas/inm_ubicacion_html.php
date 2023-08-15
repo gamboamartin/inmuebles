@@ -1,7 +1,6 @@
 <?php
 namespace gamboamartin\inmuebles\html;
 use gamboamartin\errores\errores;
-use gamboamartin\inmuebles\models\inm_producto_infonavit;
 use gamboamartin\inmuebles\models\inm_ubicacion;
 use gamboamartin\system\html_controler;
 use PDO;

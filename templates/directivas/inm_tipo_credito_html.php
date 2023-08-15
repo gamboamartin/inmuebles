@@ -2,6 +2,7 @@
 namespace gamboamartin\inmuebles\html;
 use gamboamartin\errores\errores;
 use gamboamartin\inmuebles\models\inm_producto_infonavit;
+use gamboamartin\inmuebles\models\inm_tipo_credito;
 use gamboamartin\system\html_controler;
 use PDO;
 use stdClass;
@@ -11,7 +12,7 @@ class inm_tipo_credito_html extends html_controler {
     public function select_inm_tipo_credito_id(int $cols, bool $con_registros, int $id_selected, PDO $link,
                                       bool $disabled = false, array $filtro = array()): array|string
     {
-        $modelo = new inm_producto_infonavit(link: $link);
+        $modelo = new inm_tipo_credito(link: $link);
 
         $select = $this->select_catalogo(cols: $cols, con_registros: $con_registros, id_selected: $id_selected,
             modelo: $modelo, disabled: $disabled, filtro: $filtro, label: 'Tipo de Credito', required: true);
