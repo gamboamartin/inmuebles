@@ -18,14 +18,16 @@ class inm_comprador extends _modelo_parent{
 
         $campos_obligatorios = array('inm_producto_infonavit_id','inm_attr_tipo_credito_id','inm_destino_credito_id',
             'es_segundo_credito','inm_plazo_credito_sc_id','descuento_pension_alimenticia_dh',
-            'descuento_pension_alimenticia_fc','monto_credito_solicitado_dh','monto_ahorro_voluntario');
+            'descuento_pension_alimenticia_fc','monto_credito_solicitado_dh','monto_ahorro_voluntario','nombre',
+            'apellido_paterno');
 
         $columnas_extra= array();
         $renombres= array();
 
         $atributos_criticos = array('inm_producto_infonavit_id','inm_attr_tipo_credito_id','inm_destino_credito_id',
             'es_segundo_credito','inm_plazo_credito_sc_id','descuento_pension_alimenticia_dh',
-            'descuento_pension_alimenticia_fc','monto_credito_solicitado_dh','monto_ahorro_voluntario');
+            'descuento_pension_alimenticia_fc','monto_credito_solicitado_dh','monto_ahorro_voluntario','nombre',
+            'apellido_paterno','apellido_materno');
 
         parent::__construct(link: $link, tabla: $tabla, campos_obligatorios: $campos_obligatorios,
             columnas: $columnas, columnas_extra: $columnas_extra, renombres: $renombres,
