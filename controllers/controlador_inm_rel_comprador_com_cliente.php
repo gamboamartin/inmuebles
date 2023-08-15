@@ -8,23 +8,22 @@
  */
 namespace gamboamartin\inmuebles\controllers;
 
-use base\controller\init;
 use gamboamartin\errores\errores;
-use gamboamartin\inmuebles\html\inm_plazo_credito_sc_html;
-use gamboamartin\inmuebles\models\inm_plazo_credito_sc;
+use gamboamartin\inmuebles\html\inm_rel_comprador_com_cliente_html;
+use gamboamartin\inmuebles\models\inm_rel_comprador_com_cliente;
 use gamboamartin\system\_ctl_base;
 use gamboamartin\system\links_menu;
 use gamboamartin\template\html;
 use PDO;
 use stdClass;
 
-class controlador_inm_plazo_credito_sc extends _ctl_base {
+class controlador_inm_rel_comprador_com_cliente extends _ctl_base {
 
     public function __construct(PDO      $link, html $html = new \gamboamartin\template_1\html(),
                                 stdClass $paths_conf = new stdClass())
     {
-        $modelo = new inm_plazo_credito_sc(link: $link);
-        $html_ = new inm_plazo_credito_sc_html(html: $html);
+        $modelo = new inm_rel_comprador_com_cliente(link: $link);
+        $html_ = new inm_rel_comprador_com_cliente_html(html: $html);
         $obj_link = new links_menu(link: $link, registro_id:  $this->registro_id);
 
         $datatables = $this->init_datatable();
@@ -45,7 +44,16 @@ class controlador_inm_plazo_credito_sc extends _ctl_base {
             return $this->retorno_error(
                 mensaje: 'Error al inicializar alta',data:  $r_alta, header: $header,ws:  $ws);
         }
-        $keys_selects = array();
+        $keys_selects = $this->key_select(cols:6, con_registros: true,filtro:  array(), key: 'inm_comprador_id',
+            keys_selects: array(), id_selected: -1, label: 'Comprador');
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects, header: $header,ws:  $ws);
+        }
+        $keys_selects = $this->key_select(cols:6, con_registros: true,filtro:  array(), key: 'com_cliente_id',
+            keys_selects: $keys_selects, id_selected: -1, label: 'Cliente');
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects, header: $header,ws:  $ws);
+        }
         $inputs = $this->inputs(keys_selects: $keys_selects);
         if(errores::$error){
             return $this->retorno_error(
@@ -58,10 +66,13 @@ class controlador_inm_plazo_credito_sc extends _ctl_base {
     protected function campos_view(): array
     {
         $keys = new stdClass();
-        $keys->inputs = array('descripcion', 'x', 'y');
+        $keys->inputs = array();
         $keys->selects = array();
 
+
         $init_data = array();
+        $init_data['com_cliente'] = "gamboamartin\\comercial";
+        $init_data['inm_comprador'] = "gamboamartin\\inmuebles";
         $campos_view = $this->campos_view_base(init_data: $init_data,keys:  $keys);
 
         if(errores::$error){
@@ -75,20 +86,6 @@ class controlador_inm_plazo_credito_sc extends _ctl_base {
     protected function key_selects_txt(array $keys_selects): array
     {
 
-        $keys_selects = (new init())->key_select_txt(cols: 12,key: 'descripcion', keys_selects:$keys_selects,
-            place_holder: 'Descripcion');
-        if(errores::$error){
-            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
-        }
-        $keys_selects = (new init())->key_select_txt(cols: 6,key: 'x', keys_selects:$keys_selects, place_holder: 'x');
-        if(errores::$error){
-            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
-        }
-        $keys_selects = (new init())->key_select_txt(cols: 6,key: 'y', keys_selects:$keys_selects, place_holder: 'y');
-        if(errores::$error){
-            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
-        }
-
         return $keys_selects;
     }
 
@@ -101,7 +98,21 @@ class controlador_inm_plazo_credito_sc extends _ctl_base {
                 mensaje: 'Error al generar salida de template',data:  $r_modifica,header: $header,ws: $ws);
         }
 
-        $keys_selects = array();
+
+        $keys_selects = $this->key_select(cols:6, con_registros: true,filtro:  array(), key: 'inm_comprador_id',
+            keys_selects: array(), id_selected: $this->registro['inm_rel_comprador_com_cliente_inm_comprador_id'],
+            label: 'Comprador');
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects, header: $header,ws:  $ws);
+        }
+
+        $keys_selects = $this->key_select(cols:6, con_registros: true,filtro:  array(), key: 'com_cliente_id',
+            keys_selects: $keys_selects, id_selected: $this->registro['inm_rel_comprador_com_cliente_com_cliente_id'],
+            label: 'Comprador');
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects, header: $header,ws:  $ws);
+        }
+
         $base = $this->base_upd(keys_selects: $keys_selects, params: array(),params_ajustados: array());
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al integrar base',data:  $base, header: $header,ws:  $ws);
@@ -113,17 +124,15 @@ class controlador_inm_plazo_credito_sc extends _ctl_base {
     /**
      * Inicializa los elementos mostrables para datatables
      * @return stdClass
-     * @version 1.2.0
      */
     private function init_datatable(): stdClass
     {
-        $columns["inm_plazo_credito_sc_id"]["titulo"] = "Id";
-        $columns["inm_plazo_credito_sc_descripcion"]["titulo"] = "Descripcion";
-        $columns["inm_plazo_credito_sc_x"]["titulo"] = "X";
-        $columns["inm_plazo_credito_sc_y"]["titulo"] = "Y";
+        $columns["inm_rel_comprador_com_cliente_id"]["titulo"] = "Id";
+        $columns["inm_comprador_descripcion"]["titulo"] = "Comprador";
+        $columns["com_cliente_razon_social"]["titulo"] = "Cliente";
 
-        $filtro = array("inm_plazo_credito_sc.id","inm_plazo_credito_sc.descripcion",
-            "inm_plazo_credito_sc.x",'inm_plazo_credito_sc.y');
+        $filtro = array("inm_rel_comprador_com_cliente.id","inm_comprador.descripcion",
+            "com_cliente.razon_social");
 
         $datatables = new stdClass();
         $datatables->columns = $columns;
