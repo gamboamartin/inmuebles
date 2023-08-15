@@ -3,6 +3,7 @@
 namespace gamboamartin\inmuebles\models;
 
 use base\orm\_modelo_parent;
+use gamboamartin\comercial\models\com_cliente;
 use gamboamartin\errores\errores;
 use PDO;
 use stdClass;
@@ -36,6 +37,7 @@ class inm_comprador extends _modelo_parent{
 
     public function alta_bd(array $keys_integra_ds = array('codigo', 'descripcion')): array|stdClass
     {
+        $registro_entrada = $this->registro;
 
         if(!isset($this->registro['descripcion'])){
             $descripcion = $this->registro['nombre'];
@@ -55,13 +57,40 @@ class inm_comprador extends _modelo_parent{
             return $this->error->error(mensaje: 'Error al insertar',data:  $r_alta_bd);
         }
 
-        $razon_social = $r_alta_bd->registro_puro['nombre'];
-        $razon_social .= $r_alta_bd->registro_puro['apellido_paterno'];
-        $razon_social .= $r_alta_bd->registro_puro['apellido_materno'];
+       // print_r($this->registro);exit;
+
+        $razon_social = $registro_entrada['nombre'];
+        $razon_social .= $registro_entrada['apellido_paterno'];
+        $razon_social .= $registro_entrada['apellido_materno'];
 
         $com_cliente_ins['razon_social'] = trim($razon_social);
-        $com_cliente_ins['rfc'] = $this->registro['rfc'];
-        $com_cliente_ins['dp_calle_pertenece_id'] = $this->registro['dp_calle_pertenece_id'];
+        $com_cliente_ins['rfc'] = $registro_entrada['rfc'];
+        $com_cliente_ins['dp_calle_pertenece_id'] = $registro_entrada['dp_calle_pertenece_id'];
+        $com_cliente_ins['numero_exterior'] = $registro_entrada['numero_exterior'];
+        $com_cliente_ins['numero_interior'] = $registro_entrada['numero_interior'];
+        $com_cliente_ins['telefono'] = $registro_entrada['telefono'];
+        $com_cliente_ins['cat_sat_regimen_fiscal_id'] = $registro_entrada['cat_sat_regimen_fiscal_id'];
+        $com_cliente_ins['cat_sat_moneda_id'] = $registro_entrada['cat_sat_moneda_id'];
+        $com_cliente_ins['cat_sat_forma_pago_id'] = $registro_entrada['cat_sat_forma_pago_id'];
+        $com_cliente_ins['cat_sat_metodo_pago_id'] = $registro_entrada['cat_sat_metodo_pago_id'];
+        $com_cliente_ins['cat_sat_uso_cfdi_id'] = $registro_entrada['cat_sat_uso_cfdi_id'];
+        $com_cliente_ins['cat_sat_tipo_de_comprobante_id'] = 1;
+        $com_cliente_ins['codigo'] = $registro_entrada['rfc'];
+        $com_cliente_ins['com_tipo_cliente_id'] = $registro_entrada['com_tipo_cliente_id'];
+        $com_cliente_ins['cat_sat_tipo_persona_id'] = $registro_entrada['cat_sat_tipo_persona_id'];
+
+        $r_com_cliente = (new com_cliente(link: $this->link))->alta_registro(registro: $com_cliente_ins);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al insertar cliente',data:  $r_com_cliente);
+        }
+
+        $inm_rel_comprador_com_cliente_ins['inm_comprador_id'] = $r_alta_bd->registro_id;
+        $inm_rel_comprador_com_cliente_ins['com_cliente_id'] = $r_com_cliente->registro_id;
+
+        $r_inm_rel_comprador_com_cliente_ins = (new inm_rel_comprador_com_cliente(link: $this->link))->alta_registro(registro: $inm_rel_comprador_com_cliente_ins);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al insertar relacion',data:  $r_inm_rel_comprador_com_cliente_ins);
+        }
 
         return $r_alta_bd;
 
