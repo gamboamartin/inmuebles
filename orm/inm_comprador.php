@@ -55,7 +55,13 @@ class inm_comprador extends _modelo_parent{
             return $this->error->error(mensaje: 'Error al insertar',data:  $r_alta_bd);
         }
 
+        $razon_social = $r_alta_bd->registro_puro['nombre'];
+        $razon_social .= $r_alta_bd->registro_puro['apellido_paterno'];
+        $razon_social .= $r_alta_bd->registro_puro['apellido_materno'];
 
+        $com_cliente_ins['razon_social'] = trim($razon_social);
+        $com_cliente_ins['rfc'] = $this->registro['rfc'];
+        $com_cliente_ins['dp_calle_pertenece_id'] = $this->registro['dp_calle_pertenece_id'];
 
         return $r_alta_bd;
 

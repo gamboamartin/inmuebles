@@ -7,6 +7,15 @@
 <?php echo $controlador->inputs->apellido_materno; ?>
 <?php echo $controlador->inputs->nombre; ?>
 
+<?php echo $controlador->inputs->dp_pais_id; ?>
+<?php echo $controlador->inputs->dp_estado_id; ?>
+<?php echo $controlador->inputs->dp_municipio_id; ?>
+<?php echo $controlador->inputs->dp_cp_id; ?>
+<?php echo $controlador->inputs->dp_colonia_postal_id; ?>
+<?php echo $controlador->inputs->dp_calle_pertenece_id; ?>
+<?php echo $controlador->inputs->numero_exterior; ?>
+<?php echo $controlador->inputs->numero_interior; ?>
+
 <?php echo $controlador->inputs->inm_producto_infonavit_id; ?>
 <?php echo $controlador->inputs->inm_attr_tipo_credito_id; ?>
 <?php echo $controlador->inputs->inm_destino_credito_id; ?>

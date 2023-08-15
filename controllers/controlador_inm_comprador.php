@@ -73,6 +73,69 @@ class controlador_inm_comprador extends _ctl_base {
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects, header: $header,ws:  $ws);
         }
+
+
+        /**
+         * DOMICILIO
+         */
+
+        $columns_ds = array('dp_pais_descripcion');
+        $keys_selects = $this->key_select(cols:6, con_registros: true,filtro:  array(), key: 'dp_pais_id',
+            keys_selects: $keys_selects, id_selected: 151, label: 'Pais', columns_ds : $columns_ds);
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects,
+                header: $header,ws:  $ws);
+        }
+        $filtro = array();
+        $filtro['dp_pais.id'] = 151;
+
+        $columns_ds = array('dp_estado_descripcion');
+
+        $keys_selects = $this->key_select(cols:6, con_registros: true,filtro:  $filtro, key: 'dp_estado_id',
+            keys_selects: $keys_selects, id_selected: 14, label: 'Estado', columns_ds: $columns_ds);
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects,
+                header: $header,ws:  $ws);
+        }
+
+        $filtro = array();
+        $filtro['dp_estado.id'] = 14;
+
+        $columns_ds = array('dp_municipio_descripcion');
+
+        $keys_selects = $this->key_select(cols:6, con_registros: true,filtro:  $filtro, key: 'dp_municipio_id',
+            keys_selects: $keys_selects, id_selected: -1, label: 'Municipio', columns_ds: $columns_ds);
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects,
+                header: $header,ws:  $ws);
+        }
+
+        $columns_ds = array('dp_cp_descripcion');
+
+        $keys_selects = $this->key_select(cols:6, con_registros: true,filtro:  $filtro, key: 'dp_cp_id',
+            keys_selects: $keys_selects, id_selected: -1, label: 'CP', columns_ds: $columns_ds);
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects,
+                header: $header,ws:  $ws);
+        }
+
+        $columns_ds = array('dp_colonia_descripcion');
+        $keys_selects = $this->key_select(cols:6, con_registros: true,filtro:  $filtro, key: 'dp_colonia_postal_id',
+            keys_selects: $keys_selects, id_selected: -1, label: 'Colonia', columns_ds: $columns_ds);
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects,
+                header: $header,ws:  $ws);
+        }
+
+        $columns_ds = array('dp_calle_descripcion');
+        $keys_selects = $this->key_select(cols:6, con_registros: true,filtro:  $filtro, key: 'dp_calle_pertenece_id',
+            keys_selects: $keys_selects, id_selected: -1, label: 'Calle', columns_ds: $columns_ds);
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects,
+                header: $header,ws:  $ws);
+        }
+
+
         $inputs = $this->inputs(keys_selects: $keys_selects);
         if(errores::$error){
             return $this->retorno_error(
@@ -87,7 +150,7 @@ class controlador_inm_comprador extends _ctl_base {
         $keys = new stdClass();
         $keys->inputs = array('descripcion', 'es_segundo_credito', 'descuento_pension_alimenticia_dh',
             'descuento_pension_alimenticia_fc','monto_credito_solicitado_dh','monto_ahorro_voluntario','nss','curp',
-            'rfc','apellido_paterno','apellido_materno','nombre');
+            'rfc','apellido_paterno','apellido_materno','nombre','numero_exterior','numero_interior');
         $keys->selects = array();
 
 
@@ -96,6 +159,14 @@ class controlador_inm_comprador extends _ctl_base {
         $init_data['inm_attr_tipo_credito'] = "gamboamartin\\inmuebles";
         $init_data['inm_destino_credito'] = "gamboamartin\\inmuebles";
         $init_data['inm_plazo_credito_sc'] = "gamboamartin\\inmuebles";
+
+        $init_data['dp_pais'] = "gamboamartin\\direccion_postal";
+        $init_data['dp_estado'] = "gamboamartin\\direccion_postal";
+        $init_data['dp_municipio'] = "gamboamartin\\direccion_postal";
+        $init_data['dp_cp'] = "gamboamartin\\direccion_postal";
+        $init_data['dp_colonia_postal'] = "gamboamartin\\direccion_postal";
+        $init_data['dp_calle_pertenece'] = "gamboamartin\\direccion_postal";
+
         $campos_view = $this->campos_view_base(init_data: $init_data,keys:  $keys);
 
         if(errores::$error){
@@ -161,6 +232,17 @@ class controlador_inm_comprador extends _ctl_base {
         }
         $keys_selects = (new init())->key_select_txt(cols: 12,key: 'nombre',
             keys_selects:$keys_selects, place_holder: 'Nombre(s)');
+        if(errores::$error){
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        }
+
+        $keys_selects = (new init())->key_select_txt(cols: 12,key: 'numero_exterior',
+            keys_selects:$keys_selects, place_holder: 'Exterior');
+        if(errores::$error){
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        }
+        $keys_selects = (new init())->key_select_txt(cols: 12,key: 'numero_interior',
+            keys_selects:$keys_selects, place_holder: 'Interior');
         if(errores::$error){
             return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
