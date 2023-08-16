@@ -47,139 +47,28 @@ class controlador_inm_comprador extends _ctl_base {
             return $this->retorno_error(
                 mensaje: 'Error al inicializar alta',data:  $r_alta, header: $header,ws:  $ws);
         }
-        $columns_ds[] = 'inm_producto_infonavit_descripcion';
-        $keys_selects = $this->key_select(cols:6, con_registros: true,filtro:  array(), key: 'inm_producto_infonavit_id',
-            keys_selects: array(), id_selected: -1, label: 'Producto',columns_ds: $columns_ds);
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects, header: $header,ws:  $ws);
-        }
-        $columns_ds = array();
-        $columns_ds[] = 'inm_tipo_credito_descripcion';
-        $columns_ds[] = 'inm_attr_tipo_credito_descripcion';
-        $keys_selects = $this->key_select(cols:6, con_registros: true,filtro:  array(), key: 'inm_attr_tipo_credito_id',
-            keys_selects: $keys_selects, id_selected: -1, label: 'Tipo de Credito', columns_ds: $columns_ds);
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects, header: $header,ws:  $ws);
-        }
-
-        $columns_ds = array();
-        $columns_ds[] = 'inm_destino_credito_descripcion';
-
-        $keys_selects = $this->key_select(cols:12, con_registros: true,filtro:  array(), key: 'inm_destino_credito_id',
-            keys_selects: $keys_selects, id_selected: -1, label: 'Destino del Credito', columns_ds: $columns_ds);
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects, header: $header,ws:  $ws);
-        }
-        $keys_selects = $this->key_select(cols:6, con_registros: true,filtro:  array(), key: 'inm_plazo_credito_sc_id',
-            keys_selects: $keys_selects, id_selected: -1, label: 'Plazo Segundo Credito');
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects, header: $header,ws:  $ws);
-        }
 
 
-        /**
-         * DOMICILIO
-         */
+        $keys_selects = array();
 
-        $columns_ds = array('dp_pais_descripcion');
-        $keys_selects = $this->key_select(cols:6, con_registros: true,filtro:  array(), key: 'dp_pais_id',
-            keys_selects: $keys_selects, id_selected: 151, label: 'Pais', columns_ds : $columns_ds);
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects,
-                header: $header,ws:  $ws);
-        }
-        $filtro = array();
-        $filtro['dp_pais.id'] = 151;
-
-        $columns_ds = array('dp_estado_descripcion');
-
-        $keys_selects = $this->key_select(cols:6, con_registros: true,filtro:  $filtro, key: 'dp_estado_id',
-            keys_selects: $keys_selects, id_selected: 14, label: 'Estado', columns_ds: $columns_ds);
+        $keys_selects = $this->ks_infonavit(keys_selects: $keys_selects, row_upd: new stdClass());
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects,
                 header: $header,ws:  $ws);
         }
 
-        $filtro = array();
-        $filtro['dp_estado.id'] = 14;
-
-        $columns_ds = array('dp_municipio_descripcion');
-
-        $keys_selects = $this->key_select(cols:6, con_registros: true,filtro:  $filtro, key: 'dp_municipio_id',
-            keys_selects: $keys_selects, id_selected: -1, label: 'Municipio', columns_ds: $columns_ds);
+        $keys_selects = $this->ks_dp(keys_selects: $keys_selects, row_upd: new stdClass());
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects,
                 header: $header,ws:  $ws);
         }
 
-        $columns_ds = array('dp_cp_descripcion');
-
-        $keys_selects = $this->key_select(cols:6, con_registros: true,filtro:  $filtro, key: 'dp_cp_id',
-            keys_selects: $keys_selects, id_selected: -1, label: 'CP', columns_ds: $columns_ds);
+        $keys_selects = $this->ks_fiscales(keys_selects: $keys_selects, row_upd: new stdClass());
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects,
                 header: $header,ws:  $ws);
         }
 
-        $columns_ds = array('dp_colonia_descripcion');
-        $keys_selects = $this->key_select(cols:6, con_registros: true,filtro:  $filtro, key: 'dp_colonia_postal_id',
-            keys_selects: $keys_selects, id_selected: -1, label: 'Colonia', columns_ds: $columns_ds);
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects,
-                header: $header,ws:  $ws);
-        }
-
-        $columns_ds = array('dp_calle_descripcion');
-        $keys_selects = $this->key_select(cols:6, con_registros: true,filtro:  $filtro, key: 'dp_calle_pertenece_id',
-            keys_selects: $keys_selects, id_selected: -1, label: 'Calle', columns_ds: $columns_ds);
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects,
-                header: $header,ws:  $ws);
-        }
-
-        /**
-         * FISCALES
-         */
-
-        $columns_ds = array('cat_sat_regimen_fiscal_descripcion');
-        $keys_selects = $this->key_select(cols:6, con_registros: true,filtro:  array(), key: 'cat_sat_regimen_fiscal_id',
-            keys_selects: $keys_selects, id_selected: 605, label: 'Regimen Fiscal', columns_ds: $columns_ds);
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects,
-                header: $header,ws:  $ws);
-        }
-
-        $columns_ds = array('cat_sat_moneda_descripcion');
-        $keys_selects = $this->key_select(cols:6, con_registros: true,filtro:  array(), key: 'cat_sat_moneda_id',
-            keys_selects: $keys_selects, id_selected: 161, label: 'Moneda', columns_ds: $columns_ds);
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects,
-                header: $header,ws:  $ws);
-        }
-
-        $columns_ds = array('cat_sat_forma_pago_descripcion');
-        $keys_selects = $this->key_select(cols:6, con_registros: true,filtro:  array(), key: 'cat_sat_forma_pago_id',
-            keys_selects: $keys_selects, id_selected: 99, label: 'Forma de Pago', columns_ds: $columns_ds);
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects,
-                header: $header,ws:  $ws);
-        }
-
-        $columns_ds = array('cat_sat_metodo_pago_descripcion');
-        $keys_selects = $this->key_select(cols:6, con_registros: true,filtro:  array(), key: 'cat_sat_metodo_pago_id',
-            keys_selects: $keys_selects, id_selected: 2, label: 'Metodo de Pago', columns_ds: $columns_ds);
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects,
-                header: $header,ws:  $ws);
-        }
-
-        $columns_ds = array('cat_sat_uso_cfdi_descripcion');
-        $keys_selects = $this->key_select(cols:6, con_registros: true,filtro:  array(), key: 'cat_sat_uso_cfdi_id',
-            keys_selects: $keys_selects, id_selected: 22, label: 'Uso de CFDI', columns_ds: $columns_ds);
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects,
-                header: $header,ws:  $ws);
-        }
 
         $columns_ds = array('com_tipo_cliente_descripcion');
         $keys_selects = $this->key_select(cols:6, con_registros: true,filtro:  array(), key: 'com_tipo_cliente_id',
@@ -189,15 +78,10 @@ class controlador_inm_comprador extends _ctl_base {
                 header: $header,ws:  $ws);
         }
 
-        $columns_ds = array('cat_sat_tipo_persona_descripcion');
-        $keys_selects = $this->key_select(cols:6, con_registros: true,filtro:  array(), key: 'cat_sat_tipo_persona_id',
-            keys_selects: $keys_selects, id_selected: 5, label: 'Tipo de Persona', columns_ds: $columns_ds);
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects,
-                header: $header,ws:  $ws);
-        }
-
-
+        $this->row_upd->descuento_pension_alimenticia_dh = 0;
+        $this->row_upd->monto_credito_solicitado_dh = 0;
+        $this->row_upd->descuento_pension_alimenticia_fc = 0;
+        $this->row_upd->monto_ahorro_voluntario = 0;
 
         $inputs = $this->inputs(keys_selects: $keys_selects);
         if(errores::$error){
@@ -329,6 +213,204 @@ class controlador_inm_comprador extends _ctl_base {
         return $keys_selects;
     }
 
+    private function ks_dp(array $keys_selects, stdClass $row_upd): array
+    {
+        if(!isset($row_upd->dp_pais_id)){
+            $row_upd->dp_pais_id = 151;
+        }
+        if(!isset($row_upd->dp_estado_id)){
+            $row_upd->dp_estado_id = 14;
+        }
+        if(!isset($row_upd->dp_municipio_id)){
+            $row_upd->dp_municipio_id = -1;
+        }
+        if(!isset($row_upd->dp_cp_id)){
+            $row_upd->dp_cp_id = -1;
+        }
+        if(!isset($row_upd->dp_colonia_postal_id)){
+            $row_upd->dp_colonia_postal_id = -1;
+        }
+        if(!isset($row_upd->dp_calle_pertenece_id)){
+            $row_upd->dp_calle_pertenece_id = -1;
+        }
+
+        $columns_ds = array('dp_pais_descripcion');
+        $keys_selects = $this->key_select(cols:6, con_registros: true,filtro:  array(), key: 'dp_pais_id',
+            keys_selects: $keys_selects, id_selected: $row_upd->dp_pais_id, label: 'Pais', columns_ds : $columns_ds);
+        if(errores::$error){
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        }
+        $filtro = array();
+        $filtro['dp_pais.id'] = $row_upd->dp_pais_id;
+
+        $columns_ds = array('dp_estado_descripcion');
+
+        $keys_selects = $this->key_select(cols:6, con_registros: true,filtro:  $filtro, key: 'dp_estado_id',
+            keys_selects: $keys_selects, id_selected: $row_upd->dp_estado_id, label: 'Estado', columns_ds: $columns_ds);
+        if(errores::$error){
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        }
+
+        $filtro = array();
+        $filtro['dp_estado.id'] = $row_upd->dp_estado_id;
+
+        $columns_ds = array('dp_municipio_descripcion');
+
+        $keys_selects = $this->key_select(cols:6, con_registros: true,filtro:  $filtro, key: 'dp_municipio_id',
+            keys_selects: $keys_selects, id_selected: $row_upd->dp_municipio_id, label: 'Municipio', columns_ds: $columns_ds);
+        if(errores::$error){
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        }
+
+        $columns_ds = array('dp_cp_descripcion');
+
+        $keys_selects = $this->key_select(cols:6, con_registros: true,filtro:  $filtro, key: 'dp_cp_id',
+            keys_selects: $keys_selects, id_selected: $row_upd->dp_cp_id, label: 'CP', columns_ds: $columns_ds);
+        if(errores::$error){
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        }
+
+        $columns_ds = array('dp_colonia_descripcion');
+        $keys_selects = $this->key_select(cols:6, con_registros: true,filtro:  $filtro, key: 'dp_colonia_postal_id',
+            keys_selects: $keys_selects, id_selected: $row_upd->dp_colonia_postal_id, label: 'Colonia', columns_ds: $columns_ds);
+        if(errores::$error){
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        }
+
+        $columns_ds = array('dp_calle_descripcion');
+        $keys_selects = $this->key_select(cols:6, con_registros: true,filtro:  $filtro, key: 'dp_calle_pertenece_id',
+            keys_selects: $keys_selects, id_selected: $row_upd->dp_calle_pertenece_id, label: 'Calle', columns_ds: $columns_ds);
+        if(errores::$error){
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        }
+        return $keys_selects;
+    }
+
+    private function ks_fiscales(array $keys_selects, stdClass $row_upd): array
+    {
+
+        if(!isset($row_upd->cat_sat_regimen_fiscal_id)){
+            $row_upd->cat_sat_regimen_fiscal_id = 605;
+        }
+        if(!isset($row_upd->cat_sat_moneda_id)){
+            $row_upd->cat_sat_moneda_id = 161;
+        }
+        if(!isset($row_upd->cat_sat_forma_pago_id)){
+            $row_upd->cat_sat_forma_pago_id = 99;
+        }
+        if(!isset($row_upd->cat_sat_metodo_pago_id)){
+            $row_upd->cat_sat_metodo_pago_id = 2;
+        }
+        if(!isset($row_upd->cat_sat_uso_cfdi_id)){
+            $row_upd->cat_sat_uso_cfdi_id = 22;
+        }
+        if(!isset($row_upd->cat_sat_tipo_persona_id)){
+            $row_upd->cat_sat_tipo_persona_id = 5;
+        }
+
+        $columns_ds = array('cat_sat_regimen_fiscal_descripcion');
+        $keys_selects = $this->key_select(cols:6, con_registros: true,filtro:  array(), key: 'cat_sat_regimen_fiscal_id',
+            keys_selects: $keys_selects, id_selected: $row_upd->cat_sat_regimen_fiscal_id, label: 'Regimen Fiscal', columns_ds: $columns_ds);
+        if(errores::$error){
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        }
+
+        $columns_ds = array('cat_sat_moneda_descripcion');
+        $keys_selects = $this->key_select(cols:6, con_registros: true,filtro:  array(), key: 'cat_sat_moneda_id',
+            keys_selects: $keys_selects, id_selected: $row_upd->cat_sat_moneda_id, label: 'Moneda', columns_ds: $columns_ds);
+        if(errores::$error){
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        }
+
+        $columns_ds = array('cat_sat_forma_pago_descripcion');
+        $keys_selects = $this->key_select(cols:6, con_registros: true,filtro:  array(), key: 'cat_sat_forma_pago_id',
+            keys_selects: $keys_selects, id_selected: $row_upd->cat_sat_forma_pago_id, label: 'Forma de Pago', columns_ds: $columns_ds);
+        if(errores::$error){
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        }
+
+        $columns_ds = array('cat_sat_metodo_pago_descripcion');
+        $keys_selects = $this->key_select(cols:6, con_registros: true,filtro:  array(), key: 'cat_sat_metodo_pago_id',
+            keys_selects: $keys_selects, id_selected: $row_upd->cat_sat_metodo_pago_id, label: 'Metodo de Pago', columns_ds: $columns_ds);
+        if(errores::$error){
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        }
+
+        $columns_ds = array('cat_sat_uso_cfdi_descripcion');
+        $keys_selects = $this->key_select(cols:6, con_registros: true,filtro:  array(), key: 'cat_sat_uso_cfdi_id',
+            keys_selects: $keys_selects, id_selected: $row_upd->cat_sat_uso_cfdi_id, label: 'Uso de CFDI', columns_ds: $columns_ds);
+        if(errores::$error){
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        }
+
+
+        $columns_ds = array('cat_sat_tipo_persona_descripcion');
+        $keys_selects = $this->key_select(cols:6, con_registros: true,filtro:  array(), key: 'cat_sat_tipo_persona_id',
+            keys_selects: $keys_selects, id_selected: $row_upd->cat_sat_tipo_persona_id, label: 'Tipo de Persona', columns_ds: $columns_ds);
+        if(errores::$error){
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        }
+        return $keys_selects;
+    }
+
+    /**
+     * Integra los parametros para la generacion de inputs de tipo infonavit
+     * @param array $keys_selects Configuraciones precargadas
+     * @param stdClass $row_upd Registro en proceso
+     * @return array
+     */
+    private function ks_infonavit(array $keys_selects, stdClass $row_upd): array
+    {
+
+        if(!isset($row_upd->inm_producto_infonavit_id)){
+            $row_upd->inm_producto_infonavit_id = -1;
+        }
+        if(!isset($row_upd->inm_attr_tipo_credito_id)){
+            $row_upd->inm_attr_tipo_credito_id = -1;
+        }
+        if(!isset($row_upd->inm_destino_credito_id)){
+            $row_upd->inm_destino_credito_id = -1;
+        }
+        if(!isset($row_upd->inm_plazo_credito_sc_id)){
+            $row_upd->inm_plazo_credito_sc_id = 7;
+        }
+
+        $columns_ds[] = 'inm_producto_infonavit_descripcion';
+        $keys_selects = $this->key_select(cols:6, con_registros: true,filtro:  array(), key: 'inm_producto_infonavit_id',
+            keys_selects: $keys_selects, id_selected: $row_upd->inm_producto_infonavit_id, label: 'Producto',
+            columns_ds: $columns_ds);
+        if(errores::$error){
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        }
+        $columns_ds = array();
+        $columns_ds[] = 'inm_tipo_credito_descripcion';
+        $columns_ds[] = 'inm_attr_tipo_credito_descripcion';
+        $keys_selects = $this->key_select(cols:6, con_registros: true,filtro:  array(), key: 'inm_attr_tipo_credito_id',
+            keys_selects: $keys_selects, id_selected: $row_upd->inm_attr_tipo_credito_id, label: 'Tipo de Credito',
+            columns_ds: $columns_ds);
+        if(errores::$error){
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        }
+
+        $columns_ds = array();
+        $columns_ds[] = 'inm_destino_credito_descripcion';
+
+        $keys_selects = $this->key_select(cols:12, con_registros: true,filtro:  array(), key: 'inm_destino_credito_id',
+            keys_selects: $keys_selects, id_selected: $row_upd->inm_destino_credito_id, label: 'Destino del Credito',
+            columns_ds: $columns_ds);
+        if(errores::$error){
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        }
+        $keys_selects = $this->key_select(cols:6, con_registros: true,filtro:  array(), key: 'inm_plazo_credito_sc_id',
+            keys_selects: $keys_selects, id_selected: $row_upd->inm_plazo_credito_sc_id,
+            label: 'Plazo Segundo Credito');
+        if(errores::$error){
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        }
+
+        return $keys_selects;
+    }
+
     public function modifica(bool $header, bool $ws = false): array|stdClass
     {
 
@@ -389,149 +471,31 @@ class controlador_inm_comprador extends _ctl_base {
         $this->row_upd->telefono = $com_cliente['com_cliente_telefono'];
 
 
+        $keys_selects = array();
 
-        $keys_selects = $this->key_select(cols:6, con_registros: true,filtro:  array(), key: 'inm_producto_infonavit_id',
-            keys_selects: array(), id_selected: $this->row_upd->inm_producto_infonavit_id, label: 'Producto');
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects, header: $header,ws:  $ws);
-        }
-        $keys_selects = $this->key_select(cols:6, con_registros: true,filtro:  array(), key: 'inm_attr_tipo_credito_id',
-            keys_selects: $keys_selects, id_selected: $this->row_upd->inm_attr_tipo_credito_id, label: 'Tipo de Credito');
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects, header: $header,ws:  $ws);
-        }
-        $keys_selects = $this->key_select(cols:12, con_registros: true,filtro:  array(), key: 'inm_destino_credito_id',
-            keys_selects: $keys_selects, id_selected: $this->row_upd->inm_destino_credito_id, label: 'Destino del Credito');
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects, header: $header,ws:  $ws);
-        }
-        $keys_selects = $this->key_select(cols:6, con_registros: true,filtro:  array(), key: 'inm_plazo_credito_sc_id',
-            keys_selects: $keys_selects, id_selected: $this->row_upd->inm_plazo_credito_sc_id, label: 'Plazo segundo credito');
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects, header: $header,ws:  $ws);
-        }
-
-
-        $keys_selects = $this->key_select(cols:6, con_registros: true,filtro:  array(), key: 'com_tipo_cliente_id',
-            keys_selects: $keys_selects, id_selected: $com_cliente['com_tipo_cliente_id'], label: 'Tipo de Cliente');
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects, header: $header,ws:  $ws);
-        }
-
-        $columns_ds = array('dp_pais_descripcion');
-        $keys_selects = $this->key_select(cols:6, con_registros: true,filtro:  array(), key: 'dp_pais_id',
-            keys_selects: $keys_selects, id_selected: $com_cliente['dp_pais_id'], label: 'Pais', columns_ds : $columns_ds);
+        $keys_selects = $this->ks_infonavit(keys_selects: $keys_selects, row_upd: $this->row_upd);
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects,
                 header: $header,ws:  $ws);
         }
 
-
-        $filtro = array();
-        $filtro['dp_pais.id'] = $com_cliente['dp_pais_id'];
-
-        $columns_ds = array('dp_estado_descripcion');
-
-        $keys_selects = $this->key_select(cols:6, con_registros: true,filtro:  $filtro, key: 'dp_estado_id',
-            keys_selects: $keys_selects, id_selected: $com_cliente['dp_estado_id'], label: 'Estado', columns_ds: $columns_ds);
+        $keys_selects = $this->ks_dp(keys_selects: $keys_selects, row_upd: $this->row_upd);
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects,
                 header: $header,ws:  $ws);
         }
 
-        $filtro = array();
-        $filtro['dp_estado.id'] = $com_cliente['dp_estado_id'];
-
-        $columns_ds = array('dp_municipio_descripcion');
-
-        $keys_selects = $this->key_select(cols:6, con_registros: true,filtro:  $filtro, key: 'dp_municipio_id',
-            keys_selects: $keys_selects, id_selected: $com_cliente['dp_municipio_id'], label: 'Municipio', columns_ds: $columns_ds);
+        $keys_selects = $this->ks_fiscales(keys_selects: $keys_selects, row_upd: new stdClass());
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects,
                 header: $header,ws:  $ws);
         }
 
-        $columns_ds = array('dp_cp_descripcion');
-
-        $keys_selects = $this->key_select(cols:6, con_registros: true,filtro:  $filtro, key: 'dp_cp_id',
-            keys_selects: $keys_selects, id_selected: $com_cliente['dp_cp_id'], label: 'CP', columns_ds: $columns_ds);
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects,
-                header: $header,ws:  $ws);
-        }
-
-        $columns_ds = array('dp_colonia_descripcion');
-        $keys_selects = $this->key_select(cols:6, con_registros: true,filtro:  $filtro, key: 'dp_colonia_postal_id',
-            keys_selects: $keys_selects, id_selected: $com_cliente['dp_colonia_postal_id'], label: 'Colonia', columns_ds: $columns_ds);
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects,
-                header: $header,ws:  $ws);
-        }
-
-        $columns_ds = array('dp_calle_descripcion');
-        $keys_selects = $this->key_select(cols:6, con_registros: true,filtro:  $filtro, key: 'dp_calle_pertenece_id',
-            keys_selects: $keys_selects, id_selected: $com_cliente['dp_calle_pertenece_id'], label: 'Calle', columns_ds: $columns_ds);
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects,
-                header: $header,ws:  $ws);
-        }
-
-
-        /**
-         * FISCALES
-         */
-
-        $columns_ds = array('cat_sat_regimen_fiscal_descripcion');
-        $keys_selects = $this->key_select(cols:6, con_registros: true,filtro:  array(), key: 'cat_sat_regimen_fiscal_id',
-            keys_selects: $keys_selects, id_selected: $com_cliente['cat_sat_regimen_fiscal_id'], label: 'Regimen Fiscal', columns_ds: $columns_ds);
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects,
-                header: $header,ws:  $ws);
-        }
-
-        $columns_ds = array('cat_sat_moneda_descripcion');
-        $keys_selects = $this->key_select(cols:6, con_registros: true,filtro:  array(), key: 'cat_sat_moneda_id',
-            keys_selects: $keys_selects, id_selected: $com_cliente['cat_sat_moneda_id'], label: 'Moneda', columns_ds: $columns_ds);
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects,
-                header: $header,ws:  $ws);
-        }
-
-        $columns_ds = array('cat_sat_forma_pago_descripcion');
-        $keys_selects = $this->key_select(cols:6, con_registros: true,filtro:  array(), key: 'cat_sat_forma_pago_id',
-            keys_selects: $keys_selects, id_selected: $com_cliente['cat_sat_forma_pago_id'], label: 'Forma de Pago', columns_ds: $columns_ds);
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects,
-                header: $header,ws:  $ws);
-        }
-
-        $columns_ds = array('cat_sat_metodo_pago_descripcion');
-        $keys_selects = $this->key_select(cols:6, con_registros: true,filtro:  array(), key: 'cat_sat_metodo_pago_id',
-            keys_selects: $keys_selects, id_selected: $com_cliente['cat_sat_metodo_pago_id'], label: 'Metodo de Pago', columns_ds: $columns_ds);
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects,
-                header: $header,ws:  $ws);
-        }
-
-        $columns_ds = array('cat_sat_uso_cfdi_descripcion');
-        $keys_selects = $this->key_select(cols:6, con_registros: true,filtro:  array(), key: 'cat_sat_uso_cfdi_id',
-            keys_selects: $keys_selects, id_selected: $com_cliente['cat_sat_uso_cfdi_id'], label: 'Uso de CFDI', columns_ds: $columns_ds);
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects,
-                header: $header,ws:  $ws);
-        }
 
         $columns_ds = array('com_tipo_cliente_descripcion');
         $keys_selects = $this->key_select(cols:6, con_registros: true,filtro:  array(), key: 'com_tipo_cliente_id',
-            keys_selects: $keys_selects, id_selected: $com_cliente['com_tipo_cliente_id'], label: 'Tipo de Cliente', columns_ds: $columns_ds);
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects,
-                header: $header,ws:  $ws);
-        }
-
-        $columns_ds = array('cat_sat_tipo_persona_descripcion');
-        $keys_selects = $this->key_select(cols:6, con_registros: true,filtro:  array(), key: 'cat_sat_tipo_persona_id',
-            keys_selects: $keys_selects, id_selected: 5, label: 'Tipo de Persona', columns_ds: $columns_ds);
+            keys_selects: $keys_selects, id_selected: $com_cliente['com_tipo_cliente_id'], label: 'Tipo de Cliente',
+            columns_ds: $columns_ds);
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects,
                 header: $header,ws:  $ws);
