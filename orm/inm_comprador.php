@@ -59,39 +59,63 @@ class inm_comprador extends _modelo_parent{
             return $this->error->error(mensaje: 'Error al insertar',data:  $r_alta_bd);
         }
 
-       // print_r($this->registro);exit;
-
-        $razon_social = $registro_entrada['nombre'];
-        $razon_social .= $registro_entrada['apellido_paterno'];
-        $razon_social .= $registro_entrada['apellido_materno'];
-
-        $com_cliente_ins['razon_social'] = trim($razon_social);
-        $com_cliente_ins['rfc'] = $registro_entrada['rfc'];
-        $com_cliente_ins['dp_calle_pertenece_id'] = $registro_entrada['dp_calle_pertenece_id'];
-        $com_cliente_ins['numero_exterior'] = $registro_entrada['numero_exterior'];
-        $com_cliente_ins['numero_interior'] = $registro_entrada['numero_interior'];
-        $com_cliente_ins['telefono'] = $registro_entrada['telefono'];
-        $com_cliente_ins['cat_sat_regimen_fiscal_id'] = $registro_entrada['cat_sat_regimen_fiscal_id'];
-        $com_cliente_ins['cat_sat_moneda_id'] = $registro_entrada['cat_sat_moneda_id'];
-        $com_cliente_ins['cat_sat_forma_pago_id'] = $registro_entrada['cat_sat_forma_pago_id'];
-        $com_cliente_ins['cat_sat_metodo_pago_id'] = $registro_entrada['cat_sat_metodo_pago_id'];
-        $com_cliente_ins['cat_sat_uso_cfdi_id'] = $registro_entrada['cat_sat_uso_cfdi_id'];
-        $com_cliente_ins['cat_sat_tipo_de_comprobante_id'] = 1;
-        $com_cliente_ins['codigo'] = $registro_entrada['rfc'];
-        $com_cliente_ins['com_tipo_cliente_id'] = $registro_entrada['com_tipo_cliente_id'];
-        $com_cliente_ins['cat_sat_tipo_persona_id'] = $registro_entrada['cat_sat_tipo_persona_id'];
-
-        $r_com_cliente = (new com_cliente(link: $this->link))->alta_registro(registro: $com_cliente_ins);
+        $filtro['com_cliente.rfc'] = $registro_entrada['rfc'];
+        $existe_cliente = (new com_cliente(link: $this->link))->existe(filtro: $filtro);
         if(errores::$error){
-            return $this->error->error(mensaje: 'Error al insertar cliente',data:  $r_com_cliente);
+            return $this->error->error(mensaje: 'Error al validar si existe',data:  $existe_cliente);
         }
+
+        if(!$existe_cliente) {
+            $razon_social = $registro_entrada['nombre'];
+            $razon_social .= $registro_entrada['apellido_paterno'];
+            $razon_social .= $registro_entrada['apellido_materno'];
+
+            $com_cliente_ins['razon_social'] = trim($razon_social);
+            $com_cliente_ins['rfc'] = $registro_entrada['rfc'];
+            $com_cliente_ins['dp_calle_pertenece_id'] = $registro_entrada['dp_calle_pertenece_id'];
+            $com_cliente_ins['numero_exterior'] = $registro_entrada['numero_exterior'];
+            $com_cliente_ins['numero_interior'] = $registro_entrada['numero_interior'];
+            $com_cliente_ins['telefono'] = $registro_entrada['telefono'];
+            $com_cliente_ins['cat_sat_regimen_fiscal_id'] = $registro_entrada['cat_sat_regimen_fiscal_id'];
+            $com_cliente_ins['cat_sat_moneda_id'] = $registro_entrada['cat_sat_moneda_id'];
+            $com_cliente_ins['cat_sat_forma_pago_id'] = $registro_entrada['cat_sat_forma_pago_id'];
+            $com_cliente_ins['cat_sat_metodo_pago_id'] = $registro_entrada['cat_sat_metodo_pago_id'];
+            $com_cliente_ins['cat_sat_uso_cfdi_id'] = $registro_entrada['cat_sat_uso_cfdi_id'];
+            $com_cliente_ins['cat_sat_tipo_de_comprobante_id'] = 1;
+            $com_cliente_ins['codigo'] = $registro_entrada['rfc'];
+            $com_cliente_ins['com_tipo_cliente_id'] = $registro_entrada['com_tipo_cliente_id'];
+            $com_cliente_ins['cat_sat_tipo_persona_id'] = $registro_entrada['cat_sat_tipo_persona_id'];
+
+            $r_com_cliente = (new com_cliente(link: $this->link))->alta_registro(registro: $com_cliente_ins);
+            if (errores::$error) {
+                return $this->error->error(mensaje: 'Error al insertar cliente', data: $r_com_cliente);
+            }
+        }
+        else{
+            $r_com_cliente_f = (new com_cliente(link: $this->link))->filtro_and(filtro: $filtro);
+            if (errores::$error) {
+                return $this->error->error(mensaje: 'Error al obtener cliente', data: $r_com_cliente_f);
+            }
+            if($r_com_cliente_f->n_registros === 0){
+                return $this->error->error(mensaje: 'Error no existe cliente', data: $r_com_cliente_f);
+            }
+            if($r_com_cliente_f->n_registros > 1){
+                return $this->error->error(mensaje: 'Error existe mas de un cliente', data: $r_com_cliente_f);
+            }
+            $r_com_cliente = new stdClass();
+            $r_com_cliente->registro_id = $r_com_cliente_f->registros[0]['com_cliente_id'];
+
+        }
+
 
         $inm_rel_comprador_com_cliente_ins['inm_comprador_id'] = $r_alta_bd->registro_id;
         $inm_rel_comprador_com_cliente_ins['com_cliente_id'] = $r_com_cliente->registro_id;
 
-        $r_inm_rel_comprador_com_cliente_ins = (new inm_rel_comprador_com_cliente(link: $this->link))->alta_registro(registro: $inm_rel_comprador_com_cliente_ins);
+        $r_inm_rel_comprador_com_cliente_ins = (new inm_rel_comprador_com_cliente(link: $this->link))->alta_registro(
+            registro: $inm_rel_comprador_com_cliente_ins);
         if(errores::$error){
-            return $this->error->error(mensaje: 'Error al insertar relacion',data:  $r_inm_rel_comprador_com_cliente_ins);
+            return $this->error->error(mensaje: 'Error al insertar relacion',
+                data:  $r_inm_rel_comprador_com_cliente_ins);
         }
 
         return $r_alta_bd;
@@ -117,6 +141,7 @@ class inm_comprador extends _modelo_parent{
     public function modifica_bd(array $registro, int $id, bool $reactiva = false,
                                 array $keys_integra_ds = array('codigo', 'descripcion')): array|stdClass
     {
+        //print_r($registro);exit;
         $r_modifica = parent::modifica_bd(registro: $registro,id:  $id, reactiva: $reactiva,
             keys_integra_ds: $keys_integra_ds); // TODO: Change the autogenerated stub
         if(errores::$error){

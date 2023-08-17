@@ -2,6 +2,7 @@
 require "init.php";
 require 'vendor/autoload.php';
 
+
 use base\controller\init;
 use config\generales;
 use gamboamartin\errores\errores;

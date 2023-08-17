@@ -10,9 +10,11 @@ use gamboamartin\test\test;
 
 
 use stdClass;
+use function PHPUnit\Framework\assertEquals;
+use function PHPUnit\Framework\assertStringContainsStringIgnoringCase;
 
 
-class controlador_inm_attr_tipo_infonavitTest extends test {
+class controlador_inm_attr_tipo_creditoTest extends test {
     public errores $errores;
     private stdClass $paths_conf;
     public function __construct(?string $name = null, array $data = [], $dataName = '')
@@ -23,6 +25,28 @@ class controlador_inm_attr_tipo_infonavitTest extends test {
         $this->paths_conf->generales = '/var/www/html/inmuebles/config/generales.php';
         $this->paths_conf->database = '/var/www/html/inmuebles/config/database.php';
         $this->paths_conf->views = '/var/www/html/inmuebles/config/views.php';
+    }
+
+    public function test_alta(): void
+    {
+        errores::$error = false;
+
+
+        $ch = curl_init("http://localhost/inmuebles/index.php?seccion=inm_attr_tipo_credito&accion=alta&adm_menu_id=64&session_id=8945652758&adm_menu_id=64");
+        $fp = fopen("inm_attr_tipo_credito.alta", "w");
+
+        curl_setopt($ch, CURLOPT_FILE, $fp);
+        curl_setopt($ch, CURLOPT_HEADER, 0);
+
+        curl_exec($ch);
+        curl_close($ch);
+        fclose($fp);
+
+        $data = file_get_contents("inm_attr_tipo_credito.alta");
+        assertStringContainsStringIgnoringCase("><div class='controls'><input type='text' name='descripcion' value='' class='form-control' required id='descripcion' placeholder='De", $data);
+        unlink('inm_attr_tipo_credito.alta');
+
+
     }
 
     public function test_init_datatable(): void

@@ -38,6 +38,13 @@ class controlador_inm_attr_tipo_credito extends _ctl_base {
             paths_conf: $paths_conf);
     }
 
+    /**
+     * Integra un formulario de alta
+     * @param bool $header si header retorna el resultado en web
+     * @param bool $ws si ws muestra el resultado en json
+     * @return array|string
+     * @version 1.13.0
+     */
     public function alta(bool $header, bool $ws = false): array|string
     {
         $r_alta = $this->init_alta();

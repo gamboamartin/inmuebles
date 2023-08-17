@@ -18,6 +18,7 @@ use gamboamartin\system\_ctl_base;
 use gamboamartin\system\links_menu;
 use gamboamartin\template\html;
 use PDO;
+use setasign\Fpdi\Tcpdf\Fpdi;
 use stdClass;
 
 class controlador_inm_comprador extends _ctl_base {
@@ -469,6 +470,12 @@ class controlador_inm_comprador extends _ctl_base {
         $this->row_upd->numero_exterior = $com_cliente['com_cliente_numero_exterior'];
         $this->row_upd->numero_interior = $com_cliente['com_cliente_numero_interior'];
         $this->row_upd->telefono = $com_cliente['com_cliente_telefono'];
+        $this->row_upd->dp_pais_id = $com_cliente['dp_pais_id'];
+        $this->row_upd->dp_estado_id = $com_cliente['dp_estado_id'];
+        $this->row_upd->dp_municipio_id = $com_cliente['dp_municipio_id'];
+        $this->row_upd->dp_cp_id = $com_cliente['dp_cp_id'];
+        $this->row_upd->dp_colonia_postal_id = $com_cliente['dp_colonia_postal_id'];
+        $this->row_upd->dp_calle_pertenece_id = $com_cliente['dp_calle_pertenece_id'];
 
 
         $keys_selects = array();
@@ -527,6 +534,181 @@ class controlador_inm_comprador extends _ctl_base {
         $datatables->filtro = $filtro;
 
         return $datatables;
+    }
+
+    public function solicitud_infonavit(bool $header, bool $ws = false){
+
+        $inm_comprador = $this->modelo->registro(registro_id: $this->registro_id);
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al obtener comprador',data:  $inm_comprador,
+                header: $header,ws:  $ws);
+        }
+
+        $filtro['inm_comprador.id'] = $this->registro_id;
+
+        $r_imp_rel_comprador_com_cliente = (new inm_rel_comprador_com_cliente(link: $this->link))->filtro_and(filtro:$filtro);
+        if(errores::$error){
+            return $this->retorno_error(
+                mensaje: 'Error al obtener imp_rel_comprador_com_cliente',data:  $r_imp_rel_comprador_com_cliente,header: $header,ws: $ws);
+        }
+
+        if($r_imp_rel_comprador_com_cliente->n_registros === 0){
+            return $this->retorno_error(
+                mensaje: 'Error no existe inm_rel_comprador_com_cliente',data:  $r_imp_rel_comprador_com_cliente,
+                header: $header,ws: $ws);
+        }
+
+        if($r_imp_rel_comprador_com_cliente->n_registros > 1){
+            return $this->retorno_error(
+                mensaje: 'Error de integridad existe mas de un inm_rel_comprador_com_cliente',data:  $r_imp_rel_comprador_com_cliente,
+                header: $header,ws: $ws);
+        }
+
+        $imp_rel_comprador_com_cliente = $r_imp_rel_comprador_com_cliente->registros[0];
+
+        $filtro = array();
+        $filtro['com_cliente.id'] = $imp_rel_comprador_com_cliente['com_cliente_id'];
+
+        $r_com_cliente = (new com_cliente(link: $this->link))->filtro_and(filtro:$filtro);
+        if(errores::$error){
+            return $this->retorno_error(
+                mensaje: 'Error al obtener com_cliente',data:  $r_com_cliente,header: $header,ws: $ws);
+        }
+
+        if($r_com_cliente->n_registros === 0){
+            return $this->retorno_error(
+                mensaje: 'Error no existe com_cliente',data:  $r_com_cliente,
+                header: $header,ws: $ws);
+        }
+
+        if($r_com_cliente->n_registros > 1){
+            return $this->retorno_error(
+                mensaje: 'Error de integridad existe mas de un com_cliente',data:  $r_com_cliente,
+                header: $header,ws: $ws);
+        }
+
+        $com_cliente = $r_com_cliente->registros[0];
+
+        //print_r($com_cliente);exit;
+
+
+        //print_r($inm_comprador);exit;
+
+        $pdf = new \setasign\Fpdi\Fpdi();
+        $pdf->AddPage();
+        $pdf->setSourceFile($this->path_base.'templates/solicitud_infonavit.pdf');
+        $tplIdx = $pdf->importPage(1);
+        $pdf->useTemplate($tplIdx,null,null,null,null,true);
+
+        $pdf->SetFont('Arial','B', 15);
+        $pdf->SetTextColor(0,0,0);
+
+        /**
+         * 1. CRÉDITO SOLICITADO
+         */
+        $pdf->SetXY($inm_comprador['inm_producto_infonavit_x'], $inm_comprador['inm_producto_infonavit_y']);
+        $pdf->Write(0, 'X');
+
+        $pdf->SetXY($inm_comprador['inm_tipo_credito_x'], $inm_comprador['inm_tipo_credito_y']);
+        $pdf->Write(0, 'X');
+
+        $pdf->SetXY($inm_comprador['inm_attr_tipo_credito_x'], $inm_comprador['inm_attr_tipo_credito_y']);
+        $pdf->Write(0, 'X');
+
+        $pdf->SetXY($inm_comprador['inm_destino_credito_x'], $inm_comprador['inm_destino_credito_y']);
+        $pdf->Write(0, 'X');
+
+        $x_inm_comprador_es_segundo_credito = 46.5;
+        $y_inm_comprador_es_segundo_credito = 91.5;
+        if($inm_comprador['inm_comprador_es_segundo_credito'] === 'SI'){
+
+            $x_inm_comprador_es_segundo_credito = 31.5;
+        }
+
+        $pdf->SetXY($x_inm_comprador_es_segundo_credito, $y_inm_comprador_es_segundo_credito);
+        $pdf->Write(0, 'X');
+
+
+        $pdf->SetXY($inm_comprador['inm_plazo_credito_sc_x'], $inm_comprador['inm_plazo_credito_sc_y']);
+        $pdf->Write(0, 'X');
+
+
+        /**
+         * 2. DATOS PARA DETERMINAR EL MONTO DE CRÉDITO
+         */
+
+        if(round($inm_comprador['inm_comprador_descuento_pension_alimenticia_dh'],2)>0.0) {
+
+            $x_inm_comprador_descuento_pension_alimenticia_dh = 77;
+            $y_inm_comprador_descuento_pension_alimenticia_dh = 117;
+
+            $pdf->SetXY($x_inm_comprador_descuento_pension_alimenticia_dh,
+                $y_inm_comprador_descuento_pension_alimenticia_dh);
+            $pdf->Write(0, $inm_comprador['inm_comprador_descuento_pension_alimenticia_dh']);
+        }
+
+        if(round($inm_comprador['inm_comprador_descuento_pension_alimenticia_fc'],2)>0.0) {
+            $x_inm_comprador_descuento_pension_alimenticia_fc = 115;
+            $y_inm_comprador_descuento_pension_alimenticia_fc = 117;
+
+            $pdf->SetXY($x_inm_comprador_descuento_pension_alimenticia_fc,
+                $y_inm_comprador_descuento_pension_alimenticia_fc);
+            $pdf->Write(0, $inm_comprador['inm_comprador_descuento_pension_alimenticia_fc']);
+        }
+
+        if(round($inm_comprador['inm_comprador_monto_credito_solicitado_dh'],2)>0.0) {
+            $x_inm_comprador_monto_credito_solicitado_dh = 79;
+            $y_inm_comprador_monto_credito_solicitado_dh = 131;
+
+            $pdf->SetXY($x_inm_comprador_monto_credito_solicitado_dh,
+                $y_inm_comprador_monto_credito_solicitado_dh);
+            $pdf->Write(0, $inm_comprador['inm_comprador_monto_credito_solicitado_dh']);
+        }
+
+        if(round($inm_comprador['inm_comprador_monto_ahorro_voluntario'],2)>0.0) {
+            $x_inm_comprador_monto_ahorro_voluntario = 51.5;
+            $y_inm_comprador_monto_ahorro_voluntario = 143;
+
+            $pdf->SetXY($x_inm_comprador_monto_ahorro_voluntario,
+                $y_inm_comprador_monto_ahorro_voluntario);
+            $pdf->Write(0, $inm_comprador['inm_comprador_monto_ahorro_voluntario']);
+        }
+
+
+        /**
+         * 3. DATOS DE LA VIVIENDA/TERRENO DESTINO DEL CRÉDITO
+         */
+
+        $pdf->SetFont('Arial','B', 8);
+        $pdf->SetTextColor(0,0,0);
+
+        $x_dp_calle_descripcion = 15.5;
+        $y_dp_calle_descripcion = 164;
+
+        $pdf->SetXY($x_dp_calle_descripcion,
+            $y_dp_calle_descripcion);
+        $pdf->Write(0, $com_cliente['dp_calle_descripcion']);
+
+
+        $x_com_cliente_numero_exterior = 15.5;
+        $y_com_cliente_numero_exterior = 170;
+
+        $pdf->SetXY($x_com_cliente_numero_exterior,
+            $y_com_cliente_numero_exterior);
+        $pdf->Write(0, $com_cliente['com_cliente_numero_exterior']);
+
+
+        $pdf->AddPage();
+        $tplIdx = $pdf->importPage(2);
+        $pdf->useTemplate($tplIdx,null,null,null,null,true);
+
+        $pdf->AddPage();
+        $tplIdx = $pdf->importPage(3);
+        $pdf->useTemplate($tplIdx,null,null,null,null,true);
+
+        $pdf->Output('tu_pedorrote.pdf', 'I');
+
+        exit;
     }
 
 

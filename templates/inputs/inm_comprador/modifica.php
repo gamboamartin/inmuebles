@@ -1,5 +1,6 @@
 <?php /** @var  gamboamartin\facturacion\controllers\controlador_fc_docto_relacionado $controlador  controlador en ejecucion */ ?>
 <?php use config\views; ?>
+
 <?php echo $controlador->inputs->com_tipo_cliente_id; ?>
 <?php echo $controlador->inputs->nss; ?>
 <?php echo $controlador->inputs->curp; ?>
@@ -22,7 +23,31 @@
 <?php echo $controlador->inputs->inm_producto_infonavit_id; ?>
 <?php echo $controlador->inputs->inm_attr_tipo_credito_id; ?>
 <?php echo $controlador->inputs->inm_destino_credito_id; ?>
-<?php echo $controlador->inputs->es_segundo_credito; ?>
+
+    <?php
+
+        $checked_no = 'checked';
+        $checked_si = '';
+        if($controlador->row_upd->es_segundo_credito === 'SI'){
+            $checked_no = '';
+            $checked_si = 'checked';
+        }
+?>
+    <div class="control-group col-sm-6">
+        <label class="control-label" for="inm_attr_tipo_credito_id">Es Segundo credito</label>
+        <label class="form-check-label chk">
+            <input type="radio" name="es_segundo_credito" value="NO"
+                   class="form-check-input" id="es_segundo_credito"
+                   title="Es Segundo Credito" <?php echo $checked_no; ?> >
+            NO
+        </label>
+        <label class="form-check-label chk">
+            <input type="radio" name="es_segundo_credito" value="SI"
+                   class="form-check-input" id="es_segundo_credito"
+                   title="Es Segundo Credito" <?php echo $checked_si; ?>>
+            SI
+        </label>
+    </div>
 <?php echo $controlador->inputs->inm_plazo_credito_sc_id; ?>
 <?php echo $controlador->inputs->descuento_pension_alimenticia_dh; ?>
 <?php echo $controlador->inputs->descuento_pension_alimenticia_fc; ?>
