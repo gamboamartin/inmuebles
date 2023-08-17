@@ -27,6 +27,8 @@ class controlador_inm_attr_tipo_creditoTest extends test {
         $this->paths_conf->views = '/var/www/html/inmuebles/config/views.php';
     }
 
+
+
     public function test_alta(): void
     {
         errores::$error = false;
@@ -47,6 +49,26 @@ class controlador_inm_attr_tipo_creditoTest extends test {
         unlink('inm_attr_tipo_credito.alta');
 
 
+    }
+
+    public function test_campos_view(): void
+    {
+        errores::$error = false;
+
+        $_GET['seccion'] = 'inm_producto_infonavit';
+        $_GET['accion'] = 'lista';
+        $_SESSION['grupo_id'] = 1;
+        $_SESSION['usuario_id'] = 2;
+        $_GET['session_id'] = '1';
+
+
+        $ctl = new controlador_inm_attr_tipo_credito(link: $this->link, paths_conf: $this->paths_conf);
+        $ctl = new liberator($ctl);
+
+        $resultado = $ctl->campos_view();
+        $this->assertIsArray($resultado);
+        $this->assertNotTrue(errores::$error);
+        errores::$error = false;
     }
 
     public function test_init_datatable(): void

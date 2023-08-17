@@ -69,6 +69,7 @@ class controlador_inm_attr_tipo_credito extends _ctl_base {
     /**
      * Integra los elementos y configuraciones para uso en front de dependencia
      * @return array
+     * @version 1.15.0
      */
     protected function campos_view(): array
     {
