@@ -4,4 +4,4 @@
 <?php echo $controlador->inputs->descripcion; ?>
 <?php echo $controlador->inputs->x; ?>
 <?php echo $controlador->inputs->y; ?>
-<?php include (new views())->ruta_templates.'botons/submit/alta_bd.php';?>
+<?php include (new views())->ruta_templates.'botons/submit/modifica_bd.php';?>

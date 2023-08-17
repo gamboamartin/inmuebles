@@ -62,4 +62,4 @@
 <?php echo $controlador->inputs->cat_sat_metodo_pago_id; ?>
 <?php echo $controlador->inputs->cat_sat_uso_cfdi_id; ?>
 <?php echo $controlador->inputs->cat_sat_tipo_persona_id; ?>
-<?php include (new views())->ruta_templates.'botons/submit/alta_bd.php';?>
+<?php include (new views())->ruta_templates.'botons/submit/modifica_bd.php';?>

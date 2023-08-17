@@ -8,23 +8,22 @@
  */
 namespace gamboamartin\inmuebles\controllers;
 
-use base\controller\init;
 use gamboamartin\errores\errores;
-use gamboamartin\inmuebles\html\inm_attr_tipo_credito_html;
-use gamboamartin\inmuebles\models\inm_attr_tipo_credito;
+use gamboamartin\inmuebles\html\inm_rel_ubi_comp_html;
+use gamboamartin\inmuebles\models\inm_rel_ubi_comp;
 use gamboamartin\system\_ctl_base;
 use gamboamartin\system\links_menu;
 use gamboamartin\template\html;
 use PDO;
 use stdClass;
 
-class controlador_inm_attr_tipo_credito extends _ctl_base {
+class controlador_inm_rel_ubi_comp extends _ctl_base {
 
     public function __construct(PDO      $link, html $html = new \gamboamartin\template_1\html(),
                                 stdClass $paths_conf = new stdClass())
     {
-        $modelo = new inm_attr_tipo_credito(link: $link);
-        $html_ = new inm_attr_tipo_credito_html(html: $html);
+        $modelo = new inm_rel_ubi_comp(link: $link);
+        $html_ = new inm_rel_ubi_comp_html(html: $html);
         $obj_link = new links_menu(link: $link, registro_id:  $this->registro_id);
 
         $datatables = $this->init_datatable();
@@ -38,13 +37,6 @@ class controlador_inm_attr_tipo_credito extends _ctl_base {
             paths_conf: $paths_conf);
     }
 
-    /**
-     * Integra un formulario de alta
-     * @param bool $header si header retorna el resultado en web
-     * @param bool $ws si ws muestra el resultado en json
-     * @return array|string
-     * @version 1.13.0
-     */
     public function alta(bool $header, bool $ws = false): array|string
     {
         $r_alta = $this->init_alta();
@@ -52,8 +44,13 @@ class controlador_inm_attr_tipo_credito extends _ctl_base {
             return $this->retorno_error(
                 mensaje: 'Error al inicializar alta',data:  $r_alta, header: $header,ws:  $ws);
         }
-        $keys_selects = $this->key_select(cols:6, con_registros: true,filtro:  array(), key: 'inm_tipo_credito_id',
-            keys_selects: array(), id_selected: -1, label: 'Tipo de Credito');
+        $keys_selects = $this->key_select(cols:6, con_registros: true,filtro:  array(), key: 'inm_comprador_id',
+            keys_selects: array(), id_selected: -1, label: 'Comprador');
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects, header: $header,ws:  $ws);
+        }
+        $keys_selects = $this->key_select(cols:6, con_registros: true,filtro:  array(), key: 'inm_ubicacion_id',
+            keys_selects: $keys_selects, id_selected: -1, label: 'Ubicacion');
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects, header: $header,ws:  $ws);
         }
@@ -66,19 +63,16 @@ class controlador_inm_attr_tipo_credito extends _ctl_base {
         return $r_alta;
     }
 
-    /**
-     * Integra los elementos y configuraciones para uso en front de dependencia
-     * @return array
-     */
     protected function campos_view(): array
     {
         $keys = new stdClass();
-        $keys->inputs = array('descripcion', 'x', 'y');
+        $keys->inputs = array();
         $keys->selects = array();
 
 
         $init_data = array();
-        $init_data['inm_tipo_credito'] = "gamboamartin\\inmuebles";
+        $init_data['inm_ubicacion'] = "gamboamartin\\inmuebles";
+        $init_data['inm_comprador'] = "gamboamartin\\inmuebles";
         $campos_view = $this->campos_view_base(init_data: $init_data,keys:  $keys);
 
         if(errores::$error){
@@ -91,20 +85,6 @@ class controlador_inm_attr_tipo_credito extends _ctl_base {
 
     protected function key_selects_txt(array $keys_selects): array
     {
-
-        $keys_selects = (new init())->key_select_txt(cols: 6,key: 'descripcion', keys_selects:$keys_selects,
-            place_holder: 'Descripcion');
-        if(errores::$error){
-            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
-        }
-        $keys_selects = (new init())->key_select_txt(cols: 6,key: 'x', keys_selects:$keys_selects, place_holder: 'x');
-        if(errores::$error){
-            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
-        }
-        $keys_selects = (new init())->key_select_txt(cols: 6,key: 'y', keys_selects:$keys_selects, place_holder: 'y');
-        if(errores::$error){
-            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
-        }
 
         return $keys_selects;
     }
@@ -119,9 +99,16 @@ class controlador_inm_attr_tipo_credito extends _ctl_base {
         }
 
 
-        $keys_selects = $this->key_select(cols:6, con_registros: true,filtro:  array(), key: 'inm_tipo_credito_id',
-            keys_selects: array(), id_selected: $this->registro['inm_attr_tipo_credito_inm_tipo_credito_id'],
-            label: 'Tipo de credito');
+        $keys_selects = $this->key_select(cols:6, con_registros: true,filtro:  array(), key: 'inm_comprador_id',
+            keys_selects: array(), id_selected: $this->registro['inm_rel_ubi_comp_inm_comprador_id'],
+            label: 'Comprador');
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects, header: $header,ws:  $ws);
+        }
+
+        $keys_selects = $this->key_select(cols:6, con_registros: true,filtro:  array(), key: 'inm_ubicacion_id',
+            keys_selects: $keys_selects, id_selected: $this->registro['inm_rel_ubi_comp_inm_ubicacion_id'],
+            label: 'Comprador');
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects, header: $header,ws:  $ws);
         }
@@ -137,18 +124,15 @@ class controlador_inm_attr_tipo_credito extends _ctl_base {
     /**
      * Inicializa los elementos mostrables para datatables
      * @return stdClass
-     * @version 1.3.0
      */
     private function init_datatable(): stdClass
     {
-        $columns["inm_attr_tipo_credito_id"]["titulo"] = "Id";
-        $columns["inm_attr_tipo_credito_descripcion"]["titulo"] = "Descripcion";
-        $columns["inm_attr_tipo_credito_x"]["titulo"] = "X";
-        $columns["inm_attr_tipo_credito_y"]["titulo"] = "Y";
-        $columns["inm_tipo_credito_descripcion"]["titulo"] = "Tipo de Credito";
+        $columns["inm_rel_ubi_comp_id"]["titulo"] = "Id";
+        $columns["inm_comprador_descripcion"]["titulo"] = "Comprador";
+        $columns["inm_ubicacion_descripcion"]["titulo"] = "Ubicacion";
 
-        $filtro = array("inm_attr_tipo_credito.id","inm_attr_tipo_credito.descripcion",
-            "inm_attr_tipo_credito.x",'inm_tipo_credito.descripcion');
+        $filtro = array("inm_rel_ubi_comp.id","inm_comprador.descripcion",
+            "inm_ubicacion.descripcion");
 
         $datatables = new stdClass();
         $datatables->columns = $columns;
