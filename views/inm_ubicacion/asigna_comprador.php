@@ -18,6 +18,9 @@
                     <?php include (new views())->ruta_templates."head/subtitulo.php"; ?>
                     <?php include (new views())->ruta_templates."mensajes.php"; ?>
 
+                    <?php echo $controlador->inputs->inm_comprador_id; ?>
+                    <?php echo $controlador->inputs->precio_operacion; ?>
+
                     <?php echo $controlador->inputs->dp_estado_id; ?>
                     <?php echo $controlador->inputs->dp_municipio_id; ?>
                     <?php echo $controlador->inputs->dp_cp_id; ?>
@@ -27,18 +30,14 @@
                     <?php echo $controlador->inputs->numero_interior; ?>
                     <?php echo $controlador->inputs->manzana; ?>
                     <?php echo $controlador->inputs->lote; ?>
-                    <?php echo $controlador->inputs->inm_comprador_id; ?>
                     <?php echo $controlador->inputs->inm_ubicacion_id; ?>
                     <?php echo $controlador->inputs->seccion_retorno; ?>
                     <?php echo $controlador->inputs->btn_action_next; ?>
                     <?php echo $controlador->inputs->id_retorno; ?>
                     <?php include (new views())->ruta_templates.'botons/submit/alta_bd.php';?>
                     </form>
-
                 </div>
-
             </div>
-
 
             <div class="container">
                 <div class="row">
@@ -58,6 +57,7 @@
                                         <th>AP</th>
                                         <th>AM</th>
                                         <th>NSS</th>
+                                        <th>Precio Operacion</th>
                                     <tr>
                                     </thead>
                                     <tbody>
@@ -68,18 +68,14 @@
                                         <td><?php echo $inm_comprador['inm_comprador_apellido_paterno'] ?></td>
                                         <td><?php echo $inm_comprador['inm_comprador_apellido_materno'] ?></td>
                                         <td><?php echo $inm_comprador['inm_comprador_nss'] ?></td>
+                                        <td><?php echo $inm_comprador['inm_rel_ubi_comp_precio_operacion'] ?></td>
                                     <tr>
                                     <?php }  ?>
                                     </tbody>
                                 </table>
-
                             </div>
                         </div>
                     </div>
-
-
-
-
                 </div>
     </div>
 </main>

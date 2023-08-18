@@ -230,11 +230,11 @@ class controlador_inm_comprador extends _ctl_base {
                 header: $header,ws:  $ws);
         }
 
-        /*$inm_ubicacion_id = $this->html->hidden(name:'inm_ubicacion_id',value: $this->registro_id);
+        $inm_comprador_id = $this->html->hidden(name:'inm_comprador_id',value: $this->registro_id);
         if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al in_registro_id',data:  $inm_ubicacion_id,
+            return $this->retorno_error(mensaje: 'Error al in_registro_id',data:  $inm_comprador_id,
                 header: $header,ws:  $ws);
-        }*/
+        }
 
         $id_retorno = $this->html->hidden(name:'id_retorno',value: $this->registro_id);
         if(errores::$error){
@@ -253,11 +253,19 @@ class controlador_inm_comprador extends _ctl_base {
                 header: $header,ws:  $ws);
         }
 
+        $precio_operacion = $this->html->input_monto(cols: 12, row_upd: new stdClass(),value_vacio: false,
+            name: 'precio_operacion',place_holder: 'Precio de operacion');
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al obtener precio operacion',data:  $precio_operacion,
+                header: $header,ws:  $ws);
+        }
+
         $this->inputs->id_retorno = $id_retorno;
         $this->inputs->btn_action_next = $btn_action_next;
         $this->inputs->seccion_retorno = $seccion_retorno;
         $this->inputs->registro_id = $in_registro_id;
-        //$this->inputs->inm_ubicacion_id = $inm_ubicacion_id;
+        $this->inputs->inm_comprador_id = $inm_comprador_id;
+        $this->inputs->precio_operacion = $precio_operacion;
 
 
 
@@ -303,7 +311,8 @@ class controlador_inm_comprador extends _ctl_base {
         $keys = new stdClass();
         $keys->inputs = array('descripcion', 'es_segundo_credito', 'descuento_pension_alimenticia_dh',
             'descuento_pension_alimenticia_fc','monto_credito_solicitado_dh','monto_ahorro_voluntario','nss','curp',
-            'rfc','apellido_paterno','apellido_materno','nombre','numero_exterior','numero_interior','telefono');
+            'rfc','apellido_paterno','apellido_materno','nombre','numero_exterior','numero_interior','telefono',
+            'nombre_empresa_patron','nrp_nep','lada_nep','numero_nep','extension_nep');
         $keys->selects = array();
 
 
@@ -410,6 +419,33 @@ class controlador_inm_comprador extends _ctl_base {
 
         $keys_selects = (new init())->key_select_txt(cols: 12,key: 'telefono',
             keys_selects:$keys_selects, place_holder: 'Telefono');
+        if(errores::$error){
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        }
+
+        $keys_selects = (new init())->key_select_txt(cols: 12,key: 'nombre_empresa_patron',
+            keys_selects:$keys_selects, place_holder: 'Nombre Empresa o Patron');
+        if(errores::$error){
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        }
+
+        $keys_selects = (new init())->key_select_txt(cols: 6,key: 'lada_nep',
+            keys_selects:$keys_selects, place_holder: 'Lada');
+        if(errores::$error){
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        }
+        $keys_selects = (new init())->key_select_txt(cols: 6,key: 'numero_nep',
+            keys_selects:$keys_selects, place_holder: 'Numero');
+        if(errores::$error){
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        }
+        $keys_selects = (new init())->key_select_txt(cols: 6,key: 'extension_nep',
+            keys_selects:$keys_selects, place_holder: 'Extension',required: false);
+        if(errores::$error){
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        }
+        $keys_selects = (new init())->key_select_txt(cols: 6,key: 'nrp_nep',
+            keys_selects:$keys_selects, place_holder: 'Registro Patronal');
         if(errores::$error){
             return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
@@ -730,9 +766,15 @@ class controlador_inm_comprador extends _ctl_base {
     private function init_datatable(): stdClass
     {
         $columns["inm_comprador_id"]["titulo"] = "Id";
+        $columns["inm_comprador_nombre"]["titulo"] = "Nombre";
+        $columns["inm_comprador_apellido_paterno"]["titulo"] = "AP";
+        $columns["inm_comprador_apellido_materno"]["titulo"] = "AM";
+        $columns["inm_comprador_nss"]["titulo"] = "NSS";
+        $columns["inm_comprador_curp"]["titulo"] = "CURP";
 
 
-        $filtro = array("inm_comprador.id");
+        $filtro = array("inm_comprador.id",'inm_comprador.nombre','inm_comprador.apellido_paterno',
+            'inm_comprador.apellido_materno','inm_comprador.nss','inm_comprador.curp');
 
         $datatables = new stdClass();
         $datatables->columns = $columns;
@@ -827,6 +869,7 @@ class controlador_inm_comprador extends _ctl_base {
         /**
          * 1. CRÉDITO SOLICITADO
          */
+
         $pdf->SetXY($inm_comprador['inm_producto_infonavit_x'], $inm_comprador['inm_producto_infonavit_y']);
         $pdf->Write(0, 'X');
 
@@ -858,6 +901,7 @@ class controlador_inm_comprador extends _ctl_base {
          * 2. DATOS PARA DETERMINAR EL MONTO DE CRÉDITO
          */
 
+        $pdf->SetFont('Arial','B', 10);
         if(round($inm_comprador['inm_comprador_descuento_pension_alimenticia_dh'],2)>0.0) {
 
             $x_inm_comprador_descuento_pension_alimenticia_dh = 77;
@@ -900,14 +944,13 @@ class controlador_inm_comprador extends _ctl_base {
          * 3. DATOS DE LA VIVIENDA/TERRENO DESTINO DEL CRÉDITO
          */
 
-        $pdf->SetFont('Arial','B', 8);
-        $pdf->SetTextColor(0,0,0);
+
 
         $x_imp_rel_ubi_comp = 15.5;
         $y_imp_rel_ubi_comp = 164;
 
         $pdf->SetXY($x_imp_rel_ubi_comp, $y_imp_rel_ubi_comp);
-        $pdf->Write(0, $imp_rel_ubi_comp['dp_calle_ubicacion_descripcion']);
+        $pdf->Write(0, strtoupper($imp_rel_ubi_comp['dp_calle_ubicacion_descripcion']));
 
 
         $x_imp_rel_ubi_comp_numero_exterior = 15.5;
@@ -915,7 +958,7 @@ class controlador_inm_comprador extends _ctl_base {
 
         $pdf->SetXY($x_imp_rel_ubi_comp_numero_exterior,
             $y_imp_rel_ubi_comp_numero_exterior);
-        $pdf->Write(0, $imp_rel_ubi_comp['inm_ubicacion_numero_exterior']);
+        $pdf->Write(0, strtoupper($imp_rel_ubi_comp['inm_ubicacion_numero_exterior']));
 
 
         $x_imp_rel_ubi_comp_numero_interior = 31;
@@ -923,7 +966,7 @@ class controlador_inm_comprador extends _ctl_base {
 
         $pdf->SetXY($x_imp_rel_ubi_comp_numero_interior,
             $y_imp_rel_ubi_comp_numero_interior);
-        $pdf->Write(0, $imp_rel_ubi_comp['inm_ubicacion_numero_interior']);
+        $pdf->Write(0, strtoupper($imp_rel_ubi_comp['inm_ubicacion_numero_interior']));
 
 
         $x_imp_rel_ubi_comp_lote = 46;
@@ -931,7 +974,7 @@ class controlador_inm_comprador extends _ctl_base {
 
         $pdf->SetXY($x_imp_rel_ubi_comp_lote,
             $y_imp_rel_ubi_comp_lote);
-        $pdf->Write(0, $imp_rel_ubi_comp['inm_ubicacion_lote']);
+        $pdf->Write(0, strtoupper($imp_rel_ubi_comp['inm_ubicacion_lote']));
 
 
         $x_imp_rel_ubi_comp_manzana = 61;
@@ -939,7 +982,7 @@ class controlador_inm_comprador extends _ctl_base {
 
         $pdf->SetXY($x_imp_rel_ubi_comp_manzana,
             $y_imp_rel_ubi_comp_manzana);
-        $pdf->Write(0, $imp_rel_ubi_comp['inm_ubicacion_manzana']);
+        $pdf->Write(0, strtoupper($imp_rel_ubi_comp['inm_ubicacion_manzana']));
 
 
 
@@ -947,33 +990,165 @@ class controlador_inm_comprador extends _ctl_base {
         $y_imp_rel_ubi_colonia_descripcion = 170;
 
         $pdf->SetXY($x_imp_rel_ubi_colonia_descripcion, $y_imp_rel_ubi_colonia_descripcion);
-        $pdf->Write(0, $imp_rel_ubi_comp['dp_colonia_ubicacion_descripcion']);
+        $pdf->Write(0, strtoupper($imp_rel_ubi_comp['dp_colonia_ubicacion_descripcion']));
 
 
         $x_imp_rel_ubi_estado_descripcion = 15.5;
         $y_imp_rel_ubi_estado_descripcion = 176;
 
         $pdf->SetXY($x_imp_rel_ubi_estado_descripcion, $y_imp_rel_ubi_estado_descripcion);
-        $pdf->Write(0, $imp_rel_ubi_comp['dp_estado_ubicacion_descripcion']);
+        $pdf->Write(0, strtoupper($imp_rel_ubi_comp['dp_estado_ubicacion_descripcion']));
 
 
         $x_imp_rel_ubi_municipio_descripcion = 100;
         $y_imp_rel_ubi_municipio_descripcion = 176;
 
         $pdf->SetXY($x_imp_rel_ubi_municipio_descripcion, $y_imp_rel_ubi_municipio_descripcion);
-        $pdf->Write(0, $imp_rel_ubi_comp['dp_municipio_ubicacion_descripcion']);
+        $pdf->Write(0, strtoupper($imp_rel_ubi_comp['dp_municipio_ubicacion_descripcion']));
 
 
         $x_imp_rel_ubi_cp_descripcion = 173;
         $y_imp_rel_ubi_cp_descripcion = 176;
 
         $pdf->SetXY($x_imp_rel_ubi_cp_descripcion, $y_imp_rel_ubi_cp_descripcion);
-        $pdf->Write(0, $imp_rel_ubi_comp['dp_cp_ubicacion_descripcion']);
+        $pdf->Write(0, strtoupper($imp_rel_ubi_comp['dp_cp_ubicacion_descripcion']));
+
+
+        $x_con_discapacidad = 94.5;
+        $y_con_discapacidad = 190;
+
+        if($inm_comprador['inm_comprador_con_discapacidad'] === 'SI'){
+
+            $x_con_discapacidad = 84;
+        }
+
+        $pdf->SetXY($x_con_discapacidad, $y_con_discapacidad);
+        $pdf->Write(0, 'X');
+
+
+        $x_imp_rel_ubi_precio_operacion = 21.5;
+        $y_imp_rel_ubi_precio_operacion = 224.5;
+
+
+        if((int)$inm_comprador['inm_destino_credito_id'] === 3 ){
+            $x_imp_rel_ubi_precio_operacion = 67;
+
+        }
+        if((int)$inm_comprador['inm_destino_credito_id'] === 4 ){
+            $x_imp_rel_ubi_precio_operacion = 114;
+
+        }
+        if((int)$inm_comprador['inm_destino_credito_id'] === 5 ){
+            $x_imp_rel_ubi_precio_operacion = 163;
+
+        }
+
+        $pdf->SetXY($x_imp_rel_ubi_precio_operacion, $y_imp_rel_ubi_precio_operacion);
+        $pdf->Write(0, $imp_rel_ubi_comp['inm_rel_ubi_comp_precio_operacion']);
+
+
+        /**
+         * 4. DATOS DE LA EMPRESA O PATRÓN
+         */
+
+        $x_nombre_empresa_patron = 16;
+        $y_nombre_empresa_patron = 249;
+        $pdf->SetXY($x_nombre_empresa_patron, $y_nombre_empresa_patron);
+        $pdf->Write(0, strtoupper($inm_comprador['inm_comprador_nombre_empresa_patron']));
+
+        $x_nrp = 140;
+        $y_nrp = 249;
+        $pdf->SetXY($x_nrp, $y_nrp);
+        $pdf->Write(0, strtoupper($inm_comprador['inm_comprador_nrp_nep']));
+
+        $x_lada_nep = 57;
+        $y_lada_nep = 256;
+        $pdf->SetXY($x_lada_nep, $y_lada_nep);
+        $pdf->Write(0, strtoupper($inm_comprador['inm_comprador_lada_nep']));
+
+        $x_num_nep = 70;
+        $y_num_nep = 256;
+        $pdf->SetXY($x_num_nep, $y_num_nep);
+        $pdf->Write(0, strtoupper($inm_comprador['inm_comprador_numero_nep']));
+
+        if(is_null($inm_comprador['inm_comprador_extension_nep'])){
+            $inm_comprador['inm_comprador_extension_nep'] = '';
+        }
+        $x_ext_nep = 110;
+        $y_ext_nep = 256;
+        $pdf->SetXY($x_ext_nep, $y_ext_nep);
+        $pdf->Write(0, strtoupper($inm_comprador['inm_comprador_extension_nep']));
 
 
         $pdf->AddPage();
         $tplIdx = $pdf->importPage(2);
         $pdf->useTemplate($tplIdx,null,null,null,null,true);
+
+        /**
+         * 5. DATOS DE IDENTIFICACIÓN DEL (DE LA) DERECHOHABIENTE / DATOS QUE SERÁN VALIDADOS
+         */
+
+        $x_nss = 16;
+        $y_nss = 30;
+        $pdf->SetXY($x_nss, $y_nss);
+        $pdf->Write(0, strtoupper($inm_comprador['inm_comprador_nss']));
+
+        $x_curp = 67;
+        $y_curp = 30;
+        $pdf->SetXY($x_curp, $y_curp);
+        $pdf->Write(0,strtoupper( $inm_comprador['inm_comprador_curp']));
+
+        $x_rfc = 132;
+        $y_rfc = 30;
+        $pdf->SetXY($x_rfc, $y_rfc);
+        $pdf->Write(0, strtoupper($com_cliente['com_cliente_rfc']));
+
+
+        $x_ap = 16;
+        $y_ap = 37;
+        $pdf->SetXY($x_ap, $y_ap);
+        $pdf->Write(0, strtoupper($inm_comprador['inm_comprador_apellido_paterno']));
+
+        $x_am = 106;
+        $y_am = 37;
+        $pdf->SetXY($x_am, $y_am);
+        $pdf->Write(0, strtoupper($inm_comprador['inm_comprador_apellido_materno']));
+
+        $x_nombre = 16;
+        $y_nombre = 44;
+        $pdf->SetXY($x_nombre, $y_nombre);
+        $pdf->Write(0, strtoupper($inm_comprador['inm_comprador_nombre']));
+
+        $domicilio = $com_cliente['dp_calle_descripcion'].' '.$com_cliente['com_cliente_numero_exterior'];
+        $domicilio .= $com_cliente['com_cliente_numero_interior'];
+
+        $x_rfc = 16;
+        $y_rfc = 54;
+        $pdf->SetXY($x_rfc, $y_rfc);
+        $pdf->Write(0, strtoupper($domicilio));
+
+
+        $x_colonia = 16;
+        $y_colonia = 61;
+        $pdf->SetXY($x_colonia, $y_colonia);
+        $pdf->Write(0, strtoupper($com_cliente['dp_colonia_descripcion']));
+
+        $x_estado = 105;
+        $y_estado = 61;
+        $pdf->SetXY($x_estado, $y_estado);
+        $pdf->Write(0, strtoupper($com_cliente['dp_estado_descripcion']));
+
+        $x_municipio = 16;
+        $y_municipio = 68;
+        $pdf->SetXY($x_municipio, $y_municipio);
+        $pdf->Write(0, strtoupper($com_cliente['dp_municipio_descripcion']));
+
+        $x_cp = 82;
+        $y_cp = 68;
+        $pdf->SetXY($x_cp, $y_cp);
+        $pdf->Write(0, strtoupper($com_cliente['dp_cp_descripcion']));
+
+
 
         $pdf->AddPage();
         $tplIdx = $pdf->importPage(3);

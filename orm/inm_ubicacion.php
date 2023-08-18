@@ -17,7 +17,7 @@ class inm_ubicacion extends _modelo_parent{
             'dp_cp'=>'dp_colonia_postal','dp_colonia'=>'dp_colonia_postal','dp_municipio'=>'dp_cp',
             'dp_estado'=>'dp_municipio','dp_pais'=>'dp_estado','dp_calle'=>'dp_calle_pertenece');
 
-        $campos_obligatorios = array('manzana','lote','dp_calle_pertenece_id');
+        $campos_obligatorios = array('dp_calle_pertenece_id');
 
         $columnas_extra= array();
         $renombres= array();
@@ -64,6 +64,14 @@ class inm_ubicacion extends _modelo_parent{
     }
 
     private function init_row(array $registro){
+
+        if(!isset($registro['manzana'])){
+            $registro['manzana'] = '';
+        }
+        if(!isset($registro['lote'])){
+            $registro['lote'] = '';
+        }
+
         $dp_calle_pertenece = (new dp_calle_pertenece(link: $this->link))->registro(
             registro_id: $registro['dp_calle_pertenece_id'],retorno_obj: true);
         if(errores::$error){

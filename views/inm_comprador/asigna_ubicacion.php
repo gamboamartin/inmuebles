@@ -18,6 +18,9 @@
                     <?php include (new views())->ruta_templates."head/subtitulo.php"; ?>
                     <?php include (new views())->ruta_templates."mensajes.php"; ?>
 
+                    <?php echo $controlador->inputs->inm_ubicacion_id; ?>
+                    <?php echo $controlador->inputs->precio_operacion; ?>
+
                     <?php echo $controlador->inputs->com_tipo_cliente_id; ?>
                     <?php echo $controlador->inputs->nss; ?>
                     <?php echo $controlador->inputs->curp; ?>
@@ -25,7 +28,11 @@
                     <?php echo $controlador->inputs->apellido_paterno; ?>
                     <?php echo $controlador->inputs->apellido_materno; ?>
                     <?php echo $controlador->inputs->nombre; ?>
-                    <?php echo $controlador->inputs->inm_ubicacion_id; ?>
+                    <?php echo $controlador->inputs->inm_comprador_id; ?>
+                    <?php echo $controlador->inputs->inm_comprador_id; ?>
+                    <?php echo $controlador->inputs->seccion_retorno; ?>
+                    <?php echo $controlador->inputs->btn_action_next; ?>
+                    <?php echo $controlador->inputs->id_retorno; ?>
                     <?php include (new views())->ruta_templates.'botons/submit/alta_bd.php';?>
                     </form>
 

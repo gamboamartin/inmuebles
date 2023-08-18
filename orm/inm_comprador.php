@@ -27,7 +27,8 @@ class inm_comprador extends _modelo_parent{
         $atributos_criticos = array('inm_producto_infonavit_id','inm_attr_tipo_credito_id','inm_destino_credito_id',
             'es_segundo_credito','inm_plazo_credito_sc_id','descuento_pension_alimenticia_dh',
             'descuento_pension_alimenticia_fc','monto_credito_solicitado_dh','monto_ahorro_voluntario','nombre',
-            'apellido_paterno','apellido_materno');
+            'apellido_paterno','apellido_materno','nombre_empresa_patron','nrp_nep','lada_nep','numero_nep',
+            'extension_nep','lada_com','numero_com','cel_com','genero','correo_com');
 
         parent::__construct(link: $link, tabla: $tabla, campos_obligatorios: $campos_obligatorios,
             columnas: $columnas, columnas_extra: $columnas_extra, renombres: $renombres,
@@ -71,11 +72,16 @@ class inm_comprador extends _modelo_parent{
                 return $this->error->error(mensaje: 'Error al generar razon social',data:  $razon_social);
             }
 
+            $numero_interior = '';
+            if(isset($registro_entrada['numero_interior'])){
+                $numero_interior = $registro_entrada['numero_interior'];
+            }
+
             $com_cliente_ins['razon_social'] = trim($razon_social);
             $com_cliente_ins['rfc'] = $registro_entrada['rfc'];
             $com_cliente_ins['dp_calle_pertenece_id'] = $registro_entrada['dp_calle_pertenece_id'];
             $com_cliente_ins['numero_exterior'] = $registro_entrada['numero_exterior'];
-            $com_cliente_ins['numero_interior'] = $registro_entrada['numero_interior'];
+            $com_cliente_ins['numero_interior'] = $numero_interior;
             $com_cliente_ins['telefono'] = $registro_entrada['telefono'];
             $com_cliente_ins['cat_sat_regimen_fiscal_id'] = $registro_entrada['cat_sat_regimen_fiscal_id'];
             $com_cliente_ins['cat_sat_moneda_id'] = $registro_entrada['cat_sat_moneda_id'];

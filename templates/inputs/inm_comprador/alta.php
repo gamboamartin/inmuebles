@@ -59,13 +59,40 @@
     </div>
 
 
-
-
 <?php echo $controlador->inputs->inm_plazo_credito_sc_id; ?>
+
+
+    <div class="control-group col-sm-12">
+        <label class="control-label" for="inm_attr_tipo_credito_id">Con Discapacidad</label>
+        <label class="form-check-label chk">
+            <input type="radio" name="con_discapacidad" value="NO" class="form-check-input" id="con_discapacidad"
+                   title="Con discapacidad" checked>
+            NO
+        </label>
+        <label class="form-check-label chk">
+            <input type="radio" name="con_discapacidad" value="SI" class="form-check-input" id="con_discapacidad"
+                   title="Con discapacidad">
+            SI
+        </label>
+    </div>
+
+
 <?php echo $controlador->inputs->descuento_pension_alimenticia_dh; ?>
 <?php echo $controlador->inputs->descuento_pension_alimenticia_fc; ?>
 <?php echo $controlador->inputs->monto_credito_solicitado_dh; ?>
 <?php echo $controlador->inputs->monto_ahorro_voluntario; ?>
+
+<?php /**
+ *
+ * DATOS EMPRESA
+ *
+ **/
+?>
+<?php echo $controlador->inputs->nombre_empresa_patron; ?>
+<?php echo $controlador->inputs->nrp_nep; ?>
+<?php echo $controlador->inputs->lada_nep; ?>
+<?php echo $controlador->inputs->numero_nep; ?>
+<?php echo $controlador->inputs->extension_nep; ?>
 
 <?php /**
  *

@@ -248,12 +248,19 @@ class controlador_inm_ubicacion extends _ctl_base {
             return $this->retorno_error(mensaje: 'Error al in_registro_id',data:  $btn_action_next,
                 header: $header,ws:  $ws);
         }
+        $precio_operacion = $this->html->input_monto(cols: 12, row_upd: new stdClass(),value_vacio: false,
+            name: 'precio_operacion',place_holder: 'Precio de operacion');
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al obtener precio operacion',data:  $precio_operacion,
+                header: $header,ws:  $ws);
+        }
 
         $this->inputs->id_retorno = $id_retorno;
         $this->inputs->btn_action_next = $btn_action_next;
         $this->inputs->seccion_retorno = $seccion_retorno;
         $this->inputs->registro_id = $in_registro_id;
         $this->inputs->inm_ubicacion_id = $inm_ubicacion_id;
+        $this->inputs->precio_operacion = $precio_operacion;
 
 
 
@@ -363,7 +370,8 @@ class controlador_inm_ubicacion extends _ctl_base {
 
         $columns_ds = array('dp_calle_descripcion');
         $keys_selects = $this->key_select(cols:6, con_registros: true,filtro:  $filtro, key: 'dp_calle_pertenece_id',
-            keys_selects: $keys_selects, id_selected: $registro->dp_calle_pertenece_id, label: 'Calle', columns_ds: $columns_ds);
+            keys_selects: $keys_selects, id_selected: $registro->dp_calle_pertenece_id, label: 'Calle',
+            columns_ds: $columns_ds);
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects,
                 header: $header,ws:  $ws);
@@ -373,8 +381,6 @@ class controlador_inm_ubicacion extends _ctl_base {
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al integrar base',data:  $base, header: $header,ws:  $ws);
         }
-
-
 
         return $r_modifica;
     }
@@ -412,12 +418,12 @@ class controlador_inm_ubicacion extends _ctl_base {
             return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
         $keys_selects = (new init())->key_select_txt(cols: 6,key: 'manzana', keys_selects:$keys_selects,
-            place_holder: 'Manzana');
+            place_holder: 'Manzana',required: false);
         if(errores::$error){
             return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
         $keys_selects = (new init())->key_select_txt(cols: 6,key: 'lote', keys_selects:$keys_selects,
-            place_holder: 'Lote');
+            place_holder: 'Lote', required: false);
         if(errores::$error){
             return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
@@ -439,8 +445,6 @@ class controlador_inm_ubicacion extends _ctl_base {
 
         return $keys_selects;
     }
-
-
 
     /**
      * Inicializa los elementos mostrables para datatables
