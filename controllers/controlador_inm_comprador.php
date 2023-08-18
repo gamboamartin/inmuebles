@@ -1051,20 +1051,39 @@ class controlador_inm_comprador extends _ctl_base {
          * 4. DATOS DE LA EMPRESA O PATRÓN
          */
 
+        if(!isset($inm_comprador['inm_comprador_nombre_empresa_patron'])){
+            $inm_comprador['inm_comprador_nombre_empresa_patron'] = '';
+        }
+
         $x_nombre_empresa_patron = 16;
         $y_nombre_empresa_patron = 249;
         $pdf->SetXY($x_nombre_empresa_patron, $y_nombre_empresa_patron);
         $pdf->Write(0, strtoupper($inm_comprador['inm_comprador_nombre_empresa_patron']));
+
+
+        if(!isset($inm_comprador['inm_comprador_nrp_nep'])){
+            $inm_comprador['inm_comprador_nrp_nep'] = '';
+        }
 
         $x_nrp = 140;
         $y_nrp = 249;
         $pdf->SetXY($x_nrp, $y_nrp);
         $pdf->Write(0, strtoupper($inm_comprador['inm_comprador_nrp_nep']));
 
+
+        if(!isset($inm_comprador['inm_comprador_lada_nep'])){
+            $inm_comprador['inm_comprador_lada_nep'] = '';
+        }
+
         $x_lada_nep = 57;
         $y_lada_nep = 256;
         $pdf->SetXY($x_lada_nep, $y_lada_nep);
         $pdf->Write(0, strtoupper($inm_comprador['inm_comprador_lada_nep']));
+
+
+        if(!isset($inm_comprador['inm_comprador_numero_nep'])){
+            $inm_comprador['inm_comprador_numero_nep'] = '';
+        }
 
         $x_num_nep = 70;
         $y_num_nep = 256;
