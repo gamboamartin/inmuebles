@@ -42,12 +42,11 @@ class inm_comprador extends _modelo_parent{
         $registro_entrada = $this->registro;
 
         if(!isset($this->registro['descripcion'])){
-            $descripcion = $this->registro['nombre'];
-            $descripcion .= ' '.$this->registro['apellido_paterno'];
-            $descripcion .= ' '.$this->registro['apellido_materno'];
-            $descripcion .= ' '.$this->registro['nss'];
-            $descripcion .= ' '.$this->registro['curp'];
-            $descripcion .= ' '.$this->registro['rfc'];
+            $descripcion = $this->descripcion(registro: $this->registro );
+            if(errores::$error){
+                return $this->error->error(mensaje: 'Error al obtener descripcion',data:  $descripcion);
+            }
+
             $this->registro['descripcion'] = $descripcion;
         }
         if(!isset($this->registro['inm_plazo_credito_sc_id'])){
@@ -66,9 +65,11 @@ class inm_comprador extends _modelo_parent{
         }
 
         if(!$existe_cliente) {
-            $razon_social = $registro_entrada['nombre'];
-            $razon_social .= $registro_entrada['apellido_paterno'];
-            $razon_social .= $registro_entrada['apellido_materno'];
+
+            $razon_social = $this->razon_social(registro_entrada: $registro_entrada);
+            if(errores::$error){
+                return $this->error->error(mensaje: 'Error al generar razon social',data:  $razon_social);
+            }
 
             $com_cliente_ins['razon_social'] = trim($razon_social);
             $com_cliente_ins['rfc'] = $registro_entrada['rfc'];
@@ -120,6 +121,22 @@ class inm_comprador extends _modelo_parent{
 
         return $r_alta_bd;
 
+    }
+
+    /**
+     * Genera la descripcion de un comprador basado en datos del registro a insertar
+     * @param array $registro Registro en proceso
+     * @return string
+     */
+    private function descripcion(array $registro): string
+    {
+        $descripcion = $registro['nombre'];
+        $descripcion .= ' '.$registro['apellido_paterno'];
+        $descripcion .= ' '.$registro['apellido_materno'];
+        $descripcion .= ' '.$registro['nss'];
+        $descripcion .= ' '.$registro['curp'];
+        $descripcion .= ' '.$registro['rfc'];
+        return $descripcion;
     }
 
     public function elimina_bd(int $id): array|stdClass
@@ -183,6 +200,14 @@ class inm_comprador extends _modelo_parent{
 
 
         return $r_modifica;
+    }
+
+    private function razon_social(array $registro_entrada): string
+    {
+        $razon_social = $registro_entrada['nombre'];
+        $razon_social .= $registro_entrada['apellido_paterno'];
+        $razon_social .= $registro_entrada['apellido_materno'];
+        return $razon_social;
     }
 
 

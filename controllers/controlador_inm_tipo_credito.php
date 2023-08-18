@@ -18,7 +18,7 @@ use gamboamartin\template\html;
 use PDO;
 use stdClass;
 
-class controlador_inm_tipo_credito extends _ctl_base {
+class controlador_inm_tipo_credito extends _ctl_formato {
 
     public function __construct(PDO      $link, html $html = new \gamboamartin\template_1\html(),
                                 stdClass $paths_conf = new stdClass())
@@ -72,25 +72,7 @@ class controlador_inm_tipo_credito extends _ctl_base {
         return $campos_view;
     }
 
-    protected function key_selects_txt(array $keys_selects): array
-    {
 
-        $keys_selects = (new init())->key_select_txt(cols: 12,key: 'descripcion', keys_selects:$keys_selects,
-            place_holder: 'Descripcion');
-        if(errores::$error){
-            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
-        }
-        $keys_selects = (new init())->key_select_txt(cols: 6,key: 'x', keys_selects:$keys_selects, place_holder: 'x');
-        if(errores::$error){
-            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
-        }
-        $keys_selects = (new init())->key_select_txt(cols: 6,key: 'y', keys_selects:$keys_selects, place_holder: 'y');
-        if(errores::$error){
-            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
-        }
-
-        return $keys_selects;
-    }
 
     public function modifica(bool $header, bool $ws = false): array|stdClass
     {
