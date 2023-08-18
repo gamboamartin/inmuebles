@@ -74,7 +74,7 @@ class controlador_inm_comprador extends _ctl_base {
 
 
         $columns_ds = array('com_tipo_cliente_descripcion');
-        $keys_selects = $this->key_select(cols:6, con_registros: true,filtro:  array(), key: 'com_tipo_cliente_id',
+        $keys_selects = $this->key_select(cols:12, con_registros: true,filtro:  array(), key: 'com_tipo_cliente_id',
             keys_selects: $keys_selects, id_selected: -1, label: 'Tipo de Cliente', columns_ds: $columns_ds);
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects,
@@ -400,7 +400,7 @@ class controlador_inm_comprador extends _ctl_base {
         if(errores::$error){
             return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
-        $keys_selects = (new init())->key_select_txt(cols: 12,key: 'nombre',
+        $keys_selects = (new init())->key_select_txt(cols: 6,key: 'nombre',
             keys_selects:$keys_selects, place_holder: 'Nombre(s)');
         if(errores::$error){
             return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
@@ -741,7 +741,7 @@ class controlador_inm_comprador extends _ctl_base {
 
 
         $columns_ds = array('com_tipo_cliente_descripcion');
-        $keys_selects = $this->key_select(cols:6, con_registros: true,filtro:  array(), key: 'com_tipo_cliente_id',
+        $keys_selects = $this->key_select(cols:12, con_registros: true,filtro:  array(), key: 'com_tipo_cliente_id',
             keys_selects: $keys_selects, id_selected: $com_cliente['com_tipo_cliente_id'], label: 'Tipo de Cliente',
             columns_ds: $columns_ds);
         if(errores::$error){
