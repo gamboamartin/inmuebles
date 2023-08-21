@@ -104,7 +104,26 @@
 <?php echo $controlador->inputs->dp_calle_pertenece_id; ?>
 <?php echo $controlador->inputs->numero_exterior; ?>
 <?php echo $controlador->inputs->numero_interior; ?>
-<?php echo $controlador->inputs->telefono; ?>
+<?php echo $controlador->inputs->lada_com; ?>
+<?php echo $controlador->inputs->numero_com; ?>
+<?php echo $controlador->inputs->cel_com; ?>
+
+    <div class="control-group col-sm-6">
+        <label class="control-label" for="inm_attr_tipo_credito_id">Genero</label>
+        <label class="form-check-label chk">
+            <input type="radio" name="genero" value="M" class="form-check-input" id="genero"
+                   title="Genero" checked>
+            M
+        </label>
+        <label class="form-check-label chk">
+            <input type="radio" name="genero" value="F" class="form-check-input" id="genero"
+                   title="Genero">
+            F
+        </label>
+    </div>
+
+
+<?php echo $controlador->inputs->correo_com; ?>
 
 
     <div class="col-md-12">

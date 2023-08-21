@@ -93,6 +93,7 @@ class controlador_inm_attr_tipo_credito extends _ctl_formato {
      * @param array $keys_selects Keys precargados
      * @param int $cols_descripcion Columnas para descripcion
      * @return array
+     * @version 1.23.0
      */
     protected function key_selects_txt(array $keys_selects, int $cols_descripcion = 6): array
     {

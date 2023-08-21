@@ -84,7 +84,7 @@ class inm_comprador extends _modelo_parent{
             $com_cliente_ins['dp_calle_pertenece_id'] = $registro_entrada['dp_calle_pertenece_id'];
             $com_cliente_ins['numero_exterior'] = $registro_entrada['numero_exterior'];
             $com_cliente_ins['numero_interior'] = $numero_interior;
-            $com_cliente_ins['telefono'] = $registro_entrada['telefono'];
+            $com_cliente_ins['telefono'] = $registro_entrada['lada_com'].$registro_entrada['numero_com'];
             $com_cliente_ins['cat_sat_regimen_fiscal_id'] = $registro_entrada['cat_sat_regimen_fiscal_id'];
             $com_cliente_ins['cat_sat_moneda_id'] = $registro_entrada['cat_sat_moneda_id'];
             $com_cliente_ins['cat_sat_forma_pago_id'] = $registro_entrada['cat_sat_forma_pago_id'];

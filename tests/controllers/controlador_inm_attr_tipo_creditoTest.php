@@ -102,6 +102,28 @@ class controlador_inm_attr_tipo_creditoTest extends test {
         errores::$error = false;
     }
 
+    public function test_key_selects_txt(): void
+    {
+        errores::$error = false;
+
+        $_GET['seccion'] = 'inm_producto_infonavit';
+        $_GET['accion'] = 'lista';
+        $_SESSION['grupo_id'] = 1;
+        $_SESSION['usuario_id'] = 2;
+        $_GET['session_id'] = '1';
+
+
+        $ctl = new controlador_inm_attr_tipo_credito(link: $this->link, paths_conf: $this->paths_conf);
+        $ctl = new liberator($ctl);
+
+        $keys_selects = array();
+        $resultado = $ctl->key_selects_txt($keys_selects);
+        $this->assertIsArray($resultado);
+        $this->assertNotTrue(errores::$error);
+        $this->assertEquals("Descripcion",$resultado['descripcion']->place_holder);
+        errores::$error = false;
+    }
+
 
 }
 

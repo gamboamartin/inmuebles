@@ -27,6 +27,13 @@ if($controlador->row_upd->con_discapacidad === 'SI'){
     $checked_cd_si = 'checked';
 }
 
+$checked_genero_m = 'checked';
+$checked_genero_f = '';
+if($controlador->row_upd->genero === 'F'){
+    $checked_genero_m = '';
+    $checked_genero_f = 'checked';
+}
+
 
 ?>
     <div class="control-group col-sm-6">
@@ -122,7 +129,27 @@ if($controlador->row_upd->con_discapacidad === 'SI'){
 <?php echo $controlador->inputs->dp_calle_pertenece_id; ?>
 <?php echo $controlador->inputs->numero_exterior; ?>
 <?php echo $controlador->inputs->numero_interior; ?>
-<?php echo $controlador->inputs->telefono; ?>
+<?php echo $controlador->inputs->lada_com; ?>
+<?php echo $controlador->inputs->numero_com; ?>
+<?php echo $controlador->inputs->cel_com; ?>
+
+    <div class="control-group col-sm-6">
+        <label class="control-label" for="inm_attr_tipo_credito_id">Genero</label>
+        <label class="form-check-label chk">
+            <input type="radio" name="genero" value="M"
+                   class="form-check-input" id="genero"
+                   title="Genero" <?php echo $checked_genero_m; ?> >
+            M
+        </label>
+        <label class="form-check-label chk">
+            <input type="radio" name="genero" value="F"
+                   class="form-check-input" id="genero"
+                   title="Genero" <?php echo $checked_genero_f; ?>>
+            F
+        </label>
+    </div>
+
+<?php echo $controlador->inputs->correo_com; ?>
 
 
     <div class="col-md-12">

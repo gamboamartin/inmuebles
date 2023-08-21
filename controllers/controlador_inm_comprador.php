@@ -312,7 +312,8 @@ class controlador_inm_comprador extends _ctl_base {
         $keys->inputs = array('descripcion', 'es_segundo_credito', 'descuento_pension_alimenticia_dh',
             'descuento_pension_alimenticia_fc','monto_credito_solicitado_dh','monto_ahorro_voluntario','nss','curp',
             'rfc','apellido_paterno','apellido_materno','nombre','numero_exterior','numero_interior','telefono',
-            'nombre_empresa_patron','nrp_nep','lada_nep','numero_nep','extension_nep');
+            'nombre_empresa_patron','nrp_nep','lada_nep','numero_nep','extension_nep','lada_com','numero_com',
+            'cel_com','genero','correo_com');
         $keys->selects = array();
 
 
@@ -452,7 +453,32 @@ class controlador_inm_comprador extends _ctl_base {
             return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
 
+        $keys_selects = (new init())->key_select_txt(cols: 6,key: 'lada_com',
+            keys_selects:$keys_selects, place_holder: 'Lada');
+        if(errores::$error){
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        }
+        $keys_selects = (new init())->key_select_txt(cols: 6,key: 'numero_com',
+            keys_selects:$keys_selects, place_holder: 'Numero');
+        if(errores::$error){
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        }
+        $keys_selects = (new init())->key_select_txt(cols: 6,key: 'cel_com',
+            keys_selects:$keys_selects, place_holder: 'Celular');
+        if(errores::$error){
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        }
 
+        $keys_selects = (new init())->key_select_txt(cols: 6,key: 'genero',
+            keys_selects:$keys_selects, place_holder: 'Genero');
+        if(errores::$error){
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        }
+        $keys_selects = (new init())->key_select_txt(cols: 12,key: 'correo_com',
+            keys_selects:$keys_selects, place_holder: 'Correo');
+        if(errores::$error){
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        }
 
         return $keys_selects;
     }
@@ -1204,6 +1230,38 @@ class controlador_inm_comprador extends _ctl_base {
         $pdf->SetXY($x_cp, $y_cp);
         $pdf->Write(0, strtoupper($com_cliente['dp_cp_descripcion']));
 
+
+        $x_lada = 27;
+        $y_lada = 76;
+        $pdf->SetXY($x_lada, $y_lada);
+        $pdf->Write(0, strtoupper($inm_comprador['inm_comprador_lada_com']));
+
+        $x_numero = 40;
+        $y_numero = 76;
+        $pdf->SetXY($x_numero, $y_numero);
+        $pdf->Write(0, strtoupper($inm_comprador['inm_comprador_numero_com']));
+
+        $x_cel = 88;
+        $y_cel = 76;
+        $pdf->SetXY($x_cel, $y_cel);
+        $pdf->Write(0, strtoupper($inm_comprador['inm_comprador_cel_com']));
+
+        $x_genero = 144.5;
+        $y_genero = 77;
+
+        if($inm_comprador['inm_comprador_genero'] === 'F'){
+
+            $x_genero = 150.5;
+        }
+
+        $pdf->SetXY($x_genero, $y_genero);
+        $pdf->Write(0, 'X');
+
+
+        $x_correo = 37.5;
+        $y_correo = 85.5;
+        $pdf->SetXY($x_correo, $y_correo);
+        $pdf->Write(0, strtoupper($inm_comprador['inm_comprador_correo_com']));
 
 
         $pdf->AddPage();
