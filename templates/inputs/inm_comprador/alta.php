@@ -68,6 +68,7 @@
     </div>
 
 <?php echo $controlador->inputs->inm_tipo_discapacidad_id; ?>
+<?php echo $controlador->inputs->inm_persona_discapacidad_id; ?>
 
 
     <div class="col-md-12">

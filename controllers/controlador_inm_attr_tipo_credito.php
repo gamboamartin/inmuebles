@@ -88,6 +88,12 @@ class controlador_inm_attr_tipo_credito extends _ctl_formato {
         return $campos_view;
     }
 
+    /**
+     * Integra los parametros de tipo txt
+     * @param array $keys_selects Keys precargados
+     * @param int $cols_descripcion Columnas para descripcion
+     * @return array
+     */
     protected function key_selects_txt(array $keys_selects, int $cols_descripcion = 6): array
     {
         $keys_selects = parent::key_selects_txt(keys_selects: $keys_selects,

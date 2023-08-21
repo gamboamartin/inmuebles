@@ -322,6 +322,7 @@ class controlador_inm_comprador extends _ctl_base {
         $init_data['inm_destino_credito'] = "gamboamartin\\inmuebles";
         $init_data['inm_plazo_credito_sc'] = "gamboamartin\\inmuebles";
         $init_data['inm_tipo_discapacidad'] = "gamboamartin\\inmuebles";
+        $init_data['inm_persona_discapacidad'] = "gamboamartin\\inmuebles";
 
         $init_data['dp_pais'] = "gamboamartin\\direccion_postal";
         $init_data['dp_estado'] = "gamboamartin\\direccion_postal";
@@ -620,6 +621,9 @@ class controlador_inm_comprador extends _ctl_base {
         if(!isset($row_upd->inm_tipo_discapacidad_id)){
             $row_upd->inm_tipo_discapacidad_id = 5;
         }
+        if(!isset($row_upd->inm_persona_discapacidad_id)){
+            $row_upd->inm_persona_discapacidad_id = 6;
+        }
 
         $columns_ds[] = 'inm_producto_infonavit_descripcion';
         $keys_selects = $this->key_select(cols:6, con_registros: true,filtro:  array(), key: 'inm_producto_infonavit_id',
@@ -658,6 +662,15 @@ class controlador_inm_comprador extends _ctl_base {
         $columns_ds[] = 'inm_tipo_discapacidad_descripcion';
         $keys_selects = $this->key_select(cols:6, con_registros: true,filtro:  array(), key: 'inm_tipo_discapacidad_id',
             keys_selects: $keys_selects, id_selected: $row_upd->inm_tipo_discapacidad_id, label: 'Tipo de Discapacidad',
+            columns_ds: $columns_ds);
+        if(errores::$error){
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        }
+
+        $columns_ds = array();
+        $columns_ds[] = 'inm_persona_discapacidad_descripcion';
+        $keys_selects = $this->key_select(cols:12, con_registros: true,filtro:  array(), key: 'inm_persona_discapacidad_id',
+            keys_selects: $keys_selects, id_selected: $row_upd->inm_persona_discapacidad_id, label: 'Persona Discapacidad',
             columns_ds: $columns_ds);
         if(errores::$error){
             return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
@@ -1042,7 +1055,10 @@ class controlador_inm_comprador extends _ctl_base {
         $pdf->SetXY($inm_comprador['inm_tipo_discapacidad_x'], $inm_comprador['inm_tipo_discapacidad_y']);
         $pdf->Write(0, 'X');
 
-        
+        $pdf->SetXY($inm_comprador['inm_persona_discapacidad_x'], $inm_comprador['inm_persona_discapacidad_y']);
+        $pdf->Write(0, 'X');
+
+
 
 
         $x_imp_rel_ubi_precio_operacion = 21.5;
