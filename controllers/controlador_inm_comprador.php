@@ -81,6 +81,14 @@ class controlador_inm_comprador extends _ctl_base {
                 header: $header,ws:  $ws);
         }
 
+        $columns_ds = array('inm_estado_civil_descripcion');
+        $keys_selects = $this->key_select(cols:6, con_registros: true,filtro:  array(), key: 'inm_estado_civil_id',
+            keys_selects: $keys_selects, id_selected: -1, label: 'Estado Civil',
+            columns_ds: $columns_ds);
+        if(errores::$error){
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        }
+
         $this->row_upd->descuento_pension_alimenticia_dh = 0;
         $this->row_upd->monto_credito_solicitado_dh = 0;
         $this->row_upd->descuento_pension_alimenticia_fc = 0;
@@ -324,6 +332,7 @@ class controlador_inm_comprador extends _ctl_base {
         $init_data['inm_plazo_credito_sc'] = "gamboamartin\\inmuebles";
         $init_data['inm_tipo_discapacidad'] = "gamboamartin\\inmuebles";
         $init_data['inm_persona_discapacidad'] = "gamboamartin\\inmuebles";
+        $init_data['inm_estado_civil'] = "gamboamartin\\inmuebles";
 
         $init_data['dp_pais'] = "gamboamartin\\direccion_postal";
         $init_data['dp_estado'] = "gamboamartin\\direccion_postal";
@@ -474,7 +483,7 @@ class controlador_inm_comprador extends _ctl_base {
         if(errores::$error){
             return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
-        $keys_selects = (new init())->key_select_txt(cols: 12,key: 'correo_com',
+        $keys_selects = (new init())->key_select_txt(cols: 6,key: 'correo_com',
             keys_selects:$keys_selects, place_holder: 'Correo');
         if(errores::$error){
             return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
@@ -553,6 +562,9 @@ class controlador_inm_comprador extends _ctl_base {
         if(errores::$error){
             return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
+
+
+
         return $keys_selects;
     }
 
@@ -799,6 +811,14 @@ class controlador_inm_comprador extends _ctl_base {
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects,
                 header: $header,ws:  $ws);
+        }
+
+        $columns_ds = array('inm_estado_civil_descripcion');
+        $keys_selects = $this->key_select(cols:6, con_registros: true,filtro:  array(), key: 'inm_estado_civil_id',
+            keys_selects: $keys_selects, id_selected: $this->row_upd->inm_estado_civil_id, label: 'Estado Civil',
+            columns_ds: $columns_ds);
+        if(errores::$error){
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
 
 
@@ -1085,8 +1105,6 @@ class controlador_inm_comprador extends _ctl_base {
         $pdf->Write(0, 'X');
 
 
-
-
         $x_imp_rel_ubi_precio_operacion = 21.5;
         $y_imp_rel_ubi_precio_operacion = 224.5;
 
@@ -1262,6 +1280,15 @@ class controlador_inm_comprador extends _ctl_base {
         $y_correo = 85.5;
         $pdf->SetXY($x_correo, $y_correo);
         $pdf->Write(0, strtoupper($inm_comprador['inm_comprador_correo_com']));
+
+
+        $pdf->SetXY($inm_comprador['inm_estado_civil_x'], $inm_comprador['inm_estado_civil_y']);
+        $pdf->Write(0, 'X');
+
+        if((int)$inm_comprador['inm_estado_civil_id'] !==1){
+            $pdf->SetXY(58.5, 90);
+            $pdf->Write(0, 'X');
+        }
 
 
         $pdf->AddPage();

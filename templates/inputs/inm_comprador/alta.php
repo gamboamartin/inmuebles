@@ -124,6 +124,7 @@
 
 
 <?php echo $controlador->inputs->correo_com; ?>
+<?php echo $controlador->inputs->inm_estado_civil_id; ?>
 
 
     <div class="col-md-12">
