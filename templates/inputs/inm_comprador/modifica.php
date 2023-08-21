@@ -65,7 +65,7 @@ if($controlador->row_upd->con_discapacidad === 'SI'){
         <hr>
     </div>
 
-    <div class="control-group col-sm-12">
+    <div class="control-group col-sm-6">
         <label class="control-label" for="inm_attr_tipo_credito_id">Con Discapacidad</label>
         <label class="form-check-label chk">
             <input type="radio" name="con_discapacidad" value="NO"
@@ -80,6 +80,8 @@ if($controlador->row_upd->con_discapacidad === 'SI'){
             SI
         </label>
     </div>
+
+<?php echo $controlador->inputs->inm_tipo_discapacidad_id; ?>
 
 
     <div class="col-md-12">
@@ -107,8 +109,6 @@ if($controlador->row_upd->con_discapacidad === 'SI'){
 <?php echo $controlador->inputs->apellido_paterno; ?>
 <?php echo $controlador->inputs->apellido_materno; ?>
 <?php echo $controlador->inputs->nombre; ?>
-
-
 
 
 
@@ -146,15 +146,6 @@ if($controlador->row_upd->con_discapacidad === 'SI'){
     </div>
 
 <?php echo $controlador->inputs->com_tipo_cliente_id; ?>
-
-
-
-
-
-
-
-
-
 
 
 

@@ -7,6 +7,12 @@ use gamboamartin\errores\errores;
 use gamboamartin\system\_ctl_base;
 
 class _ctl_formato extends _ctl_base{
+    /**
+     * Obtiene los parametros para selectores de tipo texto
+     * @param array $keys_selects
+     * @param int $cols_descripcion
+     * @return array
+     */
     protected function key_selects_txt(array $keys_selects, int $cols_descripcion = 12): array
     {
 

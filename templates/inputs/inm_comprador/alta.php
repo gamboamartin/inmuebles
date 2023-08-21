@@ -53,7 +53,7 @@
         <hr>
     </div>
 
-    <div class="control-group col-sm-12">
+    <div class="control-group col-sm-6">
         <label class="control-label" for="inm_attr_tipo_credito_id">Con Discapacidad</label>
         <label class="form-check-label chk">
             <input type="radio" name="con_discapacidad" value="NO" class="form-check-input" id="con_discapacidad"
@@ -66,6 +66,8 @@
             SI
         </label>
     </div>
+
+<?php echo $controlador->inputs->inm_tipo_discapacidad_id; ?>
 
 
     <div class="col-md-12">
