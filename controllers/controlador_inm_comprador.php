@@ -963,7 +963,7 @@ class controlador_inm_comprador extends _ctl_base {
         $y_imp_rel_ubi_comp = 164;
 
         $pdf->SetXY($x_imp_rel_ubi_comp, $y_imp_rel_ubi_comp);
-        $pdf->Write(0, strtoupper($imp_rel_ubi_comp['dp_calle_ubicacion_descripcion']));
+            $pdf->Write(0, strtoupper($imp_rel_ubi_comp['dp_calle_ubicacion_descripcion']));
 
 
         $x_imp_rel_ubi_comp_numero_exterior = 15.5;
@@ -1042,6 +1042,7 @@ class controlador_inm_comprador extends _ctl_base {
         $pdf->SetXY($inm_comprador['inm_tipo_discapacidad_x'], $inm_comprador['inm_tipo_discapacidad_y']);
         $pdf->Write(0, 'X');
 
+        
 
 
         $x_imp_rel_ubi_precio_operacion = 21.5;
@@ -1063,6 +1064,8 @@ class controlador_inm_comprador extends _ctl_base {
 
         $pdf->SetXY($x_imp_rel_ubi_precio_operacion, $y_imp_rel_ubi_precio_operacion);
         $pdf->Write(0, $imp_rel_ubi_comp['inm_rel_ubi_comp_precio_operacion']);
+
+
 
 
         /**
