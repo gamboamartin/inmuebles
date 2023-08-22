@@ -69,6 +69,17 @@ class inm_referencia extends _modelo_parent{
         return $descripcion;
     }
 
+    final public function inm_referencias(int $inm_comprador_id){
+        $filtro = array();
+        $filtro['inm_comprador.id'] = $inm_comprador_id;
+
+        $r_inm_referencia = $this->filtro_and(filtro:$filtro);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al obtener r_inm_referencia',data:  $r_inm_referencia);
+        }
+        return $r_inm_referencia->registros;
+    }
+
 
 
 }

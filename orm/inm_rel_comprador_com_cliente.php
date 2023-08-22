@@ -3,6 +3,7 @@
 namespace gamboamartin\inmuebles\models;
 
 use base\orm\_modelo_parent;
+use gamboamartin\comercial\models\com_cliente;
 use gamboamartin\errores\errores;
 use PDO;
 use stdClass;
@@ -47,6 +48,31 @@ class inm_rel_comprador_com_cliente extends _modelo_parent{
 
         return $r_alta_bd;
 
+    }
+
+
+
+    final public function imp_rel_comprador_com_cliente(int $inm_comprador_id){
+        $filtro['inm_comprador.id'] = $inm_comprador_id;
+
+        $r_imp_rel_comprador_com_cliente = $this->filtro_and(filtro:$filtro);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al obtener imp_rel_comprador_com_cliente',
+                data:  $r_imp_rel_comprador_com_cliente);
+        }
+
+        if($r_imp_rel_comprador_com_cliente->n_registros === 0){
+            return $this->error->error(
+                mensaje: 'Error no existe inm_rel_comprador_com_cliente',data:  $r_imp_rel_comprador_com_cliente);
+        }
+
+        if($r_imp_rel_comprador_com_cliente->n_registros > 1){
+            return $this->error->error(
+                mensaje: 'Error de integridad existe mas de un inm_rel_comprador_com_cliente',
+                data:  $r_imp_rel_comprador_com_cliente);
+        }
+
+        return $r_imp_rel_comprador_com_cliente->registros[0];
     }
 
 

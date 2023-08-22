@@ -64,7 +64,8 @@
         "gamboa.martin/notificaciones": "^4.0.0",
         "gamboa.martin/facturacion": "^13.0.0",
         "gamboa.martin/banco": "^2.0.0",
-      "ext-openssl": "*"
+      "ext-openssl": "*",
+      "ext-mbstring": "*"
     },
     "require-dev": {
         "phpunit/phpunit": "^9.5"

@@ -117,5 +117,21 @@ class inm_rel_ubi_comp extends _modelo_parent{
 
     }
 
+    final public function imp_rel_ubi_comp(int $inm_comprador_id){
+
+        $filtro['inm_comprador.id'] = $inm_comprador_id;
+
+        $r_imp_rel_ubi_comp = $this->filtro_and(filtro:$filtro);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al obtener r_imp_rel_ubi_comp',data:  $r_imp_rel_ubi_comp);
+        }
+
+        if($r_imp_rel_ubi_comp->n_registros === 0){
+            return $this->error->error(
+                mensaje: 'Error no existe inm_rel_comprador_com_cliente',data:  $r_imp_rel_ubi_comp);
+        }
+        return $r_imp_rel_ubi_comp->registros[0];
+    }
+
 
 }

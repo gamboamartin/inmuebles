@@ -24,7 +24,9 @@ use gamboamartin\system\_ctl_base;
 use gamboamartin\system\links_menu;
 use gamboamartin\template\html;
 use PDO;
+use setasign\Fpdi\Fpdi;
 use stdClass;
+use Throwable;
 
 class controlador_inm_comprador extends _ctl_base {
 
@@ -870,160 +872,138 @@ class controlador_inm_comprador extends _ctl_base {
         return $datatables;
     }
 
-    public function solicitud_infonavit(bool $header, bool $ws = false){
+    public function solicitud_infonavit(bool $header, bool $ws = false)
+    {
 
         $inm_comprador = $this->modelo->registro(registro_id: $this->registro_id);
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al obtener comprador',data:  $inm_comprador,
-                header: $header,ws:  $ws);
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al obtener comprador', data: $inm_comprador,
+                header: $header, ws: $ws);
         }
 
-        $filtro['inm_comprador.id'] = $this->registro_id;
-
-        $r_imp_rel_comprador_com_cliente = (new inm_rel_comprador_com_cliente(link: $this->link))->filtro_and(filtro:$filtro);
-        if(errores::$error){
+        $imp_rel_comprador_com_cliente = (new inm_rel_comprador_com_cliente(link: $this->link))->imp_rel_comprador_com_cliente(inm_comprador_id: $this->registro_id);
+        if (errores::$error) {
             return $this->retorno_error(
-                mensaje: 'Error al obtener imp_rel_comprador_com_cliente',data:  $r_imp_rel_comprador_com_cliente,header: $header,ws: $ws);
+                mensaje: 'Error al obtener imp_rel_comprador_com_cliente', data: $imp_rel_comprador_com_cliente, header: $header, ws: $ws);
         }
 
-        if($r_imp_rel_comprador_com_cliente->n_registros === 0){
+
+        $com_cliente = (new com_cliente(link: $this->link))->registro(registro_id: $imp_rel_comprador_com_cliente['com_cliente_id']);
+        if (errores::$error) {
             return $this->retorno_error(
-                mensaje: 'Error no existe inm_rel_comprador_com_cliente',data:  $r_imp_rel_comprador_com_cliente,
-                header: $header,ws: $ws);
+                mensaje: 'Error al obtener com_cliente', data: $com_cliente, header: $header, ws: $ws);
         }
 
-        if($r_imp_rel_comprador_com_cliente->n_registros > 1){
+
+        $imp_rel_ubi_comp = (new inm_rel_ubi_comp(link: $this->link))->imp_rel_ubi_comp(inm_comprador_id: $this->registro_id);
+        if (errores::$error) {
             return $this->retorno_error(
-                mensaje: 'Error de integridad existe mas de un inm_rel_comprador_com_cliente',data:  $r_imp_rel_comprador_com_cliente,
-                header: $header,ws: $ws);
+                mensaje: 'Error al obtener imp_rel_ubi_comp', data: $imp_rel_ubi_comp, header: $header, ws: $ws);
         }
 
-        $imp_rel_comprador_com_cliente = $r_imp_rel_comprador_com_cliente->registros[0];
-
-        $filtro = array();
-        $filtro['com_cliente.id'] = $imp_rel_comprador_com_cliente['com_cliente_id'];
-
-        $r_com_cliente = (new com_cliente(link: $this->link))->filtro_and(filtro:$filtro);
-        if(errores::$error){
+        $inm_conf_empresa = (new inm_conf_empresa(link: $this->link))->inm_conf_empresa(org_empresa_id: $inm_comprador['org_empresa_id']);
+        if (errores::$error) {
             return $this->retorno_error(
-                mensaje: 'Error al obtener com_cliente',data:  $r_com_cliente,header: $header,ws: $ws);
+                mensaje: 'Error al obtener r_inm_conf_empresa', data: $inm_conf_empresa, header: $header, ws: $ws);
         }
 
-        if($r_com_cliente->n_registros === 0){
+        $inm_rel_co_acreditados = (new inm_co_acreditado(link: $this->link))->inm_co_acreditados(inm_comprador_id: $this->registro_id);
+        if (errores::$error) {
             return $this->retorno_error(
-                mensaje: 'Error no existe com_cliente',data:  $r_com_cliente,
-                header: $header,ws: $ws);
+                mensaje: 'Error al obtener inm_rel_co_acreditados', data: $inm_rel_co_acreditados, header: $header, ws: $ws);
         }
 
-        if($r_com_cliente->n_registros > 1){
+        $inm_referencias = (new inm_referencia(link: $this->link))->inm_referencias(inm_comprador_id: $this->registro_id);
+        if (errores::$error) {
             return $this->retorno_error(
-                mensaje: 'Error de integridad existe mas de un com_cliente',data:  $r_com_cliente,
-                header: $header,ws: $ws);
-        }
-
-        $com_cliente = $r_com_cliente->registros[0];
-
-
-        $filtro = array();
-        $filtro['inm_comprador.id'] = $this->registro_id;
-
-        $r_imp_rel_ubi_comp = (new inm_rel_ubi_comp(link: $this->link))->filtro_and(filtro:$filtro);
-        if(errores::$error){
-            return $this->retorno_error(
-                mensaje: 'Error al obtener r_imp_rel_ubi_comp',data:  $r_imp_rel_ubi_comp,header: $header,ws: $ws);
-        }
-
-        if($r_imp_rel_ubi_comp->n_registros === 0){
-            return $this->retorno_error(
-                mensaje: 'Error no existe inm_rel_comprador_com_cliente',data:  $r_imp_rel_comprador_com_cliente,
-                header: $header,ws: $ws);
+                mensaje: 'Error al obtener inm_referencias', data: $inm_referencias, header: $header, ws: $ws);
         }
 
 
-        $imp_rel_ubi_comp = $r_imp_rel_ubi_comp->registros[0];
-
-
-
-        $pdf = new \setasign\Fpdi\Fpdi();
+        $pdf = new Fpdi();
         $pdf->AddPage();
-        $pdf->setSourceFile($this->path_base.'templates/solicitud_infonavit.pdf');
-        $tplIdx = $pdf->importPage(1);
-        $pdf->useTemplate($tplIdx,null,null,null,null,true);
+        try {
+            $pdf->setSourceFile($this->path_base . 'templates/solicitud_infonavit.pdf');
+            $tplIdx = $pdf->importPage(1);
+        } catch (Throwable $e) {
+            return $this->retorno_error(mensaje: 'Error al obtener plantilla', data: $e, header: $header, ws: $ws);
+        }
 
-        $pdf->SetFont('Arial','B', 15);
-        $pdf->SetTextColor(0,0,0);
+        $pdf->useTemplate($tplIdx, null, null, null, null, true);
+
+        $pdf->SetFont('Arial', 'B', 15);
+        $pdf->SetTextColor(0, 0, 0);
 
         /**
          * 1. CRÉDITO SOLICITADO
          */
 
-        $pdf->SetXY($inm_comprador['inm_producto_infonavit_x'], $inm_comprador['inm_producto_infonavit_y']);
-        $pdf->Write(0, 'X');
+        $entidades_pdf = array('inm_producto_infonavit','inm_tipo_credito','inm_attr_tipo_credito',
+            'inm_destino_credito','inm_plazo_credito_sc','inm_tipo_discapacidad','inm_persona_discapacidad');
 
-        $pdf->SetXY($inm_comprador['inm_tipo_credito_x'], $inm_comprador['inm_tipo_credito_y']);
-        $pdf->Write(0, 'X');
-
-        $pdf->SetXY($inm_comprador['inm_attr_tipo_credito_x'], $inm_comprador['inm_attr_tipo_credito_y']);
-        $pdf->Write(0, 'X');
-
-        $pdf->SetXY($inm_comprador['inm_destino_credito_x'], $inm_comprador['inm_destino_credito_y']);
-        $pdf->Write(0, 'X');
-
-        $x_inm_comprador_es_segundo_credito = 46.5;
-        $y_inm_comprador_es_segundo_credito = 91.5;
-        if($inm_comprador['inm_comprador_es_segundo_credito'] === 'SI'){
-
-            $x_inm_comprador_es_segundo_credito = 31.5;
+        foreach ($entidades_pdf as $name_entidad){
+            $pdf = (new _pdf())->write_x(name_entidad: $name_entidad, pdf: $pdf, row: $inm_comprador);
+            if (errores::$error) {
+                return $this->retorno_error(mensaje: 'Error al escribir en pdf', data: $pdf, header: $header, ws: $ws);
+            }
         }
 
-        $pdf->SetXY($x_inm_comprador_es_segundo_credito, $y_inm_comprador_es_segundo_credito);
-        $pdf->Write(0, 'X');
 
+        $x = 46.5;
+        $y = 91.5;
+        if ($inm_comprador['inm_comprador_es_segundo_credito'] === 'SI') {
+            $x = 31.5;
+        }
 
-        $pdf->SetXY($inm_comprador['inm_plazo_credito_sc_x'], $inm_comprador['inm_plazo_credito_sc_y']);
-        $pdf->Write(0, 'X');
+        $pdf = (new _pdf())->write(pdf: $pdf, valor: 'X', x: $x, y: $y);
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al escribir en pdf', data: $pdf, header: $header, ws: $ws);
+        }
 
 
         /**
          * 2. DATOS PARA DETERMINAR EL MONTO DE CRÉDITO
          */
 
-        $pdf->SetFont('Arial','B', 10);
-        if(round($inm_comprador['inm_comprador_descuento_pension_alimenticia_dh'],2)>0.0) {
+        $pdf->SetFont('Arial', 'B', 10);
 
-            $x_inm_comprador_descuento_pension_alimenticia_dh = 77;
-            $y_inm_comprador_descuento_pension_alimenticia_dh = 117;
+        if (round($inm_comprador['inm_comprador_descuento_pension_alimenticia_dh'], 2) > 0.0) {
 
-            $pdf->SetXY($x_inm_comprador_descuento_pension_alimenticia_dh,
-                $y_inm_comprador_descuento_pension_alimenticia_dh);
-            $pdf->Write(0, $inm_comprador['inm_comprador_descuento_pension_alimenticia_dh']);
+
+            $pdf = (new _pdf())->write(pdf: $pdf, valor: $inm_comprador['inm_comprador_descuento_pension_alimenticia_dh'], x: 77, y: 117);
+            if (errores::$error) {
+                return $this->retorno_error(mensaje: 'Error al escribir en pdf', data: $pdf, header: $header, ws: $ws);
+            }
+
+
         }
 
-        if(round($inm_comprador['inm_comprador_descuento_pension_alimenticia_fc'],2)>0.0) {
-            $x_inm_comprador_descuento_pension_alimenticia_fc = 115;
-            $y_inm_comprador_descuento_pension_alimenticia_fc = 117;
+        if (round($inm_comprador['inm_comprador_descuento_pension_alimenticia_fc'], 2) > 0.0) {
 
-            $pdf->SetXY($x_inm_comprador_descuento_pension_alimenticia_fc,
-                $y_inm_comprador_descuento_pension_alimenticia_fc);
-            $pdf->Write(0, $inm_comprador['inm_comprador_descuento_pension_alimenticia_fc']);
+            $pdf = (new _pdf())->write(pdf: $pdf, valor: $inm_comprador['inm_comprador_descuento_pension_alimenticia_fc'], x: 115, y: 117);
+            if (errores::$error) {
+                return $this->retorno_error(mensaje: 'Error al escribir en pdf', data: $pdf, header: $header, ws: $ws);
+            }
+
         }
 
-        if(round($inm_comprador['inm_comprador_monto_credito_solicitado_dh'],2)>0.0) {
-            $x_inm_comprador_monto_credito_solicitado_dh = 79;
-            $y_inm_comprador_monto_credito_solicitado_dh = 131;
+        if (round($inm_comprador['inm_comprador_monto_credito_solicitado_dh'], 2) > 0.0) {
 
-            $pdf->SetXY($x_inm_comprador_monto_credito_solicitado_dh,
-                $y_inm_comprador_monto_credito_solicitado_dh);
-            $pdf->Write(0, $inm_comprador['inm_comprador_monto_credito_solicitado_dh']);
+            $pdf = (new _pdf())->write(pdf: $pdf, valor: $inm_comprador['inm_comprador_monto_credito_solicitado_dh'], x: 79, y: 131);
+            if (errores::$error) {
+                return $this->retorno_error(mensaje: 'Error al escribir en pdf', data: $pdf, header: $header, ws: $ws);
+            }
+
         }
 
-        if(round($inm_comprador['inm_comprador_monto_ahorro_voluntario'],2)>0.0) {
-            $x_inm_comprador_monto_ahorro_voluntario = 51.5;
-            $y_inm_comprador_monto_ahorro_voluntario = 143;
+        if (round($inm_comprador['inm_comprador_monto_ahorro_voluntario'], 2) > 0.0) {
 
-            $pdf->SetXY($x_inm_comprador_monto_ahorro_voluntario,
-                $y_inm_comprador_monto_ahorro_voluntario);
-            $pdf->Write(0, $inm_comprador['inm_comprador_monto_ahorro_voluntario']);
+
+            $pdf = (new _pdf())->write(pdf: $pdf, valor: $inm_comprador['inm_comprador_monto_ahorro_voluntario'], x: 51.5, y: 143);
+            if (errores::$error) {
+                return $this->retorno_error(mensaje: 'Error al escribir en pdf', data: $pdf, header: $header, ws: $ws);
+            }
+
         }
 
 
@@ -1031,270 +1011,177 @@ class controlador_inm_comprador extends _ctl_base {
          * 3. DATOS DE LA VIVIENDA/TERRENO DESTINO DEL CRÉDITO
          */
 
+        $keys_ubicacion['dp_calle_ubicacion_descripcion']= array('x'=>15.5,'y'=>164);
+        $keys_ubicacion['inm_ubicacion_numero_exterior']= array('x'=>15.5,'y'=>170);
+        $keys_ubicacion['inm_ubicacion_numero_interior']= array('x'=>31,'y'=>170);
+        $keys_ubicacion['inm_ubicacion_lote']= array('x'=>46,'y'=>170);
+        $keys_ubicacion['inm_ubicacion_manzana']= array('x'=>61,'y'=>170);
+        $keys_ubicacion['dp_colonia_ubicacion_descripcion']= array('x'=>81,'y'=>170);
+        $keys_ubicacion['dp_estado_ubicacion_descripcion']= array('x'=>15.5,'y'=>176);
+        $keys_ubicacion['dp_municipio_ubicacion_descripcion']= array('x'=>100,'y'=>176);
+        $keys_ubicacion['dp_cp_ubicacion_descripcion']= array('x'=>173,'y'=>176);
 
 
-        $x_imp_rel_ubi_comp = 15.5;
-        $y_imp_rel_ubi_comp = 164;
-
-        $pdf->SetXY($x_imp_rel_ubi_comp, $y_imp_rel_ubi_comp);
-            $pdf->Write(0, strtoupper($imp_rel_ubi_comp['dp_calle_ubicacion_descripcion']));
-
-
-        $x_imp_rel_ubi_comp_numero_exterior = 15.5;
-        $y_imp_rel_ubi_comp_numero_exterior = 170;
-
-        $pdf->SetXY($x_imp_rel_ubi_comp_numero_exterior,
-            $y_imp_rel_ubi_comp_numero_exterior);
-        $pdf->Write(0, strtoupper($imp_rel_ubi_comp['inm_ubicacion_numero_exterior']));
+        foreach ($keys_ubicacion as $key=>$coordenadas){
+            $pdf = (new _pdf())->write(pdf: $pdf, valor: $imp_rel_ubi_comp[$key], x: $coordenadas['x'], y: $coordenadas['y']);
+            if (errores::$error) {
+                return $this->retorno_error(mensaje: 'Error al escribir en pdf', data: $pdf, header: $header, ws: $ws);
+            }
+        }
 
 
-        $x_imp_rel_ubi_comp_numero_interior = 31;
-        $y_imp_rel_ubi_comp_numero_interior = 170;
-
-        $pdf->SetXY($x_imp_rel_ubi_comp_numero_interior,
-            $y_imp_rel_ubi_comp_numero_interior);
-        $pdf->Write(0, strtoupper($imp_rel_ubi_comp['inm_ubicacion_numero_interior']));
-
-
-        $x_imp_rel_ubi_comp_lote = 46;
-        $y_imp_rel_ubi_comp_lote = 170;
-
-        $pdf->SetXY($x_imp_rel_ubi_comp_lote,
-            $y_imp_rel_ubi_comp_lote);
-        $pdf->Write(0, strtoupper($imp_rel_ubi_comp['inm_ubicacion_lote']));
-
-
-        $x_imp_rel_ubi_comp_manzana = 61;
-        $y_imp_rel_ubi_comp_manzana = 170;
-
-        $pdf->SetXY($x_imp_rel_ubi_comp_manzana,
-            $y_imp_rel_ubi_comp_manzana);
-        $pdf->Write(0, strtoupper($imp_rel_ubi_comp['inm_ubicacion_manzana']));
-
-
-
-        $x_imp_rel_ubi_colonia_descripcion = 81;
-        $y_imp_rel_ubi_colonia_descripcion = 170;
-
-        $pdf->SetXY($x_imp_rel_ubi_colonia_descripcion, $y_imp_rel_ubi_colonia_descripcion);
-        $pdf->Write(0, strtoupper($imp_rel_ubi_comp['dp_colonia_ubicacion_descripcion']));
-
-
-        $x_imp_rel_ubi_estado_descripcion = 15.5;
-        $y_imp_rel_ubi_estado_descripcion = 176;
-
-        $pdf->SetXY($x_imp_rel_ubi_estado_descripcion, $y_imp_rel_ubi_estado_descripcion);
-        $pdf->Write(0, strtoupper($imp_rel_ubi_comp['dp_estado_ubicacion_descripcion']));
-
-
-        $x_imp_rel_ubi_municipio_descripcion = 100;
-        $y_imp_rel_ubi_municipio_descripcion = 176;
-
-        $pdf->SetXY($x_imp_rel_ubi_municipio_descripcion, $y_imp_rel_ubi_municipio_descripcion);
-        $pdf->Write(0, strtoupper($imp_rel_ubi_comp['dp_municipio_ubicacion_descripcion']));
-
-
-        $x_imp_rel_ubi_cp_descripcion = 173;
-        $y_imp_rel_ubi_cp_descripcion = 176;
-
-        $pdf->SetXY($x_imp_rel_ubi_cp_descripcion, $y_imp_rel_ubi_cp_descripcion);
-        $pdf->Write(0, strtoupper($imp_rel_ubi_comp['dp_cp_ubicacion_descripcion']));
-
-
-        $x_con_discapacidad = 94.5;
-        $y_con_discapacidad = 190;
+        $x = 94.5;
+        $y = 190;
 
         if($inm_comprador['inm_comprador_con_discapacidad'] === 'SI'){
 
-            $x_con_discapacidad = 84;
+            $x = 84;
         }
 
-        $pdf->SetXY($x_con_discapacidad, $y_con_discapacidad);
-        $pdf->Write(0, 'X');
+        $pdf = (new _pdf())->write(pdf: $pdf, valor: 'X', x: $x, y: $y);
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al escribir en pdf', data: $pdf, header: $header, ws: $ws);
+        }
 
 
-        $pdf->SetXY($inm_comprador['inm_tipo_discapacidad_x'], $inm_comprador['inm_tipo_discapacidad_y']);
-        $pdf->Write(0, 'X');
-
-        $pdf->SetXY($inm_comprador['inm_persona_discapacidad_x'], $inm_comprador['inm_persona_discapacidad_y']);
-        $pdf->Write(0, 'X');
-
-
-        $x_imp_rel_ubi_precio_operacion = 21.5;
-        $y_imp_rel_ubi_precio_operacion = 224.5;
+        $x = 21.5;
+        $y = 224.5;
 
 
         if((int)$inm_comprador['inm_destino_credito_id'] === 3 ){
-            $x_imp_rel_ubi_precio_operacion = 67;
+            $x = 67;
 
         }
         if((int)$inm_comprador['inm_destino_credito_id'] === 4 ){
-            $x_imp_rel_ubi_precio_operacion = 114;
+            $x = 114;
 
         }
         if((int)$inm_comprador['inm_destino_credito_id'] === 5 ){
-            $x_imp_rel_ubi_precio_operacion = 163;
+            $x = 163;
 
         }
 
-        $pdf->SetXY($x_imp_rel_ubi_precio_operacion, $y_imp_rel_ubi_precio_operacion);
-        $pdf->Write(0, $imp_rel_ubi_comp['inm_rel_ubi_comp_precio_operacion']);
-
-
+        $pdf = (new _pdf())->write(pdf: $pdf, valor: $imp_rel_ubi_comp['inm_rel_ubi_comp_precio_operacion'], x: $x, y: $y);
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al escribir en pdf', data: $pdf, header: $header, ws: $ws);
+        }
 
 
         /**
          * 4. DATOS DE LA EMPRESA O PATRÓN
          */
 
-        if(!isset($inm_comprador['inm_comprador_nombre_empresa_patron'])){
-            $inm_comprador['inm_comprador_nombre_empresa_patron'] = '';
+
+        $keys_comprador['inm_comprador_nombre_empresa_patron']= array('x'=>16,'y'=>249);
+        $keys_comprador['inm_comprador_nrp_nep']= array('x'=>140,'y'=>249);
+        $keys_comprador['inm_comprador_lada_nep']= array('x'=>57,'y'=>256);
+        $keys_comprador['inm_comprador_numero_nep']= array('x'=>70,'y'=>256);
+        $keys_comprador['inm_comprador_extension_nep']= array('x'=>116,'y'=>256);
+
+
+        foreach ($keys_comprador as $key=>$coordenadas){
+
+            if(!isset($inm_comprador[$key])){
+                $inm_comprador[$key] = '';
+            }
+
+            $pdf = (new _pdf())->write(pdf: $pdf, valor: $inm_comprador[$key], x: $coordenadas['x'], y: $coordenadas['y']);
+            if (errores::$error) {
+                return $this->retorno_error(mensaje: 'Error al escribir en pdf', data: $pdf, header: $header, ws: $ws);
+            }
         }
-
-        $x_nombre_empresa_patron = 16;
-        $y_nombre_empresa_patron = 249;
-        $pdf->SetXY($x_nombre_empresa_patron, $y_nombre_empresa_patron);
-        $pdf->Write(0, strtoupper($inm_comprador['inm_comprador_nombre_empresa_patron']));
-
-
-        if(!isset($inm_comprador['inm_comprador_nrp_nep'])){
-            $inm_comprador['inm_comprador_nrp_nep'] = '';
-        }
-
-        $x_nrp = 140;
-        $y_nrp = 249;
-        $pdf->SetXY($x_nrp, $y_nrp);
-        $pdf->Write(0, strtoupper($inm_comprador['inm_comprador_nrp_nep']));
-
-
-        if(!isset($inm_comprador['inm_comprador_lada_nep'])){
-            $inm_comprador['inm_comprador_lada_nep'] = '';
-        }
-
-        $x_lada_nep = 57;
-        $y_lada_nep = 256;
-        $pdf->SetXY($x_lada_nep, $y_lada_nep);
-        $pdf->Write(0, strtoupper($inm_comprador['inm_comprador_lada_nep']));
-
-
-        if(!isset($inm_comprador['inm_comprador_numero_nep'])){
-            $inm_comprador['inm_comprador_numero_nep'] = '';
-        }
-
-        $x_num_nep = 70;
-        $y_num_nep = 256;
-        $pdf->SetXY($x_num_nep, $y_num_nep);
-        $pdf->Write(0, strtoupper($inm_comprador['inm_comprador_numero_nep']));
-
-        if(is_null($inm_comprador['inm_comprador_extension_nep'])){
-            $inm_comprador['inm_comprador_extension_nep'] = '';
-        }
-        $x_ext_nep = 110;
-        $y_ext_nep = 256;
-        $pdf->SetXY($x_ext_nep, $y_ext_nep);
-        $pdf->Write(0, strtoupper($inm_comprador['inm_comprador_extension_nep']));
 
 
         $pdf->AddPage();
-        $tplIdx = $pdf->importPage(2);
+        try {
+            $tplIdx = $pdf->importPage(2);
+        }
+        catch (Throwable $e){
+            return $this->retorno_error(mensaje: 'Error al obtener plantilla',data:  $e,header: $header,ws: $ws);
+        }
         $pdf->useTemplate($tplIdx,null,null,null,null,true);
 
         /**
          * 5. DATOS DE IDENTIFICACIÓN DEL (DE LA) DERECHOHABIENTE / DATOS QUE SERÁN VALIDADOS
          */
 
-        $x_nss = 16;
-        $y_nss = 30;
-        $pdf->SetXY($x_nss, $y_nss);
-        $pdf->Write(0, strtoupper($inm_comprador['inm_comprador_nss']));
-
-        $x_curp = 67;
-        $y_curp = 30;
-        $pdf->SetXY($x_curp, $y_curp);
-        $pdf->Write(0,strtoupper( $inm_comprador['inm_comprador_curp']));
-
-        $x_rfc = 132;
-        $y_rfc = 30;
-        $pdf->SetXY($x_rfc, $y_rfc);
-        $pdf->Write(0, strtoupper($com_cliente['com_cliente_rfc']));
+        $keys_comprador = array();
+        $keys_comprador['inm_comprador_nss']= array('x'=>16,'y'=>30);
+        $keys_comprador['inm_comprador_curp']= array('x'=>67,'y'=>30);
+        $keys_comprador['inm_comprador_apellido_paterno']= array('x'=>16,'y'=>37);
+        $keys_comprador['inm_comprador_apellido_materno']= array('x'=>106,'y'=>37);
+        $keys_comprador['inm_comprador_nombre']= array('x'=>16,'y'=>44);
+        $keys_comprador['inm_comprador_lada_com']= array('x'=>27,'y'=>76);
+        $keys_comprador['inm_comprador_numero_com']= array('x'=>40,'y'=>76);
+        $keys_comprador['inm_comprador_cel_com']= array('x'=>88,'y'=>76);
+        $keys_comprador['inm_comprador_correo_com']= array('x'=>37.5,'y'=>85.5);
 
 
-        $x_ap = 16;
-        $y_ap = 37;
-        $pdf->SetXY($x_ap, $y_ap);
-        $pdf->Write(0, strtoupper($inm_comprador['inm_comprador_apellido_paterno']));
+        foreach ($keys_comprador as $key=>$coordenadas){
 
-        $x_am = 106;
-        $y_am = 37;
-        $pdf->SetXY($x_am, $y_am);
-        $pdf->Write(0, strtoupper($inm_comprador['inm_comprador_apellido_materno']));
+            if(!isset($inm_comprador[$key])){
+                $inm_comprador[$key] = '';
+            }
 
-        $x_nombre = 16;
-        $y_nombre = 44;
-        $pdf->SetXY($x_nombre, $y_nombre);
-        $pdf->Write(0, strtoupper($inm_comprador['inm_comprador_nombre']));
+            $pdf = (new _pdf())->write(pdf: $pdf, valor: $inm_comprador[$key], x: $coordenadas['x'], y: $coordenadas['y']);
+            if (errores::$error) {
+                return $this->retorno_error(mensaje: 'Error al escribir en pdf', data: $pdf, header: $header, ws: $ws);
+            }
+        }
+
+
+
+        $pdf = (new _pdf())->write(pdf: $pdf, valor: $com_cliente['com_cliente_rfc'], x: 132, y: 30);
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al escribir en pdf', data: $pdf, header: $header, ws: $ws);
+        }
+
+
 
         $domicilio = $com_cliente['dp_calle_descripcion'].' '.$com_cliente['com_cliente_numero_exterior'];
         $domicilio .= $com_cliente['com_cliente_numero_interior'];
 
-        $x_rfc = 16;
-        $y_rfc = 54;
-        $pdf->SetXY($x_rfc, $y_rfc);
+        $x = 16;
+        $y = 54;
+        $pdf->SetXY($x, $y);
         $pdf->Write(0, strtoupper($domicilio));
 
 
-        $x_colonia = 16;
-        $y_colonia = 61;
-        $pdf->SetXY($x_colonia, $y_colonia);
-        $pdf->Write(0, strtoupper($com_cliente['dp_colonia_descripcion']));
-
-        $x_estado = 105;
-        $y_estado = 61;
-        $pdf->SetXY($x_estado, $y_estado);
-        $pdf->Write(0, strtoupper($com_cliente['dp_estado_descripcion']));
-
-        $x_municipio = 16;
-        $y_municipio = 68;
-        $pdf->SetXY($x_municipio, $y_municipio);
-        $pdf->Write(0, strtoupper($com_cliente['dp_municipio_descripcion']));
-
-        $x_cp = 82;
-        $y_cp = 68;
-        $pdf->SetXY($x_cp, $y_cp);
-        $pdf->Write(0, strtoupper($com_cliente['dp_cp_descripcion']));
+        $keys_cliente = array();
+        $keys_cliente['dp_colonia_descripcion']= array('x'=>16,'y'=>61);
+        $keys_cliente['dp_estado_descripcion']= array('x'=>105,'y'=>61);
+        $keys_cliente['dp_municipio_descripcion']= array('x'=>16,'y'=>68);
+        $keys_cliente['dp_cp_descripcion']= array('x'=>82,'y'=>68);
 
 
-        $x_lada = 27;
-        $y_lada = 76;
-        $pdf->SetXY($x_lada, $y_lada);
-        $pdf->Write(0, strtoupper($inm_comprador['inm_comprador_lada_com']));
 
-        $x_numero = 40;
-        $y_numero = 76;
-        $pdf->SetXY($x_numero, $y_numero);
-        $pdf->Write(0, strtoupper($inm_comprador['inm_comprador_numero_com']));
+        foreach ($keys_cliente as $key=>$coordenadas){
 
-        $x_cel = 88;
-        $y_cel = 76;
-        $pdf->SetXY($x_cel, $y_cel);
-        $pdf->Write(0, strtoupper($inm_comprador['inm_comprador_cel_com']));
+            if(!isset($com_cliente[$key])){
+                $com_cliente[$key] = '';
+            }
 
-        $x_genero = 144.5;
-        $y_genero = 77;
+            $pdf = (new _pdf())->write(pdf: $pdf, valor: $com_cliente[$key], x: $coordenadas['x'], y: $coordenadas['y']);
+            if (errores::$error) {
+                return $this->retorno_error(mensaje: 'Error al escribir en pdf', data: $pdf, header: $header, ws: $ws);
+            }
+        }
+
+
+
+        $x = 144.5;
+        $y = 77;
 
         if($inm_comprador['inm_comprador_genero'] === 'F'){
 
-            $x_genero = 150.5;
+            $x = 150.5;
         }
 
-        $pdf->SetXY($x_genero, $y_genero);
-        $pdf->Write(0, 'X');
+        $pdf = (new _pdf())->write(pdf: $pdf, valor: 'X', x: $x, y: $y);
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al escribir en pdf', data: $pdf, header: $header, ws: $ws);
+        }
 
-
-        $x_correo = 37.5;
-        $y_correo = 85.5;
-        $pdf->SetXY($x_correo, $y_correo);
-        $pdf->Write(0, strtoupper($inm_comprador['inm_comprador_correo_com']));
 
 
         $pdf->SetXY($inm_comprador['inm_estado_civil_x'], $inm_comprador['inm_estado_civil_y']);
@@ -1306,18 +1193,8 @@ class controlador_inm_comprador extends _ctl_base {
         }
 
 
-        $filtro = array();
-        $filtro['inm_comprador.id'] = $this->registro_id;
+        foreach ($inm_rel_co_acreditados as $imp_rel_co_acred){
 
-        $r_imp_rel_co_acred = (new inm_rel_co_acred(link: $this->link))->filtro_and(filtro:$filtro);
-        if(errores::$error){
-            return $this->retorno_error(
-                mensaje: 'Error al obtener r_imp_rel_co_acred',data:  $r_imp_rel_co_acred,header: $header,ws: $ws);
-        }
-
-        if($r_imp_rel_co_acred->n_registros === 1){
-
-            $imp_rel_co_acred = $r_imp_rel_co_acred->registros[0];
 
             $inm_co_acreditado = (new inm_co_acreditado(link: $this->link))->registro(registro_id: $imp_rel_co_acred['inm_co_acreditado_id']);
             if(errores::$error){
@@ -1326,54 +1203,35 @@ class controlador_inm_comprador extends _ctl_base {
             }
 
 
-            $x = 16;
-            $y = 105;
-            $pdf->SetXY($x, $y);
-            $pdf->Write(0, strtoupper($inm_co_acreditado['inm_co_acreditado_nss']));
+            $keys_co_acreditado = array();
+            $keys_co_acreditado['inm_co_acreditado_nss']= array('x'=>16,'y'=>105);
+            $keys_co_acreditado['inm_co_acreditado_curp']= array('x'=>64,'y'=>105);
+            $keys_co_acreditado['inm_co_acreditado_rfc']= array('x'=>132,'y'=>105);
+            $keys_co_acreditado['inm_co_acreditado_apellido_paterno']= array('x'=>16,'y'=>112);
+            $keys_co_acreditado['inm_co_acreditado_apellido_materno']= array('x'=>107,'y'=>112);
+            $keys_co_acreditado['inm_co_acreditado_nombre']= array('x'=>16,'y'=>119);
+            $keys_co_acreditado['inm_co_acreditado_lada']= array('x'=>27,'y'=>129);
+            $keys_co_acreditado['inm_co_acreditado_numero']= array('x'=>40,'y'=>129);
+            $keys_co_acreditado['inm_co_acreditado_celular']= array('x'=>86,'y'=>129);
+            $keys_co_acreditado['inm_co_acreditado_correo']= array('x'=>38,'y'=>138);
+            $keys_co_acreditado['inm_co_acreditado_nombre_empresa_patron']= array('x'=>16,'y'=>152);
+            $keys_co_acreditado['inm_co_acreditado_nrp']= array('x'=>140,'y'=>152);
+            $keys_co_acreditado['inm_co_acreditado_lada_nep']= array('x'=>100,'y'=>158);
+            $keys_co_acreditado['inm_co_acreditado_numero_nep']= array('x'=>113,'y'=>158);
+            $keys_co_acreditado['inm_co_acreditado_extension_nep']= array('x'=>150,'y'=>158);
 
 
-            $x = 64;
-            $y = 105;
-            $pdf->SetXY($x, $y);
-            $pdf->Write(0, strtoupper($inm_co_acreditado['inm_co_acreditado_curp']));
+            foreach ($keys_co_acreditado as $key=>$coordenadas){
 
-            $x = 132;
-            $y = 105;
-            $pdf->SetXY($x, $y);
-            $pdf->Write(0, strtoupper($inm_co_acreditado['inm_co_acreditado_rfc']));
+                if(!isset($inm_co_acreditado[$key])){
+                    $inm_co_acreditado[$key] = '';
+                }
 
-
-            $x = 16;
-            $y = 112;
-            $pdf->SetXY($x, $y);
-            $pdf->Write(0, strtoupper($inm_co_acreditado['inm_co_acreditado_apellido_paterno']));
-
-            $x = 107;
-            $y = 112;
-            $pdf->SetXY($x, $y);
-            $pdf->Write(0, strtoupper($inm_co_acreditado['inm_co_acreditado_apellido_materno']));
-
-            $x = 16;
-            $y = 119;
-            $pdf->SetXY($x, $y);
-            $pdf->Write(0, strtoupper($inm_co_acreditado['inm_co_acreditado_nombre']));
-
-
-            $x = 27;
-            $y = 129;
-            $pdf->SetXY($x, $y);
-            $pdf->Write(0, strtoupper($inm_co_acreditado['inm_co_acreditado_lada']));
-
-            $x = 40;
-            $y = 129;
-            $pdf->SetXY($x, $y);
-            $pdf->Write(0, strtoupper($inm_co_acreditado['inm_co_acreditado_numero']));
-
-
-            $x = 86;
-            $y = 129;
-            $pdf->SetXY($x, $y);
-            $pdf->Write(0, strtoupper($inm_co_acreditado['inm_co_acreditado_celular']));
+                $pdf = (new _pdf())->write(pdf: $pdf, valor: $inm_co_acreditado[$key], x: $coordenadas['x'], y: $coordenadas['y']);
+                if (errores::$error) {
+                    return $this->retorno_error(mensaje: 'Error al escribir en pdf', data: $pdf, header: $header, ws: $ws);
+                }
+            }
 
 
             $x = 144;
@@ -1388,185 +1246,72 @@ class controlador_inm_comprador extends _ctl_base {
             $pdf->Write(0, 'X');
 
 
-            $x = 38;
-            $y = 138;
-            $pdf->SetXY($x, $y);
-            $pdf->Write(0, strtoupper($inm_co_acreditado['inm_co_acreditado_correo']));
-
-
-            $x = 16;
-            $y = 152;
-            $pdf->SetXY($x, $y);
-            $pdf->Write(0, strtoupper($inm_co_acreditado['inm_co_acreditado_nombre_empresa_patron']));
-
-
-            $x = 140;
-            $y = 152;
-            $pdf->SetXY($x, $y);
-            $pdf->Write(0, strtoupper($inm_co_acreditado['inm_co_acreditado_nrp']));
-
-            $x = 100;
-            $y = 158;
-            $pdf->SetXY($x, $y);
-            $pdf->Write(0, strtoupper($inm_co_acreditado['inm_co_acreditado_lada_nep']));
-
-            $x = 113;
-            $y = 158;
-            $pdf->SetXY($x, $y);
-            $pdf->Write(0, strtoupper($inm_co_acreditado['inm_co_acreditado_numero_nep']));
-
-            $x = 150;
-            $y = 158;
-            $pdf->SetXY($x, $y);
-            $pdf->Write(0, strtoupper($inm_co_acreditado['inm_co_acreditado_extension_nep']));
-
-
-
-        }
-
-        $filtro = array();
-        $filtro['inm_comprador.id'] = $this->registro_id;
-
-        $r_inm_referencia = (new inm_referencia(link: $this->link))->filtro_and(filtro:$filtro);
-        if(errores::$error){
-            return $this->retorno_error(
-                mensaje: 'Error al obtener r_inm_referencia',data:  $r_inm_referencia,header: $header,ws: $ws);
         }
 
 
-        if($r_inm_referencia->n_registros > 0) {
-            $inm_referencia = $r_inm_referencia->registros[0];
+
+        if(count($inm_referencias) > 0) {
+            $inm_referencia = $inm_referencias[0];
+
+            $keys_referencias = array();
+            $keys_referencias['inm_referencia_apellido_paterno']= array('x'=>16,'y'=>177);
+            $keys_referencias['inm_referencia_apellido_materno']= array('x'=>16,'y'=>183.5);
+            $keys_referencias['inm_referencia_nombre']= array('x'=>16,'y'=>191);
+            $keys_referencias['inm_referencia_lada']= array('x'=>27,'y'=>199.5);
+            $keys_referencias['inm_referencia_numero']= array('x'=>40,'y'=>199.5);
+            $keys_referencias['inm_referencia_celular']= array('x'=>27,'y'=>206);
+            $keys_referencias['dp_calle_descripcion']= array('x'=>16,'y'=>212);
+            $keys_referencias['inm_referencia_numero_dom']= array('x'=>16,'y'=>217);
+            $keys_referencias['dp_colonia_descripcion']= array('x'=>16,'y'=>226);
+            $keys_referencias['dp_estado_descripcion']= array('x'=>16,'y'=>234);
+            $keys_referencias['dp_municipio_descripcion']= array('x'=>16,'y'=>244);
+            $keys_referencias['dp_cp_descripcion']= array('x'=>82,'y'=>244);
 
 
-            $x = 16;
-            $y = 177;
-            $pdf->SetXY($x, $y);
-            $pdf->Write(0, strtoupper($inm_referencia['inm_referencia_apellido_paterno']));
 
-            $x = 16;
-            $y = 183.5;
-            $pdf->SetXY($x, $y);
-            $pdf->Write(0, strtoupper($inm_referencia['inm_referencia_apellido_materno']));
+            foreach ($keys_referencias as $key=>$coordenadas){
 
-            $x = 16;
-            $y = 191;
-            $pdf->SetXY($x, $y);
-            $pdf->Write(0, strtoupper($inm_referencia['inm_referencia_nombre']));
+                if(!isset($inm_referencia[$key])){
+                    $inm_referencia[$key] = '';
+                }
 
-            $x = 27;
-            $y = 199.5;
-            $pdf->SetXY($x, $y);
-            $pdf->Write(0, strtoupper($inm_referencia['inm_referencia_lada']));
-
-            $x = 40;
-            $y = 199.5;
-            $pdf->SetXY($x, $y);
-            $pdf->Write(0, strtoupper($inm_referencia['inm_referencia_numero']));
-
-            $x = 27;
-            $y = 206;
-            $pdf->SetXY($x, $y);
-            $pdf->Write(0, strtoupper($inm_referencia['inm_referencia_celular']));
+                $pdf = (new _pdf())->write(pdf: $pdf, valor: $inm_referencia[$key], x: $coordenadas['x'], y: $coordenadas['y']);
+                if (errores::$error) {
+                    return $this->retorno_error(mensaje: 'Error al escribir en pdf', data: $pdf, header: $header, ws: $ws);
+                }
+            }
 
 
-            $x = 16;
-            $y = 212;
-            $pdf->SetXY($x, $y);
-            $pdf->Write(0, strtoupper($inm_referencia['dp_calle_descripcion']));
 
-            $x = 16;
-            $y = 217;
-            $pdf->SetXY($x, $y);
-            $pdf->Write(0, strtoupper($inm_referencia['inm_referencia_numero_dom']));
+            if(isset($inm_referencias[1])){
+                $inm_referencia = $inm_referencias[1];
 
-            $x = 16;
-            $y = 226;
-            $pdf->SetXY($x, $y);
-            $pdf->Write(0, strtoupper($inm_referencia['dp_colonia_descripcion']));
-
-            $x = 16;
-            $y = 234;
-            $pdf->SetXY($x, $y);
-            $pdf->Write(0, strtoupper($inm_referencia['dp_estado_descripcion']));
-
-            $x = 16;
-            $y = 244;
-            $pdf->SetXY($x, $y);
-            $pdf->Write(0, strtoupper($inm_referencia['dp_municipio_descripcion']));
+                $keys_referencias = array();
+                $keys_referencias['inm_referencia_apellido_paterno']= array('x'=>110,'y'=>177);
+                $keys_referencias['inm_referencia_apellido_materno']= array('x'=>110,'y'=>183.5);
+                $keys_referencias['inm_referencia_nombre']= array('x'=>110,'y'=>191);
+                $keys_referencias['inm_referencia_lada']= array('x'=>27,'y'=>199.5);
+                $keys_referencias['inm_referencia_numero']= array('x'=>121,'y'=>199.5);
+                $keys_referencias['inm_referencia_celular']= array('x'=>121,'y'=>206);
+                $keys_referencias['dp_calle_descripcion']= array('x'=>110,'y'=>212);
+                $keys_referencias['inm_referencia_numero_dom']= array('x'=>110,'y'=>218);
+                $keys_referencias['dp_colonia_descripcion']= array('x'=>110,'y'=>225);
+                $keys_referencias['dp_estado_descripcion']= array('x'=>110,'y'=>237);
+                $keys_referencias['dp_municipio_descripcion']= array('x'=>110,'y'=>245);
+                $keys_referencias['dp_cp_descripcion']= array('x'=>178,'y'=>245);
 
 
-            $x = 82;
-            $y = 244;
-            $pdf->SetXY($x, $y);
-            $pdf->Write(0, strtoupper($inm_referencia['dp_cp_descripcion']));
+                foreach ($keys_referencias as $key=>$coordenadas){
 
+                    if(!isset($inm_referencia[$key])){
+                        $inm_referencia[$key] = '';
+                    }
 
-            if(isset($r_inm_referencia->registros[1])){
-                $inm_referencia = $r_inm_referencia->registros[1];
-
-
-                $x = 110;
-                $y = 177;
-                $pdf->SetXY($x, $y);
-                $pdf->Write(0, strtoupper($inm_referencia['inm_referencia_apellido_paterno']));
-
-                $x = 110;
-                $y = 183.5;
-                $pdf->SetXY($x, $y);
-                $pdf->Write(0, strtoupper($inm_referencia['inm_referencia_apellido_materno']));
-
-                $x = 110;
-                $y = 191;
-                $pdf->SetXY($x, $y);
-                $pdf->Write(0, strtoupper($inm_referencia['inm_referencia_nombre']));
-
-                $x = 121;
-                $y = 199.5;
-                $pdf->SetXY($x, $y);
-                $pdf->Write(0, strtoupper($inm_referencia['inm_referencia_lada']));
-
-                $x = 134;
-                $y = 199.5;
-                $pdf->SetXY($x, $y);
-                $pdf->Write(0, strtoupper($inm_referencia['inm_referencia_numero']));
-
-                $x = 121;
-                $y = 206;
-                $pdf->SetXY($x, $y);
-                $pdf->Write(0, strtoupper($inm_referencia['inm_referencia_celular']));
-
-
-                $x = 110;
-                $y = 212;
-                $pdf->SetXY($x, $y);
-                $pdf->Write(0, strtoupper($inm_referencia['dp_calle_descripcion']));
-
-                $x = 110;
-                $y = 218;
-                $pdf->SetXY($x, $y);
-                $pdf->Write(0, strtoupper($inm_referencia['inm_referencia_numero_dom']));
-
-                $x = 110;
-                $y = 225;
-                $pdf->SetXY($x, $y);
-                $pdf->Write(0, strtoupper($inm_referencia['dp_colonia_descripcion']));
-
-                $x = 110;
-                $y = 237;
-                $pdf->SetXY($x, $y);
-                $pdf->Write(0, strtoupper($inm_referencia['dp_estado_descripcion']));
-
-                $x = 110;
-                $y = 245;
-                $pdf->SetXY($x, $y);
-                $pdf->Write(0, strtoupper(utf8_decode($inm_referencia['dp_municipio_descripcion'])));
-
-
-                $x = 178;
-                $y = 245;
-                $pdf->SetXY($x, $y);
-                $pdf->Write(0, strtoupper($inm_referencia['dp_cp_descripcion']));
-
+                    $pdf = (new _pdf())->write(pdf: $pdf, valor: $inm_referencia[$key], x: $coordenadas['x'], y: $coordenadas['y']);
+                    if (errores::$error) {
+                        return $this->retorno_error(mensaje: 'Error al escribir en pdf', data: $pdf, header: $header, ws: $ws);
+                    }
+                }
 
             }
 
@@ -1574,41 +1319,44 @@ class controlador_inm_comprador extends _ctl_base {
         }
 
         $pdf->AddPage();
-        $tplIdx = $pdf->importPage(3);
+
+        try {
+            $tplIdx = $pdf->importPage(3);
+        }
+        catch (Throwable $e){
+            return $this->retorno_error(mensaje: 'Error al obtener plantilla',data:  $e,header: $header,ws: $ws);
+        }
+
         $pdf->useTemplate($tplIdx,null,null,null,null,true);
 
-        $filtro = array();
-        $filtro['org_empresa.id'] = $inm_comprador['org_empresa_id'];
 
-        $r_inm_conf_empresa = (new inm_conf_empresa(link: $this->link))->filtro_and(filtro:$filtro);
+        $pdf = (new _pdf())->write_x(name_entidad: 'inm_tipo_inmobiliaria',pdf: $pdf,row:  $inm_conf_empresa);
         if(errores::$error){
-            return $this->retorno_error(
-                mensaje: 'Error al obtener r_inm_conf_empresa',data:  $r_inm_conf_empresa,header: $header,ws: $ws);
+            return $this->retorno_error(mensaje: 'Error al escribir en pdf',data:  $pdf,header: $header,ws: $ws);
         }
 
-        if($r_inm_conf_empresa->n_registros === 0){
-            return $this->retorno_error(
-                mensaje: 'Error no existe r_inm_conf_empresa',data:  $r_inm_conf_empresa,
-                header: $header,ws: $ws);
+
+
+        $keys_comprador = array();
+        $keys_comprador['org_empresa_razon_social']= array('x'=>16,'y'=>37);
+        $keys_comprador['org_empresa_rfc']= array('x'=>22,'y'=>57);
+        $keys_comprador['bn_cuenta_descripcion']= array('x'=>16,'y'=>85);
+
+
+
+        foreach ($keys_comprador as $key=>$coordenadas){
+
+            if(!isset($inm_comprador[$key])){
+                $inm_comprador[$key] = '';
+            }
+
+            $pdf = (new _pdf())->write(pdf: $pdf, valor: $inm_comprador[$key], x: $coordenadas['x'], y: $coordenadas['y']);
+            if (errores::$error) {
+                return $this->retorno_error(mensaje: 'Error al escribir en pdf', data: $pdf, header: $header, ws: $ws);
+            }
         }
 
-        $inm_conf_empresa = $r_inm_conf_empresa->registros[0];
 
-
-        $pdf->SetXY($inm_conf_empresa['inm_tipo_inmobiliaria_x'], $inm_conf_empresa['inm_tipo_inmobiliaria_y']);
-        $pdf->Write(0, 'X');
-
-
-        $x = 16;
-        $y = 37;
-        $pdf->SetXY($x, $y);
-        $pdf->Write(0, strtoupper($inm_comprador['org_empresa_razon_social']));
-
-
-        $x = 22;
-        $y = 57;
-        $pdf->SetXY($x, $y);
-        $pdf->Write(0, strtoupper($inm_comprador['org_empresa_rfc']));
 
 
         $x = 16;
@@ -1617,16 +1365,8 @@ class controlador_inm_comprador extends _ctl_base {
         $pdf->Write(0, strtoupper($inm_comprador['org_empresa_razon_social']));
 
 
-        $x = 16;
-        $y = 85;
-        $pdf->SetXY($x, $y);
-        $pdf->Write(0, strtoupper($inm_comprador['bn_cuenta_descripcion']));
 
-        $x = 16;
-        $y = 85;
-        $pdf->SetXY($x, $y);
-        $pdf->Write(0, strtoupper($inm_comprador['bn_cuenta_descripcion']));
-
+        
 
         $ciudad = strtoupper($inm_comprador['dp_municipio_empresa_descripcion']);
         $ciudad .= ", ".strtoupper($inm_comprador['dp_estado_empresa_descripcion']);
@@ -1642,7 +1382,6 @@ class controlador_inm_comprador extends _ctl_base {
         $pdf->SetXY($x, $y);
         $pdf->Write(0, ((int)date('d')));
 
-        //print_r($this->modelo->mes['espaniol'][date('m')]['nombre']);exit;
 
         $mes_letra = $this->modelo->mes['espaniol'][date('m')]['nombre'];
 

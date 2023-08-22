@@ -56,6 +56,8 @@ class inm_co_acreditado extends _modelo_parent{
 
     }
 
+
+
     /**
      * Genera la descripcion de un comprador basado en datos del registro a insertar
      * @param array $registro Registro en proceso
@@ -70,6 +72,17 @@ class inm_co_acreditado extends _modelo_parent{
         $descripcion .= ' '.$registro['curp'];
         $descripcion .= ' '.$registro['rfc'];
         return $descripcion;
+    }
+
+    final public function inm_co_acreditados(int $inm_comprador_id){
+        $filtro = array();
+        $filtro['inm_comprador.id'] = $inm_comprador_id;
+
+        $r_imp_rel_co_acred = (new inm_rel_co_acred(link: $this->link))->filtro_and(filtro:$filtro);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al obtener r_imp_rel_co_acred',data:  $r_imp_rel_co_acred);
+        }
+        return $r_imp_rel_co_acred->registros;
     }
 
 

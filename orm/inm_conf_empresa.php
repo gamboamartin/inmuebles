@@ -65,6 +65,24 @@ class inm_conf_empresa extends _modelo_parent{
         return $descripcion;
     }
 
+    final public function inm_conf_empresa(int $org_empresa_id){
+
+        $filtro['org_empresa.id'] = $org_empresa_id;
+
+        $r_inm_conf_empresa = $this->filtro_and(filtro:$filtro);
+        if(errores::$error){
+            return $this->error->error(
+                mensaje: 'Error al obtener r_inm_conf_empresa',data:  $r_inm_conf_empresa);
+        }
+
+        if($r_inm_conf_empresa->n_registros === 0){
+            return $this->error->error(
+                mensaje: 'Error no existe r_inm_conf_empresa',data:  $r_inm_conf_empresa);
+        }
+
+        return $r_inm_conf_empresa->registros[0];
+    }
+
 
 
 
