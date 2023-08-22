@@ -15,6 +15,7 @@ use gamboamartin\inmuebles\html\inm_comprador_html;
 use gamboamartin\inmuebles\html\inm_ubicacion_html;
 use gamboamartin\inmuebles\models\inm_co_acreditado;
 use gamboamartin\inmuebles\models\inm_comprador;
+use gamboamartin\inmuebles\models\inm_conf_empresa;
 use gamboamartin\inmuebles\models\inm_referencia;
 use gamboamartin\inmuebles\models\inm_rel_co_acred;
 use gamboamartin\inmuebles\models\inm_rel_comprador_com_cliente;
@@ -352,6 +353,8 @@ class controlador_inm_comprador extends _ctl_base {
         $init_data['com_tipo_cliente'] = "gamboamartin\\comercial";
         $init_data['cat_sat_tipo_persona'] = "gamboamartin\\cat_sat";
 
+        $init_data['bn_cuenta'] = "gamboamartin\\banco";
+
         $campos_view = $this->campos_view_base(init_data: $init_data,keys:  $keys);
 
         if(errores::$error){
@@ -592,6 +595,9 @@ class controlador_inm_comprador extends _ctl_base {
         if(!isset($row_upd->cat_sat_tipo_persona_id)){
             $row_upd->cat_sat_tipo_persona_id = 5;
         }
+        if(!isset($row_upd->bn_cuenta_id)){
+            $row_upd->bn_cuenta_id = -1;
+        }
 
         $columns_ds = array('cat_sat_regimen_fiscal_descripcion');
         $keys_selects = $this->key_select(cols:6, con_registros: true,filtro:  array(), key: 'cat_sat_regimen_fiscal_id',
@@ -628,13 +634,20 @@ class controlador_inm_comprador extends _ctl_base {
             return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
 
-
         $columns_ds = array('cat_sat_tipo_persona_descripcion');
         $keys_selects = $this->key_select(cols:6, con_registros: true,filtro:  array(), key: 'cat_sat_tipo_persona_id',
             keys_selects: $keys_selects, id_selected: $row_upd->cat_sat_tipo_persona_id, label: 'Tipo de Persona', columns_ds: $columns_ds);
         if(errores::$error){
             return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
+
+        $columns_ds = array('bn_cuenta_descripcion');
+        $keys_selects = $this->key_select(cols:12, con_registros: true,filtro:  array(), key: 'bn_cuenta_id',
+            keys_selects: $keys_selects, id_selected: $row_upd->bn_cuenta_id, label: 'Cuenta Deposito', columns_ds: $columns_ds);
+        if(errores::$error){
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        }
+
         return $keys_selects;
     }
 
@@ -1303,6 +1316,8 @@ class controlador_inm_comprador extends _ctl_base {
                 mensaje: 'Error al obtener r_imp_rel_co_acred',data:  $r_imp_rel_co_acred,header: $header,ws: $ws);
         }
 
+        //PRINT_R($r_imp_rel_co_acred);exit;
+
         if($r_imp_rel_co_acred->n_registros === 1){
 
             $imp_rel_co_acred = $r_imp_rel_co_acred->registros[0];
@@ -1561,13 +1576,55 @@ class controlador_inm_comprador extends _ctl_base {
 
         }
 
-
-
-
-
         $pdf->AddPage();
         $tplIdx = $pdf->importPage(3);
         $pdf->useTemplate($tplIdx,null,null,null,null,true);
+
+        $filtro = array();
+        $filtro['org_empresa.id'] = $inm_comprador['org_empresa_id'];
+
+        $r_inm_conf_empresa = (new inm_conf_empresa(link: $this->link))->filtro_and(filtro:$filtro);
+        if(errores::$error){
+            return $this->retorno_error(
+                mensaje: 'Error al obtener r_inm_conf_empresa',data:  $r_inm_conf_empresa,header: $header,ws: $ws);
+        }
+
+        if($r_inm_conf_empresa->n_registros === 0){
+            return $this->retorno_error(
+                mensaje: 'Error no existe r_inm_conf_empresa',data:  $r_inm_conf_empresa,
+                header: $header,ws: $ws);
+        }
+
+        $inm_conf_empresa = $r_inm_conf_empresa->registros[0];
+
+
+        $pdf->SetXY($inm_conf_empresa['inm_tipo_inmobiliaria_x'], $inm_conf_empresa['inm_tipo_inmobiliaria_y']);
+        $pdf->Write(0, 'X');
+
+
+        $x = 16;
+        $y = 37;
+        $pdf->SetXY($x, $y);
+        $pdf->Write(0, strtoupper($inm_comprador['org_empresa_razon_social']));
+
+
+        $x = 22;
+        $y = 57;
+        $pdf->SetXY($x, $y);
+        $pdf->Write(0, strtoupper($inm_comprador['org_empresa_rfc']));
+
+
+        $x = 16;
+        $y = 62;
+        $pdf->SetXY($x, $y);
+        $pdf->Write(0, strtoupper($inm_comprador['org_empresa_razon_social']));
+
+
+        $x = 16;
+        $y = 85;
+        $pdf->SetXY($x, $y);
+        $pdf->Write(0, strtoupper($inm_comprador['bn_cuenta_descripcion']));
+
 
         $pdf->Output('tu_pedorrote.pdf', 'I');
 

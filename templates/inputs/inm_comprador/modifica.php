@@ -165,6 +165,7 @@ if($controlador->row_upd->genero === 'F'){
 <?php echo $controlador->inputs->cat_sat_metodo_pago_id; ?>
 <?php echo $controlador->inputs->cat_sat_uso_cfdi_id; ?>
 <?php echo $controlador->inputs->cat_sat_tipo_persona_id; ?>
+<?php echo $controlador->inputs->bn_cuenta_id; ?>
 
 
     <div class="col-md-12">

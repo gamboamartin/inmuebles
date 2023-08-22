@@ -15,12 +15,14 @@ class inm_comprador extends _modelo_parent{
         $tabla = 'inm_comprador';
         $columnas = array($tabla=>false,'inm_producto_infonavit'=>$tabla,'inm_attr_tipo_credito'=>$tabla,
             'inm_tipo_credito'=>'inm_attr_tipo_credito','inm_destino_credito'=>$tabla,'inm_plazo_credito_sc'=>$tabla,
-            'inm_tipo_discapacidad'=>$tabla,'inm_persona_discapacidad'=>$tabla,'inm_estado_civil'=>$tabla);
+            'inm_tipo_discapacidad'=>$tabla,'inm_persona_discapacidad'=>$tabla,'inm_estado_civil'=>$tabla,
+            'bn_cuenta'=>$tabla,'org_sucursal'=>'bn_cuenta','org_empresa'=>'org_sucursal');
 
         $campos_obligatorios = array('inm_producto_infonavit_id','inm_attr_tipo_credito_id','inm_destino_credito_id',
             'es_segundo_credito','inm_plazo_credito_sc_id','descuento_pension_alimenticia_dh',
             'descuento_pension_alimenticia_fc','monto_credito_solicitado_dh','monto_ahorro_voluntario','nombre',
-            'apellido_paterno','inm_tipo_discapacidad_id','inm_tipo_discapacidad_id','inm_estado_civil_id');
+            'apellido_paterno','inm_tipo_discapacidad_id','inm_tipo_discapacidad_id','inm_estado_civil_id',
+            'bn_cuenta_id');
 
         $columnas_extra= array();
         $renombres= array();
@@ -30,7 +32,7 @@ class inm_comprador extends _modelo_parent{
             'descuento_pension_alimenticia_fc','monto_credito_solicitado_dh','monto_ahorro_voluntario','nombre',
             'apellido_paterno','apellido_materno','nombre_empresa_patron','nrp_nep','lada_nep','numero_nep',
             'extension_nep','lada_com','numero_com','cel_com','genero','correo_com','inm_tipo_discapacidad_id',
-            'inm_tipo_discapacidad_id','inm_estado_civil_id');
+            'inm_tipo_discapacidad_id','inm_estado_civil_id','bn_cuenta_id');
 
         parent::__construct(link: $link, tabla: $tabla, campos_obligatorios: $campos_obligatorios,
             columnas: $columnas, columnas_extra: $columnas_extra, renombres: $renombres,
