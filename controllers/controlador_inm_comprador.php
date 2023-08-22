@@ -1316,8 +1316,6 @@ class controlador_inm_comprador extends _ctl_base {
                 mensaje: 'Error al obtener r_imp_rel_co_acred',data:  $r_imp_rel_co_acred,header: $header,ws: $ws);
         }
 
-        //PRINT_R($r_imp_rel_co_acred);exit;
-
         if($r_imp_rel_co_acred->n_registros === 1){
 
             $imp_rel_co_acred = $r_imp_rel_co_acred->registros[0];
@@ -1624,6 +1622,43 @@ class controlador_inm_comprador extends _ctl_base {
         $y = 85;
         $pdf->SetXY($x, $y);
         $pdf->Write(0, strtoupper($inm_comprador['bn_cuenta_descripcion']));
+
+        $x = 16;
+        $y = 85;
+        $pdf->SetXY($x, $y);
+        $pdf->Write(0, strtoupper($inm_comprador['bn_cuenta_descripcion']));
+
+
+        $ciudad = strtoupper($inm_comprador['dp_municipio_empresa_descripcion']);
+        $ciudad .= ", ".strtoupper($inm_comprador['dp_estado_empresa_descripcion']);
+
+
+        $x = 36;
+        $y = 240;
+        $pdf->SetXY($x, $y);
+        $pdf->Write(0, strtoupper($ciudad));
+
+        $x = 119;
+        $y = 240;
+        $pdf->SetXY($x, $y);
+        $pdf->Write(0, ((int)date('d')));
+
+        //print_r($this->modelo->mes['espaniol'][date('m')]['nombre']);exit;
+
+        $mes_letra = $this->modelo->mes['espaniol'][date('m')]['nombre'];
+
+        $x = 128;
+        $y = 240;
+        $pdf->SetXY($x, $y);
+        $pdf->Write(0, $mes_letra);
+
+
+        $year = $this->modelo->year['espaniol'][date('Y')]['abreviado'];
+
+        $x = 178;
+        $y = 240;
+        $pdf->SetXY($x, $y);
+        $pdf->Write(0, $year);
 
 
         $pdf->Output('tu_pedorrote.pdf', 'I');

@@ -25,7 +25,30 @@ class inm_comprador extends _modelo_parent{
             'bn_cuenta_id');
 
         $columnas_extra= array();
-        $renombres= array();
+        $renombres['dp_calle_pertenece_empresa']['nombre_original']= 'dp_calle_pertenece';
+        $renombres['dp_calle_pertenece_empresa']['enlace']= 'org_empresa';
+        $renombres['dp_calle_pertenece_empresa']['key']= 'id';
+        $renombres['dp_calle_pertenece_empresa']['key_enlace']= 'dp_calle_pertenece_id';
+
+        $renombres['dp_colonia_postal_empresa']['nombre_original']= 'dp_colonia_postal';
+        $renombres['dp_colonia_postal_empresa']['enlace']= 'dp_calle_pertenece_empresa';
+        $renombres['dp_colonia_postal_empresa']['key']= 'id';
+        $renombres['dp_colonia_postal_empresa']['key_enlace']= 'dp_colonia_postal_id';
+
+        $renombres['dp_cp_empresa']['nombre_original']= 'dp_cp';
+        $renombres['dp_cp_empresa']['enlace']= 'dp_colonia_postal_empresa';
+        $renombres['dp_cp_empresa']['key']= 'id';
+        $renombres['dp_cp_empresa']['key_enlace']= 'dp_cp_id';
+
+        $renombres['dp_municipio_empresa']['nombre_original']= 'dp_municipio';
+        $renombres['dp_municipio_empresa']['enlace']= 'dp_cp_empresa';
+        $renombres['dp_municipio_empresa']['key']= 'id';
+        $renombres['dp_municipio_empresa']['key_enlace']= 'dp_municipio_id';
+
+        $renombres['dp_estado_empresa']['nombre_original']= 'dp_estado';
+        $renombres['dp_estado_empresa']['enlace']= 'dp_municipio_empresa';
+        $renombres['dp_estado_empresa']['key']= 'id';
+        $renombres['dp_estado_empresa']['key_enlace']= 'dp_estado_id';
 
         $atributos_criticos = array('inm_producto_infonavit_id','inm_attr_tipo_credito_id','inm_destino_credito_id',
             'es_segundo_credito','inm_plazo_credito_sc_id','descuento_pension_alimenticia_dh',
@@ -33,6 +56,8 @@ class inm_comprador extends _modelo_parent{
             'apellido_paterno','apellido_materno','nombre_empresa_patron','nrp_nep','lada_nep','numero_nep',
             'extension_nep','lada_com','numero_com','cel_com','genero','correo_com','inm_tipo_discapacidad_id',
             'inm_tipo_discapacidad_id','inm_estado_civil_id','bn_cuenta_id');
+
+
 
         parent::__construct(link: $link, tabla: $tabla, campos_obligatorios: $campos_obligatorios,
             columnas: $columnas, columnas_extra: $columnas_extra, renombres: $renombres,
