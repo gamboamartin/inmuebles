@@ -13,7 +13,10 @@ use gamboamartin\comercial\models\com_cliente;
 use gamboamartin\errores\errores;
 use gamboamartin\inmuebles\html\inm_comprador_html;
 use gamboamartin\inmuebles\html\inm_ubicacion_html;
+use gamboamartin\inmuebles\models\inm_co_acreditado;
 use gamboamartin\inmuebles\models\inm_comprador;
+use gamboamartin\inmuebles\models\inm_referencia;
+use gamboamartin\inmuebles\models\inm_rel_co_acred;
 use gamboamartin\inmuebles\models\inm_rel_comprador_com_cliente;
 use gamboamartin\inmuebles\models\inm_rel_ubi_comp;
 use gamboamartin\system\_ctl_base;
@@ -1289,6 +1292,277 @@ class controlador_inm_comprador extends _ctl_base {
             $pdf->SetXY(58.5, 90);
             $pdf->Write(0, 'X');
         }
+
+
+        $filtro = array();
+        $filtro['inm_comprador.id'] = $this->registro_id;
+
+        $r_imp_rel_co_acred = (new inm_rel_co_acred(link: $this->link))->filtro_and(filtro:$filtro);
+        if(errores::$error){
+            return $this->retorno_error(
+                mensaje: 'Error al obtener r_imp_rel_co_acred',data:  $r_imp_rel_co_acred,header: $header,ws: $ws);
+        }
+
+        if($r_imp_rel_co_acred->n_registros === 1){
+
+            $imp_rel_co_acred = $r_imp_rel_co_acred->registros[0];
+
+            $inm_co_acreditado = (new inm_co_acreditado(link: $this->link))->registro(registro_id: $imp_rel_co_acred['inm_co_acreditado_id']);
+            if(errores::$error){
+                return $this->retorno_error(
+                    mensaje: 'Error al obtener inm_co_acreditado',data:  $inm_co_acreditado,header: $header,ws: $ws);
+            }
+
+
+            $x = 16;
+            $y = 105;
+            $pdf->SetXY($x, $y);
+            $pdf->Write(0, strtoupper($inm_co_acreditado['inm_co_acreditado_nss']));
+
+
+            $x = 64;
+            $y = 105;
+            $pdf->SetXY($x, $y);
+            $pdf->Write(0, strtoupper($inm_co_acreditado['inm_co_acreditado_curp']));
+
+            $x = 132;
+            $y = 105;
+            $pdf->SetXY($x, $y);
+            $pdf->Write(0, strtoupper($inm_co_acreditado['inm_co_acreditado_rfc']));
+
+
+            $x = 16;
+            $y = 112;
+            $pdf->SetXY($x, $y);
+            $pdf->Write(0, strtoupper($inm_co_acreditado['inm_co_acreditado_apellido_paterno']));
+
+            $x = 107;
+            $y = 112;
+            $pdf->SetXY($x, $y);
+            $pdf->Write(0, strtoupper($inm_co_acreditado['inm_co_acreditado_apellido_materno']));
+
+            $x = 16;
+            $y = 119;
+            $pdf->SetXY($x, $y);
+            $pdf->Write(0, strtoupper($inm_co_acreditado['inm_co_acreditado_nombre']));
+
+
+            $x = 27;
+            $y = 129;
+            $pdf->SetXY($x, $y);
+            $pdf->Write(0, strtoupper($inm_co_acreditado['inm_co_acreditado_lada']));
+
+            $x = 40;
+            $y = 129;
+            $pdf->SetXY($x, $y);
+            $pdf->Write(0, strtoupper($inm_co_acreditado['inm_co_acreditado_numero']));
+
+
+            $x = 86;
+            $y = 129;
+            $pdf->SetXY($x, $y);
+            $pdf->Write(0, strtoupper($inm_co_acreditado['inm_co_acreditado_celular']));
+
+
+            $x = 144;
+            $y = 130;
+
+            if($inm_co_acreditado['inm_co_acreditado_genero'] === 'F'){
+
+                $x = 150.5;
+            }
+
+            $pdf->SetXY($x, $y);
+            $pdf->Write(0, 'X');
+
+
+            $x = 38;
+            $y = 138;
+            $pdf->SetXY($x, $y);
+            $pdf->Write(0, strtoupper($inm_co_acreditado['inm_co_acreditado_correo']));
+
+
+            $x = 16;
+            $y = 152;
+            $pdf->SetXY($x, $y);
+            $pdf->Write(0, strtoupper($inm_co_acreditado['inm_co_acreditado_nombre_empresa_patron']));
+
+
+            $x = 140;
+            $y = 152;
+            $pdf->SetXY($x, $y);
+            $pdf->Write(0, strtoupper($inm_co_acreditado['inm_co_acreditado_nrp']));
+
+            $x = 100;
+            $y = 158;
+            $pdf->SetXY($x, $y);
+            $pdf->Write(0, strtoupper($inm_co_acreditado['inm_co_acreditado_lada_nep']));
+
+            $x = 113;
+            $y = 158;
+            $pdf->SetXY($x, $y);
+            $pdf->Write(0, strtoupper($inm_co_acreditado['inm_co_acreditado_numero_nep']));
+
+            $x = 150;
+            $y = 158;
+            $pdf->SetXY($x, $y);
+            $pdf->Write(0, strtoupper($inm_co_acreditado['inm_co_acreditado_extension_nep']));
+
+
+
+        }
+
+        $filtro = array();
+        $filtro['inm_comprador.id'] = $this->registro_id;
+
+        $r_inm_referencia = (new inm_referencia(link: $this->link))->filtro_and(filtro:$filtro);
+        if(errores::$error){
+            return $this->retorno_error(
+                mensaje: 'Error al obtener r_inm_referencia',data:  $r_inm_referencia,header: $header,ws: $ws);
+        }
+
+
+        if($r_inm_referencia->n_registros > 0) {
+            $inm_referencia = $r_inm_referencia->registros[0];
+
+
+            $x = 16;
+            $y = 177;
+            $pdf->SetXY($x, $y);
+            $pdf->Write(0, strtoupper($inm_referencia['inm_referencia_apellido_paterno']));
+
+            $x = 16;
+            $y = 183.5;
+            $pdf->SetXY($x, $y);
+            $pdf->Write(0, strtoupper($inm_referencia['inm_referencia_apellido_materno']));
+
+            $x = 16;
+            $y = 191;
+            $pdf->SetXY($x, $y);
+            $pdf->Write(0, strtoupper($inm_referencia['inm_referencia_nombre']));
+
+            $x = 27;
+            $y = 199.5;
+            $pdf->SetXY($x, $y);
+            $pdf->Write(0, strtoupper($inm_referencia['inm_referencia_lada']));
+
+            $x = 40;
+            $y = 199.5;
+            $pdf->SetXY($x, $y);
+            $pdf->Write(0, strtoupper($inm_referencia['inm_referencia_numero']));
+
+            $x = 27;
+            $y = 206;
+            $pdf->SetXY($x, $y);
+            $pdf->Write(0, strtoupper($inm_referencia['inm_referencia_celular']));
+
+
+            $x = 16;
+            $y = 212;
+            $pdf->SetXY($x, $y);
+            $pdf->Write(0, strtoupper($inm_referencia['dp_calle_descripcion']));
+
+            $x = 16;
+            $y = 217;
+            $pdf->SetXY($x, $y);
+            $pdf->Write(0, strtoupper($inm_referencia['inm_referencia_numero_dom']));
+
+            $x = 16;
+            $y = 226;
+            $pdf->SetXY($x, $y);
+            $pdf->Write(0, strtoupper($inm_referencia['dp_colonia_descripcion']));
+
+            $x = 16;
+            $y = 234;
+            $pdf->SetXY($x, $y);
+            $pdf->Write(0, strtoupper($inm_referencia['dp_estado_descripcion']));
+
+            $x = 16;
+            $y = 244;
+            $pdf->SetXY($x, $y);
+            $pdf->Write(0, strtoupper($inm_referencia['dp_municipio_descripcion']));
+
+
+            $x = 82;
+            $y = 244;
+            $pdf->SetXY($x, $y);
+            $pdf->Write(0, strtoupper($inm_referencia['dp_cp_descripcion']));
+
+
+            if(isset($r_inm_referencia->registros[1])){
+                $inm_referencia = $r_inm_referencia->registros[1];
+
+
+                $x = 110;
+                $y = 177;
+                $pdf->SetXY($x, $y);
+                $pdf->Write(0, strtoupper($inm_referencia['inm_referencia_apellido_paterno']));
+
+                $x = 110;
+                $y = 183.5;
+                $pdf->SetXY($x, $y);
+                $pdf->Write(0, strtoupper($inm_referencia['inm_referencia_apellido_materno']));
+
+                $x = 110;
+                $y = 191;
+                $pdf->SetXY($x, $y);
+                $pdf->Write(0, strtoupper($inm_referencia['inm_referencia_nombre']));
+
+                $x = 121;
+                $y = 199.5;
+                $pdf->SetXY($x, $y);
+                $pdf->Write(0, strtoupper($inm_referencia['inm_referencia_lada']));
+
+                $x = 134;
+                $y = 199.5;
+                $pdf->SetXY($x, $y);
+                $pdf->Write(0, strtoupper($inm_referencia['inm_referencia_numero']));
+
+                $x = 121;
+                $y = 206;
+                $pdf->SetXY($x, $y);
+                $pdf->Write(0, strtoupper($inm_referencia['inm_referencia_celular']));
+
+
+                $x = 110;
+                $y = 212;
+                $pdf->SetXY($x, $y);
+                $pdf->Write(0, strtoupper($inm_referencia['dp_calle_descripcion']));
+
+                $x = 110;
+                $y = 218;
+                $pdf->SetXY($x, $y);
+                $pdf->Write(0, strtoupper($inm_referencia['inm_referencia_numero_dom']));
+
+                $x = 110;
+                $y = 225;
+                $pdf->SetXY($x, $y);
+                $pdf->Write(0, strtoupper($inm_referencia['dp_colonia_descripcion']));
+
+                $x = 110;
+                $y = 237;
+                $pdf->SetXY($x, $y);
+                $pdf->Write(0, strtoupper($inm_referencia['dp_estado_descripcion']));
+
+                $x = 110;
+                $y = 245;
+                $pdf->SetXY($x, $y);
+                $pdf->Write(0, strtoupper(utf8_decode($inm_referencia['dp_municipio_descripcion'])));
+
+
+                $x = 178;
+                $y = 245;
+                $pdf->SetXY($x, $y);
+                $pdf->Write(0, strtoupper($inm_referencia['dp_cp_descripcion']));
+
+
+            }
+
+
+        }
+
+
+
 
 
         $pdf->AddPage();
