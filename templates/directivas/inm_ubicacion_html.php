@@ -14,6 +14,7 @@ class inm_ubicacion_html extends html_controler {
     {
         $modelo = new inm_ubicacion(link: $link);
 
+
         $select = $this->select_catalogo(cols: $cols, con_registros: $con_registros, id_selected: $id_selected,
             modelo: $modelo, columns_ds: $columns_ds, disabled: $disabled, filtro: $filtro, label: 'Ubicacion',
             required: true);
