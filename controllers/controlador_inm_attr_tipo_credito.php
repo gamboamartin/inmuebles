@@ -105,6 +105,12 @@ class controlador_inm_attr_tipo_credito extends _ctl_formato {
         return $keys_selects;
     }
 
+    /**
+     * Genera el formulario de Modifica de un atributo de tipo de credito
+     * @param bool $header Si header muestra resultado en web
+     * @param bool $ws Si ws muestra resultado en en JSON
+     * @return array|stdClass
+     */
     public function modifica(bool $header, bool $ws = false): array|stdClass
     {
 
