@@ -17,7 +17,6 @@ use gamboamartin\inmuebles\models\inm_co_acreditado;
 use gamboamartin\inmuebles\models\inm_comprador;
 use gamboamartin\inmuebles\models\inm_conf_empresa;
 use gamboamartin\inmuebles\models\inm_referencia;
-use gamboamartin\inmuebles\models\inm_rel_co_acred;
 use gamboamartin\inmuebles\models\inm_rel_comprador_com_cliente;
 use gamboamartin\inmuebles\models\inm_rel_ubi_comp;
 use gamboamartin\system\_ctl_base;
@@ -850,7 +849,7 @@ class controlador_inm_comprador extends _ctl_base {
     /**
      * Inicializa los elementos mostrables para datatables
      * @return stdClass
-     * @version 1.3.0
+     * @version 1.40.0
      */
     private function init_datatable(): stdClass
     {

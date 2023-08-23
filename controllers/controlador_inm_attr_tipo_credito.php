@@ -126,7 +126,8 @@ class controlador_inm_attr_tipo_credito extends _ctl_formato {
             keys_selects: array(), id_selected: $this->registro['inm_attr_tipo_credito_inm_tipo_credito_id'],
             label: 'Tipo de credito');
         if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects, header: $header,ws:  $ws);
+            return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects,
+                header: $header,ws:  $ws);
         }
 
         $base = $this->base_upd(keys_selects: $keys_selects, params: array(),params_ajustados: array());
