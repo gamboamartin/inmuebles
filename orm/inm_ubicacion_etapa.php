@@ -63,6 +63,7 @@ class inm_ubicacion_etapa extends _modelo_parent{
         $descripcion = $registro['inm_ubicacion_id'];
         $descripcion .= ' '.$registro['pr_etapa_proceso_id'];
         $descripcion .= ' '.$registro['fecha'];
+        $descripcion .= ' '.time();
         return trim($descripcion);
     }
 

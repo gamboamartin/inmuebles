@@ -4,6 +4,7 @@ namespace gamboamartin\inmuebles\models;
 
 use base\orm\_modelo_parent;
 use gamboamartin\errores\errores;
+use gamboamartin\proceso\models\pr_proceso;
 use PDO;
 use stdClass;
 
@@ -109,6 +110,24 @@ class inm_rel_ubi_comp extends _modelo_parent{
                 return $this->error->error(mensaje: 'Error al maquetar respuesta registro', data: $registro);
             }
 
+        }
+
+        $modelo_etapa_cliente = new inm_comprador_etapa(link: $this->link);
+        $this->key_id = 'inm_comprador_id';
+        $r_alta_etapa = (new pr_proceso(link: $this->link))->inserta_etapa(adm_accion: __FUNCTION__, fecha: '',
+            modelo: $this, modelo_etapa: $modelo_etapa_cliente, registro_id: $this->registro['inm_comprador_id'],
+            pr_etapa_descripcion: 'UBICACION ASIGNADA');
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al insertar etapa', data: $r_alta_etapa);
+        }
+
+        $modelo_etapa_ubicacion = new inm_ubicacion_etapa(link: $this->link);
+        $this->key_id = 'inm_ubicacion_id';
+        $r_alta_etapa = (new pr_proceso(link: $this->link))->inserta_etapa(adm_accion: __FUNCTION__, fecha: '',
+            modelo: $this, modelo_etapa: $modelo_etapa_ubicacion, registro_id: $this->registro['inm_ubicacion_id'],
+            pr_etapa_descripcion: 'ASIGNADO A CLIENTE');
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al insertar etapa', data: $r_alta_etapa);
         }
 
 

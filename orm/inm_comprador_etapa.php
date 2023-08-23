@@ -64,6 +64,7 @@ class inm_comprador_etapa extends _modelo_parent{
         $descripcion = $registro['inm_comprador_id'];
         $descripcion .= ' '.$registro['pr_etapa_proceso_id'];
         $descripcion .= ' '.$registro['fecha'];
+        $descripcion .= ' '.time();
         return trim($descripcion);
     }
 
