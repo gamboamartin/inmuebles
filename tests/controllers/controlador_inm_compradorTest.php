@@ -82,6 +82,29 @@ class controlador_inm_compradorTest extends test {
         errores::$error = false;
     }
 
+    public function test_ks_infonavit(): void
+    {
+        errores::$error = false;
+
+        $_GET['seccion'] = 'inm_producto_infonavit';
+        $_GET['accion'] = 'lista';
+        $_SESSION['grupo_id'] = 1;
+        $_SESSION['usuario_id'] = 2;
+        $_GET['session_id'] = '1';
+
+
+        $ctl = new controlador_inm_comprador(link: $this->link, paths_conf: $this->paths_conf);
+        $ctl = new liberator($ctl);
+
+        $row_upd = new stdClass();
+        $keys_selects = array();
+        $resultado = $ctl->ks_infonavit($keys_selects, $row_upd);
+        $this->assertIsArray($resultado);
+        $this->assertNotTrue(errores::$error);
+        $this->assertEquals('Producto',$resultado['inm_producto_infonavit_id']->label);
+        errores::$error = false;
+    }
+
 
 
 

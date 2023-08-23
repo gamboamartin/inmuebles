@@ -65,7 +65,7 @@ class controlador_inm_comprador extends _ctl_base {
                 header: $header,ws:  $ws);
         }
 
-        $keys_selects = $this->ks_dp(keys_selects: $keys_selects, row_upd: new stdClass());
+        $keys_selects = (new _dps_init())->ks_dp(controler: $this,keys_selects:  $keys_selects,row_upd: new stdClass());
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects,
                 header: $header,ws:  $ws);
@@ -189,7 +189,7 @@ class controlador_inm_comprador extends _ctl_base {
                 header: $header,ws:  $ws);
         }
 
-        $keys_selects = $this->ks_dp(keys_selects: $keys_selects, row_upd: $this->row_upd);
+        $keys_selects = (new _dps_init())->ks_dp(controler: $this,keys_selects:  $keys_selects,row_upd: $this->row_upd);
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects,
                 header: $header,ws:  $ws);
@@ -527,81 +527,7 @@ class controlador_inm_comprador extends _ctl_base {
         return $keys_selects;
     }
 
-    private function ks_dp(array $keys_selects, stdClass $row_upd): array
-    {
-        if(!isset($row_upd->dp_pais_id)){
-            $row_upd->dp_pais_id = 151;
-        }
-        if(!isset($row_upd->dp_estado_id)){
-            $row_upd->dp_estado_id = 14;
-        }
-        if(!isset($row_upd->dp_municipio_id)){
-            $row_upd->dp_municipio_id = -1;
-        }
-        if(!isset($row_upd->dp_cp_id)){
-            $row_upd->dp_cp_id = -1;
-        }
-        if(!isset($row_upd->dp_colonia_postal_id)){
-            $row_upd->dp_colonia_postal_id = -1;
-        }
-        if(!isset($row_upd->dp_calle_pertenece_id)){
-            $row_upd->dp_calle_pertenece_id = -1;
-        }
 
-        $columns_ds = array('dp_pais_descripcion');
-        $keys_selects = $this->key_select(cols:6, con_registros: true,filtro:  array(), key: 'dp_pais_id',
-            keys_selects: $keys_selects, id_selected: $row_upd->dp_pais_id, label: 'Pais', columns_ds : $columns_ds);
-        if(errores::$error){
-            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
-        }
-        $filtro = array();
-        $filtro['dp_pais.id'] = $row_upd->dp_pais_id;
-
-        $columns_ds = array('dp_estado_descripcion');
-
-        $keys_selects = $this->key_select(cols:6, con_registros: true,filtro:  $filtro, key: 'dp_estado_id',
-            keys_selects: $keys_selects, id_selected: $row_upd->dp_estado_id, label: 'Estado', columns_ds: $columns_ds);
-        if(errores::$error){
-            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
-        }
-
-        $filtro = array();
-        $filtro['dp_estado.id'] = $row_upd->dp_estado_id;
-
-        $columns_ds = array('dp_municipio_descripcion');
-
-        $keys_selects = $this->key_select(cols:6, con_registros: true,filtro:  $filtro, key: 'dp_municipio_id',
-            keys_selects: $keys_selects, id_selected: $row_upd->dp_municipio_id, label: 'Municipio', columns_ds: $columns_ds);
-        if(errores::$error){
-            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
-        }
-
-        $columns_ds = array('dp_cp_descripcion');
-
-        $keys_selects = $this->key_select(cols:6, con_registros: true,filtro:  $filtro, key: 'dp_cp_id',
-            keys_selects: $keys_selects, id_selected: $row_upd->dp_cp_id, label: 'CP', columns_ds: $columns_ds);
-        if(errores::$error){
-            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
-        }
-
-        $columns_ds = array('dp_colonia_descripcion');
-        $keys_selects = $this->key_select(cols:6, con_registros: true,filtro:  $filtro, key: 'dp_colonia_postal_id',
-            keys_selects: $keys_selects, id_selected: $row_upd->dp_colonia_postal_id, label: 'Colonia', columns_ds: $columns_ds);
-        if(errores::$error){
-            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
-        }
-
-        $columns_ds = array('dp_calle_descripcion');
-        $keys_selects = $this->key_select(cols:6, con_registros: true,filtro:  $filtro, key: 'dp_calle_pertenece_id',
-            keys_selects: $keys_selects, id_selected: $row_upd->dp_calle_pertenece_id, label: 'Calle', columns_ds: $columns_ds);
-        if(errores::$error){
-            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
-        }
-
-
-
-        return $keys_selects;
-    }
 
     private function ks_fiscales(array $keys_selects, stdClass $row_upd): array
     {
@@ -685,6 +611,7 @@ class controlador_inm_comprador extends _ctl_base {
      * @param array $keys_selects Configuraciones precargadas
      * @param stdClass $row_upd Registro en proceso
      * @return array
+     * @version 1.42.0
      */
     private function ks_infonavit(array $keys_selects, stdClass $row_upd): array
     {
@@ -824,7 +751,7 @@ class controlador_inm_comprador extends _ctl_base {
                 header: $header,ws:  $ws);
         }
 
-        $keys_selects = $this->ks_dp(keys_selects: $keys_selects, row_upd: $this->row_upd);
+        $keys_selects = (new _dps_init())->ks_dp(controler: $this,keys_selects:  $keys_selects,row_upd: $this->row_upd);
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects,
                 header: $header,ws:  $ws);
