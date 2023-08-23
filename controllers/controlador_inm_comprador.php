@@ -365,6 +365,35 @@ class controlador_inm_comprador extends _ctl_base {
         return $campos_view;
     }
 
+    /**
+     * Inicializa los elementos por default de datos de infonavit
+     * @param stdClass $row_upd Registro en proceso
+     * @return stdClass
+     * @version 1.41.0
+     */
+    private function init_row_upd_infonavit(stdClass $row_upd): stdClass
+    {
+        if(!isset($row_upd->inm_producto_infonavit_id)){
+            $row_upd->inm_producto_infonavit_id = -1;
+        }
+        if(!isset($row_upd->inm_attr_tipo_credito_id)){
+            $row_upd->inm_attr_tipo_credito_id = -1;
+        }
+        if(!isset($row_upd->inm_destino_credito_id)){
+            $row_upd->inm_destino_credito_id = -1;
+        }
+        if(!isset($row_upd->inm_plazo_credito_sc_id)){
+            $row_upd->inm_plazo_credito_sc_id = 7;
+        }
+        if(!isset($row_upd->inm_tipo_discapacidad_id)){
+            $row_upd->inm_tipo_discapacidad_id = 5;
+        }
+        if(!isset($row_upd->inm_persona_discapacidad_id)){
+            $row_upd->inm_persona_discapacidad_id = 6;
+        }
+        return $row_upd;
+    }
+
     protected function key_selects_txt(array $keys_selects): array
     {
 
@@ -660,32 +689,19 @@ class controlador_inm_comprador extends _ctl_base {
     private function ks_infonavit(array $keys_selects, stdClass $row_upd): array
     {
 
-        if(!isset($row_upd->inm_producto_infonavit_id)){
-            $row_upd->inm_producto_infonavit_id = -1;
-        }
-        if(!isset($row_upd->inm_attr_tipo_credito_id)){
-            $row_upd->inm_attr_tipo_credito_id = -1;
-        }
-        if(!isset($row_upd->inm_destino_credito_id)){
-            $row_upd->inm_destino_credito_id = -1;
-        }
-        if(!isset($row_upd->inm_plazo_credito_sc_id)){
-            $row_upd->inm_plazo_credito_sc_id = 7;
-        }
-        if(!isset($row_upd->inm_tipo_discapacidad_id)){
-            $row_upd->inm_tipo_discapacidad_id = 5;
-        }
-        if(!isset($row_upd->inm_persona_discapacidad_id)){
-            $row_upd->inm_persona_discapacidad_id = 6;
+        $row_upd = $this->init_row_upd_infonavit(row_upd: $row_upd);
+        if(errores::$error){
+            return $this->errores->error(mensaje: 'Error al inicializa row_upd',data:  $row_upd);
         }
 
         $columns_ds[] = 'inm_producto_infonavit_descripcion';
-        $keys_selects = $this->key_select(cols:6, con_registros: true,filtro:  array(), key: 'inm_producto_infonavit_id',
-            keys_selects: $keys_selects, id_selected: $row_upd->inm_producto_infonavit_id, label: 'Producto',
-            columns_ds: $columns_ds);
+        $keys_selects = $this->key_select(cols:6, con_registros: true,filtro:  array(),
+            key: 'inm_producto_infonavit_id', keys_selects: $keys_selects,
+            id_selected: $row_upd->inm_producto_infonavit_id, label: 'Producto', columns_ds: $columns_ds);
         if(errores::$error){
             return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
+
         $columns_ds = array();
         $columns_ds[] = 'inm_tipo_credito_descripcion';
         $columns_ds[] = 'inm_attr_tipo_credito_descripcion';
@@ -723,8 +739,9 @@ class controlador_inm_comprador extends _ctl_base {
 
         $columns_ds = array();
         $columns_ds[] = 'inm_persona_discapacidad_descripcion';
-        $keys_selects = $this->key_select(cols:12, con_registros: true,filtro:  array(), key: 'inm_persona_discapacidad_id',
-            keys_selects: $keys_selects, id_selected: $row_upd->inm_persona_discapacidad_id, label: 'Persona Discapacidad',
+        $keys_selects = $this->key_select(cols:12, con_registros: true,filtro:  array(),
+            key: 'inm_persona_discapacidad_id', keys_selects: $keys_selects,
+            id_selected: $row_upd->inm_persona_discapacidad_id, label: 'Persona Discapacidad',
             columns_ds: $columns_ds);
         if(errores::$error){
             return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
