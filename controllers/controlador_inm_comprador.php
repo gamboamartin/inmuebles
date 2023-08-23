@@ -366,6 +366,37 @@ class controlador_inm_comprador extends _ctl_base {
     }
 
     /**
+     * Inicializa los key id de elementos fiscales
+     * @param stdClass $row_upd Registro en proceso
+     * @return stdClass
+     */
+    private function init_row_upd_fiscales(stdClass $row_upd): stdClass
+    {
+        if(!isset($row_upd->cat_sat_regimen_fiscal_id)){
+            $row_upd->cat_sat_regimen_fiscal_id = 605;
+        }
+        if(!isset($row_upd->cat_sat_moneda_id)){
+            $row_upd->cat_sat_moneda_id = 161;
+        }
+        if(!isset($row_upd->cat_sat_forma_pago_id)){
+            $row_upd->cat_sat_forma_pago_id = 99;
+        }
+        if(!isset($row_upd->cat_sat_metodo_pago_id)){
+            $row_upd->cat_sat_metodo_pago_id = 2;
+        }
+        if(!isset($row_upd->cat_sat_uso_cfdi_id)){
+            $row_upd->cat_sat_uso_cfdi_id = 22;
+        }
+        if(!isset($row_upd->cat_sat_tipo_persona_id)){
+            $row_upd->cat_sat_tipo_persona_id = 5;
+        }
+        if(!isset($row_upd->bn_cuenta_id)){
+            $row_upd->bn_cuenta_id = -1;
+        }
+        return $row_upd;
+    }
+
+    /**
      * Inicializa los elementos por default de datos de infonavit
      * @param stdClass $row_upd Registro en proceso
      * @return stdClass
@@ -532,26 +563,9 @@ class controlador_inm_comprador extends _ctl_base {
     private function ks_fiscales(array $keys_selects, stdClass $row_upd): array
     {
 
-        if(!isset($row_upd->cat_sat_regimen_fiscal_id)){
-            $row_upd->cat_sat_regimen_fiscal_id = 605;
-        }
-        if(!isset($row_upd->cat_sat_moneda_id)){
-            $row_upd->cat_sat_moneda_id = 161;
-        }
-        if(!isset($row_upd->cat_sat_forma_pago_id)){
-            $row_upd->cat_sat_forma_pago_id = 99;
-        }
-        if(!isset($row_upd->cat_sat_metodo_pago_id)){
-            $row_upd->cat_sat_metodo_pago_id = 2;
-        }
-        if(!isset($row_upd->cat_sat_uso_cfdi_id)){
-            $row_upd->cat_sat_uso_cfdi_id = 22;
-        }
-        if(!isset($row_upd->cat_sat_tipo_persona_id)){
-            $row_upd->cat_sat_tipo_persona_id = 5;
-        }
-        if(!isset($row_upd->bn_cuenta_id)){
-            $row_upd->bn_cuenta_id = -1;
+        $row_upd = $this->init_row_upd_fiscales(row_upd: $row_upd);
+        if(errores::$error){
+            return $this->errores->error(mensaje: 'Error al maquetar row_upd',data:  $row_upd);
         }
 
         $columns_ds = array('cat_sat_regimen_fiscal_descripcion');
