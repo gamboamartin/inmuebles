@@ -860,6 +860,7 @@ class controlador_inm_comprador extends _ctl_base {
         $columns["inm_comprador_apellido_materno"]["titulo"] = "AM";
         $columns["inm_comprador_nss"]["titulo"] = "NSS";
         $columns["inm_comprador_curp"]["titulo"] = "CURP";
+        $columns["inm_comprador_etapa"]["titulo"] = "Etapa";
 
 
         $filtro = array("inm_comprador.id",'inm_comprador.nombre','inm_comprador.apellido_paterno',
