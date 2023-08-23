@@ -11,6 +11,8 @@ use stdClass;
 
 
 class inm_ubicacion extends _modelo_parent{
+
+    private _modelo_parent $modelo_etapa;
     public function __construct(PDO $link)
     {
         $tabla = 'inm_ubicacion';
@@ -23,7 +25,7 @@ class inm_ubicacion extends _modelo_parent{
         $columnas_extra= array();
         $renombres= array();
 
-        $atributos_criticos = array('manzana','lote','dp_calle_pertenece_id');
+        $atributos_criticos = array('manzana','lote','dp_calle_pertenece_id','etapa');
 
         parent::__construct(link: $link, tabla: $tabla, campos_obligatorios: $campos_obligatorios,
             columnas: $columnas, columnas_extra: $columnas_extra, renombres: $renombres,
@@ -31,6 +33,9 @@ class inm_ubicacion extends _modelo_parent{
 
         $this->NAMESPACE = __NAMESPACE__;
         $this->etiqueta = 'Ubicaciones';
+
+        $this->modelo_etapa = new inm_ubicacion_etapa(link: $this->link);
+
     }
 
     public function alta_bd(array $keys_integra_ds = array('codigo', 'descripcion')): array|stdClass
@@ -50,11 +55,13 @@ class inm_ubicacion extends _modelo_parent{
             return $this->error->error(mensaje: 'Error al insertar ubicacion',data:  $r_alta_bd);
         }
 
-        /*$r_alta_etapa = (new pr_proceso(link: $this->link))->inserta_etapa(adm_accion: __FUNCTION__, fecha: '',
+        $r_alta_etapa = (new pr_proceso(link: $this->link))->inserta_etapa(adm_accion: __FUNCTION__, fecha: '',
             modelo: $this, modelo_etapa: $this->modelo_etapa, registro_id: $r_alta_bd->registro_id);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al insertar etapa', data: $r_alta_etapa);
-        }*/
+        }
+
+
 
         return $r_alta_bd;
     }

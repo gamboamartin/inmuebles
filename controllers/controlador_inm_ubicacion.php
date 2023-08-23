@@ -461,6 +461,7 @@ class controlador_inm_ubicacion extends _ctl_base {
         $columns["inm_ubicacion_numero_interior"]["titulo"] = "Int";
         $columns["inm_ubicacion_manzana"]["titulo"] = "Manzana";
         $columns["inm_ubicacion_lote"]["titulo"] = "Lote";
+        $columns["inm_ubicacion_etapa"]["titulo"] = "Etapa";
 
         $filtro = array("inm_ubicacion.id","dp_municipio.descripcion",'dp_cp.descripcion','dp_colonia.descripcion',
             'dp_calle.descripcion','inm_ubicacion.numero_exterior','inm_ubicacion.numero_interior',

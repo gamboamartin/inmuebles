@@ -48,6 +48,13 @@ class inm_ubicacion_etapa extends _modelo_parent{
         }
 
 
+        $row_udp['etapa'] = $r_alta_bd->registro_obj->pr_etapa_descripcion;
+        $upd = (new inm_ubicacion(link: $this->link))->modifica_bd(registro: $row_udp,id: $r_alta_bd->registro_obj->inm_ubicacion_id);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al actualizar etapa', data: $upd);
+        }
+
+
         return $r_alta_bd;
     }
 
