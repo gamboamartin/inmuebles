@@ -110,6 +110,7 @@ class controlador_inm_attr_tipo_credito extends _ctl_formato {
      * @param bool $header Si header muestra resultado en web
      * @param bool $ws Si ws muestra resultado en en JSON
      * @return array|stdClass
+     * @version 1.39.0
      */
     public function modifica(bool $header, bool $ws = false): array|stdClass
     {

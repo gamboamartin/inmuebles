@@ -1,0 +1,33 @@
+Array
+(
+    [error] => 1
+    [mensaje] => <b><span style="color:red">Error al generar salida de template</span></b>
+    [mensaje_limpio] => Error al generar salida de template
+    [file] => <b>/var/www/html/inmuebles/vendor/gamboa.martin/administrador/base/controller/controler.php</b>
+    [line] => <b>400</b>
+    [class] => <b>base\controller\controler</b>
+    [function] => <b>retorno_error</b>
+    [data] => Array
+        (
+            [error] => 1
+            [mensaje] => <b><span style="color:red">Error registro_id debe ser mayor a 0</span></b>
+            [mensaje_limpio] => Error registro_id debe ser mayor a 0
+            [file] => <b>/var/www/html/inmuebles/vendor/gamboa.martin/system/src/_ctl_base.php</b>
+            [line] => <b>431</b>
+            [class] => <b>gamboamartin\system\_ctl_base</b>
+            [function] => <b>init_modifica</b>
+            [data] => -1
+            [params] => Array
+                (
+                )
+
+            [fix] => 
+        )
+
+    [params] => Array
+        (
+        )
+
+    [fix] => 
+)
+Error

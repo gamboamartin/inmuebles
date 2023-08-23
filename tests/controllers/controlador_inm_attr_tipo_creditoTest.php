@@ -124,6 +124,29 @@ class controlador_inm_attr_tipo_creditoTest extends test {
         errores::$error = false;
     }
 
+    public function test_modifica(): void
+    {
+        errores::$error = false;
+
+
+        $ch = curl_init("http://localhost/inmuebles/index.php?seccion=inm_attr_tipo_credito&accion=modifica&adm_menu_id=64&session_id=8945652758&adm_menu_id=64&registro_id=1");
+        $fp = fopen("inm_attr_tipo_credito.modifica", "w");
+
+        curl_setopt($ch, CURLOPT_FILE, $fp);
+        curl_setopt($ch, CURLOPT_HEADER, 0);
+
+        curl_exec($ch);
+        curl_close($ch);
+        fclose($fp);
+
+        $data = file_get_contents("inm_attr_tipo_credito.modifica");
+
+        assertStringContainsStringIgnoringCase("itle='Modifica' href='index.php?seccion=inm_attr_tipo_credito&a", $data);
+        unlink('inm_attr_tipo_credito.modifica');
+
+
+    }
+
 
 }
 
