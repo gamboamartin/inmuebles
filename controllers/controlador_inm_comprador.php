@@ -921,6 +921,9 @@ class controlador_inm_comprador extends _ctl_base {
 
 
         $pdf = new Fpdi();
+
+        $_pdf = new _pdf(pdf: $pdf);
+
         $pdf->AddPage();
         try {
             $pdf->setSourceFile($this->path_base . 'templates/solicitud_infonavit.pdf');
@@ -928,8 +931,8 @@ class controlador_inm_comprador extends _ctl_base {
         } catch (Throwable $e) {
             return $this->retorno_error(mensaje: 'Error al obtener plantilla', data: $e, header: $header, ws: $ws);
         }
-
         $pdf->useTemplate($tplIdx, null, null, null, null, true);
+
 
         $pdf->SetFont('Arial', 'B', 15);
         $pdf->SetTextColor(0, 0, 0);
@@ -942,7 +945,7 @@ class controlador_inm_comprador extends _ctl_base {
             'inm_destino_credito','inm_plazo_credito_sc','inm_tipo_discapacidad','inm_persona_discapacidad');
 
         foreach ($entidades_pdf as $name_entidad){
-            $pdf = (new _pdf())->write_x(name_entidad: $name_entidad, pdf: $pdf, row: $inm_comprador);
+            $pdf = $_pdf->write_x(name_entidad: $name_entidad, row: $inm_comprador);
             if (errores::$error) {
                 return $this->retorno_error(mensaje: 'Error al escribir en pdf', data: $pdf, header: $header, ws: $ws);
             }
@@ -955,7 +958,7 @@ class controlador_inm_comprador extends _ctl_base {
             $x = 31.5;
         }
 
-        $pdf = (new _pdf())->write(pdf: $pdf, valor: 'X', x: $x, y: $y);
+        $pdf = $_pdf->write( valor: 'X', x: $x, y: $y);
         if (errores::$error) {
             return $this->retorno_error(mensaje: 'Error al escribir en pdf', data: $pdf, header: $header, ws: $ws);
         }
@@ -970,7 +973,7 @@ class controlador_inm_comprador extends _ctl_base {
         if (round($inm_comprador['inm_comprador_descuento_pension_alimenticia_dh'], 2) > 0.0) {
 
 
-            $pdf = (new _pdf())->write(pdf: $pdf, valor: $inm_comprador['inm_comprador_descuento_pension_alimenticia_dh'], x: 77, y: 117);
+            $pdf = $_pdf->write( valor: $inm_comprador['inm_comprador_descuento_pension_alimenticia_dh'], x: 77, y: 117);
             if (errores::$error) {
                 return $this->retorno_error(mensaje: 'Error al escribir en pdf', data: $pdf, header: $header, ws: $ws);
             }
@@ -980,7 +983,7 @@ class controlador_inm_comprador extends _ctl_base {
 
         if (round($inm_comprador['inm_comprador_descuento_pension_alimenticia_fc'], 2) > 0.0) {
 
-            $pdf = (new _pdf())->write(pdf: $pdf, valor: $inm_comprador['inm_comprador_descuento_pension_alimenticia_fc'], x: 115, y: 117);
+            $pdf = $_pdf->write( valor: $inm_comprador['inm_comprador_descuento_pension_alimenticia_fc'], x: 115, y: 117);
             if (errores::$error) {
                 return $this->retorno_error(mensaje: 'Error al escribir en pdf', data: $pdf, header: $header, ws: $ws);
             }
@@ -989,7 +992,7 @@ class controlador_inm_comprador extends _ctl_base {
 
         if (round($inm_comprador['inm_comprador_monto_credito_solicitado_dh'], 2) > 0.0) {
 
-            $pdf = (new _pdf())->write(pdf: $pdf, valor: $inm_comprador['inm_comprador_monto_credito_solicitado_dh'], x: 79, y: 131);
+            $pdf = $_pdf->write(valor: $inm_comprador['inm_comprador_monto_credito_solicitado_dh'], x: 79, y: 131);
             if (errores::$error) {
                 return $this->retorno_error(mensaje: 'Error al escribir en pdf', data: $pdf, header: $header, ws: $ws);
             }
@@ -999,7 +1002,7 @@ class controlador_inm_comprador extends _ctl_base {
         if (round($inm_comprador['inm_comprador_monto_ahorro_voluntario'], 2) > 0.0) {
 
 
-            $pdf = (new _pdf())->write(pdf: $pdf, valor: $inm_comprador['inm_comprador_monto_ahorro_voluntario'], x: 51.5, y: 143);
+            $pdf = $_pdf->write( valor: $inm_comprador['inm_comprador_monto_ahorro_voluntario'], x: 51.5, y: 143);
             if (errores::$error) {
                 return $this->retorno_error(mensaje: 'Error al escribir en pdf', data: $pdf, header: $header, ws: $ws);
             }
@@ -1022,11 +1025,10 @@ class controlador_inm_comprador extends _ctl_base {
         $keys_ubicacion['dp_cp_ubicacion_descripcion']= array('x'=>173,'y'=>176);
 
 
-        foreach ($keys_ubicacion as $key=>$coordenadas){
-            $pdf = (new _pdf())->write(pdf: $pdf, valor: $imp_rel_ubi_comp[$key], x: $coordenadas['x'], y: $coordenadas['y']);
-            if (errores::$error) {
-                return $this->retorno_error(mensaje: 'Error al escribir en pdf', data: $pdf, header: $header, ws: $ws);
-            }
+
+        $write = $_pdf->write_data(keys: $keys_ubicacion,row:  $imp_rel_ubi_comp);
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al escribir en pdf', data: $write, header: $header, ws: $ws);
         }
 
 
@@ -1038,7 +1040,7 @@ class controlador_inm_comprador extends _ctl_base {
             $x = 84;
         }
 
-        $pdf = (new _pdf())->write(pdf: $pdf, valor: 'X', x: $x, y: $y);
+        $pdf = $_pdf->write( valor: 'X', x: $x, y: $y);
         if (errores::$error) {
             return $this->retorno_error(mensaje: 'Error al escribir en pdf', data: $pdf, header: $header, ws: $ws);
         }
@@ -1061,7 +1063,7 @@ class controlador_inm_comprador extends _ctl_base {
 
         }
 
-        $pdf = (new _pdf())->write(pdf: $pdf, valor: $imp_rel_ubi_comp['inm_rel_ubi_comp_precio_operacion'], x: $x, y: $y);
+        $pdf = $_pdf->write( valor: $imp_rel_ubi_comp['inm_rel_ubi_comp_precio_operacion'], x: $x, y: $y);
         if (errores::$error) {
             return $this->retorno_error(mensaje: 'Error al escribir en pdf', data: $pdf, header: $header, ws: $ws);
         }
@@ -1079,16 +1081,9 @@ class controlador_inm_comprador extends _ctl_base {
         $keys_comprador['inm_comprador_extension_nep']= array('x'=>116,'y'=>256);
 
 
-        foreach ($keys_comprador as $key=>$coordenadas){
-
-            if(!isset($inm_comprador[$key])){
-                $inm_comprador[$key] = '';
-            }
-
-            $pdf = (new _pdf())->write(pdf: $pdf, valor: $inm_comprador[$key], x: $coordenadas['x'], y: $coordenadas['y']);
-            if (errores::$error) {
-                return $this->retorno_error(mensaje: 'Error al escribir en pdf', data: $pdf, header: $header, ws: $ws);
-            }
+        $write = $_pdf->write_data(keys: $keys_comprador,row:  $inm_comprador);
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al escribir en pdf', data: $write, header: $header, ws: $ws);
         }
 
 
@@ -1117,21 +1112,14 @@ class controlador_inm_comprador extends _ctl_base {
         $keys_comprador['inm_comprador_correo_com']= array('x'=>37.5,'y'=>85.5);
 
 
-        foreach ($keys_comprador as $key=>$coordenadas){
-
-            if(!isset($inm_comprador[$key])){
-                $inm_comprador[$key] = '';
-            }
-
-            $pdf = (new _pdf())->write(pdf: $pdf, valor: $inm_comprador[$key], x: $coordenadas['x'], y: $coordenadas['y']);
-            if (errores::$error) {
-                return $this->retorno_error(mensaje: 'Error al escribir en pdf', data: $pdf, header: $header, ws: $ws);
-            }
+        $write = $_pdf->write_data(keys: $keys_comprador,row:  $inm_comprador);
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al escribir en pdf', data: $write, header: $header, ws: $ws);
         }
 
 
 
-        $pdf = (new _pdf())->write(pdf: $pdf, valor: $com_cliente['com_cliente_rfc'], x: 132, y: 30);
+        $pdf = $_pdf->write(valor: $com_cliente['com_cliente_rfc'], x: 132, y: 30);
         if (errores::$error) {
             return $this->retorno_error(mensaje: 'Error al escribir en pdf', data: $pdf, header: $header, ws: $ws);
         }
@@ -1155,16 +1143,9 @@ class controlador_inm_comprador extends _ctl_base {
 
 
 
-        foreach ($keys_cliente as $key=>$coordenadas){
-
-            if(!isset($com_cliente[$key])){
-                $com_cliente[$key] = '';
-            }
-
-            $pdf = (new _pdf())->write(pdf: $pdf, valor: $com_cliente[$key], x: $coordenadas['x'], y: $coordenadas['y']);
-            if (errores::$error) {
-                return $this->retorno_error(mensaje: 'Error al escribir en pdf', data: $pdf, header: $header, ws: $ws);
-            }
+        $write = $_pdf->write_data(keys: $keys_cliente,row:  $com_cliente);
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al escribir en pdf', data: $write, header: $header, ws: $ws);
         }
 
 
@@ -1177,7 +1158,7 @@ class controlador_inm_comprador extends _ctl_base {
             $x = 150.5;
         }
 
-        $pdf = (new _pdf())->write(pdf: $pdf, valor: 'X', x: $x, y: $y);
+        $pdf = $_pdf->write( valor: 'X', x: $x, y: $y);
         if (errores::$error) {
             return $this->retorno_error(mensaje: 'Error al escribir en pdf', data: $pdf, header: $header, ws: $ws);
         }
@@ -1221,16 +1202,10 @@ class controlador_inm_comprador extends _ctl_base {
             $keys_co_acreditado['inm_co_acreditado_extension_nep']= array('x'=>150,'y'=>158);
 
 
-            foreach ($keys_co_acreditado as $key=>$coordenadas){
 
-                if(!isset($inm_co_acreditado[$key])){
-                    $inm_co_acreditado[$key] = '';
-                }
-
-                $pdf = (new _pdf())->write(pdf: $pdf, valor: $inm_co_acreditado[$key], x: $coordenadas['x'], y: $coordenadas['y']);
-                if (errores::$error) {
-                    return $this->retorno_error(mensaje: 'Error al escribir en pdf', data: $pdf, header: $header, ws: $ws);
-                }
+            $write = $_pdf->write_data(keys: $keys_co_acreditado,row:  $inm_co_acreditado);
+            if (errores::$error) {
+                return $this->retorno_error(mensaje: 'Error al escribir en pdf', data: $write, header: $header, ws: $ws);
             }
 
 
@@ -1269,16 +1244,9 @@ class controlador_inm_comprador extends _ctl_base {
 
 
 
-            foreach ($keys_referencias as $key=>$coordenadas){
-
-                if(!isset($inm_referencia[$key])){
-                    $inm_referencia[$key] = '';
-                }
-
-                $pdf = (new _pdf())->write(pdf: $pdf, valor: $inm_referencia[$key], x: $coordenadas['x'], y: $coordenadas['y']);
-                if (errores::$error) {
-                    return $this->retorno_error(mensaje: 'Error al escribir en pdf', data: $pdf, header: $header, ws: $ws);
-                }
+            $write = $_pdf->write_data(keys: $keys_referencias,row:  $inm_referencia);
+            if (errores::$error) {
+                return $this->retorno_error(mensaje: 'Error al escribir en pdf', data: $write, header: $header, ws: $ws);
             }
 
 
@@ -1290,9 +1258,9 @@ class controlador_inm_comprador extends _ctl_base {
                 $keys_referencias['inm_referencia_apellido_paterno']= array('x'=>110,'y'=>177);
                 $keys_referencias['inm_referencia_apellido_materno']= array('x'=>110,'y'=>183.5);
                 $keys_referencias['inm_referencia_nombre']= array('x'=>110,'y'=>191);
-                $keys_referencias['inm_referencia_lada']= array('x'=>27,'y'=>199.5);
+                $keys_referencias['inm_referencia_lada']= array('x'=>121,'y'=>199.5);
                 $keys_referencias['inm_referencia_numero']= array('x'=>121,'y'=>199.5);
-                $keys_referencias['inm_referencia_celular']= array('x'=>121,'y'=>206);
+                $keys_referencias['inm_referencia_celular']= array('x'=>134,'y'=>206);
                 $keys_referencias['dp_calle_descripcion']= array('x'=>110,'y'=>212);
                 $keys_referencias['inm_referencia_numero_dom']= array('x'=>110,'y'=>218);
                 $keys_referencias['dp_colonia_descripcion']= array('x'=>110,'y'=>225);
@@ -1300,18 +1268,11 @@ class controlador_inm_comprador extends _ctl_base {
                 $keys_referencias['dp_municipio_descripcion']= array('x'=>110,'y'=>245);
                 $keys_referencias['dp_cp_descripcion']= array('x'=>178,'y'=>245);
 
-
-                foreach ($keys_referencias as $key=>$coordenadas){
-
-                    if(!isset($inm_referencia[$key])){
-                        $inm_referencia[$key] = '';
-                    }
-
-                    $pdf = (new _pdf())->write(pdf: $pdf, valor: $inm_referencia[$key], x: $coordenadas['x'], y: $coordenadas['y']);
-                    if (errores::$error) {
-                        return $this->retorno_error(mensaje: 'Error al escribir en pdf', data: $pdf, header: $header, ws: $ws);
-                    }
+                $write = $_pdf->write_data(keys: $keys_referencias,row:  $inm_referencia);
+                if (errores::$error) {
+                    return $this->retorno_error(mensaje: 'Error al escribir en pdf', data: $write, header: $header, ws: $ws);
                 }
+
 
             }
 
@@ -1330,7 +1291,7 @@ class controlador_inm_comprador extends _ctl_base {
         $pdf->useTemplate($tplIdx,null,null,null,null,true);
 
 
-        $pdf = (new _pdf())->write_x(name_entidad: 'inm_tipo_inmobiliaria',pdf: $pdf,row:  $inm_conf_empresa);
+        $pdf = $_pdf->write_x(name_entidad: 'inm_tipo_inmobiliaria',row:  $inm_conf_empresa);
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al escribir en pdf',data:  $pdf,header: $header,ws: $ws);
         }
@@ -1342,19 +1303,11 @@ class controlador_inm_comprador extends _ctl_base {
         $keys_comprador['org_empresa_rfc']= array('x'=>22,'y'=>57);
         $keys_comprador['bn_cuenta_descripcion']= array('x'=>16,'y'=>85);
 
-
-
-        foreach ($keys_comprador as $key=>$coordenadas){
-
-            if(!isset($inm_comprador[$key])){
-                $inm_comprador[$key] = '';
-            }
-
-            $pdf = (new _pdf())->write(pdf: $pdf, valor: $inm_comprador[$key], x: $coordenadas['x'], y: $coordenadas['y']);
-            if (errores::$error) {
-                return $this->retorno_error(mensaje: 'Error al escribir en pdf', data: $pdf, header: $header, ws: $ws);
-            }
+        $write = $_pdf->write_data(keys: $keys_comprador,row:  $inm_comprador);
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al escribir en pdf', data: $write, header: $header, ws: $ws);
         }
+
 
 
 
@@ -1365,8 +1318,6 @@ class controlador_inm_comprador extends _ctl_base {
         $pdf->Write(0, strtoupper($inm_comprador['org_empresa_razon_social']));
 
 
-
-        
 
         $ciudad = strtoupper($inm_comprador['dp_municipio_empresa_descripcion']);
         $ciudad .= ", ".strtoupper($inm_comprador['dp_estado_empresa_descripcion']);

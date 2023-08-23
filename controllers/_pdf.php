@@ -7,12 +7,14 @@ use setasign\Fpdi\Fpdi;
 class _pdf{
 
     private errores $error;
+    private Fpdi $pdf;
 
-    public function __construct(){
+    public function __construct(Fpdi $pdf){
         $this->error = new errores();
+        $this->pdf = $pdf;
     }
 
-    final public function write(Fpdi $pdf,string $valor,float $x, float $y): Fpdi
+    final public function write(string $valor,float $x, float $y): Fpdi
     {
         $valor = trim($valor);
 
@@ -22,18 +24,36 @@ class _pdf{
         $valor = str_replace('ó', 'O', $valor);
         $valor = str_replace('ú', 'U', $valor);
         $valor = str_replace('ñ', 'Ñ', $valor);
-        
+
         $valor = mb_convert_encoding($valor, 'ISO-8859-1');
 
         $valor = strtoupper($valor);
 
 
 
-        $pdf->SetXY($x, $y);
-        $pdf->Write(0, $valor);
-        return $pdf;
+        $this->pdf->SetXY($x, $y);
+        $this->pdf->Write(0, $valor);
+        return $this->pdf;
     }
-    final public function write_x(string $name_entidad, Fpdi $pdf, array $row): Fpdi
+
+    final public function write_data(array $keys, array $row){
+        $writes = array();
+        foreach ($keys as $key=>$coordenadas){
+
+            if(!isset($row[$key])){
+                $row[$key] = '';
+            }
+
+            $pdf = $this->write(valor: $row[$key], x: $coordenadas['x'], y: $coordenadas['y']);
+            if (errores::$error) {
+                return $this->error->error(mensaje: 'Error al escribir en pdf', data: $pdf);
+            }
+            $writes[] = $pdf;
+        }
+        return $writes;
+    }
+
+    final public function write_x(string $name_entidad, array $row): Fpdi
     {
         $key_x = $name_entidad.'_x';
         $key_y = $name_entidad.'_y';
@@ -41,12 +61,12 @@ class _pdf{
         $x = $row[$key_x];
         $y = $row[$key_y];
 
-        $pdf = $this->write(pdf: $pdf,valor: 'X',x: $x, y: $y);
+        $this->pdf = $this->write(valor: 'X',x: $x, y: $y);
         if(errores::$error){
-            return $this->error->error(mensaje: 'Error al escribir en pdf',data:  $pdf);
+            return $this->error->error(mensaje: 'Error al escribir en pdf',data:  $this->pdf);
         }
 
-        return $pdf;
+        return $this->pdf;
     }
 
 
