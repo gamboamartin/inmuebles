@@ -3,34 +3,31 @@
 namespace gamboamartin\inmuebles\models;
 
 use base\orm\_modelo_parent;
-use gamboamartin\direccion_postal\models\dp_calle_pertenece;
 use gamboamartin\errores\errores;
-use gamboamartin\proceso\models\pr_proceso;
 use PDO;
 use stdClass;
 
 
-class inm_ubicacion extends _modelo_parent{
+class inm_ubicacion_etapa extends _modelo_parent{
     public function __construct(PDO $link)
     {
-        $tabla = 'inm_ubicacion';
-        $columnas = array($tabla=>false,'dp_calle_pertenece'=>$tabla,'dp_colonia_postal'=>'dp_calle_pertenece',
-            'dp_cp'=>'dp_colonia_postal','dp_colonia'=>'dp_colonia_postal','dp_municipio'=>'dp_cp',
-            'dp_estado'=>'dp_municipio','dp_pais'=>'dp_estado','dp_calle'=>'dp_calle_pertenece');
+        $tabla = 'inm_ubicacion_etapa';
+        $columnas = array($tabla=>false,'pr_etapa_proceso'=>$tabla,'inm_ubicacion'=>$tabla,
+            'pr_proceso'=>'pr_etapa_proceso','pr_etapa'=>'pr_etapa_proceso');
 
-        $campos_obligatorios = array('dp_calle_pertenece_id');
+        $campos_obligatorios = array('pr_etapa_proceso_id','inm_ubicacion_id','fecha');
 
         $columnas_extra= array();
         $renombres= array();
 
-        $atributos_criticos = array('manzana','lote','dp_calle_pertenece_id');
+        $atributos_criticos = array('pr_etapa_proceso_id','inm_ubicacion_id','fecha');
 
         parent::__construct(link: $link, tabla: $tabla, campos_obligatorios: $campos_obligatorios,
             columnas: $columnas, columnas_extra: $columnas_extra, renombres: $renombres,
             atributos_criticos: $atributos_criticos);
 
         $this->NAMESPACE = __NAMESPACE__;
-        $this->etiqueta = 'Ubicaciones';
+        $this->etiqueta = 'Etapas de Ubicacion';
     }
 
     public function alta_bd(array $keys_integra_ds = array('codigo', 'descripcion')): array|stdClass
@@ -50,46 +47,24 @@ class inm_ubicacion extends _modelo_parent{
             return $this->error->error(mensaje: 'Error al insertar ubicacion',data:  $r_alta_bd);
         }
 
-        /*$r_alta_etapa = (new pr_proceso(link: $this->link))->inserta_etapa(adm_accion: __FUNCTION__, fecha: '',
-            modelo: $this, modelo_etapa: $this->modelo_etapa, registro_id: $r_alta_bd->registro_id);
-        if(errores::$error){
-            return $this->error->error(mensaje: 'Error al insertar etapa', data: $r_alta_etapa);
-        }*/
 
         return $r_alta_bd;
     }
 
-    private function descripcion(stdClass $dp_calle_pertenece, array $registro): string
+    private function descripcion(array $registro): string
     {
-        $descripcion = $dp_calle_pertenece->dp_pais_descripcion;
-        $descripcion .= ' '.$dp_calle_pertenece->dp_estado_descripcion;
-        $descripcion .= ' '.$dp_calle_pertenece->dp_municipio_descripcion;
-        $descripcion .= ' '.$dp_calle_pertenece->dp_colonia_descripcion;
-        $descripcion .= ' '.$dp_calle_pertenece->dp_cp_descripcion;
-        $descripcion .= ' '.$registro['manzana'].' '.$registro['lote'];
-        $descripcion .= ' '.$registro['numero_exterior'].' '.$registro['numero_interior'];
+        $descripcion = $registro['inm_ubicacion_id'];
+        $descripcion .= ' '.$registro['pr_etapa_proceso_id'];
+        $descripcion .= ' '.$registro['fecha'];
         return trim($descripcion);
     }
 
     private function init_row(array $registro){
 
-        if(!isset($registro['manzana'])){
-            $registro['manzana'] = '';
-        }
-        if(!isset($registro['lote'])){
-            $registro['lote'] = '';
-        }
-
-        $dp_calle_pertenece = (new dp_calle_pertenece(link: $this->link))->registro(
-            registro_id: $registro['dp_calle_pertenece_id'],retorno_obj: true);
-        if(errores::$error){
-            return $this->error->error(mensaje: 'Error al obtener dp_calle_pertenece',data:  $dp_calle_pertenece);
-        }
-
 
         if(!isset($registro['descripcion'])){
 
-            $registro = $this->integra_descripcion(dp_calle_pertenece: $dp_calle_pertenece,registro:  $registro);
+            $registro = $this->integra_descripcion(registro:  $registro);
             if(errores::$error){
                 return $this->error->error(mensaje: 'Error al integrar descripcion',data:  $registro);
             }
@@ -98,12 +73,9 @@ class inm_ubicacion extends _modelo_parent{
         return $registro;
     }
 
-    private function integra_descripcion(stdClass $dp_calle_pertenece, array $registro){
-        if(!isset($registro['numero_interior'])){
-            $registro['numero_interior'] = '';
-        }
+    private function integra_descripcion(array $registro){
 
-        $descripcion = $this->descripcion(dp_calle_pertenece: $dp_calle_pertenece, registro: $registro);
+        $descripcion = $this->descripcion(registro: $registro);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al obtener descripcion',data:  $descripcion);
         }
