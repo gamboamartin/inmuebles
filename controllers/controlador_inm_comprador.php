@@ -442,27 +442,12 @@ class controlador_inm_comprador extends _ctl_base {
          * 1. CRÉDITO SOLICITADO
          */
 
-        $entidades_pdf = array('inm_producto_infonavit','inm_tipo_credito','inm_attr_tipo_credito',
-            'inm_destino_credito','inm_plazo_credito_sc','inm_tipo_discapacidad','inm_persona_discapacidad');
 
-        foreach ($entidades_pdf as $name_entidad){
-            $pdf = $_pdf->write_x(name_entidad: $name_entidad, row: $data->inm_comprador);
-            if (errores::$error) {
-                return $this->retorno_error(mensaje: 'Error al escribir en pdf', data: $pdf, header: $header, ws: $ws);
-            }
-        }
-
-
-        $x = 46.5;
-        $y = 91.5;
-        if ($data->inm_comprador['inm_comprador_es_segundo_credito'] === 'SI') {
-            $x = 31.5;
-        }
-
-        $pdf = $_pdf->write( valor: 'X', x: $x, y: $y);
+        $pdf = $_pdf->credito_solicitado(data: $data);
         if (errores::$error) {
             return $this->retorno_error(mensaje: 'Error al escribir en pdf', data: $pdf, header: $header, ws: $ws);
         }
+
 
 
         /**
@@ -472,7 +457,6 @@ class controlador_inm_comprador extends _ctl_base {
         $pdf->SetFont('Arial', 'B', 10);
 
         if (round($data->inm_comprador['inm_comprador_descuento_pension_alimenticia_dh'], 2) > 0.0) {
-
 
             $pdf = $_pdf->write( valor: $data->inm_comprador['inm_comprador_descuento_pension_alimenticia_dh'], x: 77, y: 117);
             if (errores::$error) {

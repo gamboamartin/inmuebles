@@ -18,6 +18,7 @@ class _dps_init{
      * Inicializa los elementos de domicilio
      * @param stdClass $row_upd Registro en proceso
      * @return stdClass
+     * @version 1.46.1
      */
     private function dps_init_ids(stdClass $row_upd): stdClass
     {
