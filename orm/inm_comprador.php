@@ -344,22 +344,31 @@ class inm_comprador extends _modelo_parent{
         return $r_modifica;
     }
 
-    private function inm_rel_comprador_cliente(int $inm_comprador_id){
+    /**
+     * Obtiene la relacion entre un cliente y un comprador
+     * @param int $inm_comprador_id Comprador identificador
+     * @return array
+     */
+    private function inm_rel_comprador_cliente(int $inm_comprador_id): array
+    {
         $filtro['inm_comprador.id'] = $inm_comprador_id;
 
-        $r_imp_rel_comprador_com_cliente = (new inm_rel_comprador_com_cliente(link: $this->link))->filtro_and(filtro:$filtro);
+        $r_imp_rel_comprador_com_cliente = (new inm_rel_comprador_com_cliente(link: $this->link))->filtro_and(
+            filtro:$filtro);
         if(errores::$error){
             return $this->error->error(
                 mensaje: 'Error al obtener imp_rel_comprador_com_cliente',data:  $r_imp_rel_comprador_com_cliente);
         }
 
         if($r_imp_rel_comprador_com_cliente->n_registros === 0){
-            return $this->error->error(mensaje: 'Error no existe inm_rel_comprador_com_cliente',data:  $r_imp_rel_comprador_com_cliente);
+            return $this->error->error(mensaje: 'Error no existe inm_rel_comprador_com_cliente',
+                data:  $r_imp_rel_comprador_com_cliente);
         }
 
         if($r_imp_rel_comprador_com_cliente->n_registros > 1){
             return $this->error->error(
-                mensaje: 'Error de integridad existe mas de un inm_rel_comprador_com_cliente',data:  $r_imp_rel_comprador_com_cliente);
+                mensaje: 'Error de integridad existe mas de un inm_rel_comprador_com_cliente',
+                data:  $r_imp_rel_comprador_com_cliente);
         }
 
         return $r_imp_rel_comprador_com_cliente->registros[0];

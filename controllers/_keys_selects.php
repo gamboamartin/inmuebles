@@ -53,9 +53,13 @@ class _keys_selects{
     }
 
     final public function hiddens(controlador_inm_ubicacion|controlador_inm_comprador $controler, string $funcion){
+        $in_registro_id = $controler->html->hidden(name:'registro_id',value: $controler->registro_id);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al in_registro_id',data:  $in_registro_id);
+        }
         $id_retorno = $controler->html->hidden(name:'id_retorno',value: $controler->registro_id);
         if(errores::$error){
-            return $this->error->error(mensaje: 'Error al in_registro_id',data:  $id_retorno);
+            return $this->error->error(mensaje: 'Error al id_retorno',data:  $id_retorno);
         }
 
         $seccion_retorno = $controler->html->hidden(name:'seccion_retorno',value: $controler->tabla);
@@ -78,6 +82,7 @@ class _keys_selects{
         $data->seccion_retorno = $seccion_retorno;
         $data->btn_action_next = $btn_action_next;
         $data->precio_operacion = $precio_operacion;
+        $data->in_registro_id = $in_registro_id;
 
         return $data;
 
