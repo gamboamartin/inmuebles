@@ -440,7 +440,7 @@ class controlador_inm_comprador extends _ctl_base {
          */
 
 
-        $pdf = $_pdf->credito_solicitado(data: $data);
+        $pdf = $_pdf->apartado_1(data: $data);
         if (errores::$error) {
             return $this->retorno_error(mensaje: 'Error al escribir en pdf', data: $pdf, header: $header, ws: $ws);
         }
@@ -451,18 +451,10 @@ class controlador_inm_comprador extends _ctl_base {
 
         $pdf->SetFont('Arial', 'B', 10);
 
-        $row_condiciones['inm_comprador_descuento_pension_alimenticia_dh'] = array('x'=>77,'y'=>117, 'value_compare'=>0.0);
-        $row_condiciones['inm_comprador_descuento_pension_alimenticia_fc'] = array('x'=>115,'y'=>117, 'value_compare'=>0.0);
-        $row_condiciones['inm_comprador_monto_credito_solicitado_dh'] = array('x'=>79,'y'=>131, 'value_compare'=>0.0);
-        $row_condiciones['inm_comprador_monto_ahorro_voluntario'] = array('x'=>51.5,'y'=>143, 'value_compare'=>0.0);
-
-        foreach ($row_condiciones as $key =>$row){
-            $pdf = $_pdf->write_condicion(key: $key,row:  $data->inm_comprador,value_compare:  $row['value_compare'],x:  $row['x'],y: $row['y']);
-            if (errores::$error) {
-                return $this->retorno_error(mensaje: 'Error al escribir en pdf', data: $pdf, header: $header, ws: $ws);
-            }
+        $pdf = $_pdf->apartado_2(data: $data);
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al escribir en pdf', data: $pdf, header: $header, ws: $ws);
         }
-
 
         /**
          * 3. DATOS DE LA VIVIENDA/TERRENO DESTINO DEL CRÉDITO
@@ -494,22 +486,21 @@ class controlador_inm_comprador extends _ctl_base {
         }
 
 
-        $x = 21.5;
+
+
+
+        $condiciones[3] = 67;
+        $condiciones[4] = 114;
+        $condiciones[5] = 163;
+        $x = $_pdf->get_x_var(condiciones: $condiciones,key_id:  'inm_destino_credito_id',
+            row:  $data->inm_comprador, x_init: 21.5);
+
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al obtener x', data: $x, header: $header, ws: $ws);
+        }
+
         $y = 224.5;
 
-
-        if((int)$data->inm_comprador['inm_destino_credito_id'] === 3 ){
-            $x = 67;
-
-        }
-        if((int)$data->inm_comprador['inm_destino_credito_id'] === 4 ){
-            $x = 114;
-
-        }
-        if((int)$data->inm_comprador['inm_destino_credito_id'] === 5 ){
-            $x = 163;
-
-        }
 
         $pdf = $_pdf->write( valor: $data->imp_rel_ubi_comp['inm_rel_ubi_comp_precio_operacion'], x: $x, y: $y);
         if (errores::$error) {
@@ -754,46 +745,42 @@ class controlador_inm_comprador extends _ctl_base {
             return $this->retorno_error(mensaje: 'Error al escribir en pdf', data: $write, header: $header, ws: $ws);
         }
 
-
-
-
-
-        $x = 16;
-        $y = 62;
-        $pdf->SetXY($x, $y);
-        $pdf->Write(0, strtoupper($data->inm_comprador['org_empresa_razon_social']));
-
-
+        $write = $_pdf->write(valor: $data->inm_comprador['org_empresa_razon_social'], x:16,y: 62);
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al escribir en pdf', data: $write, header: $header, ws: $ws);
+        }
 
         $ciudad = strtoupper($data->inm_comprador['dp_municipio_empresa_descripcion']);
         $ciudad .= ", ".strtoupper($data->inm_comprador['dp_estado_empresa_descripcion']);
 
+        $write = $_pdf->write(valor: $ciudad, x:36,y: 240);
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al escribir en pdf', data: $write, header: $header, ws: $ws);
+        }
 
-        $x = 36;
-        $y = 240;
-        $pdf->SetXY($x, $y);
-        $pdf->Write(0, strtoupper($ciudad));
 
-        $x = 119;
-        $y = 240;
-        $pdf->SetXY($x, $y);
-        $pdf->Write(0, ((int)date('d')));
+        $write = $_pdf->write(valor: ((int)date('d')), x:119,y: 240);
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al escribir en pdf', data: $write, header: $header, ws: $ws);
+        }
 
 
         $mes_letra = $this->modelo->mes['espaniol'][date('m')]['nombre'];
 
-        $x = 128;
-        $y = 240;
-        $pdf->SetXY($x, $y);
-        $pdf->Write(0, $mes_letra);
+
+        $write = $_pdf->write(valor: $mes_letra, x:128,y: 240);
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al escribir en pdf', data: $write, header: $header, ws: $ws);
+        }
+
 
 
         $year = $this->modelo->year['espaniol'][date('Y')]['abreviado'];
 
-        $x = 178;
-        $y = 240;
-        $pdf->SetXY($x, $y);
-        $pdf->Write(0, $year);
+        $write = $_pdf->write(valor: $year, x:178,y: 240);
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al escribir en pdf', data: $write, header: $header, ws: $ws);
+        }
 
 
         $pdf->Output('tu_pedorrote.pdf', 'I');

@@ -46,7 +46,7 @@ class _dps_init{
     /**
      * Integra un key select basada en la descripcion para descripcion select
      * @param _ctl_base $controler Controlador en ejecucion
-     * @param string $entidad
+     * @param string $entidad Entidad para integracion de datos
      * @param array $keys_selects
      * @param string $label
      * @param stdClass $row_upd

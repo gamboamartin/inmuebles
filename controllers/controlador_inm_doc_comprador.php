@@ -23,6 +23,8 @@ class controlador_inm_doc_comprador extends _ctl_formato {
 
     public string $ruta_doc = '';
     public bool $es_imagen = false;
+
+    public string $button_inm_doc_comprador_descarga = '';
     public function __construct(PDO      $link, html $html = new \gamboamartin\template_1\html(),
                                 stdClass $paths_conf = new stdClass())
     {
@@ -177,6 +179,8 @@ class controlador_inm_doc_comprador extends _ctl_formato {
             return $this->retorno_error(mensaje: 'Error al integrar base',data:  $base, header: $header,ws:  $ws);
         }
 
+
+
         return $r_modifica;
     }
 
@@ -284,7 +288,14 @@ class controlador_inm_doc_comprador extends _ctl_formato {
         $this->inputs->apellido_materno = $apellido_materno;
         $this->inputs->nombre = $nombre;
 
+        $button_inm_doc_comprador_descarga = $this->html->button_href(accion: 'descarga',etiqueta:  'Descarga',registro_id:  $this->registro_id,
+            seccion:  $this->seccion,style:  'success');
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al integrar button',data:  $button_inm_doc_comprador_descarga, header: $header,ws:  $ws);
+        }
+        
 
+        $this->button_inm_doc_comprador_descarga = $button_inm_doc_comprador_descarga;
 
         return $registro;
 

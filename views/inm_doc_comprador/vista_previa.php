@@ -8,10 +8,7 @@
 
             <div class="col-lg-12">
 
-                <div class="widget  widget-box box-container form-main widget-form-cart" id="form">
-
-                    <form method="post" action="#"
-                          class="form-additional">
+                <div class="widget" >
 
                     <?php include (new views())->ruta_templates."head/title.php"; ?>
                     <?php include (new views())->ruta_templates."head/subtitulo.php"; ?>
@@ -25,13 +22,9 @@
                     <?php echo $controlador->inputs->apellido_paterno; ?>
                     <?php echo $controlador->inputs->apellido_materno; ?>
                     <?php echo $controlador->inputs->nombre; ?>
+                    <?php echo $controlador->button_inm_doc_comprador_descarga; ?>
 
-                        <div class="control-group btn-alta">
-                            <div class="controls">
-                                <button type="submit" class="btn btn-success">Descargar</button><br>
-                            </div>
-                        </div>
-                    </form>
+
 
                 </div>
 

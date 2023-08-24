@@ -15,7 +15,7 @@ class _pdf{
         $this->pdf = $pdf;
     }
 
-    final public function credito_solicitado(stdClass $data){
+    final public function apartado_1(stdClass $data){
         $pdf = $this->entidades_infonavit(data: $data);
         if (errores::$error) {
             return $this->error->error(mensaje: 'Error al escribir en pdf', data: $pdf);
@@ -26,6 +26,23 @@ class _pdf{
             return $this->error->error(mensaje: 'Error al escribir en pdf', data: $pdf);
         }
         return $pdf;
+    }
+
+    final public function apartado_2(stdClass $data){
+        $write = array();
+        $row_condiciones['inm_comprador_descuento_pension_alimenticia_dh'] = array('x'=>77,'y'=>117, 'value_compare'=>0.0);
+        $row_condiciones['inm_comprador_descuento_pension_alimenticia_fc'] = array('x'=>115,'y'=>117, 'value_compare'=>0.0);
+        $row_condiciones['inm_comprador_monto_credito_solicitado_dh'] = array('x'=>79,'y'=>131, 'value_compare'=>0.0);
+        $row_condiciones['inm_comprador_monto_ahorro_voluntario'] = array('x'=>51.5,'y'=>143, 'value_compare'=>0.0);
+
+        foreach ($row_condiciones as $key =>$row){
+            $pdf = $this->write_condicion(key: $key,row:  $data->inm_comprador,value_compare:  $row['value_compare'],x:  $row['x'],y: $row['y']);
+            if (errores::$error) {
+                return $this->error->error(mensaje: 'Error al escribir en pdf', data: $pdf);
+            }
+            $write[] = $pdf;
+        }
+        return $write;
     }
     private function entidades_infonavit(stdClass $data){
         $entidades_pdf = array('inm_producto_infonavit','inm_tipo_credito','inm_attr_tipo_credito',
@@ -52,6 +69,17 @@ class _pdf{
             return $this->error->error(mensaje: 'Error al escribir en pdf', data: $pdf);
         }
         return $pdf;
+    }
+
+    final public function get_x_var(array $condiciones, string $key_id,array $row, float $x_init){
+        $x = $x_init;
+
+        if(isset($condiciones[$row[$key_id]])){
+            $x = $condiciones[$row[$key_id]];
+        }
+
+        return $x;
+
     }
 
     final public function keys_comprador(): array
@@ -102,7 +130,7 @@ class _pdf{
         return $this->pdf;
     }
 
-    final public function write_condicion(string $key, array $row, mixed $value_compare, float $x, float $y){
+    private function write_condicion(string $key, array $row, mixed $value_compare, float $x, float $y){
         $write = false;
         if (round($row[$key], 2) > $value_compare) {
             $pdf = $this->write( valor: $row[$key], x: $x, y: $y);
