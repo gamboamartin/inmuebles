@@ -11,6 +11,7 @@ namespace gamboamartin\inmuebles\controllers;
 use gamboamartin\documento\models\doc_tipo_documento;
 use gamboamartin\errores\errores;
 use gamboamartin\inmuebles\html\inm_doc_comprador_html;
+use gamboamartin\inmuebles\models\inm_comprador;
 use gamboamartin\inmuebles\models\inm_conf_docs_comprador;
 use gamboamartin\inmuebles\models\inm_doc_comprador;
 use gamboamartin\system\links_menu;
@@ -20,6 +21,8 @@ use stdClass;
 
 class controlador_inm_doc_comprador extends _ctl_formato {
 
+    public string $ruta_doc = '';
+    public bool $es_imagen = false;
     public function __construct(PDO      $link, html $html = new \gamboamartin\template_1\html(),
                                 stdClass $paths_conf = new stdClass())
     {
@@ -159,8 +162,6 @@ class controlador_inm_doc_comprador extends _ctl_formato {
 
     }
 
-
-
     public function modifica(bool $header, bool $ws = false): array|stdClass
     {
 
@@ -202,6 +203,92 @@ class controlador_inm_doc_comprador extends _ctl_formato {
         $datatables->filtro = $filtro;
 
         return $datatables;
+    }
+
+    public function vista_previa(bool $header, bool $ws = false): array|string|stdClass
+    {
+
+        $registro = $this->modelo->registro(registro_id: $this->registro_id, retorno_obj: true);
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al obtener documento',data:  $registro,header:  $header,
+                ws:  $ws);
+        }
+
+        $com_cliente = (new inm_comprador(link: $this->link))->get_com_cliente(inm_comprador_id: $registro->inm_comprador_id, retorno_obj: true);
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al obtener cliente',data:  $com_cliente,header:  $header,
+                ws:  $ws);
+        }
+
+        $ruta_doc = $this->url_base."$registro->doc_documento_ruta_relativa";
+
+
+        $this->ruta_doc = $ruta_doc;
+        if($registro->doc_extension_es_imagen === 'activo') {
+            $this->es_imagen = true;
+        }
+
+        $row_upd = new stdClass();
+        $row_upd->nss = $registro->inm_comprador_nss;
+        $row_upd->com_tipo_cliente_descripcion = $com_cliente->com_tipo_cliente_descripcion;
+        $row_upd->curp = $registro->inm_comprador_curp;
+        $row_upd->rfc = $com_cliente->com_cliente_rfc;
+        $row_upd->apellido_paterno = $registro->inm_comprador_apellido_paterno;
+        $row_upd->apellido_materno = $registro->inm_comprador_apellido_materno;
+        $row_upd->nombre = $registro->inm_comprador_nombre;
+
+
+        $com_tipo_cliente_descripcion = $this->html->input_text_required(cols: 12,disabled: true,name: 'com_tipo_cliente_descripcion',
+            place_holder: 'Tipo de Cliente',row_upd: $row_upd,value_vacio: false);
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al obtener input',data:  $com_tipo_cliente_descripcion,header:  $header,
+                ws:  $ws);
+        }
+        $nss = $this->html->input_text_required(cols: 4,disabled: true,name: 'nss',place_holder: 'NSS',row_upd:$row_upd,value_vacio: false);
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al obtener input',data:  $nss,header:  $header,
+                ws:  $ws);
+        }
+        $curp = $this->html->input_text_required(cols: 4,disabled: true,name: 'curp',place_holder: 'CURP',row_upd:$row_upd,value_vacio: false);
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al obtener input',data:  $curp,header:  $header,
+                ws:  $ws);
+        }
+        $rfc = $this->html->input_text_required(cols: 4,disabled: true,name: 'rfc',place_holder: 'RFC',row_upd:$row_upd,value_vacio: false);
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al obtener input',data:  $rfc,header:  $header,
+                ws:  $ws);
+        }
+        $apellido_paterno = $this->html->input_text_required(cols: 6,disabled: true,name: 'apellido_paterno',place_holder: 'AP',row_upd:$row_upd,value_vacio: false);
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al obtener input',data:  $apellido_paterno,header:  $header,
+                ws:  $ws);
+        }
+        $apellido_materno = $this->html->input_text_required(cols: 6,disabled: true,name: 'apellido_materno',place_holder: 'AM',row_upd:$row_upd,value_vacio: false);
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al obtener input',data:  $apellido_materno,header:  $header,
+                ws:  $ws);
+        }
+        $nombre = $this->html->input_text_required(cols: 12,disabled: true,name: 'nombre',place_holder: 'Nombre',row_upd:$row_upd,value_vacio: false);
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al obtener input',data:  $nombre,header:  $header,
+                ws:  $ws);
+        }
+
+        $this->inputs = new stdClass();
+        $this->inputs->nss = $nss;
+        $this->inputs->com_tipo_cliente_descripcion = $com_tipo_cliente_descripcion;
+        $this->inputs->curp = $curp;
+        $this->inputs->rfc = $rfc;
+        $this->inputs->apellido_paterno = $apellido_paterno;
+        $this->inputs->apellido_materno = $apellido_materno;
+        $this->inputs->nombre = $nombre;
+
+
+
+        return $registro;
+
+
     }
 
 

@@ -158,7 +158,7 @@ class inm_comprador extends _modelo_parent{
 
     }
 
-    private function com_cliente(int $com_cliente_id){
+    private function com_cliente(int $com_cliente_id, bool $retorno_obj = false){
         $filtro['com_cliente.id'] = $com_cliente_id;
 
         $r_com_cliente = (new com_cliente(link: $this->link))->filtro_and(filtro:$filtro);
@@ -177,7 +177,12 @@ class inm_comprador extends _modelo_parent{
                 mensaje: 'Error de integridad existe mas de un com_cliente',data:  $r_com_cliente);
         }
 
-        return $r_com_cliente->registros[0];
+        $com_cliente = $r_com_cliente->registros[0];
+        if($retorno_obj){
+            $com_cliente = (object)$com_cliente;
+        }
+
+        return $com_cliente;
     }
 
     final public function data_pdf(int $inm_comprador_id){
@@ -281,7 +286,7 @@ class inm_comprador extends _modelo_parent{
         return $r_elimina_bd;
     }
 
-    final public function get_com_cliente(int $inm_comprador_id){
+    final public function get_com_cliente(int $inm_comprador_id, bool $retorno_obj = false){
         $imp_rel_comprador_com_cliente = $this->inm_rel_comprador_cliente(inm_comprador_id: $inm_comprador_id);
         if(errores::$error){
             return $this->error->error(
@@ -289,7 +294,8 @@ class inm_comprador extends _modelo_parent{
         }
 
 
-        $com_cliente = $this->com_cliente(com_cliente_id: $imp_rel_comprador_com_cliente['com_cliente_id']);
+        $com_cliente = $this->com_cliente(com_cliente_id: $imp_rel_comprador_com_cliente['com_cliente_id'],
+            retorno_obj: $retorno_obj);
         if(errores::$error){
             return $this->error->error(
                 mensaje: 'Error al obtener com_cliente',data:  $com_cliente);

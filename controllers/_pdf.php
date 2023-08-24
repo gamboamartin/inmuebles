@@ -54,6 +54,30 @@ class _pdf{
         return $pdf;
     }
 
+    final public function keys_comprador(): array
+    {
+        $keys_comprador['inm_comprador_nombre_empresa_patron']= array('x'=>16,'y'=>249);
+        $keys_comprador['inm_comprador_nrp_nep']= array('x'=>140,'y'=>249);
+        $keys_comprador['inm_comprador_lada_nep']= array('x'=>57,'y'=>256);
+        $keys_comprador['inm_comprador_numero_nep']= array('x'=>70,'y'=>256);
+        $keys_comprador['inm_comprador_extension_nep']= array('x'=>116,'y'=>256);
+        return $keys_comprador;
+    }
+
+    final public function keys_ubicacion(): array
+    {
+        $keys_ubicacion['dp_calle_ubicacion_descripcion']= array('x'=>15.5,'y'=>164);
+        $keys_ubicacion['inm_ubicacion_numero_exterior']= array('x'=>15.5,'y'=>170);
+        $keys_ubicacion['inm_ubicacion_numero_interior']= array('x'=>31,'y'=>170);
+        $keys_ubicacion['inm_ubicacion_lote']= array('x'=>46,'y'=>170);
+        $keys_ubicacion['inm_ubicacion_manzana']= array('x'=>61,'y'=>170);
+        $keys_ubicacion['dp_colonia_ubicacion_descripcion']= array('x'=>81,'y'=>170);
+        $keys_ubicacion['dp_estado_ubicacion_descripcion']= array('x'=>15.5,'y'=>176);
+        $keys_ubicacion['dp_municipio_ubicacion_descripcion']= array('x'=>100,'y'=>176);
+        $keys_ubicacion['dp_cp_ubicacion_descripcion']= array('x'=>173,'y'=>176);
+        return $keys_ubicacion;
+    }
+
 
 
     final public function write(string $valor,float $x, float $y): Fpdi
@@ -76,6 +100,18 @@ class _pdf{
         $this->pdf->SetXY($x, $y);
         $this->pdf->Write(0, $valor);
         return $this->pdf;
+    }
+
+    final public function write_condicion(string $key, array $row, mixed $value_compare, float $x, float $y){
+        $write = false;
+        if (round($row[$key], 2) > $value_compare) {
+            $pdf = $this->write( valor: $row[$key], x: $x, y: $y);
+            if (errores::$error) {
+                return $this->error->error(mensaje: 'Error al escribir en pdf', data: $pdf);
+            }
+            $write = true;
+        }
+        return $write;
     }
 
     final public function write_data(array $keys, array $row){

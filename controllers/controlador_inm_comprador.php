@@ -445,50 +445,22 @@ class controlador_inm_comprador extends _ctl_base {
             return $this->retorno_error(mensaje: 'Error al escribir en pdf', data: $pdf, header: $header, ws: $ws);
         }
 
-
-
         /**
          * 2. DATOS PARA DETERMINAR EL MONTO DE CRÉDITO
          */
 
         $pdf->SetFont('Arial', 'B', 10);
 
-        if (round($data->inm_comprador['inm_comprador_descuento_pension_alimenticia_dh'], 2) > 0.0) {
+        $row_condiciones['inm_comprador_descuento_pension_alimenticia_dh'] = array('x'=>77,'y'=>117, 'value_compare'=>0.0);
+        $row_condiciones['inm_comprador_descuento_pension_alimenticia_fc'] = array('x'=>115,'y'=>117, 'value_compare'=>0.0);
+        $row_condiciones['inm_comprador_monto_credito_solicitado_dh'] = array('x'=>79,'y'=>131, 'value_compare'=>0.0);
+        $row_condiciones['inm_comprador_monto_ahorro_voluntario'] = array('x'=>51.5,'y'=>143, 'value_compare'=>0.0);
 
-            $pdf = $_pdf->write( valor: $data->inm_comprador['inm_comprador_descuento_pension_alimenticia_dh'], x: 77, y: 117);
+        foreach ($row_condiciones as $key =>$row){
+            $pdf = $_pdf->write_condicion(key: $key,row:  $data->inm_comprador,value_compare:  $row['value_compare'],x:  $row['x'],y: $row['y']);
             if (errores::$error) {
                 return $this->retorno_error(mensaje: 'Error al escribir en pdf', data: $pdf, header: $header, ws: $ws);
             }
-
-
-        }
-
-        if (round($data->inm_comprador['inm_comprador_descuento_pension_alimenticia_fc'], 2) > 0.0) {
-
-            $pdf = $_pdf->write( valor: $data->inm_comprador['inm_comprador_descuento_pension_alimenticia_fc'], x: 115, y: 117);
-            if (errores::$error) {
-                return $this->retorno_error(mensaje: 'Error al escribir en pdf', data: $pdf, header: $header, ws: $ws);
-            }
-
-        }
-
-        if (round($data->inm_comprador['inm_comprador_monto_credito_solicitado_dh'], 2) > 0.0) {
-
-            $pdf = $_pdf->write(valor: $data->inm_comprador['inm_comprador_monto_credito_solicitado_dh'], x: 79, y: 131);
-            if (errores::$error) {
-                return $this->retorno_error(mensaje: 'Error al escribir en pdf', data: $pdf, header: $header, ws: $ws);
-            }
-
-        }
-
-        if (round($data->inm_comprador['inm_comprador_monto_ahorro_voluntario'], 2) > 0.0) {
-
-
-            $pdf = $_pdf->write( valor: $data->inm_comprador['inm_comprador_monto_ahorro_voluntario'], x: 51.5, y: 143);
-            if (errores::$error) {
-                return $this->retorno_error(mensaje: 'Error al escribir en pdf', data: $pdf, header: $header, ws: $ws);
-            }
-
         }
 
 
@@ -496,17 +468,11 @@ class controlador_inm_comprador extends _ctl_base {
          * 3. DATOS DE LA VIVIENDA/TERRENO DESTINO DEL CRÉDITO
          */
 
-        $keys_ubicacion['dp_calle_ubicacion_descripcion']= array('x'=>15.5,'y'=>164);
-        $keys_ubicacion['inm_ubicacion_numero_exterior']= array('x'=>15.5,'y'=>170);
-        $keys_ubicacion['inm_ubicacion_numero_interior']= array('x'=>31,'y'=>170);
-        $keys_ubicacion['inm_ubicacion_lote']= array('x'=>46,'y'=>170);
-        $keys_ubicacion['inm_ubicacion_manzana']= array('x'=>61,'y'=>170);
-        $keys_ubicacion['dp_colonia_ubicacion_descripcion']= array('x'=>81,'y'=>170);
-        $keys_ubicacion['dp_estado_ubicacion_descripcion']= array('x'=>15.5,'y'=>176);
-        $keys_ubicacion['dp_municipio_ubicacion_descripcion']= array('x'=>100,'y'=>176);
-        $keys_ubicacion['dp_cp_ubicacion_descripcion']= array('x'=>173,'y'=>176);
 
-
+        $keys_ubicacion = $_pdf->keys_ubicacion();
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al obtener keys_ubicacion', data: $keys_ubicacion, header: $header, ws: $ws);
+        }
 
         $write = $_pdf->write_data(keys: $keys_ubicacion,row:  $data->imp_rel_ubi_comp);
         if (errores::$error) {
@@ -556,12 +522,10 @@ class controlador_inm_comprador extends _ctl_base {
          */
 
 
-        $keys_comprador['inm_comprador_nombre_empresa_patron']= array('x'=>16,'y'=>249);
-        $keys_comprador['inm_comprador_nrp_nep']= array('x'=>140,'y'=>249);
-        $keys_comprador['inm_comprador_lada_nep']= array('x'=>57,'y'=>256);
-        $keys_comprador['inm_comprador_numero_nep']= array('x'=>70,'y'=>256);
-        $keys_comprador['inm_comprador_extension_nep']= array('x'=>116,'y'=>256);
-
+        $keys_comprador = $_pdf->keys_comprador();
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al obtener keys_ubicacion', data: $keys_comprador, header: $header, ws: $ws);
+        }
 
         $write = $_pdf->write_data(keys: $keys_comprador,row:  $data->inm_comprador);
         if (errores::$error) {
