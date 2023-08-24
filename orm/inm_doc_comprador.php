@@ -14,7 +14,7 @@ class inm_doc_comprador extends _modelo_parent{
     {
         $tabla = 'inm_doc_comprador';
         $columnas = array($tabla=>false,'inm_comprador'=>$tabla,'doc_documento'=>$tabla,
-            'doc_tipo_documento'=>'doc_documento');
+            'doc_tipo_documento'=>'doc_documento','doc_extension'=>'doc_documento');
 
         $campos_obligatorios = array('inm_comprador_id','doc_documento_id');
 

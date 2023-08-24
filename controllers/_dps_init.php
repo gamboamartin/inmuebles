@@ -44,6 +44,7 @@ class _dps_init{
     }
 
     /**
+     * Integra un key select basada en la descripcion para descripcion select
      * @param _ctl_base $controler
      * @param string $entidad
      * @param array $keys_selects

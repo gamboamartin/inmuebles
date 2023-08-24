@@ -213,9 +213,6 @@ class controlador_inm_comprador extends _ctl_base {
     }
 
 
-
-
-
     protected function key_selects_txt(array $keys_selects): array
     {
 

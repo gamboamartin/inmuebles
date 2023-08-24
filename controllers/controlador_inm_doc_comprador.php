@@ -66,7 +66,7 @@ class controlador_inm_doc_comprador extends _ctl_formato {
 
         $confs = (new inm_conf_docs_comprador(link: $this->link))->registros_activos();
         if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al Obtener configuraciones',data:  $r_confs,
+            return $this->retorno_error(mensaje: 'Error al Obtener configuraciones',data:  $confs,
                 header: $header,ws:  $ws);
         }
 
@@ -124,6 +124,39 @@ class controlador_inm_doc_comprador extends _ctl_formato {
 
 
         return $campos_view;
+    }
+
+    public function descarga(bool $header, bool $ws = false): array|string
+    {
+
+        $registro = $this->modelo->registro(registro_id: $this->registro_id, retorno_obj: true);
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al obtener documento',data:  $registro,header:  $header,
+                ws:  $ws);
+        }
+        $ruta_doc = $this->path_base."$registro->doc_documento_ruta_relativa";
+
+        $content = file_get_contents($ruta_doc);
+        $name = $registro->inm_comprador_id.".".$registro->inm_comprador_nombre;
+        $name .= ".".$registro->inm_comprador_apellido_paterno;
+        $name .= ".".$registro->inm_comprador_apellido_materno.".".$registro->doc_tipo_documento_codigo;
+        $name .= ".".$registro->doc_extension_descripcion;
+
+        if($header) {
+            ob_clean();
+            // Define headers
+            header("Cache-Control: public");
+            header("Content-Description: File Transfer");
+            header("Content-Disposition: attachment; filename=$name");
+            header("Content-Type: application/$registro->doc_extension_descripcion");
+            header("Content-Transfer-Encoding: binary");
+
+            // Read the file
+            readfile($ruta_doc);
+            exit;
+        }
+        return $content;
+
     }
 
 
