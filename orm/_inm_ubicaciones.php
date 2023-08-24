@@ -32,6 +32,7 @@ class _inm_ubicaciones extends _modelo_parent{
      * Se tiene que determinar en objeto que hereda
      * @param array $registro Registro en proceso
      * @return array
+     * @version 1.45.0
      */
     protected function init_row(array $registro): array
     {

@@ -45,6 +45,7 @@ class controlador_inm_attr_tipo_creditoTest extends test {
         fclose($fp);
 
         $data = file_get_contents("inm_attr_tipo_credito.alta");
+
         assertStringContainsStringIgnoringCase("><div class='controls'><input type='text' name='descripcion' value='' class='form-control' required id='descripcion' placeholder='De", $data);
         unlink('inm_attr_tipo_credito.alta');
 
