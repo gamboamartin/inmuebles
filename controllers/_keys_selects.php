@@ -372,6 +372,7 @@ class _keys_selects{
         $controler->row_upd->dp_cp_id = $com_cliente['dp_cp_id'];
         $controler->row_upd->dp_colonia_postal_id = $com_cliente['dp_colonia_postal_id'];
         $controler->row_upd->dp_calle_pertenece_id = $com_cliente['dp_calle_pertenece_id'];
+        $controler->row_upd->com_tipo_cliente_id = $com_cliente['com_tipo_cliente_id'];
         return $controler->row_upd;
     }
 }
