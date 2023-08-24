@@ -9,15 +9,11 @@
 namespace gamboamartin\inmuebles\controllers;
 
 use base\controller\init;
-use gamboamartin\comercial\models\com_cliente;
 use gamboamartin\errores\errores;
 use gamboamartin\inmuebles\html\inm_comprador_html;
 use gamboamartin\inmuebles\html\inm_ubicacion_html;
 use gamboamartin\inmuebles\models\inm_co_acreditado;
 use gamboamartin\inmuebles\models\inm_comprador;
-use gamboamartin\inmuebles\models\inm_conf_empresa;
-use gamboamartin\inmuebles\models\inm_referencia;
-use gamboamartin\inmuebles\models\inm_rel_comprador_com_cliente;
 use gamboamartin\inmuebles\models\inm_rel_ubi_comp;
 use gamboamartin\system\_ctl_base;
 use gamboamartin\system\links_menu;
@@ -56,42 +52,10 @@ class controlador_inm_comprador extends _ctl_base {
                 mensaje: 'Error al inicializar alta',data:  $r_alta, header: $header,ws:  $ws);
         }
 
-
-        $keys_selects = array();
-
-        $keys_selects = $this->ks_infonavit(keys_selects: $keys_selects, row_upd: new stdClass());
+        $keys_selects = (new _keys_selects())->init(controler: $this,row_upd: new stdClass());
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects,
                 header: $header,ws:  $ws);
-        }
-
-        $keys_selects = (new _dps_init())->ks_dp(controler: $this,keys_selects:  $keys_selects,row_upd: new stdClass());
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects,
-                header: $header,ws:  $ws);
-        }
-
-        $keys_selects = $this->ks_fiscales(keys_selects: $keys_selects, row_upd: new stdClass());
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects,
-                header: $header,ws:  $ws);
-        }
-
-
-        $columns_ds = array('com_tipo_cliente_descripcion');
-        $keys_selects = $this->key_select(cols:12, con_registros: true,filtro:  array(), key: 'com_tipo_cliente_id',
-            keys_selects: $keys_selects, id_selected: -1, label: 'Tipo de Cliente', columns_ds: $columns_ds);
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects,
-                header: $header,ws:  $ws);
-        }
-
-        $columns_ds = array('inm_estado_civil_descripcion');
-        $keys_selects = $this->key_select(cols:6, con_registros: true,filtro:  array(), key: 'inm_estado_civil_id',
-            keys_selects: $keys_selects, id_selected: -1, label: 'Estado Civil',
-            columns_ds: $columns_ds);
-        if(errores::$error){
-            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
 
         $this->row_upd->descuento_pension_alimenticia_dh = 0;
@@ -124,124 +88,24 @@ class controlador_inm_comprador extends _ctl_base {
         }
 
 
-        $filtro['inm_comprador.id'] = $this->registro_id;
-
-        $r_imp_rel_comprador_com_cliente = (new inm_rel_comprador_com_cliente(link: $this->link))->filtro_and(filtro:$filtro);
-        if(errores::$error){
-            return $this->retorno_error(
-                mensaje: 'Error al obtener imp_rel_comprador_com_cliente',data:  $r_imp_rel_comprador_com_cliente,header: $header,ws: $ws);
-        }
-
-        if($r_imp_rel_comprador_com_cliente->n_registros === 0){
-            return $this->retorno_error(
-                mensaje: 'Error no existe inm_rel_comprador_com_cliente',data:  $r_imp_rel_comprador_com_cliente,
-                header: $header,ws: $ws);
-        }
-
-        if($r_imp_rel_comprador_com_cliente->n_registros > 1){
-            return $this->retorno_error(
-                mensaje: 'Error de integridad existe mas de un inm_rel_comprador_com_cliente',data:  $r_imp_rel_comprador_com_cliente,
-                header: $header,ws: $ws);
-        }
-
-        $imp_rel_comprador_com_cliente = $r_imp_rel_comprador_com_cliente->registros[0];
-
-        $filtro = array();
-        $filtro['com_cliente.id'] = $imp_rel_comprador_com_cliente['com_cliente_id'];
-
-        $r_com_cliente = (new com_cliente(link: $this->link))->filtro_and(filtro:$filtro);
-        if(errores::$error){
-            return $this->retorno_error(
-                mensaje: 'Error al obtener com_cliente',data:  $r_com_cliente,header: $header,ws: $ws);
-        }
-
-        if($r_com_cliente->n_registros === 0){
-            return $this->retorno_error(
-                mensaje: 'Error no existe com_cliente',data:  $r_com_cliente,
-                header: $header,ws: $ws);
-        }
-
-        if($r_com_cliente->n_registros > 1){
-            return $this->retorno_error(
-                mensaje: 'Error de integridad existe mas de un com_cliente',data:  $r_com_cliente,
-                header: $header,ws: $ws);
-        }
-
-        $com_cliente = $r_com_cliente->registros[0];
-
-        $this->row_upd->rfc = $com_cliente['com_cliente_rfc'];
-        $this->row_upd->numero_exterior = $com_cliente['com_cliente_numero_exterior'];
-        $this->row_upd->numero_interior = $com_cliente['com_cliente_numero_interior'];
-        $this->row_upd->telefono = $com_cliente['com_cliente_telefono'];
-        $this->row_upd->dp_pais_id = $com_cliente['dp_pais_id'];
-        $this->row_upd->dp_estado_id = $com_cliente['dp_estado_id'];
-        $this->row_upd->dp_municipio_id = $com_cliente['dp_municipio_id'];
-        $this->row_upd->dp_cp_id = $com_cliente['dp_cp_id'];
-        $this->row_upd->dp_colonia_postal_id = $com_cliente['dp_colonia_postal_id'];
-        $this->row_upd->dp_calle_pertenece_id = $com_cliente['dp_calle_pertenece_id'];
-
-
-        $keys_selects = array();
-
-        $keys_selects = $this->ks_infonavit(keys_selects: $keys_selects, row_upd: $this->row_upd);
+        $keys_selects = (new _keys_selects())->key_selects_base(controler: $this);
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects,
                 header: $header,ws:  $ws);
         }
 
-        $keys_selects = (new _dps_init())->ks_dp(controler: $this,keys_selects:  $keys_selects,row_upd: $this->row_upd);
+        $keys_selects = (new _keys_selects())->keys_disabled(keys_selects: $keys_selects);
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects,
                 header: $header,ws:  $ws);
         }
 
-        $keys_selects = $this->ks_fiscales(keys_selects: $keys_selects, row_upd: new stdClass());
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects,
-                header: $header,ws:  $ws);
-        }
-
-
-        $columns_ds = array('com_tipo_cliente_descripcion');
-        $keys_selects = $this->key_select(cols:6, con_registros: true,filtro:  array(), key: 'com_tipo_cliente_id',
-            keys_selects: $keys_selects, id_selected: $com_cliente['com_tipo_cliente_id'], label: 'Tipo de Cliente',
-            columns_ds: $columns_ds);
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects,
-                header: $header,ws:  $ws);
-        }
-
-
-        $keys_selects['com_tipo_cliente_id']->disabled = true;
-
-        $keys_selects['nss'] = new stdClass();
-        $keys_selects['nss']->disabled = true;
-
-        $keys_selects['curp'] = new stdClass();
-        $keys_selects['curp']->disabled = true;
-
-        $keys_selects['rfc'] = new stdClass();
-        $keys_selects['rfc']->disabled = true;
-
-        $keys_selects['apellido_paterno'] = new stdClass();
-        $keys_selects['apellido_paterno']->disabled = true;
-
-        $keys_selects['apellido_materno'] = new stdClass();
-        $keys_selects['apellido_materno']->disabled = true;
-
-        $keys_selects['nombre'] = new stdClass();
-        $keys_selects['nombre']->disabled = true;
 
         $base = $this->base_upd(keys_selects: $keys_selects, params: array(),params_ajustados: array());
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al integrar base',data:  $base, header: $header,ws:  $ws);
         }
 
-        $in_registro_id = $this->html->hidden(name:'registro_id',value: $this->registro_id);
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al in_registro_id',data:  $in_registro_id,
-                header: $header,ws:  $ws);
-        }
 
         $inm_comprador_id = $this->html->hidden(name:'inm_comprador_id',value: $this->registro_id);
         if(errores::$error){
@@ -249,37 +113,20 @@ class controlador_inm_comprador extends _ctl_base {
                 header: $header,ws:  $ws);
         }
 
-        $id_retorno = $this->html->hidden(name:'id_retorno',value: $this->registro_id);
+
+        $hiddens = (new _keys_selects())->hiddens(controler: $this,funcion: __FUNCTION__);
         if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al in_registro_id',data:  $id_retorno,
+            return $this->retorno_error(mensaje: 'Error al obtener inputs',data:  $hiddens,
                 header: $header,ws:  $ws);
         }
 
-        $seccion_retorno = $this->html->hidden(name:'seccion_retorno',value: $this->tabla);
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al in_registro_id',data:  $seccion_retorno,
-                header: $header,ws:  $ws);
-        }
-        $btn_action_next = $this->html->hidden(name:'btn_action_next',value: __FUNCTION__);
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al in_registro_id',data:  $btn_action_next,
-                header: $header,ws:  $ws);
-        }
+        $inputs = (new _keys_selects())->inputs_form_base(btn_action_next: $hiddens->btn_action_next, controler: $this,
+            id_retorno: $hiddens->id_retorno, in_registro_id: $hiddens->in_registro_id, inm_comprador_id: $inm_comprador_id,
+            inm_ubicacion_id: '', precio_operacion: $hiddens->precio_operacion, seccion_retorno: $hiddens->seccion_retorno);
 
-        $precio_operacion = $this->html->input_monto(cols: 12, row_upd: new stdClass(),value_vacio: false,
-            name: 'precio_operacion',place_holder: 'Precio de operacion');
         if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al obtener precio operacion',data:  $precio_operacion,
-                header: $header,ws:  $ws);
+            return $this->retorno_error(mensaje: 'Error al obtener inputs_hidden',data:  $inputs, header: $header,ws:  $ws);
         }
-
-        $this->inputs->id_retorno = $id_retorno;
-        $this->inputs->btn_action_next = $btn_action_next;
-        $this->inputs->seccion_retorno = $seccion_retorno;
-        $this->inputs->registro_id = $in_registro_id;
-        $this->inputs->inm_comprador_id = $inm_comprador_id;
-        $this->inputs->precio_operacion = $precio_operacion;
-
 
 
         $columns_ds = array('inm_ubicacion_id','dp_estado_descripcion','dp_municipio_descripcion',
@@ -365,65 +212,9 @@ class controlador_inm_comprador extends _ctl_base {
         return $campos_view;
     }
 
-    /**
-     * Inicializa los key id de elementos fiscales
-     * @param stdClass $row_upd Registro en proceso
-     * @return stdClass
-     */
-    private function init_row_upd_fiscales(stdClass $row_upd): stdClass
-    {
-        if(!isset($row_upd->cat_sat_regimen_fiscal_id)){
-            $row_upd->cat_sat_regimen_fiscal_id = 605;
-        }
-        if(!isset($row_upd->cat_sat_moneda_id)){
-            $row_upd->cat_sat_moneda_id = 161;
-        }
-        if(!isset($row_upd->cat_sat_forma_pago_id)){
-            $row_upd->cat_sat_forma_pago_id = 99;
-        }
-        if(!isset($row_upd->cat_sat_metodo_pago_id)){
-            $row_upd->cat_sat_metodo_pago_id = 2;
-        }
-        if(!isset($row_upd->cat_sat_uso_cfdi_id)){
-            $row_upd->cat_sat_uso_cfdi_id = 22;
-        }
-        if(!isset($row_upd->cat_sat_tipo_persona_id)){
-            $row_upd->cat_sat_tipo_persona_id = 5;
-        }
-        if(!isset($row_upd->bn_cuenta_id)){
-            $row_upd->bn_cuenta_id = -1;
-        }
-        return $row_upd;
-    }
 
-    /**
-     * Inicializa los elementos por default de datos de infonavit
-     * @param stdClass $row_upd Registro en proceso
-     * @return stdClass
-     * @version 1.41.0
-     */
-    private function init_row_upd_infonavit(stdClass $row_upd): stdClass
-    {
-        if(!isset($row_upd->inm_producto_infonavit_id)){
-            $row_upd->inm_producto_infonavit_id = -1;
-        }
-        if(!isset($row_upd->inm_attr_tipo_credito_id)){
-            $row_upd->inm_attr_tipo_credito_id = -1;
-        }
-        if(!isset($row_upd->inm_destino_credito_id)){
-            $row_upd->inm_destino_credito_id = -1;
-        }
-        if(!isset($row_upd->inm_plazo_credito_sc_id)){
-            $row_upd->inm_plazo_credito_sc_id = 7;
-        }
-        if(!isset($row_upd->inm_tipo_discapacidad_id)){
-            $row_upd->inm_tipo_discapacidad_id = 5;
-        }
-        if(!isset($row_upd->inm_persona_discapacidad_id)){
-            $row_upd->inm_persona_discapacidad_id = 6;
-        }
-        return $row_upd;
-    }
+
+
 
     protected function key_selects_txt(array $keys_selects): array
     {
@@ -484,28 +275,12 @@ class controlador_inm_comprador extends _ctl_base {
             return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
 
-        $keys_selects = (new init())->key_select_txt(cols: 6,key: 'numero_exterior',
-            keys_selects:$keys_selects, place_holder: 'Exterior');
-        if(errores::$error){
-            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
-        }
-        $keys_selects = (new init())->key_select_txt(cols: 6,key: 'numero_interior',
-            keys_selects:$keys_selects, place_holder: 'Interior', required: false);
-        if(errores::$error){
-            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
-        }
-
-        $keys_selects = (new init())->key_select_txt(cols: 12,key: 'telefono',
-            keys_selects:$keys_selects, place_holder: 'Telefono');
-        if(errores::$error){
-            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
-        }
-
         $keys_selects = (new init())->key_select_txt(cols: 12,key: 'nombre_empresa_patron',
             keys_selects:$keys_selects, place_holder: 'Nombre Empresa o Patron');
         if(errores::$error){
             return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
+
 
         $keys_selects = (new init())->key_select_txt(cols: 6,key: 'lada_nep',
             keys_selects:$keys_selects, place_holder: 'Lada');
@@ -527,6 +302,29 @@ class controlador_inm_comprador extends _ctl_base {
         if(errores::$error){
             return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
+
+
+
+        $keys_selects = (new init())->key_select_txt(cols: 6,key: 'numero_exterior',
+            keys_selects:$keys_selects, place_holder: 'Exterior');
+        if(errores::$error){
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        }
+        $keys_selects = (new init())->key_select_txt(cols: 6,key: 'numero_interior',
+            keys_selects:$keys_selects, place_holder: 'Interior', required: false);
+        if(errores::$error){
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        }
+
+        $keys_selects = (new init())->key_select_txt(cols: 12,key: 'telefono',
+            keys_selects:$keys_selects, place_holder: 'Telefono');
+        if(errores::$error){
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        }
+
+
+
+
 
         $keys_selects = (new init())->key_select_txt(cols: 6,key: 'lada_com',
             keys_selects:$keys_selects, place_holder: 'Lada');
@@ -560,136 +358,7 @@ class controlador_inm_comprador extends _ctl_base {
 
 
 
-    private function ks_fiscales(array $keys_selects, stdClass $row_upd): array
-    {
 
-        $row_upd = $this->init_row_upd_fiscales(row_upd: $row_upd);
-        if(errores::$error){
-            return $this->errores->error(mensaje: 'Error al maquetar row_upd',data:  $row_upd);
-        }
-
-        $columns_ds = array('cat_sat_regimen_fiscal_descripcion');
-        $keys_selects = $this->key_select(cols:6, con_registros: true,filtro:  array(), key: 'cat_sat_regimen_fiscal_id',
-            keys_selects: $keys_selects, id_selected: $row_upd->cat_sat_regimen_fiscal_id, label: 'Regimen Fiscal', columns_ds: $columns_ds);
-        if(errores::$error){
-            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
-        }
-
-        $columns_ds = array('cat_sat_moneda_descripcion');
-        $keys_selects = $this->key_select(cols:6, con_registros: true,filtro:  array(), key: 'cat_sat_moneda_id',
-            keys_selects: $keys_selects, id_selected: $row_upd->cat_sat_moneda_id, label: 'Moneda', columns_ds: $columns_ds);
-        if(errores::$error){
-            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
-        }
-
-        $columns_ds = array('cat_sat_forma_pago_descripcion');
-        $keys_selects = $this->key_select(cols:6, con_registros: true,filtro:  array(), key: 'cat_sat_forma_pago_id',
-            keys_selects: $keys_selects, id_selected: $row_upd->cat_sat_forma_pago_id, label: 'Forma de Pago', columns_ds: $columns_ds);
-        if(errores::$error){
-            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
-        }
-
-        $columns_ds = array('cat_sat_metodo_pago_descripcion');
-        $keys_selects = $this->key_select(cols:6, con_registros: true,filtro:  array(), key: 'cat_sat_metodo_pago_id',
-            keys_selects: $keys_selects, id_selected: $row_upd->cat_sat_metodo_pago_id, label: 'Metodo de Pago', columns_ds: $columns_ds);
-        if(errores::$error){
-            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
-        }
-
-        $columns_ds = array('cat_sat_uso_cfdi_descripcion');
-        $keys_selects = $this->key_select(cols:6, con_registros: true,filtro:  array(), key: 'cat_sat_uso_cfdi_id',
-            keys_selects: $keys_selects, id_selected: $row_upd->cat_sat_uso_cfdi_id, label: 'Uso de CFDI', columns_ds: $columns_ds);
-        if(errores::$error){
-            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
-        }
-
-        $columns_ds = array('cat_sat_tipo_persona_descripcion');
-        $keys_selects = $this->key_select(cols:6, con_registros: true,filtro:  array(), key: 'cat_sat_tipo_persona_id',
-            keys_selects: $keys_selects, id_selected: $row_upd->cat_sat_tipo_persona_id, label: 'Tipo de Persona', columns_ds: $columns_ds);
-        if(errores::$error){
-            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
-        }
-
-        $columns_ds = array('bn_cuenta_descripcion');
-        $keys_selects = $this->key_select(cols:12, con_registros: true,filtro:  array(), key: 'bn_cuenta_id',
-            keys_selects: $keys_selects, id_selected: $row_upd->bn_cuenta_id, label: 'Cuenta Deposito', columns_ds: $columns_ds);
-        if(errores::$error){
-            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
-        }
-
-        return $keys_selects;
-    }
-
-    /**
-     * Integra los parametros para la generacion de inputs de tipo infonavit
-     * @param array $keys_selects Configuraciones precargadas
-     * @param stdClass $row_upd Registro en proceso
-     * @return array
-     * @version 1.42.0
-     */
-    private function ks_infonavit(array $keys_selects, stdClass $row_upd): array
-    {
-
-        $row_upd = $this->init_row_upd_infonavit(row_upd: $row_upd);
-        if(errores::$error){
-            return $this->errores->error(mensaje: 'Error al inicializa row_upd',data:  $row_upd);
-        }
-
-        $columns_ds[] = 'inm_producto_infonavit_descripcion';
-        $keys_selects = $this->key_select(cols:6, con_registros: true,filtro:  array(),
-            key: 'inm_producto_infonavit_id', keys_selects: $keys_selects,
-            id_selected: $row_upd->inm_producto_infonavit_id, label: 'Producto', columns_ds: $columns_ds);
-        if(errores::$error){
-            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
-        }
-
-        $columns_ds = array();
-        $columns_ds[] = 'inm_tipo_credito_descripcion';
-        $columns_ds[] = 'inm_attr_tipo_credito_descripcion';
-        $keys_selects = $this->key_select(cols:6, con_registros: true,filtro:  array(), key: 'inm_attr_tipo_credito_id',
-            keys_selects: $keys_selects, id_selected: $row_upd->inm_attr_tipo_credito_id, label: 'Tipo de Credito',
-            columns_ds: $columns_ds);
-        if(errores::$error){
-            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
-        }
-
-        $columns_ds = array();
-        $columns_ds[] = 'inm_destino_credito_descripcion';
-
-        $keys_selects = $this->key_select(cols:12, con_registros: true,filtro:  array(), key: 'inm_destino_credito_id',
-            keys_selects: $keys_selects, id_selected: $row_upd->inm_destino_credito_id, label: 'Destino del Credito',
-            columns_ds: $columns_ds);
-        if(errores::$error){
-            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
-        }
-        $keys_selects = $this->key_select(cols:6, con_registros: true,filtro:  array(), key: 'inm_plazo_credito_sc_id',
-            keys_selects: $keys_selects, id_selected: $row_upd->inm_plazo_credito_sc_id,
-            label: 'Plazo Segundo Credito');
-        if(errores::$error){
-            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
-        }
-
-        $columns_ds = array();
-        $columns_ds[] = 'inm_tipo_discapacidad_descripcion';
-        $keys_selects = $this->key_select(cols:6, con_registros: true,filtro:  array(), key: 'inm_tipo_discapacidad_id',
-            keys_selects: $keys_selects, id_selected: $row_upd->inm_tipo_discapacidad_id, label: 'Tipo de Discapacidad',
-            columns_ds: $columns_ds);
-        if(errores::$error){
-            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
-        }
-
-        $columns_ds = array();
-        $columns_ds[] = 'inm_persona_discapacidad_descripcion';
-        $keys_selects = $this->key_select(cols:12, con_registros: true,filtro:  array(),
-            key: 'inm_persona_discapacidad_id', keys_selects: $keys_selects,
-            id_selected: $row_upd->inm_persona_discapacidad_id, label: 'Persona Discapacidad',
-            columns_ds: $columns_ds);
-        if(errores::$error){
-            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
-        }
-
-        return $keys_selects;
-    }
 
     public function modifica(bool $header, bool $ws = false): array|stdClass
     {
@@ -700,99 +369,11 @@ class controlador_inm_comprador extends _ctl_base {
                 mensaje: 'Error al generar salida de template',data:  $r_modifica,header: $header,ws: $ws);
         }
 
-        $filtro['inm_comprador.id'] = $this->registro_id;
 
-        $r_imp_rel_comprador_com_cliente = (new inm_rel_comprador_com_cliente(link: $this->link))->filtro_and(filtro:$filtro);
-        if(errores::$error){
-            return $this->retorno_error(
-                mensaje: 'Error al obtener imp_rel_comprador_com_cliente',data:  $r_imp_rel_comprador_com_cliente,header: $header,ws: $ws);
-        }
-
-        if($r_imp_rel_comprador_com_cliente->n_registros === 0){
-            return $this->retorno_error(
-                mensaje: 'Error no existe inm_rel_comprador_com_cliente',data:  $r_imp_rel_comprador_com_cliente,
-                header: $header,ws: $ws);
-        }
-
-        if($r_imp_rel_comprador_com_cliente->n_registros > 1){
-            return $this->retorno_error(
-                mensaje: 'Error de integridad existe mas de un inm_rel_comprador_com_cliente',data:  $r_imp_rel_comprador_com_cliente,
-                header: $header,ws: $ws);
-        }
-
-        $imp_rel_comprador_com_cliente = $r_imp_rel_comprador_com_cliente->registros[0];
-
-        $filtro = array();
-        $filtro['com_cliente.id'] = $imp_rel_comprador_com_cliente['com_cliente_id'];
-
-        $r_com_cliente = (new com_cliente(link: $this->link))->filtro_and(filtro:$filtro);
-        if(errores::$error){
-            return $this->retorno_error(
-                mensaje: 'Error al obtener com_cliente',data:  $r_com_cliente,header: $header,ws: $ws);
-        }
-
-        if($r_com_cliente->n_registros === 0){
-            return $this->retorno_error(
-                mensaje: 'Error no existe com_cliente',data:  $r_com_cliente,
-                header: $header,ws: $ws);
-        }
-
-        if($r_com_cliente->n_registros > 1){
-            return $this->retorno_error(
-                mensaje: 'Error de integridad existe mas de un com_cliente',data:  $r_com_cliente,
-                header: $header,ws: $ws);
-        }
-
-        $com_cliente = $r_com_cliente->registros[0];
-
-        $this->row_upd->rfc = $com_cliente['com_cliente_rfc'];
-        $this->row_upd->numero_exterior = $com_cliente['com_cliente_numero_exterior'];
-        $this->row_upd->numero_interior = $com_cliente['com_cliente_numero_interior'];
-        $this->row_upd->telefono = $com_cliente['com_cliente_telefono'];
-        $this->row_upd->dp_pais_id = $com_cliente['dp_pais_id'];
-        $this->row_upd->dp_estado_id = $com_cliente['dp_estado_id'];
-        $this->row_upd->dp_municipio_id = $com_cliente['dp_municipio_id'];
-        $this->row_upd->dp_cp_id = $com_cliente['dp_cp_id'];
-        $this->row_upd->dp_colonia_postal_id = $com_cliente['dp_colonia_postal_id'];
-        $this->row_upd->dp_calle_pertenece_id = $com_cliente['dp_calle_pertenece_id'];
-
-
-        $keys_selects = array();
-
-        $keys_selects = $this->ks_infonavit(keys_selects: $keys_selects, row_upd: $this->row_upd);
+        $keys_selects = (new _keys_selects())->key_selects_base(controler: $this);
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects,
                 header: $header,ws:  $ws);
-        }
-
-        $keys_selects = (new _dps_init())->ks_dp(controler: $this,keys_selects:  $keys_selects,row_upd: $this->row_upd);
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects,
-                header: $header,ws:  $ws);
-        }
-
-        $keys_selects = $this->ks_fiscales(keys_selects: $keys_selects, row_upd: new stdClass());
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects,
-                header: $header,ws:  $ws);
-        }
-
-
-        $columns_ds = array('com_tipo_cliente_descripcion');
-        $keys_selects = $this->key_select(cols:12, con_registros: true,filtro:  array(), key: 'com_tipo_cliente_id',
-            keys_selects: $keys_selects, id_selected: $com_cliente['com_tipo_cliente_id'], label: 'Tipo de Cliente',
-            columns_ds: $columns_ds);
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects,
-                header: $header,ws:  $ws);
-        }
-
-        $columns_ds = array('inm_estado_civil_descripcion');
-        $keys_selects = $this->key_select(cols:6, con_registros: true,filtro:  array(), key: 'inm_estado_civil_id',
-            keys_selects: $keys_selects, id_selected: $this->row_upd->inm_estado_civil_id, label: 'Estado Civil',
-            columns_ds: $columns_ds);
-        if(errores::$error){
-            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
 
 
@@ -833,50 +414,12 @@ class controlador_inm_comprador extends _ctl_base {
     public function solicitud_infonavit(bool $header, bool $ws = false)
     {
 
-        $inm_comprador = $this->modelo->registro(registro_id: $this->registro_id);
-        if (errores::$error) {
-            return $this->retorno_error(mensaje: 'Error al obtener comprador', data: $inm_comprador,
-                header: $header, ws: $ws);
-        }
 
-        $imp_rel_comprador_com_cliente = (new inm_rel_comprador_com_cliente(link: $this->link))->imp_rel_comprador_com_cliente(inm_comprador_id: $this->registro_id);
+        $data = (new inm_comprador(link: $this->link))->data_pdf(inm_comprador_id: $this->registro_id);
         if (errores::$error) {
             return $this->retorno_error(
-                mensaje: 'Error al obtener imp_rel_comprador_com_cliente', data: $imp_rel_comprador_com_cliente, header: $header, ws: $ws);
+                mensaje: 'Error al obtener datos', data: $data, header: $header, ws: $ws);
         }
-
-
-        $com_cliente = (new com_cliente(link: $this->link))->registro(registro_id: $imp_rel_comprador_com_cliente['com_cliente_id']);
-        if (errores::$error) {
-            return $this->retorno_error(
-                mensaje: 'Error al obtener com_cliente', data: $com_cliente, header: $header, ws: $ws);
-        }
-
-
-        $imp_rel_ubi_comp = (new inm_rel_ubi_comp(link: $this->link))->imp_rel_ubi_comp(inm_comprador_id: $this->registro_id);
-        if (errores::$error) {
-            return $this->retorno_error(
-                mensaje: 'Error al obtener imp_rel_ubi_comp', data: $imp_rel_ubi_comp, header: $header, ws: $ws);
-        }
-
-        $inm_conf_empresa = (new inm_conf_empresa(link: $this->link))->inm_conf_empresa(org_empresa_id: $inm_comprador['org_empresa_id']);
-        if (errores::$error) {
-            return $this->retorno_error(
-                mensaje: 'Error al obtener r_inm_conf_empresa', data: $inm_conf_empresa, header: $header, ws: $ws);
-        }
-
-        $inm_rel_co_acreditados = (new inm_co_acreditado(link: $this->link))->inm_co_acreditados(inm_comprador_id: $this->registro_id);
-        if (errores::$error) {
-            return $this->retorno_error(
-                mensaje: 'Error al obtener inm_rel_co_acreditados', data: $inm_rel_co_acreditados, header: $header, ws: $ws);
-        }
-
-        $inm_referencias = (new inm_referencia(link: $this->link))->inm_referencias(inm_comprador_id: $this->registro_id);
-        if (errores::$error) {
-            return $this->retorno_error(
-                mensaje: 'Error al obtener inm_referencias', data: $inm_referencias, header: $header, ws: $ws);
-        }
-
 
         $pdf = new Fpdi();
 
@@ -903,7 +446,7 @@ class controlador_inm_comprador extends _ctl_base {
             'inm_destino_credito','inm_plazo_credito_sc','inm_tipo_discapacidad','inm_persona_discapacidad');
 
         foreach ($entidades_pdf as $name_entidad){
-            $pdf = $_pdf->write_x(name_entidad: $name_entidad, row: $inm_comprador);
+            $pdf = $_pdf->write_x(name_entidad: $name_entidad, row: $data->inm_comprador);
             if (errores::$error) {
                 return $this->retorno_error(mensaje: 'Error al escribir en pdf', data: $pdf, header: $header, ws: $ws);
             }
@@ -912,7 +455,7 @@ class controlador_inm_comprador extends _ctl_base {
 
         $x = 46.5;
         $y = 91.5;
-        if ($inm_comprador['inm_comprador_es_segundo_credito'] === 'SI') {
+        if ($data->inm_comprador['inm_comprador_es_segundo_credito'] === 'SI') {
             $x = 31.5;
         }
 
@@ -928,10 +471,10 @@ class controlador_inm_comprador extends _ctl_base {
 
         $pdf->SetFont('Arial', 'B', 10);
 
-        if (round($inm_comprador['inm_comprador_descuento_pension_alimenticia_dh'], 2) > 0.0) {
+        if (round($data->inm_comprador['inm_comprador_descuento_pension_alimenticia_dh'], 2) > 0.0) {
 
 
-            $pdf = $_pdf->write( valor: $inm_comprador['inm_comprador_descuento_pension_alimenticia_dh'], x: 77, y: 117);
+            $pdf = $_pdf->write( valor: $data->inm_comprador['inm_comprador_descuento_pension_alimenticia_dh'], x: 77, y: 117);
             if (errores::$error) {
                 return $this->retorno_error(mensaje: 'Error al escribir en pdf', data: $pdf, header: $header, ws: $ws);
             }
@@ -939,28 +482,28 @@ class controlador_inm_comprador extends _ctl_base {
 
         }
 
-        if (round($inm_comprador['inm_comprador_descuento_pension_alimenticia_fc'], 2) > 0.0) {
+        if (round($data->inm_comprador['inm_comprador_descuento_pension_alimenticia_fc'], 2) > 0.0) {
 
-            $pdf = $_pdf->write( valor: $inm_comprador['inm_comprador_descuento_pension_alimenticia_fc'], x: 115, y: 117);
+            $pdf = $_pdf->write( valor: $data->inm_comprador['inm_comprador_descuento_pension_alimenticia_fc'], x: 115, y: 117);
             if (errores::$error) {
                 return $this->retorno_error(mensaje: 'Error al escribir en pdf', data: $pdf, header: $header, ws: $ws);
             }
 
         }
 
-        if (round($inm_comprador['inm_comprador_monto_credito_solicitado_dh'], 2) > 0.0) {
+        if (round($data->inm_comprador['inm_comprador_monto_credito_solicitado_dh'], 2) > 0.0) {
 
-            $pdf = $_pdf->write(valor: $inm_comprador['inm_comprador_monto_credito_solicitado_dh'], x: 79, y: 131);
+            $pdf = $_pdf->write(valor: $data->inm_comprador['inm_comprador_monto_credito_solicitado_dh'], x: 79, y: 131);
             if (errores::$error) {
                 return $this->retorno_error(mensaje: 'Error al escribir en pdf', data: $pdf, header: $header, ws: $ws);
             }
 
         }
 
-        if (round($inm_comprador['inm_comprador_monto_ahorro_voluntario'], 2) > 0.0) {
+        if (round($data->inm_comprador['inm_comprador_monto_ahorro_voluntario'], 2) > 0.0) {
 
 
-            $pdf = $_pdf->write( valor: $inm_comprador['inm_comprador_monto_ahorro_voluntario'], x: 51.5, y: 143);
+            $pdf = $_pdf->write( valor: $data->inm_comprador['inm_comprador_monto_ahorro_voluntario'], x: 51.5, y: 143);
             if (errores::$error) {
                 return $this->retorno_error(mensaje: 'Error al escribir en pdf', data: $pdf, header: $header, ws: $ws);
             }
@@ -984,7 +527,7 @@ class controlador_inm_comprador extends _ctl_base {
 
 
 
-        $write = $_pdf->write_data(keys: $keys_ubicacion,row:  $imp_rel_ubi_comp);
+        $write = $_pdf->write_data(keys: $keys_ubicacion,row:  $data->imp_rel_ubi_comp);
         if (errores::$error) {
             return $this->retorno_error(mensaje: 'Error al escribir en pdf', data: $write, header: $header, ws: $ws);
         }
@@ -993,7 +536,7 @@ class controlador_inm_comprador extends _ctl_base {
         $x = 94.5;
         $y = 190;
 
-        if($inm_comprador['inm_comprador_con_discapacidad'] === 'SI'){
+        if($data->inm_comprador['inm_comprador_con_discapacidad'] === 'SI'){
 
             $x = 84;
         }
@@ -1008,20 +551,20 @@ class controlador_inm_comprador extends _ctl_base {
         $y = 224.5;
 
 
-        if((int)$inm_comprador['inm_destino_credito_id'] === 3 ){
+        if((int)$data->inm_comprador['inm_destino_credito_id'] === 3 ){
             $x = 67;
 
         }
-        if((int)$inm_comprador['inm_destino_credito_id'] === 4 ){
+        if((int)$data->inm_comprador['inm_destino_credito_id'] === 4 ){
             $x = 114;
 
         }
-        if((int)$inm_comprador['inm_destino_credito_id'] === 5 ){
+        if((int)$data->inm_comprador['inm_destino_credito_id'] === 5 ){
             $x = 163;
 
         }
 
-        $pdf = $_pdf->write( valor: $imp_rel_ubi_comp['inm_rel_ubi_comp_precio_operacion'], x: $x, y: $y);
+        $pdf = $_pdf->write( valor: $data->imp_rel_ubi_comp['inm_rel_ubi_comp_precio_operacion'], x: $x, y: $y);
         if (errores::$error) {
             return $this->retorno_error(mensaje: 'Error al escribir en pdf', data: $pdf, header: $header, ws: $ws);
         }
@@ -1039,7 +582,7 @@ class controlador_inm_comprador extends _ctl_base {
         $keys_comprador['inm_comprador_extension_nep']= array('x'=>116,'y'=>256);
 
 
-        $write = $_pdf->write_data(keys: $keys_comprador,row:  $inm_comprador);
+        $write = $_pdf->write_data(keys: $keys_comprador,row:  $data->inm_comprador);
         if (errores::$error) {
             return $this->retorno_error(mensaje: 'Error al escribir en pdf', data: $write, header: $header, ws: $ws);
         }
@@ -1070,22 +613,22 @@ class controlador_inm_comprador extends _ctl_base {
         $keys_comprador['inm_comprador_correo_com']= array('x'=>37.5,'y'=>85.5);
 
 
-        $write = $_pdf->write_data(keys: $keys_comprador,row:  $inm_comprador);
+        $write = $_pdf->write_data(keys: $keys_comprador,row:  $data->inm_comprador);
         if (errores::$error) {
             return $this->retorno_error(mensaje: 'Error al escribir en pdf', data: $write, header: $header, ws: $ws);
         }
 
 
 
-        $pdf = $_pdf->write(valor: $com_cliente['com_cliente_rfc'], x: 132, y: 30);
+        $pdf = $_pdf->write(valor: $data->com_cliente['com_cliente_rfc'], x: 132, y: 30);
         if (errores::$error) {
             return $this->retorno_error(mensaje: 'Error al escribir en pdf', data: $pdf, header: $header, ws: $ws);
         }
 
 
 
-        $domicilio = $com_cliente['dp_calle_descripcion'].' '.$com_cliente['com_cliente_numero_exterior'];
-        $domicilio .= $com_cliente['com_cliente_numero_interior'];
+        $domicilio = $data->com_cliente['dp_calle_descripcion'].' '.$data->com_cliente['com_cliente_numero_exterior'];
+        $domicilio .= $data->com_cliente['com_cliente_numero_interior'];
 
         $x = 16;
         $y = 54;
@@ -1101,7 +644,7 @@ class controlador_inm_comprador extends _ctl_base {
 
 
 
-        $write = $_pdf->write_data(keys: $keys_cliente,row:  $com_cliente);
+        $write = $_pdf->write_data(keys: $keys_cliente,row:  $data->com_cliente);
         if (errores::$error) {
             return $this->retorno_error(mensaje: 'Error al escribir en pdf', data: $write, header: $header, ws: $ws);
         }
@@ -1111,7 +654,7 @@ class controlador_inm_comprador extends _ctl_base {
         $x = 144.5;
         $y = 77;
 
-        if($inm_comprador['inm_comprador_genero'] === 'F'){
+        if($data->inm_comprador['inm_comprador_genero'] === 'F'){
 
             $x = 150.5;
         }
@@ -1123,16 +666,16 @@ class controlador_inm_comprador extends _ctl_base {
 
 
 
-        $pdf->SetXY($inm_comprador['inm_estado_civil_x'], $inm_comprador['inm_estado_civil_y']);
+        $pdf->SetXY($data->inm_comprador['inm_estado_civil_x'], $data->inm_comprador['inm_estado_civil_y']);
         $pdf->Write(0, 'X');
 
-        if((int)$inm_comprador['inm_estado_civil_id'] !==1){
+        if((int)$data->inm_comprador['inm_estado_civil_id'] !==1){
             $pdf->SetXY(58.5, 90);
             $pdf->Write(0, 'X');
         }
 
 
-        foreach ($inm_rel_co_acreditados as $imp_rel_co_acred){
+        foreach ($data->inm_rel_co_acreditados as $imp_rel_co_acred){
 
 
             $inm_co_acreditado = (new inm_co_acreditado(link: $this->link))->registro(registro_id: $imp_rel_co_acred['inm_co_acreditado_id']);
@@ -1183,8 +726,8 @@ class controlador_inm_comprador extends _ctl_base {
 
 
 
-        if(count($inm_referencias) > 0) {
-            $inm_referencia = $inm_referencias[0];
+        if(count($data->inm_referencias) > 0) {
+            $inm_referencia = $data->inm_referencias[0];
 
             $keys_referencias = array();
             $keys_referencias['inm_referencia_apellido_paterno']= array('x'=>16,'y'=>177);
@@ -1249,7 +792,7 @@ class controlador_inm_comprador extends _ctl_base {
         $pdf->useTemplate($tplIdx,null,null,null,null,true);
 
 
-        $pdf = $_pdf->write_x(name_entidad: 'inm_tipo_inmobiliaria',row:  $inm_conf_empresa);
+        $pdf = $_pdf->write_x(name_entidad: 'inm_tipo_inmobiliaria',row:  $data->inm_conf_empresa);
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al escribir en pdf',data:  $pdf,header: $header,ws: $ws);
         }
@@ -1261,7 +804,7 @@ class controlador_inm_comprador extends _ctl_base {
         $keys_comprador['org_empresa_rfc']= array('x'=>22,'y'=>57);
         $keys_comprador['bn_cuenta_descripcion']= array('x'=>16,'y'=>85);
 
-        $write = $_pdf->write_data(keys: $keys_comprador,row:  $inm_comprador);
+        $write = $_pdf->write_data(keys: $keys_comprador,row:  $data->inm_comprador);
         if (errores::$error) {
             return $this->retorno_error(mensaje: 'Error al escribir en pdf', data: $write, header: $header, ws: $ws);
         }
@@ -1273,12 +816,12 @@ class controlador_inm_comprador extends _ctl_base {
         $x = 16;
         $y = 62;
         $pdf->SetXY($x, $y);
-        $pdf->Write(0, strtoupper($inm_comprador['org_empresa_razon_social']));
+        $pdf->Write(0, strtoupper($data->inm_comprador['org_empresa_razon_social']));
 
 
 
-        $ciudad = strtoupper($inm_comprador['dp_municipio_empresa_descripcion']);
-        $ciudad .= ", ".strtoupper($inm_comprador['dp_estado_empresa_descripcion']);
+        $ciudad = strtoupper($data->inm_comprador['dp_municipio_empresa_descripcion']);
+        $ciudad .= ", ".strtoupper($data->inm_comprador['dp_estado_empresa_descripcion']);
 
 
         $x = 36;

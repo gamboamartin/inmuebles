@@ -158,6 +158,77 @@ class inm_comprador extends _modelo_parent{
 
     }
 
+    private function com_cliente(int $com_cliente_id){
+        $filtro['com_cliente.id'] = $com_cliente_id;
+
+        $r_com_cliente = (new com_cliente(link: $this->link))->filtro_and(filtro:$filtro);
+        if(errores::$error){
+            return $this->error->error(
+                mensaje: 'Error al obtener com_cliente',data:  $r_com_cliente);
+        }
+
+        if($r_com_cliente->n_registros === 0){
+            return $this->error->error(
+                mensaje: 'Error no existe com_cliente',data:  $r_com_cliente);
+        }
+
+        if($r_com_cliente->n_registros > 1){
+            return $this->error->error(
+                mensaje: 'Error de integridad existe mas de un com_cliente',data:  $r_com_cliente);
+        }
+
+        return $r_com_cliente->registros[0];
+    }
+
+    final public function data_pdf(int $inm_comprador_id){
+        $inm_comprador = $this->registro(registro_id: $inm_comprador_id);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al obtener comprador', data: $inm_comprador);
+        }
+
+        $imp_rel_comprador_com_cliente = (new inm_rel_comprador_com_cliente(link: $this->link))->imp_rel_comprador_com_cliente(inm_comprador_id: $inm_comprador_id);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al obtener imp_rel_comprador_com_cliente', data: $imp_rel_comprador_com_cliente);
+        }
+
+        $com_cliente = (new com_cliente(link: $this->link))->registro(registro_id: $imp_rel_comprador_com_cliente['com_cliente_id']);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al obtener com_cliente', data: $com_cliente);
+        }
+
+        $imp_rel_ubi_comp = (new inm_rel_ubi_comp(link: $this->link))->imp_rel_ubi_comp(inm_comprador_id: $inm_comprador_id);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al obtener imp_rel_ubi_comp', data: $imp_rel_ubi_comp);
+        }
+
+        $inm_conf_empresa = (new inm_conf_empresa(link: $this->link))->inm_conf_empresa(org_empresa_id: $inm_comprador['org_empresa_id']);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al obtener r_inm_conf_empresa', data: $inm_conf_empresa);
+        }
+
+        $inm_rel_co_acreditados = (new inm_co_acreditado(link: $this->link))->inm_co_acreditados(inm_comprador_id: $inm_comprador_id);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al obtener inm_rel_co_acreditados', data: $inm_rel_co_acreditados);
+        }
+
+        $inm_referencias = (new inm_referencia(link: $this->link))->inm_referencias(inm_comprador_id: $inm_comprador_id);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al obtener inm_referencias', data: $inm_referencias);
+        }
+
+        $data = new stdClass();
+        $data->inm_comprador = $inm_comprador;
+        $data->imp_rel_comprador_com_cliente = $imp_rel_comprador_com_cliente;
+        $data->com_cliente = $com_cliente;
+        $data->imp_rel_ubi_comp = $imp_rel_ubi_comp;
+        $data->inm_conf_empresa = $inm_conf_empresa;
+        $data->inm_rel_co_acreditados = $inm_rel_co_acreditados;
+        $data->inm_referencias = $inm_referencias;
+
+        return $data;
+
+    }
+
     /**
      * Genera la descripcion de un comprador basado en datos del registro a insertar
      * @param array $registro Registro en proceso
@@ -210,6 +281,22 @@ class inm_comprador extends _modelo_parent{
         return $r_elimina_bd;
     }
 
+    final public function get_com_cliente(int $inm_comprador_id){
+        $imp_rel_comprador_com_cliente = $this->inm_rel_comprador_cliente(inm_comprador_id: $inm_comprador_id);
+        if(errores::$error){
+            return $this->error->error(
+                mensaje: 'Error al obtener imp_rel_comprador_com_cliente',data:  $imp_rel_comprador_com_cliente);
+        }
+
+
+        $com_cliente = $this->com_cliente(com_cliente_id: $imp_rel_comprador_com_cliente['com_cliente_id']);
+        if(errores::$error){
+            return $this->error->error(
+                mensaje: 'Error al obtener com_cliente',data:  $com_cliente);
+        }
+        return $com_cliente;
+    }
+
     public function modifica_bd(array $registro, int $id, bool $reactiva = false,
                                 array $keys_integra_ds = array('codigo', 'descripcion')): array|stdClass
     {
@@ -255,6 +342,27 @@ class inm_comprador extends _modelo_parent{
 
 
         return $r_modifica;
+    }
+
+    private function inm_rel_comprador_cliente(int $inm_comprador_id){
+        $filtro['inm_comprador.id'] = $inm_comprador_id;
+
+        $r_imp_rel_comprador_com_cliente = (new inm_rel_comprador_com_cliente(link: $this->link))->filtro_and(filtro:$filtro);
+        if(errores::$error){
+            return $this->error->error(
+                mensaje: 'Error al obtener imp_rel_comprador_com_cliente',data:  $r_imp_rel_comprador_com_cliente);
+        }
+
+        if($r_imp_rel_comprador_com_cliente->n_registros === 0){
+            return $this->error->error(mensaje: 'Error no existe inm_rel_comprador_com_cliente',data:  $r_imp_rel_comprador_com_cliente);
+        }
+
+        if($r_imp_rel_comprador_com_cliente->n_registros > 1){
+            return $this->error->error(
+                mensaje: 'Error de integridad existe mas de un inm_rel_comprador_com_cliente',data:  $r_imp_rel_comprador_com_cliente);
+        }
+
+        return $r_imp_rel_comprador_com_cliente->registros[0];
     }
 
     private function razon_social(array $registro_entrada): string

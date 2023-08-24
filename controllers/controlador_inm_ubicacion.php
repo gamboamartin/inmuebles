@@ -220,11 +220,6 @@ class controlador_inm_ubicacion extends _ctl_base {
             return $this->retorno_error(mensaje: 'Error al integrar base',data:  $base, header: $header,ws:  $ws);
         }
 
-        $in_registro_id = $this->html->hidden(name:'registro_id',value: $this->registro_id);
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al in_registro_id',data:  $in_registro_id,
-                header: $header,ws:  $ws);
-        }
 
         $inm_ubicacion_id = $this->html->hidden(name:'inm_ubicacion_id',value: $this->registro_id);
         if(errores::$error){
@@ -232,35 +227,19 @@ class controlador_inm_ubicacion extends _ctl_base {
                 header: $header,ws:  $ws);
         }
 
-        $id_retorno = $this->html->hidden(name:'id_retorno',value: $this->registro_id);
+        $hiddens = (new _keys_selects())->hiddens(controler: $this,funcion: __FUNCTION__);
         if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al in_registro_id',data:  $id_retorno,
+            return $this->retorno_error(mensaje: 'Error al obtener inputs',data:  $hiddens,
                 header: $header,ws:  $ws);
         }
 
-        $seccion_retorno = $this->html->hidden(name:'seccion_retorno',value: $this->tabla);
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al in_registro_id',data:  $seccion_retorno,
-                header: $header,ws:  $ws);
-        }
-        $btn_action_next = $this->html->hidden(name:'btn_action_next',value: __FUNCTION__);
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al in_registro_id',data:  $btn_action_next,
-                header: $header,ws:  $ws);
-        }
-        $precio_operacion = $this->html->input_monto(cols: 12, row_upd: new stdClass(),value_vacio: false,
-            name: 'precio_operacion',place_holder: 'Precio de operacion');
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al obtener precio operacion',data:  $precio_operacion,
-                header: $header,ws:  $ws);
-        }
+        $inputs = (new _keys_selects())->inputs_form_base(btn_action_next: $hiddens->btn_action_next, controler: $this,
+            id_retorno: $hiddens->id_retorno, in_registro_id: $hiddens->in_registro_id, inm_comprador_id: '',
+            inm_ubicacion_id: $inm_ubicacion_id, precio_operacion: $hiddens->precio_operacion, seccion_retorno: $hiddens->seccion_retorno);
 
-        $this->inputs->id_retorno = $id_retorno;
-        $this->inputs->btn_action_next = $btn_action_next;
-        $this->inputs->seccion_retorno = $seccion_retorno;
-        $this->inputs->registro_id = $in_registro_id;
-        $this->inputs->inm_ubicacion_id = $inm_ubicacion_id;
-        $this->inputs->precio_operacion = $precio_operacion;
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al obtener inputs_hidden',data:  $inputs, header: $header,ws:  $ws);
+        }
 
 
 
