@@ -9,11 +9,9 @@
 namespace gamboamartin\inmuebles\controllers;
 
 use gamboamartin\compresor\compresor;
-use gamboamartin\documento\models\doc_tipo_documento;
 use gamboamartin\errores\errores;
 use gamboamartin\inmuebles\html\inm_doc_comprador_html;
 use gamboamartin\inmuebles\models\inm_comprador;
-use gamboamartin\inmuebles\models\inm_conf_docs_comprador;
 use gamboamartin\inmuebles\models\inm_doc_comprador;
 use gamboamartin\system\links_menu;
 use gamboamartin\template\html;
@@ -71,30 +69,14 @@ class controlador_inm_doc_comprador extends _ctl_formato {
                 header: $header,ws:  $ws);
         }
 
-        $confs = (new inm_conf_docs_comprador(link: $this->link))->registros_activos();
+
+        $inm_tipos_doc = (new _doctos())->documentos_de_comprador(link: $this->link);
         if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al Obtener configuraciones',data:  $confs,
+            return $this->retorno_error(mensaje: 'Error al Obtener tipos de documento',data:  $inm_tipos_doc,
                 header: $header,ws:  $ws);
         }
 
-        $values_in = array();
-
-        foreach ($confs as $value){
-            $values_in[] = $value['doc_tipo_documento_id'];
-        }
-
-
-        $in['llave'] = 'doc_tipo_documento.id';
-        $in['values'] = $values_in;
-
-        $r_doc_tipo_documento = (new doc_tipo_documento(link: $this->link))->filtro_and(in: $in);
-
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al Obtener tipos de documento',data:  $r_doc_tipo_documento,
-                header: $header,ws:  $ws);
-        }
-
-        $keys_selects['doc_tipo_documento_id']->registros = $r_doc_tipo_documento->registros;
+        $keys_selects['doc_tipo_documento_id']->registros = $inm_tipos_doc;
 
         $inputs = $this->inputs(keys_selects: $keys_selects);
         if(errores::$error){

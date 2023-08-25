@@ -78,9 +78,10 @@ class _dps_init{
     }
 
     /**
-     * @param _ctl_base $controler
-     * @param array $keys_selects
-     * @param stdClass $row_upd
+     * Integra los keys para direcciones postales
+     * @param _ctl_base $controler Controlador en ejecucion
+     * @param array $keys_selects Key previos cargados
+     * @param stdClass $row_upd Registro en proceso
      * @return array
      */
     final public function ks_dp(_ctl_base $controler, array $keys_selects, stdClass $row_upd): array

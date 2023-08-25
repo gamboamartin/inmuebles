@@ -20,6 +20,7 @@ use gamboamartin\inmuebles\models\inm_rel_ubi_comp;
 use gamboamartin\system\_ctl_base;
 use gamboamartin\system\links_menu;
 use gamboamartin\template\html;
+use html\doc_tipo_documento_html;
 use PDO;
 use setasign\Fpdi\Fpdi;
 use stdClass;
@@ -29,6 +30,8 @@ class controlador_inm_comprador extends _ctl_base {
 
     public array $imp_ubicaciones = array();
     public array $inm_conf_docs_comprador = array();
+
+    public string $link_inm_doc_comprador_alta_bd = '';
     public function __construct(PDO      $link, html $html = new \gamboamartin\template_1\html(),
                                 stdClass $paths_conf = new stdClass())
     {
@@ -404,9 +407,6 @@ class controlador_inm_comprador extends _ctl_base {
         }
 
 
-
-
-
         $keys_selects = (new init())->key_select_txt(cols: 6,key: 'lada_com',
             keys_selects:$keys_selects, place_holder: 'Lada');
         if(errores::$error){
@@ -535,34 +535,26 @@ class controlador_inm_comprador extends _ctl_base {
          * 5. DATOS DE IDENTIFICACIÓN DEL (DE LA) DERECHOHABIENTE / DATOS QUE SERÁN VALIDADOS
          */
 
-        $keys_comprador = array();
-        $keys_comprador['inm_comprador_nss']= array('x'=>16,'y'=>30);
-        $keys_comprador['inm_comprador_curp']= array('x'=>67,'y'=>30);
-        $keys_comprador['inm_comprador_apellido_paterno']= array('x'=>16,'y'=>37);
-        $keys_comprador['inm_comprador_apellido_materno']= array('x'=>106,'y'=>37);
-        $keys_comprador['inm_comprador_nombre']= array('x'=>16,'y'=>44);
-        $keys_comprador['inm_comprador_lada_com']= array('x'=>27,'y'=>76);
-        $keys_comprador['inm_comprador_numero_com']= array('x'=>40,'y'=>76);
-        $keys_comprador['inm_comprador_cel_com']= array('x'=>88,'y'=>76);
-        $keys_comprador['inm_comprador_correo_com']= array('x'=>37.5,'y'=>85.5);
-
+        $keys_comprador = $_pdf->keys_comprador_hoja_2();
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al obtener keys_comprador', data: $keys_comprador, header: $header, ws: $ws);
+        }
 
         $write = $_pdf->write_data(keys: $keys_comprador,row:  $data->inm_comprador);
         if (errores::$error) {
             return $this->retorno_error(mensaje: 'Error al escribir en pdf', data: $write, header: $header, ws: $ws);
         }
 
-
-
         $pdf = $_pdf->write(valor: $data->com_cliente['com_cliente_rfc'], x: 132, y: 30);
         if (errores::$error) {
             return $this->retorno_error(mensaje: 'Error al escribir en pdf', data: $pdf, header: $header, ws: $ws);
         }
 
+        $domicilio = $_pdf->domicilio(data: $data);
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al obtener domicilio', data: $domicilio, header: $header, ws: $ws);
+        }
 
-
-        $domicilio = $data->com_cliente['dp_calle_descripcion'].' '.$data->com_cliente['com_cliente_numero_exterior'];
-        $domicilio .= $data->com_cliente['com_cliente_numero_interior'];
 
         $x = 16;
         $y = 54;
@@ -784,6 +776,72 @@ class controlador_inm_comprador extends _ctl_base {
         $pdf->Output('tu_pedorrote.pdf', 'I');
 
         exit;
+    }
+
+    final public function subir_documento(bool $header, bool $ws = false){
+
+        $this->inputs = new stdClass();
+
+        $filtro['inm_comprador.id'] = $this->registro_id;
+        $inm_comprador_id = (new inm_comprador_html(html: $this->html_base))->select_inm_comprador_id(
+            cols: 12,con_registros:  true,id_selected:  $this->registro_id,link:  $this->link,filtro: $filtro);
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al generar input', data: $inm_comprador_id, header: $header, ws: $ws);
+        }
+        $this->inputs->inm_comprador_id = $inm_comprador_id;
+
+        $doc_tipos_documentos = (new _doctos())->documentos_de_comprador(link: $this->link);
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al obtener tipos de documento', data: $doc_tipos_documentos,
+                header: $header, ws: $ws);
+        }
+
+        $doc_tipo_documento_id = (new doc_tipo_documento_html(html: $this->html_base))->select_doc_tipo_documento_id(
+            cols: 12,con_registros:  true,id_selected:  -1,link:  $this->link, registros:$doc_tipos_documentos );
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al generar input', data: $inm_comprador_id, header: $header, ws: $ws);
+        }
+        $this->inputs->doc_tipo_documento_id = $doc_tipo_documento_id;
+
+        $documento = $this->html->input_file(cols: 12,name:  'documento',row_upd:  new stdClass(),value_vacio:  false);
+        if(errores::$error){
+            return $this->retorno_error(
+                mensaje: 'Error al obtener inputs',data:  $documento, header: $header,ws:  $ws);
+        }
+
+        $this->inputs->documento = $documento;
+
+        $link_alta_doc = $this->obj_link->link_alta_bd(link:  $this->link,seccion:  'inm_doc_comprador');
+        if(errores::$error){
+            return $this->retorno_error(
+                mensaje: 'Error al generar link',data:  $link_alta_doc, header: $header,ws:  $ws);
+        }
+
+        $this->link_inm_doc_comprador_alta_bd = $link_alta_doc;
+
+        $btn_action_next = $this->html->hidden('btn_action_next',value: 'documentos');
+        if(errores::$error){
+            return $this->retorno_error(
+                mensaje: 'Error al generar btn_action_next',data:  $btn_action_next, header: $header,ws:  $ws);
+        }
+
+        $id_retorno = $this->html->hidden('id_retorno',value: $this->registro_id);
+        if(errores::$error){
+            return $this->retorno_error(
+                mensaje: 'Error al generar btn_action_next',data:  $btn_action_next, header: $header,ws:  $ws);
+        }
+
+        $seccion_retorno = $this->html->hidden('seccion_retorno',value: $this->seccion);
+        if(errores::$error){
+            return $this->retorno_error(
+                mensaje: 'Error al generar btn_action_next',data:  $btn_action_next, header: $header,ws:  $ws);
+        }
+
+        $this->inputs->btn_action_next = $btn_action_next;
+        $this->inputs->id_retorno = $id_retorno;
+        $this->inputs->seccion_retorno = $seccion_retorno;
+
+
     }
 
 

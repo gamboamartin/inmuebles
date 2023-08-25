@@ -104,6 +104,14 @@ class _pdf{
         }
         return $write;
     }
+
+    final public function domicilio(stdClass $data): string
+    {
+        $domicilio = $data->com_cliente['dp_calle_descripcion'].' '.$data->com_cliente['com_cliente_numero_exterior'];
+        $domicilio .= $data->com_cliente['com_cliente_numero_interior'];
+
+        return $domicilio;
+    }
     private function entidades_infonavit(stdClass $data){
         $entidades_pdf = array('inm_producto_infonavit','inm_tipo_credito','inm_attr_tipo_credito',
             'inm_destino_credito','inm_plazo_credito_sc','inm_tipo_discapacidad','inm_persona_discapacidad');
@@ -194,6 +202,21 @@ class _pdf{
         $keys_comprador['inm_comprador_lada_nep']= array('x'=>57,'y'=>256);
         $keys_comprador['inm_comprador_numero_nep']= array('x'=>70,'y'=>256);
         $keys_comprador['inm_comprador_extension_nep']= array('x'=>116,'y'=>256);
+        return $keys_comprador;
+    }
+
+    final public function keys_comprador_hoja_2(): array
+    {
+
+        $keys_comprador['inm_comprador_nss']= array('x'=>16,'y'=>30);
+        $keys_comprador['inm_comprador_curp']= array('x'=>67,'y'=>30);
+        $keys_comprador['inm_comprador_apellido_paterno']= array('x'=>16,'y'=>37);
+        $keys_comprador['inm_comprador_apellido_materno']= array('x'=>106,'y'=>37);
+        $keys_comprador['inm_comprador_nombre']= array('x'=>16,'y'=>44);
+        $keys_comprador['inm_comprador_lada_com']= array('x'=>27,'y'=>76);
+        $keys_comprador['inm_comprador_numero_com']= array('x'=>40,'y'=>76);
+        $keys_comprador['inm_comprador_cel_com']= array('x'=>88,'y'=>76);
+        $keys_comprador['inm_comprador_correo_com']= array('x'=>37.5,'y'=>85.5);
         return $keys_comprador;
     }
 
