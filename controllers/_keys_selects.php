@@ -91,7 +91,8 @@ class _keys_selects{
     final public function init(controlador_inm_comprador $controler, stdClass $row_upd){
         $keys_selects = array();
 
-        $keys_selects = (new _keys_selects())->ks_infonavit(controler: $controler, keys_selects: $keys_selects, row_upd: $row_upd);
+        $keys_selects = (new _keys_selects())->ks_infonavit(controler: $controler, keys_selects: $keys_selects,
+            row_upd: $row_upd);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }

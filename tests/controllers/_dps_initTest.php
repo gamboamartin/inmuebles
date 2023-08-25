@@ -5,6 +5,7 @@ namespace gamboamartin\inmuebles\tests\controllers;
 use gamboamartin\errores\errores;
 use gamboamartin\inmuebles\controllers\_dps_init;
 use gamboamartin\inmuebles\controllers\controlador_inm_attr_tipo_credito;
+use gamboamartin\inmuebles\controllers\controlador_inm_comprador;
 use gamboamartin\inmuebles\controllers\controlador_inm_plazo_credito_sc;
 use gamboamartin\inmuebles\controllers\controlador_inm_producto_infonavit;
 use gamboamartin\test\liberator;
@@ -57,6 +58,37 @@ class _dps_initTest extends test {
         errores::$error = false;
 
 
+    }
+
+    public function test_key_con_descripcion(): void
+    {
+        $_SESSION['grupo_id'] = 1;
+        $_SESSION['usuario_id'] = 2;
+        $_GET['session_id'] = '1';
+        $_GET['seccion'] = 'inm_producto_infonavit';
+        $_GET['accion'] = 'lista';
+        errores::$error = false;
+
+        $dps = new _dps_init();
+        $dps = new liberator($dps);
+
+        $_GET['seccion'] = 'inm_producto_infonavit';
+        $_GET['accion'] = 'lista';
+        $_SESSION['grupo_id'] = 1;
+        $_SESSION['usuario_id'] = 2;
+        $_GET['session_id'] = '1';
+
+
+        $controler = new controlador_inm_comprador(link: $this->link, paths_conf: $this->paths_conf);
+        $entidad = 'a';
+        $keys_selects = array();
+        $row_upd = new stdClass();
+        $label = '';
+        $resultado = $dps->key_con_descripcion($controler, $entidad, $keys_selects, $label, $row_upd);
+        //print_r($resultado);exit;
+        $this->assertIsArray($resultado);
+        $this->assertNotTrue(errores::$error);
+        $this->assertEquals('a_descripcion',$resultado['a_id']->columns_ds[0]);
     }
 
 
