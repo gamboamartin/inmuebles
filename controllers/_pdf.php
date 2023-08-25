@@ -44,6 +44,53 @@ class _pdf{
         }
         return $write;
     }
+
+    final public function apartado_3(stdClass $data){
+        $keys_ubicacion = $this->keys_ubicacion();
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al obtener keys_ubicacion', data: $keys_ubicacion);
+        }
+
+        $write = $this->write_data(keys: $keys_ubicacion,row:  $data->imp_rel_ubi_comp);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al escribir en pdf', data: $write);
+        }
+
+
+        $condiciones = array();
+        $condiciones['SI'] = 84;
+
+        $coord = $this->x_y_compare(condiciones: $condiciones,key:  'inm_comprador_con_discapacidad',
+            row:  $data->inm_comprador, x_init:  94.5, y_init: 190);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al obtener coordenadas', data: $coord);
+        }
+
+        $pdf = $this->write( valor: 'X', x: $coord->x, y: $coord->y);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al escribir en pdf', data: $pdf);
+        }
+
+
+        $condiciones = array();
+        $condiciones[3] = 67;
+        $condiciones[4] = 114;
+        $condiciones[5] = 163;
+
+
+        $coord = $this->x_y_compare(condiciones: $condiciones,key:  'inm_destino_credito_id',
+            row:  $data->inm_comprador, x_init:  21.5, y_init: 224.5);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al obtener coordenadas', data: $coord);
+        }
+
+        $pdf = $this->write( valor: $data->imp_rel_ubi_comp['inm_rel_ubi_comp_precio_operacion'], x: $coord->x, y: $coord->y);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al escribir en pdf', data: $pdf);
+        }
+
+        return $pdf;
+    }
     private function entidades_infonavit(stdClass $data){
         $entidades_pdf = array('inm_producto_infonavit','inm_tipo_credito','inm_attr_tipo_credito',
             'inm_destino_credito','inm_plazo_credito_sc','inm_tipo_discapacidad','inm_persona_discapacidad');
@@ -94,7 +141,7 @@ class _pdf{
         return $keys_comprador;
     }
 
-    final public function keys_ubicacion(): array
+    private function keys_ubicacion(): array
     {
         $keys_ubicacion['dp_calle_ubicacion_descripcion']= array('x'=>15.5,'y'=>164);
         $keys_ubicacion['inm_ubicacion_numero_exterior']= array('x'=>15.5,'y'=>170);
@@ -109,7 +156,7 @@ class _pdf{
     }
 
 
-    final public function x_y_compare(array $condiciones, string $key, array $row, float $x_init, float $y_init){
+    private function x_y_compare(array $condiciones, string $key, array $row, float $x_init, float $y_init){
         $x = $this->get_x_var(condiciones: $condiciones,key_id:  $key,
             row:  $row, x_init: $x_init);
 

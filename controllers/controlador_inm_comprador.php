@@ -454,45 +454,7 @@ class controlador_inm_comprador extends _ctl_base {
          */
 
 
-        $keys_ubicacion = $_pdf->keys_ubicacion();
-        if (errores::$error) {
-            return $this->retorno_error(mensaje: 'Error al obtener keys_ubicacion', data: $keys_ubicacion, header: $header, ws: $ws);
-        }
-
-        $write = $_pdf->write_data(keys: $keys_ubicacion,row:  $data->imp_rel_ubi_comp);
-        if (errores::$error) {
-            return $this->retorno_error(mensaje: 'Error al escribir en pdf', data: $write, header: $header, ws: $ws);
-        }
-
-
-        $condiciones = array();
-        $condiciones['SI'] = 84;
-
-        $coord = $_pdf->x_y_compare(condiciones: $condiciones,key:  'inm_comprador_con_discapacidad',
-            row:  $data->inm_comprador, x_init:  94.5, y_init: 190);
-        if (errores::$error) {
-            return $this->retorno_error(mensaje: 'Error al obtener coordenadas', data: $coord, header: $header, ws: $ws);
-        }
-
-        $pdf = $_pdf->write( valor: 'X', x: $coord->x, y: $coord->y);
-        if (errores::$error) {
-            return $this->retorno_error(mensaje: 'Error al escribir en pdf', data: $pdf, header: $header, ws: $ws);
-        }
-
-
-        $condiciones = array();
-        $condiciones[3] = 67;
-        $condiciones[4] = 114;
-        $condiciones[5] = 163;
-
-
-        $coord = $_pdf->x_y_compare(condiciones: $condiciones,key:  'inm_destino_credito_id',
-            row:  $data->inm_comprador, x_init:  21.5, y_init: 224.5);
-        if (errores::$error) {
-            return $this->retorno_error(mensaje: 'Error al obtener coordenadas', data: $coord, header: $header, ws: $ws);
-        }
-
-        $pdf = $_pdf->write( valor: $data->imp_rel_ubi_comp['inm_rel_ubi_comp_precio_operacion'], x: $coord->x, y: $coord->y);
+        $pdf = $_pdf->apartado_3(data: $data);
         if (errores::$error) {
             return $this->retorno_error(mensaje: 'Error al escribir en pdf', data: $pdf, header: $header, ws: $ws);
         }

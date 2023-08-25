@@ -24,22 +24,16 @@
                     <?php echo $controlador->inputs->nombre; ?>
                     <?php echo $controlador->button_inm_doc_comprador_descarga; ?>
 
-
-
                 </div>
-
             </div>
-
 
             <div class="col-lg-12">
                 <div class="row">
+                    <br>
                     <div class="col-md-12">
-                        <?php if($controlador->es_imagen){ ?>
-                            <img src="<?php echo $controlador->ruta_doc; ?>" class="rounded" alt="Cinque Terre">
-                        <?php } ?>
+                        <iframe class="col-md-12" height="600px" src="<?php echo $controlador->ruta_doc; ?>"></iframe>
                     </div>
                 </div>
-
                 <br>
             </div>
 

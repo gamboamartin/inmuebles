@@ -48,9 +48,9 @@ class _dps_init{
      * @param _ctl_base $controler Controlador en ejecucion
      * @param string $entidad Entidad para integracion de datos
      * @param array $keys_selects Parametros previamente cargados
-     * @param string $label
-     * @param stdClass $row_upd
-     * @param array $filtro
+     * @param string $label Etiqueta a mostrar en select
+     * @param stdClass $row_upd Registro en proceso
+     * @param array $filtro Filtro para registros a mostrar en options
      * @return array
      */
     private function key_con_descripcion(_ctl_base $controler, string $entidad, array $keys_selects, string $label,
