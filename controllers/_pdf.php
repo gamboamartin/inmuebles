@@ -105,7 +105,7 @@ class _pdf{
         return $write;
     }
 
-    final public function domicilio(stdClass $data): string
+    private function domicilio(stdClass $data): string
     {
         $domicilio = $data->com_cliente['dp_calle_descripcion'].' '.$data->com_cliente['com_cliente_numero_exterior'];
         $domicilio .= $data->com_cliente['com_cliente_numero_interior'];
@@ -313,6 +313,19 @@ class _pdf{
             $writes[] = $pdf;
         }
         return $writes;
+    }
+
+    final public function write_domicilio(stdClass $data){
+        $domicilio = $this->domicilio(data: $data);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al obtener domicilio', data: $domicilio);
+        }
+
+        $pdf_exe = $this->write(valor: $domicilio,x: 16,y: 54);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al escribir domicilio', data: $pdf_exe);
+        }
+        return $pdf_exe;
     }
 
     final public function write_x(string $name_entidad, array $row): Fpdi

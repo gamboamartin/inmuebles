@@ -571,14 +571,8 @@ class controlador_inm_comprador extends _ctl_base {
             return $this->retorno_error(mensaje: 'Error al escribir en pdf', data: $pdf_exe, header: $header, ws: $ws);
         }
 
-        $domicilio = $_pdf->domicilio(data: $data);
-        if (errores::$error) {
-            return $this->retorno_error(mensaje: 'Error al obtener domicilio', data: $domicilio, header: $header, ws: $ws);
-        }
 
-
-
-        $pdf_exe = $_pdf->write(valor: $domicilio,x: 16,y: 54);
+        $pdf_exe = $_pdf->write_domicilio(data: $data);
         if (errores::$error) {
             return $this->retorno_error(mensaje: 'Error al escribir domicilio', data: $pdf_exe, header: $header, ws: $ws);
         }

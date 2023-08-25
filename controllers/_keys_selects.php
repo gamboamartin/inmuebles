@@ -230,6 +230,13 @@ class _keys_selects{
         return $keys_selects;
     }
 
+    /**
+     * Integra los elementos para la generacion de selects fiscales
+     * @param controlador_inm_comprador $controler
+     * @param array $keys_selects
+     * @param stdClass $row_upd
+     * @return array
+     */
     private function ks_fiscales(controlador_inm_comprador $controler, array $keys_selects, stdClass $row_upd): array
     {
 
@@ -239,50 +246,57 @@ class _keys_selects{
         }
 
         $columns_ds = array('cat_sat_regimen_fiscal_descripcion');
-        $keys_selects = $controler->key_select(cols:6, con_registros: true,filtro:  array(), key: 'cat_sat_regimen_fiscal_id',
-            keys_selects: $keys_selects, id_selected: $row_upd->cat_sat_regimen_fiscal_id, label: 'Regimen Fiscal', columns_ds: $columns_ds);
+        $keys_selects = $controler->key_select(cols:6, con_registros: true,filtro:  array(),
+            key: 'cat_sat_regimen_fiscal_id', keys_selects: $keys_selects,
+            id_selected: $row_upd->cat_sat_regimen_fiscal_id, label: 'Regimen Fiscal', columns_ds: $columns_ds);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
 
         $columns_ds = array('cat_sat_moneda_descripcion');
         $keys_selects = $controler->key_select(cols:6, con_registros: true,filtro:  array(), key: 'cat_sat_moneda_id',
-            keys_selects: $keys_selects, id_selected: $row_upd->cat_sat_moneda_id, label: 'Moneda', columns_ds: $columns_ds);
+            keys_selects: $keys_selects, id_selected: $row_upd->cat_sat_moneda_id, label: 'Moneda',
+            columns_ds: $columns_ds);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
 
         $columns_ds = array('cat_sat_forma_pago_descripcion');
-        $keys_selects = $controler->key_select(cols:6, con_registros: true,filtro:  array(), key: 'cat_sat_forma_pago_id',
-            keys_selects: $keys_selects, id_selected: $row_upd->cat_sat_forma_pago_id, label: 'Forma de Pago', columns_ds: $columns_ds);
+        $keys_selects = $controler->key_select(cols:6, con_registros: true,filtro:  array(),
+            key: 'cat_sat_forma_pago_id', keys_selects: $keys_selects, id_selected: $row_upd->cat_sat_forma_pago_id,
+            label: 'Forma de Pago', columns_ds: $columns_ds);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
 
         $columns_ds = array('cat_sat_metodo_pago_descripcion');
-        $keys_selects = $controler->key_select(cols:6, con_registros: true,filtro:  array(), key: 'cat_sat_metodo_pago_id',
-            keys_selects: $keys_selects, id_selected: $row_upd->cat_sat_metodo_pago_id, label: 'Metodo de Pago', columns_ds: $columns_ds);
+        $keys_selects = $controler->key_select(cols:6, con_registros: true,filtro:  array(),
+            key: 'cat_sat_metodo_pago_id', keys_selects: $keys_selects, id_selected: $row_upd->cat_sat_metodo_pago_id,
+            label: 'Metodo de Pago', columns_ds: $columns_ds);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
 
         $columns_ds = array('cat_sat_uso_cfdi_descripcion');
         $keys_selects = $controler->key_select(cols:6, con_registros: true,filtro:  array(), key: 'cat_sat_uso_cfdi_id',
-            keys_selects: $keys_selects, id_selected: $row_upd->cat_sat_uso_cfdi_id, label: 'Uso de CFDI', columns_ds: $columns_ds);
+            keys_selects: $keys_selects, id_selected: $row_upd->cat_sat_uso_cfdi_id, label: 'Uso de CFDI',
+            columns_ds: $columns_ds);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
 
         $columns_ds = array('cat_sat_tipo_persona_descripcion');
-        $keys_selects = $controler->key_select(cols:6, con_registros: true,filtro:  array(), key: 'cat_sat_tipo_persona_id',
-            keys_selects: $keys_selects, id_selected: $row_upd->cat_sat_tipo_persona_id, label: 'Tipo de Persona', columns_ds: $columns_ds);
+        $keys_selects = $controler->key_select(cols:6, con_registros: true,filtro:  array(),
+            key: 'cat_sat_tipo_persona_id', keys_selects: $keys_selects,
+            id_selected: $row_upd->cat_sat_tipo_persona_id, label: 'Tipo de Persona', columns_ds: $columns_ds);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
 
         $columns_ds = array('bn_cuenta_descripcion');
         $keys_selects = $controler->key_select(cols:12, con_registros: true,filtro:  array(), key: 'bn_cuenta_id',
-            keys_selects: $keys_selects, id_selected: $row_upd->bn_cuenta_id, label: 'Cuenta Deposito', columns_ds: $columns_ds);
+            keys_selects: $keys_selects, id_selected: $row_upd->bn_cuenta_id, label: 'Cuenta Deposito',
+            columns_ds: $columns_ds);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
