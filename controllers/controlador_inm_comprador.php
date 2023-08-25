@@ -562,13 +562,11 @@ class controlador_inm_comprador extends _ctl_base {
         $pdf->Write(0, strtoupper($domicilio));
 
 
-        $keys_cliente = array();
-        $keys_cliente['dp_colonia_descripcion']= array('x'=>16,'y'=>61);
-        $keys_cliente['dp_estado_descripcion']= array('x'=>105,'y'=>61);
-        $keys_cliente['dp_municipio_descripcion']= array('x'=>16,'y'=>68);
-        $keys_cliente['dp_cp_descripcion']= array('x'=>82,'y'=>68);
 
-
+        $keys_cliente = $_pdf->keys_cliente();
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al obtener keys_cliente', data: $keys_cliente, header: $header, ws: $ws);
+        }
 
         $write = $_pdf->write_data(keys: $keys_cliente,row:  $data->com_cliente);
         if (errores::$error) {

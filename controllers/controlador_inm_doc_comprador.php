@@ -41,6 +41,8 @@ class controlador_inm_doc_comprador extends _ctl_formato {
 
         parent::__construct(html:$html_, link: $link,modelo:  $modelo, obj_link: $obj_link, datatables: $datatables,
             paths_conf: $paths_conf);
+
+
     }
 
     public function alta(bool $header, bool $ws = false): array|string

@@ -83,6 +83,7 @@ class _dps_init{
      * @param array $keys_selects Key previos cargados
      * @param stdClass $row_upd Registro en proceso
      * @return array
+     * @version 1.55.1
      */
     final public function ks_dp(_ctl_base $controler, array $keys_selects, stdClass $row_upd): array
     {

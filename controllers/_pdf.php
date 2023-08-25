@@ -195,6 +195,16 @@ class _pdf{
         return $pdf;
     }
 
+    final public function keys_cliente(): array
+    {
+
+        $keys_cliente['dp_colonia_descripcion']= array('x'=>16,'y'=>61);
+        $keys_cliente['dp_estado_descripcion']= array('x'=>105,'y'=>61);
+        $keys_cliente['dp_municipio_descripcion']= array('x'=>16,'y'=>68);
+        $keys_cliente['dp_cp_descripcion']= array('x'=>82,'y'=>68);
+        return $keys_cliente;
+    }
+
     private function keys_comprador(): array
     {
         $keys_comprador['inm_comprador_nombre_empresa_patron']= array('x'=>16,'y'=>249);

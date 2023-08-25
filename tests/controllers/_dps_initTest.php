@@ -91,6 +91,39 @@ class _dps_initTest extends test {
         $this->assertEquals('a_descripcion',$resultado['a_id']->columns_ds[0]);
     }
 
+    public function test_ks_dp(): void
+    {
+        $_SESSION['grupo_id'] = 1;
+        $_SESSION['usuario_id'] = 2;
+        $_GET['session_id'] = '1';
+        $_GET['seccion'] = 'inm_producto_infonavit';
+        $_GET['accion'] = 'lista';
+        errores::$error = false;
+
+        $dps = new _dps_init();
+        //$dps = new liberator($dps);
+
+        $_GET['seccion'] = 'inm_producto_infonavit';
+        $_GET['accion'] = 'lista';
+        $_SESSION['grupo_id'] = 1;
+        $_SESSION['usuario_id'] = 2;
+        $_GET['session_id'] = '1';
+
+
+        $controler = new controlador_inm_comprador(link: $this->link, paths_conf: $this->paths_conf);
+        $keys_selects = array();
+        $row_upd = new stdClass();
+        $resultado = $dps->ks_dp($controler, $keys_selects, $row_upd);
+        $this->assertIsArray($resultado);
+        $this->assertNotTrue(errores::$error);
+        $this->assertEquals('dp_pais_descripcion',$resultado['dp_pais_id']->columns_ds[0]);
+        $this->assertEquals(151,$resultado['dp_estado_id']->filtro['dp_pais.id']);
+        $this->assertEquals('Municipio',$resultado['dp_municipio_id']->label);
+        $this->assertTrue($resultado['dp_cp_id']->con_registros);
+        $this->assertEquals(6,$resultado['dp_colonia_postal_id']->cols);
+        $this->assertEquals(-1,$resultado['dp_calle_pertenece_id']->id_selected);
+    }
+
 
 
 
