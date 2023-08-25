@@ -8,6 +8,7 @@
  */
 namespace gamboamartin\inmuebles\controllers;
 
+use gamboamartin\compresor\compresor;
 use gamboamartin\documento\models\doc_tipo_documento;
 use gamboamartin\errores\errores;
 use gamboamartin\inmuebles\html\inm_doc_comprador_html;
@@ -142,17 +143,19 @@ class controlador_inm_doc_comprador extends _ctl_formato {
         $ruta_doc = $this->path_base."$registro->doc_documento_ruta_relativa";
 
         $content = file_get_contents($ruta_doc);
-        $name = $registro->inm_comprador_id.".".$registro->inm_comprador_nombre;
-        $name .= ".".$registro->inm_comprador_apellido_paterno;
-        $name .= ".".$registro->inm_comprador_apellido_materno.".".$registro->doc_tipo_documento_codigo;
-        $name .= ".".$registro->doc_extension_descripcion;
+
+        $name_file = $this->name_file(registro: $registro);
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al obtener name_file',data:  $name_file,header:  $header,
+                ws:  $ws);
+        }
 
         if($header) {
             ob_clean();
             // Define headers
             header("Cache-Control: public");
             header("Content-Description: File Transfer");
-            header("Content-Disposition: attachment; filename=$name");
+            header("Content-Disposition: attachment; filename=$name_file");
             header("Content-Type: application/$registro->doc_extension_descripcion");
             header("Content-Transfer-Encoding: binary");
 
@@ -161,6 +164,43 @@ class controlador_inm_doc_comprador extends _ctl_formato {
             exit;
         }
         return $content;
+
+    }
+
+    public function descarga_zip(bool $header, bool $ws = false): array|string
+    {
+
+        $registro = $this->modelo->registro(registro_id: $this->registro_id, retorno_obj: true);
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al obtener documento',data:  $registro,header:  $header,
+                ws:  $ws);
+        }
+        $ruta_doc = $this->path_base."$registro->doc_documento_ruta_relativa";
+
+
+
+        $name = $this->name_doc(registro: $registro);
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al obtener name',data:  $name,header:  $header,
+                ws:  $ws);
+        }
+        $name_zip  = $name.'.zip';
+
+        $name_file = $this->name_file(registro: $registro);
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al obtener name_file',data:  $name_file,header:  $header,
+                ws:  $ws);
+        }
+
+        $archivos[$ruta_doc] = $name_file;
+        $comprime = compresor::descarga_zip_multiple(archivos: $archivos, name_zip: $name_zip);
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al comprimir file',data:  $comprime,header:  $header,
+                ws:  $ws);
+        }
+
+
+        return $comprime;
 
     }
 
@@ -182,6 +222,24 @@ class controlador_inm_doc_comprador extends _ctl_formato {
 
 
         return $r_modifica;
+    }
+
+    private function name_doc(stdClass $registro): string
+    {
+        $name = $registro->inm_comprador_id.".".$registro->inm_comprador_nombre;
+        $name .= ".".$registro->inm_comprador_apellido_paterno;
+        $name .= ".".$registro->inm_comprador_apellido_materno.".".$registro->doc_tipo_documento_codigo;
+        return $name;
+    }
+
+    private function name_file(stdClass $registro): array|string
+    {
+        $name = $this->name_doc(registro: $registro);
+        if(errores::$error){
+            return $this->errores->error(mensaje: 'Error al obtener name',data:  $name);
+        }
+        $name .= ".".$registro->doc_extension_descripcion;
+        return $name;
     }
 
     /**
@@ -293,7 +351,7 @@ class controlador_inm_doc_comprador extends _ctl_formato {
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al integrar button',data:  $button_inm_doc_comprador_descarga, header: $header,ws:  $ws);
         }
-        
+
 
         $this->button_inm_doc_comprador_descarga = $button_inm_doc_comprador_descarga;
 

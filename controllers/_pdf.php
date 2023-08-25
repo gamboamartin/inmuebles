@@ -71,11 +71,13 @@ class _pdf{
         return $pdf;
     }
 
-    final public function get_x_var(array $condiciones, string $key_id,array $row, float $x_init){
+    private function get_x_var(array $condiciones, string $key_id,array $row, float $x_init){
         $x = $x_init;
 
-        if(isset($condiciones[$row[$key_id]])){
-            $x = $condiciones[$row[$key_id]];
+        $key_compare = $row[$key_id];
+
+        if(isset($condiciones[$key_compare])){
+            $x = $condiciones[$key_compare];
         }
 
         return $x;
@@ -107,6 +109,22 @@ class _pdf{
     }
 
 
+    final public function x_y_compare(array $condiciones, string $key, array $row, float $x_init, float $y_init){
+        $x = $this->get_x_var(condiciones: $condiciones,key_id:  $key,
+            row:  $row, x_init: $x_init);
+
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al obtener x', data: $x);
+        }
+        $y = $y_init;
+
+        $data = new stdClass();
+        $data->x = $x;
+        $data->y = $y;
+
+        return $data;
+    }
+
 
     final public function write(string $valor,float $x, float $y): Fpdi
     {
@@ -129,6 +147,8 @@ class _pdf{
         $this->pdf->Write(0, $valor);
         return $this->pdf;
     }
+
+
 
     private function write_condicion(string $key, array $row, mixed $value_compare, float $x, float $y){
         $write = false;

@@ -211,8 +211,6 @@ class controlador_inm_comprador extends _ctl_base {
 
         return $campos_view;
     }
-
-
     protected function key_selects_txt(array $keys_selects): array
     {
 
@@ -352,11 +350,6 @@ class controlador_inm_comprador extends _ctl_base {
 
         return $keys_selects;
     }
-
-
-
-
-
     public function modifica(bool $header, bool $ws = false): array|stdClass
     {
 
@@ -472,37 +465,34 @@ class controlador_inm_comprador extends _ctl_base {
         }
 
 
-        $x = 94.5;
-        $y = 190;
+        $condiciones = array();
+        $condiciones['SI'] = 84;
 
-        if($data->inm_comprador['inm_comprador_con_discapacidad'] === 'SI'){
-
-            $x = 84;
+        $coord = $_pdf->x_y_compare(condiciones: $condiciones,key:  'inm_comprador_con_discapacidad',
+            row:  $data->inm_comprador, x_init:  94.5, y_init: 190);
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al obtener coordenadas', data: $coord, header: $header, ws: $ws);
         }
 
-        $pdf = $_pdf->write( valor: 'X', x: $x, y: $y);
+        $pdf = $_pdf->write( valor: 'X', x: $coord->x, y: $coord->y);
         if (errores::$error) {
             return $this->retorno_error(mensaje: 'Error al escribir en pdf', data: $pdf, header: $header, ws: $ws);
         }
 
 
-
-
-
+        $condiciones = array();
         $condiciones[3] = 67;
         $condiciones[4] = 114;
         $condiciones[5] = 163;
-        $x = $_pdf->get_x_var(condiciones: $condiciones,key_id:  'inm_destino_credito_id',
-            row:  $data->inm_comprador, x_init: 21.5);
 
+
+        $coord = $_pdf->x_y_compare(condiciones: $condiciones,key:  'inm_destino_credito_id',
+            row:  $data->inm_comprador, x_init:  21.5, y_init: 224.5);
         if (errores::$error) {
-            return $this->retorno_error(mensaje: 'Error al obtener x', data: $x, header: $header, ws: $ws);
+            return $this->retorno_error(mensaje: 'Error al obtener coordenadas', data: $coord, header: $header, ws: $ws);
         }
 
-        $y = 224.5;
-
-
-        $pdf = $_pdf->write( valor: $data->imp_rel_ubi_comp['inm_rel_ubi_comp_precio_operacion'], x: $x, y: $y);
+        $pdf = $_pdf->write( valor: $data->imp_rel_ubi_comp['inm_rel_ubi_comp_precio_operacion'], x: $coord->x, y: $coord->y);
         if (errores::$error) {
             return $this->retorno_error(mensaje: 'Error al escribir en pdf', data: $pdf, header: $header, ws: $ws);
         }
