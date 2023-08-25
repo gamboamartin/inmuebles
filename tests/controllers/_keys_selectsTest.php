@@ -30,6 +30,32 @@ class _keys_selectsTest extends test {
         $this->paths_conf->views = '/var/www/html/inmuebles/config/views.php';
     }
 
+    public function test_init_row_upd_fiscales(): void
+    {
+        errores::$error = false;
+
+        $_GET['seccion'] = 'inm_producto_infonavit';
+        $_GET['accion'] = 'lista';
+        $_SESSION['grupo_id'] = 1;
+        $_SESSION['usuario_id'] = 2;
+        $_GET['session_id'] = '1';
+
+        $ks = new _keys_selects();
+        $ks = new liberator($ks);
+
+        $row_upd = new stdClass();
+        $resultado = $ks->init_row_upd_fiscales($row_upd);
+        $this->assertIsObject($resultado);
+        $this->assertNotTrue(errores::$error);
+        $this->assertEquals(605,$resultado->cat_sat_regimen_fiscal_id);
+        $this->assertEquals(161,$resultado->cat_sat_moneda_id);
+        $this->assertEquals(99,$resultado->cat_sat_forma_pago_id);
+        $this->assertEquals(2,$resultado->cat_sat_metodo_pago_id);
+        $this->assertEquals(22,$resultado->cat_sat_uso_cfdi_id);
+        $this->assertEquals(5,$resultado->cat_sat_tipo_persona_id);
+        $this->assertEquals(-1,$resultado->bn_cuenta_id);
+        errores::$error = false;
+    }
 
 
     public function test_init_row_upd_infonavit(): void

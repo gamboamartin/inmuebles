@@ -119,6 +119,7 @@ class _keys_selects{
      * Inicializa los key id de elementos fiscales
      * @param stdClass $row_upd Registro en proceso
      * @return stdClass
+     * @version 1.56.1
      */
     private function init_row_upd_fiscales(stdClass $row_upd): stdClass
     {

@@ -39,6 +39,7 @@
                          <th>Descarga</th>
                          <th>Vista Previa</th>
                          <th>ZIP</th>
+                         <th>Elimina</th>
 
                     </thead>
                     <tbody>
@@ -50,6 +51,7 @@
                         <td><?php echo $doc_tipo_documento['descarga']; ?></td>
                         <td><?php echo $doc_tipo_documento['vista_previa']; ?></td>
                         <td><?php echo $doc_tipo_documento['descarga_zip']; ?></td>
+                        <td><?php echo $doc_tipo_documento['elimina']; ?></td>
                     </tr>
                     <?php
                     }

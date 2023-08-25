@@ -282,13 +282,34 @@ class controlador_inm_comprador extends _ctl_base {
                     }
                     $inm_conf_docs_comprador[$indice]['descarga_zip'] = $button;
 
+                    $params = array('accion_retorno'=>__FUNCTION__,'seccion_retorno'=>$this->seccion,
+                        'id_retorno'=>$this->registro_id);
+                    $button = $this->html->button_href(accion: 'elimina_bd',etiqueta:
+                        'Elimina',registro_id:  $inm_doc_comprador['inm_doc_comprador_id'],
+                        seccion:  'inm_doc_comprador',style:  'danger',params: $params);
+                    if(errores::$error){
+                        return $this->retorno_error(mensaje: 'Error al integrar button',data:  $button, header: $header,ws:  $ws);
+                    }
+                    $inm_conf_docs_comprador[$indice]['elimina'] = $button;
+
                     break;
                 }
             }
             if(!$existe){
-                $inm_conf_docs_comprador[$indice]['descarga'] = 'Documento sin cargar';
-                $inm_conf_docs_comprador[$indice]['vista_previa'] = 'Documento sin cargar';
-                $inm_conf_docs_comprador[$indice]['descarga_zip'] = 'Documento sin cargar';
+
+                $params = array('doc_tipo_documento_id'=>$doc_tipo_documento['doc_tipo_documento_id']);
+
+                $button = $this->html->button_href(accion: 'subir_documento',etiqueta:
+                    'Subir Documento',registro_id:  $this->registro_id,
+                    seccion:  'inm_comprador',style:  'warning', params: $params);
+                if(errores::$error){
+                    return $this->retorno_error(mensaje: 'Error al integrar button',data:  $button, header: $header,ws:  $ws);
+                }
+
+                $inm_conf_docs_comprador[$indice]['descarga'] = $button;
+                $inm_conf_docs_comprador[$indice]['vista_previa'] = $button;
+                $inm_conf_docs_comprador[$indice]['descarga_zip'] = $button;
+                $inm_conf_docs_comprador[$indice]['elimina'] = $button;
 
             }
         }
@@ -516,9 +537,9 @@ class controlador_inm_comprador extends _ctl_base {
 
 
 
-        $pdf = $_pdf->hoja_1(data: $data);
+        $pdf_exe = $_pdf->hoja_1(data: $data);
         if (errores::$error) {
-            return $this->retorno_error(mensaje: 'Error al escribir en pdf', data: $pdf, header: $header, ws: $ws);
+            return $this->retorno_error(mensaje: 'Error al escribir en pdf', data: $pdf_exe, header: $header, ws: $ws);
         }
 
 
@@ -545,9 +566,9 @@ class controlador_inm_comprador extends _ctl_base {
             return $this->retorno_error(mensaje: 'Error al escribir en pdf', data: $write, header: $header, ws: $ws);
         }
 
-        $pdf = $_pdf->write(valor: $data->com_cliente['com_cliente_rfc'], x: 132, y: 30);
+        $pdf_exe = $_pdf->write(valor: $data->com_cliente['com_cliente_rfc'], x: 132, y: 30);
         if (errores::$error) {
-            return $this->retorno_error(mensaje: 'Error al escribir en pdf', data: $pdf, header: $header, ws: $ws);
+            return $this->retorno_error(mensaje: 'Error al escribir en pdf', data: $pdf_exe, header: $header, ws: $ws);
         }
 
         $domicilio = $_pdf->domicilio(data: $data);
@@ -556,11 +577,11 @@ class controlador_inm_comprador extends _ctl_base {
         }
 
 
-        $x = 16;
-        $y = 54;
-        $pdf->SetXY($x, $y);
-        $pdf->Write(0, strtoupper($domicilio));
 
+        $pdf_exe = $_pdf->write(valor: $domicilio,x: 16,y: 54);
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al escribir domicilio', data: $pdf_exe, header: $header, ws: $ws);
+        }
 
 
         $keys_cliente = $_pdf->keys_cliente();
@@ -583,9 +604,9 @@ class controlador_inm_comprador extends _ctl_base {
             $x = 150.5;
         }
 
-        $pdf = $_pdf->write( valor: 'X', x: $x, y: $y);
+        $pdf_exe = $_pdf->write( valor: 'X', x: $x, y: $y);
         if (errores::$error) {
-            return $this->retorno_error(mensaje: 'Error al escribir en pdf', data: $pdf, header: $header, ws: $ws);
+            return $this->retorno_error(mensaje: 'Error al escribir en pdf', data: $pdf_exe, header: $header, ws: $ws);
         }
 
 
@@ -794,8 +815,18 @@ class controlador_inm_comprador extends _ctl_base {
                 header: $header, ws: $ws);
         }
 
+        $_doc_tipo_documento_id = -1;
+        $filtro = array();
+        if(isset($_GET['doc_tipo_documento_id'])){
+            $_doc_tipo_documento_id = $_GET['doc_tipo_documento_id'];
+            $filtro['doc_tipo_documento.id'] = $_GET['doc_tipo_documento_id'];
+        }
+
+
+
         $doc_tipo_documento_id = (new doc_tipo_documento_html(html: $this->html_base))->select_doc_tipo_documento_id(
-            cols: 12,con_registros:  true,id_selected:  -1,link:  $this->link, registros:$doc_tipos_documentos );
+            cols: 12, con_registros: true, id_selected: $_doc_tipo_documento_id, link: $this->link, filtro: $filtro,
+            registros: $doc_tipos_documentos);
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al generar input', data: $inm_comprador_id, header: $header, ws: $ws);
         }
