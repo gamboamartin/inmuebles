@@ -158,7 +158,13 @@ class inm_comprador extends _modelo_parent{
 
     }
 
-    private function com_cliente(int $com_cliente_id, bool $retorno_obj = false){
+    /**
+     * @param int $com_cliente_id
+     * @param bool $retorno_obj
+     * @return array|object
+     */
+    private function com_cliente(int $com_cliente_id, bool $retorno_obj = false): object|array
+    {
         $filtro['com_cliente.id'] = $com_cliente_id;
 
         $r_com_cliente = (new com_cliente(link: $this->link))->filtro_and(filtro:$filtro);
@@ -286,7 +292,13 @@ class inm_comprador extends _modelo_parent{
         return $r_elimina_bd;
     }
 
-    final public function get_com_cliente(int $inm_comprador_id, bool $retorno_obj = false){
+    /**
+     * @param int $inm_comprador_id
+     * @param bool $retorno_obj
+     * @return array|object
+     */
+    final public function get_com_cliente(int $inm_comprador_id, bool $retorno_obj = false): object|array
+    {
         $imp_rel_comprador_com_cliente = $this->inm_rel_comprador_cliente(inm_comprador_id: $inm_comprador_id);
         if(errores::$error){
             return $this->error->error(

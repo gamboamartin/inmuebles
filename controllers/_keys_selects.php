@@ -28,9 +28,10 @@ class _keys_selects{
     }
 
     /**
-     * @param controlador_inm_comprador $controler
-     * @param array $keys_selects
-     * @param stdClass $row_upd
+     * Integra los elementos base de sistema para frontend
+     * @param controlador_inm_comprador $controler Controlador en ejecucion
+     * @param array $keys_selects Parametros previos
+     * @param stdClass $row_upd Registro en proceso
      * @return array
      */
     private function base(controlador_inm_comprador $controler, array $keys_selects, stdClass $row_upd): array
@@ -43,16 +44,17 @@ class _keys_selects{
         }
 
         $columns_ds = array('com_tipo_cliente_descripcion');
-        $keys_selects = $controler->key_select(cols:12, con_registros: true,filtro:  array(), key: 'com_tipo_cliente_id',
-            keys_selects: $keys_selects, id_selected: $row_upd->com_tipo_cliente_id, label: 'Tipo de Cliente', columns_ds: $columns_ds);
+        $keys_selects = $controler->key_select(cols:12, con_registros: true,filtro:  array(),
+            key: 'com_tipo_cliente_id', keys_selects: $keys_selects, id_selected: $row_upd->com_tipo_cliente_id,
+            label: 'Tipo de Cliente', columns_ds: $columns_ds);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
 
         $columns_ds = array('inm_estado_civil_descripcion');
-        $keys_selects = $controler->key_select(cols:6, con_registros: true,filtro:  array(), key: 'inm_estado_civil_id',
-            keys_selects: $keys_selects, id_selected: $row_upd->inm_estado_civil_id, label: 'Estado Civil',
-            columns_ds: $columns_ds);
+        $keys_selects = $controler->key_select(cols:6, con_registros: true,filtro:  array(),
+            key: 'inm_estado_civil_id', keys_selects: $keys_selects, id_selected: $row_upd->inm_estado_civil_id,
+            label: 'Estado Civil', columns_ds: $columns_ds);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
@@ -95,7 +97,13 @@ class _keys_selects{
 
     }
 
-    final public function init(controlador_inm_comprador $controler, stdClass $row_upd){
+    /**
+     * @param controlador_inm_comprador $controler
+     * @param stdClass $row_upd
+     * @return array
+     */
+    final public function init(controlador_inm_comprador $controler, stdClass $row_upd): array
+    {
         $keys_selects = array();
 
         $keys_selects = (new _keys_selects())->ks_infonavit(controler: $controler, keys_selects: $keys_selects,
@@ -256,6 +264,41 @@ class _keys_selects{
         $keys_selects['nombre'] = new stdClass();
         $keys_selects['nombre']->disabled = true;
         return $keys_selects;
+    }
+
+    final public function keys_referencias(): array
+    {
+
+        $keys_referencias['inm_referencia_apellido_paterno']= array('x'=>16,'y'=>177);
+        $keys_referencias['inm_referencia_apellido_materno']= array('x'=>16,'y'=>183.5);
+        $keys_referencias['inm_referencia_nombre']= array('x'=>16,'y'=>191);
+        $keys_referencias['inm_referencia_lada']= array('x'=>27,'y'=>199.5);
+        $keys_referencias['inm_referencia_numero']= array('x'=>40,'y'=>199.5);
+        $keys_referencias['inm_referencia_celular']= array('x'=>27,'y'=>206);
+        $keys_referencias['dp_calle_descripcion']= array('x'=>16,'y'=>212);
+        $keys_referencias['inm_referencia_numero_dom']= array('x'=>16,'y'=>217);
+        $keys_referencias['dp_colonia_descripcion']= array('x'=>16,'y'=>226);
+        $keys_referencias['dp_estado_descripcion']= array('x'=>16,'y'=>234);
+        $keys_referencias['dp_municipio_descripcion']= array('x'=>16,'y'=>244);
+        $keys_referencias['dp_cp_descripcion']= array('x'=>82,'y'=>244);
+        return $keys_referencias;
+    }
+
+    final public function keys_referencias_2(): array
+    {
+        $keys_referencias['inm_referencia_apellido_paterno']= array('x'=>110,'y'=>177);
+        $keys_referencias['inm_referencia_apellido_materno']= array('x'=>110,'y'=>183.5);
+        $keys_referencias['inm_referencia_nombre']= array('x'=>110,'y'=>191);
+        $keys_referencias['inm_referencia_lada']= array('x'=>121,'y'=>199.5);
+        $keys_referencias['inm_referencia_numero']= array('x'=>121,'y'=>199.5);
+        $keys_referencias['inm_referencia_celular']= array('x'=>134,'y'=>206);
+        $keys_referencias['dp_calle_descripcion']= array('x'=>110,'y'=>212);
+        $keys_referencias['inm_referencia_numero_dom']= array('x'=>110,'y'=>218);
+        $keys_referencias['dp_colonia_descripcion']= array('x'=>110,'y'=>225);
+        $keys_referencias['dp_estado_descripcion']= array('x'=>110,'y'=>237);
+        $keys_referencias['dp_municipio_descripcion']= array('x'=>110,'y'=>245);
+        $keys_referencias['dp_cp_descripcion']= array('x'=>178,'y'=>245);
+        return $keys_referencias;
     }
 
     /**

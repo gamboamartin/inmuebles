@@ -656,20 +656,11 @@ class controlador_inm_comprador extends _ctl_base {
         if(count($data->inm_referencias) > 0) {
             $inm_referencia = $data->inm_referencias[0];
 
-            $keys_referencias = array();
-            $keys_referencias['inm_referencia_apellido_paterno']= array('x'=>16,'y'=>177);
-            $keys_referencias['inm_referencia_apellido_materno']= array('x'=>16,'y'=>183.5);
-            $keys_referencias['inm_referencia_nombre']= array('x'=>16,'y'=>191);
-            $keys_referencias['inm_referencia_lada']= array('x'=>27,'y'=>199.5);
-            $keys_referencias['inm_referencia_numero']= array('x'=>40,'y'=>199.5);
-            $keys_referencias['inm_referencia_celular']= array('x'=>27,'y'=>206);
-            $keys_referencias['dp_calle_descripcion']= array('x'=>16,'y'=>212);
-            $keys_referencias['inm_referencia_numero_dom']= array('x'=>16,'y'=>217);
-            $keys_referencias['dp_colonia_descripcion']= array('x'=>16,'y'=>226);
-            $keys_referencias['dp_estado_descripcion']= array('x'=>16,'y'=>234);
-            $keys_referencias['dp_municipio_descripcion']= array('x'=>16,'y'=>244);
-            $keys_referencias['dp_cp_descripcion']= array('x'=>82,'y'=>244);
 
+            $keys_referencias = (new _keys_selects())->keys_referencias();
+            if (errores::$error) {
+                return $this->retorno_error(mensaje: 'Error al obtener keys_referencias', data: $keys_referencias, header: $header, ws: $ws);
+            }
 
 
             $write = $_pdf->write_data(keys: $keys_referencias,row:  $inm_referencia);
@@ -682,19 +673,10 @@ class controlador_inm_comprador extends _ctl_base {
             if(isset($inm_referencias[1])){
                 $inm_referencia = $inm_referencias[1];
 
-                $keys_referencias = array();
-                $keys_referencias['inm_referencia_apellido_paterno']= array('x'=>110,'y'=>177);
-                $keys_referencias['inm_referencia_apellido_materno']= array('x'=>110,'y'=>183.5);
-                $keys_referencias['inm_referencia_nombre']= array('x'=>110,'y'=>191);
-                $keys_referencias['inm_referencia_lada']= array('x'=>121,'y'=>199.5);
-                $keys_referencias['inm_referencia_numero']= array('x'=>121,'y'=>199.5);
-                $keys_referencias['inm_referencia_celular']= array('x'=>134,'y'=>206);
-                $keys_referencias['dp_calle_descripcion']= array('x'=>110,'y'=>212);
-                $keys_referencias['inm_referencia_numero_dom']= array('x'=>110,'y'=>218);
-                $keys_referencias['dp_colonia_descripcion']= array('x'=>110,'y'=>225);
-                $keys_referencias['dp_estado_descripcion']= array('x'=>110,'y'=>237);
-                $keys_referencias['dp_municipio_descripcion']= array('x'=>110,'y'=>245);
-                $keys_referencias['dp_cp_descripcion']= array('x'=>178,'y'=>245);
+                $keys_referencias = (new _keys_selects())->keys_referencias_2();
+                if (errores::$error) {
+                    return $this->retorno_error(mensaje: 'Error al obtener keys_referencias', data: $keys_referencias, header: $header, ws: $ws);
+                }
 
                 $write = $_pdf->write_data(keys: $keys_referencias,row:  $inm_referencia);
                 if (errores::$error) {

@@ -261,7 +261,8 @@ class controlador_inm_doc_comprador extends _ctl_formato {
                 ws:  $ws);
         }
 
-        $com_cliente = (new inm_comprador(link: $this->link))->get_com_cliente(inm_comprador_id: $registro->inm_comprador_id, retorno_obj: true);
+        $com_cliente = (new inm_comprador(link: $this->link))->get_com_cliente(
+            inm_comprador_id: $registro->inm_comprador_id, retorno_obj: true);
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al obtener cliente',data:  $com_cliente,header:  $header,
                 ws:  $ws);
@@ -288,38 +289,45 @@ class controlador_inm_doc_comprador extends _ctl_formato {
         $row_upd->nombre = $registro->inm_comprador_nombre;
 
 
-        $com_tipo_cliente_descripcion = $this->html->input_text_required(cols: 12,disabled: true,name: 'com_tipo_cliente_descripcion',
-            place_holder: 'Tipo de Cliente',row_upd: $row_upd,value_vacio: false);
+        $com_tipo_cliente_descripcion = $this->html->input_text_required(cols: 12,disabled: true,
+            name: 'com_tipo_cliente_descripcion', place_holder: 'Tipo de Cliente',row_upd: $row_upd,
+            value_vacio: false);
         if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al obtener input',data:  $com_tipo_cliente_descripcion,header:  $header,
-                ws:  $ws);
+            return $this->retorno_error(mensaje: 'Error al obtener input',data:  $com_tipo_cliente_descripcion,
+                header:  $header, ws:  $ws);
         }
-        $nss = $this->html->input_text_required(cols: 4,disabled: true,name: 'nss',place_holder: 'NSS',row_upd:$row_upd,value_vacio: false);
+        $nss = $this->html->input_text_required(cols: 4,disabled: true,name: 'nss',place_holder: 'NSS',
+            row_upd:$row_upd,value_vacio: false);
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al obtener input',data:  $nss,header:  $header,
                 ws:  $ws);
         }
-        $curp = $this->html->input_text_required(cols: 4,disabled: true,name: 'curp',place_holder: 'CURP',row_upd:$row_upd,value_vacio: false);
+        $curp = $this->html->input_text_required(cols: 4,disabled: true,name: 'curp',place_holder: 'CURP',
+            row_upd:$row_upd,value_vacio: false);
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al obtener input',data:  $curp,header:  $header,
                 ws:  $ws);
         }
-        $rfc = $this->html->input_text_required(cols: 4,disabled: true,name: 'rfc',place_holder: 'RFC',row_upd:$row_upd,value_vacio: false);
+        $rfc = $this->html->input_text_required(cols: 4,disabled: true,name: 'rfc',place_holder: 'RFC',
+            row_upd:$row_upd,value_vacio: false);
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al obtener input',data:  $rfc,header:  $header,
                 ws:  $ws);
         }
-        $apellido_paterno = $this->html->input_text_required(cols: 6,disabled: true,name: 'apellido_paterno',place_holder: 'AP',row_upd:$row_upd,value_vacio: false);
+        $apellido_paterno = $this->html->input_text_required(cols: 6,disabled: true,name: 'apellido_paterno',
+            place_holder: 'AP',row_upd:$row_upd,value_vacio: false);
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al obtener input',data:  $apellido_paterno,header:  $header,
                 ws:  $ws);
         }
-        $apellido_materno = $this->html->input_text_required(cols: 6,disabled: true,name: 'apellido_materno',place_holder: 'AM',row_upd:$row_upd,value_vacio: false);
+        $apellido_materno = $this->html->input_text_required(cols: 6,disabled: true,name: 'apellido_materno',
+            place_holder: 'AM',row_upd:$row_upd,value_vacio: false);
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al obtener input',data:  $apellido_materno,header:  $header,
                 ws:  $ws);
         }
-        $nombre = $this->html->input_text_required(cols: 12,disabled: true,name: 'nombre',place_holder: 'Nombre',row_upd:$row_upd,value_vacio: false);
+        $nombre = $this->html->input_text_required(cols: 12,disabled: true,name: 'nombre',place_holder: 'Nombre',
+            row_upd:$row_upd,value_vacio: false);
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al obtener input',data:  $nombre,header:  $header,
                 ws:  $ws);
@@ -334,10 +342,12 @@ class controlador_inm_doc_comprador extends _ctl_formato {
         $this->inputs->apellido_materno = $apellido_materno;
         $this->inputs->nombre = $nombre;
 
-        $button_inm_doc_comprador_descarga = $this->html->button_href(accion: 'descarga',etiqueta:  'Descarga',registro_id:  $this->registro_id,
+        $button_inm_doc_comprador_descarga = $this->html->button_href(accion: 'descarga',etiqueta:  'Descarga',
+            registro_id:  $this->registro_id,
             seccion:  $this->seccion,style:  'success');
         if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al integrar button',data:  $button_inm_doc_comprador_descarga, header: $header,ws:  $ws);
+            return $this->retorno_error(mensaje: 'Error al integrar button',data:  $button_inm_doc_comprador_descarga,
+                header: $header,ws:  $ws);
         }
 
 
