@@ -624,23 +624,11 @@ class controlador_inm_comprador extends _ctl_base {
             }
 
 
-            $keys_co_acreditado = array();
-            $keys_co_acreditado['inm_co_acreditado_nss']= array('x'=>16,'y'=>105);
-            $keys_co_acreditado['inm_co_acreditado_curp']= array('x'=>64,'y'=>105);
-            $keys_co_acreditado['inm_co_acreditado_rfc']= array('x'=>132,'y'=>105);
-            $keys_co_acreditado['inm_co_acreditado_apellido_paterno']= array('x'=>16,'y'=>112);
-            $keys_co_acreditado['inm_co_acreditado_apellido_materno']= array('x'=>107,'y'=>112);
-            $keys_co_acreditado['inm_co_acreditado_nombre']= array('x'=>16,'y'=>119);
-            $keys_co_acreditado['inm_co_acreditado_lada']= array('x'=>27,'y'=>129);
-            $keys_co_acreditado['inm_co_acreditado_numero']= array('x'=>40,'y'=>129);
-            $keys_co_acreditado['inm_co_acreditado_celular']= array('x'=>86,'y'=>129);
-            $keys_co_acreditado['inm_co_acreditado_correo']= array('x'=>38,'y'=>138);
-            $keys_co_acreditado['inm_co_acreditado_nombre_empresa_patron']= array('x'=>16,'y'=>152);
-            $keys_co_acreditado['inm_co_acreditado_nrp']= array('x'=>140,'y'=>152);
-            $keys_co_acreditado['inm_co_acreditado_lada_nep']= array('x'=>100,'y'=>158);
-            $keys_co_acreditado['inm_co_acreditado_numero_nep']= array('x'=>113,'y'=>158);
-            $keys_co_acreditado['inm_co_acreditado_extension_nep']= array('x'=>150,'y'=>158);
 
+            $keys_co_acreditado = (new _keys_selects())->keys_co_acreditado();
+            if (errores::$error) {
+                return $this->retorno_error(mensaje: 'Error al integrar keys', data: $keys_co_acreditado, header: $header, ws: $ws);
+            }
 
 
             $write = $_pdf->write_data(keys: $keys_co_acreditado,row:  $inm_co_acreditado);
