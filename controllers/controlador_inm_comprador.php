@@ -50,6 +50,13 @@ class controlador_inm_comprador extends _ctl_base {
             paths_conf: $paths_conf);
     }
 
+    /**
+     * Integra formulario de alta
+     * @param bool $header Si header retorna resultado en web
+     * @param bool $ws Si ws muestra resultado en json
+     * @return array|string
+     * @version 1.62.1
+     */
     public function alta(bool $header, bool $ws = false): array|string
     {
         $r_alta = $this->init_alta();
@@ -572,12 +579,10 @@ class controlador_inm_comprador extends _ctl_base {
             return $this->retorno_error(mensaje: 'Error al escribir en pdf', data: $pdf_exe, header: $header, ws: $ws);
         }
 
-
         $pdf_exe = $_pdf->write_domicilio(data: $data);
         if (errores::$error) {
             return $this->retorno_error(mensaje: 'Error al escribir domicilio', data: $pdf_exe, header: $header, ws: $ws);
         }
-
 
         $keys_cliente = $_pdf->keys_cliente();
         if (errores::$error) {
@@ -588,7 +593,6 @@ class controlador_inm_comprador extends _ctl_base {
         if (errores::$error) {
             return $this->retorno_error(mensaje: 'Error al escribir en pdf', data: $write, header: $header, ws: $ws);
         }
-
 
 
         $x = 144.5;
@@ -603,7 +607,6 @@ class controlador_inm_comprador extends _ctl_base {
         if (errores::$error) {
             return $this->retorno_error(mensaje: 'Error al escribir en pdf', data: $pdf_exe, header: $header, ws: $ws);
         }
-
 
 
         $pdf->SetXY($data->inm_comprador['inm_estado_civil_x'], $data->inm_comprador['inm_estado_civil_y']);
@@ -625,7 +628,6 @@ class controlador_inm_comprador extends _ctl_base {
             }
 
 
-
             $keys_co_acreditado = (new _keys_selects())->keys_co_acreditado();
             if (errores::$error) {
                 return $this->retorno_error(mensaje: 'Error al integrar keys', data: $keys_co_acreditado, header: $header, ws: $ws);
@@ -637,17 +639,10 @@ class controlador_inm_comprador extends _ctl_base {
                 return $this->retorno_error(mensaje: 'Error al escribir en pdf', data: $write, header: $header, ws: $ws);
             }
 
-
-            $x = 144;
-            $y = 130;
-
-            if($inm_co_acreditado['inm_co_acreditado_genero'] === 'F'){
-
-                $x = 150.5;
+            $write = $_pdf->write_co_acreditado_genero(inm_co_acreditado: $inm_co_acreditado);
+            if (errores::$error) {
+                return $this->retorno_error(mensaje: 'Error al escribir en pdf', data: $write, header: $header, ws: $ws);
             }
-
-            $pdf->SetXY($x, $y);
-            $pdf->Write(0, 'X');
 
 
         }
@@ -715,8 +710,6 @@ class controlador_inm_comprador extends _ctl_base {
             return $this->retorno_error(mensaje: 'Error al escribir en pdf', data: $write, header: $header, ws: $ws);
         }
 
-
-
         $year = $this->modelo->year['espaniol'][date('Y')]['abreviado'];
 
         $write = $_pdf->write(valor: $year, x:178,y: 240);
@@ -754,8 +747,6 @@ class controlador_inm_comprador extends _ctl_base {
             $_doc_tipo_documento_id = $_GET['doc_tipo_documento_id'];
             $filtro['doc_tipo_documento.id'] = $_GET['doc_tipo_documento_id'];
         }
-
-
 
         $doc_tipo_documento_id = (new doc_tipo_documento_html(html: $this->html_base))->select_doc_tipo_documento_id(
             cols: 12, con_registros: true, id_selected: $_doc_tipo_documento_id, link: $this->link, filtro: $filtro,

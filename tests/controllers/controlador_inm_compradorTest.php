@@ -28,6 +28,44 @@ class controlador_inm_compradorTest extends test {
         $this->paths_conf->views = '/var/www/html/inmuebles/config/views.php';
     }
 
+    public function test_alta(): void
+    {
+        errores::$error = false;
+
+
+        $ch = curl_init("http://localhost/inmuebles/index.php?seccion=inm_comprador&accion=alta&adm_menu_id=64&session_id=4810112241&adm_menu_id=64");
+        $fp = fopen("inm_comprador.alta", "w");
+
+        curl_setopt($ch, CURLOPT_FILE, $fp);
+        curl_setopt($ch, CURLOPT_HEADER, 0);
+
+        curl_exec($ch);
+        curl_close($ch);
+        fclose($fp);
+
+        $data = file_get_contents("inm_comprador.alta");
+
+        //print_r($data);exit;
+
+        assertStringContainsStringIgnoringCase("<div class='control-group col-sm-6'><label class='control-label' for='inm_producto_infonavit_id'>Producto</label><div", $data);
+        assertStringContainsStringIgnoringCase('for="inm_attr_tipo_credito_id">Es Segundo credito</label>', $data);
+        assertStringContainsStringIgnoringCase('<label class="form-check-label chk', $data);
+        assertStringContainsStringIgnoringCase('<input type="radio" name="es_segundo_credito" value="NO" class="form-check-input es_segundo_credito"', $data);
+        assertStringContainsStringIgnoringCase('id="es_segundo_credito" title="Es Segundo Credito" checked>', $data);
+        assertStringContainsStringIgnoringCase("<div class='control-group col-sm-6'><label class='control-label' for='inm_plazo_credito_sc_id'>Plazo Segundo Credito</label><div class='controls'><select class='form-c", $data);
+        assertStringContainsStringIgnoringCase("<h4>2. DATOS PARA DETERMINAR EL MONTO DE CRÉDITO</h4>", $data);
+        assertStringContainsStringIgnoringCase("ss='control-label' for='descuento_pension_alimenticia_dh'>Descuento Pension Alimenticia Derechohabiente</label><di", $data);
+        assertStringContainsStringIgnoringCase("untario' value='0' class='form-control' required id='monto_ahorro_voluntario", $data);
+        assertStringContainsStringIgnoringCase('<input type="radio" name="con_discapacidad" value="SI" class="form-check-input" id="con_discapacidad"', $data);
+        assertStringContainsStringIgnoringCase("l-group col-sm-6'><label class='control-label' for='inm_tipo_discapacidad_id'>Tipo de Discapacidad</label><div class='controls'><select class=", $data);
+        assertStringContainsStringIgnoringCase("abel class='control-label' for='nombre_empresa_patron'>Nombre Empresa o Patron</label><div class='controls'><input type='text' name='n", $data);
+        assertStringContainsStringIgnoringCase("_civil_id' data-live-search='true' id='inm_estado_civil_id' name='inm_estado_civil_id' required ><option value=''  >Selecciona una", $data);
+        assertStringContainsStringIgnoringCase("m-6'><label class='control-label' for='cat_sat_regimen_fiscal_id'>Regimen Fiscal</label><div class='controls'><select class='form-control se", $data);
+        assertStringContainsStringIgnoringCase("e Cliente</label><div class='controls'><select class='form-control selectpick", $data);
+        unlink('inm_comprador.alta');
+
+
+    }
 
 
     public function test_init_datatable(): void

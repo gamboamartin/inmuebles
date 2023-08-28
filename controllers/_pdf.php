@@ -298,7 +298,20 @@ class _pdf{
         return $this->pdf;
     }
 
+    final public function write_co_acreditado_genero(array $inm_co_acreditado): Fpdi
+    {
+        $x = 144;
+        $y = 130;
 
+        if($inm_co_acreditado['inm_co_acreditado_genero'] === 'F'){
+
+            $x = 150.5;
+        }
+
+        $this->pdf->SetXY($x, $y);
+        $this->pdf->Write(0, 'X');
+        return $this->pdf;
+    }
 
     private function write_condicion(string $key, array $row, mixed $value_compare, float $x, float $y){
         $write = false;

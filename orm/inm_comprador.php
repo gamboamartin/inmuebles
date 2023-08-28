@@ -88,72 +88,12 @@ class inm_comprador extends _modelo_parent{
             return $this->error->error(mensaje: 'Error al insertar',data:  $r_alta_bd);
         }
 
-        $filtro['com_cliente.rfc'] = $registro_entrada['rfc'];
-        $existe_cliente = (new com_cliente(link: $this->link))->existe(filtro: $filtro);
-        if(errores::$error){
-            return $this->error->error(mensaje: 'Error al validar si existe',data:  $existe_cliente);
+        $integra_relacion_com_cliente = $this->integra_relacion_com_cliente(inm_comprador_id: $r_alta_bd->registro_id,
+            registro_entrada: $registro_entrada);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al obtener cliente', data: $integra_relacion_com_cliente);
         }
-
-        if(!$existe_cliente) {
-
-            $razon_social = $this->razon_social(registro_entrada: $registro_entrada);
-            if(errores::$error){
-                return $this->error->error(mensaje: 'Error al generar razon social',data:  $razon_social);
-            }
-
-            $numero_interior = '';
-            if(isset($registro_entrada['numero_interior'])){
-                $numero_interior = $registro_entrada['numero_interior'];
-            }
-
-            $com_cliente_ins['razon_social'] = trim($razon_social);
-            $com_cliente_ins['rfc'] = $registro_entrada['rfc'];
-            $com_cliente_ins['dp_calle_pertenece_id'] = $registro_entrada['dp_calle_pertenece_id'];
-            $com_cliente_ins['numero_exterior'] = $registro_entrada['numero_exterior'];
-            $com_cliente_ins['numero_interior'] = $numero_interior;
-            $com_cliente_ins['telefono'] = $registro_entrada['lada_com'].$registro_entrada['numero_com'];
-            $com_cliente_ins['cat_sat_regimen_fiscal_id'] = $registro_entrada['cat_sat_regimen_fiscal_id'];
-            $com_cliente_ins['cat_sat_moneda_id'] = $registro_entrada['cat_sat_moneda_id'];
-            $com_cliente_ins['cat_sat_forma_pago_id'] = $registro_entrada['cat_sat_forma_pago_id'];
-            $com_cliente_ins['cat_sat_metodo_pago_id'] = $registro_entrada['cat_sat_metodo_pago_id'];
-            $com_cliente_ins['cat_sat_uso_cfdi_id'] = $registro_entrada['cat_sat_uso_cfdi_id'];
-            $com_cliente_ins['cat_sat_tipo_de_comprobante_id'] = 1;
-            $com_cliente_ins['codigo'] = $registro_entrada['rfc'];
-            $com_cliente_ins['com_tipo_cliente_id'] = $registro_entrada['com_tipo_cliente_id'];
-            $com_cliente_ins['cat_sat_tipo_persona_id'] = $registro_entrada['cat_sat_tipo_persona_id'];
-
-            $r_com_cliente = (new com_cliente(link: $this->link))->alta_registro(registro: $com_cliente_ins);
-            if (errores::$error) {
-                return $this->error->error(mensaje: 'Error al insertar cliente', data: $r_com_cliente);
-            }
-        }
-        else{
-            $r_com_cliente_f = (new com_cliente(link: $this->link))->filtro_and(filtro: $filtro);
-            if (errores::$error) {
-                return $this->error->error(mensaje: 'Error al obtener cliente', data: $r_com_cliente_f);
-            }
-            if($r_com_cliente_f->n_registros === 0){
-                return $this->error->error(mensaje: 'Error no existe cliente', data: $r_com_cliente_f);
-            }
-            if($r_com_cliente_f->n_registros > 1){
-                return $this->error->error(mensaje: 'Error existe mas de un cliente', data: $r_com_cliente_f);
-            }
-            $r_com_cliente = new stdClass();
-            $r_com_cliente->registro_id = $r_com_cliente_f->registros[0]['com_cliente_id'];
-
-        }
-
-
-        $inm_rel_comprador_com_cliente_ins['inm_comprador_id'] = $r_alta_bd->registro_id;
-        $inm_rel_comprador_com_cliente_ins['com_cliente_id'] = $r_com_cliente->registro_id;
-
-        $r_inm_rel_comprador_com_cliente_ins = (new inm_rel_comprador_com_cliente(link: $this->link))->alta_registro(
-            registro: $inm_rel_comprador_com_cliente_ins);
-        if(errores::$error){
-            return $this->error->error(mensaje: 'Error al insertar relacion',
-                data:  $r_inm_rel_comprador_com_cliente_ins);
-        }
-
+        
         return $r_alta_bd;
 
     }
@@ -190,6 +130,26 @@ class inm_comprador extends _modelo_parent{
         }
 
         return $com_cliente;
+    }
+
+    private function com_cliente_ins(int $numero_interior, string $razon_social, array $registro_entrada): array
+    {
+        $com_cliente_ins['razon_social'] = trim($razon_social);
+        $com_cliente_ins['rfc'] = $registro_entrada['rfc'];
+        $com_cliente_ins['dp_calle_pertenece_id'] = $registro_entrada['dp_calle_pertenece_id'];
+        $com_cliente_ins['numero_exterior'] = $registro_entrada['numero_exterior'];
+        $com_cliente_ins['numero_interior'] = $numero_interior;
+        $com_cliente_ins['telefono'] = $registro_entrada['lada_com'].$registro_entrada['numero_com'];
+        $com_cliente_ins['cat_sat_regimen_fiscal_id'] = $registro_entrada['cat_sat_regimen_fiscal_id'];
+        $com_cliente_ins['cat_sat_moneda_id'] = $registro_entrada['cat_sat_moneda_id'];
+        $com_cliente_ins['cat_sat_forma_pago_id'] = $registro_entrada['cat_sat_forma_pago_id'];
+        $com_cliente_ins['cat_sat_metodo_pago_id'] = $registro_entrada['cat_sat_metodo_pago_id'];
+        $com_cliente_ins['cat_sat_uso_cfdi_id'] = $registro_entrada['cat_sat_uso_cfdi_id'];
+        $com_cliente_ins['cat_sat_tipo_de_comprobante_id'] = 1;
+        $com_cliente_ins['codigo'] = $registro_entrada['rfc'];
+        $com_cliente_ins['com_tipo_cliente_id'] = $registro_entrada['com_tipo_cliente_id'];
+        $com_cliente_ins['cat_sat_tipo_persona_id'] = $registro_entrada['cat_sat_tipo_persona_id'];
+        return $com_cliente_ins;
     }
 
     final public function data_pdf(int $inm_comprador_id){
@@ -321,6 +281,57 @@ class inm_comprador extends _modelo_parent{
         return $com_cliente;
     }
 
+    private function inm_rel_com_cliente_ins(int $com_cliente_id, int $inm_comprador_id): array
+    {
+        $inm_rel_comprador_com_cliente_ins['inm_comprador_id'] = $inm_comprador_id;
+        $inm_rel_comprador_com_cliente_ins['com_cliente_id'] = $com_cliente_id;
+        return $inm_rel_comprador_com_cliente_ins;
+    }
+
+    private function inserta_com_cliente(array $registro_entrada){
+        $com_cliente_ins = $this->row_com_cliente_ins(registro_entrada: $registro_entrada);
+
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al integrar registro de cliente', data: $com_cliente_ins);
+        }
+
+        $r_com_cliente = (new com_cliente(link: $this->link))->alta_registro(registro: $com_cliente_ins);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al insertar cliente', data: $r_com_cliente);
+        }
+        return $r_com_cliente;
+    }
+
+    private function inserta_inm_rel_comprador_com_cliente(int $com_cliente_id, int $inm_comprador_id){
+        $inm_rel_comprador_com_cliente_ins = $this->inm_rel_com_cliente_ins(com_cliente_id: $com_cliente_id,
+            inm_comprador_id: $inm_comprador_id);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al integrar row rel com cliente', data: $inm_rel_comprador_com_cliente_ins);
+        }
+
+        $r_inm_rel_comprador_com_cliente_ins = (new inm_rel_comprador_com_cliente(link: $this->link))->alta_registro(
+            registro: $inm_rel_comprador_com_cliente_ins);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al insertar relacion',
+                data:  $r_inm_rel_comprador_com_cliente_ins);
+        }
+        return $r_inm_rel_comprador_com_cliente_ins;
+    }
+
+    private function integra_relacion_com_cliente(int $inm_comprador_id, array $registro_entrada){
+        $r_com_cliente = $this->transacciona_com_cliente(registro_entrada: $registro_entrada);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al obtener cliente', data: $r_com_cliente);
+        }
+        $r_inm_rel_comprador_com_cliente = $this->inserta_inm_rel_comprador_com_cliente(
+            com_cliente_id: $r_com_cliente->registro_id,inm_comprador_id:  $inm_comprador_id);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al integrar r_inm_rel_comprador_com_cliente',
+                data: $r_inm_rel_comprador_com_cliente);
+        }
+        return $r_inm_rel_comprador_com_cliente;
+    }
+
     public function modifica_bd(array $registro, int $id, bool $reactiva = false,
                                 array $keys_integra_ds = array('codigo', 'descripcion')): array|stdClass
     {
@@ -368,6 +379,14 @@ class inm_comprador extends _modelo_parent{
         return $r_modifica;
     }
 
+    private function numero_interior(array $registro_entrada){
+        $numero_interior = '';
+        if(isset($registro_entrada['numero_interior'])){
+            $numero_interior = $registro_entrada['numero_interior'];
+        }
+        return $numero_interior;
+    }
+
     /**
      * Obtiene la relacion entre un cliente y un comprador
      * @param int $inm_comprador_id Comprador identificador
@@ -398,12 +417,80 @@ class inm_comprador extends _modelo_parent{
         return $r_imp_rel_comprador_com_cliente->registros[0];
     }
 
+    private function r_com_cliente(array $filtro){
+        $r_com_cliente_f = (new com_cliente(link: $this->link))->filtro_and(filtro: $filtro);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al obtener cliente', data: $r_com_cliente_f);
+        }
+        if($r_com_cliente_f->n_registros === 0){
+            return $this->error->error(mensaje: 'Error no existe cliente', data: $r_com_cliente_f);
+        }
+        if($r_com_cliente_f->n_registros > 1){
+            return $this->error->error(mensaje: 'Error existe mas de un cliente', data: $r_com_cliente_f);
+        }
+        $r_com_cliente = new stdClass();
+        $r_com_cliente->registro_id = $r_com_cliente_f->registros[0]['com_cliente_id'];
+        return $r_com_cliente;
+
+    }
+
     private function razon_social(array $registro_entrada): string
     {
         $razon_social = $registro_entrada['nombre'];
         $razon_social .= $registro_entrada['apellido_paterno'];
         $razon_social .= $registro_entrada['apellido_materno'];
         return $razon_social;
+    }
+
+    private function result_com_cliente(bool $existe_cliente, array $filtro, array $registro_entrada){
+        if(!$existe_cliente) {
+            $r_com_cliente = $this->inserta_com_cliente(registro_entrada: $registro_entrada);
+            if (errores::$error) {
+                return $this->error->error(mensaje: 'Error al insertar cliente', data: $r_com_cliente);
+            }
+        }
+        else{
+            $r_com_cliente = $this->r_com_cliente(filtro: $filtro);
+            if (errores::$error) {
+                return $this->error->error(mensaje: 'Error al obtener cliente', data: $r_com_cliente);
+            }
+        }
+        return $r_com_cliente;
+    }
+
+    private function row_com_cliente_ins(array $registro_entrada){
+        $razon_social = $this->razon_social(registro_entrada: $registro_entrada);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al generar razon social',data:  $razon_social);
+        }
+
+
+        $numero_interior = $this->numero_interior(registro_entrada: $registro_entrada);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al generar numero_interior',data:  $numero_interior);
+        }
+
+        $com_cliente_ins = $this->com_cliente_ins(numero_interior: $numero_interior,
+            razon_social:  $razon_social,registro_entrada:  $registro_entrada);
+
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al integrar registro de cliente', data: $com_cliente_ins);
+        }
+        return $com_cliente_ins;
+    }
+
+    private function transacciona_com_cliente(array $registro_entrada){
+        $filtro['com_cliente.rfc'] = $registro_entrada['rfc'];
+        $existe_cliente = (new com_cliente(link: $this->link))->existe(filtro: $filtro);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al validar si existe',data:  $existe_cliente);
+        }
+
+        $r_com_cliente = $this->result_com_cliente(existe_cliente: $existe_cliente,filtro:  $filtro,registro_entrada:  $registro_entrada);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al obtener cliente', data: $r_com_cliente);
+        }
+        return $r_com_cliente;
     }
 
 
