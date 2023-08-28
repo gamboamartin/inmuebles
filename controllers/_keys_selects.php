@@ -33,6 +33,7 @@ class _keys_selects{
      * @param array $keys_selects Parametros previos
      * @param stdClass $row_upd Registro en proceso
      * @return array
+     * @version 1.60.1
      */
     private function base(controlador_inm_comprador $controler, array $keys_selects, stdClass $row_upd): array
     {
@@ -98,8 +99,9 @@ class _keys_selects{
     }
 
     /**
-     * @param controlador_inm_comprador $controler
-     * @param stdClass $row_upd
+     * Inicializa los parametros de los selectores para frontend
+     * @param controlador_inm_comprador $controler Controlador en ejecucion
+     * @param stdClass $row_upd Registro en proceso
      * @return array
      */
     final public function init(controlador_inm_comprador $controler, stdClass $row_upd): array
@@ -212,7 +214,6 @@ class _keys_selects{
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al obtener row_upd',data:  $row_upd);
         }
-
 
         $keys_selects = $this->init(controler: $controler,row_upd: $controler->row_upd);
         if(errores::$error){

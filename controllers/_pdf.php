@@ -139,6 +139,20 @@ class _pdf{
         return $pdf;
     }
 
+    final public function get_key_referencias(int $indice){
+        $keys_referencias = (new _keys_selects())->keys_referencias();
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al obtener keys_referencias', data: $keys_referencias);
+        }
+        if($indice === 1) {
+            $keys_referencias = (new _keys_selects())->keys_referencias_2();
+            if (errores::$error) {
+                return $this->error->error(mensaje: 'Error al obtener keys_referencias', data: $keys_referencias);
+            }
+        }
+        return $keys_referencias;
+    }
+
     private function get_x_var(array $condiciones, string $key_id,array $row, float $x_init){
         $x = $x_init;
 
@@ -326,6 +340,15 @@ class _pdf{
             return $this->error->error(mensaje: 'Error al escribir domicilio', data: $pdf_exe);
         }
         return $pdf_exe;
+    }
+
+    final public function write_referencia(array $inm_referencia, array $keys_referencias){
+
+        $write = $this->write_data(keys: $keys_referencias,row:  $inm_referencia);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al escribir en pdf', data: $write);
+        }
+        return $write;
     }
 
     final public function write_x(string $name_entidad, array $row): Fpdi

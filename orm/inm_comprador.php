@@ -159,8 +159,9 @@ class inm_comprador extends _modelo_parent{
     }
 
     /**
-     * @param int $com_cliente_id
-     * @param bool $retorno_obj
+     * Obtiene el cliente fiscal asignado al comprador de vivienda
+     * @param int $com_cliente_id Identificador de cliente
+     * @param bool $retorno_obj Retorna un objeto en caso de ser verdadero
      * @return array|object
      */
     private function com_cliente(int $com_cliente_id, bool $retorno_obj = false): object|array

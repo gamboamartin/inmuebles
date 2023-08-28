@@ -652,42 +652,19 @@ class controlador_inm_comprador extends _ctl_base {
         }
 
 
-
-        if(count($data->inm_referencias) > 0) {
-            $inm_referencia = $data->inm_referencias[0];
-
-
-            $keys_referencias = (new _keys_selects())->keys_referencias();
+        foreach ($data->inm_referencias as $indice=>$inm_referencia){
+            $keys_referencias = $_pdf->get_key_referencias(indice: $indice);
             if (errores::$error) {
-                return $this->retorno_error(mensaje: 'Error al obtener keys_referencias', data: $keys_referencias, header: $header, ws: $ws);
+                return $this->retorno_error(mensaje: 'Error al obtener keys_referencias', data: $keys_referencias,
+                    header: $header, ws: $ws);
             }
 
-
-            $write = $_pdf->write_data(keys: $keys_referencias,row:  $inm_referencia);
+            $write = $_pdf->write_referencia(inm_referencia: $inm_referencia, keys_referencias: $keys_referencias);
             if (errores::$error) {
                 return $this->retorno_error(mensaje: 'Error al escribir en pdf', data: $write, header: $header, ws: $ws);
             }
-
-
-
-            if(isset($inm_referencias[1])){
-                $inm_referencia = $inm_referencias[1];
-
-                $keys_referencias = (new _keys_selects())->keys_referencias_2();
-                if (errores::$error) {
-                    return $this->retorno_error(mensaje: 'Error al obtener keys_referencias', data: $keys_referencias, header: $header, ws: $ws);
-                }
-
-                $write = $_pdf->write_data(keys: $keys_referencias,row:  $inm_referencia);
-                if (errores::$error) {
-                    return $this->retorno_error(mensaje: 'Error al escribir en pdf', data: $write, header: $header, ws: $ws);
-                }
-
-
-            }
-
-
         }
+
 
         $pdf->AddPage();
 
