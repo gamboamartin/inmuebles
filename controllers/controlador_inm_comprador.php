@@ -620,30 +620,10 @@ class controlador_inm_comprador extends _ctl_base {
 
         foreach ($data->inm_rel_co_acreditados as $imp_rel_co_acred){
 
-
-            $inm_co_acreditado = (new inm_co_acreditado(link: $this->link))->registro(registro_id: $imp_rel_co_acred['inm_co_acreditado_id']);
-            if(errores::$error){
-                return $this->retorno_error(
-                    mensaje: 'Error al obtener inm_co_acreditado',data:  $inm_co_acreditado,header: $header,ws: $ws);
-            }
-
-
-            $keys_co_acreditado = (new _keys_selects())->keys_co_acreditado();
-            if (errores::$error) {
-                return $this->retorno_error(mensaje: 'Error al integrar keys', data: $keys_co_acreditado, header: $header, ws: $ws);
-            }
-
-
-            $write = $_pdf->write_data(keys: $keys_co_acreditado,row:  $inm_co_acreditado);
+            $write = $_pdf->write_co_acreditado($imp_rel_co_acred['inm_co_acreditado_id'],link:  $this->link);
             if (errores::$error) {
                 return $this->retorno_error(mensaje: 'Error al escribir en pdf', data: $write, header: $header, ws: $ws);
             }
-
-            $write = $_pdf->write_co_acreditado_genero(inm_co_acreditado: $inm_co_acreditado);
-            if (errores::$error) {
-                return $this->retorno_error(mensaje: 'Error al escribir en pdf', data: $write, header: $header, ws: $ws);
-            }
-
 
         }
 

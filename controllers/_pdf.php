@@ -2,6 +2,8 @@
 namespace gamboamartin\inmuebles\controllers;
 
 use gamboamartin\errores\errores;
+use gamboamartin\inmuebles\models\inm_co_acreditado;
+use PDO;
 use setasign\Fpdi\Fpdi;
 use stdClass;
 
@@ -298,7 +300,32 @@ class _pdf{
         return $this->pdf;
     }
 
-    final public function write_co_acreditado_genero(array $inm_co_acreditado): Fpdi
+    final public function write_co_acreditado(int $inm_co_acreditado_id, PDO $link){
+        $inm_co_acreditado = (new inm_co_acreditado(link: $link))->registro(registro_id: $inm_co_acreditado_id);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al obtener inm_co_acreditado',data:  $inm_co_acreditado);
+        }
+
+
+        $keys_co_acreditado = (new _keys_selects())->keys_co_acreditado();
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al integrar keys', data: $keys_co_acreditado);
+        }
+
+
+        $write = $this->write_data(keys: $keys_co_acreditado,row:  $inm_co_acreditado);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al escribir en pdf', data: $write);
+        }
+
+        $write = $this->write_co_acreditado_genero(inm_co_acreditado: $inm_co_acreditado);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al escribir en pdf', data: $write);
+        }
+        return $write;
+    }
+
+    private function write_co_acreditado_genero(array $inm_co_acreditado): Fpdi
     {
         $x = 144;
         $y = 130;

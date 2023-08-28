@@ -5,6 +5,7 @@ namespace gamboamartin\inmuebles\models;
 use base\orm\_modelo_parent;
 use gamboamartin\comercial\models\com_cliente;
 use gamboamartin\errores\errores;
+use gamboamartin\proceso\models\pr_sub_proceso;
 use PDO;
 use stdClass;
 
@@ -93,7 +94,41 @@ class inm_comprador extends _modelo_parent{
         if (errores::$error) {
             return $this->error->error(mensaje: 'Error al obtener cliente', data: $integra_relacion_com_cliente);
         }
-        
+
+        $filtro['adm_seccion.descripcion'] = $this->tabla;
+        $filtro['pr_sub_proceso.descripcion'] = 'ALTA';
+        $filtro['pr_proceso.descripcion'] = 'INMOBILIARIA CLIENTES';
+        $existe = (new pr_sub_proceso(link: $this->link))->existe(filtro: $filtro);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al validar si existe sub proceso', data: $existe);
+        }
+        if(!$existe){
+            return $this->error->error(mensaje: 'Error no existe sub proceso definido', data: $filtro);
+        }
+        $r_pr_sub_proceso = (new pr_sub_proceso(link: $this->link))->filtro_and(filtro: $filtro);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al obtener sub proceso', data: $r_pr_sub_proceso);
+        }
+        if($r_pr_sub_proceso->n_registros > 1){
+            return $this->error->error(mensaje: 'Error de integridad', data: $r_pr_sub_proceso);
+        }
+        if($r_pr_sub_proceso->n_registros === 0){
+            return $this->error->error(mensaje: 'Error no existe sub proceso', data: $r_pr_sub_proceso);
+        }
+
+        $pr_sub_proceso = $r_pr_sub_proceso->registros[0];
+
+
+
+        $inm_comprador_proceso_ins['inm_comprador_id'] = $r_alta_bd->registro_id;
+        $inm_comprador_proceso_ins['pr_sub_proceso_id'] = $pr_sub_proceso['pr_sub_proceso_id'];
+        $inm_comprador_proceso_ins['fecha'] = date('Y-m-d');
+        $r_alta_sp = (new inm_comprador_proceso(link: $this->link))->alta_registro(registro: $inm_comprador_proceso_ins);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al insertar sub proceso en comprador', data: $r_alta_sp);
+        }
+
+
         return $r_alta_bd;
 
     }
@@ -204,10 +239,18 @@ class inm_comprador extends _modelo_parent{
     /**
      * Genera la descripcion de un comprador basado en datos del registro a insertar
      * @param array $registro Registro en proceso
-     * @return string
+     * @return string|array
      */
-    private function descripcion(array $registro): string
+    private function descripcion(array $registro): string|array
     {
+        $keys = array('nombre','apellido_paterno','nss','curp','rfc');
+        $valida = $this->validacion->valida_existencia_keys(keys: $keys,registro:  $registro);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al validar registro', data: $valida);
+        }
+        if(!isset($registro['apellido_materno'])){
+            $registro['apellido_materno'] = '';
+        }
         $descripcion = $registro['nombre'];
         $descripcion .= ' '.$registro['apellido_paterno'];
         $descripcion .= ' '.$registro['apellido_materno'];
@@ -391,6 +434,7 @@ class inm_comprador extends _modelo_parent{
      * Obtiene la relacion entre un cliente y un comprador
      * @param int $inm_comprador_id Comprador identificador
      * @return array
+     * @version 1.63.1
      */
     private function inm_rel_comprador_cliente(int $inm_comprador_id): array
     {

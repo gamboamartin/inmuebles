@@ -33,6 +33,12 @@ class inm_rel_comprador_com_cliente extends _modelo_parent{
     public function alta_bd(array $keys_integra_ds = array('codigo', 'descripcion')): array|stdClass
     {
 
+        $keys = array('com_cliente_id','inm_comprador_id');
+        $valida = $this->validacion->valida_ids(keys: $keys,registro:  $this->registro);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al validar registro',data:  $valida);
+        }
+
         if(!isset($this->registro['descripcion'])){
             $descripcion = $this->registro['com_cliente_id'];
             $descripcion .= ' '.$this->registro['inm_comprador_id'];
