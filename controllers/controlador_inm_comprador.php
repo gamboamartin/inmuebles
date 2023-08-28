@@ -496,10 +496,11 @@ class controlador_inm_comprador extends _ctl_base {
         $columns["inm_comprador_nss"]["titulo"] = "NSS";
         $columns["inm_comprador_curp"]["titulo"] = "CURP";
         $columns["inm_comprador_etapa"]["titulo"] = "Etapa";
+        $columns["inm_comprador_proceso"]["titulo"] = "Proceso Actual";
 
 
         $filtro = array("inm_comprador.id",'inm_comprador.nombre','inm_comprador.apellido_paterno',
-            'inm_comprador.apellido_materno','inm_comprador.nss','inm_comprador.curp');
+            'inm_comprador.apellido_materno','inm_comprador.nss','inm_comprador.curp','inm_comprador.proceso');
 
         $datatables = new stdClass();
         $datatables->columns = $columns;
@@ -652,19 +653,10 @@ class controlador_inm_comprador extends _ctl_base {
         }
 
 
-        foreach ($data->inm_referencias as $indice=>$inm_referencia){
-            $keys_referencias = $_pdf->get_key_referencias(indice: $indice);
-            if (errores::$error) {
-                return $this->retorno_error(mensaje: 'Error al obtener keys_referencias', data: $keys_referencias,
-                    header: $header, ws: $ws);
-            }
-
-            $write = $_pdf->write_referencia(inm_referencia: $inm_referencia, keys_referencias: $keys_referencias);
-            if (errores::$error) {
-                return $this->retorno_error(mensaje: 'Error al escribir en pdf', data: $write, header: $header, ws: $ws);
-            }
+        $write = $_pdf->write_referencias(data: $data);
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al escribir en pdf', data: $write, header: $header, ws: $ws);
         }
-
 
         $pdf->AddPage();
 

@@ -139,7 +139,7 @@ class _pdf{
         return $pdf;
     }
 
-    final public function get_key_referencias(int $indice){
+    private function get_key_referencias(int $indice){
         $keys_referencias = (new _keys_selects())->keys_referencias();
         if (errores::$error) {
             return $this->error->error(mensaje: 'Error al obtener keys_referencias', data: $keys_referencias);
@@ -342,13 +342,30 @@ class _pdf{
         return $pdf_exe;
     }
 
-    final public function write_referencia(array $inm_referencia, array $keys_referencias){
+    private function write_referencia(array $inm_referencia, array $keys_referencias){
 
         $write = $this->write_data(keys: $keys_referencias,row:  $inm_referencia);
         if (errores::$error) {
             return $this->error->error(mensaje: 'Error al escribir en pdf', data: $write);
         }
         return $write;
+    }
+
+    final public function write_referencias(stdClass $data){
+        $writes = array();
+        foreach ($data->inm_referencias as $indice=>$inm_referencia){
+            $keys_referencias = $this->get_key_referencias(indice: $indice);
+            if (errores::$error) {
+                return $this->error->error(mensaje: 'Error al obtener keys_referencias', data: $keys_referencias);
+            }
+
+            $write = $this->write_referencia(inm_referencia: $inm_referencia, keys_referencias: $keys_referencias);
+            if (errores::$error) {
+                return $this->error->error(mensaje: 'Error al escribir en pdf', data: $write);
+            }
+            $writes[] = $write;
+        }
+        return $writes;
     }
 
     final public function write_x(string $name_entidad, array $row): Fpdi

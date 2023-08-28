@@ -103,6 +103,7 @@ class _keys_selects{
      * @param controlador_inm_comprador $controler Controlador en ejecucion
      * @param stdClass $row_upd Registro en proceso
      * @return array
+     * @version 1.61.1
      */
     final public function init(controlador_inm_comprador $controler, stdClass $row_upd): array
     {

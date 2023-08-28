@@ -54,6 +54,30 @@ class _keys_selectsTest extends test {
         errores::$error = false;
     }
 
+    public function test_init(): void
+    {
+        errores::$error = false;
+
+        $_GET['seccion'] = 'inm_producto_infonavit';
+        $_GET['accion'] = 'lista';
+        $_SESSION['grupo_id'] = 1;
+        $_SESSION['usuario_id'] = 2;
+        $_GET['session_id'] = '1';
+
+        $ks = new _keys_selects();
+        //$ks = new liberator($ks);
+
+        $controler = new controlador_inm_comprador(link: $this->link, paths_conf: $this->paths_conf);
+        $row_upd = new stdClass();
+
+        $resultado = $ks->init($controler, $row_upd);
+        $this->assertIsArray($resultado);
+        $this->assertNotTrue(errores::$error);
+        $this->assertEquals("inm_tipo_credito_descripcion",$resultado['inm_attr_tipo_credito_id']->columns_ds[0]);
+        $this->assertEquals("inm_attr_tipo_credito_descripcion",$resultado['inm_attr_tipo_credito_id']->columns_ds[1]);
+        errores::$error = false;
+    }
+
     public function test_init_row_upd_fiscales(): void
     {
         errores::$error = false;
