@@ -39,12 +39,15 @@ class base_test{
     }
     public function alta_inm_comprador(
         PDO $link, string $apellido_materno = 'Apellido M', string $apellido_paterno = 'Apellido P',
-        int $bn_cuenta_id = 1, string $curp = 'CURP', float $descuento_pension_alimenticia_dh = 0,
-        float $descuento_pension_alimenticia_fc = 0, string $es_segundo_credito = 'NO', $id = 1,
-        int $inm_attr_tipo_credito_id = 1, int $inm_destino_credito_id = 1, int $inm_estado_civil_id= 1,
-        int $inm_producto_infonavit_id = 1, int $inm_tipo_discapacidad_id= 1, float $monto_ahorro_voluntario = 0,
-        float $monto_credito_solicitado_dh = 0, string $nombre='Nombre', string $nss = 'NSS',
-        string $rfc = 'AAA010101AAA'): array|\stdClass
+        int $bn_cuenta_id = 1, int $cat_sat_forma_pago_id = 99, int $cat_sat_metodo_pago_id = 2,
+        int $cat_sat_moneda_id = 161, int $cat_sat_regimen_fiscal_id = 605, int $cat_sat_tipo_persona_id = 5,
+        int $cat_sat_uso_cfdi_id = 22, int $com_tipo_cliente_id = 1, string $curp = 'CURP',
+        float $descuento_pension_alimenticia_dh = 0, float $descuento_pension_alimenticia_fc = 0,
+        int $dp_calle_pertenece_id = 1, string $es_segundo_credito = 'NO', $id = 1, int $inm_attr_tipo_credito_id = 1,
+        int $inm_destino_credito_id = 1, int $inm_estado_civil_id= 1, int $inm_producto_infonavit_id = 1,
+        int $inm_tipo_discapacidad_id= 1, string $lada_com = '1', float $monto_ahorro_voluntario = 0,
+        float $monto_credito_solicitado_dh = 0, string $nombre='Nombre', string $nss = 'NSS', string $numero_com = '1',
+        string $numero_exterior = '1', string $rfc = 'AAA010101AAA'): array|\stdClass
     {
 
         $existe = (new bn_cuenta(link: $link))->existe_by_id(registro_id: $bn_cuenta_id);
@@ -76,6 +79,17 @@ class base_test{
         $registro['inm_tipo_discapacidad_id'] = $inm_tipo_discapacidad_id;
         $registro['inm_estado_civil_id'] = $inm_estado_civil_id;
         $registro['bn_cuenta_id'] = $bn_cuenta_id;
+        $registro['dp_calle_pertenece_id'] = $dp_calle_pertenece_id;
+        $registro['numero_exterior'] = $numero_exterior;
+        $registro['lada_com'] = $lada_com;
+        $registro['numero_com'] = $numero_com;
+        $registro['cat_sat_regimen_fiscal_id'] = $cat_sat_regimen_fiscal_id;
+        $registro['cat_sat_moneda_id'] = $cat_sat_moneda_id;
+        $registro['cat_sat_forma_pago_id'] = $cat_sat_forma_pago_id;
+        $registro['cat_sat_metodo_pago_id'] = $cat_sat_metodo_pago_id;
+        $registro['cat_sat_uso_cfdi_id'] = $cat_sat_uso_cfdi_id;
+        $registro['com_tipo_cliente_id'] = $com_tipo_cliente_id;
+        $registro['cat_sat_tipo_persona_id'] = $cat_sat_tipo_persona_id;
 
         $alta = (new inm_comprador($link))->alta_registro($registro);
         if(errores::$error){
@@ -152,11 +166,40 @@ class base_test{
         return $del;
     }
 
+    public function del_com_cliente(PDO $link): array
+    {
+
+        $del = $this->del_fc_receptor_email(link: $link);
+        if(errores::$error){
+            return (new errores())->error('Error al eliminar', $del);
+        }
+        $del = $this->del_inm_rel_comprador_com_cliente(link: $link);
+        if(errores::$error){
+            return (new errores())->error('Error al eliminar', $del);
+        }
+
+        $del = (new \gamboamartin\comercial\test\base_test())->del_com_cliente(link: $link);
+        if(errores::$error){
+            return (new errores())->error('Error al eliminar', $del);
+        }
+        return $del;
+    }
+
     public function del_fc_csd(PDO $link): array
     {
 
 
         $del = (new \gamboamartin\facturacion\tests\base_test())->del_fc_csd(link: $link);
+        if(errores::$error){
+            return (new errores())->error('Error al eliminar', $del);
+        }
+        return $del;
+    }
+
+    public function del_fc_receptor_email(PDO $link): array
+    {
+
+        $del = (new \gamboamartin\facturacion\tests\base_test())->del_fc_receptor_email(link: $link);
         if(errores::$error){
             return (new errores())->error('Error al eliminar', $del);
         }

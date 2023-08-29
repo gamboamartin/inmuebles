@@ -34,7 +34,50 @@ class inm_compradorTest extends test {
         $this->paths_conf->views = '/var/www/html/inmuebles/config/views.php';
     }
 
+    public function test_com_cliente(): void
+    {
+        errores::$error = false;
 
+        $_GET['seccion'] = 'inm_producto_infonavit';
+        $_GET['accion'] = 'lista';
+        $_SESSION['grupo_id'] = 1;
+        $_SESSION['usuario_id'] = 2;
+        $_GET['session_id'] = '1';
+
+        $inm = new inm_comprador(link: $this->link);
+        $inm = new liberator($inm);
+
+
+
+        $del = (new base_test())->del_com_cliente(link: $this->link);
+        if(errores::$error){
+            $error = (new errores())->error(mensaje:'Error al eliminar', data: $del);
+            print_r($error);exit;
+        }
+
+
+        $com_cliente_id = 1;
+        $resultado = $inm->com_cliente($com_cliente_id);
+        $this->assertIsArray($resultado);
+        $this->assertTrue(errores::$error);
+        $this->assertEquals("Error no existe com_cliente",$resultado['mensaje_limpio']);
+
+        errores::$error = false;
+
+        $alta = (new base_test())->alta_com_cliente(link: $this->link);
+        if(errores::$error){
+            $error = (new errores())->error(mensaje:'Error al insertar', data: $alta);
+            print_r($error);exit;
+        }
+
+        $com_cliente_id = 1;
+        $resultado = $inm->com_cliente($com_cliente_id);
+        $this->assertIsArray($resultado);
+        $this->assertNotTrue(errores::$error);
+        $this->assertEquals(1,$resultado['com_cliente_codigo']);
+        $this->assertEquals(601,$resultado['cat_sat_regimen_fiscal_codigo']);
+        errores::$error = false;
+    }
 
     public function test_inm_rel_comprador_cliente(): void
     {
@@ -90,6 +133,8 @@ class inm_compradorTest extends test {
         $this->assertEquals(1,$resultado['com_cliente_id']);
         errores::$error = false;
     }
+
+
 
 
 

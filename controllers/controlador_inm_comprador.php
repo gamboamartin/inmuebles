@@ -618,13 +618,10 @@ class controlador_inm_comprador extends _ctl_base {
         }
 
 
-        foreach ($data->inm_rel_co_acreditados as $imp_rel_co_acred){
 
-            $write = $_pdf->write_co_acreditado($imp_rel_co_acred['inm_co_acreditado_id'],link:  $this->link);
-            if (errores::$error) {
-                return $this->retorno_error(mensaje: 'Error al escribir en pdf', data: $write, header: $header, ws: $ws);
-            }
-
+        $write = $_pdf->write_co_acreditados(data: $data,link:  $this->link);
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al escribir en pdf', data: $write, header: $header, ws: $ws);
         }
 
 

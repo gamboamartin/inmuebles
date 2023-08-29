@@ -300,7 +300,7 @@ class _pdf{
         return $this->pdf;
     }
 
-    final public function write_co_acreditado(int $inm_co_acreditado_id, PDO $link){
+    private function write_co_acreditado(int $inm_co_acreditado_id, PDO $link){
         $inm_co_acreditado = (new inm_co_acreditado(link: $link))->registro(registro_id: $inm_co_acreditado_id);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al obtener inm_co_acreditado',data:  $inm_co_acreditado);
@@ -323,6 +323,18 @@ class _pdf{
             return $this->error->error(mensaje: 'Error al escribir en pdf', data: $write);
         }
         return $write;
+    }
+
+    final public function write_co_acreditados(stdClass $data, PDO $link){
+        $writes = array();
+        foreach ($data->inm_rel_co_acreditados as $imp_rel_co_acred){
+            $write = $this->write_co_acreditado($imp_rel_co_acred['inm_co_acreditado_id'],link:  $link);
+            if (errores::$error) {
+                return $this->error->error(mensaje: 'Error al escribir en pdf', data: $write);
+            }
+            $writes[] = $write;
+        }
+        return $writes;
     }
 
     private function write_co_acreditado_genero(array $inm_co_acreditado): Fpdi
