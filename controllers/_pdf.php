@@ -107,6 +107,13 @@ class _pdf{
         return $write;
     }
 
+    final public function ciudad(stdClass $data): string
+    {
+        $ciudad = strtoupper($data->inm_comprador['dp_municipio_empresa_descripcion']);
+        $ciudad .= ", ".strtoupper($data->inm_comprador['dp_estado_empresa_descripcion']);
+        return $ciudad;
+    }
+
     private function domicilio(stdClass $data): string
     {
         $domicilio = $data->com_cliente['dp_calle_descripcion'].' '.$data->com_cliente['com_cliente_numero_exterior'];
@@ -243,6 +250,15 @@ class _pdf{
         $keys_comprador['inm_comprador_numero_com']= array('x'=>40,'y'=>76);
         $keys_comprador['inm_comprador_cel_com']= array('x'=>88,'y'=>76);
         $keys_comprador['inm_comprador_correo_com']= array('x'=>37.5,'y'=>85.5);
+        return $keys_comprador;
+    }
+
+    final public function keys_comprador_hoja_3(): array
+    {
+        $keys_comprador = array();
+        $keys_comprador['org_empresa_razon_social']= array('x'=>16,'y'=>37);
+        $keys_comprador['org_empresa_rfc']= array('x'=>22,'y'=>57);
+        $keys_comprador['bn_cuenta_descripcion']= array('x'=>16,'y'=>85);
         return $keys_comprador;
     }
 

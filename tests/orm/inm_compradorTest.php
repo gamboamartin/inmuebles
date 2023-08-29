@@ -78,6 +78,50 @@ class inm_compradorTest extends test {
         errores::$error = false;
     }
 
+    public function test_get_com_cliente(): void
+    {
+        errores::$error = false;
+
+        $_GET['seccion'] = 'inm_producto_infonavit';
+        $_GET['accion'] = 'lista';
+        $_SESSION['grupo_id'] = 1;
+        $_SESSION['usuario_id'] = 2;
+        $_GET['session_id'] = '1';
+
+        $inm = new inm_comprador(link: $this->link);
+        //$inm = new liberator($inm);
+
+
+        $del = (new base_test())->del_inm_comprador(link: $this->link);
+        if(errores::$error){
+            $error = (new errores())->error(mensaje:'Error al eliminar', data: $del);
+            print_r($error);exit;
+        }
+
+
+        $inm_comprador_id = 1;
+        $resultado = $inm->get_com_cliente($inm_comprador_id);
+        $this->assertIsArray($resultado);
+        $this->assertTrue(errores::$error);
+        $this->assertEquals("Error al obtener imp_rel_comprador_com_cliente",$resultado['mensaje_limpio']);
+
+        errores::$error = false;
+
+        $alta = (new base_test())->alta_inm_comprador(link: $this->link);
+        if(errores::$error){
+            $error = (new errores())->error(mensaje:'Error al insertar', data: $alta);
+            print_r($error);exit;
+        }
+
+        $resultado = $inm->get_com_cliente($inm_comprador_id);
+        $this->assertIsArray($resultado);
+        $this->assertNotTrue(errores::$error);
+        $this->assertEquals('MXN',$resultado['cat_sat_moneda_codigo_bis']);
+        $this->assertEquals(151,$resultado['cat_sat_moneda_dp_pais_id']);
+
+        errores::$error = false;
+    }
+
     public function test_inm_rel_comprador_cliente(): void
     {
         errores::$error = false;

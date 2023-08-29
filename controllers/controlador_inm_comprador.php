@@ -253,11 +253,12 @@ class controlador_inm_comprador extends _ctl_base {
         }
         $inm_docs_comprador = $r_inm_doc_comprador->registros;
 
-        $inm_conf_docs_comprador = (new inm_conf_docs_comprador(link: $this->link))->registros_activos();
+
+        $inm_conf_docs_comprador = (new _doctos())->documentos_de_comprador(inm_comprador_id: $this->registro_id,link:  $this->link);
         if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al obtener configuraciones',
-                data:  $inm_conf_docs_comprador, header: $header,ws:  $ws);
+            return $this->retorno_error(mensaje: 'Error al obtener configuraciones de documentos',data:  $inm_conf_docs_comprador, header: $header,ws:  $ws);
         }
+
 
         foreach ($inm_conf_docs_comprador as $indice=>$doc_tipo_documento){
             $existe = false;
@@ -635,11 +636,10 @@ class controlador_inm_comprador extends _ctl_base {
         }
 
 
-
-        $keys_comprador = array();
-        $keys_comprador['org_empresa_razon_social']= array('x'=>16,'y'=>37);
-        $keys_comprador['org_empresa_rfc']= array('x'=>22,'y'=>57);
-        $keys_comprador['bn_cuenta_descripcion']= array('x'=>16,'y'=>85);
+        $keys_comprador = $_pdf->keys_comprador_hoja_3();
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al obtener keys_comprador', data: $keys_comprador, header: $header, ws: $ws);
+        }
 
         $write = $_pdf->write_data(keys: $keys_comprador,row:  $data->inm_comprador);
         if (errores::$error) {
@@ -651,8 +651,10 @@ class controlador_inm_comprador extends _ctl_base {
             return $this->retorno_error(mensaje: 'Error al escribir en pdf', data: $write, header: $header, ws: $ws);
         }
 
-        $ciudad = strtoupper($data->inm_comprador['dp_municipio_empresa_descripcion']);
-        $ciudad .= ", ".strtoupper($data->inm_comprador['dp_estado_empresa_descripcion']);
+        $ciudad = $_pdf->ciudad(data: $data);
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al obtener ciudad', data: $ciudad, header: $header, ws: $ws);
+        }
 
         $write = $_pdf->write(valor: $ciudad, x:36,y: 240);
         if (errores::$error) {
@@ -699,7 +701,8 @@ class controlador_inm_comprador extends _ctl_base {
         }
         $this->inputs->inm_comprador_id = $inm_comprador_id;
 
-        $doc_tipos_documentos = (new _doctos())->documentos_de_comprador(link: $this->link);
+        $doc_tipos_documentos = (new _doctos())->documentos_de_comprador(inm_comprador_id: $this->registro_id,
+            link: $this->link);
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al obtener tipos de documento', data: $doc_tipos_documentos,
                 header: $header, ws: $ws);
