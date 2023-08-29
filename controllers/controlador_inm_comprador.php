@@ -595,28 +595,15 @@ class controlador_inm_comprador extends _ctl_base {
         }
 
 
-        $x = 144.5;
-        $y = 77;
-
-        if($data->inm_comprador['inm_comprador_genero'] === 'F'){
-
-            $x = 150.5;
-        }
-
-        $pdf_exe = $_pdf->write( valor: 'X', x: $x, y: $y);
+        $write = $_pdf->write_genero(data: $data);
         if (errores::$error) {
-            return $this->retorno_error(mensaje: 'Error al escribir en pdf', data: $pdf_exe, header: $header, ws: $ws);
+            return $this->retorno_error(mensaje: 'Error al escribir en pdf', data: $write, header: $header, ws: $ws);
         }
 
-
-        $pdf->SetXY($data->inm_comprador['inm_estado_civil_x'], $data->inm_comprador['inm_estado_civil_y']);
-        $pdf->Write(0, 'X');
-
-        if((int)$data->inm_comprador['inm_estado_civil_id'] !==1){
-            $pdf->SetXY(58.5, 90);
-            $pdf->Write(0, 'X');
+        $write = $_pdf->write_estado_civil(data: $data);
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al escribir en pdf', data: $write, header: $header, ws: $ws);
         }
-
 
 
         $write = $_pdf->write_co_acreditados(data: $data,link:  $this->link);

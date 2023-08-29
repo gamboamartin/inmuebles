@@ -394,6 +394,34 @@ class _pdf{
         return $pdf_exe;
     }
 
+    final public function write_estado_civil(stdClass $data): Fpdi
+    {
+        $this->pdf->SetXY($data->inm_comprador['inm_estado_civil_x'], $data->inm_comprador['inm_estado_civil_y']);
+        $this->pdf->Write(0, 'X');
+
+        if((int)$data->inm_comprador['inm_estado_civil_id'] !==1){
+            $this->pdf->SetXY(58.5, 90);
+            $this->pdf->Write(0, 'X');
+        }
+        return $this->pdf;
+    }
+
+    final public function write_genero(stdClass $data){
+        $x = 144.5;
+        $y = 77;
+
+        if($data->inm_comprador['inm_comprador_genero'] === 'F'){
+
+            $x = 150.5;
+        }
+
+        $pdf_exe = $this->write( valor: 'X', x: $x, y: $y);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al escribir en pdf', data: $pdf_exe);
+        }
+        return $pdf_exe;
+    }
+
     private function write_referencia(array $inm_referencia, array $keys_referencias){
 
         $write = $this->write_data(keys: $keys_referencias,row:  $inm_referencia);

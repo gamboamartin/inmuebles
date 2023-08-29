@@ -331,8 +331,9 @@ class inm_comprador extends _modelo_parent{
     }
 
     /**
-     * @param int $inm_comprador_id
-     * @param bool $retorno_obj
+     * Obtiene los datos del cliente de fc basados en el comprador
+     * @param int $inm_comprador_id Comprador id
+     * @param bool $retorno_obj Retorna un objeto en caso de ser true
      * @return array|object
      */
     final public function get_com_cliente(int $inm_comprador_id, bool $retorno_obj = false): object|array

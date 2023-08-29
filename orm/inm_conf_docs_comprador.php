@@ -13,13 +13,16 @@ class inm_conf_docs_comprador extends _modelo_parent{
     public function __construct(PDO $link)
     {
         $tabla = 'inm_conf_docs_comprador';
-        $columnas = array($tabla=>false,'doc_tipo_documento'=>$tabla);
+        $columnas = array($tabla=>false,'doc_tipo_documento'=>$tabla,'inm_attr_tipo_credito'=>$tabla,
+            'inm_destino_credito'=>$tabla, 'inm_producto_infonavit'=>$tabla);
 
-        $campos_obligatorios = array('doc_tipo_documento_id');
+        $campos_obligatorios = array('doc_tipo_documento_id','inm_attr_tipo_credito_id','inm_destino_credito_id',
+            'inm_producto_infonavit_id','es_obligatorio');
 
         $columnas_extra= array();
 
-        $atributos_criticos = array('doc_tipo_documento_id');
+        $atributos_criticos = array('doc_tipo_documento_id','inm_attr_tipo_credito_id','inm_destino_credito_id',
+            'inm_producto_infonavit_id','es_obligatorio');
 
         $renombres = array();
 
@@ -33,15 +36,15 @@ class inm_conf_docs_comprador extends _modelo_parent{
 
     public function alta_bd(array $keys_integra_ds = array('codigo', 'descripcion')): array|stdClass
     {
-        $registro_entrada = $this->registro;
-
         if(!isset($this->registro['descripcion'])){
             $descripcion = $this->descripcion(registro: $this->registro );
             if(errores::$error){
                 return $this->error->error(mensaje: 'Error al obtener descripcion',data:  $descripcion);
             }
-
             $this->registro['descripcion'] = $descripcion;
+        }
+        if(!isset($this->registro['es_obligatorio'])){
+            $this->registro['es_obligatorio'] = 'activo';
         }
 
 

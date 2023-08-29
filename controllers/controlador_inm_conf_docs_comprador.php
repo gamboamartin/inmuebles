@@ -50,8 +50,32 @@ class controlador_inm_conf_docs_comprador extends _ctl_base {
         $keys_selects = array();
 
         $columns_ds = array('doc_tipo_documento_descripcion');
-        $keys_selects = $this->key_select(cols:12, con_registros: true,filtro:  array(), key: 'doc_tipo_documento_id',
+        $keys_selects = $this->key_select(cols:6, con_registros: true,filtro:  array(), key: 'doc_tipo_documento_id',
             keys_selects: $keys_selects, id_selected: -1, label: 'Tipo de Documento', columns_ds: $columns_ds);
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects,
+                header: $header,ws:  $ws);
+        }
+
+        $columns_ds = array('inm_attr_tipo_credito_descripcion');
+        $keys_selects = $this->key_select(cols:6, con_registros: true,filtro:  array(), key: 'inm_attr_tipo_credito_id',
+            keys_selects: $keys_selects, id_selected: -1, label: 'Tipo de Credito', columns_ds: $columns_ds);
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects,
+                header: $header,ws:  $ws);
+        }
+
+        $columns_ds = array('inm_destino_credito_descripcion');
+        $keys_selects = $this->key_select(cols:6, con_registros: true,filtro:  array(), key: 'inm_destino_credito_id',
+            keys_selects: $keys_selects, id_selected: -1, label: 'Destino de Credito', columns_ds: $columns_ds);
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects,
+                header: $header,ws:  $ws);
+        }
+
+        $columns_ds = array('inm_producto_infonavit_descripcion');
+        $keys_selects = $this->key_select(cols:6, con_registros: true,filtro:  array(), key: 'inm_producto_infonavit_id',
+            keys_selects: $keys_selects, id_selected: -1, label: 'Producto Infonavit', columns_ds: $columns_ds);
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects,
                 header: $header,ws:  $ws);
@@ -67,6 +91,29 @@ class controlador_inm_conf_docs_comprador extends _ctl_base {
         return $r_alta;
     }
 
+    public function es_obligatorio(bool $header, bool $ws = false): array|stdClass{
+        $en_transaccion = false;
+        if($this->link->inTransaction()){
+            $en_transaccion = true;
+        }
+
+        if(!$en_transaccion){
+            $this->link->beginTransaction();
+        }
+
+        $upd = $this->row_upd(key: __FUNCTION__);
+        if(errores::$error){
+            $this->link->rollBack();
+            return $this->retorno_error(mensaje: 'Error al obtener row upd',data:  $upd, header: $header,ws:  $ws);
+        }
+        $this->link->commit();
+
+        $_SESSION[$upd->salida][]['mensaje'] = $upd->mensaje.' del id '.$this->registro_id;
+        $this->header_out(result: $upd, header: $header,ws:  $ws);
+
+        return $upd;
+    }
+
 
 
     protected function campos_view(): array
@@ -78,6 +125,10 @@ class controlador_inm_conf_docs_comprador extends _ctl_base {
         $init_data = array();
         $init_data['doc_tipo_documento'] = "gamboamartin\\documento";
 
+        $init_data['inm_attr_tipo_credito'] = "gamboamartin\\inmuebles";
+        $init_data['inm_destino_credito'] = "gamboamartin\\inmuebles";
+        $init_data['inm_producto_infonavit'] = "gamboamartin\\inmuebles";
+
         $campos_view = $this->campos_view_base(init_data: $init_data,keys:  $keys);
 
         if(errores::$error){
@@ -87,10 +138,6 @@ class controlador_inm_conf_docs_comprador extends _ctl_base {
 
         return $campos_view;
     }
-
-
-
-
 
 
 
@@ -105,9 +152,33 @@ class controlador_inm_conf_docs_comprador extends _ctl_base {
 
         $keys_selects = array();
         $columns_ds = array('doc_tipo_documento_descripcion');
-        $keys_selects = $this->key_select(cols:12, con_registros: true,filtro:  array(), key: 'doc_tipo_documento_id',
+        $keys_selects = $this->key_select(cols:6, con_registros: true,filtro:  array(), key: 'doc_tipo_documento_id',
             keys_selects: $keys_selects, id_selected: $this->row_upd->doc_tipo_documento_id, label: 'Tipo de Documento',
             columns_ds: $columns_ds);
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects,
+                header: $header,ws:  $ws);
+        }
+
+        $columns_ds = array('inm_attr_tipo_credito_descripcion');
+        $keys_selects = $this->key_select(cols:6, con_registros: true,filtro:  array(), key: 'inm_attr_tipo_credito_id',
+            keys_selects: $keys_selects, id_selected: $this->row_upd->inm_attr_tipo_credito_id, label: 'Tipo de Credito', columns_ds: $columns_ds);
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects,
+                header: $header,ws:  $ws);
+        }
+
+        $columns_ds = array('inm_destino_credito_descripcion');
+        $keys_selects = $this->key_select(cols:6, con_registros: true,filtro:  array(), key: 'inm_destino_credito_id',
+            keys_selects: $keys_selects, id_selected: $this->row_upd->inm_destino_credito_id, label: 'Destino de Credito', columns_ds: $columns_ds);
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects,
+                header: $header,ws:  $ws);
+        }
+
+        $columns_ds = array('inm_producto_infonavit_descripcion');
+        $keys_selects = $this->key_select(cols:6, con_registros: true,filtro:  array(), key: 'inm_producto_infonavit_id',
+            keys_selects: $keys_selects, id_selected: $this->row_upd->inm_producto_infonavit_id, label: 'Producto Infonavit', columns_ds: $columns_ds);
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects,
                 header: $header,ws:  $ws);

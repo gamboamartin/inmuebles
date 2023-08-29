@@ -48,7 +48,6 @@ class inm_compradorTest extends test {
         $inm = new liberator($inm);
 
 
-
         $del = (new base_test())->del_com_cliente(link: $this->link);
         if(errores::$error){
             $error = (new errores())->error(mensaje:'Error al eliminar', data: $del);
