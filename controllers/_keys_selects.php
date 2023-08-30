@@ -4,6 +4,7 @@ namespace gamboamartin\inmuebles\controllers;
 
 use gamboamartin\errores\errores;
 use gamboamartin\inmuebles\models\inm_comprador;
+use gamboamartin\js_base\valida;
 use stdClass;
 
 class _keys_selects{
@@ -14,8 +15,14 @@ class _keys_selects{
         $this->error = new errores();
     }
 
-    private function ajusta_row_data_cliente(controlador_inm_comprador $controler){
-        $com_cliente = (new inm_comprador(link: $controler->link))->get_com_cliente(inm_comprador_id: $controler->registro_id);
+    /**
+     * @param controlador_inm_comprador $controler
+     * @return array|stdClass
+     */
+    private function ajusta_row_data_cliente(controlador_inm_comprador $controler): array|stdClass
+    {
+        $com_cliente = (new inm_comprador(link: $controler->link))->get_com_cliente(
+            inm_comprador_id: $controler->registro_id);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al obtener com_cliente',data:  $com_cliente);
         }
@@ -450,8 +457,37 @@ class _keys_selects{
         return $keys_selects;
     }
 
-    private function row_data_cliente(array $com_cliente, controlador_inm_comprador $controler): stdClass
+    /**
+     * Asigna elementos de cliente para modifica
+     * @param array $com_cliente Registro de tipo cliente
+     * @param controlador_inm_comprador $controler Controlador en ejecucion
+     * @return stdClass|array
+     * @version 1.67.1
+     */
+    private function row_data_cliente(array $com_cliente, controlador_inm_comprador $controler): stdClass|array
     {
+        $keys = array('com_cliente_rfc','com_cliente_numero_exterior','com_cliente_telefono','dp_pais_id',
+            'dp_estado_id','dp_municipio_id','dp_cp_id','dp_colonia_postal_id','dp_calle_pertenece_id',
+            'com_tipo_cliente_id');
+
+        $valida = (new valida())->valida_existencia_keys(keys: $keys,registro:  $com_cliente);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al validar com_cliente',data:  $valida);
+        }
+
+        if(!isset($com_cliente['com_cliente_numero_interior'])){
+            $com_cliente['com_cliente_numero_interior'] = '';
+        }
+
+        $keys = array('dp_pais_id', 'dp_estado_id','dp_municipio_id','dp_cp_id','dp_colonia_postal_id',
+            'dp_calle_pertenece_id', 'com_tipo_cliente_id');
+
+        $valida = (new valida())->valida_ids(keys: $keys,registro:  $com_cliente);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al validar com_cliente',data:  $valida);
+        }
+
+
         $controler->row_upd->rfc = $com_cliente['com_cliente_rfc'];
         $controler->row_upd->numero_exterior = $com_cliente['com_cliente_numero_exterior'];
         $controler->row_upd->numero_interior = $com_cliente['com_cliente_numero_interior'];

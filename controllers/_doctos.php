@@ -4,6 +4,7 @@ namespace gamboamartin\inmuebles\controllers;
 use gamboamartin\documento\models\doc_tipo_documento;
 use gamboamartin\errores\errores;
 use gamboamartin\inmuebles\models\inm_comprador;
+use gamboamartin\inmuebles\models\inm_comprador_proceso;
 use gamboamartin\inmuebles\models\inm_conf_docs_comprador;
 use PDO;
 
@@ -22,14 +23,34 @@ class _doctos{
             return $this->error->error(mensaje: 'Error al Obtener comprador',data:  $inm_comprador);
         }
 
+        $filtro['inm_comprador.id'] = $inm_comprador_id;
+
+
+        $r_inm_comprador_proceso = (new inm_comprador_proceso(link: $link))->filtro_and(filtro: $filtro, limit: 1,
+            order: array('inm_comprador_proceso.id'=>'DESC'));
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al sub proceso',data:  $r_inm_comprador_proceso);
+        }
+
+        if($r_inm_comprador_proceso->n_registros === 0){
+            return $this->error->error(mensaje: 'Error no existe proceso para el comprador',data:  $r_inm_comprador_proceso);
+        }
+        if($r_inm_comprador_proceso->n_registros > 1){
+            return $this->error->error(mensaje: 'Error de integridad',data:  $r_inm_comprador_proceso);
+        }
+        $inm_comprador_proceso = $r_inm_comprador_proceso->registros[0];
+
+        $filtro = array();
         $filtro['inm_attr_tipo_credito.id'] = $inm_comprador->inm_attr_tipo_credito_id;
         $filtro['inm_destino_credito.id'] = $inm_comprador->inm_destino_credito_id;
         $filtro['inm_producto_infonavit.id'] = $inm_comprador->inm_producto_infonavit_id;
+        $filtro['pr_sub_proceso.id'] = $inm_comprador_proceso['pr_sub_proceso_id'];
 
         $r_inm_conf_docs_comprador = (new inm_conf_docs_comprador(link: $link))->filtro_and(filtro: $filtro);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al Obtener configuraciones',data:  $r_inm_conf_docs_comprador);
         }
+
 
         $confs = $r_inm_conf_docs_comprador->registros;
 

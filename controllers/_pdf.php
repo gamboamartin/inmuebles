@@ -107,6 +107,42 @@ class _pdf{
         return $write;
     }
 
+    final public function apartado_5(stdClass $data){
+        $write = $this->write_comprador_hoja_3(data: $data);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al escribir en pdf', data: $write);
+        }
+
+        $pdf_exe = $this->write(valor: $data->com_cliente['com_cliente_rfc'], x: 132, y: 30);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al escribir en pdf', data: $pdf_exe);
+        }
+
+        $pdf_exe = $this->write_domicilio(data: $data);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al escribir domicilio', data: $pdf_exe);
+        }
+
+
+        $write = $this->write_cliente_hoja_3(data: $data);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al escribir en pdf', data: $write);
+        }
+
+
+        $write = $this->write_genero(data: $data);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al escribir en pdf', data: $write);
+        }
+
+        $write = $this->write_estado_civil(data: $data);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al escribir en pdf', data: $write);
+        }
+
+        return $write;
+    }
+
     final public function ciudad(stdClass $data): string
     {
         $ciudad = strtoupper($data->inm_comprador['dp_municipio_empresa_descripcion']);
@@ -218,7 +254,9 @@ class _pdf{
         return $pdf;
     }
 
-    final public function keys_cliente(): array
+
+
+    private function keys_cliente(): array
     {
 
         $keys_cliente['dp_colonia_descripcion']= array('x'=>16,'y'=>61);
@@ -238,7 +276,7 @@ class _pdf{
         return $keys_comprador;
     }
 
-    final public function keys_comprador_hoja_2(): array
+    private function keys_comprador_hoja_2(): array
     {
 
         $keys_comprador['inm_comprador_nss']= array('x'=>16,'y'=>30);
@@ -316,6 +354,19 @@ class _pdf{
         return $this->pdf;
     }
 
+    private function write_cliente_hoja_3(stdClass $data){
+        $keys_cliente = $this->keys_cliente();
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al obtener keys_cliente', data: $keys_cliente);
+        }
+
+        $write = $this->write_data(keys: $keys_cliente,row:  $data->com_cliente);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al escribir en pdf', data: $write);
+        }
+        return $write;
+    }
+
     private function write_co_acreditado(int $inm_co_acreditado_id, PDO $link){
         $inm_co_acreditado = (new inm_co_acreditado(link: $link))->registro(registro_id: $inm_co_acreditado_id);
         if(errores::$error){
@@ -368,6 +419,19 @@ class _pdf{
         return $this->pdf;
     }
 
+    private function write_comprador_hoja_3(stdClass $data){
+        $keys_comprador = $this->keys_comprador_hoja_2();
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al obtener keys_comprador', data: $keys_comprador);
+        }
+
+        $write = $this->write_data(keys: $keys_comprador,row:  $data->inm_comprador);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al escribir en pdf', data: $write);
+        }
+        return $write;
+    }
+
     private function write_condicion(string $key, array $row, mixed $value_compare, float $x, float $y){
         $write = false;
         if (round($row[$key], 2) > $value_compare) {
@@ -397,7 +461,7 @@ class _pdf{
         return $writes;
     }
 
-    final public function write_domicilio(stdClass $data){
+    private function write_domicilio(stdClass $data){
         $domicilio = $this->domicilio(data: $data);
         if (errores::$error) {
             return $this->error->error(mensaje: 'Error al obtener domicilio', data: $domicilio);
@@ -410,7 +474,7 @@ class _pdf{
         return $pdf_exe;
     }
 
-    final public function write_estado_civil(stdClass $data): Fpdi
+    private function write_estado_civil(stdClass $data): Fpdi
     {
         $this->pdf->SetXY($data->inm_comprador['inm_estado_civil_x'], $data->inm_comprador['inm_estado_civil_y']);
         $this->pdf->Write(0, 'X');
@@ -422,7 +486,7 @@ class _pdf{
         return $this->pdf;
     }
 
-    final public function write_genero(stdClass $data){
+    private function write_genero(stdClass $data){
         $x = 144.5;
         $y = 77;
 

@@ -5,6 +5,7 @@ namespace gamboamartin\inmuebles\models;
 use base\orm\_modelo_parent;
 use gamboamartin\documento\models\doc_documento;
 use gamboamartin\errores\errores;
+use gamboamartin\inmuebles\controllers\_doctos;
 use PDO;
 use stdClass;
 
@@ -61,12 +62,10 @@ class inm_doc_comprador extends _modelo_parent{
         $this->registro['doc_documento_id'] = $r_alta_doc->registro_id;
 
         if(!isset($this->registro['descripcion'])){
-            $descripcion = $r_alta_doc->registro_id;
-            $descripcion .= ' '.$this->registro['doc_tipo_documento_id'];
-            $descripcion .= ' '.$r_alta_doc->registro_obj->doc_tipo_documento_descripcion;
-            $descripcion .= ' '.$r_alta_doc->registro_obj->doc_extension_descripcion;
-            $descripcion .= ' '.$this->registro['inm_comprador_id'];
-            $descripcion .= ' '.$r_alta_doc->registro_obj->doc_documento_nombre;
+            $descripcion = $this->descripcion(r_alta_doc: $r_alta_doc,registro:  $this->registro);
+            if(errores::$error){
+                return $this->error->error(mensaje: 'Error al obtener descripcion',data:  $descripcion);
+            }
             $this->registro['descripcion'] = $descripcion;
         }
 
@@ -74,7 +73,78 @@ class inm_doc_comprador extends _modelo_parent{
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al insertar',data:  $r_alta_bd);
         }
+
+        $inm_conf_docs_comprador = (new _doctos())->documentos_de_comprador(inm_comprador_id: $this->registro['inm_comprador_id'],link:  $this->link);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al obtener configuraciones de documentos',data:  $inm_conf_docs_comprador);
+        }
+
+
+
+        $inm_docs_comprador = $this->inm_docs_comprador(inm_comprador_id: $this->registro['inm_comprador_id']);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al obtener documentos',data:  $inm_docs_comprador);
+        }
+
+
+        $existen_todos = true;
+        $existen_algunos = false;
+        foreach ($inm_conf_docs_comprador as $doc_tipo_documento){
+            $existe = false;
+            foreach ($inm_docs_comprador as $inm_doc_comprador){
+                if($doc_tipo_documento['doc_tipo_documento_id'] === $inm_doc_comprador['doc_tipo_documento_id']){
+                    $existe = true;
+                    $existen_algunos = true;
+                    break;
+                }
+            }
+            if(!$existe){
+                $existen_todos = false;
+            }
+        }
+
+        if(!$existen_todos && $existen_algunos){
+            $existen_algunos = true;
+        }
+        if($existen_todos && $existen_algunos){
+            $existen_algunos = false;
+        }
+
+
+        if($existen_algunos){
+
+            $pr_comprador_proceso_ins['inm_comprador_id'] = $this->registro['inm_comprador_id'];
+            $pr_comprador_proceso_ins['pr_sub_proceso_id'] = 4;
+            $pr_comprador_proceso_ins['fecha'] = date('Y-m-d');
+            $r_alta_proceso = (new inm_comprador_proceso(link: $this->link))->alta_registro(registro: $pr_comprador_proceso_ins);
+            if(errores::$error){
+                return $this->error->error(mensaje: 'Error al insertar etapa',data:  $r_alta_proceso);
+            }
+        }
+
+
         return $r_alta_bd;
+    }
+
+    private function descripcion(stdClass $r_alta_doc, array $registro): string
+    {
+        $descripcion = $r_alta_doc->registro_id;
+        $descripcion .= ' '.$registro['doc_tipo_documento_id'];
+        $descripcion .= ' '.$r_alta_doc->registro_obj->doc_tipo_documento_descripcion;
+        $descripcion .= ' '.$r_alta_doc->registro_obj->doc_extension_descripcion;
+        $descripcion .= ' '.$registro['inm_comprador_id'];
+        $descripcion .= ' '.$r_alta_doc->registro_obj->doc_documento_nombre;
+        return $descripcion;
+    }
+
+    final public function inm_docs_comprador(int $inm_comprador_id){
+
+        $filtro['inm_comprador.id'] = $inm_comprador_id;
+        $r_inm_doc_comprador = $this->filtro_and(filtro: $filtro);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al obtener documentos',data:  $r_inm_doc_comprador);
+        }
+        return $r_inm_doc_comprador->registros;
     }
 
 

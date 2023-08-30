@@ -181,6 +181,40 @@ class _keys_selectsTest extends test {
         errores::$error = false;
     }
 
+    public function test_row_data_cliente(): void
+    {
+        errores::$error = false;
+
+        $_GET['seccion'] = 'inm_producto_infonavit';
+        $_GET['accion'] = 'lista';
+        $_SESSION['grupo_id'] = 1;
+        $_SESSION['usuario_id'] = 2;
+        $_GET['session_id'] = '1';
+
+        $ks = new _keys_selects();
+        $ks = new liberator($ks);
+
+        $controler = new controlador_inm_comprador(link: $this->link, paths_conf: $this->paths_conf);
+        $controler->row_upd = new stdClass();
+
+        $com_cliente = array();
+        $com_cliente['com_cliente_rfc'] = -1;
+        $com_cliente['com_cliente_numero_exterior'] = -1;
+        $com_cliente['com_cliente_telefono'] = -1;
+        $com_cliente['dp_pais_id'] = 1;
+        $com_cliente['dp_estado_id'] = 1;
+        $com_cliente['dp_municipio_id'] = 1;
+        $com_cliente['dp_cp_id'] = 1;
+        $com_cliente['dp_colonia_postal_id'] = 1;
+        $com_cliente['dp_calle_pertenece_id'] = 1;
+        $com_cliente['com_tipo_cliente_id'] = 1;
+        $resultado = $ks->row_data_cliente($com_cliente, $controler);
+        $this->assertIsObject($resultado);
+        $this->assertNotTrue(errores::$error);
+        $this->assertEquals(1,$resultado->dp_pais_id);
+        errores::$error = false;
+    }
+
 
 }
 

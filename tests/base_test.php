@@ -217,6 +217,10 @@ class base_test{
         if(errores::$error){
             return (new errores())->error('Error al eliminar', $del);
         }
+        $del = $this->del_inm_doc_comprador(link: $link);
+        if(errores::$error){
+            return (new errores())->error('Error al eliminar', $del);
+        }
 
         $del = $this->del($link, 'gamboamartin\\inmuebles\\models\\inm_comprador');
         if(errores::$error){
@@ -239,6 +243,15 @@ class base_test{
     public function del_inm_conf_empresa(PDO $link): array
     {
         $del = $this->del($link, 'gamboamartin\\inmuebles\\models\\inm_conf_empresa');
+        if(errores::$error){
+            return (new errores())->error('Error al eliminar', $del);
+        }
+        return $del;
+    }
+
+    public function del_inm_doc_comprador(PDO $link): array
+    {
+        $del = $this->del($link, 'gamboamartin\\inmuebles\\models\\inm_doc_comprador');
         if(errores::$error){
             return (new errores())->error('Error al eliminar', $del);
         }
