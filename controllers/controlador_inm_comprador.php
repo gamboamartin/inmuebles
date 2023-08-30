@@ -12,6 +12,7 @@ use base\controller\init;
 use gamboamartin\errores\errores;
 use gamboamartin\inmuebles\html\inm_comprador_html;
 use gamboamartin\inmuebles\html\inm_ubicacion_html;
+use gamboamartin\inmuebles\models\_inm_comprador;
 use gamboamartin\inmuebles\models\inm_co_acreditado;
 use gamboamartin\inmuebles\models\inm_comprador;
 use gamboamartin\inmuebles\models\inm_conf_docs_comprador;
@@ -71,17 +72,16 @@ class controlador_inm_comprador extends _ctl_base {
                 header: $header,ws:  $ws);
         }
 
-        $this->row_upd->descuento_pension_alimenticia_dh = 0;
-        $this->row_upd->monto_credito_solicitado_dh = 0;
-        $this->row_upd->descuento_pension_alimenticia_fc = 0;
-        $this->row_upd->monto_ahorro_voluntario = 0;
+        $row_upd = (new _inm_comprador())->row_upd_montos(controler: $this);
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al integrar row_upd',data:  $row_upd, header: $header,ws:  $ws);
+        }
 
         $inputs = $this->inputs(keys_selects: $keys_selects);
         if(errores::$error){
             return $this->retorno_error(
                 mensaje: 'Error al obtener inputs',data:  $inputs, header: $header,ws:  $ws);
         }
-
 
         $es_segundo_credito = $this->html->directivas->input_radio_doble(campo: 'es_segundo_credito',
             checked_default: 2,tag: 'Es Segundo Credito', val_1: 'SI',val_2: 'NO');
