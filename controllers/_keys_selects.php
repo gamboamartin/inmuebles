@@ -227,9 +227,15 @@ class _keys_selects{
      * Ajusta los selects para forms upd
      * @param controlador_inm_comprador $controler Controlador en ejecucion
      * @return array
+     * @version 1.71.0
      */
     final public function key_selects_base(controlador_inm_comprador $controler): array
     {
+        if($controler->registro_id<=0){
+            return $this->error->error(mensaje: 'Error $controler->registro_id es menor a 0',
+                data:  $controler->registro_id);
+        }
+
         $row_upd = $this->ajusta_row_data_cliente(controler: $controler);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al obtener row_upd',data:  $row_upd);
@@ -263,6 +269,10 @@ class _keys_selects{
         return $keys_co_acreditado;
     }
 
+    /**
+     * @param array $keys_selects
+     * @return array
+     */
     final public function keys_disabled(array $keys_selects): array
     {
         $keys_selects['com_tipo_cliente_id']->disabled = true;

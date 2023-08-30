@@ -8,6 +8,7 @@ let sl_dp_municipio_id = $("#dp_municipio_id");
 let sl_dp_cp_id = $("#dp_cp_id");
 let sl_dp_colonia_postal_id = $("#dp_colonia_postal_id");
 let sl_inm_plazo_credito_sc_id = $("#inm_plazo_credito_sc_id");
+
 let chk_es_segundo_credito = $(".es_segundo_credito");
 
 let dp_pais_id = -1;

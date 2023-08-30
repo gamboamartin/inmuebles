@@ -144,7 +144,7 @@ class _pdf{
         return $write;
     }
 
-    final public function ciudad(stdClass $data): string
+    private function ciudad(stdClass $data): string
     {
         $ciudad = strtoupper($data->inm_comprador['dp_municipio_empresa_descripcion']);
         $ciudad .= ", ".strtoupper($data->inm_comprador['dp_estado_empresa_descripcion']);
@@ -386,6 +386,19 @@ class _pdf{
         return $this->pdf;
     }
 
+    final public function write_cuidad(stdClass $data){
+        $ciudad = $this->ciudad(data: $data);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al obtener ciudad', data: $ciudad);
+        }
+
+        $write = $this->write(valor: $ciudad, x:36,y: 240);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al escribir en pdf', data: $write);
+        }
+        return $write;
+    }
+
     private function write_cliente_hoja_3(stdClass $data){
         $keys_cliente = $this->keys_cliente();
         if (errores::$error) {
@@ -506,6 +519,14 @@ class _pdf{
         return $writes;
     }
 
+    private function write_dia(){
+        $write = $this->write(valor: ((int)date('d')), x:119,y: 240);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al escribir en pdf', data: $write);
+        }
+        return $write;
+    }
+
     private function write_domicilio(stdClass $data){
         $domicilio = $this->domicilio(data: $data);
         if (errores::$error) {
@@ -531,6 +552,26 @@ class _pdf{
         return $this->pdf;
     }
 
+    final public function write_fecha(modelo $modelo){
+        $write = $this->write_dia();
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al escribir en pdf', data: $write);
+        }
+
+
+        $write = $this->write_mes(modelo: $modelo);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al escribir en pdf', data: $write);
+        }
+
+
+        $write = $this->write_year(modelo: $modelo);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al escribir en pdf', data: $write);
+        }
+        return $write;
+    }
+
     private function write_genero(stdClass $data){
         $x = 144.5;
         $y = 77;
@@ -547,7 +588,7 @@ class _pdf{
         return $pdf_exe;
     }
 
-    final public function write_mes(modelo $modelo){
+    private function write_mes(modelo $modelo){
         $mes_letra = $modelo->mes['espaniol'][date('m')]['nombre'];
 
 
@@ -600,7 +641,7 @@ class _pdf{
         return $this->pdf;
     }
 
-    final public function write_year(modelo $modelo){
+    private function write_year(modelo $modelo){
         $year = $modelo->year['espaniol'][date('Y')]['abreviado'];
 
         $write = $this->write(valor: $year, x:178,y: 240);

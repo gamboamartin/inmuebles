@@ -178,6 +178,55 @@ class _keys_selectsTest extends test {
         errores::$error = false;
     }
 
+    public function test_key_selects_base(): void
+    {
+        errores::$error = false;
+
+        $_GET['seccion'] = 'inm_producto_infonavit';
+        $_GET['accion'] = 'lista';
+        $_SESSION['grupo_id'] = 1;
+        $_SESSION['usuario_id'] = 2;
+        $_GET['session_id'] = '1';
+
+        $del = (new base_test())->del_inm_comprador(link: $this->link);
+        if(errores::$error){
+            $error = (new errores())->error(mensaje:'Error al eliminar', data: $del);
+            print_r($error);exit;
+        }
+
+        $ks = new _keys_selects();
+        //$ks = new liberator($ks);
+
+        $controler = new controlador_inm_comprador(link: $this->link, paths_conf: $this->paths_conf);
+        $controler->registro_id = 1;
+        $controler->row_upd = new stdClass();
+
+        $resultado = $ks->key_selects_base($controler);
+        $this->assertIsArray($resultado);
+        $this->assertTrue(errores::$error);
+        $this->assertEquals("Error al obtener row_upd",$resultado['mensaje_limpio']);
+
+        errores::$error = false;
+
+        $alta = (new base_test())->alta_inm_comprador(link: $this->link);
+        if(errores::$error){
+            $error = (new errores())->error(mensaje:'Error al insertar', data: $alta);
+            print_r($error);exit;
+        }
+
+        $resultado = $ks->key_selects_base($controler);
+
+        $this->assertIsArray($resultado);
+        $this->assertNotTrue(errores::$error);
+        $this->assertEquals("Producto",$resultado['inm_producto_infonavit_id']->label);
+        $this->assertEmpty($resultado['inm_attr_tipo_credito_id']->filtro);
+        $this->assertEquals('inm_destino_credito_descripcion',$resultado['inm_destino_credito_id']->columns_ds[0]);
+        $this->assertEquals(6,$resultado['inm_plazo_credito_sc_id']->cols);
+        $this->assertEquals(5,$resultado['inm_tipo_discapacidad_id']->id_selected);
+        $this->assertEquals(6,$resultado['inm_persona_discapacidad_id']->id_selected);
+        errores::$error = false;
+    }
+
     public function test_ks_fiscales(): void
     {
         errores::$error = false;

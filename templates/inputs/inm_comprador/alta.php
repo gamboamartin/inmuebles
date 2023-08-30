@@ -10,20 +10,9 @@
 <?php echo $controlador->inputs->inm_producto_infonavit_id; ?>
 <?php echo $controlador->inputs->inm_attr_tipo_credito_id; ?>
 <?php echo $controlador->inputs->inm_destino_credito_id; ?>
+<?php echo $controlador->inputs->es_segundo_credito; ?>
 
-    <div class="control-group col-sm-6">
-        <label class="control-label" for="inm_attr_tipo_credito_id">Es Segundo credito</label>
-        <label class="form-check-label chk">
-            <input type="radio" name="es_segundo_credito" value="NO" class="form-check-input es_segundo_credito"
-                   id="es_segundo_credito" title="Es Segundo Credito" checked>
-            NO
-        </label>
-        <label class="form-check-label chk">
-            <input type="radio" name="es_segundo_credito" value="SI" class="form-check-input es_segundo_credito"
-                   id="es_segundo_credito" title="Es Segundo Credito">
-            SI
-        </label>
-    </div>
+
 
 
 <?php echo $controlador->inputs->inm_plazo_credito_sc_id; ?>

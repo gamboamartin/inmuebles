@@ -82,6 +82,32 @@ class controlador_inm_comprador extends _ctl_base {
                 mensaje: 'Error al obtener inputs',data:  $inputs, header: $header,ws:  $ws);
         }
 
+        $checked_default = 2;
+        $class_label[] = 'form-check-label';
+        $class_label[] = 'chk';
+
+        $class_radio[] = 'form-check-input';
+        $class_radio[] = 'es_segundo_credito';
+
+        $for = 'Es Segundo Credito';
+
+        $ids_css[] = 'es_segundo_credito';
+
+        $label_html = 'Es Segundo Credito';
+        $title = 'Es Segundo Credito';
+
+        $es_segundo_credito = $this->html->directivas->radio_doble(checked_default: $checked_default,
+            class_label:  $class_label,class_radio:  $class_radio,cols:6,
+            for: $for, ids_css: $ids_css,label_html:  $label_html,name:  'es_segundo_credito',title:  $title,val_1: 'SI',val_2: 'NO');
+
+        if(errores::$error){
+            return $this->retorno_error(
+                mensaje: 'Error al obtener es_segundo_credito',data:  $es_segundo_credito, header: $header,ws:  $ws);
+        }
+
+        $this->inputs->es_segundo_credito = $es_segundo_credito;
+
+
         return $r_alta;
     }
 
@@ -653,30 +679,13 @@ class controlador_inm_comprador extends _ctl_base {
             return $this->retorno_error(mensaje: 'Error al escribir en pdf', data: $write, header: $header, ws: $ws);
         }
 
-        $ciudad = $_pdf->ciudad(data: $data);
-        if (errores::$error) {
-            return $this->retorno_error(mensaje: 'Error al obtener ciudad', data: $ciudad, header: $header, ws: $ws);
-        }
-
-        $write = $_pdf->write(valor: $ciudad, x:36,y: 240);
+        $write = $_pdf->write_cuidad(data: $data);
         if (errores::$error) {
             return $this->retorno_error(mensaje: 'Error al escribir en pdf', data: $write, header: $header, ws: $ws);
         }
 
 
-        $write = $_pdf->write(valor: ((int)date('d')), x:119,y: 240);
-        if (errores::$error) {
-            return $this->retorno_error(mensaje: 'Error al escribir en pdf', data: $write, header: $header, ws: $ws);
-        }
-
-
-        $write = $_pdf->write_mes(modelo: $this->modelo);
-        if (errores::$error) {
-            return $this->retorno_error(mensaje: 'Error al escribir en pdf', data: $write, header: $header, ws: $ws);
-        }
-
-
-        $write = $_pdf->write_year(modelo: $this->modelo);
+        $write = $_pdf->write_fecha(modelo: $this->modelo);
         if (errores::$error) {
             return $this->retorno_error(mensaje: 'Error al escribir en pdf', data: $write, header: $header, ws: $ws);
         }

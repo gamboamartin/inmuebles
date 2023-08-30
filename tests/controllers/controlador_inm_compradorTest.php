@@ -48,10 +48,10 @@ class controlador_inm_compradorTest extends test {
         //print_r($data);exit;
 
         assertStringContainsStringIgnoringCase("<div class='control-group col-sm-6'><label class='control-label' for='inm_producto_infonavit_id'>Producto</label><div", $data);
-        assertStringContainsStringIgnoringCase('for="inm_attr_tipo_credito_id">Es Segundo credito</label>', $data);
+        assertStringContainsStringIgnoringCase("for='Es Segundo Credito'>Es Segundo Credito</label>", $data);
         assertStringContainsStringIgnoringCase('<label class="form-check-label chk', $data);
-        assertStringContainsStringIgnoringCase('<input type="radio" name="es_segundo_credito" value="NO" class="form-check-input es_segundo_credito"', $data);
-        assertStringContainsStringIgnoringCase('id="es_segundo_credito" title="Es Segundo Credito" checked>', $data);
+        assertStringContainsStringIgnoringCase("<input type='radio' name='es_segundo_credito' value='SI' class=' form-check-input  es_segundo_credito  form-check-input ' id=' es_segundo_credito ' title='Es Segundo Credito' >", $data);
+        assertStringContainsStringIgnoringCase("id=' es_segundo_credito '", $data);
         assertStringContainsStringIgnoringCase("<div class='control-group col-sm-6'><label class='control-label' for='inm_plazo_credito_sc_id'>Plazo Segundo Credito</label><div class='controls'><select class='form-c", $data);
         assertStringContainsStringIgnoringCase("<h4>2. DATOS PARA DETERMINAR EL MONTO DE CRÉDITO</h4>", $data);
         assertStringContainsStringIgnoringCase("ss='control-label' for='descuento_pension_alimenticia_dh'>Descuento Pension Alimenticia Derechohabiente</label><di", $data);
