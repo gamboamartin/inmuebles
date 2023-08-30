@@ -600,6 +600,16 @@ class _pdf{
         return $this->pdf;
     }
 
+    final public function write_year(modelo $modelo){
+        $year = $modelo->year['espaniol'][date('Y')]['abreviado'];
+
+        $write = $this->write(valor: $year, x:178,y: 240);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al escribir en pdf', data: $write);
+        }
+        return $write;
+    }
+
 
 
 }

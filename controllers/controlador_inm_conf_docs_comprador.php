@@ -221,8 +221,8 @@ class controlador_inm_conf_docs_comprador extends _ctl_base {
         $columns["doc_tipo_documento_id"]["titulo"] = "Id";
         $columns["doc_tipo_documento_descripcion"]["titulo"] = "Tipo de Documento";
         $columns["inm_attr_tipo_credito_descripcion"]["titulo"] = "Tipo de Credito";
-        $columns["inm_proceso_descripcion"]["titulo"] = "Proceso";
-        $columns["inm_sub_proceso_descripcion"]["titulo"] = "SUB Proceso";
+        $columns["pr_proceso_descripcion"]["titulo"] = "Proceso";
+        $columns["pr_sub_proceso_descripcion"]["titulo"] = "SUB Proceso";
 
         $filtro = array("doc_tipo_documento.id",'doc_tipo_documento.descripcion');
 

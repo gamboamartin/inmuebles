@@ -303,7 +303,7 @@ class controlador_inm_comprador extends _ctl_base {
         }
 
 
-        $inm_conf_docs_comprador = (new _doctos())->documentos_de_comprador(inm_comprador_id: $this->registro_id,link:  $this->link);
+        $inm_conf_docs_comprador = (new _doctos())->documentos_de_comprador(inm_comprador_id: $this->registro_id,link:  $this->link, todos: true);
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al obtener configuraciones de documentos',data:  $inm_conf_docs_comprador, header: $header,ws:  $ws);
         }
@@ -355,7 +355,7 @@ class controlador_inm_comprador extends _ctl_base {
     }
 
     private function existen_documentos(int $inm_comprador_id){
-        $inm_conf_docs_comprador = (new _doctos())->documentos_de_comprador(inm_comprador_id: $inm_comprador_id,link:  $this->link);
+        $inm_conf_docs_comprador = (new _doctos())->documentos_de_comprador(inm_comprador_id: $inm_comprador_id,link:  $this->link, todos: false);
         if(errores::$error){
             return $this->errores->error(mensaje: 'Error al obtener configuraciones de documentos',data:  $inm_conf_docs_comprador);
         }
@@ -675,9 +675,8 @@ class controlador_inm_comprador extends _ctl_base {
             return $this->retorno_error(mensaje: 'Error al escribir en pdf', data: $write, header: $header, ws: $ws);
         }
 
-        $year = $this->modelo->year['espaniol'][date('Y')]['abreviado'];
 
-        $write = $_pdf->write(valor: $year, x:178,y: 240);
+        $write = $_pdf->write_year(modelo: $this->modelo);
         if (errores::$error) {
             return $this->retorno_error(mensaje: 'Error al escribir en pdf', data: $write, header: $header, ws: $ws);
         }
@@ -701,7 +700,7 @@ class controlador_inm_comprador extends _ctl_base {
         $this->inputs->inm_comprador_id = $inm_comprador_id;
 
         $doc_tipos_documentos = (new _doctos())->documentos_de_comprador(inm_comprador_id: $this->registro_id,
-            link: $this->link);
+            link: $this->link, todos: false);
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al obtener tipos de documento', data: $doc_tipos_documentos,
                 header: $header, ws: $ws);

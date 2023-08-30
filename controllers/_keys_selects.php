@@ -223,7 +223,13 @@ class _keys_selects{
         return $controler->inputs;
     }
 
-    final public function key_selects_base(controlador_inm_comprador $controler){
+    /**
+     * Ajusta los selects para forms upd
+     * @param controlador_inm_comprador $controler Controlador en ejecucion
+     * @return array
+     */
+    final public function key_selects_base(controlador_inm_comprador $controler): array
+    {
         $row_upd = $this->ajusta_row_data_cliente(controler: $controler);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al obtener row_upd',data:  $row_upd);

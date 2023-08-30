@@ -16,7 +16,7 @@ class _doctos{
         $this->error = new errores();
     }
 
-    final public function documentos_de_comprador(int $inm_comprador_id, PDO $link){
+    final public function documentos_de_comprador(int $inm_comprador_id, PDO $link, bool $todos){
 
         $inm_comprador = (new inm_comprador(link: $link))->registro(registro_id: $inm_comprador_id,retorno_obj: true);
         if(errores::$error){
@@ -44,7 +44,9 @@ class _doctos{
         $filtro['inm_attr_tipo_credito.id'] = $inm_comprador->inm_attr_tipo_credito_id;
         $filtro['inm_destino_credito.id'] = $inm_comprador->inm_destino_credito_id;
         $filtro['inm_producto_infonavit.id'] = $inm_comprador->inm_producto_infonavit_id;
-        $filtro['pr_sub_proceso.id'] = $inm_comprador_proceso['pr_sub_proceso_id'];
+        if(!$todos) {
+            $filtro['pr_sub_proceso.id'] = $inm_comprador_proceso['pr_sub_proceso_id'];
+        }
 
         $r_inm_conf_docs_comprador = (new inm_conf_docs_comprador(link: $link))->filtro_and(filtro: $filtro);
         if(errores::$error){
@@ -54,7 +56,7 @@ class _doctos{
 
         $confs = $r_inm_conf_docs_comprador->registros;
 
-        
+
         $values_in = array();
         foreach ($confs as $value){
             $values_in[] = $value['doc_tipo_documento_id'];
