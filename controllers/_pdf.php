@@ -144,6 +144,8 @@ class _pdf{
         return $write;
     }
 
+
+
     private function ciudad(stdClass $data): string
     {
         $ciudad = strtoupper($data->inm_comprador['dp_municipio_empresa_descripcion']);
@@ -464,13 +466,25 @@ class _pdf{
         return $this->pdf;
     }
 
-    final public function write_comprador(stdClass $data){
+    private function write_comprador(stdClass $data){
         $keys_comprador = $this->keys_comprador_hoja_3();
         if (errores::$error) {
             return $this->error->error(mensaje: 'Error al obtener keys_comprador', data: $keys_comprador);
         }
 
         $write = $this->write_data(keys: $keys_comprador,row:  $data->inm_comprador);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al escribir en pdf', data: $write);
+        }
+        return $write;
+    }
+
+    final public function write_comprador_a_8(stdClass $data){
+        $pdf = $this->write_x(name_entidad: 'inm_tipo_inmobiliaria',row:  $data->inm_conf_empresa);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al escribir en pdf',data:  $pdf);
+        }
+        $write = $this->write_comprador(data: $data);
         if (errores::$error) {
             return $this->error->error(mensaje: 'Error al escribir en pdf', data: $write);
         }

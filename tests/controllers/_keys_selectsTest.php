@@ -178,6 +178,29 @@ class _keys_selectsTest extends test {
         errores::$error = false;
     }
 
+    public function test_integra_disabled(): void
+    {
+        errores::$error = false;
+
+        $_GET['seccion'] = 'inm_producto_infonavit';
+        $_GET['accion'] = 'lista';
+        $_SESSION['grupo_id'] = 1;
+        $_SESSION['usuario_id'] = 2;
+        $_GET['session_id'] = '1';
+
+
+        $ks = new _keys_selects();
+        $ks = new liberator($ks);
+
+        $keys_selects = array();
+        $key = 'a';
+        $resultado = $ks->integra_disabled($key, $keys_selects);
+        $this->assertIsArray($resultado);
+        $this->assertNotTrue(errores::$error);
+        $this->assertTrue($resultado['a']->disabled);
+        errores::$error = false;
+    }
+
     public function test_key_selects_base(): void
     {
         errores::$error = false;
@@ -226,6 +249,8 @@ class _keys_selectsTest extends test {
         $this->assertEquals(6,$resultado['inm_persona_discapacidad_id']->id_selected);
         errores::$error = false;
     }
+
+
 
     public function test_ks_fiscales(): void
     {

@@ -83,22 +83,18 @@ class controlador_inm_comprador extends _ctl_base {
         }
 
         $checked_default = 2;
-        $class_label[] = 'form-check-label';
-        $class_label[] = 'chk';
 
-        $class_radio[] = 'form-check-input';
-        $class_radio[] = 'es_segundo_credito';
 
-        $for = 'Es Segundo Credito';
-
-        $ids_css[] = 'es_segundo_credito';
-
-        $label_html = 'Es Segundo Credito';
-        $title = 'Es Segundo Credito';
+        $params_chk = $this->params_base_chk(campo: 'es_segundo_credito',tag:  'Es Segundo Credito');
+        if(errores::$error){
+            return $this->retorno_error(
+                mensaje: 'Error al obtener params_chk',data:  $params_chk, header: $header,ws:  $ws);
+        }
 
         $es_segundo_credito = $this->html->directivas->radio_doble(checked_default: $checked_default,
-            class_label:  $class_label,class_radio:  $class_radio,cols:6,
-            for: $for, ids_css: $ids_css,label_html:  $label_html,name:  'es_segundo_credito',title:  $title,val_1: 'SI',val_2: 'NO');
+            class_label:  $params_chk->class_label,class_radio:  $params_chk->class_radio,cols:6,
+            for: $params_chk->for, ids_css: $params_chk->ids_css,label_html:  $params_chk->label_html,
+            name:  $params_chk->name,title:  $params_chk->title,val_1: 'SI',val_2: 'NO');
 
         if(errores::$error){
             return $this->retorno_error(
@@ -407,7 +403,32 @@ class controlador_inm_comprador extends _ctl_base {
         return $inm_conf_docs_comprador;
     }
 
+    /**
+     * Inicializa los elementos mostrables para datatables
+     * @return stdClass
+     * @version 1.40.0
+     */
+    private function init_datatable(): stdClass
+    {
+        $columns["inm_comprador_id"]["titulo"] = "Id";
+        $columns["inm_comprador_nombre"]["titulo"] = "Nombre";
+        $columns["inm_comprador_apellido_paterno"]["titulo"] = "AP";
+        $columns["inm_comprador_apellido_materno"]["titulo"] = "AM";
+        $columns["inm_comprador_nss"]["titulo"] = "NSS";
+        $columns["inm_comprador_curp"]["titulo"] = "CURP";
+        $columns["inm_comprador_etapa"]["titulo"] = "Etapa";
+        $columns["inm_comprador_proceso"]["titulo"] = "Proceso Actual";
 
+
+        $filtro = array("inm_comprador.id",'inm_comprador.nombre','inm_comprador.apellido_paterno',
+            'inm_comprador.apellido_materno','inm_comprador.nss','inm_comprador.curp','inm_comprador.proceso');
+
+        $datatables = new stdClass();
+        $datatables->columns = $columns;
+        $datatables->filtro = $filtro;
+
+        return $datatables;
+    }
     protected function key_selects_txt(array $keys_selects): array
     {
 
@@ -544,8 +565,6 @@ class controlador_inm_comprador extends _ctl_base {
 
         return $keys_selects;
     }
-
-
     public function modifica(bool $header, bool $ws = false): array|stdClass
     {
 
@@ -571,31 +590,32 @@ class controlador_inm_comprador extends _ctl_base {
         return $r_modifica;
     }
 
-    /**
-     * Inicializa los elementos mostrables para datatables
-     * @return stdClass
-     * @version 1.40.0
-     */
-    private function init_datatable(): stdClass
+    private function params_base_chk(string $campo, string $tag): stdClass
     {
-        $columns["inm_comprador_id"]["titulo"] = "Id";
-        $columns["inm_comprador_nombre"]["titulo"] = "Nombre";
-        $columns["inm_comprador_apellido_paterno"]["titulo"] = "AP";
-        $columns["inm_comprador_apellido_materno"]["titulo"] = "AM";
-        $columns["inm_comprador_nss"]["titulo"] = "NSS";
-        $columns["inm_comprador_curp"]["titulo"] = "CURP";
-        $columns["inm_comprador_etapa"]["titulo"] = "Etapa";
-        $columns["inm_comprador_proceso"]["titulo"] = "Proceso Actual";
+        $class_label[] = 'form-check-label';
+        $class_label[] = 'chk';
 
+        $class_radio[] = 'form-check-input';
+        $class_radio[] = $campo;
 
-        $filtro = array("inm_comprador.id",'inm_comprador.nombre','inm_comprador.apellido_paterno',
-            'inm_comprador.apellido_materno','inm_comprador.nss','inm_comprador.curp','inm_comprador.proceso');
+        $for = $tag;
 
-        $datatables = new stdClass();
-        $datatables->columns = $columns;
-        $datatables->filtro = $filtro;
+        $ids_css[] = $campo;
 
-        return $datatables;
+        $label_html = $tag;
+        $title = $tag;
+
+        $data = new stdClass();
+
+        $data->class_label = $class_label;
+        $data->class_radio = $class_radio;
+        $data->for = $for;
+        $data->ids_css = $ids_css;
+        $data->label_html = $label_html;
+        $data->title = $title;
+        $data->name = $campo;
+
+        return $data;
     }
 
     public function solicitud_infonavit(bool $header, bool $ws = false)
@@ -663,13 +683,7 @@ class controlador_inm_comprador extends _ctl_base {
         $pdf->useTemplate($tplIdx,null,null,null,null,true);
 
 
-        $pdf = $_pdf->write_x(name_entidad: 'inm_tipo_inmobiliaria',row:  $data->inm_conf_empresa);
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al escribir en pdf',data:  $pdf,header: $header,ws: $ws);
-        }
-
-
-        $write = $_pdf->write_comprador(data: $data);
+        $write = $_pdf->write_comprador_a_8(data: $data);
         if (errores::$error) {
             return $this->retorno_error(mensaje: 'Error al escribir en pdf', data: $write, header: $header, ws: $ws);
         }

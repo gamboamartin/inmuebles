@@ -224,6 +224,39 @@ class _keys_selects{
     }
 
     /**
+     * Integra el atributo disabled como true
+     * @param string $key key a inicializar e integrar
+     * @param array $keys_selects Parametros previos cargados
+     * @return array
+     * @version 1.82.1
+     */
+    private function integra_disabled(string $key, array $keys_selects): array
+    {
+        $key = trim($key);
+        if($key === ''){
+            return $this->error->error(mensaje: 'Error key esta vacio',data: $key);
+        }
+        if(is_numeric($key)){
+            return $this->error->error(mensaje: 'Error key debe ser un texto',data: $key);
+        }
+        if(!isset($keys_selects[$key])){
+            $keys_selects[$key] = new stdClass();
+        }
+        $keys_selects[$key]->disabled = true;
+        return $keys_selects;
+    }
+
+    private function integra_disableds(array $keys, array $keys_selects){
+        foreach ($keys as $key){
+            $keys_selects = $this->integra_disabled(key: $key,keys_selects:  $keys_selects);
+            if(errores::$error){
+                return $this->error->error(mensaje: 'Error al integra disabled',data: $keys_selects);
+            }
+        }
+        return $keys_selects;
+    }
+
+    /**
      * Ajusta los selects para forms upd
      * @param controlador_inm_comprador $controler Controlador en ejecucion
      * @return array
@@ -275,25 +308,13 @@ class _keys_selects{
      */
     final public function keys_disabled(array $keys_selects): array
     {
-        $keys_selects['com_tipo_cliente_id']->disabled = true;
+        $keys = array('com_tipo_cliente_id','nss','curp','rfc','apellido_paterno','apellido_materno','nombre');
 
-        $keys_selects['nss'] = new stdClass();
-        $keys_selects['nss']->disabled = true;
+        $keys_selects = $this->integra_disableds(keys: $keys,keys_selects:  $keys_selects);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al integra disabled',data: $keys_selects);
+        }
 
-        $keys_selects['curp'] = new stdClass();
-        $keys_selects['curp']->disabled = true;
-
-        $keys_selects['rfc'] = new stdClass();
-        $keys_selects['rfc']->disabled = true;
-
-        $keys_selects['apellido_paterno'] = new stdClass();
-        $keys_selects['apellido_paterno']->disabled = true;
-
-        $keys_selects['apellido_materno'] = new stdClass();
-        $keys_selects['apellido_materno']->disabled = true;
-
-        $keys_selects['nombre'] = new stdClass();
-        $keys_selects['nombre']->disabled = true;
         return $keys_selects;
     }
 
