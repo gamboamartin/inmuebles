@@ -324,6 +324,7 @@ class _keys_selects{
      * Genera los keys selects con disabled
      * @param array $keys_selects Parametros previos cargados
      * @return array
+     * @version 1.76.1
      */
     final public function keys_disabled(array $keys_selects): array
     {
@@ -511,7 +512,7 @@ class _keys_selects{
         $keys_selects = $controler->key_select(cols:12, con_registros: true,filtro:  array(),
             key: 'inm_persona_discapacidad_id', keys_selects: $keys_selects,
             id_selected: $row_upd->inm_persona_discapacidad_id, label: 'Persona Discapacidad',
-            columns_ds: $columns_ds);
+            columns_ds: $columns_ds, disabled: true);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }

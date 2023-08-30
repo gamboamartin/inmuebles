@@ -66,15 +66,19 @@ class controlador_inm_comprador extends _ctl_base {
                 mensaje: 'Error al inicializar alta',data:  $r_alta, header: $header,ws:  $ws);
         }
 
-        $keys_selects = (new _keys_selects())->init(controler: $this,row_upd: new stdClass());
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects,
-                header: $header,ws:  $ws);
-        }
-
         $row_upd = (new _inm_comprador())->row_upd_montos(controler: $this);
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al integrar row_upd',data:  $row_upd, header: $header,ws:  $ws);
+        }
+
+        $this->row_upd->inm_producto_infonavit_id = 1;
+        $this->row_upd->inm_attr_tipo_credito_id = 6;
+        $this->row_upd->inm_destino_credito_id = 1;
+
+        $keys_selects = (new _keys_selects())->init(controler: $this,row_upd: $this->row_upd);
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects,
+                header: $header,ws:  $ws);
         }
 
         $inputs = $this->inputs(keys_selects: $keys_selects);
@@ -83,26 +87,11 @@ class controlador_inm_comprador extends _ctl_base {
                 mensaje: 'Error al obtener inputs',data:  $inputs, header: $header,ws:  $ws);
         }
 
-        $es_segundo_credito = $this->html->directivas->input_radio_doble(campo: 'es_segundo_credito',
-            checked_default: 2,tag: 'Es Segundo Credito', val_1: 'SI',val_2: 'NO');
-
+        $radios = (new _inm_comprador())->radios(controler: $this);
         if(errores::$error){
             return $this->retorno_error(
-                mensaje: 'Error al obtener es_segundo_credito',data:  $es_segundo_credito, header: $header,ws:  $ws);
+                mensaje: 'Error al integrar radios',data:  $radios, header: $header,ws:  $ws);
         }
-        $this->inputs->es_segundo_credito = $es_segundo_credito;
-
-
-        $con_discapacidad = $this->html->directivas->input_radio_doble(campo: 'con_discapacidad',
-            checked_default: 1,tag: 'Con Discapacidad', val_1: 'NO',val_2: 'SI');
-
-
-        if(errores::$error){
-            return $this->retorno_error(
-                mensaje: 'Error al obtener con_discapacidad',data:  $con_discapacidad, header: $header,ws:  $ws);
-        }
-
-        $this->inputs->con_discapacidad = $con_discapacidad;
 
 
         return $r_alta;
