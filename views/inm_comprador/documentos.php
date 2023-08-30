@@ -51,7 +51,7 @@
                         <td><?php echo $doc_tipo_documento['descarga']; ?></td>
                         <td><?php echo $doc_tipo_documento['vista_previa']; ?></td>
                         <td><?php echo $doc_tipo_documento['descarga_zip']; ?></td>
-                        <td><?php echo $doc_tipo_documento['elimina']; ?></td>
+                        <td><?php echo $doc_tipo_documento['elimina_bd']; ?></td>
                     </tr>
                     <?php
                     }

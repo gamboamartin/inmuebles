@@ -8,6 +8,7 @@ use gamboamartin\inmuebles\controllers\controlador_inm_attr_tipo_credito;
 use gamboamartin\inmuebles\controllers\controlador_inm_comprador;
 use gamboamartin\inmuebles\controllers\controlador_inm_plazo_credito_sc;
 use gamboamartin\inmuebles\controllers\controlador_inm_producto_infonavit;
+use gamboamartin\inmuebles\tests\base_test;
 use gamboamartin\test\liberator;
 use gamboamartin\test\test;
 
@@ -28,6 +29,51 @@ class _keys_selectsTest extends test {
         $this->paths_conf->generales = '/var/www/html/inmuebles/config/generales.php';
         $this->paths_conf->database = '/var/www/html/inmuebles/config/database.php';
         $this->paths_conf->views = '/var/www/html/inmuebles/config/views.php';
+    }
+
+    public function test_ajusta_row_data_cliente(): void
+    {
+        errores::$error = false;
+
+        $_GET['seccion'] = 'inm_producto_infonavit';
+        $_GET['accion'] = 'lista';
+        $_SESSION['grupo_id'] = 1;
+        $_SESSION['usuario_id'] = 2;
+        $_GET['session_id'] = '1';
+
+        $del = (new base_test())->del_inm_comprador(link: $this->link);
+        if(errores::$error){
+            $error = (new errores())->error(mensaje:'Error al eliminar', data: $del);
+            print_r($error);exit;
+        }
+
+        $ks = new _keys_selects();
+        $ks = new liberator($ks);
+
+        $controler = new controlador_inm_comprador(link: $this->link, paths_conf: $this->paths_conf);
+        $controler->registro_id = 1;
+        $controler->row_upd = new stdClass();
+
+        $resultado = $ks->ajusta_row_data_cliente($controler);
+        $this->assertIsArray($resultado);
+        $this->assertTrue(errores::$error);
+        $this->assertEquals("Error al obtener com_cliente",$resultado['mensaje_limpio']);
+        errores::$error = false;
+
+        $alta = (new base_test())->alta_inm_comprador(link: $this->link);
+        if(errores::$error){
+            $error = (new errores())->error(mensaje:'Error al insertar', data: $alta);
+            print_r($error);exit;
+        }
+
+        $resultado = $ks->ajusta_row_data_cliente($controler);
+        $this->assertIsObject($resultado);
+        $this->assertNotTrue(errores::$error);
+        $this->assertEquals("AAA010101AAA",$resultado->rfc);
+        $this->assertEquals("1",$resultado->numero_exterior);
+        $this->assertEquals("1649",$resultado->dp_municipio_id);
+        $this->assertEquals("1",$resultado->com_tipo_cliente_id);
+        errores::$error = false;
     }
 
     public function test_base(): void

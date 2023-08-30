@@ -111,10 +111,21 @@ class inm_doc_comprador extends _modelo_parent{
         }
 
 
-        if($existen_algunos){
+        if($existen_algunos ){
 
             $pr_comprador_proceso_ins['inm_comprador_id'] = $this->registro['inm_comprador_id'];
             $pr_comprador_proceso_ins['pr_sub_proceso_id'] = 4;
+            $pr_comprador_proceso_ins['fecha'] = date('Y-m-d');
+            $r_alta_proceso = (new inm_comprador_proceso(link: $this->link))->alta_registro(registro: $pr_comprador_proceso_ins);
+            if(errores::$error){
+                return $this->error->error(mensaje: 'Error al insertar etapa',data:  $r_alta_proceso);
+            }
+        }
+
+        if($existen_todos){
+
+            $pr_comprador_proceso_ins['inm_comprador_id'] = $this->registro['inm_comprador_id'];
+            $pr_comprador_proceso_ins['pr_sub_proceso_id'] = 5;
             $pr_comprador_proceso_ins['fecha'] = date('Y-m-d');
             $r_alta_proceso = (new inm_comprador_proceso(link: $this->link))->alta_registro(registro: $pr_comprador_proceso_ins);
             if(errores::$error){

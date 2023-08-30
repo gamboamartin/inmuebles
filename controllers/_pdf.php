@@ -1,6 +1,7 @@
 <?php
 namespace gamboamartin\inmuebles\controllers;
 
+use base\orm\modelo;
 use gamboamartin\errores\errores;
 use gamboamartin\inmuebles\models\inm_co_acreditado;
 use PDO;
@@ -322,7 +323,7 @@ class _pdf{
         return $keys_comprador;
     }
 
-    final public function keys_comprador_hoja_3(): array
+    private function keys_comprador_hoja_3(): array
     {
         $keys_comprador = array();
         $keys_comprador['org_empresa_razon_social']= array('x'=>16,'y'=>37);
@@ -450,6 +451,19 @@ class _pdf{
         return $this->pdf;
     }
 
+    final public function write_comprador(stdClass $data){
+        $keys_comprador = $this->keys_comprador_hoja_3();
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al obtener keys_comprador', data: $keys_comprador);
+        }
+
+        $write = $this->write_data(keys: $keys_comprador,row:  $data->inm_comprador);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al escribir en pdf', data: $write);
+        }
+        return $write;
+    }
+
     private function write_comprador_hoja_3(stdClass $data){
         $keys_comprador = $this->keys_comprador_hoja_2();
         if (errores::$error) {
@@ -531,6 +545,17 @@ class _pdf{
             return $this->error->error(mensaje: 'Error al escribir en pdf', data: $pdf_exe);
         }
         return $pdf_exe;
+    }
+
+    final public function write_mes(modelo $modelo){
+        $mes_letra = $modelo->mes['espaniol'][date('m')]['nombre'];
+
+
+        $write = $this->write(valor: $mes_letra, x:128,y: 240);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al escribir en pdf', data: $write);
+        }
+        return $write;
     }
 
     private function write_referencia(array $inm_referencia, array $keys_referencias){

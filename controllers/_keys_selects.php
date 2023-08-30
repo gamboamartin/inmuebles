@@ -19,9 +19,14 @@ class _keys_selects{
      * Ajusta los elementos para front obtenidos del cliente
      * @param controlador_inm_comprador $controler Controlador en ejecucion
      * @return array|stdClass
+     * @version 1.69.1
      */
     private function ajusta_row_data_cliente(controlador_inm_comprador $controler): array|stdClass
     {
+        if($controler->registro_id<=0){
+            return $this->error->error(mensaje: 'Error $controler->registro_id es menor a 0',
+                data:  $controler->registro_id);
+        }
         $com_cliente = (new inm_comprador(link: $controler->link))->get_com_cliente(
             inm_comprador_id: $controler->registro_id);
         if(errores::$error){

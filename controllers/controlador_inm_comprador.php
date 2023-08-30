@@ -186,7 +186,7 @@ class controlador_inm_comprador extends _ctl_base {
         if(errores::$error){
             return $this->errores->error(mensaje: 'Error al integrar button',data:  $button);
         }
-        $inm_conf_docs_comprador[$indice]['descarga'] = $button;
+        $inm_conf_docs_comprador[$indice][$accion] = $button;
         return $inm_conf_docs_comprador;
     }
 
@@ -341,7 +341,7 @@ class controlador_inm_comprador extends _ctl_base {
                 $inm_conf_docs_comprador[$indice]['descarga'] = $button;
                 $inm_conf_docs_comprador[$indice]['vista_previa'] = $button;
                 $inm_conf_docs_comprador[$indice]['descarga_zip'] = $button;
-                $inm_conf_docs_comprador[$indice]['elimina'] = $button;
+                $inm_conf_docs_comprador[$indice]['elimina_bd'] = $button;
 
             }
         }
@@ -623,7 +623,7 @@ class controlador_inm_comprador extends _ctl_base {
             return $this->retorno_error(mensaje: 'Error al escribir en pdf', data: $write, header: $header, ws: $ws);
         }
 
-        
+
 
         $pdf->AddPage();
 
@@ -643,12 +643,7 @@ class controlador_inm_comprador extends _ctl_base {
         }
 
 
-        $keys_comprador = $_pdf->keys_comprador_hoja_3();
-        if (errores::$error) {
-            return $this->retorno_error(mensaje: 'Error al obtener keys_comprador', data: $keys_comprador, header: $header, ws: $ws);
-        }
-
-        $write = $_pdf->write_data(keys: $keys_comprador,row:  $data->inm_comprador);
+        $write = $_pdf->write_comprador(data: $data);
         if (errores::$error) {
             return $this->retorno_error(mensaje: 'Error al escribir en pdf', data: $write, header: $header, ws: $ws);
         }
@@ -675,10 +670,7 @@ class controlador_inm_comprador extends _ctl_base {
         }
 
 
-        $mes_letra = $this->modelo->mes['espaniol'][date('m')]['nombre'];
-
-
-        $write = $_pdf->write(valor: $mes_letra, x:128,y: 240);
+        $write = $_pdf->write_mes(modelo: $this->modelo);
         if (errores::$error) {
             return $this->retorno_error(mensaje: 'Error al escribir en pdf', data: $write, header: $header, ws: $ws);
         }
