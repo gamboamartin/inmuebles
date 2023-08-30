@@ -66,12 +66,7 @@ class controlador_inm_comprador extends _ctl_base {
                 mensaje: 'Error al inicializar alta',data:  $r_alta, header: $header,ws:  $ws);
         }
 
-        $row_upd = (new _inm_comprador())->row_upd_montos(controler: $this);
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al integrar row_upd',data:  $row_upd, header: $header,ws:  $ws);
-        }
-
-        $row_upd = (new _inm_comprador())->row_upd_ids(controler: $this);
+        $row_upd = (new _inm_comprador())->row_upd_base(controler: $this);
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al integrar row_upd',data:  $row_upd, header: $header,ws:  $ws);
         }

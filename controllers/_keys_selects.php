@@ -80,9 +80,17 @@ class _keys_selects{
      * @param controlador_inm_ubicacion|controlador_inm_comprador $controler Controlador en ejecucion
      * @param string $funcion Funcion de retorno
      * @return array|stdClass
+     * @version 1.78.1
      */
-    final public function hiddens(controlador_inm_ubicacion|controlador_inm_comprador $controler, string $funcion): array|stdClass
+    final public function hiddens(
+        controlador_inm_ubicacion|controlador_inm_comprador $controler, string $funcion): array|stdClass
     {
+
+        $funcion = trim($funcion);
+        if($funcion === ''){
+            return $this->error->error(mensaje: 'Error funcion esta vacio',data:  $funcion);
+        }
+
         $in_registro_id = $controler->html->hidden(name:'registro_id',value: $controler->registro_id);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al in_registro_id',data:  $in_registro_id);

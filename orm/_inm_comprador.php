@@ -35,14 +35,27 @@ class _inm_comprador{
         return $controler->inputs;
     }
 
-    final public function row_upd_ids(controlador_inm_comprador $controler): stdClass
+    final public function row_upd_base(controlador_inm_comprador $controler){
+        $row_upd = $this->row_upd_montos(controler: $controler);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al integrar row_upd',data:  $row_upd);
+        }
+
+        $row_upd = $this->row_upd_ids(controler: $controler);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al integrar row_upd',data:  $row_upd);
+        }
+        return $controler->row_upd;
+    }
+
+    private function row_upd_ids(controlador_inm_comprador $controler): stdClass
     {
         $controler->row_upd->inm_producto_infonavit_id = 1;
         $controler->row_upd->inm_attr_tipo_credito_id = 6;
         $controler->row_upd->inm_destino_credito_id = 1;
         return $controler->row_upd;
     }
-    final public function row_upd_montos(controlador_inm_comprador $controler): stdClass
+    private function row_upd_montos(controlador_inm_comprador $controler): stdClass
     {
         $controler->row_upd->descuento_pension_alimenticia_dh = 0;
         $controler->row_upd->monto_credito_solicitado_dh = 0;
