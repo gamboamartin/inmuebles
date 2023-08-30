@@ -82,26 +82,27 @@ class controlador_inm_comprador extends _ctl_base {
                 mensaje: 'Error al obtener inputs',data:  $inputs, header: $header,ws:  $ws);
         }
 
-        $checked_default = 2;
 
-
-        $params_chk = $this->params_base_chk(campo: 'es_segundo_credito',tag:  'Es Segundo Credito');
-        if(errores::$error){
-            return $this->retorno_error(
-                mensaje: 'Error al obtener params_chk',data:  $params_chk, header: $header,ws:  $ws);
-        }
-
-        $es_segundo_credito = $this->html->directivas->radio_doble(checked_default: $checked_default,
-            class_label:  $params_chk->class_label,class_radio:  $params_chk->class_radio,cols:6,
-            for: $params_chk->for, ids_css: $params_chk->ids_css,label_html:  $params_chk->label_html,
-            name:  $params_chk->name,title:  $params_chk->title,val_1: 'SI',val_2: 'NO');
+        $es_segundo_credito = $this->html->directivas->input_radio_doble(campo: 'es_segundo_credito',
+            checked_default: 2,tag: 'Es Segundo Credito', val_1: 'SI',val_2: 'NO');
 
         if(errores::$error){
             return $this->retorno_error(
                 mensaje: 'Error al obtener es_segundo_credito',data:  $es_segundo_credito, header: $header,ws:  $ws);
         }
-
         $this->inputs->es_segundo_credito = $es_segundo_credito;
+
+
+        $con_discapacidad = $this->html->directivas->input_radio_doble(campo: 'con_discapacidad',
+            checked_default: 1,tag: 'Con Discapacidad', val_1: 'NO',val_2: 'SI');
+
+
+        if(errores::$error){
+            return $this->retorno_error(
+                mensaje: 'Error al obtener con_discapacidad',data:  $con_discapacidad, header: $header,ws:  $ws);
+        }
+
+        $this->inputs->con_discapacidad = $con_discapacidad;
 
 
         return $r_alta;
@@ -590,33 +591,7 @@ class controlador_inm_comprador extends _ctl_base {
         return $r_modifica;
     }
 
-    private function params_base_chk(string $campo, string $tag): stdClass
-    {
-        $class_label[] = 'form-check-label';
-        $class_label[] = 'chk';
 
-        $class_radio[] = 'form-check-input';
-        $class_radio[] = $campo;
-
-        $for = $tag;
-
-        $ids_css[] = $campo;
-
-        $label_html = $tag;
-        $title = $tag;
-
-        $data = new stdClass();
-
-        $data->class_label = $class_label;
-        $data->class_radio = $class_radio;
-        $data->for = $for;
-        $data->ids_css = $ids_css;
-        $data->label_html = $label_html;
-        $data->title = $title;
-        $data->name = $campo;
-
-        return $data;
-    }
 
     public function solicitud_infonavit(bool $header, bool $ws = false)
     {
@@ -632,15 +607,12 @@ class controlador_inm_comprador extends _ctl_base {
 
         $_pdf = new _pdf(pdf: $pdf);
 
-        $pdf->AddPage();
-        try {
-            $pdf->setSourceFile($this->path_base . 'templates/solicitud_infonavit.pdf');
-            $tplIdx = $pdf->importPage(1);
-        } catch (Throwable $e) {
-            return $this->retorno_error(mensaje: 'Error al obtener plantilla', data: $e, header: $header, ws: $ws);
-        }
-        $pdf->useTemplate($tplIdx, null, null, null, null, true);
 
+        $pdf = $_pdf->add_template(file_plantilla: 'templates/solicitud_infonavit.pdf',page:  1,
+            path_base:  $this->path_base,plantilla_cargada:  false);
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al agregar template', data: $pdf, header: $header, ws: $ws);
+        }
 
         $pdf->SetFont('Arial', 'B', 15);
         $pdf->SetTextColor(0, 0, 0);
@@ -653,14 +625,12 @@ class controlador_inm_comprador extends _ctl_base {
         }
 
 
-        $pdf->AddPage();
-        try {
-            $tplIdx = $pdf->importPage(2);
+        $pdf = $_pdf->add_template(file_plantilla: 'templates/solicitud_infonavit.pdf',page:  2,
+            path_base:  $this->path_base,plantilla_cargada:  true);
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al agregar template', data: $pdf, header: $header, ws: $ws);
         }
-        catch (Throwable $e){
-            return $this->retorno_error(mensaje: 'Error al obtener plantilla',data:  $e,header: $header,ws: $ws);
-        }
-        $pdf->useTemplate($tplIdx,null,null,null,null,true);
+
 
 
 
@@ -671,38 +641,18 @@ class controlador_inm_comprador extends _ctl_base {
 
 
 
-        $pdf->AddPage();
-
-        try {
-            $tplIdx = $pdf->importPage(3);
-        }
-        catch (Throwable $e){
-            return $this->retorno_error(mensaje: 'Error al obtener plantilla',data:  $e,header: $header,ws: $ws);
+        $pdf = $_pdf->add_template(file_plantilla: 'templates/solicitud_infonavit.pdf',page:  3,
+            path_base:  $this->path_base,plantilla_cargada:  true);
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al agregar template', data: $pdf, header: $header, ws: $ws);
         }
 
-        $pdf->useTemplate($tplIdx,null,null,null,null,true);
 
-
-        $write = $_pdf->write_comprador_a_8(data: $data);
+        $write = $_pdf->hoja_3(data: $data, modelo: $this->modelo);
         if (errores::$error) {
             return $this->retorno_error(mensaje: 'Error al escribir en pdf', data: $write, header: $header, ws: $ws);
         }
 
-        $write = $_pdf->write(valor: $data->inm_comprador['org_empresa_razon_social'], x:16,y: 62);
-        if (errores::$error) {
-            return $this->retorno_error(mensaje: 'Error al escribir en pdf', data: $write, header: $header, ws: $ws);
-        }
-
-        $write = $_pdf->write_cuidad(data: $data);
-        if (errores::$error) {
-            return $this->retorno_error(mensaje: 'Error al escribir en pdf', data: $write, header: $header, ws: $ws);
-        }
-
-
-        $write = $_pdf->write_fecha(modelo: $this->modelo);
-        if (errores::$error) {
-            return $this->retorno_error(mensaje: 'Error al escribir en pdf', data: $write, header: $header, ws: $ws);
-        }
 
 
         $pdf->Output('tu_pedorrote.pdf', 'I');

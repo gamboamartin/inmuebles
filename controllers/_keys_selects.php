@@ -246,7 +246,14 @@ class _keys_selects{
         return $keys_selects;
     }
 
-    private function integra_disableds(array $keys, array $keys_selects){
+    /**
+     * Integra los keys en forma disabled para elementos de consulta
+     * @param array $keys Keys a integrar coo disabled
+     * @param array $keys_selects parametros previos cargados
+     * @return array
+     */
+    private function integra_disableds(array $keys, array $keys_selects): array
+    {
         foreach ($keys as $key){
             $keys_selects = $this->integra_disabled(key: $key,keys_selects:  $keys_selects);
             if(errores::$error){

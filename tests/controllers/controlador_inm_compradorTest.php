@@ -56,7 +56,7 @@ class controlador_inm_compradorTest extends test {
         assertStringContainsStringIgnoringCase("<h4>2. DATOS PARA DETERMINAR EL MONTO DE CRÉDITO</h4>", $data);
         assertStringContainsStringIgnoringCase("ss='control-label' for='descuento_pension_alimenticia_dh'>Descuento Pension Alimenticia Derechohabiente</label><di", $data);
         assertStringContainsStringIgnoringCase("untario' value='0' class='form-control' required id='monto_ahorro_voluntario", $data);
-        assertStringContainsStringIgnoringCase('<input type="radio" name="con_discapacidad" value="SI" class="form-check-input" id="con_discapacidad"', $data);
+        assertStringContainsStringIgnoringCase("<input type='radio' name='con_discapacidad", $data);
         assertStringContainsStringIgnoringCase("l-group col-sm-6'><label class='control-label' for='inm_tipo_discapacidad_id'>Tipo de Discapacidad</label><div class='controls'><select class=", $data);
         assertStringContainsStringIgnoringCase("abel class='control-label' for='nombre_empresa_patron'>Nombre Empresa o Patron</label><div class='controls'><input type='text' name='n", $data);
         assertStringContainsStringIgnoringCase("_civil_id' data-live-search='true' id='inm_estado_civil_id' name='inm_estado_civil_id' required ><option value=''  >Selecciona una", $data);

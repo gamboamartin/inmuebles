@@ -7,6 +7,7 @@ use gamboamartin\inmuebles\models\inm_co_acreditado;
 use PDO;
 use setasign\Fpdi\Fpdi;
 use stdClass;
+use Throwable;
 
 class _pdf{
 
@@ -16,6 +17,17 @@ class _pdf{
     public function __construct(Fpdi $pdf){
         $this->error = new errores();
         $this->pdf = $pdf;
+    }
+
+    final public function add_template(string $file_plantilla, int $page, string $path_base, bool $plantilla_cargada){
+        $this->pdf->AddPage();
+        $tpl_idx = $this->tpl_idx(file_plantilla: $file_plantilla, page: $page,path_base:  $path_base,
+            plantilla_cargada: $plantilla_cargada);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al escribir en pdf', data: $tpl_idx);
+        }
+        $this->pdf->useTemplate($tpl_idx, null, null, null, null, true);
+        return $this->pdf;
     }
 
     private function apartado_1(stdClass $data){
@@ -289,6 +301,30 @@ class _pdf{
     }
 
 
+    final public function hoja_3(stdClass $data, modelo $modelo){
+        $write = $this->write_comprador_a_8(data: $data);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al escribir en pdf', data: $write);
+        }
+
+        $write = $this->write(valor: $data->inm_comprador['org_empresa_razon_social'], x:16,y: 62);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al escribir en pdf', data: $write);
+        }
+
+        $write = $this->write_cuidad(data: $data);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al escribir en pdf', data: $write);
+        }
+
+
+        $write = $this->write_fecha(modelo: $modelo);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al escribir en pdf', data: $write);
+        }
+        return $write;
+    }
+
 
     private function keys_cliente(): array
     {
@@ -348,6 +384,20 @@ class _pdf{
         return $keys_ubicacion;
     }
 
+    private function tpl_idx(string $file_plantilla, int $page, string $path_base, bool $plantilla_cargada): array|string
+    {
+        try {
+            if(!$plantilla_cargada) {
+                $this->pdf->setSourceFile($path_base . $file_plantilla);
+            }
+            $tpl_idx = $this->pdf->importPage($page);
+        } catch (Throwable $e) {
+            return $this->error->error(mensaje: 'Error al obtener plantilla', data: $e);
+        }
+
+        return $tpl_idx;
+    }
+
 
     private function x_y_compare(array $condiciones, string $key, array $row, float $x_init, float $y_init){
         $x = $this->get_x_var(condiciones: $condiciones,key_id:  $key,
@@ -388,7 +438,7 @@ class _pdf{
         return $this->pdf;
     }
 
-    final public function write_cuidad(stdClass $data){
+    private function write_cuidad(stdClass $data){
         $ciudad = $this->ciudad(data: $data);
         if (errores::$error) {
             return $this->error->error(mensaje: 'Error al obtener ciudad', data: $ciudad);
@@ -479,7 +529,7 @@ class _pdf{
         return $write;
     }
 
-    final public function write_comprador_a_8(stdClass $data){
+    private function write_comprador_a_8(stdClass $data){
         $pdf = $this->write_x(name_entidad: 'inm_tipo_inmobiliaria',row:  $data->inm_conf_empresa);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al escribir en pdf',data:  $pdf);
@@ -566,7 +616,7 @@ class _pdf{
         return $this->pdf;
     }
 
-    final public function write_fecha(modelo $modelo){
+    private function write_fecha(modelo $modelo){
         $write = $this->write_dia();
         if (errores::$error) {
             return $this->error->error(mensaje: 'Error al escribir en pdf', data: $write);
