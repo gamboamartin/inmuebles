@@ -233,12 +233,47 @@ class _keys_selects{
      * @param string $precio_operacion Precio de operacion de compra venta
      * @param string $seccion_retorno Seccion de retorno
      * @return array|stdClass
+     * @version 1.81.1
      */
     final public function inputs_form_base(
         string $btn_action_next, controlador_inm_comprador|controlador_inm_ubicacion $controler,
         string $id_retorno, string $in_registro_id, string $inm_comprador_id, string $inm_ubicacion_id,
         string $precio_operacion, string $seccion_retorno): array|stdClass
     {
+        if(is_array($controler->inputs)){
+            return $this->error->error(mensaje: 'Error $controler->inputs no esta inicializado',
+                data: $controler->inputs);
+        }
+
+        $id_retorno = trim($id_retorno);
+        if($id_retorno === ''){
+            return $this->error->error(mensaje: 'Error id_retorno esta vacio', data: $id_retorno);
+        }
+        $btn_action_next = trim($btn_action_next);
+        if($btn_action_next === ''){
+            return $this->error->error(mensaje: 'Error btn_action_next esta vacio', data: $btn_action_next);
+        }
+        $seccion_retorno = trim($seccion_retorno);
+        if($seccion_retorno === ''){
+            return $this->error->error(mensaje: 'Error seccion_retorno esta vacio', data: $seccion_retorno);
+        }
+        $in_registro_id = trim($in_registro_id);
+        if($in_registro_id === ''){
+            return $this->error->error(mensaje: 'Error in_registro_id esta vacio', data: $in_registro_id);
+        }
+        $precio_operacion = trim($precio_operacion);
+        if($precio_operacion === ''){
+            return $this->error->error(mensaje: 'Error precio_operacion esta vacio', data: $precio_operacion);
+        }
+
+        $inm_comprador_id = trim($inm_comprador_id);
+        $inm_ubicacion_id = trim($inm_ubicacion_id);
+
+        if($inm_comprador_id === '' && $inm_ubicacion_id === ''){
+            return $this->error->error(mensaje: 'Error inm_comprador_id o  inm_ubicacion_id debe tener info',
+                data: $controler->inputs);
+        }
+
         $controler->inputs->id_retorno = $id_retorno;
         $controler->inputs->btn_action_next = $btn_action_next;
         $controler->inputs->seccion_retorno = $seccion_retorno;

@@ -15,6 +15,18 @@ class _inm_comprador{
     }
 
 
+    final public function button(string $accion, controlador_inm_comprador $controler, string $etiqueta, int $indice,
+                                 int $inm_doc_comprador_id, array $inm_conf_docs_comprador, array $params = array(),
+                                 string $style = 'success', string $target = ''): array
+    {
+        $button = $controler->html->button_href(accion: $accion, etiqueta: $etiqueta, registro_id: $inm_doc_comprador_id,
+            seccion: 'inm_doc_comprador', style: $style, params: $params, target: $target);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al integrar button',data:  $button);
+        }
+        $inm_conf_docs_comprador[$indice][$accion] = $button;
+        return $inm_conf_docs_comprador;
+    }
     final public function keys_selects(controlador_inm_comprador $controler){
         $row_upd = $this->row_upd_base(controler: $controler);
         if(errores::$error){

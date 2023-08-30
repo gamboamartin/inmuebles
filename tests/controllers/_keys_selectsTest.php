@@ -205,6 +205,37 @@ class _keys_selectsTest extends test {
         errores::$error = false;
     }
 
+    public function test_inputs_form_base(): void
+    {
+        errores::$error = false;
+
+        $_GET['seccion'] = 'inm_producto_infonavit';
+        $_GET['accion'] = 'lista';
+        $_SESSION['grupo_id'] = 1;
+        $_SESSION['usuario_id'] = 2;
+        $_GET['session_id'] = '1';
+
+
+        $ks = new _keys_selects();
+        //$ks = new liberator($ks);
+
+        $controler = new controlador_inm_comprador(link: $this->link, paths_conf: $this->paths_conf);
+        $controler->inputs = new stdClass();
+        $btn_action_next = 'b';
+        $id_retorno = 'a';
+        $in_registro_id = 'd';
+        $inm_comprador_id = 'f';
+        $inm_ubicacion_id = '';
+        $precio_operacion = 'e';
+        $seccion_retorno = 'c';
+        $resultado = $ks->inputs_form_base($btn_action_next, $controler, $id_retorno, $in_registro_id,
+            $inm_comprador_id, $inm_ubicacion_id, $precio_operacion, $seccion_retorno);
+        $this->assertIsObject($resultado);
+        $this->assertNotTrue(errores::$error);
+        $this->assertEquals('a',$resultado->id_retorno);
+        errores::$error = false;
+    }
+
     public function test_integra_disabled(): void
     {
         errores::$error = false;

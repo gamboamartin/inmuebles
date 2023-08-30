@@ -179,40 +179,28 @@ class controlador_inm_comprador extends _ctl_base {
         return $r_modifica;
     }
 
-    private function button(string $accion, string $etiqueta, int $indice, int $inm_doc_comprador_id,
-                            array $inm_conf_docs_comprador, array $params = array(), string $style = 'success',
-                            string $target = ''): array
-    {
-        $button = $this->html->button_href(accion: $accion, etiqueta: $etiqueta, registro_id: $inm_doc_comprador_id,
-            seccion: 'inm_doc_comprador', style: $style, params: $params, target: $target);
-        if(errores::$error){
-            return $this->errores->error(mensaje: 'Error al integrar button',data:  $button);
-        }
-        $inm_conf_docs_comprador[$indice][$accion] = $button;
-        return $inm_conf_docs_comprador;
-    }
 
     private function buttons(int $indice, int $inm_comprador_id, array $inm_conf_docs_comprador, array $inm_doc_comprador): array
     {
-        $inm_conf_docs_comprador = $this->button(accion: 'descarga',etiqueta: 'Descarga',indice:  $indice,
-            inm_doc_comprador_id: $inm_doc_comprador['inm_doc_comprador_id'],
+        $inm_conf_docs_comprador = (new _inm_comprador())->button(accion: 'descarga', controler: $this,
+            etiqueta: 'Descarga', indice: $indice, inm_doc_comprador_id: $inm_doc_comprador['inm_doc_comprador_id'],
             inm_conf_docs_comprador: $inm_conf_docs_comprador);
 
         if(errores::$error){
             return $this->errores->error(mensaje: 'Error al integrar button',data:  $inm_conf_docs_comprador);
         }
 
-        $inm_conf_docs_comprador = $this->button(accion: 'vista_previa',etiqueta: 'Vista Previa',
-            indice:  $indice, inm_doc_comprador_id: $inm_doc_comprador['inm_doc_comprador_id'],
-            inm_conf_docs_comprador: $inm_conf_docs_comprador, target: '_blank');
+        $inm_conf_docs_comprador = (new _inm_comprador())->button(accion: 'vista_previa', controler: $this,
+            etiqueta: 'Vista Previa', indice: $indice,
+            inm_doc_comprador_id: $inm_doc_comprador['inm_doc_comprador_id'], inm_conf_docs_comprador: $inm_conf_docs_comprador, target: '_blank');
 
         if(errores::$error){
             return $this->errores->error(mensaje: 'Error al integrar button',data:  $inm_conf_docs_comprador);
         }
 
-        $inm_conf_docs_comprador = $this->button(accion: 'descarga_zip',etiqueta: 'ZIP',
-            indice:  $indice, inm_doc_comprador_id: $inm_doc_comprador['inm_doc_comprador_id'],
-            inm_conf_docs_comprador: $inm_conf_docs_comprador);
+        $inm_conf_docs_comprador = (new _inm_comprador())->button(accion: 'descarga_zip', controler: $this,
+            etiqueta: 'ZIP', indice: $indice,
+            inm_doc_comprador_id: $inm_doc_comprador['inm_doc_comprador_id'], inm_conf_docs_comprador: $inm_conf_docs_comprador);
 
         if(errores::$error){
             return $this->errores->error(mensaje: 'Error al integrar button',data:  $inm_conf_docs_comprador);
@@ -222,9 +210,9 @@ class controlador_inm_comprador extends _ctl_base {
         $params = array('accion_retorno'=>'documentos','seccion_retorno'=>$this->seccion,
             'id_retorno'=>$inm_comprador_id);
 
-        $inm_conf_docs_comprador = $this->button(accion: 'elimina_bd', etiqueta: 'Elimina',
-            indice: $indice, inm_doc_comprador_id: $inm_doc_comprador['inm_doc_comprador_id'],
-            inm_conf_docs_comprador: $inm_conf_docs_comprador, params: $params, style: 'danger');
+        $inm_conf_docs_comprador = (new _inm_comprador())->button(accion: 'elimina_bd', controler: $this,
+            etiqueta: 'Elimina', indice: $indice,
+            inm_doc_comprador_id: $inm_doc_comprador['inm_doc_comprador_id'], inm_conf_docs_comprador: $inm_conf_docs_comprador, params: $params, style: 'danger');
 
         if(errores::$error){
             return $this->errores->error(mensaje: 'Error al integrar button',data:  $inm_conf_docs_comprador);
@@ -476,6 +464,9 @@ class controlador_inm_comprador extends _ctl_base {
         if(errores::$error){
             return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
+
+        $keys_selects['lada_nep']->regex = $this->validacion->patterns['lada_html'];
+
 
         $keys_selects = (new init())->key_select_txt(cols: 6,key: 'numero_nep',
             keys_selects:$keys_selects, place_holder: 'Numero');
