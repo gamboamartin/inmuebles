@@ -34,6 +34,14 @@ class _inm_comprador{
 
         return $controler->inputs;
     }
+
+    final public function row_upd_ids(controlador_inm_comprador $controler): stdClass
+    {
+        $controler->row_upd->inm_producto_infonavit_id = 1;
+        $controler->row_upd->inm_attr_tipo_credito_id = 6;
+        $controler->row_upd->inm_destino_credito_id = 1;
+        return $controler->row_upd;
+    }
     final public function row_upd_montos(controlador_inm_comprador $controler): stdClass
     {
         $controler->row_upd->descuento_pension_alimenticia_dh = 0;
@@ -42,5 +50,7 @@ class _inm_comprador{
         $controler->row_upd->monto_ahorro_voluntario = 0;
         return $controler->row_upd;
     }
+
+
 
 }

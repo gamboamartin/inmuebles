@@ -75,7 +75,14 @@ class _keys_selects{
         return $keys_selects;
     }
 
-    final public function hiddens(controlador_inm_ubicacion|controlador_inm_comprador $controler, string $funcion){
+    /**
+     * Integra los inputs de tipo hidden
+     * @param controlador_inm_ubicacion|controlador_inm_comprador $controler Controlador en ejecucion
+     * @param string $funcion Funcion de retorno
+     * @return array|stdClass
+     */
+    final public function hiddens(controlador_inm_ubicacion|controlador_inm_comprador $controler, string $funcion): array|stdClass
+    {
         $in_registro_id = $controler->html->hidden(name:'registro_id',value: $controler->registro_id);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al in_registro_id',data:  $in_registro_id);

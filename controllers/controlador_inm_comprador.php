@@ -71,9 +71,10 @@ class controlador_inm_comprador extends _ctl_base {
             return $this->retorno_error(mensaje: 'Error al integrar row_upd',data:  $row_upd, header: $header,ws:  $ws);
         }
 
-        $this->row_upd->inm_producto_infonavit_id = 1;
-        $this->row_upd->inm_attr_tipo_credito_id = 6;
-        $this->row_upd->inm_destino_credito_id = 1;
+        $row_upd = (new _inm_comprador())->row_upd_ids(controler: $this);
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al integrar row_upd',data:  $row_upd, header: $header,ws:  $ws);
+        }
 
         $keys_selects = (new _keys_selects())->init(controler: $this,row_upd: $this->row_upd);
         if(errores::$error){
