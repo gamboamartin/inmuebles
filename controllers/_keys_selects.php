@@ -16,7 +16,8 @@ class _keys_selects{
     }
 
     /**
-     * @param controlador_inm_comprador $controler
+     * Ajusta los elementos para front obtenidos del cliente
+     * @param controlador_inm_comprador $controler Controlador en ejecucion
      * @return array|stdClass
      */
     private function ajusta_row_data_cliente(controlador_inm_comprador $controler): array|stdClass

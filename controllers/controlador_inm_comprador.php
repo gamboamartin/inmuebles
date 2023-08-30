@@ -616,32 +616,14 @@ class controlador_inm_comprador extends _ctl_base {
         }
         $pdf->useTemplate($tplIdx,null,null,null,null,true);
 
-        /**
-         * 5. DATOS DE IDENTIFICACIÓN DEL (DE LA) DERECHOHABIENTE / DATOS QUE SERÁN VALIDADOS
-         */
 
-        $write = $_pdf->apartado_5(data: $data);
+
+        $write = $_pdf->hoja_2(data: $data, link: $this->link);
         if (errores::$error) {
             return $this->retorno_error(mensaje: 'Error al escribir en pdf', data: $write, header: $header, ws: $ws);
         }
 
-        /**
-         * 6. DATOS DE IDENTIFICACIÓN QUE SERÁN VALIDADOS (OBLIGATORIOS EN CRÉDITO CONYUGAL, FAMILIAR O CORRESIDENCIAL)
-         */
-
-        $write = $_pdf->write_co_acreditados(data: $data,link:  $this->link);
-        if (errores::$error) {
-            return $this->retorno_error(mensaje: 'Error al escribir en pdf', data: $write, header: $header, ws: $ws);
-        }
-
-
-        /**
-         * 7. REFERENCIAS FAMILIARES DEL (DE LA) DERECHOHABIENTE / DATOS QUE SERÁN VALIDADOS
-         */
-        $write = $_pdf->write_referencias(data: $data);
-        if (errores::$error) {
-            return $this->retorno_error(mensaje: 'Error al escribir en pdf', data: $write, header: $header, ws: $ws);
-        }
+        
 
         $pdf->AddPage();
 

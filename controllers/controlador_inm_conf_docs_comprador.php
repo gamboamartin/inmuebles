@@ -81,6 +81,14 @@ class controlador_inm_conf_docs_comprador extends _ctl_base {
                 header: $header,ws:  $ws);
         }
 
+        $columns_ds = array('pr_proceso_descripcion','pr_sub_proceso_descripcion');
+        $keys_selects = $this->key_select(cols:12, con_registros: true,filtro:  array(), key: 'pr_sub_proceso_id',
+            keys_selects: $keys_selects, id_selected: -1, label: 'Sub Proceso', columns_ds: $columns_ds);
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects,
+                header: $header,ws:  $ws);
+        }
+
 
         $inputs = $this->inputs(keys_selects: $keys_selects);
         if(errores::$error){
@@ -128,6 +136,8 @@ class controlador_inm_conf_docs_comprador extends _ctl_base {
         $init_data['inm_attr_tipo_credito'] = "gamboamartin\\inmuebles";
         $init_data['inm_destino_credito'] = "gamboamartin\\inmuebles";
         $init_data['inm_producto_infonavit'] = "gamboamartin\\inmuebles";
+
+        $init_data['pr_sub_proceso'] = "gamboamartin\\proceso";
 
         $campos_view = $this->campos_view_base(init_data: $init_data,keys:  $keys);
 
@@ -184,6 +194,15 @@ class controlador_inm_conf_docs_comprador extends _ctl_base {
                 header: $header,ws:  $ws);
         }
 
+        $columns_ds = array('pr_proceso_descripcion','pr_sub_proceso_descripcion');
+        $keys_selects = $this->key_select(cols:12, con_registros: true,filtro:  array(), key: 'pr_sub_proceso_id',
+            keys_selects: $keys_selects, id_selected: $this->row_upd->pr_sub_proceso_id, label: 'Sub Proceso',
+            columns_ds: $columns_ds);
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects,
+                header: $header,ws:  $ws);
+        }
+
 
         $base = $this->base_upd(keys_selects: $keys_selects, params: array(),params_ajustados: array());
         if(errores::$error){
@@ -202,6 +221,8 @@ class controlador_inm_conf_docs_comprador extends _ctl_base {
         $columns["doc_tipo_documento_id"]["titulo"] = "Id";
         $columns["doc_tipo_documento_descripcion"]["titulo"] = "Tipo de Documento";
         $columns["inm_attr_tipo_credito_descripcion"]["titulo"] = "Tipo de Credito";
+        $columns["inm_proceso_descripcion"]["titulo"] = "Proceso";
+        $columns["inm_sub_proceso_descripcion"]["titulo"] = "SUB Proceso";
 
         $filtro = array("doc_tipo_documento.id",'doc_tipo_documento.descripcion');
 

@@ -107,7 +107,7 @@ class _pdf{
         return $write;
     }
 
-    final public function apartado_5(stdClass $data){
+    private function apartado_5(stdClass $data){
         $write = $this->write_comprador_hoja_3(data: $data);
         if (errores::$error) {
             return $this->error->error(mensaje: 'Error al escribir en pdf', data: $write);
@@ -254,6 +254,37 @@ class _pdf{
         return $pdf;
     }
 
+    final public function hoja_2(stdClass $data, PDO $link){
+        /**
+         * 5. DATOS DE IDENTIFICACIÓN DEL (DE LA) DERECHOHABIENTE / DATOS QUE SERÁN VALIDADOS
+         */
+
+        $write = $this->apartado_5(data: $data);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al escribir en pdf', data: $write);
+        }
+
+        /**
+         * 6. DATOS DE IDENTIFICACIÓN QUE SERÁN VALIDADOS (OBLIGATORIOS EN CRÉDITO CONYUGAL, FAMILIAR O CORRESIDENCIAL)
+         */
+
+        $write = $this->write_co_acreditados(data: $data,link:  $link);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al escribir en pdf', data: $write);
+        }
+
+
+        /**
+         * 7. REFERENCIAS FAMILIARES DEL (DE LA) DERECHOHABIENTE / DATOS QUE SERÁN VALIDADOS
+         */
+        $write = $this->write_referencias(data: $data);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al escribir en pdf', data: $write);
+        }
+
+        return $write;
+    }
+
 
 
     private function keys_cliente(): array
@@ -392,7 +423,7 @@ class _pdf{
         return $write;
     }
 
-    final public function write_co_acreditados(stdClass $data, PDO $link){
+    private function write_co_acreditados(stdClass $data, PDO $link){
         $writes = array();
         foreach ($data->inm_rel_co_acreditados as $imp_rel_co_acred){
             $write = $this->write_co_acreditado($imp_rel_co_acred['inm_co_acreditado_id'],link:  $link);
@@ -511,7 +542,7 @@ class _pdf{
         return $write;
     }
 
-    final public function write_referencias(stdClass $data){
+    private function write_referencias(stdClass $data){
         $writes = array();
         foreach ($data->inm_referencias as $indice=>$inm_referencia){
             $keys_referencias = $this->get_key_referencias(indice: $indice);
