@@ -201,6 +201,29 @@ class _keys_selectsTest extends test {
         errores::$error = false;
     }
 
+    public function test_integra_disableds(): void
+    {
+        errores::$error = false;
+
+        $_GET['seccion'] = 'inm_producto_infonavit';
+        $_GET['accion'] = 'lista';
+        $_SESSION['grupo_id'] = 1;
+        $_SESSION['usuario_id'] = 2;
+        $_GET['session_id'] = '1';
+
+
+        $ks = new _keys_selects();
+        $ks = new liberator($ks);
+
+        $keys_selects = array();
+        $keys[] = 'z';
+        $resultado = $ks->integra_disableds($keys, $keys_selects);
+        $this->assertIsArray($resultado);
+        $this->assertNotTrue(errores::$error);
+        $this->assertTrue($resultado['z']->disabled);
+        errores::$error = false;
+    }
+
     public function test_key_selects_base(): void
     {
         errores::$error = false;

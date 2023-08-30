@@ -4,6 +4,7 @@ namespace gamboamartin\inmuebles\controllers;
 use base\orm\modelo;
 use gamboamartin\errores\errores;
 use gamboamartin\inmuebles\models\inm_co_acreditado;
+use gamboamartin\inmuebles\models\inm_comprador;
 use PDO;
 use setasign\Fpdi\Fpdi;
 use stdClass;
@@ -19,7 +20,7 @@ class _pdf{
         $this->pdf = $pdf;
     }
 
-    final public function add_template(string $file_plantilla, int $page, string $path_base, bool $plantilla_cargada){
+    private function add_template(string $file_plantilla, int $page, string $path_base, bool $plantilla_cargada){
         $this->pdf->AddPage();
         $tpl_idx = $this->tpl_idx(file_plantilla: $file_plantilla, page: $page,path_base:  $path_base,
             plantilla_cargada: $plantilla_cargada);
@@ -199,6 +200,52 @@ class _pdf{
         return $pdf;
     }
 
+    private function genera_hoja_1(stdClass $data, string $path_base){
+        $pdf = $this->add_template(file_plantilla: 'templates/solicitud_infonavit.pdf',page:  1,
+            path_base:  $path_base,plantilla_cargada:  false);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al agregar template', data: $pdf);
+        }
+        $pdf->SetFont('Arial', 'B', 15);
+        $pdf->SetTextColor(0, 0, 0);
+
+        $pdf_exe = $this->hoja_1(data: $data);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al escribir en pdf', data: $pdf_exe);
+        }
+
+        return $pdf;
+    }
+
+    private function genera_hoja_2(stdClass $data, PDO $link, string $path_base){
+        $pdf = $this->add_template(file_plantilla: 'templates/solicitud_infonavit.pdf',page:  2,
+            path_base:  $path_base,plantilla_cargada:  true);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al agregar template', data: $pdf);
+        }
+
+        $write = $this->hoja_2(data: $data, link: $link);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al escribir en pdf', data: $write);
+        }
+        return $write;
+    }
+
+    private function genera_hoja_3(stdClass $data, modelo $modelo, string $path_base){
+        $pdf = $this->add_template(file_plantilla: 'templates/solicitud_infonavit.pdf',page:  3,
+            path_base:  $path_base,plantilla_cargada:  true);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al agregar template', data: $pdf);
+        }
+
+
+        $write = $this->hoja_3(data: $data, modelo: $modelo);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al escribir en pdf', data: $write);
+        }
+        return $write;
+    }
+
     private function get_key_referencias(int $indice){
         $keys_referencias = (new _keys_selects())->keys_referencias();
         if (errores::$error) {
@@ -226,7 +273,7 @@ class _pdf{
 
     }
 
-    final public function hoja_1(stdClass $data){
+    private function hoja_1(stdClass $data){
         /**
          * 1. CRÉDITO SOLICITADO
          */
@@ -269,7 +316,7 @@ class _pdf{
         return $pdf;
     }
 
-    final public function hoja_2(stdClass $data, PDO $link){
+    private function hoja_2(stdClass $data, PDO $link){
         /**
          * 5. DATOS DE IDENTIFICACIÓN DEL (DE LA) DERECHOHABIENTE / DATOS QUE SERÁN VALIDADOS
          */
@@ -301,7 +348,7 @@ class _pdf{
     }
 
 
-    final public function hoja_3(stdClass $data, modelo $modelo){
+    private function hoja_3(stdClass $data, modelo $modelo){
         $write = $this->write_comprador_a_8(data: $data);
         if (errores::$error) {
             return $this->error->error(mensaje: 'Error al escribir en pdf', data: $write);
@@ -323,6 +370,27 @@ class _pdf{
             return $this->error->error(mensaje: 'Error al escribir en pdf', data: $write);
         }
         return $write;
+    }
+
+    private function hojas(stdClass $data, modelo $modelo, string $path_base){
+        $pdf_exe = $this->genera_hoja_1(data: $data,path_base: $path_base);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al escribir en pdf', data: $pdf_exe);
+        }
+
+
+        $pdf_exe = $this->genera_hoja_2(data: $data, link: $modelo->link, path_base: $path_base);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al escribir en pdf', data: $pdf_exe);
+        }
+
+
+        $pdf_exe = $this->genera_hoja_3(data: $data,modelo:  $modelo,path_base:  $path_base);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al escribir en pdf', data: $pdf_exe);
+        }
+
+        return $pdf_exe;
     }
 
 
@@ -382,6 +450,21 @@ class _pdf{
         $keys_ubicacion['dp_municipio_ubicacion_descripcion']= array('x'=>100,'y'=>176);
         $keys_ubicacion['dp_cp_ubicacion_descripcion']= array('x'=>173,'y'=>176);
         return $keys_ubicacion;
+    }
+
+    final public function solicitud_infonavit(int $inm_comprador_id, string $path_base, modelo $modelo){
+
+        $data = (new inm_comprador(link: $modelo->link))->data_pdf(inm_comprador_id: $inm_comprador_id);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al obtener datos', data: $data);
+        }
+
+        $pdf_exe = $this->hojas(data: $data, modelo: $modelo, path_base: $path_base);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al escribir en pdf', data: $pdf_exe);
+        }
+        $this->pdf->Output('solicitud.pdf', 'I');
+        return $this->pdf;
     }
 
     private function tpl_idx(string $file_plantilla, int $page, string $path_base, bool $plantilla_cargada): array|string

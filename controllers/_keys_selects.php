@@ -251,10 +251,21 @@ class _keys_selects{
      * @param array $keys Keys a integrar coo disabled
      * @param array $keys_selects parametros previos cargados
      * @return array
+     * @version 1.74.1
      */
     private function integra_disableds(array $keys, array $keys_selects): array
     {
         foreach ($keys as $key){
+            if(!is_string($key)){
+                return $this->error->error(mensaje: 'Error key no es un string',data: $key);
+            }
+            $key = trim($key);
+            if($key === ''){
+                return $this->error->error(mensaje: 'Error key esta vacio',data: $key);
+            }
+            if(is_numeric($key)){
+                return $this->error->error(mensaje: 'Error key debe ser un texto',data: $key);
+            }
             $keys_selects = $this->integra_disabled(key: $key,keys_selects:  $keys_selects);
             if(errores::$error){
                 return $this->error->error(mensaje: 'Error al integra disabled',data: $keys_selects);

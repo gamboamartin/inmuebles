@@ -596,66 +596,14 @@ class controlador_inm_comprador extends _ctl_base {
     public function solicitud_infonavit(bool $header, bool $ws = false)
     {
 
-
-        $data = (new inm_comprador(link: $this->link))->data_pdf(inm_comprador_id: $this->registro_id);
-        if (errores::$error) {
-            return $this->retorno_error(
-                mensaje: 'Error al obtener datos', data: $data, header: $header, ws: $ws);
-        }
-
         $pdf = new Fpdi();
-
         $_pdf = new _pdf(pdf: $pdf);
 
-
-        $pdf = $_pdf->add_template(file_plantilla: 'templates/solicitud_infonavit.pdf',page:  1,
-            path_base:  $this->path_base,plantilla_cargada:  false);
-        if (errores::$error) {
-            return $this->retorno_error(mensaje: 'Error al agregar template', data: $pdf, header: $header, ws: $ws);
-        }
-
-        $pdf->SetFont('Arial', 'B', 15);
-        $pdf->SetTextColor(0, 0, 0);
-
-
-
-        $pdf_exe = $_pdf->hoja_1(data: $data);
+        $pdf_exe = $_pdf->solicitud_infonavit(inm_comprador_id: $this->registro_id,path_base:  $this->path_base,
+            modelo:  $this->modelo);
         if (errores::$error) {
             return $this->retorno_error(mensaje: 'Error al escribir en pdf', data: $pdf_exe, header: $header, ws: $ws);
         }
-
-
-        $pdf = $_pdf->add_template(file_plantilla: 'templates/solicitud_infonavit.pdf',page:  2,
-            path_base:  $this->path_base,plantilla_cargada:  true);
-        if (errores::$error) {
-            return $this->retorno_error(mensaje: 'Error al agregar template', data: $pdf, header: $header, ws: $ws);
-        }
-
-
-
-
-        $write = $_pdf->hoja_2(data: $data, link: $this->link);
-        if (errores::$error) {
-            return $this->retorno_error(mensaje: 'Error al escribir en pdf', data: $write, header: $header, ws: $ws);
-        }
-
-
-
-        $pdf = $_pdf->add_template(file_plantilla: 'templates/solicitud_infonavit.pdf',page:  3,
-            path_base:  $this->path_base,plantilla_cargada:  true);
-        if (errores::$error) {
-            return $this->retorno_error(mensaje: 'Error al agregar template', data: $pdf, header: $header, ws: $ws);
-        }
-
-
-        $write = $_pdf->hoja_3(data: $data, modelo: $this->modelo);
-        if (errores::$error) {
-            return $this->retorno_error(mensaje: 'Error al escribir en pdf', data: $write, header: $header, ws: $ws);
-        }
-
-
-
-        $pdf->Output('tu_pedorrote.pdf', 'I');
 
         exit;
     }
