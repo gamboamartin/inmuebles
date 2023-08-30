@@ -222,6 +222,18 @@ class _keys_selects{
         return $row_upd;
     }
 
+    /**
+     * Se integran los inputs a un objeto legible para uso en frontend
+     * @param string $btn_action_next Button siguiente accion
+     * @param controlador_inm_comprador|controlador_inm_ubicacion $controler Controlador en ejecucion
+     * @param string $id_retorno Identificador de retorno como get registro_id
+     * @param string $in_registro_id Input de retorno
+     * @param string $inm_comprador_id Comprador identificador
+     * @param string $inm_ubicacion_id Ubicacion Identificador
+     * @param string $precio_operacion Precio de operacion de compra venta
+     * @param string $seccion_retorno Seccion de retorno
+     * @return array|stdClass
+     */
     final public function inputs_form_base(
         string $btn_action_next, controlador_inm_comprador|controlador_inm_ubicacion $controler,
         string $id_retorno, string $in_registro_id, string $inm_comprador_id, string $inm_ubicacion_id,

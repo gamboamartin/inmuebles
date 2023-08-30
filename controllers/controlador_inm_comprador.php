@@ -66,15 +66,9 @@ class controlador_inm_comprador extends _ctl_base {
                 mensaje: 'Error al inicializar alta',data:  $r_alta, header: $header,ws:  $ws);
         }
 
-        $row_upd = (new _inm_comprador())->row_upd_base(controler: $this);
+        $keys_selects = (new _inm_comprador())->keys_selects(controler: $this);
         if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al integrar row_upd',data:  $row_upd, header: $header,ws:  $ws);
-        }
-
-        $keys_selects = (new _keys_selects())->init(controler: $this,row_upd: $this->row_upd);
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects,
-                header: $header,ws:  $ws);
+            return $this->retorno_error(mensaje: 'Error al integrar row_upd',data:  $keys_selects, header: $header,ws:  $ws);
         }
 
         $inputs = $this->inputs(keys_selects: $keys_selects);
@@ -418,11 +412,7 @@ class controlador_inm_comprador extends _ctl_base {
     protected function key_selects_txt(array $keys_selects): array
     {
 
-        $keys_selects = (new init())->key_select_txt(cols: 6,key: 'es_segundo_credito', keys_selects:$keys_selects,
-            place_holder: 'Es segundo Credito');
-        if(errores::$error){
-            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
-        }
+
         $keys_selects = (new init())->key_select_txt(cols: 12,key: 'descuento_pension_alimenticia_dh',
             keys_selects:$keys_selects, place_holder: 'Descuento Pension Alimenticia Derechohabiente');
         if(errores::$error){
@@ -486,6 +476,7 @@ class controlador_inm_comprador extends _ctl_base {
         if(errores::$error){
             return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
+
         $keys_selects = (new init())->key_select_txt(cols: 6,key: 'numero_nep',
             keys_selects:$keys_selects, place_holder: 'Numero');
         if(errores::$error){

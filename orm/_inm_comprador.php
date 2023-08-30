@@ -2,6 +2,7 @@
 namespace gamboamartin\inmuebles\models;
 
 use gamboamartin\errores\errores;
+use gamboamartin\inmuebles\controllers\_keys_selects;
 use gamboamartin\inmuebles\controllers\controlador_inm_comprador;
 use stdClass;
 
@@ -13,6 +14,19 @@ class _inm_comprador{
         $this->error = new errores();
     }
 
+
+    final public function keys_selects(controlador_inm_comprador $controler){
+        $row_upd = $this->row_upd_base(controler: $controler);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al integrar row_upd',data:  $row_upd);
+        }
+
+        $keys_selects = (new _keys_selects())->init(controler: $controler,row_upd: $controler->row_upd);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        }
+        return $keys_selects;
+    }
     final public function radios(controlador_inm_comprador $controler){
         $es_segundo_credito = $controler->html->directivas->input_radio_doble(campo: 'es_segundo_credito',
             checked_default: 2,tag: 'Es Segundo Credito', val_1: 'SI',val_2: 'NO');
@@ -35,7 +49,7 @@ class _inm_comprador{
         return $controler->inputs;
     }
 
-    final public function row_upd_base(controlador_inm_comprador $controler){
+    private function row_upd_base(controlador_inm_comprador $controler){
         $row_upd = $this->row_upd_montos(controler: $controler);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al integrar row_upd',data:  $row_upd);
