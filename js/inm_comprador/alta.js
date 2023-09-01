@@ -20,6 +20,7 @@ let curp_ct = $("#curp");
 let rfc_ct = $("#rfc");
 let apellido_paterno_ct = $("#apellido_paterno");
 let apellido_materno_ct = $("#apellido_materno");
+let nombre_ct = $("#nombre");
 
 let dp_pais_id = -1;
 let dp_estado_id = -1;
@@ -32,6 +33,14 @@ apellido_paterno_ct.change(function(){
     let apellido_paterno = $(this).val();
     apellido_paterno = apellido_paterno.toUpperCase()
     apellido_paterno_ct.val(apellido_paterno);
+
+});
+
+nombre_ct.change(function(){
+
+    let nombre = $(this).val();
+    nombre = nombre.toUpperCase()
+    nombre_ct.val(nombre);
 
 });
 
