@@ -19,6 +19,7 @@ let nrp_nep_ct = $("#nrp_nep");
 let curp_ct = $("#curp");
 let rfc_ct = $("#rfc");
 let apellido_paterno_ct = $("#apellido_paterno");
+let apellido_materno_ct = $("#apellido_materno");
 
 let dp_pais_id = -1;
 let dp_estado_id = -1;
@@ -31,6 +32,14 @@ apellido_paterno_ct.change(function(){
     let apellido_paterno = $(this).val();
     apellido_paterno = apellido_paterno.toUpperCase()
     apellido_paterno_ct.val(apellido_paterno);
+
+});
+
+apellido_materno_ct.change(function(){
+
+    let apellido_materno = $(this).val();
+    apellido_materno = apellido_materno.toUpperCase()
+    apellido_materno_ct.val(apellido_materno);
 
 });
 
