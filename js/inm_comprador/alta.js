@@ -14,11 +14,21 @@ let sl_inm_persona_discapacidad_id = $("#inm_persona_discapacidad_id");
 let chk_es_segundo_credito = $(".es_segundo_credito");
 let chk_con_discapacidad = $(".con_discapacidad");
 
+let nombre_empresa_patron_ct = $("#nombre_empresa_patron");
+
 let dp_pais_id = -1;
 let dp_estado_id = -1;
 let dp_municipio_id = -1;
 let dp_cp_id = -1;
 let dp_colonia_postal_id = -1;
+
+nombre_empresa_patron_ct.change(function(){
+
+    let nombre_empresa_patron = $(this).val();
+    nombre_empresa_patron = nombre_empresa_patron.toUpperCase()
+    nombre_empresa_patron_ct.val(nombre_empresa_patron);
+
+});
 
 sl_inm_plazo_credito_sc_id.prop('disabled',true);
 

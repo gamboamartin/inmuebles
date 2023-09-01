@@ -132,6 +132,7 @@ class _inm_comprador{
      * Inicializa los ids default
      * @param controlador_inm_comprador $controler Controlador en ejecucion
      * @return stdClass
+     * @version 1.87.1
      */
     private function row_upd_ids(controlador_inm_comprador $controler): stdClass
     {
