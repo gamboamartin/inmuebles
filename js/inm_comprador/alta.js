@@ -15,6 +15,7 @@ let chk_es_segundo_credito = $(".es_segundo_credito");
 let chk_con_discapacidad = $(".con_discapacidad");
 
 let nombre_empresa_patron_ct = $("#nombre_empresa_patron");
+let nrp_nep_ct = $("#nrp_nep");
 
 let dp_pais_id = -1;
 let dp_estado_id = -1;
@@ -27,6 +28,14 @@ nombre_empresa_patron_ct.change(function(){
     let nombre_empresa_patron = $(this).val();
     nombre_empresa_patron = nombre_empresa_patron.toUpperCase()
     nombre_empresa_patron_ct.val(nombre_empresa_patron);
+
+});
+
+nrp_nep_ct.change(function(){
+
+    let nrp_nep = $(this).val();
+    nrp_nep = nrp_nep.toUpperCase()
+    nrp_nep_ct.val(nrp_nep);
 
 });
 

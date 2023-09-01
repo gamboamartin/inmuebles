@@ -115,7 +115,13 @@ class _inm_comprador{
         return $controler->inputs;
     }
 
-    private function row_upd_base(controlador_inm_comprador $controler){
+    /**
+     * Ajusta los key base para los inputs
+     * @param controlador_inm_comprador $controler Controlador en ejecucion
+     * @return array|stdClass
+     */
+    private function row_upd_base(controlador_inm_comprador $controler): array|stdClass
+    {
         $row_upd = $this->row_upd_montos(controler: $controler);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al integrar row_upd',data:  $row_upd);
