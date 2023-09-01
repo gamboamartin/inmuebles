@@ -53,12 +53,32 @@ class _inm_comprador{
         return $r_inm_rel_ubi_comp->registros;
     }
 
-    final public function integra_button_default(string $button, int $indice, array $inm_conf_docs_comprador): array
+    private function integra_button_default(string $button, int $indice, array $inm_conf_docs_comprador): array
     {
         $inm_conf_docs_comprador[$indice]['descarga'] = $button;
         $inm_conf_docs_comprador[$indice]['vista_previa'] = $button;
         $inm_conf_docs_comprador[$indice]['descarga_zip'] = $button;
         $inm_conf_docs_comprador[$indice]['elimina_bd'] = $button;
+        return $inm_conf_docs_comprador;
+    }
+
+    final public function integra_data(controlador_inm_comprador $controler, array $doc_tipo_documento,
+                                       int $indice, array $inm_conf_docs_comprador){
+        $params = array('doc_tipo_documento_id'=>$doc_tipo_documento['doc_tipo_documento_id']);
+
+        $button = $controler->html->button_href(accion: 'subir_documento',etiqueta:
+            'Subir Documento',registro_id:  $controler->registro_id,
+            seccion:  'inm_comprador',style:  'warning', params: $params);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al integrar button',data:  $button);
+        }
+
+        $inm_conf_docs_comprador = $this->integra_button_default(button: $button,
+            indice:  $indice,inm_conf_docs_comprador:  $inm_conf_docs_comprador);
+
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al integrar button',data:  $inm_conf_docs_comprador);
+        }
         return $inm_conf_docs_comprador;
     }
     final public function keys_selects(controlador_inm_comprador $controler){
@@ -108,6 +128,11 @@ class _inm_comprador{
         return $controler->row_upd;
     }
 
+    /**
+     * Inicializa los ids default
+     * @param controlador_inm_comprador $controler Controlador en ejecucion
+     * @return stdClass
+     */
     private function row_upd_ids(controlador_inm_comprador $controler): stdClass
     {
         $controler->row_upd->inm_producto_infonavit_id = 1;
