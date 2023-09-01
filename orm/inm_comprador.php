@@ -23,7 +23,7 @@ class inm_comprador extends _modelo_parent{
             'es_segundo_credito','inm_plazo_credito_sc_id','descuento_pension_alimenticia_dh',
             'descuento_pension_alimenticia_fc','monto_credito_solicitado_dh','monto_ahorro_voluntario','nombre',
             'apellido_paterno','inm_tipo_discapacidad_id','inm_tipo_discapacidad_id','inm_estado_civil_id',
-            'bn_cuenta_id','inm_persona_discapacidad_id','lada_nep','numero_nep');
+            'bn_cuenta_id','inm_persona_discapacidad_id','lada_nep','numero_nep','curp');
 
         $columnas_extra= array();
         $renombres['dp_calle_pertenece_empresa']['nombre_original']= 'dp_calle_pertenece';
@@ -56,11 +56,12 @@ class inm_comprador extends _modelo_parent{
             'descuento_pension_alimenticia_fc','monto_credito_solicitado_dh','monto_ahorro_voluntario','nombre',
             'apellido_paterno','apellido_materno','nombre_empresa_patron','nrp_nep','lada_nep','numero_nep',
             'extension_nep','lada_com','numero_com','cel_com','genero','correo_com','inm_tipo_discapacidad_id',
-            'inm_tipo_discapacidad_id','inm_estado_civil_id','bn_cuenta_id','inm_persona_discapacidad_id');
+            'inm_tipo_discapacidad_id','inm_estado_civil_id','bn_cuenta_id','inm_persona_discapacidad_id','curp');
 
 
         $tipo_campos['lada_nep'] = 'lada';
         $tipo_campos['numero_nep'] = 'tel_sin_lada';
+        $tipo_campos['curp'] = 'curp';
 
         parent::__construct(link: $link, tabla: $tabla, campos_obligatorios: $campos_obligatorios,
             columnas: $columnas, columnas_extra: $columnas_extra, renombres: $renombres,

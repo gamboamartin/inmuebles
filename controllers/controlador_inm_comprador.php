@@ -175,16 +175,16 @@ class controlador_inm_comprador extends _ctl_base {
         }
 
         $inm_conf_docs_comprador = (new _inm_comprador())->button(accion: 'vista_previa', controler: $this,
-            etiqueta: 'Vista Previa', indice: $indice,
-            inm_doc_comprador_id: $inm_doc_comprador['inm_doc_comprador_id'], inm_conf_docs_comprador: $inm_conf_docs_comprador, target: '_blank');
+            etiqueta: 'Vista Previa', indice: $indice, inm_doc_comprador_id: $inm_doc_comprador['inm_doc_comprador_id'],
+            inm_conf_docs_comprador: $inm_conf_docs_comprador, target: '_blank');
 
         if(errores::$error){
             return $this->errores->error(mensaje: 'Error al integrar button',data:  $inm_conf_docs_comprador);
         }
 
         $inm_conf_docs_comprador = (new _inm_comprador())->button(accion: 'descarga_zip', controler: $this,
-            etiqueta: 'ZIP', indice: $indice,
-            inm_doc_comprador_id: $inm_doc_comprador['inm_doc_comprador_id'], inm_conf_docs_comprador: $inm_conf_docs_comprador);
+            etiqueta: 'ZIP', indice: $indice, inm_doc_comprador_id: $inm_doc_comprador['inm_doc_comprador_id'],
+            inm_conf_docs_comprador: $inm_conf_docs_comprador);
 
         if(errores::$error){
             return $this->errores->error(mensaje: 'Error al integrar button',data:  $inm_conf_docs_comprador);
@@ -195,8 +195,8 @@ class controlador_inm_comprador extends _ctl_base {
             'id_retorno'=>$inm_comprador_id);
 
         $inm_conf_docs_comprador = (new _inm_comprador())->button(accion: 'elimina_bd', controler: $this,
-            etiqueta: 'Elimina', indice: $indice,
-            inm_doc_comprador_id: $inm_doc_comprador['inm_doc_comprador_id'], inm_conf_docs_comprador: $inm_conf_docs_comprador, params: $params, style: 'danger');
+            etiqueta: 'Elimina', indice: $indice, inm_doc_comprador_id: $inm_doc_comprador['inm_doc_comprador_id'],
+            inm_conf_docs_comprador: $inm_conf_docs_comprador, params: $params, style: 'danger');
 
         if(errores::$error){
             return $this->errores->error(mensaje: 'Error al integrar button',data:  $inm_conf_docs_comprador);
@@ -312,10 +312,13 @@ class controlador_inm_comprador extends _ctl_base {
                     return $this->retorno_error(mensaje: 'Error al integrar button',data:  $button, header: $header,ws:  $ws);
                 }
 
-                $inm_conf_docs_comprador[$indice]['descarga'] = $button;
-                $inm_conf_docs_comprador[$indice]['vista_previa'] = $button;
-                $inm_conf_docs_comprador[$indice]['descarga_zip'] = $button;
-                $inm_conf_docs_comprador[$indice]['elimina_bd'] = $button;
+                $inm_conf_docs_comprador = (new _inm_comprador())->integra_button_default(button: $button,
+                    indice:  $indice,inm_conf_docs_comprador:  $inm_conf_docs_comprador);
+
+                if(errores::$error){
+                    return $this->retorno_error(mensaje: 'Error al integrar button',data:  $inm_conf_docs_comprador, header: $header,ws:  $ws);
+                }
+
 
             }
         }

@@ -41,7 +41,7 @@ class base_test{
         PDO $link, string $apellido_materno = 'Apellido M', string $apellido_paterno = 'Apellido P',
         int $bn_cuenta_id = 1, int $cat_sat_forma_pago_id = 99, int $cat_sat_metodo_pago_id = 2,
         int $cat_sat_moneda_id = 161, int $cat_sat_regimen_fiscal_id = 605, int $cat_sat_tipo_persona_id = 5,
-        int $cat_sat_uso_cfdi_id = 22, int $com_tipo_cliente_id = 1, string $curp = 'CURP',
+        int $cat_sat_uso_cfdi_id = 22, int $com_tipo_cliente_id = 1, string $curp = 'XEXX010101MNEXXXA8',
         float $descuento_pension_alimenticia_dh = 0, float $descuento_pension_alimenticia_fc = 0,
         int $dp_calle_pertenece_id = 1, string $es_segundo_credito = 'NO', $id = 1, int $inm_attr_tipo_credito_id = 1,
         int $inm_destino_credito_id = 1, int $inm_estado_civil_id= 1, int $inm_producto_infonavit_id = 1,

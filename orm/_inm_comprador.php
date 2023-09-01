@@ -52,6 +52,15 @@ class _inm_comprador{
 
         return $r_inm_rel_ubi_comp->registros;
     }
+
+    final public function integra_button_default(string $button, int $indice, array $inm_conf_docs_comprador): array
+    {
+        $inm_conf_docs_comprador[$indice]['descarga'] = $button;
+        $inm_conf_docs_comprador[$indice]['vista_previa'] = $button;
+        $inm_conf_docs_comprador[$indice]['descarga_zip'] = $button;
+        $inm_conf_docs_comprador[$indice]['elimina_bd'] = $button;
+        return $inm_conf_docs_comprador;
+    }
     final public function keys_selects(controlador_inm_comprador $controler){
         $row_upd = $this->row_upd_base(controler: $controler);
         if(errores::$error){
@@ -112,6 +121,7 @@ class _inm_comprador{
      * Asigna los montos a 0 en alta
      * @param controlador_inm_comprador $controler  Controlador en ejecucion
      * @return stdClass
+     * @version 1.85.1
      */
     private function row_upd_montos(controlador_inm_comprador $controler): stdClass
     {
