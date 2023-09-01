@@ -18,12 +18,21 @@ let nombre_empresa_patron_ct = $("#nombre_empresa_patron");
 let nrp_nep_ct = $("#nrp_nep");
 let curp_ct = $("#curp");
 let rfc_ct = $("#rfc");
+let apellido_paterno_ct = $("#apellido_paterno");
 
 let dp_pais_id = -1;
 let dp_estado_id = -1;
 let dp_municipio_id = -1;
 let dp_cp_id = -1;
 let dp_colonia_postal_id = -1;
+
+apellido_paterno_ct.change(function(){
+
+    let apellido_paterno = $(this).val();
+    apellido_paterno = apellido_paterno.toUpperCase()
+    apellido_paterno_ct.val(apellido_paterno);
+
+});
 
 nombre_empresa_patron_ct.change(function(){
 
