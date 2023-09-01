@@ -45,9 +45,10 @@ class base_test{
         float $descuento_pension_alimenticia_dh = 0, float $descuento_pension_alimenticia_fc = 0,
         int $dp_calle_pertenece_id = 1, string $es_segundo_credito = 'NO', $id = 1, int $inm_attr_tipo_credito_id = 1,
         int $inm_destino_credito_id = 1, int $inm_estado_civil_id= 1, int $inm_producto_infonavit_id = 1,
-        int $inm_tipo_discapacidad_id= 1, string $lada_com = '1', float $monto_ahorro_voluntario = 0,
-        float $monto_credito_solicitado_dh = 0, string $nombre='Nombre', string $nss = 'NSS', string $numero_com = '1',
-        string $numero_exterior = '1', string $rfc = 'AAA010101AAA'): array|\stdClass
+        int $inm_tipo_discapacidad_id= 1, string $lada_com = '1', string $lada_nep = '33',
+        float $monto_ahorro_voluntario = 0, float $monto_credito_solicitado_dh = 0, string $nombre='Nombre',
+        string $nss = 'NSS', string $numero_com = '1', string $numero_exterior = '1', string $numero_nep = '99999999',
+        string $rfc = 'AAA010101AAA'): array|\stdClass
     {
 
         $existe = (new bn_cuenta(link: $link))->existe_by_id(registro_id: $bn_cuenta_id);
@@ -90,6 +91,8 @@ class base_test{
         $registro['cat_sat_uso_cfdi_id'] = $cat_sat_uso_cfdi_id;
         $registro['com_tipo_cliente_id'] = $com_tipo_cliente_id;
         $registro['cat_sat_tipo_persona_id'] = $cat_sat_tipo_persona_id;
+        $registro['lada_nep'] = $lada_nep;
+        $registro['numero_nep'] = $numero_nep;
 
         $alta = (new inm_comprador($link))->alta_registro($registro);
         if(errores::$error){

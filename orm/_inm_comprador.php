@@ -5,6 +5,7 @@ use gamboamartin\errores\errores;
 use gamboamartin\inmuebles\controllers\_keys_selects;
 use gamboamartin\inmuebles\controllers\controlador_inm_comprador;
 use gamboamartin\inmuebles\html\inm_ubicacion_html;
+use PDO;
 use stdClass;
 
 class _inm_comprador{
@@ -39,6 +40,17 @@ class _inm_comprador{
             return $this->error->error(mensaje: 'Error al inm_ubicacion_id',data:  $inm_ubicacion_id);
         }
         return $inm_ubicacion_id;
+    }
+
+    final public function inm_ubicaciones(int $inm_comprador_id, PDO $link){
+        $filtro = array();
+        $filtro['inm_comprador.id'] = $inm_comprador_id;
+        $r_inm_rel_ubi_comp = (new inm_rel_ubi_comp(link: $link))->filtro_and(filtro: $filtro);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al obtener compradores',data:  $r_inm_rel_ubi_comp);
+        }
+
+        return $r_inm_rel_ubi_comp->registros;
     }
     final public function keys_selects(controlador_inm_comprador $controler){
         $row_upd = $this->row_upd_base(controler: $controler);
@@ -94,6 +106,13 @@ class _inm_comprador{
         $controler->row_upd->inm_destino_credito_id = 1;
         return $controler->row_upd;
     }
+
+
+    /**
+     * Asigna los montos a 0 en alta
+     * @param controlador_inm_comprador $controler  Controlador en ejecucion
+     * @return stdClass
+     */
     private function row_upd_montos(controlador_inm_comprador $controler): stdClass
     {
         $controler->row_upd->descuento_pension_alimenticia_dh = 0;

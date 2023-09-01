@@ -23,7 +23,7 @@ class inm_comprador extends _modelo_parent{
             'es_segundo_credito','inm_plazo_credito_sc_id','descuento_pension_alimenticia_dh',
             'descuento_pension_alimenticia_fc','monto_credito_solicitado_dh','monto_ahorro_voluntario','nombre',
             'apellido_paterno','inm_tipo_discapacidad_id','inm_tipo_discapacidad_id','inm_estado_civil_id',
-            'bn_cuenta_id','inm_persona_discapacidad_id');
+            'bn_cuenta_id','inm_persona_discapacidad_id','lada_nep','numero_nep');
 
         $columnas_extra= array();
         $renombres['dp_calle_pertenece_empresa']['nombre_original']= 'dp_calle_pertenece';
@@ -90,6 +90,24 @@ class inm_comprador extends _modelo_parent{
         }
         if(!isset($this->registro['inm_persona_discapacidad_id'])){
             $this->registro['inm_persona_discapacidad_id'] = 6;
+        }
+
+        $keys = array('lada_nep','numero_nep');
+        $valida = $this->validacion->valida_existencia_keys(keys: $keys,registro:  $this->registro);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al validar registro',data:  $valida);
+        }
+
+
+        $numero_completo_nep = $this->registro['lada_nep'].$this->registro['numero_nep'];
+
+        $numero_completo_nep = trim($numero_completo_nep);
+        if($numero_completo_nep === ''){
+            return $this->error->error(mensaje: 'Error numero_completo_nep esta vacio',data:  $numero_completo_nep);
+        }
+
+        if(strlen($numero_completo_nep)!==10){
+            return $this->error->error(mensaje: 'Error numero_completo_nep no es de 10 digitos',data:  $numero_completo_nep);
         }
 
 

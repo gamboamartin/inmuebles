@@ -27,10 +27,12 @@ use Throwable;
 
 class controlador_inm_comprador extends _ctl_base {
 
-    public array $imp_ubicaciones = array();
+    public array $inm_ubicaciones = array();
     public array $inm_conf_docs_comprador = array();
 
     public string $link_inm_doc_comprador_alta_bd = '';
+
+    public string $link_rel_ubi_comp_alta_bd = '';
     public function __construct(PDO      $link, html $html = new \gamboamartin\template_1\html(),
                                 stdClass $paths_conf = new stdClass())
     {
@@ -149,17 +151,13 @@ class controlador_inm_comprador extends _ctl_base {
 
         $this->link_rel_ubi_comp_alta_bd = $link_rel_ubi_comp_alta_bd;
 
-
-        $filtro = array();
-        $filtro['inm_comprador.id'] = $this->registro_id;
-        $r_inm_rel_ubi_comp = (new inm_rel_ubi_comp(link: $this->link))->filtro_and(filtro: $filtro);
+        $inm_ubicaciones = (new _inm_comprador())->inm_ubicaciones(inm_comprador_id: $this->registro_id,link:  $this->link);
         if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al obtener compradores',data:  $r_inm_rel_ubi_comp,
+            return $this->retorno_error(mensaje: 'Error al obtener compradores',data:  $inm_ubicaciones,
                 header: $header,ws:  $ws);
         }
 
-        $this->imp_ubicaciones = $r_inm_rel_ubi_comp->registros;
-
+        $this->inm_ubicaciones = $inm_ubicaciones;
 
 
         return $r_modifica;
@@ -453,12 +451,14 @@ class controlador_inm_comprador extends _ctl_base {
 
         $keys_selects['lada_nep']->regex = $this->validacion->patterns['lada_html'];
 
-
         $keys_selects = (new init())->key_select_txt(cols: 6,key: 'numero_nep',
             keys_selects:$keys_selects, place_holder: 'Numero');
         if(errores::$error){
             return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
+
+        $keys_selects['numero_nep']->regex = $this->validacion->patterns['tel_sin_lada_html'];
+
         $keys_selects = (new init())->key_select_txt(cols: 6,key: 'extension_nep',
             keys_selects:$keys_selects, place_holder: 'Extension',required: false);
         if(errores::$error){
