@@ -449,8 +449,6 @@ class controlador_inm_comprador extends _ctl_base {
             return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
 
-
-
         $keys_selects = (new init())->key_select_txt(cols: 6,key: 'numero_exterior',
             keys_selects:$keys_selects, place_holder: 'Exterior');
         if(errores::$error){
@@ -467,7 +465,6 @@ class controlador_inm_comprador extends _ctl_base {
         if(errores::$error){
             return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
-
 
         $keys_selects = (new init())->key_select_txt(cols: 6,key: 'lada_com',
             keys_selects:$keys_selects, place_holder: 'Lada');
@@ -507,13 +504,11 @@ class controlador_inm_comprador extends _ctl_base {
                 mensaje: 'Error al generar salida de template',data:  $r_modifica,header: $header,ws: $ws);
         }
 
-
         $keys_selects = (new _keys_selects())->key_selects_base(controler: $this);
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects,
                 header: $header,ws:  $ws);
         }
-
 
         $base = $this->base_upd(keys_selects: $keys_selects, params: array(),params_ajustados: array());
         if(errores::$error){

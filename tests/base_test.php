@@ -47,7 +47,7 @@ class base_test{
         int $inm_destino_credito_id = 1, int $inm_estado_civil_id= 1, int $inm_producto_infonavit_id = 1,
         int $inm_tipo_discapacidad_id= 1, string $lada_com = '1', string $lada_nep = '33',
         float $monto_ahorro_voluntario = 0, float $monto_credito_solicitado_dh = 0, string $nombre='Nombre',
-        string $nss = 'NSS', string $numero_com = '1', string $numero_exterior = '1', string $numero_nep = '99999999',
+        string $nss = '12345678914', string $numero_com = '1', string $numero_exterior = '1', string $numero_nep = '99999999',
         string $rfc = 'AAA010101AAA'): array|\stdClass
     {
 

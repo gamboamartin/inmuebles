@@ -62,6 +62,7 @@ class inm_comprador extends _modelo_parent{
         $tipo_campos['lada_nep'] = 'lada';
         $tipo_campos['numero_nep'] = 'tel_sin_lada';
         $tipo_campos['curp'] = 'curp';
+        $tipo_campos['nss'] = 'nss';
 
         parent::__construct(link: $link, tabla: $tabla, campos_obligatorios: $campos_obligatorios,
             columnas: $columnas, columnas_extra: $columnas_extra, renombres: $renombres,
