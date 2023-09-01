@@ -119,6 +119,7 @@ class _inm_comprador{
      * Ajusta los key base para los inputs
      * @param controlador_inm_comprador $controler Controlador en ejecucion
      * @return array|stdClass
+     * @version 1.89.1
      */
     private function row_upd_base(controlador_inm_comprador $controler): array|stdClass
     {

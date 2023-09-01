@@ -16,6 +16,7 @@ let chk_con_discapacidad = $(".con_discapacidad");
 
 let nombre_empresa_patron_ct = $("#nombre_empresa_patron");
 let nrp_nep_ct = $("#nrp_nep");
+let curp_ct = $("#curp");
 
 let dp_pais_id = -1;
 let dp_estado_id = -1;
@@ -36,6 +37,14 @@ nrp_nep_ct.change(function(){
     let nrp_nep = $(this).val();
     nrp_nep = nrp_nep.toUpperCase()
     nrp_nep_ct.val(nrp_nep);
+
+});
+
+curp_ct.change(function(){
+
+    let curp = $(this).val();
+    curp = curp.toUpperCase()
+    curp_ct.val(curp);
 
 });
 

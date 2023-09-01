@@ -33,6 +33,34 @@ class _inm_compradorTest extends test {
         $this->paths_conf->views = '/var/www/html/inmuebles/config/views.php';
     }
 
+    public function test_row_upd_base(): void
+    {
+        errores::$error = false;
+
+        $_GET['seccion'] = 'inm_producto_infonavit';
+        $_GET['accion'] = 'lista';
+        $_SESSION['grupo_id'] = 1;
+        $_SESSION['usuario_id'] = 2;
+        $_GET['session_id'] = '1';
+
+        $_inm = new _inm_comprador();
+        $_inm = new liberator($_inm);
+
+        $controler = new controlador_inm_comprador(link: $this->link, paths_conf: $this->paths_conf);
+        $controler->row_upd = new stdClass();
+        $resultado = $_inm->row_upd_base($controler);
+        $this->assertIsObject($resultado);
+        $this->assertNotTrue(errores::$error);
+        $this->assertEquals(0,$resultado->descuento_pension_alimenticia_dh);
+        $this->assertEquals(0,$resultado->monto_credito_solicitado_dh);
+        $this->assertEquals(0,$resultado->descuento_pension_alimenticia_fc);
+        $this->assertEquals(0,$resultado->monto_ahorro_voluntario);
+        $this->assertEquals(1,$resultado->inm_producto_infonavit_id);
+        $this->assertEquals(6,$resultado->inm_attr_tipo_credito_id);
+        $this->assertEquals(1,$resultado->inm_destino_credito_id);
+        errores::$error = false;
+    }
+
     public function test_row_upd_ids(): void
     {
         errores::$error = false;
