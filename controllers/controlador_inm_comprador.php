@@ -13,9 +13,7 @@ use gamboamartin\errores\errores;
 use gamboamartin\inmuebles\html\inm_comprador_html;
 use gamboamartin\inmuebles\html\inm_ubicacion_html;
 use gamboamartin\inmuebles\models\_inm_comprador;
-use gamboamartin\inmuebles\models\inm_co_acreditado;
 use gamboamartin\inmuebles\models\inm_comprador;
-use gamboamartin\inmuebles\models\inm_conf_docs_comprador;
 use gamboamartin\inmuebles\models\inm_doc_comprador;
 use gamboamartin\inmuebles\models\inm_rel_ubi_comp;
 use gamboamartin\system\_ctl_base;
@@ -56,7 +54,6 @@ class controlador_inm_comprador extends _ctl_base {
      * @param bool $header Si header retorna resultado en web
      * @param bool $ws Si ws muestra resultado en json
      * @return array|string
-     * @version 1.62.1
      */
     public function alta(bool $header, bool $ws = false): array|string
     {
@@ -102,13 +99,7 @@ class controlador_inm_comprador extends _ctl_base {
                 mensaje: 'Error al obtener registro',data:  $registro,header: $header,ws: $ws);
         }
 
-        $keys_selects = (new _keys_selects())->key_selects_base(controler: $this);
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects,
-                header: $header,ws:  $ws);
-        }
-
-        $keys_selects = (new _keys_selects())->keys_disabled(keys_selects: $keys_selects);
+        $keys_selects = (new _keys_selects())->key_selects_asigna_ubicacion(controler: $this);
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects,
                 header: $header,ws:  $ws);

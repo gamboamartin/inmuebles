@@ -343,7 +343,7 @@ class _keys_selectsTest extends test {
 
 
         $ks = new _keys_selects();
-        //$ks = new liberator($ks);
+        $ks = new liberator($ks);
 
         $keys_selects = array();
         $resultado = $ks->keys_disabled($keys_selects);

@@ -337,6 +337,25 @@ class _keys_selects{
     }
 
     /**
+     * Obtiene los keys para view asigna ubicacion
+     * @param controlador_inm_comprador $controler Controlador en ejecucion
+     * @return array
+     */
+    final public function key_selects_asigna_ubicacion(controlador_inm_comprador $controler): array
+    {
+        $keys_selects = $this->key_selects_base(controler: $controler);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        }
+
+        $keys_selects = $this->keys_disabled(keys_selects: $keys_selects);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        }
+        return $keys_selects;
+    }
+
+    /**
      * Ajusta los selects para forms upd
      * @param controlador_inm_comprador $controler Controlador en ejecucion
      * @return array
@@ -388,7 +407,7 @@ class _keys_selects{
      * @return array
      * @version 1.76.1
      */
-    final public function keys_disabled(array $keys_selects): array
+    private function keys_disabled(array $keys_selects): array
     {
         $keys = array('com_tipo_cliente_id','nss','curp','rfc','apellido_paterno','apellido_materno','nombre');
 
