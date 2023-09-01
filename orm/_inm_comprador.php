@@ -81,7 +81,15 @@ class _inm_comprador{
         }
         return $inm_conf_docs_comprador;
     }
-    final public function keys_selects(controlador_inm_comprador $controler){
+
+    /**
+     * Integra los parametros de los inputs
+     * @param controlador_inm_comprador $controler Controlador en ejecucion
+     * @return array
+     * @version 11.90.1
+     */
+    final public function keys_selects(controlador_inm_comprador $controler): array
+    {
         $row_upd = $this->row_upd_base(controler: $controler);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al integrar row_upd',data:  $row_upd);

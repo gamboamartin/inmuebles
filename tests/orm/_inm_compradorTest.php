@@ -33,6 +33,28 @@ class _inm_compradorTest extends test {
         $this->paths_conf->views = '/var/www/html/inmuebles/config/views.php';
     }
 
+    public function test_keys_selects(): void
+    {
+        errores::$error = false;
+
+        $_GET['seccion'] = 'inm_producto_infonavit';
+        $_GET['accion'] = 'lista';
+        $_SESSION['grupo_id'] = 1;
+        $_SESSION['usuario_id'] = 2;
+        $_GET['session_id'] = '1';
+
+        $_inm = new _inm_comprador();
+        //$_inm = new liberator($_inm);
+
+        $controler = new controlador_inm_comprador(link: $this->link, paths_conf: $this->paths_conf);
+        $controler->row_upd = new stdClass();
+        $resultado = $_inm->keys_selects($controler);
+        $this->assertIsArray($resultado);
+        $this->assertNotTrue(errores::$error);
+        $this->assertEquals("inm_producto_infonavit_descripcion",$resultado['inm_producto_infonavit_id']->columns_ds[0]);
+        errores::$error = false;
+    }
+
     public function test_row_upd_base(): void
     {
         errores::$error = false;
