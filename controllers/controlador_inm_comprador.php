@@ -133,12 +133,7 @@ class controlador_inm_comprador extends _ctl_base {
             return $this->retorno_error(mensaje: 'Error al obtener inputs_hidden',data:  $inputs, header: $header,ws:  $ws);
         }
 
-
-        $columns_ds = array('inm_ubicacion_id','dp_estado_descripcion','dp_municipio_descripcion',
-            'dp_cp_descripcion','dp_colonia_descripcion','dp_calle_descripcion','inm_ubicacion_numero_exterior');
-
-        $inm_ubicacion_id = (new inm_ubicacion_html(html: $this->html_base))->select_inm_ubicacion_id(
-            cols: 12, con_registros: true,id_selected: -1,link:  $this->link, columns_ds: $columns_ds);
+        $inm_ubicacion_id = (new _inm_comprador())->inm_ubicacion_id_input(controler: $this);
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al inm_ubicacion_id',data:  $inm_ubicacion_id,
                 header: $header,ws:  $ws);

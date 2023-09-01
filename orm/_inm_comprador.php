@@ -4,6 +4,7 @@ namespace gamboamartin\inmuebles\models;
 use gamboamartin\errores\errores;
 use gamboamartin\inmuebles\controllers\_keys_selects;
 use gamboamartin\inmuebles\controllers\controlador_inm_comprador;
+use gamboamartin\inmuebles\html\inm_ubicacion_html;
 use stdClass;
 
 class _inm_comprador{
@@ -26,6 +27,18 @@ class _inm_comprador{
         }
         $inm_conf_docs_comprador[$indice][$accion] = $button;
         return $inm_conf_docs_comprador;
+    }
+
+    final public function inm_ubicacion_id_input(controlador_inm_comprador $controler){
+        $columns_ds = array('inm_ubicacion_id','dp_estado_descripcion','dp_municipio_descripcion',
+            'dp_cp_descripcion','dp_colonia_descripcion','dp_calle_descripcion','inm_ubicacion_numero_exterior');
+
+        $inm_ubicacion_id = (new inm_ubicacion_html(html: $controler->html_base))->select_inm_ubicacion_id(
+            cols: 12, con_registros: true,id_selected: -1,link:  $controler->link, columns_ds: $columns_ds);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al inm_ubicacion_id',data:  $inm_ubicacion_id);
+        }
+        return $inm_ubicacion_id;
     }
     final public function keys_selects(controlador_inm_comprador $controler){
         $row_upd = $this->row_upd_base(controler: $controler);
