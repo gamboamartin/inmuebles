@@ -386,6 +386,9 @@ class controlador_inm_comprador extends _ctl_base {
         if(errores::$error){
             return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
+
+        $keys_selects['nss']->regex = $this->validacion->patterns['nss_html'];
+
         $keys_selects = (new init())->key_select_txt(cols: 6,key: 'curp',
             keys_selects:$keys_selects, place_holder: 'CURP');
         if(errores::$error){
