@@ -19,7 +19,7 @@ class inm_comprador extends _modelo_parent{
             'inm_tipo_discapacidad'=>$tabla,'inm_persona_discapacidad'=>$tabla,'inm_estado_civil'=>$tabla,
             'bn_cuenta'=>$tabla,'org_sucursal'=>'bn_cuenta','org_empresa'=>'org_sucursal');
 
-        $campos_obligatorios = array('apellido_paterno','bn_cuenta_id','cel_com','curp',
+        $campos_obligatorios = array('apellido_paterno','bn_cuenta_id','cel_com','correo_com','curp',
             'descuento_pension_alimenticia_dh', 'descuento_pension_alimenticia_fc', 'es_segundo_credito',
             'inm_attr_tipo_credito_id', 'inm_destino_credito_id','inm_estado_civil_id','inm_persona_discapacidad_id',
             'inm_producto_infonavit_id', 'inm_plazo_credito_sc_id', 'inm_tipo_discapacidad_id','lada_com','lada_nep',
@@ -66,6 +66,7 @@ class inm_comprador extends _modelo_parent{
         $tipo_campos['curp'] = 'curp';
         $tipo_campos['nss'] = 'nss';
         $tipo_campos['cel_com'] = 'telefono_mx';
+        $tipo_campos['correo_com'] = 'correo';
 
         parent::__construct(link: $link, tabla: $tabla, campos_obligatorios: $campos_obligatorios,
             columnas: $columnas, columnas_extra: $columnas_extra, renombres: $renombres,

@@ -507,6 +507,8 @@ class controlador_inm_comprador extends _ctl_base {
             return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
 
+        $keys_selects['correo_com']->regex = $this->validacion->patterns['correo_html_base'];
+
         return $keys_selects;
     }
     public function modifica(bool $header, bool $ws = false): array|stdClass
