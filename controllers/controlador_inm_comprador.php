@@ -472,21 +472,29 @@ class controlador_inm_comprador extends _ctl_base {
             return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
 
-        $keys_selects = (new init())->key_select_txt(cols: 6,key: 'lada_com',
-            keys_selects:$keys_selects, place_holder: 'Lada');
+        $keys_selects = (new init())->key_select_txt(cols: 6,key: 'lada_com', keys_selects:$keys_selects,
+            place_holder: 'Lada');
         if(errores::$error){
             return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
+
+        $keys_selects['lada_com']->regex = $this->validacion->patterns['lada_html'];
+
         $keys_selects = (new init())->key_select_txt(cols: 6,key: 'numero_com',
             keys_selects:$keys_selects, place_holder: 'Numero');
         if(errores::$error){
             return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
+
+        $keys_selects['numero_com']->regex = $this->validacion->patterns['tel_sin_lada_html'];
+
         $keys_selects = (new init())->key_select_txt(cols: 6,key: 'cel_com',
             keys_selects:$keys_selects, place_holder: 'Celular');
         if(errores::$error){
             return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
+
+        $keys_selects['cel_com']->regex = $this->validacion->patterns['telefono_mx_html'];
 
         $keys_selects = (new init())->key_select_txt(cols: 6,key: 'genero',
             keys_selects:$keys_selects, place_holder: 'Genero');

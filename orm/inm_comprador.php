@@ -19,11 +19,11 @@ class inm_comprador extends _modelo_parent{
             'inm_tipo_discapacidad'=>$tabla,'inm_persona_discapacidad'=>$tabla,'inm_estado_civil'=>$tabla,
             'bn_cuenta'=>$tabla,'org_sucursal'=>'bn_cuenta','org_empresa'=>'org_sucursal');
 
-        $campos_obligatorios = array('inm_producto_infonavit_id','inm_attr_tipo_credito_id','inm_destino_credito_id',
-            'es_segundo_credito','inm_plazo_credito_sc_id','descuento_pension_alimenticia_dh',
-            'descuento_pension_alimenticia_fc','monto_credito_solicitado_dh','monto_ahorro_voluntario','nombre',
-            'apellido_paterno','inm_tipo_discapacidad_id','inm_tipo_discapacidad_id','inm_estado_civil_id',
-            'bn_cuenta_id','inm_persona_discapacidad_id','lada_nep','numero_nep','curp');
+        $campos_obligatorios = array('apellido_paterno','bn_cuenta_id','cel_com','curp',
+            'descuento_pension_alimenticia_dh', 'descuento_pension_alimenticia_fc', 'es_segundo_credito',
+            'inm_attr_tipo_credito_id', 'inm_destino_credito_id','inm_estado_civil_id','inm_persona_discapacidad_id',
+            'inm_producto_infonavit_id', 'inm_plazo_credito_sc_id', 'inm_tipo_discapacidad_id','lada_com','lada_nep',
+            'monto_ahorro_voluntario', 'monto_credito_solicitado_dh','nombre','numero_com','numero_nep');
 
         $columnas_extra= array();
         $renombres['dp_calle_pertenece_empresa']['nombre_original']= 'dp_calle_pertenece';
@@ -51,18 +51,21 @@ class inm_comprador extends _modelo_parent{
         $renombres['dp_estado_empresa']['key']= 'id';
         $renombres['dp_estado_empresa']['key_enlace']= 'dp_estado_id';
 
-        $atributos_criticos = array('inm_producto_infonavit_id','inm_attr_tipo_credito_id','inm_destino_credito_id',
-            'es_segundo_credito','inm_plazo_credito_sc_id','descuento_pension_alimenticia_dh',
-            'descuento_pension_alimenticia_fc','monto_credito_solicitado_dh','monto_ahorro_voluntario','nombre',
-            'apellido_paterno','apellido_materno','nombre_empresa_patron','nrp_nep','lada_nep','numero_nep',
-            'extension_nep','lada_com','numero_com','cel_com','genero','correo_com','inm_tipo_discapacidad_id',
-            'inm_tipo_discapacidad_id','inm_estado_civil_id','bn_cuenta_id','inm_persona_discapacidad_id','curp');
+        $atributos_criticos = array('apellido_materno','apellido_paterno','bn_cuenta_id','cel_com','curp','correo_com',
+            'descuento_pension_alimenticia_dh', 'descuento_pension_alimenticia_fc','es_segundo_credito',
+            'extension_nep','genero', 'inm_attr_tipo_credito_id', 'inm_destino_credito_id','inm_estado_civil_id',
+            'inm_persona_discapacidad_id', 'inm_plazo_credito_sc_id', 'inm_producto_infonavit_id',
+            'inm_tipo_discapacidad_id','lada_com','lada_nep', 'monto_ahorro_voluntario', 'monto_credito_solicitado_dh',
+            'nombre', 'nombre_empresa_patron', 'nrp_nep','numero_com','numero_nep');
 
 
+        $tipo_campos['lada_com'] = 'lada';
         $tipo_campos['lada_nep'] = 'lada';
         $tipo_campos['numero_nep'] = 'tel_sin_lada';
+        $tipo_campos['numero_com'] = 'tel_sin_lada';
         $tipo_campos['curp'] = 'curp';
         $tipo_campos['nss'] = 'nss';
+        $tipo_campos['cel_com'] = 'telefono_mx';
 
         parent::__construct(link: $link, tabla: $tabla, campos_obligatorios: $campos_obligatorios,
             columnas: $columnas, columnas_extra: $columnas_extra, renombres: $renombres,
@@ -94,7 +97,7 @@ class inm_comprador extends _modelo_parent{
             $this->registro['inm_persona_discapacidad_id'] = 6;
         }
 
-        $keys = array('lada_nep','numero_nep');
+        $keys = array('lada_nep','numero_nep','lada_com','numero_com');
         $valida = $this->validacion->valida_existencia_keys(keys: $keys,registro:  $this->registro);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al validar registro',data:  $valida);
@@ -110,6 +113,17 @@ class inm_comprador extends _modelo_parent{
 
         if(strlen($numero_completo_nep)!==10){
             return $this->error->error(mensaje: 'Error numero_completo_nep no es de 10 digitos',data:  $numero_completo_nep);
+        }
+
+        $numero_completo_com = $this->registro['lada_com'].$this->registro['numero_com'];
+
+        $numero_completo_com = trim($numero_completo_com);
+        if($numero_completo_com === ''){
+            return $this->error->error(mensaje: 'Error numero_completo_com esta vacio',data:  $numero_completo_com);
+        }
+
+        if(strlen($numero_completo_com)!==10){
+            return $this->error->error(mensaje: 'Error numero_completo_com no es de 10 digitos',data:  $numero_completo_com);
         }
 
         $valida = $this->validacion->valida_rfc(key: 'rfc',registro:  $this->registro);
