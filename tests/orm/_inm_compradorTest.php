@@ -55,6 +55,37 @@ class _inm_compradorTest extends test {
         errores::$error = false;
     }
 
+    public function test_radios(): void
+    {
+        errores::$error = false;
+
+        $_GET['seccion'] = 'inm_producto_infonavit';
+        $_GET['accion'] = 'lista';
+        $_SESSION['grupo_id'] = 1;
+        $_SESSION['usuario_id'] = 2;
+        $_GET['session_id'] = '1';
+
+        $_inm = new _inm_comprador();
+        //$_inm = new liberator($_inm);
+
+        $controler = new controlador_inm_comprador(link: $this->link, paths_conf: $this->paths_conf);
+        $controler->row_upd = new stdClass();
+        $controler->inputs = new stdClass();
+        $checked_default = 2;
+        $resultado = $_inm->radios($checked_default, $controler);
+        $this->assertIsObject($resultado);
+        $this->assertNotTrue(errores::$error);
+        $this->assertStringContainsStringIgnoringCase("<div class='control-group col-sm-6'>",$resultado->es_segundo_credito);
+        $this->assertStringContainsStringIgnoringCase("<label class='control-label' for='Es Segundo Credito'>Es Segundo Credito</label>",$resultado->es_segundo_credito);
+        $this->assertStringContainsStringIgnoringCase(" <label class='form-check-label chk form-check-label'>",$resultado->es_segundo_credito);
+        $this->assertStringContainsStringIgnoringCase(" <input type='radio' name='es_segundo_credito' value='SI' class='form-check-input es_segundo_credito form-check-input' id='es_segundo_credito'",$resultado->es_segundo_credito);
+        $this->assertStringContainsStringIgnoringCase(" title='Es Segundo Credito' >",$resultado->es_segundo_credito);
+        $this->assertStringContainsStringIgnoringCase("SI",$resultado->es_segundo_credito);
+        $this->assertStringContainsStringIgnoringCase("</label>",$resultado->es_segundo_credito);
+        $this->assertStringContainsStringIgnoringCase("<input type='radio' name='es_segundo_credito' value='NO' class='form-check-input es_segundo_credito form-check-input' id='es_segundo_credito'",$resultado->es_segundo_credito);
+        $this->assertStringContainsStringIgnoringCase(" title='Es Segundo Credito' checked>",$resultado->es_segundo_credito);
+    }
+
     public function test_row_upd_base(): void
     {
         errores::$error = false;

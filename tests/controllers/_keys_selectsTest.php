@@ -282,6 +282,41 @@ class _keys_selectsTest extends test {
         errores::$error = false;
     }
 
+    public function test_key_selects_asigna_ubicacion(): void
+    {
+        errores::$error = false;
+
+        $_GET['seccion'] = 'inm_producto_infonavit';
+        $_GET['accion'] = 'lista';
+        $_SESSION['grupo_id'] = 1;
+        $_SESSION['usuario_id'] = 2;
+        $_GET['session_id'] = '1';
+
+        $del = (new base_test())->del_inm_comprador(link: $this->link);
+        if(errores::$error){
+            $error = (new errores())->error(mensaje:'Error al eliminar', data: $del);
+            print_r($error);exit;
+        }
+        $alta = (new base_test())->alta_inm_comprador(link: $this->link);
+        if(errores::$error){
+            $error = (new errores())->error(mensaje:'Error al insertar', data: $alta);
+            print_r($error);exit;
+        }
+
+        $ks = new _keys_selects();
+        //$ks = new liberator($ks);
+
+        $controler = new controlador_inm_comprador(link: $this->link, paths_conf: $this->paths_conf);
+        $controler->registro_id = 1;
+        $controler->row_upd = new stdClass();
+
+        $resultado = $ks->key_selects_asigna_ubicacion($controler);
+        $this->assertIsArray($resultado);
+        $this->assertNotTrue(errores::$error);
+        $this->assertTrue($resultado['inm_plazo_credito_sc_id']->disabled);
+        errores::$error = false;
+    }
+
     public function test_key_selects_base(): void
     {
         errores::$error = false;

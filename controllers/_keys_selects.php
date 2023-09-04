@@ -340,9 +340,15 @@ class _keys_selects{
      * Obtiene los keys para view asigna ubicacion
      * @param controlador_inm_comprador $controler Controlador en ejecucion
      * @return array
+     * @version 1.102.1
      */
     final public function key_selects_asigna_ubicacion(controlador_inm_comprador $controler): array
     {
+        if($controler->registro_id<=0){
+            return $this->error->error(mensaje: 'Error $controler->registro_id es menor a 0',
+                data:  $controler->registro_id);
+        }
+
         $keys_selects = $this->key_selects_base(controler: $controler);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);

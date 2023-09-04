@@ -53,6 +53,7 @@ class controlador_inm_comprador extends _ctl_base {
      * @param bool $header Si header retorna resultado en web
      * @param bool $ws Si ws muestra resultado en json
      * @return array|string
+     * @version 1.102.1
      */
     public function alta(bool $header, bool $ws = false): array|string
     {

@@ -539,8 +539,23 @@ class inm_comprador extends _modelo_parent{
             return $this->error->error(mensaje: 'Error al modificar comprador',data:  $r_modifica);
         }
 
+        $row_upd_post = array();
+        $aplica_upd_posterior = false;
+
         if($r_modifica->registro_actualizado->inm_comprador_es_segundo_credito === 'NO'){
             $row_upd_post['inm_plazo_credito_sc_id'] = 7;
+            $aplica_upd_posterior = true;
+
+        }
+
+        if($r_modifica->registro_actualizado->inm_comprador_con_discapacidad === 'NO'){
+            $row_upd_post['inm_tipo_discapacidad_id'] = 5;
+            $row_upd_post['inm_persona_discapacidad_id'] = 6;
+            $aplica_upd_posterior = true;
+
+        }
+
+        if($aplica_upd_posterior){
             $r_modifica_post = parent::modifica_bd(registro: $row_upd_post,id:  $id);
             if(errores::$error){
                 return $this->error->error(mensaje: 'Error al modificar comprador',data:  $r_modifica_post);

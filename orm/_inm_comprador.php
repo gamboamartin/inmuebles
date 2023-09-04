@@ -102,7 +102,23 @@ class _inm_comprador{
         }
         return $keys_selects;
     }
-    final public function radios(int $checked_default, controlador_inm_comprador $controler){
+
+    /**
+     * Genera los inputs de tipo radio para frontend
+     * @param int $checked_default Elemento default
+     * @param controlador_inm_comprador $controler Controlador en ejecucion
+     * @return array|stdClass
+     * @version 1.102.1
+     */
+    final public function radios(int $checked_default, controlador_inm_comprador $controler): array|stdClass
+    {
+        if($checked_default <=0){
+            return $this->error->error(mensaje: 'Error checked_default debe ser mayor a 0', data: $checked_default);
+        }
+        if($checked_default > 2){
+            return $this->error->error(mensaje: 'Error checked_default debe ser menor a 3', data: $checked_default);
+        }
+
         $es_segundo_credito = $controler->html->directivas->input_radio_doble(campo: 'es_segundo_credito',
             checked_default: $checked_default,tag: 'Es Segundo Credito', val_1: 'SI',val_2: 'NO');
 
