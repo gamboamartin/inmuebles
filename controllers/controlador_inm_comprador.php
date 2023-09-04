@@ -65,7 +65,8 @@ class controlador_inm_comprador extends _ctl_base {
 
         $keys_selects = (new _inm_comprador())->keys_selects(controler: $this);
         if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al integrar row_upd',data:  $keys_selects, header: $header,ws:  $ws);
+            return $this->retorno_error(mensaje: 'Error al integrar row_upd',data:  $keys_selects,
+                header: $header,ws:  $ws);
         }
 
         $inputs = $this->inputs(keys_selects: $keys_selects);
@@ -74,7 +75,7 @@ class controlador_inm_comprador extends _ctl_base {
                 mensaje: 'Error al obtener inputs',data:  $inputs, header: $header,ws:  $ws);
         }
 
-        $radios = (new _inm_comprador())->radios(checked_default: 1, controler: $this);
+        $radios = (new _inm_comprador())->radios(checked_default_cd: 1, checked_default_esc: 1, controler: $this);
         if(errores::$error){
             return $this->retorno_error(
                 mensaje: 'Error al integrar radios',data:  $radios, header: $header,ws:  $ws);
@@ -531,12 +532,18 @@ class controlador_inm_comprador extends _ctl_base {
             return $this->retorno_error(mensaje: 'Error al integrar base',data:  $base, header: $header,ws:  $ws);
         }
 
-        $checked_default = 1;
+        $checked_default_esc = 1;
         if($this->row_upd->es_segundo_credito === 'NO'){
-            $checked_default = 2;
+            $checked_default_esc = 2;
         }
 
-        $radios = (new _inm_comprador())->radios(checked_default: $checked_default, controler: $this);
+        $checked_default_cd = 2;
+        if($this->row_upd->con_discapacidad === 'NO'){
+            $checked_default_cd = 1;
+        }
+
+        $radios = (new _inm_comprador())->radios(checked_default_cd: $checked_default_cd,
+            checked_default_esc: $checked_default_esc, controler: $this);
         if(errores::$error){
             return $this->retorno_error(
                 mensaje: 'Error al integrar radios',data:  $radios, header: $header,ws:  $ws);

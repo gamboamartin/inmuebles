@@ -594,20 +594,32 @@ class _keys_selects{
 
         $columns_ds = array();
         $columns_ds[] = 'inm_tipo_discapacidad_descripcion';
+
+        $disabled = false;
+        if((int)$row_upd->inm_tipo_discapacidad_id === 5){
+            $disabled = true;
+        }
+
         $keys_selects = $controler->key_select(cols:6, con_registros: true,filtro:  array(),
             key: 'inm_tipo_discapacidad_id', keys_selects: $keys_selects,
             id_selected: $row_upd->inm_tipo_discapacidad_id, label: 'Tipo de Discapacidad', columns_ds: $columns_ds,
-            disabled: true);
+            disabled: $disabled);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
 
         $columns_ds = array();
         $columns_ds[] = 'inm_persona_discapacidad_descripcion';
+
+        $disabled = false;
+        if((int)$row_upd->inm_persona_discapacidad_id === 6){
+            $disabled = true;
+        }
+
         $keys_selects = $controler->key_select(cols:12, con_registros: true,filtro:  array(),
             key: 'inm_persona_discapacidad_id', keys_selects: $keys_selects,
             id_selected: $row_upd->inm_persona_discapacidad_id, label: 'Persona Discapacidad',
-            columns_ds: $columns_ds, disabled: true);
+            columns_ds: $columns_ds, disabled: $disabled);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }

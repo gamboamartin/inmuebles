@@ -8,6 +8,8 @@ let sl_dp_municipio_id = $("#dp_municipio_id");
 let sl_dp_cp_id = $("#dp_cp_id");
 let sl_dp_colonia_postal_id = $("#dp_colonia_postal_id");
 let sl_inm_plazo_credito_sc_id = $("#inm_plazo_credito_sc_id");
+let sl_inm_tipo_discapacidad_id = $("#inm_tipo_discapacidad_id");
+let sl_inm_persona_discapacidad_id = $("#inm_persona_discapacidad_id");
 
 let dp_pais_id = -1;
 let dp_estado_id = -1;
@@ -16,6 +18,7 @@ let dp_cp_id = -1;
 let dp_colonia_postal_id = -1;
 
 let chk_es_segundo_credito = $(".es_segundo_credito");
+let chk_con_discapacidad = $(".con_discapacidad");
 
 
 chk_es_segundo_credito.change(function(){
@@ -29,6 +32,23 @@ chk_es_segundo_credito.change(function(){
         sl_inm_plazo_credito_sc_id.prop('disabled',true);
     }
     sl_inm_plazo_credito_sc_id.selectpicker('refresh');
+});
+
+chk_con_discapacidad.change(function(){
+    let con_discapacidad = $(this).val();
+    if(con_discapacidad === 'SI'){
+        sl_inm_tipo_discapacidad_id.prop('disabled',false);
+        sl_inm_persona_discapacidad_id.prop('disabled',false);
+    }
+    else{
+        sl_inm_tipo_discapacidad_id.val(5);
+        sl_inm_tipo_discapacidad_id.prop('disabled',true);
+
+        sl_inm_persona_discapacidad_id.val(6);
+        sl_inm_persona_discapacidad_id.prop('disabled',true);
+    }
+    sl_inm_tipo_discapacidad_id.selectpicker('refresh');
+    sl_inm_persona_discapacidad_id.selectpicker('refresh');
 });
 
 sl_dp_pais_id.change(function(){

@@ -105,22 +105,25 @@ class _inm_comprador{
 
     /**
      * Genera los inputs de tipo radio para frontend
-     * @param int $checked_default Elemento default
+     * @param int $checked_default_cd Elemento default con discapacidad
+     * @param int $checked_default_esc Elemento default es segundo credito
      * @param controlador_inm_comprador $controler Controlador en ejecucion
      * @return array|stdClass
      * @version 1.102.1
      */
-    final public function radios(int $checked_default, controlador_inm_comprador $controler): array|stdClass
+    final public function radios(int $checked_default_cd, int $checked_default_esc,
+                                 controlador_inm_comprador $controler): array|stdClass
     {
-        if($checked_default <=0){
-            return $this->error->error(mensaje: 'Error checked_default debe ser mayor a 0', data: $checked_default);
+        if($checked_default_esc <=0){
+            return $this->error->error(mensaje: 'Error checked_default debe ser mayor a 0',
+                data: $checked_default_esc);
         }
-        if($checked_default > 2){
-            return $this->error->error(mensaje: 'Error checked_default debe ser menor a 3', data: $checked_default);
+        if($checked_default_esc > 2){
+            return $this->error->error(mensaje: 'Error checked_default debe ser menor a 3', data: $checked_default_esc);
         }
 
         $es_segundo_credito = $controler->html->directivas->input_radio_doble(campo: 'es_segundo_credito',
-            checked_default: $checked_default,tag: 'Es Segundo Credito', val_1: 'SI',val_2: 'NO');
+            checked_default: $checked_default_esc,tag: 'Es Segundo Credito', val_1: 'SI',val_2: 'NO');
 
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al obtener es_segundo_credito',data:  $es_segundo_credito);
@@ -128,7 +131,7 @@ class _inm_comprador{
         $controler->inputs->es_segundo_credito = $es_segundo_credito;
 
         $con_discapacidad = $controler->html->directivas->input_radio_doble(campo: 'con_discapacidad',
-            checked_default: 1,tag: 'Con Discapacidad', val_1: 'NO',val_2: 'SI');
+            checked_default: $checked_default_cd,tag: 'Con Discapacidad', val_1: 'NO',val_2: 'SI');
 
 
         if(errores::$error){

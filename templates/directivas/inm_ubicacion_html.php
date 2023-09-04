@@ -8,6 +8,17 @@ use stdClass;
 
 class inm_ubicacion_html extends html_controler {
 
+    /**
+     * Genera un input select de ubicaciones
+     * @param int $cols Columnas css
+     * @param bool $con_registros si no con registros da u input vacio
+     * @param int $id_selected Seleccion default
+     * @param PDO $link Conexion a la base de datos
+     * @param array $columns_ds Columnas a mostrar en select
+     * @param bool $disabled Si disabled integra el atributo disabled al input
+     * @param array $filtro Si se integra filtro el resultado de los options se ajusta al filtro
+     * @return array|string
+     */
     public function select_inm_ubicacion_id(int $cols, bool $con_registros, int $id_selected, PDO $link,
                                             array $columns_ds = array(), bool $disabled = false,
                                             array $filtro = array()): array|string

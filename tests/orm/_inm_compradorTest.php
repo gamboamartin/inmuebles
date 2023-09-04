@@ -71,8 +71,9 @@ class _inm_compradorTest extends test {
         $controler = new controlador_inm_comprador(link: $this->link, paths_conf: $this->paths_conf);
         $controler->row_upd = new stdClass();
         $controler->inputs = new stdClass();
-        $checked_default = 2;
-        $resultado = $_inm->radios($checked_default, $controler);
+        $checked_default_1 = 2;
+        $checked_default_2 = 2;
+        $resultado = $_inm->radios($checked_default_1,$checked_default_2, $controler);
         $this->assertIsObject($resultado);
         $this->assertNotTrue(errores::$error);
         $this->assertStringContainsStringIgnoringCase("<div class='control-group col-sm-6'>",$resultado->es_segundo_credito);
