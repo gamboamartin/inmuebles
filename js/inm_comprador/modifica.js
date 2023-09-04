@@ -7,6 +7,7 @@ let sl_dp_estado_id = $("#dp_estado_id");
 let sl_dp_municipio_id = $("#dp_municipio_id");
 let sl_dp_cp_id = $("#dp_cp_id");
 let sl_dp_colonia_postal_id = $("#dp_colonia_postal_id");
+let sl_inm_plazo_credito_sc_id = $("#inm_plazo_credito_sc_id");
 
 let dp_pais_id = -1;
 let dp_estado_id = -1;
@@ -14,6 +15,21 @@ let dp_municipio_id = -1;
 let dp_cp_id = -1;
 let dp_colonia_postal_id = -1;
 
+let chk_es_segundo_credito = $(".es_segundo_credito");
+
+
+chk_es_segundo_credito.change(function(){
+    let es_segundo_credito = $(this).val();
+
+    if(es_segundo_credito === 'SI'){
+        sl_inm_plazo_credito_sc_id.prop('disabled',false);
+    }
+    else{
+        sl_inm_plazo_credito_sc_id.val(7);
+        sl_inm_plazo_credito_sc_id.prop('disabled',true);
+    }
+    sl_inm_plazo_credito_sc_id.selectpicker('refresh');
+});
 
 sl_dp_pais_id.change(function(){
     dp_pais_id = $(this).val();

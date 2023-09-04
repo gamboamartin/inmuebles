@@ -73,7 +73,7 @@ class controlador_inm_comprador extends _ctl_base {
                 mensaje: 'Error al obtener inputs',data:  $inputs, header: $header,ws:  $ws);
         }
 
-        $radios = (new _inm_comprador())->radios(controler: $this);
+        $radios = (new _inm_comprador())->radios(checked_default: 1, controler: $this);
         if(errores::$error){
             return $this->retorno_error(
                 mensaje: 'Error al integrar radios',data:  $radios, header: $header,ws:  $ws);
@@ -525,10 +525,20 @@ class controlador_inm_comprador extends _ctl_base {
             return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects,
                 header: $header,ws:  $ws);
         }
-
         $base = $this->base_upd(keys_selects: $keys_selects, params: array(),params_ajustados: array());
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al integrar base',data:  $base, header: $header,ws:  $ws);
+        }
+
+        $checked_default = 1;
+        if($this->row_upd->es_segundo_credito === 'NO'){
+            $checked_default = 2;
+        }
+
+        $radios = (new _inm_comprador())->radios(checked_default: $checked_default, controler: $this);
+        if(errores::$error){
+            return $this->retorno_error(
+                mensaje: 'Error al integrar radios',data:  $radios, header: $header,ws:  $ws);
         }
 
         return $r_modifica;

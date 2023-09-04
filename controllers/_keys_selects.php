@@ -572,18 +572,26 @@ class _keys_selects{
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
-        $keys_selects = $controler->key_select(cols:6, con_registros: true,filtro:  array(), key: 'inm_plazo_credito_sc_id',
-            keys_selects: $keys_selects, id_selected: $row_upd->inm_plazo_credito_sc_id,
-            label: 'Plazo Segundo Credito');
+
+        $disabled = false;
+        if((int)$row_upd->inm_plazo_credito_sc_id === 7){
+            $disabled = true;
+        }
+
+        $keys_selects = $controler->key_select(cols:6, con_registros: true,filtro:  array(),
+            key: 'inm_plazo_credito_sc_id', keys_selects: $keys_selects,
+            id_selected: $row_upd->inm_plazo_credito_sc_id, label: 'Plazo Segundo Credito', disabled: $disabled);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
 
+
         $columns_ds = array();
         $columns_ds[] = 'inm_tipo_discapacidad_descripcion';
-        $keys_selects = $controler->key_select(cols:6, con_registros: true,filtro:  array(), key: 'inm_tipo_discapacidad_id',
-            keys_selects: $keys_selects, id_selected: $row_upd->inm_tipo_discapacidad_id, label: 'Tipo de Discapacidad',
-            columns_ds: $columns_ds, disabled: true);
+        $keys_selects = $controler->key_select(cols:6, con_registros: true,filtro:  array(),
+            key: 'inm_tipo_discapacidad_id', keys_selects: $keys_selects,
+            id_selected: $row_upd->inm_tipo_discapacidad_id, label: 'Tipo de Discapacidad', columns_ds: $columns_ds,
+            disabled: true);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
@@ -597,6 +605,8 @@ class _keys_selects{
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
+
+
 
         return $keys_selects;
     }

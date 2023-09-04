@@ -102,9 +102,9 @@ class _inm_comprador{
         }
         return $keys_selects;
     }
-    final public function radios(controlador_inm_comprador $controler){
+    final public function radios(int $checked_default, controlador_inm_comprador $controler){
         $es_segundo_credito = $controler->html->directivas->input_radio_doble(campo: 'es_segundo_credito',
-            checked_default: 2,tag: 'Es Segundo Credito', val_1: 'SI',val_2: 'NO');
+            checked_default: $checked_default,tag: 'Es Segundo Credito', val_1: 'SI',val_2: 'NO');
 
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al obtener es_segundo_credito',data:  $es_segundo_credito);
