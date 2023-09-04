@@ -1,6 +1,7 @@
 <?php
 namespace gamboamartin\inmuebles\models;
 
+use gamboamartin\banco\models\bn_cuenta;
 use gamboamartin\errores\errores;
 use gamboamartin\inmuebles\controllers\_keys_selects;
 use gamboamartin\inmuebles\controllers\controlador_inm_comprador;
@@ -154,6 +155,12 @@ class _inm_comprador{
         $controler->row_upd->inm_producto_infonavit_id = 1;
         $controler->row_upd->inm_attr_tipo_credito_id = 6;
         $controler->row_upd->inm_destino_credito_id = 1;
+        $bn_cuenta_id = (new bn_cuenta(link: $controler->link))->bn_cuenta_id_default();
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al obtener bn_cuenta_id',data:  $bn_cuenta_id);
+        }
+
+        $controler->row_upd->bn_cuenta_id = $bn_cuenta_id;
         return $controler->row_upd;
     }
 
