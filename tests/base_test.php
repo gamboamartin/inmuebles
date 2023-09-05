@@ -7,8 +7,10 @@ use gamboamartin\banco\models\bn_cuenta;
 use gamboamartin\comercial\models\com_cliente;
 use gamboamartin\errores\errores;
 
+use gamboamartin\inmuebles\models\inm_co_acreditado;
 use gamboamartin\inmuebles\models\inm_comprador;
 use gamboamartin\inmuebles\models\inm_conf_empresa;
+use gamboamartin\inmuebles\models\inm_rel_co_acred;
 use gamboamartin\inmuebles\models\inm_rel_comprador_com_cliente;
 use gamboamartin\inmuebles\models\inm_rel_ubi_comp;
 use gamboamartin\inmuebles\models\inm_ubicacion;
@@ -37,6 +39,41 @@ class base_test{
 
         $alta = (new \gamboamartin\comercial\test\base_test())->alta_com_cliente(link: $link, cat_sat_metodo_pago_id: 1,
             cat_sat_regimen_fiscal_id: 601, cat_sat_tipo_persona_id: 4, id: $id);
+        if(errores::$error){
+            return (new errores())->error(mensaje: 'Error al insertar', data: $alta);
+        }
+        return $alta;
+    }
+
+    public function alta_inm_co_acreditado(PDO $link, string $apellido_materno = 'APELLIDO MATERNO',
+                                           string $apellido_paterno = 'AP', string $celular = '1234567890',
+                                           string $correo = 'test@test.com.mx', string $curp= 'XEXX010101MNEXXXA8',
+                                           string $genero = 'GENERO', int $id = 1, string $lada = '12',
+                                           string $lada_nep = 'LADA NEP', string $nombre = 'NOMBRE',
+                                           string $nombre_empresa_patron = 'NOMBRE EMPRESA', string $nrp = 'NRP',
+                                           string $nss = '12345678912', string $numero = '12345678',
+                                           string $numero_nep = 'NUMERO NEP',
+                                           string $rfc = 'AAA010101AAA' ): array|\stdClass
+    {
+
+        $registro['id'] = $id;
+        $registro['nombre'] = $nombre;
+        $registro['apellido_paterno'] = $apellido_paterno;
+        $registro['nss'] = $nss;
+        $registro['curp'] = $curp;
+        $registro['rfc'] = $rfc;
+        $registro['apellido_materno'] = $apellido_materno;
+        $registro['lada'] = $lada;
+        $registro['numero'] = $numero;
+        $registro['celular'] = $celular;
+        $registro['genero'] = $genero;
+        $registro['correo'] = $correo;
+        $registro['nombre_empresa_patron'] = $nombre_empresa_patron;
+        $registro['nrp'] = $nrp;
+        $registro['lada_nep'] = $lada_nep;
+        $registro['numero_nep'] = $numero_nep;
+
+        $alta = (new inm_co_acreditado($link))->alta_registro($registro);
         if(errores::$error){
             return (new errores())->error(mensaje: 'Error al insertar', data: $alta);
         }
@@ -133,6 +170,22 @@ class base_test{
         $registro['org_empresa_id'] = $org_empresa_id;
 
         $alta = (new inm_conf_empresa($link))->alta_registro($registro);
+        if(errores::$error){
+            return (new errores())->error(mensaje: 'Error al insertar', data: $alta);
+        }
+        return $alta;
+    }
+
+    public function alta_inm_rel_co_acred(PDO $link, int $id = 1, int $inm_co_acreditado_id = 1,
+                                          int $inm_comprador_id = 1): array|\stdClass
+    {
+
+        $registro['id'] = $id;
+        $registro['inm_co_acreditado_id'] = $inm_co_acreditado_id;
+        $registro['inm_comprador_id'] = $inm_comprador_id;
+
+
+        $alta = (new inm_rel_co_acred($link))->alta_registro($registro);
         if(errores::$error){
             return (new errores())->error(mensaje: 'Error al insertar', data: $alta);
         }
@@ -310,6 +363,15 @@ class base_test{
         return $del;
     }
 
+    public function del_inm_co_acreditado(PDO $link): array
+    {
+        $del = $this->del($link, 'gamboamartin\\inmuebles\\models\\inm_co_acreditado');
+        if(errores::$error){
+            return (new errores())->error('Error al eliminar', $del);
+        }
+        return $del;
+    }
+
     public function del_inm_comprador(PDO $link): array
     {
 
@@ -330,6 +392,10 @@ class base_test{
             return (new errores())->error('Error al eliminar', $del);
         }
         $del = $this->del_inm_rel_ubi_comp(link: $link);
+        if(errores::$error){
+            return (new errores())->error('Error al eliminar', $del);
+        }
+        $del = $this->del_inm_rel_co_acred(link: $link);
         if(errores::$error){
             return (new errores())->error('Error al eliminar', $del);
         }
@@ -374,6 +440,16 @@ class base_test{
     public function del_inm_doc_comprador(PDO $link): array
     {
         $del = $this->del($link, 'gamboamartin\\inmuebles\\models\\inm_doc_comprador');
+        if(errores::$error){
+            return (new errores())->error('Error al eliminar', $del);
+        }
+        return $del;
+    }
+
+    public function del_inm_rel_co_acred(PDO $link): array
+    {
+
+        $del = $this->del($link, 'gamboamartin\\inmuebles\\models\\inm_rel_co_acred');
         if(errores::$error){
             return (new errores())->error('Error al eliminar', $del);
         }

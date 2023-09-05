@@ -64,14 +64,25 @@ class inm_co_acreditado extends _modelo_parent{
     }
 
 
-
     /**
      * Genera la descripcion de un comprador basado en datos del registro a insertar
      * @param array $registro Registro en proceso
-     * @return string
+     * @return string|array
      */
-    private function descripcion(array $registro): string
+    private function descripcion(array $registro): string|array
     {
+        $keys = array('nombre','apellido_paterno','nss','curp','rfc','apellido_materno');
+        $valida = $this->validacion->valida_existencia_keys(keys: $keys,registro:  $registro, valida_vacio: false);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al validar registro',data:  $valida);
+        }
+
+        $keys = array('nombre','apellido_paterno','nss','curp','rfc');
+        $valida = $this->validacion->valida_existencia_keys(keys: $keys,registro:  $registro);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al validar registro',data:  $valida);
+        }
+
         $descripcion = $registro['nombre'];
         $descripcion .= ' '.$registro['apellido_paterno'];
         $descripcion .= ' '.$registro['apellido_materno'];
@@ -81,7 +92,17 @@ class inm_co_acreditado extends _modelo_parent{
         return $descripcion;
     }
 
-    final public function inm_co_acreditados(int $inm_comprador_id){
+    /**
+     * Obtiene los co acreditados de un cliente
+     * @param int $inm_comprador_id  Comprador id
+     * @return array
+     * @version 1.113.1
+     */
+    final public function inm_co_acreditados(int $inm_comprador_id): array
+    {
+        if($inm_comprador_id<=0){
+            return $this->error->error(mensaje: 'Error inm_comprador_id debe ser mayor a 0',data:  $inm_comprador_id);
+        }
         $filtro = array();
         $filtro['inm_comprador.id'] = $inm_comprador_id;
 

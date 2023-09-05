@@ -297,7 +297,8 @@ class inm_comprador extends _modelo_parent{
             return $this->error->error(mensaje: 'Error al obtener r_inm_conf_empresa', data: $inm_conf_empresa);
         }
 
-        $inm_rel_co_acreditados = (new inm_co_acreditado(link: $this->link))->inm_co_acreditados(inm_comprador_id: $inm_comprador_id);
+        $inm_rel_co_acreditados = (new inm_co_acreditado(link: $this->link))->inm_co_acreditados(
+            inm_comprador_id: $inm_comprador_id);
         if (errores::$error) {
             return $this->error->error(mensaje: 'Error al obtener inm_rel_co_acreditados', data: $inm_rel_co_acreditados);
         }
