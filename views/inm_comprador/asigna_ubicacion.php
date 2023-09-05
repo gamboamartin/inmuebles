@@ -67,7 +67,7 @@
                                     <tr>
                                     </thead>
                                     <tbody>
-                                    <?php    foreach ($controlador->imp_ubicaciones as $inm_ubicacion){ ?>
+                                    <?php    foreach ($controlador->inm_ubicaciones as $inm_ubicacion){ ?>
                                     <tr>
                                         <td><?php echo $inm_ubicacion['inm_ubicacion_id'] ?></td>
                                         <td><?php echo $inm_ubicacion['dp_estado_ubicacion_descripcion'] ?></td>

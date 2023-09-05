@@ -107,6 +107,8 @@ class controlador_inm_ubicacion extends _ctl_base {
                 header: $header,ws:  $ws);
         }
 
+        $this->row_upd->costo_directo = 0;
+
 
         $inputs = $this->inputs(keys_selects: $keys_selects);
         if(errores::$error){
@@ -213,6 +215,8 @@ class controlador_inm_ubicacion extends _ctl_base {
 
         $keys_selects['lote'] = new stdClass();
         $keys_selects['lote']->disabled = true;
+
+
 
 
         $base = $this->base_upd(keys_selects: $keys_selects, params: array(),params_ajustados: array());
@@ -407,7 +411,7 @@ class controlador_inm_ubicacion extends _ctl_base {
             return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
         $keys_selects = (new init())->key_select_txt(cols: 12,key: 'costo_directo', keys_selects:$keys_selects,
-            place_holder: 'Costo Directo');
+            place_holder: 'Costo Directo', value: 0);
         if(errores::$error){
             return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
@@ -416,7 +420,7 @@ class controlador_inm_ubicacion extends _ctl_base {
         if(errores::$error){
             return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
-        $keys_selects = (new init())->key_select_txt(cols: 6,key: 'numero_interior', keys_selects:$keys_selects,
+        $keys_selects = (new init())->key_select_txt(cols: 6,key: 'numero_interior', keys_selects: $keys_selects,
             place_holder: 'Interior',required: false);
         if(errores::$error){
             return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);

@@ -85,6 +85,13 @@ class controlador_inm_comprador extends _ctl_base {
         return $r_alta;
     }
 
+    /**
+     * Integra un formulario para la asignacion de una ubicacion
+     * @param bool $header Si header retorna resultado en web
+     * @param bool $ws Si ws muestra resultado en json
+     * @return array|stdClass
+     * @version 1.105.1
+     */
     public function asigna_ubicacion(bool $header, bool $ws = false): array|stdClass
     {
 
@@ -150,14 +157,14 @@ class controlador_inm_comprador extends _ctl_base {
 
         $this->link_rel_ubi_comp_alta_bd = $link_rel_ubi_comp_alta_bd;
 
-        $inm_ubicaciones = (new _inm_comprador())->inm_ubicaciones(inm_comprador_id: $this->registro_id,link:  $this->link);
+        $inm_ubicaciones = (new _inm_comprador())->inm_ubicaciones(inm_comprador_id: $this->registro_id,
+            link:  $this->link);
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al obtener compradores',data:  $inm_ubicaciones,
                 header: $header,ws:  $ws);
         }
 
         $this->inm_ubicaciones = $inm_ubicaciones;
-
 
         return $r_modifica;
     }

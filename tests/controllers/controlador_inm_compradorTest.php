@@ -72,6 +72,36 @@ class controlador_inm_compradorTest extends test {
 
     }
 
+    public function test_asigna_ubicacion(): void
+    {
+        errores::$error = false;
+
+
+        $ch = curl_init("http://localhost/inmuebles/index.php?seccion=inm_comprador&accion=asigna_ubicacion&adm_menu_id=64&session_id=5850109279&adm_menu_id=64&registro_id=1");
+        $fp = fopen("inm_comprador.asigna_ubicacion", "w");
+
+        curl_setopt($ch, CURLOPT_FILE, $fp);
+        curl_setopt($ch, CURLOPT_HEADER, 0);
+
+        curl_exec($ch);
+        curl_close($ch);
+        fclose($fp);
+
+        $data = file_get_contents("inm_comprador.asigna_ubicacion");
+
+        assertStringContainsStringIgnoringCase("<label class='control-label' for='inm_ubicacion_id'>", $data);
+        assertStringContainsStringIgnoringCase("<input type='text' name='precio_operacion' value='' class='form-control'", $data);
+        assertStringContainsStringIgnoringCase("<select class='form-control selectpicker color-secondary  com_tipo_cliente_id'", $data);
+        assertStringContainsStringIgnoringCase("<input type='hidden' name='inm_comprador_id' value='1'>", $data);
+        assertStringContainsStringIgnoringCase("<input type='hidden' name='inm_comprador_id' value='1'>", $data);
+        assertStringContainsStringIgnoringCase("<input type='hidden' name='seccion_retorno' value='inm_comprador'>", $data);
+        assertStringContainsStringIgnoringCase("<input type='hidden' name='btn_action_next' value='asigna_ubicacion'>", $data);
+        assertStringContainsStringIgnoringCase("<input type='hidden' name='id_retorno' value='1'>", $data);
+
+        unlink('inm_comprador.asigna_ubicacion');
+        errores::$error = false;
+    }
+
 
     public function test_init_datatable(): void
     {
