@@ -293,79 +293,12 @@ class controlador_inm_comprador extends _ctl_base {
         if(errores::$error){
             return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
-        $keys_selects = (new init())->key_select_txt(cols: 6,key: 'nss',
-            keys_selects:$keys_selects, place_holder: 'NSS');
+
+        $keys_selects = (new _keys_selects())->keys_base_cliente(keys_selects: $keys_selects);
         if(errores::$error){
             return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
 
-        $keys_selects['nss']->regex = $this->validacion->patterns['nss_html'];
-
-        $keys_selects = (new init())->key_select_txt(cols: 6,key: 'curp',
-            keys_selects:$keys_selects, place_holder: 'CURP');
-        if(errores::$error){
-            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
-        }
-
-        $keys_selects['curp']->regex = $this->validacion->patterns['curp_html'];
-
-        $keys_selects = (new init())->key_select_txt(cols: 6,key: 'rfc',
-            keys_selects:$keys_selects, place_holder: 'RFC');
-        if(errores::$error){
-            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
-        }
-
-        $keys_selects['rfc']->regex = $this->validacion->patterns['rfc_html'];
-
-        $keys_selects = (new init())->key_select_txt(cols: 6,key: 'apellido_paterno',
-            keys_selects:$keys_selects, place_holder: 'Apellido Paterno');
-        if(errores::$error){
-            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
-        }
-        $keys_selects = (new init())->key_select_txt(cols: 6,key: 'apellido_materno',
-            keys_selects:$keys_selects, place_holder: 'Apellido Materno');
-        if(errores::$error){
-            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
-        }
-        $keys_selects = (new init())->key_select_txt(cols: 6,key: 'nombre',
-            keys_selects:$keys_selects, place_holder: 'Nombre(s)');
-        if(errores::$error){
-            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
-        }
-
-        $keys_selects = (new init())->key_select_txt(cols: 12,key: 'nombre_empresa_patron',
-            keys_selects:$keys_selects, place_holder: 'Nombre Empresa o Patron');
-        if(errores::$error){
-            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
-        }
-
-
-        $keys_selects = (new init())->key_select_txt(cols: 6,key: 'lada_nep',
-            keys_selects:$keys_selects, place_holder: 'Lada');
-        if(errores::$error){
-            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
-        }
-
-        $keys_selects['lada_nep']->regex = $this->validacion->patterns['lada_html'];
-
-        $keys_selects = (new init())->key_select_txt(cols: 6,key: 'numero_nep',
-            keys_selects:$keys_selects, place_holder: 'Numero');
-        if(errores::$error){
-            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
-        }
-
-        $keys_selects['numero_nep']->regex = $this->validacion->patterns['tel_sin_lada_html'];
-
-        $keys_selects = (new init())->key_select_txt(cols: 6,key: 'extension_nep',
-            keys_selects:$keys_selects, place_holder: 'Extension',required: false);
-        if(errores::$error){
-            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
-        }
-        $keys_selects = (new init())->key_select_txt(cols: 6,key: 'nrp_nep',
-            keys_selects:$keys_selects, place_holder: 'Registro Patronal');
-        if(errores::$error){
-            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
-        }
 
         $keys_selects = (new init())->key_select_txt(cols: 6,key: 'numero_exterior',
             keys_selects:$keys_selects, place_holder: 'Exterior');
@@ -429,6 +362,7 @@ class controlador_inm_comprador extends _ctl_base {
      * @param bool $header Si header retorna resultado en web
      * @param bool $ws Si ws muestra resultado en json
      * @return array|stdClass
+     * @version 1.109.1
      */
     public function modifica(bool $header, bool $ws = false): array|stdClass
     {

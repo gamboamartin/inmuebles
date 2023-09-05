@@ -82,64 +82,7 @@ class controlador_inm_co_acreditado extends _ctl_base {
     protected function key_selects_txt(array $keys_selects): array
     {
 
-        $keys_selects = (new init())->key_select_txt(cols: 6,key: 'nss', keys_selects:$keys_selects,
-            place_holder: 'NSS');
-        if(errores::$error){
-            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
-        }
-        $keys_selects = (new init())->key_select_txt(cols: 6,key: 'curp',
-            keys_selects:$keys_selects, place_holder: 'CURP');
-        if(errores::$error){
-            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
-        }
-        $keys_selects = (new init())->key_select_txt(cols: 6,key: 'rfc',
-            keys_selects:$keys_selects, place_holder: 'RFC');
-        if(errores::$error){
-            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
-        }
-        $keys_selects = (new init())->key_select_txt(cols: 6,key: 'apellido_paterno',
-            keys_selects:$keys_selects, place_holder: 'Apellido Paterno');
-        if(errores::$error){
-            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
-        }
-        $keys_selects = (new init())->key_select_txt(cols: 6,key: 'apellido_materno',
-            keys_selects:$keys_selects, place_holder: 'Apellido Materno');
-        if(errores::$error){
-            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
-        }
-        $keys_selects = (new init())->key_select_txt(cols: 6,key: 'nombre',
-            keys_selects:$keys_selects, place_holder: 'Nombre(s)');
-        if(errores::$error){
-            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
-        }
-
-
-        $keys_selects = (new init())->key_select_txt(cols: 12,key: 'nombre_empresa_patron',
-            keys_selects:$keys_selects, place_holder: 'Nombre Empresa o Patron');
-        if(errores::$error){
-            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
-        }
-
-        $keys_selects = (new init())->key_select_txt(cols: 12,key: 'nrp',
-            keys_selects:$keys_selects, place_holder: 'NÚMERO DE REGISTRO PATRONAL (NRP)', required: false);
-        if(errores::$error){
-            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
-        }
-
-        $keys_selects = (new init())->key_select_txt(cols: 6,key: 'lada_nep',
-            keys_selects:$keys_selects, place_holder: 'Lada');
-        if(errores::$error){
-            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
-        }
-
-        $keys_selects = (new init())->key_select_txt(cols: 6,key: 'numero_nep',
-            keys_selects:$keys_selects, place_holder: 'Numero');
-        if(errores::$error){
-            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
-        }
-
-        $keys_selects = (new init())->key_select_txt(cols: 12,key: 'extension_nep',
-            keys_selects:$keys_selects, place_holder: 'Extension');
+        $keys_selects = (new _keys_selects())->keys_base_cliente(keys_selects: $keys_selects);
         if(errores::$error){
             return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
@@ -150,24 +93,29 @@ class controlador_inm_co_acreditado extends _ctl_base {
         if(errores::$error){
             return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
+        $keys_selects['lada']->regex = $this->validacion->patterns['lada_html'];
+
         $keys_selects = (new init())->key_select_txt(cols: 6,key: 'numero',
             keys_selects:$keys_selects, place_holder: 'Numero');
         if(errores::$error){
             return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
+        $keys_selects['numero']->regex = $this->validacion->patterns['tel_sin_lada_html'];
+
         $keys_selects = (new init())->key_select_txt(cols: 6,key: 'celular',
             keys_selects:$keys_selects, place_holder: 'Celular');
         if(errores::$error){
             return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
 
+        $keys_selects['celular']->regex = $this->validacion->patterns['telefono_mx_html'];
+
         $keys_selects = (new init())->key_select_txt(cols: 12,key: 'correo',
             keys_selects:$keys_selects, place_holder: 'Correo');
         if(errores::$error){
             return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
-
-
+        $keys_selects['correo']->regex = $this->validacion->patterns['correo_html_base'];
 
 
 

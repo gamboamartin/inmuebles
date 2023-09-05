@@ -62,11 +62,14 @@ class controlador_inm_compradorTest extends test {
         assertStringContainsStringIgnoringCase("untario' value='0' class='form-control' required id='monto_ahorro_voluntario", $data);
         assertStringContainsStringIgnoringCase("<input type='radio' name='con_discapacidad", $data);
         assertStringContainsStringIgnoringCase("l-group col-sm-6'><label class='control-label' for='inm_tipo_discapacidad_id'>Tipo de Discapacidad</label><div class='controls'><select class=", $data);
-        assertStringContainsStringIgnoringCase("abel class='control-label' for='nombre_empresa_patron'>Nombre Empresa o Patron</label><div class='controls'><input type='text' name='n", $data);
+        assertStringContainsStringIgnoringCase("<div class='control-group col-sm-12'><label class='control-label'", $data);
         assertStringContainsStringIgnoringCase("_civil_id' data-live-search='true' id='inm_estado_civil_id' name='inm_estado_civil_id' required ><option value=''  >Selecciona una", $data);
         assertStringContainsStringIgnoringCase("m-6'><label class='control-label' for='cat_sat_regimen_fiscal_id'>Regimen Fiscal</label><div class='controls'><select class='form-control se", $data);
         assertStringContainsStringIgnoringCase("e Cliente</label><div class='controls'><select class='form-control selectpick", $data);
         assertStringContainsStringIgnoringCase(" <h4>2. DATOS PARA DETERMINAR EL MONTO DE CRÉDITO</h4>", $data);
+        assertStringContainsStringIgnoringCase("for='nombre_empresa_patron'>Nombre de la Empresa/Patrón", $data);
+        assertStringContainsStringIgnoringCase("iv class='controls'><input type='text' name='nombre_empresa_patron' value='' ", $data);
+        assertStringContainsStringIgnoringCase("abel class='control-label' for='nrp_nep'>NÚMERO DE REGISTRO PATRONAL (NRP)", $data);
         unlink('inm_comprador.alta');
 
 
@@ -145,6 +148,33 @@ class controlador_inm_compradorTest extends test {
         $this->assertEquals("Nombre",$resultado->columns['inm_comprador_nombre']['titulo']);
 
         errores::$error = false;
+    }
+
+    public function test_modifica(): void
+    {
+        errores::$error = false;
+
+
+        $ch = curl_init("http://localhost/inmuebles/index.php?seccion=inm_comprador&accion=modifica&adm_menu_id=64&session_id=5850109279&adm_menu_id=64&registro_id=1");
+        $fp = fopen("inm_comprador.modifica", "w");
+
+        curl_setopt($ch, CURLOPT_FILE, $fp);
+        curl_setopt($ch, CURLOPT_HEADER, 0);
+
+        curl_exec($ch);
+        curl_close($ch);
+        fclose($fp);
+
+        $data = file_get_contents("inm_comprador.modifica");
+
+        $this->assertStringContainsStringIgnoringCase("for='inm_producto_infonavit_id'>Producto</label><div class='controls'><selec",$data);
+        $this->assertStringContainsStringIgnoringCase("e' id='inm_attr_tipo_credito_id' name='inm_attr_tipo_credito_id' required ><option value=''  >Sele",$data);
+        $this->assertStringContainsStringIgnoringCase("PRAR UNA VIVIENDA</option><option value='2'  >COMPRAR TERRENO</option><option value='3'  >CONSTRUIR VIVIENDA</op",$data);
+        $this->assertStringContainsStringIgnoringCase("control-label' for='lada_nep'>Lada</label><div class='controls'><input type='text' name='lada_nep' ",$data);
+
+        errores::$error = false;
+
+        unlink("inm_comprador.modifica");
     }
 
 

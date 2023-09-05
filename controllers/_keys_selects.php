@@ -2,17 +2,21 @@
 
 namespace gamboamartin\inmuebles\controllers;
 
+use base\controller\init;
 use gamboamartin\errores\errores;
 use gamboamartin\inmuebles\models\inm_comprador;
 use gamboamartin\js_base\valida;
+use gamboamartin\validacion\validacion;
 use stdClass;
 
 class _keys_selects{
 
     private errores $error;
+    private validacion $validacion;
 
     public function __construct(){
         $this->error = new errores();
+        $this->validacion = new validacion();
     }
 
     /**
@@ -386,6 +390,24 @@ class _keys_selects{
         return $keys_selects;
     }
 
+    final public function keys_base_cliente(array $keys_selects){
+        $keys_selects = $this->keys_identificadores(keys_selects: $keys_selects);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        }
+
+        $keys_selects = $this->keys_name(keys_selects: $keys_selects);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        }
+
+        $keys_selects = $this->keys_nrp(keys_selects: $keys_selects);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        }
+        return $keys_selects;
+    }
+
     final public function keys_co_acreditado(): array
     {
 
@@ -422,6 +444,91 @@ class _keys_selects{
             return $this->error->error(mensaje: 'Error al integra disabled',data: $keys_selects);
         }
 
+        return $keys_selects;
+    }
+
+    private function keys_identificadores(array $keys_selects){
+        $keys_selects = (new init())->key_select_txt(cols: 6,key: 'nss', keys_selects:$keys_selects,
+            place_holder: 'NSS');
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        }
+
+        $keys_selects['nss']->regex = $this->validacion->patterns['nss_html'];
+
+        $keys_selects = (new init())->key_select_txt(cols: 6,key: 'curp',
+            keys_selects:$keys_selects, place_holder: 'CURP');
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        }
+        $keys_selects['curp']->regex = $this->validacion->patterns['curp_html'];
+
+        $keys_selects = (new init())->key_select_txt(cols: 6,key: 'rfc',
+            keys_selects:$keys_selects, place_holder: 'RFC');
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        }
+        $keys_selects['rfc']->regex = $this->validacion->patterns['rfc_html'];
+
+        return $keys_selects;
+    }
+
+    private function keys_name(array $keys_selects){
+        $keys_selects = (new init())->key_select_txt(cols: 6,key: 'apellido_paterno',
+            keys_selects:$keys_selects, place_holder: 'Apellido Paterno');
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        }
+        $keys_selects = (new init())->key_select_txt(cols: 6,key: 'apellido_materno',
+            keys_selects:$keys_selects, place_holder: 'Apellido Materno');
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        }
+        $keys_selects = (new init())->key_select_txt(cols: 6,key: 'nombre',
+            keys_selects:$keys_selects, place_holder: 'Nombre(s)');
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        }
+        return $keys_selects;
+    }
+
+    private function keys_nrp(array $keys_selects){
+        $keys_selects = (new init())->key_select_txt(cols: 12,key: 'nombre_empresa_patron',
+            keys_selects:$keys_selects, place_holder: 'Nombre de la Empresa/Patrón');
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        }
+
+        $keys_selects = (new init())->key_select_txt(cols: 12,key: 'nrp',
+            keys_selects:$keys_selects, place_holder: 'NÚMERO DE REGISTRO PATRONAL (NRP)');
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        }
+        $keys_selects = (new init())->key_select_txt(cols: 12,key: 'nrp_nep',
+            keys_selects:$keys_selects, place_holder: 'NÚMERO DE REGISTRO PATRONAL (NRP)');
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        }
+
+        $keys_selects = (new init())->key_select_txt(cols: 6,key: 'lada_nep',
+            keys_selects:$keys_selects, place_holder: 'Lada');
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        }
+        $keys_selects['lada_nep']->regex = $this->validacion->patterns['lada_html'];
+
+        $keys_selects = (new init())->key_select_txt(cols: 6,key: 'numero_nep',
+            keys_selects:$keys_selects, place_holder: 'Numero');
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        }
+        $keys_selects['numero_nep']->regex = $this->validacion->patterns['tel_sin_lada_html'];
+
+        $keys_selects = (new init())->key_select_txt(cols: 12,key: 'extension_nep',
+            keys_selects:$keys_selects, place_holder: 'Extension',required: false);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        }
         return $keys_selects;
     }
 

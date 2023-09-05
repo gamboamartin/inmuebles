@@ -29,7 +29,7 @@ class inm_co_acreditado extends _modelo_parent{
         $tipo_campos['curp'] = 'curp';
         $tipo_campos['rfc'] = 'rfc';
         $tipo_campos['lada'] = 'lada';
-        $tipo_campos['numero'] = 'numero';
+        $tipo_campos['numero'] = 'tel_sin_lada';
         $tipo_campos['celular'] = 'telefono_mx';
         $tipo_campos['correo'] = 'correo';
 
