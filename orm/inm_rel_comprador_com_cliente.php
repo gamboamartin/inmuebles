@@ -56,9 +56,18 @@ class inm_rel_comprador_com_cliente extends _modelo_parent{
 
     }
 
+    /**
+     * Obtiene la relacion entre cliente de facturacion y comprador de inmuebles
+     * @param int $inm_comprador_id Identificador de comprador
+     * @return array
+     * @version 1.110.1
+     */
+    final public function imp_rel_comprador_com_cliente(int $inm_comprador_id): array
+    {
+        if($inm_comprador_id <= 0){
+            return $this->error->error(mensaje: 'Error inm_comprador_id es menor a 0', data:  $inm_comprador_id);
+        }
 
-
-    final public function imp_rel_comprador_com_cliente(int $inm_comprador_id){
         $filtro['inm_comprador.id'] = $inm_comprador_id;
 
         $r_imp_rel_comprador_com_cliente = $this->filtro_and(filtro:$filtro);
