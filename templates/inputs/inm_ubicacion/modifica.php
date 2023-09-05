@@ -11,4 +11,5 @@
 <?php echo $controlador->inputs->manzana; ?>
 <?php echo $controlador->inputs->lote; ?>
 <?php echo $controlador->inputs->costo_directo; ?>
+<?php echo $controlador->inputs->cuenta_predial; ?>
 <?php include (new views())->ruta_templates.'botons/submit/modifica_bd.php';?>

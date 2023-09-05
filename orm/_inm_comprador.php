@@ -7,6 +7,7 @@ use gamboamartin\inmuebles\controllers\_doctos;
 use gamboamartin\inmuebles\controllers\_keys_selects;
 use gamboamartin\inmuebles\controllers\controlador_inm_comprador;
 use gamboamartin\inmuebles\html\inm_ubicacion_html;
+use gamboamartin\validacion\validacion;
 use PDO;
 use stdClass;
 
@@ -95,6 +96,37 @@ class _inm_comprador{
         }
 
         return $inm_conf_docs_comprador;
+    }
+
+    /**
+     * Integra los checkeds default para upd
+     * @param controlador_inm_comprador $controler Controlador en ejecucion
+     * @return stdClass|array
+     * @version 1.107.1
+     */
+    private function checkeds_default(controlador_inm_comprador $controler): stdClass|array
+    {
+        $keys = array('es_segundo_credito','con_discapacidad');
+        $valida = (new validacion())->valida_existencia_keys(keys: $keys,registro:  $controler->row_upd);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al validar row upd',data:  $valida);
+        }
+        $checked_default_esc = 1;
+        if($controler->row_upd->es_segundo_credito === 'NO'){
+            $checked_default_esc = 2;
+        }
+
+        $checked_default_cd = 2;
+        if($controler->row_upd->con_discapacidad === 'NO'){
+            $checked_default_cd = 1;
+        }
+
+        $data = new stdClass();
+        $data->checked_default_esc = $checked_default_esc;
+        $data->checked_default_cd = $checked_default_cd;
+
+        return $data;
+
     }
 
     private function doc_existente(controlador_inm_comprador $controler, array $doc_tipo_documento, int $indice,
@@ -314,6 +346,26 @@ class _inm_comprador{
         $controler->inputs->con_discapacidad = $con_discapacidad;
 
         return $controler->inputs;
+    }
+
+    /**
+     * Integra los inputs de tipo radio para upd
+     * @param controlador_inm_comprador $controler Controlador en ejecucion
+     * @return array|stdClass
+     */
+    final public function radios_chk(controlador_inm_comprador $controler): array|stdClass
+    {
+        $checkeds = $this->checkeds_default(controler: $controler);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al integrar checkeds',data:  $checkeds);
+        }
+
+        $radios = $this->radios(checked_default_cd: $checkeds->checked_default_cd,
+            checked_default_esc: $checkeds->checked_default_esc, controler: $controler);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al integrar radios',data:  $radios);
+        }
+        return $radios;
     }
 
     /**

@@ -12,7 +12,6 @@ use base\controller\init;
 use gamboamartin\errores\errores;
 use gamboamartin\inmuebles\html\inm_comprador_html;
 use gamboamartin\inmuebles\html\inm_ubicacion_html;
-use gamboamartin\inmuebles\models\inm_comprador;
 use gamboamartin\inmuebles\models\inm_rel_ubi_comp;
 use gamboamartin\inmuebles\models\inm_ubicacion;
 use gamboamartin\system\_ctl_base;
@@ -371,7 +370,8 @@ class controlador_inm_ubicacion extends _ctl_base {
     protected function campos_view(): array
     {
         $keys = new stdClass();
-        $keys->inputs = array('descripcion', 'manzana', 'lote','costo_directo','numero_exterior','numero_interior');
+        $keys->inputs = array('descripcion', 'manzana', 'lote','costo_directo','numero_exterior','numero_interior',
+            'cuenta_predial');
         $keys->selects = array();
 
 
@@ -410,8 +410,13 @@ class controlador_inm_ubicacion extends _ctl_base {
         if(errores::$error){
             return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
-        $keys_selects = (new init())->key_select_txt(cols: 12,key: 'costo_directo', keys_selects:$keys_selects,
+        $keys_selects = (new init())->key_select_txt(cols: 6,key: 'costo_directo', keys_selects:$keys_selects,
             place_holder: 'Costo Directo', value: 0);
+        if(errores::$error){
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        }
+        $keys_selects = (new init())->key_select_txt(cols: 6,key: 'cuenta_predial', keys_selects:$keys_selects,
+            place_holder: 'Cuenta Predial');
         if(errores::$error){
             return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
@@ -445,10 +450,11 @@ class controlador_inm_ubicacion extends _ctl_base {
         $columns["inm_ubicacion_manzana"]["titulo"] = "Manzana";
         $columns["inm_ubicacion_lote"]["titulo"] = "Lote";
         $columns["inm_ubicacion_etapa"]["titulo"] = "Etapa";
+        $columns["inm_ubicacion_cuenta_predial"]["titulo"] = "Predial";
 
         $filtro = array("inm_ubicacion.id","dp_municipio.descripcion",'dp_cp.descripcion','dp_colonia.descripcion',
             'dp_calle.descripcion','inm_ubicacion.numero_exterior','inm_ubicacion.numero_interior',
-            'inm_ubicacion.manzana','inm_ubicacion.lote');
+            'inm_ubicacion.manzana','inm_ubicacion.lote','inm_ubicacion.cuenta_predial');
 
         $datatables = new stdClass();
         $datatables->columns = $columns;
