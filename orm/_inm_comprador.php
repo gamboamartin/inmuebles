@@ -197,9 +197,13 @@ class _inm_comprador{
      * @param int $inm_comprador_id Comprador identificador
      * @param PDO $link Conexion a a la base de datos
      * @return array
+     * @version 1.104.1
      */
     final public function inm_ubicaciones(int $inm_comprador_id, PDO $link): array
     {
+        if($inm_comprador_id<= 0){
+            return $this->error->error(mensaje: 'Error inm_comprador_id es menor a 0',data:  $inm_comprador_id);
+        }
         $filtro = array();
         $filtro['inm_comprador.id'] = $inm_comprador_id;
         $r_inm_rel_ubi_comp = (new inm_rel_ubi_comp(link: $link))->filtro_and(filtro: $filtro);

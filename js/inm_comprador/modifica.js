@@ -20,6 +20,70 @@ let dp_colonia_postal_id = -1;
 let chk_es_segundo_credito = $(".es_segundo_credito");
 let chk_con_discapacidad = $(".con_discapacidad");
 
+let nombre_empresa_patron_ct = $("#nombre_empresa_patron");
+let nrp_nep_ct = $("#nrp_nep");
+let curp_ct = $("#curp");
+let rfc_ct = $("#rfc");
+let apellido_paterno_ct = $("#apellido_paterno");
+let apellido_materno_ct = $("#apellido_materno");
+let nombre_ct = $("#nombre");
+
+apellido_paterno_ct.change(function(){
+
+    let apellido_paterno = $(this).val();
+    apellido_paterno = apellido_paterno.toUpperCase()
+    apellido_paterno_ct.val(apellido_paterno);
+
+});
+
+nombre_ct.change(function(){
+
+    let nombre = $(this).val();
+    nombre = nombre.toUpperCase()
+    nombre_ct.val(nombre);
+
+});
+
+apellido_materno_ct.change(function(){
+
+    let apellido_materno = $(this).val();
+    apellido_materno = apellido_materno.toUpperCase()
+    apellido_materno_ct.val(apellido_materno);
+
+});
+
+nombre_empresa_patron_ct.change(function(){
+
+    let nombre_empresa_patron = $(this).val();
+    nombre_empresa_patron = nombre_empresa_patron.toUpperCase()
+    nombre_empresa_patron_ct.val(nombre_empresa_patron);
+
+});
+
+rfc_ct.change(function(){
+
+    let rfc = $(this).val();
+    rfc = rfc.toUpperCase()
+    rfc_ct.val(rfc);
+
+});
+
+nrp_nep_ct.change(function(){
+
+    let nrp_nep = $(this).val();
+    nrp_nep = nrp_nep.toUpperCase()
+    nrp_nep_ct.val(nrp_nep);
+
+});
+
+curp_ct.change(function(){
+
+    let curp = $(this).val();
+    curp = curp.toUpperCase()
+    curp_ct.val(curp);
+
+});
+
 
 chk_es_segundo_credito.change(function(){
     let es_segundo_credito = $(this).val();

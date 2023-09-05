@@ -11,6 +11,7 @@ use gamboamartin\inmuebles\controllers\controlador_inm_producto_infonavit;
 use gamboamartin\inmuebles\models\_inm_comprador;
 use gamboamartin\inmuebles\models\_inm_ubicaciones;
 use gamboamartin\inmuebles\models\inm_ubicacion;
+use gamboamartin\inmuebles\tests\base_test;
 use gamboamartin\test\liberator;
 use gamboamartin\test\test;
 
@@ -55,6 +56,54 @@ class _inm_compradorTest extends test {
         $this->assertNotTrue(errores::$error);
         $this->assertStringContainsStringIgnoringCase("for='inm_ubicacion_id'>Ubicacion</label><div class='controls'>",$resultado);
         errores::$error = false;
+    }
+
+    public function test_inm_ubicaciones(): void
+    {
+        errores::$error = false;
+
+        $_GET['seccion'] = 'inm_producto_infonavit';
+        $_GET['accion'] = 'lista';
+        $_SESSION['grupo_id'] = 1;
+        $_SESSION['usuario_id'] = 2;
+        $_GET['session_id'] = '1';
+
+        $_inm = new _inm_comprador();
+        //$_inm = new liberator($_inm);
+
+        $controler = new controlador_inm_comprador(link: $this->link, paths_conf: $this->paths_conf);
+        //$controler->row_upd = new stdClass();
+        //$controler->inputs = new stdClass();
+
+        $del = (new base_test())->del_inm_rel_ubi_comp(link: $this->link);
+        if(errores::$error){
+            $error = (new errores())->error(mensaje:'Error al eliminar', data: $del);
+            print_r($error);exit;
+        }
+        $inm_comprador_id = 1;
+        $link = $this->link;
+        $resultado = $_inm->inm_ubicaciones($inm_comprador_id, $link);
+        $this->assertIsArray($resultado);
+        $this->assertNotTrue(errores::$error);
+        $this->assertEmpty($resultado);
+        errores::$error = false;
+
+        $alta = (new base_test())->alta_inm_rel_ubi_comp(link: $this->link);
+        if(errores::$error){
+            $error = (new errores())->error(mensaje:'Error al insertar', data: $alta);
+            print_r($error);exit;
+        }
+
+
+        $inm_comprador_id = 1;
+        $link = $this->link;
+        $resultado = $_inm->inm_ubicaciones($inm_comprador_id, $link);
+
+        $this->assertIsArray($resultado);
+        $this->assertNotTrue(errores::$error);
+        $this->assertEquals(1,$resultado[0]['inm_ubicacion_id']);
+        errores::$error = false;
+
     }
 
     public function test_keys_selects(): void

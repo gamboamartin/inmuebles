@@ -9,6 +9,8 @@ use gamboamartin\errores\errores;
 
 use gamboamartin\inmuebles\models\inm_comprador;
 use gamboamartin\inmuebles\models\inm_rel_comprador_com_cliente;
+use gamboamartin\inmuebles\models\inm_rel_ubi_comp;
+use gamboamartin\inmuebles\models\inm_ubicacion;
 use PDO;
 use stdClass;
 
@@ -150,6 +152,58 @@ class base_test{
         return $alta;
     }
 
+    public function alta_inm_rel_ubi_comp(PDO $link, int $inm_comprador_id = 1, int $inm_ubicacion_id = 1, int $id = 1,
+                                          float $precio_operacion = 450000): array|\stdClass
+    {
+
+        $existe = (new inm_comprador(link: $link))->existe_by_id(registro_id: $inm_comprador_id);
+        if(errores::$error){
+            return (new errores())->error(mensaje: 'Error al validar si existe inm_comprador', data: $existe);
+        }
+        if(!$existe){
+            $alta = $this->alta_inm_comprador(link: $link, id: $inm_comprador_id);
+            if(errores::$error){
+                return (new errores())->error(mensaje: 'Error al insertar inm_comprador', data: $alta);
+            }
+
+        }
+
+        $existe = (new inm_ubicacion(link: $link))->existe_by_id(registro_id: $inm_ubicacion_id);
+        if(errores::$error){
+            return (new errores())->error(mensaje: 'Error al validar si existe inm_ubicacion_id', data: $existe);
+        }
+        if(!$existe){
+            $alta = $this->alta_inm_ubicacion(link: $link, id: $inm_ubicacion_id);
+            if(errores::$error){
+                return (new errores())->error(mensaje: 'Error al insertar inm_comprador', data: $alta);
+            }
+        }
+
+
+        $registro['id'] = $id;
+        $registro['inm_comprador_id'] = $inm_comprador_id;
+        $registro['inm_ubicacion_id'] = $inm_ubicacion_id;
+        $registro['precio_operacion'] = $precio_operacion;
+
+        $alta = (new inm_rel_ubi_comp($link))->alta_registro($registro);
+        if(errores::$error){
+            return (new errores())->error(mensaje: 'Error al insertar', data: $alta);
+        }
+        return $alta;
+    }
+
+    public function alta_inm_ubicacion(PDO $link, int $id = 1): array|\stdClass
+    {
+
+        $registro['id'] = $id;
+
+        $alta = (new inm_ubicacion($link))->alta_registro($registro);
+        if(errores::$error){
+            return (new errores())->error(mensaje: 'Error al insertar', data: $alta);
+        }
+        return $alta;
+    }
+
     public function del(PDO $link, string $name_model): array
     {
 
@@ -231,8 +285,26 @@ class base_test{
         if(errores::$error){
             return (new errores())->error('Error al eliminar', $del);
         }
+        $del = $this->del_inm_comprador_etapa(link: $link);
+        if(errores::$error){
+            return (new errores())->error('Error al eliminar', $del);
+        }
+        $del = $this->del_inm_rel_ubi_comp(link: $link);
+        if(errores::$error){
+            return (new errores())->error('Error al eliminar', $del);
+        }
 
         $del = $this->del($link, 'gamboamartin\\inmuebles\\models\\inm_comprador');
+        if(errores::$error){
+            return (new errores())->error('Error al eliminar', $del);
+        }
+        return $del;
+    }
+
+    public function del_inm_comprador_etapa(PDO $link): array
+    {
+
+        $del = $this->del($link, 'gamboamartin\\inmuebles\\models\\inm_comprador_etapa');
         if(errores::$error){
             return (new errores())->error('Error al eliminar', $del);
         }
@@ -271,6 +343,15 @@ class base_test{
     public function del_inm_rel_comprador_com_cliente(PDO $link): array
     {
         $del = $this->del($link, 'gamboamartin\\inmuebles\\models\\inm_rel_comprador_com_cliente');
+        if(errores::$error){
+            return (new errores())->error('Error al eliminar', $del);
+        }
+        return $del;
+    }
+
+    public function del_inm_rel_ubi_comp(PDO $link): array
+    {
+        $del = $this->del($link, 'gamboamartin\\inmuebles\\models\\inm_rel_ubi_comp');
         if(errores::$error){
             return (new errores())->error('Error al eliminar', $del);
         }
