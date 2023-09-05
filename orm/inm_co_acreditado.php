@@ -15,8 +15,7 @@ class inm_co_acreditado extends _modelo_parent{
         $columnas = array($tabla=>false);
 
         $campos_obligatorios = array('nss','curp','rfc', 'apellido_paterno','apellido_materno','nombre', 'lada',
-            'numero','celular','genero', 'correo','nombre_empresa_patron','nrp','lada_nep','numero_nep',
-            'extension_nep');
+            'numero','celular','genero', 'correo','nombre_empresa_patron','nrp','lada_nep','numero_nep');
 
         $columnas_extra= array();
         $renombres= array();

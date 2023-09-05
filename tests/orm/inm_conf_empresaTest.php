@@ -10,7 +10,9 @@ use gamboamartin\inmuebles\controllers\controlador_inm_plazo_credito_sc;
 use gamboamartin\inmuebles\controllers\controlador_inm_producto_infonavit;
 use gamboamartin\inmuebles\models\_inm_ubicaciones;
 use gamboamartin\inmuebles\models\inm_comprador;
+use gamboamartin\inmuebles\models\inm_conf_empresa;
 use gamboamartin\inmuebles\models\inm_rel_comprador_com_cliente;
+use gamboamartin\inmuebles\models\inm_rel_ubi_comp;
 use gamboamartin\inmuebles\models\inm_ubicacion;
 use gamboamartin\inmuebles\tests\base_test;
 use gamboamartin\test\liberator;
@@ -22,7 +24,7 @@ use function PHPUnit\Framework\assertEquals;
 use function PHPUnit\Framework\assertStringContainsStringIgnoringCase;
 
 
-class inm_rel_comprador_com_clienteTest extends test {
+class inm_conf_empresaTest extends test {
     public errores $errores;
     private stdClass $paths_conf;
     public function __construct(?string $name = null, array $data = [], $dataName = '')
@@ -35,7 +37,7 @@ class inm_rel_comprador_com_clienteTest extends test {
         $this->paths_conf->views = '/var/www/html/inmuebles/config/views.php';
     }
 
-    public function test_imp_rel_comprador_com_cliente(): void
+    public function test_inm_conf_empresa(): void
     {
         errores::$error = false;
 
@@ -45,8 +47,9 @@ class inm_rel_comprador_com_clienteTest extends test {
         $_SESSION['usuario_id'] = 2;
         $_GET['session_id'] = '1';
 
-        $inm = new inm_rel_comprador_com_cliente(link: $this->link);
+        $inm = new inm_conf_empresa(link: $this->link);
         //$inm = new liberator($inm);
+
 
         $del = (new base_test())->del_org_empresa(link: $this->link);
         if(errores::$error){
@@ -54,35 +57,28 @@ class inm_rel_comprador_com_clienteTest extends test {
             print_r($error);exit;
         }
 
-        $del = (new base_test())->del_inm_rel_comprador_com_cliente(link: $this->link);
-        if(errores::$error){
-            $error = (new errores())->error(mensaje:'Error al eliminar', data: $del);
-            print_r($error);exit;
-        }
-
-
-        $inm_comprador_id = 1;
-        $resultado = $inm->imp_rel_comprador_com_cliente($inm_comprador_id);
+        $org_empresa_id = 1;
+        $resultado = $inm->inm_conf_empresa($org_empresa_id);
 
         $this->assertIsArray($resultado);
         $this->assertTrue(errores::$error);
-        $this->assertEquals("Error no existe inm_rel_comprador_com_cliente",$resultado['mensaje_limpio']);
+        $this->assertEquals("Error no existe r_inm_conf_empresa",$resultado['mensaje_limpio']);
 
         errores::$error = false;
 
-        $alta = (new base_test())->alta_inm_rel_comprador_com_cliente(link: $this->link);
+        $alta = (new base_test())->alta_inm_conf_empresa(link: $this->link);
         if(errores::$error){
             $error = (new errores())->error(mensaje:'Error al insertar', data: $alta);
             print_r($error);exit;
         }
 
-        $inm_comprador_id = 1;
-        $resultado = $inm->imp_rel_comprador_com_cliente($inm_comprador_id);
+        $org_empresa_id = 1;
+        $resultado = $inm->inm_conf_empresa($org_empresa_id);
 
         $this->assertIsArray($resultado);
         $this->assertNotTrue(errores::$error);
-        $this->assertEquals(1,$resultado['inm_comprador_id']);
-        $this->assertEquals(1,$resultado['com_cliente_id']);
+        $this->assertEquals(1,$resultado['inm_tipo_inmobiliaria_id']);
+        $this->assertEquals(1,$resultado['org_empresa_id']);
         errores::$error = false;
     }
 

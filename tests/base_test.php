@@ -8,9 +8,11 @@ use gamboamartin\comercial\models\com_cliente;
 use gamboamartin\errores\errores;
 
 use gamboamartin\inmuebles\models\inm_comprador;
+use gamboamartin\inmuebles\models\inm_conf_empresa;
 use gamboamartin\inmuebles\models\inm_rel_comprador_com_cliente;
 use gamboamartin\inmuebles\models\inm_rel_ubi_comp;
 use gamboamartin\inmuebles\models\inm_ubicacion;
+use gamboamartin\organigrama\models\org_empresa;
 use PDO;
 use stdClass;
 
@@ -109,6 +111,33 @@ class base_test{
         }
         return $alta;
     }
+
+    public function alta_inm_conf_empresa(PDO $link, int $id = 1, int $inm_tipo_inmobiliaria_id = 1,
+                                          int $org_empresa_id = 1): array|\stdClass
+    {
+
+
+        $existe = (new org_empresa(link: $link))->existe_by_id(registro_id: $org_empresa_id);
+        if(errores::$error){
+            return (new errores())->error(mensaje: 'Error al validar si existe org_empresa_id', data: $existe);
+        }
+        if(!$existe){
+            $alta = $this->alta_org_empresa(link: $link, id: $org_empresa_id);
+            if(errores::$error){
+                return (new errores())->error(mensaje: 'Error al insertar org_empresa', data: $alta);
+            }
+        }
+
+        $registro['id'] = $id;
+        $registro['inm_tipo_inmobiliaria_id'] = $inm_tipo_inmobiliaria_id;
+        $registro['org_empresa_id'] = $org_empresa_id;
+
+        $alta = (new inm_conf_empresa($link))->alta_registro($registro);
+        if(errores::$error){
+            return (new errores())->error(mensaje: 'Error al insertar', data: $alta);
+        }
+        return $alta;
+    }
     public function alta_inm_rel_comprador_com_cliente(PDO $link, int $com_cliente_id = 1, int $inm_comprador_id = 1,
                                                        int $id = 1): array|\stdClass
     {
@@ -198,6 +227,17 @@ class base_test{
         $registro['id'] = $id;
 
         $alta = (new inm_ubicacion($link))->alta_registro($registro);
+        if(errores::$error){
+            return (new errores())->error(mensaje: 'Error al insertar', data: $alta);
+        }
+        return $alta;
+    }
+
+    public function alta_org_empresa(PDO $link, $id = 1): array|\stdClass
+    {
+
+        $alta = (new \gamboamartin\organigrama\tests\base_test())->alta_org_empresa(link: $link,
+            cat_sat_regimen_fiscal_id: 601, cat_sat_tipo_persona_id: 4, id: $id);
         if(errores::$error){
             return (new errores())->error(mensaje: 'Error al insertar', data: $alta);
         }
@@ -367,6 +407,10 @@ class base_test{
         }
 
         $del = $this->del_inm_conf_empresa(link: $link);
+        if(errores::$error){
+            return (new errores())->error('Error al eliminar', $del);
+        }
+        $del = $this->del_org_puesto(link: $link);
         if(errores::$error){
             return (new errores())->error('Error al eliminar', $del);
         }

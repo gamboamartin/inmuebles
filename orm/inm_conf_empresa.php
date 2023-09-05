@@ -56,28 +56,42 @@ class inm_conf_empresa extends _modelo_parent{
     /**
      * Genera la descripcion de un comprador basado en datos del registro a insertar
      * @param array $registro Registro en proceso
-     * @return string
+     * @return string|array
      */
-    private function descripcion(array $registro): string
+    private function descripcion(array $registro): string|array
     {
+        $keys = array('inm_tipo_inmobiliaria_id','org_empresa_id');
+        $valida = $this->validacion->valida_ids(keys: $keys,registro:  $registro);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al validar registro', data: $valida);
+        }
+
         $descripcion = $registro['inm_tipo_inmobiliaria_id'];
         $descripcion .= ' '.$registro['org_empresa_id'];
         return $descripcion;
     }
 
-    final public function inm_conf_empresa(int $org_empresa_id){
+    /**
+     * Obtiene la empresa
+     * @param int $org_empresa_id Identificador de empresa
+     * @return array
+     * @version 1.112.1
+     */
+    final public function inm_conf_empresa(int $org_empresa_id): array
+    {
 
+        if($org_empresa_id<=0){
+            return $this->error->error(mensaje: 'Error org_empresa_id debe ser mayor a 0',data:  $org_empresa_id);
+        }
         $filtro['org_empresa.id'] = $org_empresa_id;
 
         $r_inm_conf_empresa = $this->filtro_and(filtro:$filtro);
         if(errores::$error){
-            return $this->error->error(
-                mensaje: 'Error al obtener r_inm_conf_empresa',data:  $r_inm_conf_empresa);
+            return $this->error->error(mensaje: 'Error al obtener r_inm_conf_empresa',data:  $r_inm_conf_empresa);
         }
 
         if($r_inm_conf_empresa->n_registros === 0){
-            return $this->error->error(
-                mensaje: 'Error no existe r_inm_conf_empresa',data:  $r_inm_conf_empresa);
+            return $this->error->error(mensaje: 'Error no existe r_inm_conf_empresa',data:  $r_inm_conf_empresa);
         }
 
         return $r_inm_conf_empresa->registros[0];
