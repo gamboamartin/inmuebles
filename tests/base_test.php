@@ -10,6 +10,7 @@ use gamboamartin\errores\errores;
 use gamboamartin\inmuebles\models\inm_co_acreditado;
 use gamboamartin\inmuebles\models\inm_comprador;
 use gamboamartin\inmuebles\models\inm_conf_empresa;
+use gamboamartin\inmuebles\models\inm_referencia;
 use gamboamartin\inmuebles\models\inm_rel_co_acred;
 use gamboamartin\inmuebles\models\inm_rel_comprador_com_cliente;
 use gamboamartin\inmuebles\models\inm_rel_ubi_comp;
@@ -170,6 +171,40 @@ class base_test{
         $registro['org_empresa_id'] = $org_empresa_id;
 
         $alta = (new inm_conf_empresa($link))->alta_registro($registro);
+        if(errores::$error){
+            return (new errores())->error(mensaje: 'Error al insertar', data: $alta);
+        }
+        return $alta;
+    }
+
+    public function alta_inm_referencia(PDO $link, string $apellido_materno = 'AM', string $apellido_paterno = 'AP',
+                                        string $celular = '1234567890', int $dp_calle_pertenece_id = 109, int $id = 1,
+                                        int $inm_comprador_id= 1, string $lada = '123', string $nombre = 'NOMBRE',
+                                        string $numero = '1234567', string $numero_dom = 'NUMERO DOM'): array|\stdClass
+    {
+        $existe = (new inm_comprador(link: $link))->existe_by_id(registro_id: $inm_comprador_id);
+        if(errores::$error){
+            return (new errores())->error(mensaje: 'Error al validar si existe inm_comprador_id', data: $existe);
+        }
+        if(!$existe){
+            $alta = $this->alta_inm_comprador(link: $link, id: $inm_comprador_id);
+            if(errores::$error){
+                return (new errores())->error(mensaje: 'Error al insertar inm_comprador_id', data: $alta);
+            }
+        }
+
+        $registro['id'] = $id;
+        $registro['nombre'] = $nombre;
+        $registro['apellido_paterno'] = $apellido_paterno;
+        $registro['apellido_materno'] = $apellido_materno;
+        $registro['inm_comprador_id'] = $inm_comprador_id;
+        $registro['lada'] = $lada;
+        $registro['numero'] = $numero;
+        $registro['celular'] = $celular;
+        $registro['dp_calle_pertenece_id'] = $dp_calle_pertenece_id;
+        $registro['numero_dom'] = $numero_dom;
+
+        $alta = (new inm_referencia($link))->alta_registro($registro);
         if(errores::$error){
             return (new errores())->error(mensaje: 'Error al insertar', data: $alta);
         }
@@ -399,6 +434,10 @@ class base_test{
         if(errores::$error){
             return (new errores())->error('Error al eliminar', $del);
         }
+        $del = $this->del_inm_referencia(link: $link);
+        if(errores::$error){
+            return (new errores())->error('Error al eliminar', $del);
+        }
 
         $del = $this->del($link, 'gamboamartin\\inmuebles\\models\\inm_comprador');
         if(errores::$error){
@@ -440,6 +479,15 @@ class base_test{
     public function del_inm_doc_comprador(PDO $link): array
     {
         $del = $this->del($link, 'gamboamartin\\inmuebles\\models\\inm_doc_comprador');
+        if(errores::$error){
+            return (new errores())->error('Error al eliminar', $del);
+        }
+        return $del;
+    }
+
+    public function del_inm_referencia(PDO $link): array
+    {
+        $del = $this->del($link, 'gamboamartin\\inmuebles\\models\\inm_referencia');
         if(errores::$error){
             return (new errores())->error('Error al eliminar', $del);
         }

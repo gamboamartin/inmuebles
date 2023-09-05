@@ -27,9 +27,13 @@ class inm_referencia extends _modelo_parent{
         $atributos_criticos = array('inm_comprador_id','apellido_paterno','apellido_materno', 'nombre','lada',
             'numero', 'celular','dp_calle_pertenece_id','numero_dom');
 
+        $tipo_campos['lada'] = 'lada';
+        $tipo_campos['numero'] = 'tel_sin_lada';
+        $tipo_campos['celular'] = 'telefono_mx';
+
         parent::__construct(link: $link, tabla: $tabla, campos_obligatorios: $campos_obligatorios,
             columnas: $columnas, columnas_extra: $columnas_extra, renombres: $renombres,
-            atributos_criticos: $atributos_criticos);
+            tipo_campos: $tipo_campos, atributos_criticos: $atributos_criticos);
 
         $this->NAMESPACE = __NAMESPACE__;
         $this->etiqueta = 'Referencia';
@@ -59,17 +63,40 @@ class inm_referencia extends _modelo_parent{
     /**
      * Genera la descripcion de un comprador basado en datos del registro a insertar
      * @param array $registro Registro en proceso
-     * @return string
+     * @return string|array
      */
-    private function descripcion(array $registro): string
+    private function descripcion(array $registro): string|array
     {
+        $keys = array('nombre','apellido_paterno','apellido_materno');
+        $valida = $this->validacion->valida_existencia_keys(keys: $keys,registro:  $registro,valida_vacio: false);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al validar $registro',data: $valida);;
+        }
+
+        $keys = array('nombre','apellido_paterno');
+        $valida = $this->validacion->valida_existencia_keys(keys: $keys,registro:  $registro);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al validar $registro',data: $valida);;
+        }
+
         $descripcion = $registro['nombre'];
         $descripcion .= ' '.$registro['apellido_paterno'];
         $descripcion .= ' '.$registro['apellido_materno'];
         return $descripcion;
     }
 
-    final public function inm_referencias(int $inm_comprador_id){
+    /**
+     * Obtiene las referencias basadas en un comprador
+     * @param int $inm_comprador_id Identificador de comprador
+     * @return array
+     * @version 1.114.1
+     */
+    final public function inm_referencias(int $inm_comprador_id): array
+    {
+        if($inm_comprador_id<=0){
+            return $this->error->error(mensaje: 'Error inm_comprador_id debe ser mayor a 0',data:  $inm_comprador_id);
+        }
+
         $filtro = array();
         $filtro['inm_comprador.id'] = $inm_comprador_id;
 
