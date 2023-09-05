@@ -77,7 +77,7 @@ class controlador_inm_compradorTest extends test {
         errores::$error = false;
 
 
-        $ch = curl_init("http://localhost/inmuebles/index.php?seccion=inm_comprador&accion=asigna_ubicacion&adm_menu_id=64&session_id=5850109279&adm_menu_id=64&registro_id=1");
+        $ch = curl_init("http://localhost/inmuebles/index.php?seccion=inm_comprador&accion=asigna_ubicacion&adm_menu_id=64&session_id=1590259697&adm_menu_id=64&registro_id=1");
         $fp = fopen("inm_comprador.asigna_ubicacion", "w");
 
         curl_setopt($ch, CURLOPT_FILE, $fp);
@@ -102,6 +102,25 @@ class controlador_inm_compradorTest extends test {
         errores::$error = false;
     }
 
+    public function test_campos_view(): void
+    {
+        errores::$error = false;
+
+        $_GET['seccion'] = 'inm_producto_infonavit';
+        $_GET['accion'] = 'lista';
+        $_SESSION['grupo_id'] = 1;
+        $_SESSION['usuario_id'] = 2;
+        $_GET['session_id'] = '1';
+
+
+        $ctl = new controlador_inm_comprador(link: $this->link, paths_conf: $this->paths_conf);
+        $ctl = new liberator($ctl);
+
+        $resultado = $ctl->campos_view();
+        $this->assertIsArray($resultado);
+        $this->assertNotTrue(errores::$error);
+        errores::$error = false;
+    }
 
     public function test_init_datatable(): void
     {
@@ -127,11 +146,6 @@ class controlador_inm_compradorTest extends test {
 
         errores::$error = false;
     }
-
-
-
-
-
 
 
 

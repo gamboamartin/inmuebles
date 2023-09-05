@@ -20,12 +20,12 @@ class inm_ubicacion extends _inm_ubicaciones {
             'dp_cp'=>'dp_colonia_postal','dp_colonia'=>'dp_colonia_postal','dp_municipio'=>'dp_cp',
             'dp_estado'=>'dp_municipio','dp_pais'=>'dp_estado','dp_calle'=>'dp_calle_pertenece');
 
-        $campos_obligatorios = array('dp_calle_pertenece_id');
+        $campos_obligatorios = array('dp_calle_pertenece_id','cuenta_predial');
 
         $columnas_extra= array();
         $renombres= array();
 
-        $atributos_criticos = array('manzana','lote','dp_calle_pertenece_id','etapa');
+        $atributos_criticos = array('manzana','lote','dp_calle_pertenece_id','etapa','cuenta_predial');
 
         parent::__construct(link: $link, tabla: $tabla, campos_obligatorios: $campos_obligatorios,
             columnas: $columnas, columnas_extra: $columnas_extra, renombres: $renombres,

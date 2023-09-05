@@ -13,7 +13,6 @@ use gamboamartin\errores\errores;
 use gamboamartin\inmuebles\html\inm_comprador_html;
 use gamboamartin\inmuebles\models\_inm_comprador;
 use gamboamartin\inmuebles\models\inm_comprador;
-use gamboamartin\inmuebles\models\inm_doc_comprador;
 use gamboamartin\system\_ctl_base;
 use gamboamartin\system\links_menu;
 use gamboamartin\template\html;
@@ -169,7 +168,11 @@ class controlador_inm_comprador extends _ctl_base {
         return $r_modifica;
     }
 
-
+    /**
+     * Integra los campos para las vistas de frontend base
+     * @return array
+     * @version 1.106.1
+     */
     protected function campos_view(): array
     {
         $keys = new stdClass();
