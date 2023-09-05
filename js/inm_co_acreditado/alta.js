@@ -8,6 +8,9 @@ let rfc_ct = $("#rfc");
 let apellido_paterno_ct = $("#apellido_paterno");
 let apellido_materno_ct = $("#apellido_materno");
 let nombre_ct = $("#nombre");
+let nrp_ct = $("#nrp_nep");
+
+let nombre_empresa_patron_ct = $("#nombre_empresa_patron");
 
 
 curp_ct.change(function(){
@@ -49,6 +52,22 @@ apellido_materno_ct.change(function(){
     apellido_materno_ct.val(apellido_materno);
 
 });
+nombre_empresa_patron_ct.change(function(){
+
+    let nombre_empresa_patron = $(this).val();
+    nombre_empresa_patron = nombre_empresa_patron.toUpperCase()
+    nombre_empresa_patron_ct.val(nombre_empresa_patron);
+
+});
+
+nrp_ct.change(function(){
+
+    let nrp = $(this).val();
+    nrp = nrp.toUpperCase()
+    nrp_ct.val(nrp);
+
+});
+
 
 
 

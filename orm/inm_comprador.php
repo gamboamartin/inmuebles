@@ -272,22 +272,27 @@ class inm_comprador extends _modelo_parent{
             return $this->error->error(mensaje: 'Error al obtener comprador', data: $inm_comprador);
         }
 
-        $imp_rel_comprador_com_cliente = (new inm_rel_comprador_com_cliente(link: $this->link))->imp_rel_comprador_com_cliente(inm_comprador_id: $inm_comprador_id);
+        $imp_rel_comprador_com_cliente = (new inm_rel_comprador_com_cliente(link: $this->link))
+            ->imp_rel_comprador_com_cliente(inm_comprador_id: $inm_comprador_id);
         if (errores::$error) {
-            return $this->error->error(mensaje: 'Error al obtener imp_rel_comprador_com_cliente', data: $imp_rel_comprador_com_cliente);
+            return $this->error->error(mensaje: 'Error al obtener imp_rel_comprador_com_cliente',
+                data: $imp_rel_comprador_com_cliente);
         }
 
-        $com_cliente = (new com_cliente(link: $this->link))->registro(registro_id: $imp_rel_comprador_com_cliente['com_cliente_id']);
+        $com_cliente = (new com_cliente(link: $this->link))->registro(
+            registro_id: $imp_rel_comprador_com_cliente['com_cliente_id']);
         if (errores::$error) {
             return $this->error->error(mensaje: 'Error al obtener com_cliente', data: $com_cliente);
         }
 
-        $imp_rel_ubi_comp = (new inm_rel_ubi_comp(link: $this->link))->imp_rel_ubi_comp(inm_comprador_id: $inm_comprador_id);
+        $imp_rel_ubi_comp = (new inm_rel_ubi_comp(link: $this->link))->imp_rel_ubi_comp(
+            inm_comprador_id: $inm_comprador_id);
         if (errores::$error) {
             return $this->error->error(mensaje: 'Error al obtener imp_rel_ubi_comp', data: $imp_rel_ubi_comp);
         }
 
-        $inm_conf_empresa = (new inm_conf_empresa(link: $this->link))->inm_conf_empresa(org_empresa_id: $inm_comprador['org_empresa_id']);
+        $inm_conf_empresa = (new inm_conf_empresa(link: $this->link))->inm_conf_empresa(
+            org_empresa_id: $inm_comprador['org_empresa_id']);
         if (errores::$error) {
             return $this->error->error(mensaje: 'Error al obtener r_inm_conf_empresa', data: $inm_conf_empresa);
         }

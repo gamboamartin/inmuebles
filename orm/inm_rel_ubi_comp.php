@@ -136,7 +136,18 @@ class inm_rel_ubi_comp extends _modelo_parent{
 
     }
 
-    final public function imp_rel_ubi_comp(int $inm_comprador_id){
+    /**
+     * Obtiene la relacion entre una ubicacion y un cliente
+     * @param int $inm_comprador_id Identificador de comprador
+     * @return array
+     * @version 1.111.1
+     */
+    final public function imp_rel_ubi_comp(int $inm_comprador_id): array
+    {
+
+        if($inm_comprador_id<=0){
+            return $this->error->error(mensaje: 'Error inm_comprador_id debe ser mayor a 0',data:  $inm_comprador_id);
+        }
 
         $filtro['inm_comprador.id'] = $inm_comprador_id;
 
@@ -147,7 +158,7 @@ class inm_rel_ubi_comp extends _modelo_parent{
 
         if($r_imp_rel_ubi_comp->n_registros === 0){
             return $this->error->error(
-                mensaje: 'Error no existe inm_rel_comprador_com_cliente',data:  $r_imp_rel_ubi_comp);
+                mensaje: 'Error no existe inm_rel_ubi_comp',data:  $r_imp_rel_ubi_comp);
         }
         return $r_imp_rel_ubi_comp->registros[0];
     }
