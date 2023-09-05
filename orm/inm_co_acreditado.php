@@ -25,9 +25,17 @@ class inm_co_acreditado extends _modelo_parent{
             'numero','celular','genero', 'correo','nombre_empresa_patron','nrp','lada_nep','numero_nep',
             'extension_nep');
 
+        $tipo_campos['nss'] = 'nss';
+        $tipo_campos['curp'] = 'curp';
+        $tipo_campos['rfc'] = 'rfc';
+        $tipo_campos['lada'] = 'lada';
+        $tipo_campos['numero'] = 'numero';
+        $tipo_campos['celular'] = 'telefono_mx';
+        $tipo_campos['correo'] = 'correo';
+
         parent::__construct(link: $link, tabla: $tabla, campos_obligatorios: $campos_obligatorios,
             columnas: $columnas, columnas_extra: $columnas_extra, renombres: $renombres,
-            atributos_criticos: $atributos_criticos);
+            tipo_campos: $tipo_campos, atributos_criticos: $atributos_criticos);
 
         $this->NAMESPACE = __NAMESPACE__;
         $this->etiqueta = 'Co acreditado';

@@ -326,6 +326,10 @@ class _inm_comprador{
         if($checked_default_esc > 2){
             return $this->error->error(mensaje: 'Error checked_default debe ser menor a 3', data: $checked_default_esc);
         }
+        if(is_array($controler->inputs)){
+            return $this->error->error(mensaje: 'Error controler->inputs no esta inicializado',
+                data: $controler->inputs);
+        }
 
         $es_segundo_credito = $controler->html->directivas->input_radio_doble(campo: 'es_segundo_credito',
             checked_default: $checked_default_esc,tag: 'Es Segundo Credito', val_1: 'SI',val_2: 'NO');
@@ -352,9 +356,20 @@ class _inm_comprador{
      * Integra los inputs de tipo radio para upd
      * @param controlador_inm_comprador $controler Controlador en ejecucion
      * @return array|stdClass
+     * @version 1.108.1
      */
     final public function radios_chk(controlador_inm_comprador $controler): array|stdClass
     {
+        $keys = array('es_segundo_credito','con_discapacidad');
+        $valida = (new validacion())->valida_existencia_keys(keys: $keys,registro:  $controler->row_upd);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al validar row upd',data:  $valida);
+        }
+        if(is_array($controler->inputs)){
+            return $this->error->error(mensaje: 'Error controler->inputs no esta inicializado',
+                data: $controler->inputs);
+        }
+
         $checkeds = $this->checkeds_default(controler: $controler);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al integrar checkeds',data:  $checkeds);

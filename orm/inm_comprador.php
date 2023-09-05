@@ -69,6 +69,7 @@ class inm_comprador extends _modelo_parent{
         $tipo_campos['cel_com'] = 'telefono_mx';
         $tipo_campos['correo_com'] = 'correo';
 
+
         parent::__construct(link: $link, tabla: $tabla, campos_obligatorios: $campos_obligatorios,
             columnas: $columnas, columnas_extra: $columnas_extra, renombres: $renombres,
             tipo_campos: $tipo_campos, atributos_criticos: $atributos_criticos);

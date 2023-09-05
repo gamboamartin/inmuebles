@@ -20,7 +20,7 @@ use stdClass;
 
 class controlador_inm_co_acreditado extends _ctl_base {
 
-    public array $imp_ubicaciones = array();
+
     public function __construct(PDO      $link, html $html = new \gamboamartin\template_1\html(),
                                 stdClass $paths_conf = new stdClass())
     {

@@ -423,6 +423,13 @@ class controlador_inm_comprador extends _ctl_base {
 
         return $keys_selects;
     }
+
+    /**
+     * Genera la vista de modifica
+     * @param bool $header Si header retorna resultado en web
+     * @param bool $ws Si ws muestra resultado en json
+     * @return array|stdClass
+     */
     public function modifica(bool $header, bool $ws = false): array|stdClass
     {
 
