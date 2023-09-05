@@ -3,6 +3,7 @@ namespace gamboamartin\inmuebles\models;
 
 use gamboamartin\banco\models\bn_cuenta;
 use gamboamartin\errores\errores;
+use gamboamartin\inmuebles\controllers\_doctos;
 use gamboamartin\inmuebles\controllers\_keys_selects;
 use gamboamartin\inmuebles\controllers\controlador_inm_comprador;
 use gamboamartin\inmuebles\html\inm_ubicacion_html;
@@ -18,7 +19,7 @@ class _inm_comprador{
     }
 
 
-    final public function button(string $accion, controlador_inm_comprador $controler, string $etiqueta, int $indice,
+    private function button(string $accion, controlador_inm_comprador $controler, string $etiqueta, int $indice,
                                  int $inm_doc_comprador_id, array $inm_conf_docs_comprador, array $params = array(),
                                  string $style = 'success', string $target = ''): array
     {
@@ -31,7 +32,155 @@ class _inm_comprador{
         return $inm_conf_docs_comprador;
     }
 
-    final public function inm_ubicacion_id_input(controlador_inm_comprador $controler){
+    final public function button_del(controlador_inm_comprador $controler, int $indice, int $inm_comprador_id,
+                                array $inm_conf_docs_comprador, array $inm_doc_comprador){
+        $params = array('accion_retorno'=>'documentos','seccion_retorno'=>$controler->seccion,
+            'id_retorno'=>$inm_comprador_id);
+
+        $inm_conf_docs_comprador = (new _inm_comprador())->button(accion: 'elimina_bd', controler: $controler,
+            etiqueta: 'Elimina', indice: $indice, inm_doc_comprador_id: $inm_doc_comprador['inm_doc_comprador_id'],
+            inm_conf_docs_comprador: $inm_conf_docs_comprador, params: $params, style: 'danger');
+
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al integrar button',data:  $inm_conf_docs_comprador);
+        }
+        return $inm_conf_docs_comprador;
+    }
+
+    private function buttons(controlador_inm_comprador $controler, int $indice, array $inm_conf_docs_comprador,
+                                  array $inm_doc_comprador){
+
+        $inm_conf_docs_comprador = $this->button(accion: 'descarga', controler: $controler,
+            etiqueta: 'Descarga', indice: $indice, inm_doc_comprador_id: $inm_doc_comprador['inm_doc_comprador_id'],
+            inm_conf_docs_comprador: $inm_conf_docs_comprador);
+
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al integrar button',data:  $inm_conf_docs_comprador);
+        }
+
+        $inm_conf_docs_comprador = $this->button(accion: 'vista_previa', controler: $controler,
+            etiqueta: 'Vista Previa', indice: $indice, inm_doc_comprador_id: $inm_doc_comprador['inm_doc_comprador_id'],
+            inm_conf_docs_comprador: $inm_conf_docs_comprador, target: '_blank');
+
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al integrar button',data:  $inm_conf_docs_comprador);
+        }
+
+        $inm_conf_docs_comprador = $this->button(accion: 'descarga_zip', controler: $controler,
+            etiqueta: 'ZIP', indice: $indice, inm_doc_comprador_id: $inm_doc_comprador['inm_doc_comprador_id'],
+            inm_conf_docs_comprador: $inm_conf_docs_comprador);
+
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al integrar button',data:  $inm_conf_docs_comprador);
+        }
+        return $inm_conf_docs_comprador;
+    }
+
+    private function buttons_base(controlador_inm_comprador $controler, int $indice, int $inm_comprador_id,
+                                  array $inm_conf_docs_comprador, array $inm_doc_comprador): array
+    {
+        $inm_conf_docs_comprador = $this->buttons(controler: $controler,indice:  $indice,
+            inm_conf_docs_comprador:  $inm_conf_docs_comprador,inm_doc_comprador:  $inm_doc_comprador);
+
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al integrar button',data:  $inm_conf_docs_comprador);
+        }
+
+        $inm_conf_docs_comprador = $this->button_del(controler: $controler,indice:  $indice,
+            inm_comprador_id:  $inm_comprador_id,inm_conf_docs_comprador:  $inm_conf_docs_comprador,
+            inm_doc_comprador:  $inm_doc_comprador);
+
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al integrar button',data:  $inm_conf_docs_comprador);
+        }
+
+        return $inm_conf_docs_comprador;
+    }
+
+    private function doc_existente(controlador_inm_comprador $controler, array $doc_tipo_documento, int $indice,
+                                        array $inm_conf_docs_comprador, array $inm_doc_comprador){
+
+        $existe = false;
+        if($doc_tipo_documento['doc_tipo_documento_id'] === $inm_doc_comprador['doc_tipo_documento_id']){
+
+            $existe = true;
+
+            $inm_conf_docs_comprador = $this->buttons_base(
+                controler: $controler,indice:  $indice,inm_comprador_id:  $controler->registro_id,
+                inm_conf_docs_comprador:  $inm_conf_docs_comprador,inm_doc_comprador:  $inm_doc_comprador);
+
+            if(errores::$error){
+                return $this->error->error(mensaje: 'Error al integrar button',data:  $inm_conf_docs_comprador);
+            }
+        }
+
+        $data = new stdClass();
+        $data->existe = $existe;
+        $data->inm_conf_docs_comprador = $inm_conf_docs_comprador;
+        return $data;
+    }
+
+    private function inm_conf_docs_comprador(controlador_inm_comprador $controler, array $inm_docs_comprador){
+        $inm_conf_docs_comprador = (new _doctos())->documentos_de_comprador(inm_comprador_id: $controler->registro_id,
+            link:  $controler->link, todos: true);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al obtener configuraciones de documentos',
+                data:  $inm_conf_docs_comprador);
+        }
+
+
+        foreach ($inm_conf_docs_comprador as $indice=>$doc_tipo_documento){
+            $inm_conf_docs_comprador = $this->inm_docs_comprador(controler: $controler,
+                doc_tipo_documento:  $doc_tipo_documento,indice:  $indice,
+                inm_conf_docs_comprador:  $inm_conf_docs_comprador,inm_docs_comprador:  $inm_docs_comprador);
+
+            if(errores::$error){
+                return $this->error->error(mensaje: 'Error al integrar buttons',data:  $inm_conf_docs_comprador);
+            }
+        }
+        return $inm_conf_docs_comprador;
+    }
+
+    private function inm_docs_comprador(controlador_inm_comprador $controler, array $doc_tipo_documento,
+                                             int $indice, array $inm_conf_docs_comprador,array $inm_docs_comprador){
+        $existe = false;
+        foreach ($inm_docs_comprador as $inm_doc_comprador){
+
+            $existe_doc_comprador = $this->doc_existente(controler: $controler,
+                doc_tipo_documento:  $doc_tipo_documento,indice:  $indice,
+                inm_conf_docs_comprador:  $inm_conf_docs_comprador,inm_doc_comprador:  $inm_doc_comprador);
+
+            if(errores::$error){
+                return $this->error->error(mensaje: 'Error al integrar datos',data:  $existe_doc_comprador);
+            }
+
+            $inm_conf_docs_comprador = $existe_doc_comprador->inm_conf_docs_comprador;
+            $existe = $existe_doc_comprador->existe;
+            if($existe){
+                break;
+            }
+
+        }
+        if(!$existe){
+            $inm_conf_docs_comprador = $this->integra_data(controler: $controler,
+                doc_tipo_documento:  $doc_tipo_documento,indice:  $indice,
+                inm_conf_docs_comprador:  $inm_conf_docs_comprador);
+
+            if(errores::$error){
+                return $this->error->error(mensaje: 'Error al integrar button',data:  $inm_conf_docs_comprador);
+            }
+        }
+        return $inm_conf_docs_comprador;
+    }
+
+    /**
+     * Genera un select con datos de la ubicacion
+     * @param controlador_inm_comprador $controler Controlador en ejecucion
+     * @return array|string
+     * @version 1.103.1
+     */
+    final public function inm_ubicacion_id_input(controlador_inm_comprador $controler): array|string
+    {
         $columns_ds = array('inm_ubicacion_id','dp_estado_descripcion','dp_municipio_descripcion',
             'dp_cp_descripcion','dp_colonia_descripcion','dp_calle_descripcion','inm_ubicacion_numero_exterior');
 
@@ -43,7 +192,14 @@ class _inm_comprador{
         return $inm_ubicacion_id;
     }
 
-    final public function inm_ubicaciones(int $inm_comprador_id, PDO $link){
+    /**
+     * Obtiene las ubicaciones asignadas a un comprador
+     * @param int $inm_comprador_id Comprador identificador
+     * @param PDO $link Conexion a a la base de datos
+     * @return array
+     */
+    final public function inm_ubicaciones(int $inm_comprador_id, PDO $link): array
+    {
         $filtro = array();
         $filtro['inm_comprador.id'] = $inm_comprador_id;
         $r_inm_rel_ubi_comp = (new inm_rel_ubi_comp(link: $link))->filtro_and(filtro: $filtro);
@@ -63,7 +219,7 @@ class _inm_comprador{
         return $inm_conf_docs_comprador;
     }
 
-    final public function integra_data(controlador_inm_comprador $controler, array $doc_tipo_documento,
+    private function integra_data(controlador_inm_comprador $controler, array $doc_tipo_documento,
                                        int $indice, array $inm_conf_docs_comprador){
         $params = array('doc_tipo_documento_id'=>$doc_tipo_documento['doc_tipo_documento_id']);
 
@@ -79,6 +235,19 @@ class _inm_comprador{
 
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al integrar button',data:  $inm_conf_docs_comprador);
+        }
+        return $inm_conf_docs_comprador;
+    }
+
+    final public function integra_inm_documentos(controlador_inm_comprador $controler){
+        $inm_docs_comprador = (new inm_doc_comprador(link: $controler->link))->inm_docs_comprador(inm_comprador_id: $controler->registro_id);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al obtener documentos',data:  $inm_docs_comprador);
+        }
+        $inm_conf_docs_comprador = $this->inm_conf_docs_comprador(controler: $controler,inm_docs_comprador:  $inm_docs_comprador);
+
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al integrar buttons',data:  $inm_conf_docs_comprador);
         }
         return $inm_conf_docs_comprador;
     }

@@ -33,6 +33,30 @@ class _inm_compradorTest extends test {
         $this->paths_conf->views = '/var/www/html/inmuebles/config/views.php';
     }
 
+    public function test_inm_ubicacion_id_input(): void
+    {
+        errores::$error = false;
+
+        $_GET['seccion'] = 'inm_producto_infonavit';
+        $_GET['accion'] = 'lista';
+        $_SESSION['grupo_id'] = 1;
+        $_SESSION['usuario_id'] = 2;
+        $_GET['session_id'] = '1';
+
+        $_inm = new _inm_comprador();
+        //$_inm = new liberator($_inm);
+
+        $controler = new controlador_inm_comprador(link: $this->link, paths_conf: $this->paths_conf);
+        //$controler->row_upd = new stdClass();
+        //$controler->inputs = new stdClass();
+
+        $resultado = $_inm->inm_ubicacion_id_input($controler);
+        $this->assertIsString($resultado);
+        $this->assertNotTrue(errores::$error);
+        $this->assertStringContainsStringIgnoringCase("for='inm_ubicacion_id'>Ubicacion</label><div class='controls'>",$resultado);
+        errores::$error = false;
+    }
+
     public function test_keys_selects(): void
     {
         errores::$error = false;
