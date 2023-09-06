@@ -168,6 +168,41 @@ class _pdfTest extends test {
         errores::$error = false;
     }
 
+    public function test_write(): void
+    {
+        errores::$error = false;
+
+        $_GET['seccion'] = 'inm_producto_infonavit';
+        $_GET['accion'] = 'lista';
+        $_SESSION['grupo_id'] = 1;
+        $_SESSION['usuario_id'] = 2;
+        $_GET['session_id'] = '1';
+
+
+        $pdf = new Fpdi();
+
+        $_pdf = new _pdf($pdf);
+        $_pdf = new liberator($_pdf);
+
+        $pdf->SetFont('Arial', 'B', 15);
+        $pdf->SetTextColor(0, 0, 0);
+        $pdf->AddPage();
+
+
+
+        $valor = 'axJ';
+        $x = 1;
+        $y = 2;
+
+        $resultado = $_pdf->write($valor, $x, $y);
+        $this->assertIsObject($resultado);
+        $this->assertNotTrue(errores::$error);
+        $this->assertEquals("setasign\Fpdi\Fpdi",get_class($resultado));
+        errores::$error = false;
+
+
+    }
+
 
 }
 

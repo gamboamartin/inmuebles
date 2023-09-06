@@ -105,12 +105,6 @@ class controlador_inm_co_acreditado extends _ctl_base {
         return $keys_selects;
     }
 
-
-
-
-
-
-
     /**
      * Inicializa los elementos mostrables para datatables
      * @return stdClass

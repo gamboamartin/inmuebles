@@ -27,6 +27,7 @@ class _pdf{
      * @param string $path_base Path base de sistema
      * @param bool $plantilla_cargada Si la plantilla no esta cargada la carga por primera vez
      * @return array|Fpdi
+     * @version 1.119.1
 
      */
     private function add_template(string $file_plantilla, int $page, string $path_base,
@@ -215,6 +216,7 @@ class _pdf{
         }
         return $pdf;
     }
+
 
     private function genera_hoja_1(stdClass $data, string $path_base){
         $pdf = $this->add_template(file_plantilla: 'templates/solicitud_infonavit.pdf',page:  1,
@@ -564,8 +566,25 @@ class _pdf{
     }
 
 
-    final public function write(string $valor,float $x, float $y): Fpdi
+    /**
+     * Escribe un valor en un pdf
+     * @param string|null $valor Valor a escribir
+     * @param float $x Posicion en x
+     * @param float $y Posicion en y
+     * @return Fpdi|array
+     * @version 1.119.1
+     */
+    private function write(string|null $valor,float $x, float $y): Fpdi|array
     {
+        if($x < 0.0){
+            return $this->error->error(mensaje: 'Error x debe ser mayor a 0', data: $x);
+        }
+        if($y < 0.0){
+            return $this->error->error(mensaje: 'Error y debe ser mayor a 0', data: $y);
+        }
+        if(is_null($valor)){
+            $valor = '';
+        }
         $valor = trim($valor);
 
         $valor = str_replace('á', 'A', $valor);
@@ -578,11 +597,13 @@ class _pdf{
         $valor = mb_convert_encoding($valor, 'ISO-8859-1');
 
         $valor = strtoupper($valor);
-
-
-
-        $this->pdf->SetXY($x, $y);
-        $this->pdf->Write(0, $valor);
+        try {
+            $this->pdf->SetXY($x, $y);
+            $this->pdf->Write(0, $valor);
+        }
+        catch (Throwable $e){
+            return $this->error->error(mensaje: 'Error al escribir', data: $e);
+        }
         return $this->pdf;
     }
 
