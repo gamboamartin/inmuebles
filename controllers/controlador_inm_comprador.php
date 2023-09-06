@@ -324,6 +324,46 @@ class controlador_inm_comprador extends _ctl_base {
 
         $this->inputs->inm_co_acreditado->correo = $inm_co_acreditado_correo;
 
+        $inm_co_acreditado_nombre_empresa_patron = (new inm_co_acreditado_html(html: $this->html_base))->nombre_empresa_patron(cols: 4);
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al generar input',data:  $inm_co_acreditado_nombre_empresa_patron,
+                header: $header,ws:  $ws);
+        }
+
+        $this->inputs->inm_co_acreditado->nombre_empresa_patron = $inm_co_acreditado_nombre_empresa_patron;
+
+        $inm_co_acreditado_nrp = (new inm_co_acreditado_html(html: $this->html_base))->nrp(cols: 4);
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al generar input',data:  $inm_co_acreditado_nrp,
+                header: $header,ws:  $ws);
+        }
+
+        $this->inputs->inm_co_acreditado->nrp = $inm_co_acreditado_nrp;
+
+        $inm_co_acreditado_lada_nep = (new inm_co_acreditado_html(html: $this->html_base))->lada_nep(cols: 4);
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al generar input',data:  $inm_co_acreditado_lada_nep,
+                header: $header,ws:  $ws);
+        }
+
+        $this->inputs->inm_co_acreditado->lada_nep = $inm_co_acreditado_lada_nep;
+
+        $inm_co_acreditado_numero_nep = (new inm_co_acreditado_html(html: $this->html_base))->numero_nep(cols: 4);
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al generar input',data:  $inm_co_acreditado_numero_nep,
+                header: $header,ws:  $ws);
+        }
+
+        $this->inputs->inm_co_acreditado->numero_nep = $inm_co_acreditado_numero_nep;
+
+        $inm_co_acreditado_extension_nep = (new inm_co_acreditado_html(html: $this->html_base))->extension_nep(cols: 4);
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al generar input',data:  $inm_co_acreditado_extension_nep,
+                header: $header,ws:  $ws);
+        }
+
+        $this->inputs->inm_co_acreditado->extension_nep = $inm_co_acreditado_extension_nep;
+
         return $r_modifica;
     }
 

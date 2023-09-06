@@ -59,7 +59,29 @@ class inm_co_acreditado_html extends html_controler {
 
     }
 
+    final public function extension_nep(int $cols, bool $disabled = false, string $name = 'extension_nep', string $place_holder= 'Extension',
+                                     stdClass $row_upd = new stdClass(), bool $value_vacio = false): array|string
+    {
+
+
+        return $this->input_text_required(cols: $cols,disabled:  $disabled,name:  $name,
+            place_holder:  $place_holder,row_upd:  $row_upd,value_vacio:  $value_vacio);
+
+    }
+
+
     final public function lada(int $cols, bool $disabled = false, string $name = 'lada', string $place_holder= 'Lada',
+                               stdClass $row_upd = new stdClass(), bool $value_vacio = false): array|string
+    {
+
+        $regex = $this->validacion->patterns['lada_html'];
+
+        return $this->input_text_required(cols: $cols,disabled:  $disabled,name:  $name,
+            place_holder:  $place_holder,row_upd:  $row_upd,value_vacio:  $value_vacio,regex: $regex);
+
+    }
+
+    final public function lada_nep(int $cols, bool $disabled = false, string $name = 'lada_nep', string $place_holder= 'Lada',
                                stdClass $row_upd = new stdClass(), bool $value_vacio = false): array|string
     {
 
@@ -79,6 +101,29 @@ class inm_co_acreditado_html extends html_controler {
             place_holder:  $place_holder,row_upd:  $row_upd,value_vacio:  $value_vacio);
 
     }
+
+    final public function nombre_empresa_patron(int $cols, bool $disabled = false, string $name = 'nombre_empresa_patron',
+                                                string $place_holder= 'Nombre Empresa Patron',
+                                                stdClass $row_upd = new stdClass(),
+                                                bool $value_vacio = false): array|string
+    {
+
+
+        return $this->input_text_required(cols: $cols,disabled:  $disabled,name:  $name,
+            place_holder:  $place_holder,row_upd:  $row_upd,value_vacio:  $value_vacio);
+
+    }
+
+    final public function nrp(int $cols, bool $disabled = false, string $name = 'nrp',
+                                                string $place_holder= 'NRP',
+                                                stdClass $row_upd = new stdClass(),
+                                                bool $value_vacio = false): array|string
+    {
+
+        return $this->input_text_required(cols: $cols,disabled:  $disabled,name:  $name,
+            place_holder:  $place_holder,row_upd:  $row_upd,value_vacio:  $value_vacio);
+
+    }
     final public function nss(int $cols, bool $disabled = false, string $name = 'nss', string $place_holder= 'NSS',
                               stdClass $row_upd = new stdClass(), bool $value_vacio = false): array|string
     {
@@ -92,6 +137,17 @@ class inm_co_acreditado_html extends html_controler {
 
     final public function numero(int $cols, bool $disabled = false, string $name = 'numero', string $place_holder= 'Numero',
                                stdClass $row_upd = new stdClass(), bool $value_vacio = false): array|string
+    {
+
+        $regex = $this->validacion->patterns['tel_sin_lada_html'];
+
+        return $this->input_text_required(cols: $cols,disabled:  $disabled,name:  $name,
+            place_holder:  $place_holder,row_upd:  $row_upd,value_vacio:  $value_vacio,regex: $regex);
+
+    }
+
+    final public function numero_nep(int $cols, bool $disabled = false, string $name = 'numero_nep', string $place_holder= 'Numero',
+                                 stdClass $row_upd = new stdClass(), bool $value_vacio = false): array|string
     {
 
         $regex = $this->validacion->patterns['tel_sin_lada_html'];

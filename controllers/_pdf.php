@@ -49,7 +49,22 @@ class _pdf{
         return $this->pdf;
     }
 
-    private function apartado_1(stdClass $data){
+    /**
+     * Escribe en ele pdf los elementos del apartado 1 de la solicitud de infonavit
+     * @param stdClass $data Datos de cliente
+     * @return array|Fpdi
+     * @version 1.123.1
+     */
+    private function apartado_1(stdClass $data): Fpdi|array
+    {
+        $valida = (new valida())->valida_existencia_keys(keys: array('inm_comprador'),registro:  $data);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al validar datos', data: $valida);
+        }
+        if(!is_array($data->inm_comprador)){
+            return $this->error->error(mensaje: 'Error $data->inm_comprador no es un array', data: $data);
+        }
+
         $pdf = $this->entidades_infonavit(data: $data);
         if (errores::$error) {
             return $this->error->error(mensaje: 'Error al escribir en pdf', data: $pdf);
@@ -762,7 +777,16 @@ class _pdf{
         return $write;
     }
 
-    private function write_condicion(string $key, array $row, mixed $value_compare, float $x, float $y){
+    /**
+     * @param string $key
+     * @param array $row
+     * @param mixed $value_compare
+     * @param float $x
+     * @param float $y
+     * @return array|bool
+     */
+    private function write_condicion(string $key, array $row, mixed $value_compare, float $x, float $y): bool|array
+    {
         $write = false;
         if (round($row[$key], 2) > $value_compare) {
             $pdf = $this->write( valor: $row[$key], x: $x, y: $y);
