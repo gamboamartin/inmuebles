@@ -34,6 +34,37 @@ class _pdfTest extends test {
         $this->paths_conf->views = '/var/www/html/inmuebles/config/views.php';
     }
 
+    public function test_add_template(): void
+    {
+        errores::$error = false;
+
+        $_GET['seccion'] = 'inm_producto_infonavit';
+        $_GET['accion'] = 'lista';
+        $_SESSION['grupo_id'] = 1;
+        $_SESSION['usuario_id'] = 2;
+        $_GET['session_id'] = '1';
+
+
+        $pdf = new Fpdi();
+
+
+        $_pdf = new _pdf($pdf);
+
+        $_pdf = new liberator($_pdf);
+
+        $file_plantilla = 'templates/solicitud_infonavit.pdf';
+        $page = 2;
+        $path_base = (new generales())->path_base;
+        $plantilla_cargada = false;
+        $resultado = $_pdf->add_template($file_plantilla, $page, $path_base, $plantilla_cargada);
+        $this->assertIsObject($resultado);
+        $this->assertNotTrue(errores::$error);
+        $this->assertEquals("setasign\Fpdi\Fpdi",get_class($resultado));
+
+
+        errores::$error = false;
+    }
+
     public function test_tpl_idx(): void
     {
         errores::$error = false;

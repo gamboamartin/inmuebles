@@ -21,19 +21,27 @@ class _pdf{
     }
 
     /**
-     * @param string $file_plantilla
-     * @param int $page
-     * @param string $path_base
-     * @param bool $plantilla_cargada
+     * Anexa el template para solicitudes
+     * @param string $file_plantilla Ruta de archivo relativa de plantilla
+     * @param int $page no de pagina de plantilla a integrar
+     * @param string $path_base Path base de sistema
+     * @param bool $plantilla_cargada Si la plantilla no esta cargada la carga por primera vez
      * @return array|Fpdi
+
      */
-    private function add_template(string $file_plantilla, int $page, string $path_base, bool $plantilla_cargada): Fpdi|array
+    private function add_template(string $file_plantilla, int $page, string $path_base,
+                                 bool $plantilla_cargada): Fpdi|array
     {
+        $valida = $this->valida_datos_plantilla(file_plantilla: $file_plantilla,page:  $page,path_base:  $path_base);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al validar datos de plantilla', data: $valida);
+        }
+
         $this->pdf->AddPage();
         $tpl_idx = $this->tpl_idx(file_plantilla: $file_plantilla, page: $page,path_base:  $path_base,
             plantilla_cargada: $plantilla_cargada);
         if (errores::$error) {
-            return $this->error->error(mensaje: 'Error al escribir en pdf', data: $tpl_idx);
+            return $this->error->error(mensaje: 'Error al importar plantilla', data: $tpl_idx);
         }
         $this->pdf->useTemplate($tpl_idx, null, null, null, null, true);
         return $this->pdf;
@@ -486,17 +494,10 @@ class _pdf{
      */
     private function tpl_idx(string $file_plantilla, int $page, string $path_base, bool $plantilla_cargada): array|string
     {
-        $file_plantilla = trim($file_plantilla);
-        if($file_plantilla === ''){
-            return $this->error->error(mensaje: 'Error file_plantilla esta vacio', data: $file_plantilla);
-        }
 
-        $path_base = trim($path_base);
-        if($path_base === ''){
-            return $this->error->error(mensaje: 'Error path_base esta vacio', data: $path_base);
-        }
-        if($page < 1){
-            return $this->error->error(mensaje: 'Error page debe ser mayor a 0', data: $page);
+        $valida = $this->valida_datos_plantilla(file_plantilla: $file_plantilla,page:  $page,path_base:  $path_base);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al validar datos de plantilla', data: $valida);
         }
 
         $ruta = trim($path_base . $file_plantilla);
@@ -514,6 +515,27 @@ class _pdf{
         }
 
         return $tpl_idx;
+    }
+
+    private function valida_datos_plantilla(string $file_plantilla, int $page, string $path_base): bool|array
+    {
+        $file_plantilla = trim($file_plantilla);
+        if($file_plantilla === ''){
+            return $this->error->error(mensaje: 'Error file_plantilla esta vacio', data: $file_plantilla);
+        }
+        $path_base = trim($path_base);
+        if($path_base === ''){
+            return $this->error->error(mensaje: 'Error path_base esta vacio', data: $path_base);
+        }
+        if($page < 1){
+            return $this->error->error(mensaje: 'Error page debe ser mayor a 0', data: $page);
+        }
+
+        $ruta = trim($path_base . $file_plantilla);
+        if(!file_exists($ruta)){
+            return $this->error->error(mensaje: 'Error no existe la plantilla', data: $ruta);
+        }
+        return true;
     }
 
 

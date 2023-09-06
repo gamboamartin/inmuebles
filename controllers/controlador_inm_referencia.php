@@ -142,12 +142,12 @@ class controlador_inm_referencia extends _ctl_base {
                 mensaje: 'Error al generar salida de template',data:  $r_modifica,header: $header,ws: $ws);
         }
 
-       // print_r($this->registro);exit;
         $this->row_upd->dp_pais_id = $this->registro['dp_pais_id'];
         $this->row_upd->dp_estado_id = $this->registro['dp_estado_id'];
         $this->row_upd->dp_municipio_id = $this->registro['dp_municipio_id'];
         $this->row_upd->dp_cp_id = $this->registro['dp_cp_id'];
         $this->row_upd->dp_colonia_id = $this->registro['dp_colonia_id'];
+        $this->row_upd->dp_colonia_postal_id = $this->registro['dp_colonia_postal_id'];
 
         $keys_selects = array();
 
