@@ -48,6 +48,34 @@
                         <?php echo $controlador->inputs->inm_co_acreditado->numero; ?>
                         <?php echo $controlador->inputs->inm_co_acreditado->celular; ?>
 
+                        <div class="control-group col-sm-6">
+                            <label class="control-label" for="inm_attr_tipo_credito_id">Genero</label>
+                            <label class="form-check-label chk">
+                                <input type="radio" name="genero" value="M" class="form-check-input" id="genero"
+                                       title="Genero" checked>
+                                M
+                            </label>
+                            <label class="form-check-label chk">
+                                <input type="radio" name="genero" value="F" class="form-check-input" id="genero"
+                                       title="Genero">
+                                F
+                            </label>
+                        </div>
+
+                        <?php echo $controlador->inputs->inm_co_acreditado->correo; ?>
+
+                        <div class="col-md-12">
+                            <hr>
+                            <h4>7. DATOS DE LA EMPRESA O PATRÓN CO ACREDITADO</h4>
+                            <hr>
+                        </div>
+
+                        <?php echo $controlador->inputs->inm_co_acreditado->nombre_empresa_patron; ?>
+                        <?php echo $controlador->inputs->inm_co_acreditado->nrp; ?>
+                        <?php echo $controlador->inputs->inm_co_acreditado->lada_nep; ?>
+                        <?php echo $controlador->inputs->inm_co_acreditado->numero_nep; ?>
+                        <?php echo $controlador->inputs->inm_co_acreditado->extension_nep; ?>
+
 
                     <?php include (new views())->ruta_templates.'botons/submit/alta_bd.php';?>
                     </form>

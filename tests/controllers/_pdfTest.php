@@ -110,6 +110,40 @@ class _pdfTest extends test {
 
     }
 
+    public function test_es_segundo_credito(): void
+    {
+        errores::$error = false;
+
+        $_GET['seccion'] = 'inm_producto_infonavit';
+        $_GET['accion'] = 'lista';
+        $_SESSION['grupo_id'] = 1;
+        $_SESSION['usuario_id'] = 2;
+        $_GET['session_id'] = '1';
+
+
+        $pdf = new Fpdi();
+
+        $_pdf = new _pdf($pdf);
+        $_pdf = new liberator($_pdf);
+
+        $pdf->SetFont('Arial', 'B', 15);
+        $pdf->SetTextColor(0, 0, 0);
+        $pdf->AddPage();
+
+
+        $data = new stdClass();
+        $data->inm_comprador = array();
+
+        $data->inm_comprador['inm_comprador_es_segundo_credito'] = 'NO';
+
+
+        $resultado = $_pdf->es_segundo_credito($data);
+        $this->assertIsObject($resultado);
+        $this->assertNotTrue(errores::$error);
+        $this->assertEquals("setasign\Fpdi\Fpdi",get_class($resultado));
+        errores::$error = false;
+    }
+
     public function test_tpl_idx(): void
     {
         errores::$error = false;

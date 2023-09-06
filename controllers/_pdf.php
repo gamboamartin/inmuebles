@@ -221,7 +221,28 @@ class _pdf{
         }
         return $writes;
     }
-    private function es_segundo_credito(stdClass $data){
+
+    /**
+     * Integra una x si es segundo credito en SI
+     * @param stdClass $data Datos de cliente
+     * @return array|Fpdi
+     * @version 1.122.1
+     */
+    private function es_segundo_credito(stdClass $data): Fpdi|array
+    {
+        $valida = (new valida())->valida_existencia_keys(keys: array('inm_comprador'),registro:  $data);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al validar datos', data: $valida);
+        }
+        if(!is_array($data->inm_comprador)){
+            return $this->error->error(mensaje: 'Error $data->inm_comprador no es un array', data: $data);
+        }
+        $keys = array('inm_comprador_es_segundo_credito');
+        $valida = (new valida())->valida_existencia_keys(keys: $keys,registro:  $data->inm_comprador);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al validar datos', data: $valida);
+        }
+
         $x = 46.5;
         $y = 91.5;
         if ($data->inm_comprador['inm_comprador_es_segundo_credito'] === 'SI') {

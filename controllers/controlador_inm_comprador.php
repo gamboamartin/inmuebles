@@ -316,6 +316,14 @@ class controlador_inm_comprador extends _ctl_base {
 
         $this->inputs->inm_co_acreditado->celular = $inm_co_acreditado_celular;
 
+        $inm_co_acreditado_correo = (new inm_co_acreditado_html(html: $this->html_base))->correo(cols: 4);
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al generar input',data:  $inm_co_acreditado_correo,
+                header: $header,ws:  $ws);
+        }
+
+        $this->inputs->inm_co_acreditado->correo = $inm_co_acreditado_correo;
+
         return $r_modifica;
     }
 

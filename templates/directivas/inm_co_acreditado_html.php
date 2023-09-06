@@ -37,6 +37,17 @@ class inm_co_acreditado_html extends html_controler {
             place_holder:  $place_holder,row_upd:  $row_upd,value_vacio:  $value_vacio,regex: $regex);
 
     }
+
+    final public function correo(int $cols, bool $disabled = false, string $name = 'correo', string $place_holder= 'Correo',
+                                  stdClass $row_upd = new stdClass(), bool $value_vacio = false): array|string
+    {
+
+        $regex = $this->validacion->patterns['correo_html_base'];
+
+        return $this->input_text_required(cols: $cols,disabled:  $disabled,name:  $name,
+            place_holder:  $place_holder,row_upd:  $row_upd,value_vacio:  $value_vacio,regex: $regex);
+
+    }
     final public function curp(int $cols, bool $disabled = false, string $name = 'curp', string $place_holder= 'CURP',
                               stdClass $row_upd = new stdClass(), bool $value_vacio = false): array|string
     {
