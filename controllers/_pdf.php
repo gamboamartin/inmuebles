@@ -77,7 +77,22 @@ class _pdf{
         return $pdf;
     }
 
-    private function apartado_2(stdClass $data){
+    /**
+     * Escribe los datos del apartado 2 de la solicitud de infonavit
+     * @param stdClass $data datos de cliente
+     * @return array
+     * @version 1.125.1
+     */
+    private function apartado_2(stdClass $data): array
+    {
+        $valida = (new valida())->valida_existencia_keys(keys: array('inm_comprador'),registro:  $data);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al validar datos', data: $valida);
+        }
+        if(!is_array($data->inm_comprador)){
+            return $this->error->error(mensaje: 'Error $data->inm_comprador no es un array', data: $data);
+        }
+
         $write = array();
         $row_condiciones['inm_comprador_descuento_pension_alimenticia_dh'] =
             array('x'=>77,'y'=>117, 'value_compare'=>0.0);
@@ -515,6 +530,10 @@ class _pdf{
         return $keys_comprador;
     }
 
+    /**
+     * Integra los parametros de coordenadas de los datos de la ubicacion
+     * @return array
+     */
     private function keys_ubicacion(): array
     {
         $keys_ubicacion['dp_calle_ubicacion_descripcion']= array('x'=>15.5,'y'=>164);
