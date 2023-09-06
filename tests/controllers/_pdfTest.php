@@ -97,6 +97,77 @@ class _pdfTest extends test {
 
     }
 
+    public function test_valida_datos_plantilla(): void
+    {
+        errores::$error = false;
+
+        $_GET['seccion'] = 'inm_producto_infonavit';
+        $_GET['accion'] = 'lista';
+        $_SESSION['grupo_id'] = 1;
+        $_SESSION['usuario_id'] = 2;
+        $_GET['session_id'] = '1';
+
+
+        $pdf = new Fpdi();
+
+
+        $_pdf = new _pdf($pdf);
+
+        $_pdf = new liberator($_pdf);
+
+        $file_plantilla = '';
+        $page = -1;
+        $path_base = '';
+
+        $resultado = $_pdf->valida_datos_plantilla($file_plantilla, $page, $path_base);
+        $this->assertIsArray($resultado);
+        $this->assertTrue(errores::$error);
+        $this->assertEquals("Error file_plantilla esta vacio",$resultado['mensaje_limpio']);
+        errores::$error = false;
+
+        $file_plantilla = 'a';
+        $page = -1;
+        $path_base = '';
+
+        $resultado = $_pdf->valida_datos_plantilla($file_plantilla, $page, $path_base);
+        $this->assertIsArray($resultado);
+        $this->assertTrue(errores::$error);
+        $this->assertEquals("Error path_base esta vacio",$resultado['mensaje_limpio']);
+        errores::$error = false;
+
+        $file_plantilla = 'a';
+        $page = -1;
+        $path_base = 'b';
+
+        $resultado = $_pdf->valida_datos_plantilla($file_plantilla, $page, $path_base);
+        $this->assertIsArray($resultado);
+        $this->assertTrue(errores::$error);
+        $this->assertEquals("Error page debe ser mayor a 0",$resultado['mensaje_limpio']);
+        errores::$error = false;
+
+        $file_plantilla = 'a';
+        $page = 5;
+        $path_base = 'b';
+
+        $resultado = $_pdf->valida_datos_plantilla($file_plantilla, $page, $path_base);
+        $this->assertIsArray($resultado);
+        $this->assertTrue(errores::$error);
+        $this->assertEquals("Error no existe la plantilla",$resultado['mensaje_limpio']);
+
+        errores::$error = false;
+
+        $file_plantilla = 'templates/solicitud_infonavit.pdf';
+        $page = 1;
+        $path_base = (new generales())->path_base;
+
+        $resultado = $_pdf->valida_datos_plantilla($file_plantilla, $page, $path_base);
+        $this->assertIsBool($resultado);
+        $this->assertNotTrue(errores::$error);
+        $this->assertTrue($resultado);
+
+        errores::$error = false;
+    }
+
 
 }
 

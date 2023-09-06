@@ -6,6 +6,7 @@ use gamboamartin\errores\errores;
 use gamboamartin\inmuebles\controllers\_doctos;
 use gamboamartin\inmuebles\controllers\_keys_selects;
 use gamboamartin\inmuebles\controllers\controlador_inm_comprador;
+use gamboamartin\inmuebles\html\inm_co_acreditado_html;
 use gamboamartin\inmuebles\html\inm_ubicacion_html;
 use gamboamartin\validacion\validacion;
 use PDO;
@@ -150,6 +151,34 @@ class _inm_comprador{
         $data->existe = $existe;
         $data->inm_conf_docs_comprador = $inm_conf_docs_comprador;
         return $data;
+    }
+
+    final public function inm_co_acreditado_id_input(controlador_inm_comprador $controler): array|string
+    {
+        $columns_ds = array('inm_co_acreditado_nss','inm_co_acreditado_curp','inm_co_acreditado_nombre',
+            'inm_co_acreditado_apellido_paterno','inm_co_acreditado_apellido_materno');
+
+        $inm_co_acreditado_id = (new inm_co_acreditado_html(html: $controler->html_base))->select_inm_co_acreditado_id(
+            cols: 12, con_registros: true,id_selected: -1,link:  $controler->link, columns_ds: $columns_ds);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al inm_co_acreditado_id',data:  $inm_co_acreditado_id);
+        }
+        return $inm_co_acreditado_id;
+    }
+
+    final public function inm_co_acreditados(int $inm_comprador_id, PDO $link): array
+    {
+        if($inm_comprador_id<= 0){
+            return $this->error->error(mensaje: 'Error inm_comprador_id es menor a 0',data:  $inm_comprador_id);
+        }
+        $filtro = array();
+        $filtro['inm_comprador.id'] = $inm_comprador_id;
+        $r_inm_rel_co_acred = (new inm_rel_co_acred(link: $link))->filtro_and(filtro: $filtro);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al obtener co acreditados',data:  $r_inm_rel_co_acred);
+        }
+
+        return $r_inm_rel_co_acred->registros;
     }
 
     private function inm_conf_docs_comprador(controlador_inm_comprador $controler, array $inm_docs_comprador){

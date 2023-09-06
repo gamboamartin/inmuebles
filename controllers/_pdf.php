@@ -517,6 +517,14 @@ class _pdf{
         return $tpl_idx;
     }
 
+    /**
+     * Valida que los datos de una plantilla pdf sean los correctos
+     * @param string $file_plantilla Archivo de plantilla pdf
+     * @param int $page Numero de pagina de plantilla
+     * @param string $path_base Ruta base de sistema
+     * @return bool|array
+     * @version 1.118.1
+     */
     private function valida_datos_plantilla(string $file_plantilla, int $page, string $path_base): bool|array
     {
         $file_plantilla = trim($file_plantilla);
