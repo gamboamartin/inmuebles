@@ -533,6 +533,7 @@ class _pdf{
     /**
      * Integra los parametros de coordenadas de los datos de la ubicacion
      * @return array
+     * @version 1.126.1
      */
     private function keys_ubicacion(): array
     {
@@ -842,7 +843,14 @@ class _pdf{
         return $write;
     }
 
-    final public function write_data(array $keys, array $row){
+    /**
+     * Escribe datos en el pdf
+     * @param array $keys Keys para obtener valores
+     * @param array $row Registro de cliente
+     * @return array
+     */
+    final public function write_data(array $keys, array $row): array
+    {
         $writes = array();
         foreach ($keys as $key=>$coordenadas){
 

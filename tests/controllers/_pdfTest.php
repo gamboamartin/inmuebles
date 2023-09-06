@@ -229,6 +229,30 @@ class _pdfTest extends test {
         errores::$error = false;
     }
 
+    public function test_keys_ubicacion(): void
+    {
+        errores::$error = false;
+
+        $_GET['seccion'] = 'inm_producto_infonavit';
+        $_GET['accion'] = 'lista';
+        $_SESSION['grupo_id'] = 1;
+        $_SESSION['usuario_id'] = 2;
+        $_GET['session_id'] = '1';
+
+
+        $pdf = new Fpdi();
+
+        $_pdf = new _pdf($pdf);
+        $_pdf = new liberator($_pdf);
+
+        $resultado = $_pdf->keys_ubicacion();
+        $this->assertIsArray($resultado);
+        $this->assertNotTrue(errores::$error);
+        $this->assertEquals(15.5,$resultado['dp_calle_ubicacion_descripcion']['x']);
+        $this->assertEquals(164,$resultado['dp_calle_ubicacion_descripcion']['y']);
+        errores::$error = false;
+    }
+
     public function test_tpl_idx(): void
     {
         errores::$error = false;

@@ -15,12 +15,14 @@ use gamboamartin\inmuebles\html\inm_comprador_html;
 use gamboamartin\inmuebles\models\_inm_comprador;
 use gamboamartin\inmuebles\models\inm_comprador;
 use gamboamartin\system\_ctl_base;
+use gamboamartin\system\actions;
 use gamboamartin\system\links_menu;
 use gamboamartin\template\html;
 use html\doc_tipo_documento_html;
 use PDO;
 use setasign\Fpdi\Fpdi;
 use stdClass;
+use Throwable;
 
 class controlador_inm_comprador extends _ctl_base {
 
@@ -33,6 +35,8 @@ class controlador_inm_comprador extends _ctl_base {
     public string $link_rel_ubi_comp_alta_bd = '';
     public string $link_inm_rel_co_acred_alta_bd = '';
     public string $link_asigna_nuevo_co_acreditado_bd = '';
+
+    public string $link_inm_comprador_modifica = '';
     public function __construct(PDO      $link, html $html = new \gamboamartin\template_1\html(),
                                 stdClass $paths_conf = new stdClass())
     {
@@ -242,127 +246,14 @@ class controlador_inm_comprador extends _ctl_base {
 
         $this->inputs->inm_co_acreditado = new stdClass();
 
-        $inm_co_acreditado_nss = (new inm_co_acreditado_html(html: $this->html_base))->nss(cols: 6);
+        $inputs_co_acreditado = (new inm_co_acreditado_html(html: $this->html_base))->inputs();
         if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al generar input',data:  $inm_co_acreditado_nss,
+            return $this->retorno_error(mensaje: 'Error al generar inputs',data:  $inputs_co_acreditado,
                 header: $header,ws:  $ws);
         }
 
-        $this->inputs->inm_co_acreditado->nss = $inm_co_acreditado_nss;
+        $this->inputs->inm_co_acreditado = $inputs_co_acreditado;
 
-        $inm_co_acreditado_curp = (new inm_co_acreditado_html(html: $this->html_base))->curp(cols: 6);
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al generar input',data:  $inm_co_acreditado_curp,
-                header: $header,ws:  $ws);
-        }
-
-        $this->inputs->inm_co_acreditado->curp = $inm_co_acreditado_curp;
-
-        $inm_co_acreditado_rfc = (new inm_co_acreditado_html(html: $this->html_base))->rfc(cols: 6);
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al generar input',data:  $inm_co_acreditado_rfc,
-                header: $header,ws:  $ws);
-        }
-
-        $this->inputs->inm_co_acreditado->rfc = $inm_co_acreditado_rfc;
-
-        $inm_co_acreditado_apellido_paterno = (new inm_co_acreditado_html(html: $this->html_base))->apellido_paterno(cols: 6);
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al generar input',data:  $inm_co_acreditado_apellido_paterno,
-                header: $header,ws:  $ws);
-        }
-
-        $this->inputs->inm_co_acreditado->apellido_paterno = $inm_co_acreditado_apellido_paterno;
-
-        $inm_co_acreditado_apellido_materno = (new inm_co_acreditado_html(html: $this->html_base))->apellido_materno(cols: 6);
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al generar input',data:  $inm_co_acreditado_apellido_materno,
-                header: $header,ws:  $ws);
-        }
-
-        $this->inputs->inm_co_acreditado->apellido_materno = $inm_co_acreditado_apellido_materno;
-
-        $inm_co_acreditado_nombre = (new inm_co_acreditado_html(html: $this->html_base))->nombre(cols: 6);
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al generar input',data:  $inm_co_acreditado_nombre,
-                header: $header,ws:  $ws);
-        }
-
-        $this->inputs->inm_co_acreditado->nombre = $inm_co_acreditado_nombre;
-
-        $this->inputs->inm_co_acreditado->apellido_materno = $inm_co_acreditado_apellido_materno;
-
-        $inm_co_acreditado_lada = (new inm_co_acreditado_html(html: $this->html_base))->lada(cols: 4);
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al generar input',data:  $inm_co_acreditado_lada,
-                header: $header,ws:  $ws);
-        }
-
-        $this->inputs->inm_co_acreditado->lada = $inm_co_acreditado_lada;
-
-        $inm_co_acreditado_numero = (new inm_co_acreditado_html(html: $this->html_base))->numero(cols: 4);
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al generar input',data:  $inm_co_acreditado_numero,
-                header: $header,ws:  $ws);
-        }
-
-        $this->inputs->inm_co_acreditado->numero = $inm_co_acreditado_numero;
-
-        $inm_co_acreditado_celular = (new inm_co_acreditado_html(html: $this->html_base))->celular(cols: 4);
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al generar input',data:  $inm_co_acreditado_celular,
-                header: $header,ws:  $ws);
-        }
-
-        $this->inputs->inm_co_acreditado->celular = $inm_co_acreditado_celular;
-
-        $inm_co_acreditado_correo = (new inm_co_acreditado_html(html: $this->html_base))->correo(cols: 6);
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al generar input',data:  $inm_co_acreditado_correo,
-                header: $header,ws:  $ws);
-        }
-
-        $this->inputs->inm_co_acreditado->correo = $inm_co_acreditado_correo;
-
-        $inm_co_acreditado_nombre_empresa_patron = (new inm_co_acreditado_html(html: $this->html_base))->nombre_empresa_patron(cols: 12);
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al generar input',data:  $inm_co_acreditado_nombre_empresa_patron,
-                header: $header,ws:  $ws);
-        }
-
-        $this->inputs->inm_co_acreditado->nombre_empresa_patron = $inm_co_acreditado_nombre_empresa_patron;
-
-        $inm_co_acreditado_nrp = (new inm_co_acreditado_html(html: $this->html_base))->nrp(cols: 12);
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al generar input',data:  $inm_co_acreditado_nrp,
-                header: $header,ws:  $ws);
-        }
-
-        $this->inputs->inm_co_acreditado->nrp = $inm_co_acreditado_nrp;
-
-        $inm_co_acreditado_lada_nep = (new inm_co_acreditado_html(html: $this->html_base))->lada_nep(cols: 4);
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al generar input',data:  $inm_co_acreditado_lada_nep,
-                header: $header,ws:  $ws);
-        }
-
-        $this->inputs->inm_co_acreditado->lada_nep = $inm_co_acreditado_lada_nep;
-
-        $inm_co_acreditado_numero_nep = (new inm_co_acreditado_html(html: $this->html_base))->numero_nep(cols: 4);
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al generar input',data:  $inm_co_acreditado_numero_nep,
-                header: $header,ws:  $ws);
-        }
-
-        $this->inputs->inm_co_acreditado->numero_nep = $inm_co_acreditado_numero_nep;
-
-        $inm_co_acreditado_extension_nep = (new inm_co_acreditado_html(html: $this->html_base))->extension_nep(cols: 4);
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al generar input',data:  $inm_co_acreditado_extension_nep,
-                header: $header,ws:  $ws);
-        }
-
-        $this->inputs->inm_co_acreditado->extension_nep = $inm_co_acreditado_extension_nep;
 
         return $r_modifica;
     }
@@ -370,6 +261,17 @@ class controlador_inm_comprador extends _ctl_base {
     final public function asigna_nuevo_co_acreditado_bd(bool $header, bool $ws = false): array|stdClass{
 
         $this->link->beginTransaction();
+
+        $id_retorno = -1;
+        if(isset($_POST['id_retorno'])){
+            $id_retorno = $_POST['id_retorno'];
+            unset($_POST['id_retorno']);
+        }
+        $siguiente_view = (new actions())->init_alta_bd();
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al obtener siguiente view', data: $siguiente_view,
+                header:  $header, ws: $ws);
+        }
 
         $inm_comprador_id = $this->registro_id;
         $inm_co_acreditado_ins['nss'] = $_POST['nss'];
@@ -398,8 +300,28 @@ class controlador_inm_comprador extends _ctl_base {
         }
         $this->link->commit();
 
+        if($header){
+            if($id_retorno === -1) {
+                $id_retorno = $this->registro_id;
+            }
+            $this->retorno_base(registro_id:$id_retorno, result: $result, siguiente_view: $siguiente_view,
+                ws:  $ws,seccion_retorno: $this->seccion, valida_permiso: true);
+        }
+        if($ws){
+            header('Content-Type: application/json');
+            try {
+                echo json_encode($result, JSON_THROW_ON_ERROR);
+            }
+            catch (Throwable $e){
+                $error = (new errores())->error(mensaje: 'Error al maquetar JSON' , data: $e);
+                print_r($error);
+            }
+            exit;
+        }
+        $result->siguiente_view = $siguiente_view;
 
-        print_r($_POST);exit;
+
+        return $result;
     }
 
     /**
