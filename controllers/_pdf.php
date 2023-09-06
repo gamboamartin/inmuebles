@@ -352,7 +352,15 @@ class _pdf{
         return $keys_referencias;
     }
 
-    private function get_x_var(array $condiciones, string $key_id,array $row, float $x_init){
+    /**
+     * @param array $condiciones
+     * @param string $key_id
+     * @param array $row
+     * @param float $x_init
+     * @return float
+     */
+    private function get_x_var(array $condiciones, string $key_id,array $row, float $x_init): float
+    {
         $x = $x_init;
 
         $key_compare = $row[$key_id];
@@ -848,11 +856,31 @@ class _pdf{
      * @param array $keys Keys para obtener valores
      * @param array $row Registro de cliente
      * @return array
+     * @version 1.127.1
+     *
      */
-    final public function write_data(array $keys, array $row): array
+    private function write_data(array $keys, array $row): array
     {
         $writes = array();
         foreach ($keys as $key=>$coordenadas){
+
+            $key = trim($key);
+            if($key === ''){
+                return $this->error->error(mensaje: 'Error key esta vacio', data: $key);
+            }
+            if(is_numeric($key)){
+                return $this->error->error(mensaje: 'Error key es un numero', data: $key);
+            }
+
+            if(!is_array($coordenadas)){
+                return $this->error->error(mensaje: 'Error coordenadas debe ser un array', data: $coordenadas);
+            }
+
+            $keys_coord = array('x','y');
+            $valida = (new valida())->valida_double_mayores_0(keys: $keys_coord,registro:  $coordenadas);
+            if(errores::$error){
+                return $this->error->error(mensaje: 'Error al validar coordenadas', data: $valida);
+            }
 
             if(!isset($row[$key])){
                 $row[$key] = '';

@@ -255,6 +255,15 @@ class controlador_inm_comprador extends _ctl_base {
         $this->inputs->inm_co_acreditado = $inputs_co_acreditado;
 
 
+        $button = $this->html->button_href(accion: 'modifica',etiqueta: 'Ver Datos',registro_id: $this->registro_id,seccion: $this->tabla,style: 'warning');
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al generar button',data:  $button,
+                header: $header,ws:  $ws);
+        }
+
+        $this->buttons['modifica'] = $button;
+
+
         return $r_modifica;
     }
 

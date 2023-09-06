@@ -79,7 +79,7 @@
 
                     <?php include (new views())->ruta_templates.'botons/submit/alta_bd.php';?>
                     </form>
-
+                    <?php echo $controlador->buttons['modifica']; ?>
                 </div>
 
             </div>
