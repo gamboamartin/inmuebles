@@ -191,11 +191,28 @@ class _pdf{
 
         return $domicilio;
     }
-    private function entidades_infonavit(stdClass $data){
+
+    /**
+     * Escribe los datos de infonavit en el pdf
+     * @param stdClass $data datos de cliente
+     * @return array
+     * @version 1.121.1
+     *
+     */
+    private function entidades_infonavit(stdClass $data): array
+    {
         $entidades_pdf = array('inm_producto_infonavit','inm_tipo_credito','inm_attr_tipo_credito',
             'inm_destino_credito','inm_plazo_credito_sc','inm_tipo_discapacidad','inm_persona_discapacidad');
         $writes = array();
         foreach ($entidades_pdf as $name_entidad){
+            $valida = (new valida())->valida_existencia_keys(keys: array('inm_comprador'),registro:  $data);
+            if (errores::$error) {
+                return $this->error->error(mensaje: 'Error al validar datos', data: $valida);
+            }
+            if(!is_array($data->inm_comprador)){
+                return $this->error->error(mensaje: 'Error $data->inm_comprador no es un array', data: $data);
+            }
+
             $pdf = $this->write_x(name_entidad: $name_entidad, row: $data->inm_comprador);
             if (errores::$error) {
                 return $this->error->error(mensaje: 'Error al escribir en pdf', data: $pdf);

@@ -65,6 +65,51 @@ class _pdfTest extends test {
         errores::$error = false;
     }
 
+    public function test_entidades_infonavit(): void
+    {
+        errores::$error = false;
+
+        $_GET['seccion'] = 'inm_producto_infonavit';
+        $_GET['accion'] = 'lista';
+        $_SESSION['grupo_id'] = 1;
+        $_SESSION['usuario_id'] = 2;
+        $_GET['session_id'] = '1';
+
+
+        $pdf = new Fpdi();
+
+        $_pdf = new _pdf($pdf);
+        $_pdf = new liberator($_pdf);
+
+        $pdf->SetFont('Arial', 'B', 15);
+        $pdf->SetTextColor(0, 0, 0);
+        $pdf->AddPage();
+
+
+        $data = new stdClass();
+        $data->inm_comprador = array();
+        $data->inm_comprador['inm_producto_infonavit_x'] = 1;
+        $data->inm_comprador['inm_producto_infonavit_y'] = 1;
+        $data->inm_comprador['inm_tipo_credito_x'] = 1;
+        $data->inm_comprador['inm_tipo_credito_y'] = 1;
+        $data->inm_comprador['inm_attr_tipo_credito_x'] = 1;
+        $data->inm_comprador['inm_attr_tipo_credito_y'] = 1;
+        $data->inm_comprador['inm_destino_credito_x'] = 1;
+        $data->inm_comprador['inm_destino_credito_y'] = 1;
+        $data->inm_comprador['inm_plazo_credito_sc_x'] = 1;
+        $data->inm_comprador['inm_plazo_credito_sc_y'] = 1;
+        $data->inm_comprador['inm_tipo_discapacidad_x'] = 1;
+        $data->inm_comprador['inm_tipo_discapacidad_y'] = 1;
+        $data->inm_comprador['inm_persona_discapacidad_x'] = 1;
+        $data->inm_comprador['inm_persona_discapacidad_y'] = 1;
+
+        $resultado = $_pdf->entidades_infonavit($data);
+        $this->assertIsArray($resultado);
+        $this->assertNotTrue(errores::$error);
+        errores::$error = false;
+
+    }
+
     public function test_tpl_idx(): void
     {
         errores::$error = false;

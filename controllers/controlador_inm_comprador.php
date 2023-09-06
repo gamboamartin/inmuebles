@@ -32,6 +32,7 @@ class controlador_inm_comprador extends _ctl_base {
 
     public string $link_rel_ubi_comp_alta_bd = '';
     public string $link_inm_rel_co_acred_alta_bd = '';
+    public string $link_asigna_nuevo_co_acreditado_bd = '';
     public function __construct(PDO      $link, html $html = new \gamboamartin\template_1\html(),
                                 stdClass $paths_conf = new stdClass())
     {
@@ -221,13 +222,14 @@ class controlador_inm_comprador extends _ctl_base {
 
         $this->inputs->inm_co_acreditado_id = $inm_co_acreditado_id;
 
-        $link_inm_rel_co_acred_alta_bd = $this->obj_link->link_alta_bd(link: $this->link,seccion: 'inm_rel_co_acred');
+        $link_asigna_nuevo_co_acreditado_bd = $this->obj_link->link_con_id(accion: 'asigna_nuevo_co_acreditado_bd',
+            link: $this->link, registro_id: $this->registro_id, seccion: $this->tabla);
         if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al generar link',data:  $link_inm_rel_co_acred_alta_bd,
+            return $this->retorno_error(mensaje: 'Error al generar link',data:  $link_asigna_nuevo_co_acreditado_bd,
                 header: $header,ws:  $ws);
         }
 
-        $this->link_inm_rel_co_acred_alta_bd = $link_inm_rel_co_acred_alta_bd;
+        $this->link_asigna_nuevo_co_acreditado_bd = $link_asigna_nuevo_co_acreditado_bd;
 
         $inm_co_acreditados = (new _inm_comprador())->inm_co_acreditados(inm_comprador_id: $this->registro_id,
             link:  $this->link);
@@ -315,6 +317,33 @@ class controlador_inm_comprador extends _ctl_base {
         $this->inputs->inm_co_acreditado->celular = $inm_co_acreditado_celular;
 
         return $r_modifica;
+    }
+
+    final public function asigna_nuevo_co_acreditado_bd(bool $header, bool $ws = false): array|stdClass{
+        $this->link->beginTransaction();
+
+        $inm_comprador_id = $this->registro_id;
+        $inm_co_acreditado_ins['nss'] = $_POST['nss'];
+        $inm_co_acreditado_ins['curp'] = $_POST['curp'];
+        $inm_co_acreditado_ins['rfc'] = $_POST['rfc'];
+        $inm_co_acreditado_ins['apellido_paterno'] = $_POST['apellido_paterno'];
+        $inm_co_acreditado_ins['apellido_materno'] = $_POST['apellido_materno'];
+        $inm_co_acreditado_ins['nombre'] = $_POST['nombre'];
+        $inm_co_acreditado_ins['lada'] = $_POST['lada'];
+        $inm_co_acreditado_ins['numero'] = $_POST['numero'];
+        $inm_co_acreditado_ins['celular'] = $_POST['celular'];
+
+        $result = (new inm_comprador(link: $this->link))->asigna_nuevo_co_acreditado_bd(
+            inm_comprador_id: $inm_comprador_id, inm_co_acreditado: $inm_co_acreditado_ins);
+
+        if(errores::$error){
+            $this->link->rollBack();
+            return $this->retorno_error(mensaje: 'Error al insertar datos',data:  $result,header:  $header,ws:  $ws);
+        }
+        $this->link->commit();
+
+
+        print_r($_POST);exit;
     }
 
     /**
