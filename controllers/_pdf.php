@@ -5,6 +5,7 @@ use base\orm\modelo;
 use gamboamartin\errores\errores;
 use gamboamartin\inmuebles\models\inm_co_acreditado;
 use gamboamartin\inmuebles\models\inm_comprador;
+use gamboamartin\js_base\valida;
 use PDO;
 use setasign\Fpdi\Fpdi;
 use stdClass;
@@ -858,20 +859,38 @@ class _pdf{
         return $writes;
     }
 
-    final public function write_x(string $name_entidad, array $row): Fpdi
+    /**
+     * Escribe una X en el pdf
+     * @param string $name_entidad Nombre de la entidad para obtener campo
+     * @param array $row Registro en proceso
+     * @return Fpdi|array
+     * @version 1.120.1
+     */
+    private function write_x(string $name_entidad, array $row): Fpdi|array
     {
+        $name_entidad = trim($name_entidad);
+        if($name_entidad === ''){
+            return $this->error->error(mensaje: 'Error name_entidad esta vacio',data:  $name_entidad);
+        }
         $key_x = $name_entidad.'_x';
         $key_y = $name_entidad.'_y';
+
+        $keys = array($key_x, $key_y);
+        $valida = (new valida())->valida_double_mayores_0(keys: $keys,registro:  $row);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al validar row',data:  $valida);
+        }
 
         $x = $row[$key_x];
         $y = $row[$key_y];
 
-        $this->pdf = $this->write(valor: 'X',x: $x, y: $y);
+
+        $result = $this->write(valor: 'X',x: $x, y: $y);
         if(errores::$error){
-            return $this->error->error(mensaje: 'Error al escribir en pdf',data:  $this->pdf);
+            return $this->error->error(mensaje: 'Error al escribir en pdf',data:  $result);
         }
 
-        return $this->pdf;
+        return $result;
     }
 
     private function write_year(modelo $modelo){

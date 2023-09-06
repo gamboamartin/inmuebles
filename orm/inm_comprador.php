@@ -183,6 +183,28 @@ class inm_comprador extends _modelo_parent{
 
     }
 
+    final public function asigna_nuevo_co_acreditado_bd(int $inm_comprador_id, array $inm_co_acreditado){
+
+        $alta_inm_co_acreditado = (new inm_co_acreditado(link: $this->link))->alta_registro(registro: $inm_co_acreditado);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al insertar alta_inm_co_acreditado',data:  $alta_inm_co_acreditado);
+        }
+        $inm_rel_co_acred_ins['inm_co_acreditado_id'] = $alta_inm_co_acreditado->registro_id;
+        $inm_rel_co_acred_ins['inm_comprador_id'] = $inm_comprador_id;
+
+        $alta_inm_rel_co_acred = (new inm_rel_co_acred(link: $this->link))->alta_registro(registro: $inm_rel_co_acred_ins);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al insertar alta_inm_rel_co_acred',data:  $alta_inm_rel_co_acred);
+        }
+
+        $data = new stdClass();
+        $data->inm_co_acreditado = $alta_inm_co_acreditado;
+        $data->inm_rel_co_acred = $alta_inm_rel_co_acred;
+
+        return $data;
+
+    }
+
     /**
      * Obtiene el cliente fiscal asignado al comprador de vivienda
      * @param int $com_cliente_id Identificador de cliente
@@ -618,6 +640,8 @@ class inm_comprador extends _modelo_parent{
         return $r_modifica;
     }
 
+
+
     private function numero_interior(array $registro_entrada){
         $numero_interior = '';
         if(isset($registro_entrada['numero_interior'])){
@@ -625,8 +649,6 @@ class inm_comprador extends _modelo_parent{
         }
         return $numero_interior;
     }
-
-
 
     private function r_com_cliente(array $filtro, array $registro_entrada){
         $r_com_cliente_f = (new com_cliente(link: $this->link))->filtro_and(filtro: $filtro);

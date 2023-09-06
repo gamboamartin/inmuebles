@@ -240,7 +240,7 @@ class controlador_inm_comprador extends _ctl_base {
 
         $this->inputs->inm_co_acreditado = new stdClass();
 
-        $inm_co_acreditado_nss = (new inm_co_acreditado_html(html: $this->html_base))->nss(cols: 4);
+        $inm_co_acreditado_nss = (new inm_co_acreditado_html(html: $this->html_base))->nss(cols: 6);
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al generar input',data:  $inm_co_acreditado_nss,
                 header: $header,ws:  $ws);
@@ -248,7 +248,7 @@ class controlador_inm_comprador extends _ctl_base {
 
         $this->inputs->inm_co_acreditado->nss = $inm_co_acreditado_nss;
 
-        $inm_co_acreditado_curp = (new inm_co_acreditado_html(html: $this->html_base))->curp(cols: 4);
+        $inm_co_acreditado_curp = (new inm_co_acreditado_html(html: $this->html_base))->curp(cols: 6);
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al generar input',data:  $inm_co_acreditado_curp,
                 header: $header,ws:  $ws);
@@ -256,7 +256,7 @@ class controlador_inm_comprador extends _ctl_base {
 
         $this->inputs->inm_co_acreditado->curp = $inm_co_acreditado_curp;
 
-        $inm_co_acreditado_rfc = (new inm_co_acreditado_html(html: $this->html_base))->rfc(cols: 4);
+        $inm_co_acreditado_rfc = (new inm_co_acreditado_html(html: $this->html_base))->rfc(cols: 6);
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al generar input',data:  $inm_co_acreditado_rfc,
                 header: $header,ws:  $ws);
@@ -264,7 +264,7 @@ class controlador_inm_comprador extends _ctl_base {
 
         $this->inputs->inm_co_acreditado->rfc = $inm_co_acreditado_rfc;
 
-        $inm_co_acreditado_apellido_paterno = (new inm_co_acreditado_html(html: $this->html_base))->apellido_paterno(cols: 4);
+        $inm_co_acreditado_apellido_paterno = (new inm_co_acreditado_html(html: $this->html_base))->apellido_paterno(cols: 6);
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al generar input',data:  $inm_co_acreditado_apellido_paterno,
                 header: $header,ws:  $ws);
@@ -272,7 +272,7 @@ class controlador_inm_comprador extends _ctl_base {
 
         $this->inputs->inm_co_acreditado->apellido_paterno = $inm_co_acreditado_apellido_paterno;
 
-        $inm_co_acreditado_apellido_materno = (new inm_co_acreditado_html(html: $this->html_base))->apellido_materno(cols: 4);
+        $inm_co_acreditado_apellido_materno = (new inm_co_acreditado_html(html: $this->html_base))->apellido_materno(cols: 6);
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al generar input',data:  $inm_co_acreditado_apellido_materno,
                 header: $header,ws:  $ws);
@@ -280,7 +280,7 @@ class controlador_inm_comprador extends _ctl_base {
 
         $this->inputs->inm_co_acreditado->apellido_materno = $inm_co_acreditado_apellido_materno;
 
-        $inm_co_acreditado_nombre = (new inm_co_acreditado_html(html: $this->html_base))->nombre(cols: 4);
+        $inm_co_acreditado_nombre = (new inm_co_acreditado_html(html: $this->html_base))->nombre(cols: 6);
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al generar input',data:  $inm_co_acreditado_nombre,
                 header: $header,ws:  $ws);
