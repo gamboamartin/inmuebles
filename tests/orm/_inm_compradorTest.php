@@ -61,6 +61,8 @@ class _inm_compradorTest extends test {
         errores::$error = false;
     }
 
+
+
     public function test_inm_ubicacion_id_input(): void
     {
         errores::$error = false;

@@ -266,7 +266,18 @@ class inm_comprador extends _modelo_parent{
         return $com_cliente_ins;
     }
 
-    final public function data_pdf(int $inm_comprador_id){
+    /**
+     * Obtiene los datos par ala generacion de la solicitud de infonavit
+     * @param int $inm_comprador_id Comprador en proceso
+     * @return array|stdClass
+     * @version 1.115.1
+     */
+    final public function data_pdf(int $inm_comprador_id): array|stdClass
+    {
+        if($inm_comprador_id<=0){
+            return $this->error->error(mensaje: 'Error al inm_comprador_id debe ser mayor a 0',
+                data: $inm_comprador_id);
+        }
         $inm_comprador = $this->registro(registro_id: $inm_comprador_id);
         if (errores::$error) {
             return $this->error->error(mensaje: 'Error al obtener comprador', data: $inm_comprador);

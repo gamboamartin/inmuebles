@@ -88,27 +88,10 @@ class controlador_inm_co_acreditado extends _ctl_base {
         }
 
 
-        $keys_selects = (new init())->key_select_txt(cols: 6,key: 'lada',
-            keys_selects:$keys_selects, place_holder: 'Lada');
+        $keys_selects = (new _keys_selects())->keys_contacto(keys_selects: $keys_selects);
         if(errores::$error){
             return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
-        $keys_selects['lada']->regex = $this->validacion->patterns['lada_html'];
-
-        $keys_selects = (new init())->key_select_txt(cols: 6,key: 'numero',
-            keys_selects:$keys_selects, place_holder: 'Numero');
-        if(errores::$error){
-            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
-        }
-        $keys_selects['numero']->regex = $this->validacion->patterns['tel_sin_lada_html'];
-
-        $keys_selects = (new init())->key_select_txt(cols: 6,key: 'celular',
-            keys_selects:$keys_selects, place_holder: 'Celular');
-        if(errores::$error){
-            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
-        }
-
-        $keys_selects['celular']->regex = $this->validacion->patterns['telefono_mx_html'];
 
         $keys_selects = (new init())->key_select_txt(cols: 12,key: 'correo',
             keys_selects:$keys_selects, place_holder: 'Correo');

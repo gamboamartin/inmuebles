@@ -78,6 +78,70 @@ class inm_compradorTest extends test {
         errores::$error = false;
     }
 
+    public function test_data_pdf(): void
+    {
+        errores::$error = false;
+
+        $_GET['seccion'] = 'inm_producto_infonavit';
+        $_GET['accion'] = 'lista';
+        $_SESSION['grupo_id'] = 1;
+        $_SESSION['usuario_id'] = 2;
+        $_GET['session_id'] = '1';
+
+        $inm = new inm_comprador(link: $this->link);
+        //$inm = new liberator($inm);
+
+
+        $del = (new base_test())->del_inm_comprador(link: $this->link);
+        if(errores::$error){
+            $error = (new errores())->error(mensaje:'Error al eliminar', data: $del);
+            print_r($error);exit;
+        }
+
+        $del = (new base_test())->del_inm_conf_empresa(link: $this->link);
+        if(errores::$error){
+            $error = (new errores())->error(mensaje:'Error al eliminar', data: $del);
+            print_r($error);exit;
+        }
+
+
+        $inm_comprador_id = 1;
+        $resultado = $inm->data_pdf($inm_comprador_id);
+        $this->assertIsArray($resultado);
+        $this->assertTrue(errores::$error);
+        $this->assertEquals("Error al obtener comprador",$resultado['mensaje_limpio']);
+        errores::$error = false;
+
+        $alta = (new base_test())->alta_inm_comprador(link: $this->link);
+        if(errores::$error){
+            $error = (new errores())->error(mensaje:'Error al insertar', data: $alta);
+            print_r($error);exit;
+        }
+        $alta = (new base_test())->alta_inm_rel_ubi_comp(link: $this->link);
+        if(errores::$error){
+            $error = (new errores())->error(mensaje:'Error al insertar', data: $alta);
+            print_r($error);exit;
+        }
+        $alta = (new base_test())->alta_inm_conf_empresa(link: $this->link);
+        if(errores::$error){
+            $error = (new errores())->error(mensaje:'Error al insertar', data: $alta);
+            print_r($error);exit;
+        }
+
+
+        $resultado = $inm->data_pdf($inm_comprador_id);
+
+        $this->assertIsObject($resultado);
+        $this->assertNotTrue(errores::$error);
+        $this->assertEquals(1,$resultado->inm_comprador['inm_comprador_id']);
+        $this->assertEquals(1,$resultado->inm_comprador['inm_producto_infonavit_id']);
+        $this->assertEquals("UBICACION ASIGNADA",$resultado->inm_comprador['inm_comprador_etapa']);
+
+        errores::$error = false;
+    }
+
+
+
     public function test_get_com_cliente(): void
     {
         errores::$error = false;
