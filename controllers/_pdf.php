@@ -79,13 +79,18 @@ class _pdf{
 
     private function apartado_2(stdClass $data){
         $write = array();
-        $row_condiciones['inm_comprador_descuento_pension_alimenticia_dh'] = array('x'=>77,'y'=>117, 'value_compare'=>0.0);
-        $row_condiciones['inm_comprador_descuento_pension_alimenticia_fc'] = array('x'=>115,'y'=>117, 'value_compare'=>0.0);
-        $row_condiciones['inm_comprador_monto_credito_solicitado_dh'] = array('x'=>79,'y'=>131, 'value_compare'=>0.0);
-        $row_condiciones['inm_comprador_monto_ahorro_voluntario'] = array('x'=>51.5,'y'=>143, 'value_compare'=>0.0);
+        $row_condiciones['inm_comprador_descuento_pension_alimenticia_dh'] =
+            array('x'=>77,'y'=>117, 'value_compare'=>0.0);
+        $row_condiciones['inm_comprador_descuento_pension_alimenticia_fc'] =
+            array('x'=>115,'y'=>117, 'value_compare'=>0.0);
+        $row_condiciones['inm_comprador_monto_credito_solicitado_dh'] =
+            array('x'=>79,'y'=>131, 'value_compare'=>0.0);
+        $row_condiciones['inm_comprador_monto_ahorro_voluntario'] =
+            array('x'=>51.5,'y'=>143, 'value_compare'=>0.0);
 
         foreach ($row_condiciones as $key =>$row){
-            $pdf = $this->write_condicion(key: $key,row:  $data->inm_comprador,value_compare:  $row['value_compare'],x:  $row['x'],y: $row['y']);
+            $pdf = $this->write_condicion(key: $key,row:  $data->inm_comprador,value_compare:  $row['value_compare'],
+                x:  $row['x'],y: $row['y']);
             if (errores::$error) {
                 return $this->error->error(mensaje: 'Error al escribir en pdf', data: $pdf);
             }
@@ -778,15 +783,35 @@ class _pdf{
     }
 
     /**
-     * @param string $key
-     * @param array $row
-     * @param mixed $value_compare
-     * @param float $x
-     * @param float $y
+     * Escribe un dato basado en condiciones
+     * @param string $key Key a buscar
+     * @param array $row registro en proceso
+     * @param mixed $value_compare Valor de comparacion
+     * @param float $x coordenadas en x
+     * @param float $y coordenadas en y
      * @return array|bool
+     * @version 1.124.1
      */
     private function write_condicion(string $key, array $row, mixed $value_compare, float $x, float $y): bool|array
     {
+        $key = trim($key);
+        if($key === ''){
+            return $this->error->error(mensaje: 'Error key esta vacio', data: $key);
+        }
+        $valida = (new valida())->valida_existencia_keys(keys: array($key),registro:  $row);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al validar $row', data: $valida);
+        }
+        if(!is_numeric($row[$key])){
+            return $this->error->error(mensaje: 'Error $row[key] debe ser un numero', data: $row);
+        }
+        if($x < 0.0){
+            return $this->error->error(mensaje: 'Error x debe ser mayor a 0', data: $x);
+        }
+        if($y < 0.0){
+            return $this->error->error(mensaje: 'Error y debe ser mayor a 0', data: $y);
+        }
+
         $write = false;
         if (round($row[$key], 2) > $value_compare) {
             $pdf = $this->write( valor: $row[$key], x: $x, y: $y);

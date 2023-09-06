@@ -316,7 +316,7 @@ class controlador_inm_comprador extends _ctl_base {
 
         $this->inputs->inm_co_acreditado->celular = $inm_co_acreditado_celular;
 
-        $inm_co_acreditado_correo = (new inm_co_acreditado_html(html: $this->html_base))->correo(cols: 4);
+        $inm_co_acreditado_correo = (new inm_co_acreditado_html(html: $this->html_base))->correo(cols: 6);
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al generar input',data:  $inm_co_acreditado_correo,
                 header: $header,ws:  $ws);
@@ -324,7 +324,7 @@ class controlador_inm_comprador extends _ctl_base {
 
         $this->inputs->inm_co_acreditado->correo = $inm_co_acreditado_correo;
 
-        $inm_co_acreditado_nombre_empresa_patron = (new inm_co_acreditado_html(html: $this->html_base))->nombre_empresa_patron(cols: 4);
+        $inm_co_acreditado_nombre_empresa_patron = (new inm_co_acreditado_html(html: $this->html_base))->nombre_empresa_patron(cols: 12);
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al generar input',data:  $inm_co_acreditado_nombre_empresa_patron,
                 header: $header,ws:  $ws);
@@ -332,7 +332,7 @@ class controlador_inm_comprador extends _ctl_base {
 
         $this->inputs->inm_co_acreditado->nombre_empresa_patron = $inm_co_acreditado_nombre_empresa_patron;
 
-        $inm_co_acreditado_nrp = (new inm_co_acreditado_html(html: $this->html_base))->nrp(cols: 4);
+        $inm_co_acreditado_nrp = (new inm_co_acreditado_html(html: $this->html_base))->nrp(cols: 12);
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al generar input',data:  $inm_co_acreditado_nrp,
                 header: $header,ws:  $ws);
@@ -368,6 +368,7 @@ class controlador_inm_comprador extends _ctl_base {
     }
 
     final public function asigna_nuevo_co_acreditado_bd(bool $header, bool $ws = false): array|stdClass{
+
         $this->link->beginTransaction();
 
         $inm_comprador_id = $this->registro_id;
@@ -380,6 +381,13 @@ class controlador_inm_comprador extends _ctl_base {
         $inm_co_acreditado_ins['lada'] = $_POST['lada'];
         $inm_co_acreditado_ins['numero'] = $_POST['numero'];
         $inm_co_acreditado_ins['celular'] = $_POST['celular'];
+        $inm_co_acreditado_ins['genero'] = $_POST['genero'];
+        $inm_co_acreditado_ins['correo'] = $_POST['correo'];
+        $inm_co_acreditado_ins['nombre_empresa_patron'] = $_POST['nombre_empresa_patron'];
+        $inm_co_acreditado_ins['nrp'] = $_POST['nrp'];
+        $inm_co_acreditado_ins['lada_nep'] = $_POST['lada_nep'];
+        $inm_co_acreditado_ins['numero_nep'] = $_POST['numero_nep'];
+        $inm_co_acreditado_ins['extension_nep'] = $_POST['extension_nep'];
 
         $result = (new inm_comprador(link: $this->link))->asigna_nuevo_co_acreditado_bd(
             inm_comprador_id: $inm_comprador_id, inm_co_acreditado: $inm_co_acreditado_ins);

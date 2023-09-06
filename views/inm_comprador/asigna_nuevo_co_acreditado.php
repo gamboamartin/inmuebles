@@ -49,7 +49,7 @@
                         <?php echo $controlador->inputs->inm_co_acreditado->celular; ?>
 
                         <div class="control-group col-sm-6">
-                            <label class="control-label" for="inm_attr_tipo_credito_id">Genero</label>
+                            <label class="control-label" for="genero">Genero</label>
                             <label class="form-check-label chk">
                                 <input type="radio" name="genero" value="M" class="form-check-input" id="genero"
                                        title="Genero" checked>
@@ -91,7 +91,7 @@
 
                         <div class="widget widget-box box-container widget-mylistings">
                             <div class="widget-header" style="display: flex;justify-content: space-between;align-items: center;">
-                                <h2>Ubicaciones</h2>
+                                <h2>Co Acreditados</h2>
                             </div>
 
                             <div class="table table-responsive">

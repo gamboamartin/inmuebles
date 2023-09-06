@@ -330,6 +330,41 @@ class _pdfTest extends test {
 
     }
 
+    public function test_write_condicion(): void
+    {
+        errores::$error = false;
+
+        $_GET['seccion'] = 'inm_producto_infonavit';
+        $_GET['accion'] = 'lista';
+        $_SESSION['grupo_id'] = 1;
+        $_SESSION['usuario_id'] = 2;
+        $_GET['session_id'] = '1';
+
+
+        $pdf = new Fpdi();
+
+        $_pdf = new _pdf($pdf);
+        $_pdf = new liberator($_pdf);
+
+        $pdf->SetFont('Arial', 'B', 15);
+        $pdf->SetTextColor(0, 0, 0);
+        $pdf->AddPage();
+
+        $key = 'a';
+        $row = array();
+        $row['a'] = '1';
+        $value_compare = '';
+        $x = 1;
+        $y = .01;
+
+
+        $resultado = $_pdf->write_condicion($key, $row, $value_compare, $x, $y);
+        $this->assertIsBool($resultado);
+        $this->assertNotTrue(errores::$error);
+        $this->assertTrue($resultado);
+        errores::$error = false;
+    }
+
     public function test_write_x(): void
     {
         errores::$error = false;
