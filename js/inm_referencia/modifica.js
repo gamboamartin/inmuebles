@@ -14,6 +14,33 @@ let dp_municipio_id = -1;
 let dp_cp_id = -1;
 let dp_colonia_postal_id = -1;
 
+let nombre_ct = $("#nombre");
+let apellido_paterno_ct = $("#apellido_paterno");
+let apellido_materno_ct = $("#apellido_materno");
+
+nombre_ct.change(function(){
+
+    let nombre = $(this).val();
+    nombre = nombre.toUpperCase()
+    nombre_ct.val(nombre);
+
+});
+
+apellido_materno_ct.change(function(){
+
+    let apellido_materno = $(this).val();
+    apellido_materno = apellido_materno.toUpperCase()
+    apellido_materno_ct.val(apellido_materno);
+
+});
+
+apellido_paterno_ct.change(function(){
+
+    let apellido_paterno = $(this).val();
+    apellido_paterno = apellido_paterno.toUpperCase()
+    apellido_paterno_ct.val(apellido_paterno);
+
+});
 
 sl_dp_pais_id.change(function(){
     dp_pais_id = $(this).val();

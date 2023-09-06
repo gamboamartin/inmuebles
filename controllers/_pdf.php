@@ -20,7 +20,15 @@ class _pdf{
         $this->pdf = $pdf;
     }
 
-    private function add_template(string $file_plantilla, int $page, string $path_base, bool $plantilla_cargada){
+    /**
+     * @param string $file_plantilla
+     * @param int $page
+     * @param string $path_base
+     * @param bool $plantilla_cargada
+     * @return array|Fpdi
+     */
+    private function add_template(string $file_plantilla, int $page, string $path_base, bool $plantilla_cargada): Fpdi|array
+    {
         $this->pdf->AddPage();
         $tpl_idx = $this->tpl_idx(file_plantilla: $file_plantilla, page: $page,path_base:  $path_base,
             plantilla_cargada: $plantilla_cargada);
@@ -467,8 +475,35 @@ class _pdf{
         return $this->pdf;
     }
 
+    /**
+     * Carga la plantilla de un pdf existente
+     * @param string $file_plantilla Archivo pdf de plantilla base vacio
+     * @param int $page Pagina de plantilla a cargar
+     * @param string $path_base Ruta base de sistema
+     * @param bool $plantilla_cargada Si plantilla esta cargada ya no importa el documento base solo integra la pagina
+     * @return array|string
+     * @version 1.116.1
+     */
     private function tpl_idx(string $file_plantilla, int $page, string $path_base, bool $plantilla_cargada): array|string
     {
+        $file_plantilla = trim($file_plantilla);
+        if($file_plantilla === ''){
+            return $this->error->error(mensaje: 'Error file_plantilla esta vacio', data: $file_plantilla);
+        }
+
+        $path_base = trim($path_base);
+        if($path_base === ''){
+            return $this->error->error(mensaje: 'Error path_base esta vacio', data: $path_base);
+        }
+        if($page < 1){
+            return $this->error->error(mensaje: 'Error page debe ser mayor a 0', data: $page);
+        }
+
+        $ruta = trim($path_base . $file_plantilla);
+        if(!file_exists($ruta)){
+            return $this->error->error(mensaje: 'Error no existe la plantilla', data: $ruta);
+        }
+
         try {
             if(!$plantilla_cargada) {
                 $this->pdf->setSourceFile($path_base . $file_plantilla);
