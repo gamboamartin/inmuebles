@@ -87,6 +87,23 @@ class controlador_inm_comprador extends _ctl_base {
         }
 
 
+        $btn_collapse_all = $this->html->button_para_java(id_css: 'collapse_all',style:  'primary',tag:  'Ver/Ocultar Todo');
+        if(errores::$error){
+            return $this->retorno_error(
+                mensaje: 'Error al btn_collapse_all',data:  $btn_collapse_all, header: $header,ws:  $ws);
+        }
+
+        $this->buttons['btn_collapse_all'] = $btn_collapse_all;
+
+        $btn_collapse_a1 = $this->html->button_para_java(id_css: 'collapse_a1',style:  'primary',tag:  'Ver/Ocultar');
+        if(errores::$error){
+            return $this->retorno_error(
+                mensaje: 'Error al btn_collapse_a1',data:  $btn_collapse_a1, header: $header,ws:  $ws);
+        }
+
+        $this->buttons['btn_collapse_a1'] = $btn_collapse_a1;
+
+
         return $r_alta;
     }
 
@@ -730,6 +747,22 @@ class controlador_inm_comprador extends _ctl_base {
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al integrar radios',data:  $radios, header: $header,ws:  $ws);
         }
+
+        $btn_collapse_all = $this->html->button_para_java(id_css: 'collapse_all',style:  'primary',tag:  'Ver/Ocultar Todo');
+        if(errores::$error){
+            return $this->retorno_error(
+                mensaje: 'Error al btn_collapse_all',data:  $btn_collapse_all, header: $header,ws:  $ws);
+        }
+
+        $this->buttons['btn_collapse_all'] = $btn_collapse_all;
+
+        $btn_collapse_a1 = $this->html->button_para_java(id_css: 'collapse_a1',style:  'primary',tag:  'Ver/Ocultar');
+        if(errores::$error){
+            return $this->retorno_error(
+                mensaje: 'Error al btn_collapse_a1',data:  $btn_collapse_a1, header: $header,ws:  $ws);
+        }
+
+        $this->buttons['btn_collapse_a1'] = $btn_collapse_a1;
 
         return $r_modifica;
     }

@@ -1,17 +1,13 @@
 <?php /** @var  gamboamartin\facturacion\controllers\controlador_fc_docto_relacionado $controlador  controlador en ejecucion */ ?>
 <?php use config\views; ?>
 
-    <a class="btn btn-primary" href="#apartado_all" role="button" id="collapse_all">
-        Ver/Ocultar todo
-    </a>
+<?php echo $controlador->buttons['btn_collapse_all']; ?>
+
 
 <div class="col-md-12">
     <hr>
-    <h4>
-        1. CRÉDITO SOLICITADO
-        <a class="btn btn-primary" href="#apartado_1" role="button" id="collapse_a1">
-            +/-
-        </a>
+    <h4>1. CRÉDITO SOLICITADO
+        <?php echo $controlador->buttons['btn_collapse_a1']; ?>
     </h4>
     <hr>
 </div>

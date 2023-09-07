@@ -1,9 +1,14 @@
 <?php /** @var  gamboamartin\facturacion\controllers\controlador_fc_docto_relacionado $controlador  controlador en ejecucion */ ?>
 <?php use config\views; ?>
 
+<?php echo $controlador->buttons['btn_collapse_all']; ?>
+
     <div class="col-md-12">
         <hr>
-        <h4>1. CRÉDITO SOLICITADO</h4>
+        <h4>
+            1. CRÉDITO SOLICITADO
+            <?php echo $controlador->buttons['btn_collapse_a1']; ?>
+        </h4>
         <hr>
     </div>
 

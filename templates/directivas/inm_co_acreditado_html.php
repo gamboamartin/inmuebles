@@ -241,6 +241,17 @@ class inm_co_acreditado_html extends html_controler {
             place_holder:  $place_holder,row_upd:  $row_upd,value_vacio:  $value_vacio);
 
     }
+
+    /**
+     * Integra un input de tipo nss
+     * @param int $cols Columnas css
+     * @param bool $disabled atributo disabled input
+     * @param string $name Name input
+     * @param string $place_holder Marca de agua mostrable en input
+     * @param stdClass $row_upd Registro en proceso
+     * @param bool $value_vacio Si vacio deja el input vacio
+     * @return array|string
+     */
     private function nss(int $cols, bool $disabled = false, string $name = 'nss', string $place_holder= 'NSS',
                               stdClass $row_upd = new stdClass(), bool $value_vacio = false): array|string
     {
