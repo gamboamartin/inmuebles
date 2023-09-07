@@ -153,6 +153,11 @@ class _inm_comprador{
         return $data;
     }
 
+    /**
+     * Genera un input select para co acreditado
+     * @param controlador_inm_comprador $controler Controlador en ejecucion
+     * @return array|string
+     */
     final public function inm_co_acreditado_id_input(controlador_inm_comprador $controler): array|string
     {
         $columns_ds = array('inm_co_acreditado_nss','inm_co_acreditado_curp','inm_co_acreditado_nombre',

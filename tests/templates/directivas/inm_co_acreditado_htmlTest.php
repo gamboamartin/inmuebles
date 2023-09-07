@@ -13,6 +13,7 @@ use gamboamartin\inmuebles\html\inm_ubicacion_html;
 use gamboamartin\inmuebles\models\_inm_comprador;
 use gamboamartin\inmuebles\models\_inm_ubicaciones;
 use gamboamartin\inmuebles\models\inm_ubicacion;
+use gamboamartin\inmuebles\tests\base_test;
 use gamboamartin\template\html;
 use gamboamartin\test\liberator;
 use gamboamartin\test\test;
@@ -50,15 +51,32 @@ class inm_co_acreditado_htmlTest extends test {
         $html = new inm_co_acreditado_html($html_);
         //$_inm = new liberator($_inm);
 
+        $del = (new base_test())->del_inm_co_acreditado(link: $this->link);
+        if(errores::$error){
+            $error = (new errores())->error(mensaje:'Error al eliminar',data:  $del);
+            print_r($error);
+            exit;
+        }
+
+        $alta = (new base_test())->alta_inm_co_acreditado(link: $this->link);
+        if(errores::$error){
+            $error = (new errores())->error(mensaje:'Error al eliminar',data:  $del);
+            print_r($error);
+            exit;
+        }
+
         $cols = 2;
         $con_registros = true;
         $id_selected = -1;
         $link = $this->link;
         $resultado = $html->select_inm_co_acreditado_id($cols, $con_registros, $id_selected, $link);
 
+
+
         $this->assertIsString($resultado);
         $this->assertNotTrue(errores::$error);
         $this->assertStringContainsStringIgnoringCase("<div class='control-group col-sm-2'><label class='control-label' for='inm_co_acreditado_id'>Co Acreditado</label><div class='controls'><select class='form-control selectpicker color-secondary  inm_co_acreditado_id' data-live-search='true' id='inm_co_acreditado_id' name='inm_co_acreditado_id' required ><option value=''  >Selecciona una opcion</option><option value='1'  >NOMBRE AP APELLIDO MATERNO 12345678912 XEXX010101MNEXXXA8 AAA010101AAA NOMBRE AP APELLIDO MATERNO 12345678912 XEXX010101MNEXXXA8 AAA010101AAA</option></select></div></div>",$resultado);
+
         errores::$error = false;
     }
 

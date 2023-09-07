@@ -5,11 +5,11 @@ let session_id = getParameterByName('session_id');
 
 let nombre_empresa_patron_ct = $("#nombre_empresa_patron");
 let nrp_nep_ct = $("#nrp_nep");
-let curp_ct = $("#curp");
-let rfc_ct = $("#rfc");
-let apellido_paterno_ct = $("#apellido_paterno");
-let apellido_materno_ct = $("#apellido_materno");
-let nombre_ct = $("#nombre");
+let curp_ct = $(".inm_co_acreditado_curp");
+let rfc_ct = $(".inm_co_acreditado_rfc");
+let apellido_paterno_ct = $(".inm_co_acreditado_apellido_paterno");
+let apellido_materno_ct = $(".inm_co_acreditado_apellido_materno");
+let nombre_ct = $(".inm_co_acreditado_nombre");
 
 
 apellido_paterno_ct.change(function(){
@@ -61,7 +61,6 @@ nrp_nep_ct.change(function(){
 });
 
 curp_ct.change(function(){
-
     let curp = $(this).val();
     curp = curp.toUpperCase()
     curp_ct.val(curp);

@@ -12,9 +12,10 @@ class inm_co_acreditado_html extends html_controler {
                                            stdClass $row_upd = new stdClass(), bool $value_vacio = false): array|string
     {
 
+        $class_css = array('inm_co_acreditado_apellido_materno');
 
-        return $this->input_text_required(cols: $cols,disabled:  $disabled,name:  $name,
-            place_holder:  $place_holder,row_upd:  $row_upd,value_vacio:  $value_vacio);
+        return $this->input_text(cols: $cols, disabled: $disabled, name: $name, place_holder: $place_holder,
+            row_upd: $row_upd, value_vacio: $value_vacio, class_css: $class_css);
 
     }
     private function apellido_paterno(int $cols, bool $disabled = false, string $name = 'apellido_paterno', string $place_holder= 'Apellido Paterno',
@@ -22,8 +23,10 @@ class inm_co_acreditado_html extends html_controler {
     {
 
 
-        return $this->input_text_required(cols: $cols,disabled:  $disabled,name:  $name,
-            place_holder:  $place_holder,row_upd:  $row_upd,value_vacio:  $value_vacio);
+        $class_css = array('inm_co_acreditado_apellido_paterno');
+
+        return $this->input_text(cols: $cols, disabled: $disabled, name: $name, place_holder: $place_holder,
+            row_upd: $row_upd, value_vacio: $value_vacio, class_css: $class_css);
 
     }
 
@@ -53,9 +56,10 @@ class inm_co_acreditado_html extends html_controler {
     {
 
         $regex = $this->validacion->patterns['curp_html'];
+        $class_css = array('inm_co_acreditado_curp');
 
-        return $this->input_text_required(cols: $cols,disabled:  $disabled,name:  $name,
-            place_holder:  $place_holder,row_upd:  $row_upd,value_vacio:  $value_vacio,regex: $regex);
+        return $this->input_text(cols: $cols, disabled: $disabled, name: $name, place_holder: $place_holder,
+            row_upd: $row_upd, value_vacio: $value_vacio, class_css: $class_css, regex: $regex);
 
     }
 
@@ -206,8 +210,10 @@ class inm_co_acreditado_html extends html_controler {
     {
 
 
-        return $this->input_text_required(cols: $cols,disabled:  $disabled,name:  $name,
-            place_holder:  $place_holder,row_upd:  $row_upd,value_vacio:  $value_vacio);
+        $class_css = array('inm_co_acreditado_nombre');
+
+        return $this->input_text(cols: $cols, disabled: $disabled, name: $name, place_holder: $place_holder,
+            row_upd: $row_upd, value_vacio: $value_vacio, class_css: $class_css);
 
     }
 
@@ -218,8 +224,10 @@ class inm_co_acreditado_html extends html_controler {
     {
 
 
-        return $this->input_text_required(cols: $cols,disabled:  $disabled,name:  $name,
-            place_holder:  $place_holder,row_upd:  $row_upd,value_vacio:  $value_vacio);
+        $class_css = array('inm_co_acreditado_nombre_empresa_patron');
+
+        return $this->input_text(cols: $cols, disabled: $disabled, name: $name, place_holder: $place_holder,
+            row_upd: $row_upd, value_vacio: $value_vacio, class_css: $class_css);
 
     }
 
@@ -272,8 +280,10 @@ class inm_co_acreditado_html extends html_controler {
 
         $regex = $this->validacion->patterns['rfc_html'];
 
-        return $this->input_text_required(cols: $cols,disabled:  $disabled,name:  $name,
-            place_holder:  $place_holder,row_upd:  $row_upd,value_vacio:  $value_vacio,regex: $regex);
+        $class_css = array('inm_co_acreditado_rfc');
+
+        return $this->input_text(cols: $cols, disabled: $disabled, name: $name, place_holder: $place_holder,
+            row_upd: $row_upd, value_vacio: $value_vacio, class_css: $class_css, regex: $regex);
 
     }
 

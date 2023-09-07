@@ -35,8 +35,6 @@ class controlador_inm_comprador extends _ctl_base {
     public string $link_rel_ubi_comp_alta_bd = '';
     public string $link_inm_rel_co_acred_alta_bd = '';
     public string $link_asigna_nuevo_co_acreditado_bd = '';
-
-    public string $link_inm_comprador_modifica = '';
     public function __construct(PDO      $link, html $html = new \gamboamartin\template_1\html(),
                                 stdClass $paths_conf = new stdClass())
     {
