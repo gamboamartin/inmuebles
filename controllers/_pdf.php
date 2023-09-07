@@ -114,7 +114,13 @@ class _pdf{
         return $write;
     }
 
-    private function apartado_3(stdClass $data){
+    /**
+     * Integra los elementos del apartado de de la solicitud
+     * @param stdClass $data Datos de cliente
+     * @return array|Fpdi
+     */
+    private function apartado_3(stdClass $data): Fpdi|array
+    {
         $keys_ubicacion = $this->keys_ubicacion();
         if (errores::$error) {
             return $this->error->error(mensaje: 'Error al obtener keys_ubicacion', data: $keys_ubicacion);
@@ -153,7 +159,8 @@ class _pdf{
             return $this->error->error(mensaje: 'Error al obtener coordenadas', data: $coord);
         }
 
-        $pdf = $this->write( valor: $data->imp_rel_ubi_comp['inm_rel_ubi_comp_precio_operacion'], x: $coord->x, y: $coord->y);
+        $pdf = $this->write( valor: $data->imp_rel_ubi_comp['inm_rel_ubi_comp_precio_operacion'],
+            x: $coord->x, y: $coord->y);
         if (errores::$error) {
             return $this->error->error(mensaje: 'Error al escribir en pdf', data: $pdf);
         }

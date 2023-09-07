@@ -40,8 +40,6 @@ let collapse_a14 = $("#collapse_a14");
 
 
 
-
-
 let dp_pais_id = -1;
 let dp_estado_id = -1;
 let dp_municipio_id = -1;
