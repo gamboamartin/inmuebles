@@ -229,6 +229,38 @@ class _pdfTest extends test {
         errores::$error = false;
     }
 
+    public function test_get_x_var(): void
+    {
+        errores::$error = false;
+
+        $_GET['seccion'] = 'inm_producto_infonavit';
+        $_GET['accion'] = 'lista';
+        $_SESSION['grupo_id'] = 1;
+        $_SESSION['usuario_id'] = 2;
+        $_GET['session_id'] = '1';
+
+
+        $pdf = new Fpdi();
+
+        $_pdf = new _pdf($pdf);
+        $_pdf = new liberator($_pdf);
+
+
+
+        $condiciones= array();
+        $key_id = 'a';
+        $row = array();
+        $x_init = '-1';
+
+        $row['a'] = 'z';
+
+        $resultado = $_pdf->get_x_var($condiciones, $key_id, $row, $x_init);
+        $this->assertIsFloat($resultado);
+        $this->assertNotTrue(errores::$error);
+        $this->assertEquals(-1,$resultado);
+        errores::$error = false;
+    }
+
     public function test_keys_ubicacion(): void
     {
         errores::$error = false;

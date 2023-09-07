@@ -353,14 +353,25 @@ class _pdf{
     }
 
     /**
-     * @param array $condiciones
-     * @param string $key_id
-     * @param array $row
-     * @param float $x_init
-     * @return float
+     * Obtiene el valor de x
+     * @param array $condiciones Condiciones para x
+     * @param string $key_id Key para obtener valor a comparar
+     * @param array $row Registro en proceso
+     * @param float $x_init Posicion inicial
+     * @return float|array
+     * @version 1.129.1
      */
-    private function get_x_var(array $condiciones, string $key_id,array $row, float $x_init): float
+    private function get_x_var(array $condiciones, string $key_id,array $row, float $x_init): float|array
     {
+        $key_id = trim($key_id);
+        if($key_id === ''){
+            return $this->error->error(mensaje: 'Error key_id esta vacio', data: $key_id);
+        }
+        $keys = array($key_id);
+        $valida = (new valida())->valida_existencia_keys(keys: $keys,registro:  $row);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al validar $row', data: $valida);
+        }
         $x = $x_init;
 
         $key_compare = $row[$key_id];
@@ -636,7 +647,16 @@ class _pdf{
     }
 
 
-    private function x_y_compare(array $condiciones, string $key, array $row, float $x_init, float $y_init){
+    /**
+     * @param array $condiciones
+     * @param string $key
+     * @param array $row
+     * @param float $x_init
+     * @param float $y_init
+     * @return array|stdClass
+     */
+    private function x_y_compare(array $condiciones, string $key, array $row, float $x_init, float $y_init): array|stdClass
+    {
         $x = $this->get_x_var(condiciones: $condiciones,key_id:  $key,
             row:  $row, x_init: $x_init);
 

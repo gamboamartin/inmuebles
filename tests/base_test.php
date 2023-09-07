@@ -237,6 +237,17 @@ class base_test{
                                           int $inm_comprador_id = 1): array|\stdClass
     {
 
+        $existe = (new inm_co_acreditado(link: $link))->existe_by_id(registro_id: $inm_co_acreditado_id);
+        if(errores::$error){
+            return (new errores())->error(mensaje: 'Error al validar si existe inm_co_acreditado_id', data: $existe);
+        }
+        if(!$existe){
+            $alta = $this->alta_inm_co_acreditado(link: $link, id: $inm_co_acreditado_id);
+            if(errores::$error){
+                return (new errores())->error(mensaje: 'Error al insertar inm_co_acreditado_id', data: $alta);
+            }
+        }
+
         $registro['id'] = $id;
         $registro['inm_co_acreditado_id'] = $inm_co_acreditado_id;
         $registro['inm_comprador_id'] = $inm_comprador_id;
@@ -331,10 +342,14 @@ class base_test{
         return $alta;
     }
 
-    public function alta_inm_ubicacion(PDO $link, int $id = 1): array|\stdClass
+    public function alta_inm_ubicacion(PDO $link, string $cuenta_predial = 'CP', int $dp_calle_pertenece_id = 1,
+                                       int $id = 1, string $numero_exterior = 'NUM EXT'): array|\stdClass
     {
 
         $registro['id'] = $id;
+        $registro['dp_calle_pertenece_id'] = $dp_calle_pertenece_id;
+        $registro['numero_exterior'] = $numero_exterior;
+        $registro['cuenta_predial'] = $cuenta_predial;
 
         $alta = (new inm_ubicacion($link))->alta_registro($registro);
         if(errores::$error){
