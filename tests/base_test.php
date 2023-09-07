@@ -5,6 +5,7 @@ use base\orm\modelo_base;
 
 use gamboamartin\banco\models\bn_cuenta;
 use gamboamartin\comercial\models\com_cliente;
+use gamboamartin\comercial\models\com_tipo_cliente;
 use gamboamartin\errores\errores;
 
 use gamboamartin\inmuebles\models\inm_co_acreditado;
@@ -40,6 +41,16 @@ class base_test{
 
         $alta = (new \gamboamartin\comercial\test\base_test())->alta_com_cliente(link: $link, cat_sat_metodo_pago_id: 1,
             cat_sat_regimen_fiscal_id: 601, cat_sat_tipo_persona_id: 4, id: $id);
+        if(errores::$error){
+            return (new errores())->error(mensaje: 'Error al insertar', data: $alta);
+        }
+        return $alta;
+    }
+
+    public function alta_com_tipo_cliente(PDO $link, $id = 1): array|\stdClass
+    {
+
+        $alta = (new \gamboamartin\comercial\test\base_test())->alta_com_tipo_cliente(link: $link, id: $id);
         if(errores::$error){
             return (new errores())->error(mensaje: 'Error al insertar', data: $alta);
         }
@@ -104,6 +115,17 @@ class base_test{
             $alta = $this->alta_bn_cuenta(link: $link, id: $bn_cuenta_id);
             if(errores::$error){
                 return (new errores())->error(mensaje: 'Error al insertar inm_comprador', data: $alta);
+            }
+        }
+
+        $existe = (new com_tipo_cliente(link: $link))->existe_by_id(registro_id: $com_tipo_cliente_id);
+        if(errores::$error){
+            return (new errores())->error(mensaje: 'Error al validar si existe com_tipo_cliente_id', data: $existe);
+        }
+        if(!$existe){
+            $alta = $this->alta_com_tipo_cliente(link: $link, id: $com_tipo_cliente_id);
+            if(errores::$error){
+                return (new errores())->error(mensaje: 'Error al insertar com_tipo_cliente_id', data: $alta);
             }
         }
 
