@@ -1,65 +1,98 @@
 <?php /** @var  gamboamartin\facturacion\controllers\controlador_fc_docto_relacionado $controlador  controlador en ejecucion */ ?>
 <?php use config\views; ?>
 
+    <a class="btn btn-primary" href="#apartado_all" role="button" id="collapse_all">
+        Ver/Ocultar todo
+    </a>
+
 <div class="col-md-12">
     <hr>
-    <h4>1. CRÉDITO SOLICITADO</h4>
+    <h4>
+        1. CRÉDITO SOLICITADO
+        <a class="btn btn-primary" href="#apartado_1" role="button" id="collapse_a1">
+            +/-
+        </a>
+    </h4>
     <hr>
 </div>
+
+    <div  id="apartado_1">
 
 <?php echo $controlador->inputs->inm_producto_infonavit_id; ?>
 <?php echo $controlador->inputs->inm_attr_tipo_credito_id; ?>
 <?php echo $controlador->inputs->inm_destino_credito_id; ?>
 <?php echo $controlador->inputs->es_segundo_credito; ?>
-
-
-
-
 <?php echo $controlador->inputs->inm_plazo_credito_sc_id; ?>
+    </div>
 
 
     <div class="col-md-12">
         <hr>
-        <h4>2. DATOS PARA DETERMINAR EL MONTO DE CRÉDITO</h4>
+        <h4>
+            2. DATOS PARA DETERMINAR EL MONTO DE CRÉDITO
+            <a class="btn btn-primary"  href="#apartado_2" role="button" id="collapse_a2">
+                +/-
+            </a>
+        </h4>
         <hr>
     </div>
 
+    <div id="apartado_2">
 <?php echo $controlador->inputs->descuento_pension_alimenticia_dh; ?>
 <?php echo $controlador->inputs->descuento_pension_alimenticia_fc; ?>
 <?php echo $controlador->inputs->monto_credito_solicitado_dh; ?>
 <?php echo $controlador->inputs->monto_ahorro_voluntario; ?>
+    </div>
 
 
     <div class="col-md-12">
         <hr>
-        <h4>3. DATOS DE LA VIVIENDA/TERRENO DESTINO DEL CRÉDITO</h4>
+        <h4>
+            3. DATOS DE LA VIVIENDA/TERRENO DESTINO DEL CRÉDITO
+            <a class="btn btn-primary" href="#apartado_3" role="button" id="collapse_a3">
+                +/-
+            </a>
+        </h4>
         <hr>
     </div>
 
+    <div  id="apartado_3">
 <?php echo $controlador->inputs->con_discapacidad; ?>
 
 <?php echo $controlador->inputs->inm_tipo_discapacidad_id; ?>
 <?php echo $controlador->inputs->inm_persona_discapacidad_id; ?>
+    </div>
 
 
     <div class="col-md-12">
         <hr>
-        <h4>4. DATOS DE LA EMPRESA O PATRÓN</h4>
+        <h4>
+            4. DATOS DE LA EMPRESA O PATRÓN
+            <a class="btn btn-primary" href="#apartado_4" role="button" id="collapse_a4">
+                +/-
+            </a>
+        </h4>
         <hr>
     </div>
-
+    <div  id="apartado_4">
 <?php echo $controlador->inputs->nombre_empresa_patron; ?>
 <?php echo $controlador->inputs->nrp_nep; ?>
 <?php echo $controlador->inputs->lada_nep; ?>
 <?php echo $controlador->inputs->numero_nep; ?>
 <?php echo $controlador->inputs->extension_nep; ?>
+    </div>
 
     <div class="col-md-12">
         <hr>
-        <h4>5. DATOS DE IDENTIFICACIÓN DEL (DE LA) DERECHOHABIENTE / DATOS QUE SERÁN VALIDADOS</h4>
+        <h4>
+            5. DATOS DE IDENTIFICACIÓN DEL (DE LA) DERECHOHABIENTE / DATOS QUE SERÁN VALIDADOS
+            <a class="btn btn-primary" href="#apartado_5" role="button" id="collapse_a5">
+                +/-
+            </a>
+        </h4>
         <hr>
     </div>
-
+    <div  id="apartado_5">
 <?php echo $controlador->inputs->nss; ?>
 <?php echo $controlador->inputs->curp; ?>
 <?php echo $controlador->inputs->rfc; ?>
@@ -93,17 +126,24 @@
         </label>
     </div>
 
-
 <?php echo $controlador->inputs->correo_com; ?>
 <?php echo $controlador->inputs->inm_estado_civil_id; ?>
+
+    </div>
 
 
     <div class="col-md-12">
         <hr>
-        <h4>13. DATOS FISCALES PARA FACTURACION</h4>
+        <h4>
+            13. DATOS FISCALES PARA FACTURACION
+            <a class="btn btn-primary" href="#apartado_13" role="button" id="collapse_a13">
+                +/-
+            </a>
+        </h4>
         <hr>
     </div>
 
+    <div  id="apartado_13">
 <?php echo $controlador->inputs->cat_sat_regimen_fiscal_id; ?>
 <?php echo $controlador->inputs->cat_sat_moneda_id; ?>
 <?php echo $controlador->inputs->cat_sat_forma_pago_id; ?>
@@ -111,15 +151,22 @@
 <?php echo $controlador->inputs->cat_sat_uso_cfdi_id; ?>
 <?php echo $controlador->inputs->cat_sat_tipo_persona_id; ?>
 <?php echo $controlador->inputs->bn_cuenta_id; ?>
+    </div>
 
 
     <div class="col-md-12">
         <hr>
-        <h4>14. CONTROL INTERNO</h4>
+        <h4>
+            14. CONTROL INTERNO
+            <a class="btn btn-primary" href="#apartado_14" role="button" id="collapse_a14">
+                +/-
+            </a>
+        </h4>
         <hr>
     </div>
-
+    <div  id="apartado_14">
 <?php echo $controlador->inputs->com_tipo_cliente_id; ?>
+    </div>
 
 
 

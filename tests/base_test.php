@@ -437,6 +437,11 @@ class base_test{
 
     public function del_inm_co_acreditado(PDO $link): array
     {
+        $del = $this->del_inm_rel_co_acred(link: $link);
+        if(errores::$error){
+            return (new errores())->error('Error al eliminar', $del);
+        }
+
         $del = $this->del($link, 'gamboamartin\\inmuebles\\models\\inm_co_acreditado');
         if(errores::$error){
             return (new errores())->error('Error al eliminar', $del);
@@ -475,6 +480,7 @@ class base_test{
         if(errores::$error){
             return (new errores())->error('Error al eliminar', $del);
         }
+
 
         $del = $this->del($link, 'gamboamartin\\inmuebles\\models\\inm_comprador');
         if(errores::$error){

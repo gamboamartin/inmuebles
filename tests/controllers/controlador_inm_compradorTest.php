@@ -57,7 +57,9 @@ class controlador_inm_compradorTest extends test {
         assertStringContainsStringIgnoringCase(" form-check-input' id='es_segundo_credito'", $data);
         assertStringContainsStringIgnoringCase("<label class='control-label' for='inm_plazo_credito_sc_id'>Plazo Segundo Credito</label>", $data);
         assertStringContainsStringIgnoringCase("<div class='controls'><select class='form-control selectpicker color-secondary  inm_plazo_credito_sc_id", $data);
-        assertStringContainsStringIgnoringCase("<h4>2. DATOS PARA DETERMINAR EL MONTO DE CRÉDITO</h4>", $data);
+        assertStringContainsStringIgnoringCase("2. DATOS PARA DETERMINAR EL MONTO DE CRÉDITO\n", $data);
+        assertStringContainsStringIgnoringCase('<a class="btn btn-primary"  href="#apartado_2" role="button" id="collapse_a2">', $data);
+        assertStringContainsStringIgnoringCase('+/-', $data);
         assertStringContainsStringIgnoringCase("ss='control-label' for='descuento_pension_alimenticia_dh'>Descuento Pension Alimenticia Derechohabiente</label><di", $data);
         assertStringContainsStringIgnoringCase("untario' value='0' class='form-control' required id='monto_ahorro_voluntario", $data);
         assertStringContainsStringIgnoringCase("<input type='radio' name='con_discapacidad", $data);
@@ -66,7 +68,9 @@ class controlador_inm_compradorTest extends test {
         assertStringContainsStringIgnoringCase("_civil_id' data-live-search='true' id='inm_estado_civil_id' name='inm_estado_civil_id' required ><option value=''  >Selecciona una", $data);
         assertStringContainsStringIgnoringCase("m-6'><label class='control-label' for='cat_sat_regimen_fiscal_id'>Regimen Fiscal</label><div class='controls'><select class='form-control se", $data);
         assertStringContainsStringIgnoringCase("e Cliente</label><div class='controls'><select class='form-control selectpick", $data);
-        assertStringContainsStringIgnoringCase(" <h4>2. DATOS PARA DETERMINAR EL MONTO DE CRÉDITO</h4>", $data);
+        assertStringContainsStringIgnoringCase("<h4>", $data);
+        assertStringContainsStringIgnoringCase("DATOS PARA DETERMINAR EL MONTO DE CRÉDITO", $data);
+        assertStringContainsStringIgnoringCase('<a class="btn btn-primary"  href="#apartado_2" role="button" id="collapse_a2">', $data);
         assertStringContainsStringIgnoringCase("for='nombre_empresa_patron'>Nombre de la Empresa/Patrón", $data);
         assertStringContainsStringIgnoringCase("iv class='controls'><input type='text' name='nombre_empresa_patron' value='' ", $data);
         assertStringContainsStringIgnoringCase("abel class='control-label' for='nrp_nep'>NÚMERO DE REGISTRO PATRONAL (NRP)", $data);
@@ -75,6 +79,9 @@ class controlador_inm_compradorTest extends test {
                 title='Es Segundo Credito' checked>
                 NO
             </label>", $data);
+
+
+
         unlink('inm_comprador.alta');
 
 

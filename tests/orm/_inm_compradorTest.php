@@ -105,6 +105,52 @@ class _inm_compradorTest extends test {
         errores::$error = false;
     }
 
+    public function test_inm_co_acreditados(): void
+    {
+        errores::$error = false;
+
+        $_GET['seccion'] = 'inm_producto_infonavit';
+        $_GET['accion'] = 'lista';
+        $_SESSION['grupo_id'] = 1;
+        $_SESSION['usuario_id'] = 2;
+        $_GET['session_id'] = '1';
+
+        $_inm = new _inm_comprador();
+        //$_inm = new liberator($_inm);
+
+
+
+        $del = (new base_test())->del_inm_co_acreditado(link: $this->link);
+        if(errores::$error){
+            $error = (new errores())->error(mensaje:'Error al eliminar', data: $del);
+            print_r($error);exit;
+        }
+
+        $inm_comprador_id = 1;
+        $link = $this->link;
+        $resultado = $_inm->inm_co_acreditados($inm_comprador_id, $link);
+        $this->assertIsArray($resultado);
+        $this->assertNotTrue(errores::$error);
+        $this->assertEmpty($resultado);
+
+        errores::$error = false;
+
+        $alta = (new base_test())->alta_inm_rel_co_acred(link: $this->link);
+        if(errores::$error){
+            $error = (new errores())->error(mensaje:'Error al alta', data: $alta);
+            print_r($error);exit;
+        }
+
+        $inm_comprador_id = 1;
+        $link = $this->link;
+        $resultado = $_inm->inm_co_acreditados($inm_comprador_id, $link);
+        $this->assertIsArray($resultado);
+        $this->assertNotTrue(errores::$error);
+        $this->assertEquals(1,$resultado[0]['inm_comprador_id']);
+        $this->assertEquals(1,$resultado[0]['inm_co_acreditado_id']);
+        errores::$error = false;
+    }
+
 
 
     public function test_inm_ubicacion_id_input(): void

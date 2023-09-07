@@ -177,6 +177,7 @@ class _inm_comprador{
      * @param int $inm_comprador_id Comprador id
      * @param PDO $link Conexion a la base de datos
      * @return array
+     * @version 1.134.1
      */
     final public function inm_co_acreditados(int $inm_comprador_id, PDO $link): array
     {
