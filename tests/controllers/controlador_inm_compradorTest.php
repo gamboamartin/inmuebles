@@ -45,7 +45,7 @@ class controlador_inm_compradorTest extends test {
 
         $data = file_get_contents("inm_comprador.alta");
 
-        //print_r($data);exit;
+
 
         assertStringContainsStringIgnoringCase("<div class='control-group col-sm-6'><label class='control-label' for='inm_producto_infonavit_id'>Producto</label><div", $data);
         assertStringContainsStringIgnoringCase("Es Segundo Credito", $data);
@@ -70,6 +70,11 @@ class controlador_inm_compradorTest extends test {
         assertStringContainsStringIgnoringCase("for='nombre_empresa_patron'>Nombre de la Empresa/Patrón", $data);
         assertStringContainsStringIgnoringCase("iv class='controls'><input type='text' name='nombre_empresa_patron' value='' ", $data);
         assertStringContainsStringIgnoringCase("abel class='control-label' for='nrp_nep'>NÚMERO DE REGISTRO PATRONAL (NRP)", $data);
+        assertStringContainsStringIgnoringCase("<label class='form-check-label chk form-check-label'>
+                <input type='radio' name='es_segundo_credito' value='NO' class='form-check-input es_segundo_credito form-check-input' id='es_segundo_credito' 
+                title='Es Segundo Credito' checked>
+                NO
+            </label>", $data);
         unlink('inm_comprador.alta');
 
 

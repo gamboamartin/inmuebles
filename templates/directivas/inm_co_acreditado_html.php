@@ -276,8 +276,22 @@ class inm_co_acreditado_html extends html_controler {
             place_holder:  $place_holder,row_upd:  $row_upd,value_vacio:  $value_vacio,regex: $regex);
 
     }
-    final public function select_inm_co_acreditado_id(int $cols, bool $con_registros, int $id_selected, PDO $link, array $columns_ds=array(),
-                                      bool $disabled = false, array $filtro = array()): array|string
+
+    /**
+     * Genera un selector de tipo co acreditado
+     * @param int $cols No de columnas css
+     * @param bool $con_registros Si con registros integra registros en options
+     * @param int $id_selected Selected id
+     * @param PDO $link Conexion a la base de datos
+     * @param array $columns_ds Columnas a mostrar en opciones
+     * @param bool $disabled Atributo disabled
+     * @param array $filtro Filtro de datos
+     * @return array|string
+     * @version 1.130.1
+     */
+    final public function select_inm_co_acreditado_id(int $cols, bool $con_registros, int $id_selected,
+                                                      PDO $link, array $columns_ds=array(), bool $disabled = false,
+                                                      array $filtro = array()): array|string
     {
         $modelo = new inm_co_acreditado(link: $link);
 

@@ -82,7 +82,7 @@ class controlador_inm_comprador extends _ctl_base {
                 mensaje: 'Error al obtener inputs',data:  $inputs, header: $header,ws:  $ws);
         }
 
-        $radios = (new _inm_comprador())->radios(checked_default_cd: 1, checked_default_esc: 1, controler: $this);
+        $radios = (new _inm_comprador())->radios(checked_default_cd: 1, checked_default_esc: 2, controler: $this);
         if(errores::$error){
             return $this->retorno_error(
                 mensaje: 'Error al integrar radios',data:  $radios, header: $header,ws:  $ws);
@@ -490,8 +490,6 @@ class controlador_inm_comprador extends _ctl_base {
 
     }
 
-
-
     /**
      * Inicializa los elementos mostrables para datatables
      * @return stdClass
@@ -639,9 +637,6 @@ class controlador_inm_comprador extends _ctl_base {
 
         return $r_modifica;
     }
-
-
-
     public function solicitud_infonavit(bool $header, bool $ws = false)
     {
 
