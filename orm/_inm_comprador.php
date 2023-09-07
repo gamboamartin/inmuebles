@@ -172,6 +172,12 @@ class _inm_comprador{
         return $inm_co_acreditado_id;
     }
 
+    /**
+     * Obtiene los co acreaditados de un cliente
+     * @param int $inm_comprador_id Comprador id
+     * @param PDO $link Conexion a la base de datos
+     * @return array
+     */
     final public function inm_co_acreditados(int $inm_comprador_id, PDO $link): array
     {
         if($inm_comprador_id<= 0){

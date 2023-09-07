@@ -11,14 +11,12 @@
 
                 <div class="widget  widget-box box-container form-main widget-form-cart" id="form">
 
-                    <form method="post" action="<?php echo $controlador->link_inm_rel_co_acred_alta_bd; ?>"
-                          class="form-additional">
+                    <form method="post" action="#" class="form-additional">
 
                     <?php include (new views())->ruta_templates."head/title.php"; ?>
                     <?php include (new views())->ruta_templates."head/subtitulo.php"; ?>
                     <?php include (new views())->ruta_templates."mensajes.php"; ?>
 
-                    <?php echo $controlador->inputs->inm_co_acreditado_id; ?>
 
                     <?php echo $controlador->inputs->com_tipo_cliente_id; ?>
                     <?php echo $controlador->inputs->nss; ?>
@@ -46,7 +44,7 @@
 
                         <div class="widget widget-box box-container widget-mylistings">
                             <div class="widget-header" style="display: flex;justify-content: space-between;align-items: center;">
-                                <h2>Ubicaciones</h2>
+                                <h2>Co Acreditados</h2>
                             </div>
 
                             <div class="table table-responsive">
@@ -78,8 +76,6 @@
                             </div>
                         </div>
                     </div>
-
-
 
 
                 </div>
