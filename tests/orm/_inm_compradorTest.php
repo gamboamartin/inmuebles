@@ -61,6 +61,50 @@ class _inm_compradorTest extends test {
         errores::$error = false;
     }
 
+    public function test_inm_co_acreditado_id_input(): void
+    {
+        errores::$error = false;
+
+        $_GET['seccion'] = 'inm_producto_infonavit';
+        $_GET['accion'] = 'lista';
+        $_SESSION['grupo_id'] = 1;
+        $_SESSION['usuario_id'] = 2;
+        $_GET['session_id'] = '1';
+
+        $_inm = new _inm_comprador();
+        //$_inm = new liberator($_inm);
+
+        $controler = new controlador_inm_comprador(link: $this->link, paths_conf: $this->paths_conf);
+
+
+        $del = (new base_test())->del_inm_co_acreditado(link: $this->link);
+        if(errores::$error){
+            $error = (new errores())->error(mensaje:'Error al eliminar', data: $del);
+            print_r($error);exit;
+        }
+
+        $resultado = $_inm->inm_co_acreditado_id_input($controler);
+
+        $this->assertIsString($resultado);
+        $this->assertNotTrue(errores::$error);
+        $this->assertEquals("<div class='control-group col-sm-12'><label class='control-label' for='inm_co_acreditado_id'>Co Acreditado</label><div class='controls'><select class='form-control selectpicker color-secondary  inm_co_acreditado_id' data-live-search='true' id='inm_co_acreditado_id' name='inm_co_acreditado_id' required ><option value=''  >Selecciona una opcion</option></select></div></div>",$resultado);
+        errores::$error = false;
+
+        $alta = (new base_test())->alta_inm_co_acreditado(link: $this->link);
+        if(errores::$error){
+            $error = (new errores())->error(mensaje:'Error al insertar', data: $alta);
+            print_r($error);exit;
+        }
+
+
+        $resultado = $_inm->inm_co_acreditado_id_input($controler);
+
+        $this->assertIsString($resultado);
+        $this->assertNotTrue(errores::$error);
+        $this->assertEquals("<div class='control-group col-sm-12'><label class='control-label' for='inm_co_acreditado_id'>Co Acreditado</label><div class='controls'><select class='form-control selectpicker color-secondary  inm_co_acreditado_id' data-live-search='true' id='inm_co_acreditado_id' name='inm_co_acreditado_id' required ><option value=''  >Selecciona una opcion</option><option value='1'  >12345678912 XEXX010101MNEXXXA8 NOMBRE AP APELLIDO MATERNO</option></select></div></div>",$resultado);
+        errores::$error = false;
+    }
+
 
 
     public function test_inm_ubicacion_id_input(): void
