@@ -10,7 +10,18 @@ use stdClass;
 
 class inm_comprador_html extends html_controler {
 
-    public function select_inm_comprador_id(int $cols, bool $con_registros, int $id_selected, PDO $link, array $columns_ds=array(),
+    final public function header_collapsible(string $id_css_button, string $style_button, string $tag_button, string $tag_header){
+
+        $btn = $this->button_para_java(id_css: $id_css_button,style:  $style_button,tag:  $tag_button);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al btn_collapse_all',data:  $btn);
+        }
+
+        return "<div class='col-md-12'>
+                    <hr><h4>$tag_header $btn </h4><hr>
+                    </div>";
+    }
+    final public function select_inm_comprador_id(int $cols, bool $con_registros, int $id_selected, PDO $link, array $columns_ds=array(),
                                       bool $disabled = false, array $filtro = array()): array|string
     {
         $modelo = new inm_comprador(link: $link);

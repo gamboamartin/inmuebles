@@ -3,14 +3,7 @@
 
 <?php echo $controlador->buttons['btn_collapse_all']; ?>
 
-    <div class="col-md-12">
-        <hr>
-        <h4>
-            1. CRÉDITO SOLICITADO
-            <?php echo $controlador->buttons['btn_collapse_a1']; ?>
-        </h4>
-        <hr>
-    </div>
+<?php echo $controlador->header_frontend->apartado_1; ?>
 
 
 <?php echo $controlador->inputs->inm_producto_infonavit_id; ?>

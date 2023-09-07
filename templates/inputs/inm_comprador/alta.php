@@ -1,24 +1,16 @@
-<?php /** @var  gamboamartin\facturacion\controllers\controlador_fc_docto_relacionado $controlador  controlador en ejecucion */ ?>
+<?php /** @var  gamboamartin\inmuebles\controllers\controlador_inm_comprador $controlador  controlador en ejecucion */ ?>
 <?php use config\views; ?>
 
 <?php echo $controlador->buttons['btn_collapse_all']; ?>
 
-
-<div class="col-md-12">
-    <hr>
-    <h4>1. CRÉDITO SOLICITADO
-        <?php echo $controlador->buttons['btn_collapse_a1']; ?>
-    </h4>
-    <hr>
-</div>
+<?php echo $controlador->header_frontend->apartado_1; ?>
 
     <div  id="apartado_1">
-
-<?php echo $controlador->inputs->inm_producto_infonavit_id; ?>
-<?php echo $controlador->inputs->inm_attr_tipo_credito_id; ?>
-<?php echo $controlador->inputs->inm_destino_credito_id; ?>
-<?php echo $controlador->inputs->es_segundo_credito; ?>
-<?php echo $controlador->inputs->inm_plazo_credito_sc_id; ?>
+        <?php echo $controlador->inputs->inm_producto_infonavit_id; ?>
+        <?php echo $controlador->inputs->inm_attr_tipo_credito_id; ?>
+        <?php echo $controlador->inputs->inm_destino_credito_id; ?>
+        <?php echo $controlador->inputs->es_segundo_credito; ?>
+        <?php echo $controlador->inputs->inm_plazo_credito_sc_id; ?>
     </div>
 
 

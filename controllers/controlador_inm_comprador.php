@@ -35,6 +35,10 @@ class controlador_inm_comprador extends _ctl_base {
     public string $link_rel_ubi_comp_alta_bd = '';
     public string $link_inm_rel_co_acred_alta_bd = '';
     public string $link_asigna_nuevo_co_acreditado_bd = '';
+
+    private inm_comprador_html $html_entidad;
+
+    public stdClass $header_frontend;
     public function __construct(PDO      $link, html $html = new \gamboamartin\template_1\html(),
                                 stdClass $paths_conf = new stdClass())
     {
@@ -51,6 +55,10 @@ class controlador_inm_comprador extends _ctl_base {
 
         parent::__construct(html:$html_, link: $link,modelo:  $modelo, obj_link: $obj_link, datatables: $datatables,
             paths_conf: $paths_conf);
+
+        $this->html_entidad = $html_;
+
+        $this->header_frontend = new stdClass();
     }
 
     /**
@@ -95,13 +103,17 @@ class controlador_inm_comprador extends _ctl_base {
 
         $this->buttons['btn_collapse_all'] = $btn_collapse_all;
 
-        $btn_collapse_a1 = $this->html->button_para_java(id_css: 'collapse_a1',style:  'primary',tag:  'Ver/Ocultar');
+
+        $header_apartado_1 = $this->html_entidad->header_collapsible(id_css_button: 'collapse_a1',
+            style_button: 'primary', tag_button: 'Ver/Ocultar',tag_header:  '1. CRÉDITO SOLICITADO');
+
         if(errores::$error){
             return $this->retorno_error(
-                mensaje: 'Error al btn_collapse_a1',data:  $btn_collapse_a1, header: $header,ws:  $ws);
+                mensaje: 'Error al generar header',data:  $header_apartado_1, header: $header,ws:  $ws);
         }
 
-        $this->buttons['btn_collapse_a1'] = $btn_collapse_a1;
+        $this->header_frontend->apartado_1 = $header_apartado_1;
+
 
 
         return $r_alta;
@@ -756,13 +768,15 @@ class controlador_inm_comprador extends _ctl_base {
 
         $this->buttons['btn_collapse_all'] = $btn_collapse_all;
 
-        $btn_collapse_a1 = $this->html->button_para_java(id_css: 'collapse_a1',style:  'primary',tag:  'Ver/Ocultar');
+        $header_apartado_1 = $this->html_entidad->header_collapsible(id_css_button: 'collapse_a1',
+            style_button: 'primary', tag_button: 'Ver/Ocultar',tag_header:  '1. CRÉDITO SOLICITADO');
+
         if(errores::$error){
             return $this->retorno_error(
-                mensaje: 'Error al btn_collapse_a1',data:  $btn_collapse_a1, header: $header,ws:  $ws);
+                mensaje: 'Error al generar header',data:  $header_apartado_1, header: $header,ws:  $ws);
         }
 
-        $this->buttons['btn_collapse_a1'] = $btn_collapse_a1;
+        $this->header_frontend->apartado_1 = $header_apartado_1;
 
         return $r_modifica;
     }

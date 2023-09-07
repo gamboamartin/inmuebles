@@ -648,11 +648,12 @@ class _pdf{
 
 
     /**
-     * @param array $condiciones
-     * @param string $key
-     * @param array $row
-     * @param float $x_init
-     * @param float $y_init
+     * Obtiene las coordenadas x y basado en elementos de comparacion
+     * @param array $condiciones Condiciones para obtener coordenada
+     * @param string $key Key a verificar
+     * @param array $row Registro de tipo cliente
+     * @param float $x_init x inicial
+     * @param float $y_init y inicial
      * @return array|stdClass
      */
     private function x_y_compare(array $condiciones, string $key, array $row, float $x_init, float $y_init): array|stdClass
