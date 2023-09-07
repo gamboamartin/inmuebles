@@ -28,11 +28,7 @@ if($controlador->row_upd->genero === 'F'){
 <?php echo $controlador->inputs->inm_plazo_credito_sc_id; ?>
 
 
-    <div class="col-md-12">
-        <hr>
-        <h4>2. DATOS PARA DETERMINAR EL MONTO DE CRÉDITO</h4>
-        <hr>
-    </div>
+<?php echo $controlador->header_frontend->apartado_2; ?>
 
 <?php echo $controlador->inputs->descuento_pension_alimenticia_dh; ?>
 <?php echo $controlador->inputs->descuento_pension_alimenticia_fc; ?>
@@ -40,22 +36,14 @@ if($controlador->row_upd->genero === 'F'){
 <?php echo $controlador->inputs->monto_ahorro_voluntario; ?>
 
 
-    <div class="col-md-12">
-        <hr>
-        <h4>3. DATOS DE LA VIVIENDA/TERRENO DESTINO DEL CRÉDITO</h4>
-        <hr>
-    </div>
+<?php echo $controlador->header_frontend->apartado_3; ?>
 
 <?php echo $controlador->inputs->con_discapacidad; ?>
 <?php echo $controlador->inputs->inm_tipo_discapacidad_id; ?>
 <?php echo $controlador->inputs->inm_persona_discapacidad_id; ?>
 
 
-    <div class="col-md-12">
-        <hr>
-        <h4>4. DATOS DE LA EMPRESA O PATRÓN</h4>
-        <hr>
-    </div>
+<?php echo $controlador->header_frontend->apartado_4; ?>
 
 <?php echo $controlador->inputs->nombre_empresa_patron; ?>
 <?php echo $controlador->inputs->nrp_nep; ?>
@@ -64,11 +52,7 @@ if($controlador->row_upd->genero === 'F'){
 <?php echo $controlador->inputs->extension_nep; ?>
 
 
-    <div class="col-md-12">
-        <hr>
-        <h4>5. DATOS DE IDENTIFICACIÓN DEL (DE LA) DERECHOHABIENTE / DATOS QUE SERÁN VALIDADOS</h4>
-        <hr>
-    </div>
+<?php echo $controlador->header_frontend->apartado_5; ?>
 
 <?php echo $controlador->inputs->nss; ?>
 <?php echo $controlador->inputs->curp; ?>
@@ -111,11 +95,7 @@ if($controlador->row_upd->genero === 'F'){
 <?php echo $controlador->inputs->correo_com; ?>
 <?php echo $controlador->inputs->inm_estado_civil_id; ?>
 
-    <div class="col-md-12">
-        <hr>
-        <h4>13. DATOS FISCALES PARA FACTURACION</h4>
-        <hr>
-    </div>
+<?php echo $controlador->header_frontend->apartado_13; ?>
 
 
 <?php echo $controlador->inputs->cat_sat_regimen_fiscal_id; ?>
@@ -127,11 +107,7 @@ if($controlador->row_upd->genero === 'F'){
 <?php echo $controlador->inputs->bn_cuenta_id; ?>
 
 
-    <div class="col-md-12">
-        <hr>
-        <h4>14. CONTROL INTERNO</h4>
-        <hr>
-    </div>
+<?php echo $controlador->header_frontend->apartado_14; ?>
 
 <?php echo $controlador->inputs->com_tipo_cliente_id; ?>
 

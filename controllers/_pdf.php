@@ -655,9 +655,19 @@ class _pdf{
      * @param float $x_init x inicial
      * @param float $y_init y inicial
      * @return array|stdClass
+     * @version 1.137.1
      */
     private function x_y_compare(array $condiciones, string $key, array $row, float $x_init, float $y_init): array|stdClass
     {
+        $key = trim($key);
+        if($key === ''){
+            return $this->error->error(mensaje: 'Error key esta vacio', data: $key);
+        }
+        $keys = array($key);
+        $valida = (new valida())->valida_existencia_keys(keys: $keys,registro:  $row);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al validar $row', data: $valida);
+        }
         $x = $this->get_x_var(condiciones: $condiciones,key_id:  $key,
             row:  $row, x_init: $x_init);
 

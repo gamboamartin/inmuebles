@@ -14,16 +14,7 @@
     </div>
 
 
-    <div class="col-md-12">
-        <hr>
-        <h4>
-            2. DATOS PARA DETERMINAR EL MONTO DE CRÉDITO
-            <a class="btn btn-primary"  href="#apartado_2" role="button" id="collapse_a2">
-                +/-
-            </a>
-        </h4>
-        <hr>
-    </div>
+<?php echo $controlador->header_frontend->apartado_2; ?>
 
     <div id="apartado_2">
 <?php echo $controlador->inputs->descuento_pension_alimenticia_dh; ?>
@@ -33,16 +24,7 @@
     </div>
 
 
-    <div class="col-md-12">
-        <hr>
-        <h4>
-            3. DATOS DE LA VIVIENDA/TERRENO DESTINO DEL CRÉDITO
-            <a class="btn btn-primary" href="#apartado_3" role="button" id="collapse_a3">
-                +/-
-            </a>
-        </h4>
-        <hr>
-    </div>
+<?php echo $controlador->header_frontend->apartado_3; ?>
 
     <div  id="apartado_3">
 <?php echo $controlador->inputs->con_discapacidad; ?>
@@ -52,16 +34,8 @@
     </div>
 
 
-    <div class="col-md-12">
-        <hr>
-        <h4>
-            4. DATOS DE LA EMPRESA O PATRÓN
-            <a class="btn btn-primary" href="#apartado_4" role="button" id="collapse_a4">
-                +/-
-            </a>
-        </h4>
-        <hr>
-    </div>
+<?php echo $controlador->header_frontend->apartado_4; ?>
+
     <div  id="apartado_4">
 <?php echo $controlador->inputs->nombre_empresa_patron; ?>
 <?php echo $controlador->inputs->nrp_nep; ?>
@@ -70,16 +44,7 @@
 <?php echo $controlador->inputs->extension_nep; ?>
     </div>
 
-    <div class="col-md-12">
-        <hr>
-        <h4>
-            5. DATOS DE IDENTIFICACIÓN DEL (DE LA) DERECHOHABIENTE / DATOS QUE SERÁN VALIDADOS
-            <a class="btn btn-primary" href="#apartado_5" role="button" id="collapse_a5">
-                +/-
-            </a>
-        </h4>
-        <hr>
-    </div>
+<?php echo $controlador->header_frontend->apartado_5; ?>
     <div  id="apartado_5">
 <?php echo $controlador->inputs->nss; ?>
 <?php echo $controlador->inputs->curp; ?>
@@ -120,16 +85,7 @@
     </div>
 
 
-    <div class="col-md-12">
-        <hr>
-        <h4>
-            13. DATOS FISCALES PARA FACTURACION
-            <a class="btn btn-primary" href="#apartado_13" role="button" id="collapse_a13">
-                +/-
-            </a>
-        </h4>
-        <hr>
-    </div>
+<?php echo $controlador->header_frontend->apartado_13; ?>
 
     <div  id="apartado_13">
 <?php echo $controlador->inputs->cat_sat_regimen_fiscal_id; ?>
@@ -142,16 +98,7 @@
     </div>
 
 
-    <div class="col-md-12">
-        <hr>
-        <h4>
-            14. CONTROL INTERNO
-            <a class="btn btn-primary" href="#apartado_14" role="button" id="collapse_a14">
-                +/-
-            </a>
-        </h4>
-        <hr>
-    </div>
+<?php echo $controlador->header_frontend->apartado_14; ?>
     <div  id="apartado_14">
 <?php echo $controlador->inputs->com_tipo_cliente_id; ?>
     </div>

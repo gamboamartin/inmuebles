@@ -103,16 +103,29 @@ class controlador_inm_comprador extends _ctl_base {
 
         $this->buttons['btn_collapse_all'] = $btn_collapse_all;
 
+        $headers['1'] = '1. CRÉDITO SOLICITADO';
+        $headers['2'] = '2. DATOS PARA DETERMINAR EL MONTO DE CRÉDITO';
+        $headers['3'] = '3. DATOS DE LA VIVIENDA/TERRENO DESTINO DEL CRÉDITO';
+        $headers['4'] = '4. DATOS DE LA EMPRESA O PATRÓN';
+        $headers['5'] = '5. DATOS DE IDENTIFICACIÓN DEL (DE LA) DERECHOHABIENTE / DATOS QUE SERÁN VALIDADOS';
+        $headers['13'] = '13. DATOS FISCALES PARA FACTURACION';
+        $headers['14'] = '14. CONTROL INTERNO';
 
-        $header_apartado_1 = $this->html_entidad->header_collapsible(id_css_button: 'collapse_a1',
-            style_button: 'primary', tag_button: 'Ver/Ocultar',tag_header:  '1. CRÉDITO SOLICITADO');
+        foreach ($headers as $n_apartado=>$tag_header){
+            $id_css_button = "collapse_a$n_apartado";
+            $key_header = "apartado_$n_apartado";
 
-        if(errores::$error){
-            return $this->retorno_error(
-                mensaje: 'Error al generar header',data:  $header_apartado_1, header: $header,ws:  $ws);
+            $header_apartado = $this->html_entidad->header_collapsible(id_css_button: $id_css_button,
+                style_button: 'primary', tag_button: 'Ver/Ocultar',tag_header:  $tag_header);
+
+            if(errores::$error){
+                return $this->retorno_error(
+                    mensaje: 'Error al generar header',data:  $header_apartado, header: $header,ws:  $ws);
+            }
+
+            $this->header_frontend->$key_header = $header_apartado;
         }
 
-        $this->header_frontend->apartado_1 = $header_apartado_1;
 
 
 
@@ -768,15 +781,28 @@ class controlador_inm_comprador extends _ctl_base {
 
         $this->buttons['btn_collapse_all'] = $btn_collapse_all;
 
-        $header_apartado_1 = $this->html_entidad->header_collapsible(id_css_button: 'collapse_a1',
-            style_button: 'primary', tag_button: 'Ver/Ocultar',tag_header:  '1. CRÉDITO SOLICITADO');
+        $headers['1'] = '1. CRÉDITO SOLICITADO';
+        $headers['2'] = '2. DATOS PARA DETERMINAR EL MONTO DE CRÉDITO';
+        $headers['3'] = '3. DATOS DE LA VIVIENDA/TERRENO DESTINO DEL CRÉDITO';
+        $headers['4'] = '4. DATOS DE LA EMPRESA O PATRÓN';
+        $headers['5'] = '5. DATOS DE IDENTIFICACIÓN DEL (DE LA) DERECHOHABIENTE / DATOS QUE SERÁN VALIDADOS';
+        $headers['13'] = '13. DATOS FISCALES PARA FACTURACION';
+        $headers['14'] = '14. CONTROL INTERNO';
 
-        if(errores::$error){
-            return $this->retorno_error(
-                mensaje: 'Error al generar header',data:  $header_apartado_1, header: $header,ws:  $ws);
+        foreach ($headers as $n_apartado=>$tag_header){
+            $id_css_button = "collapse_a$n_apartado";
+            $key_header = "apartado_$n_apartado";
+
+            $header_apartado = $this->html_entidad->header_collapsible(id_css_button: $id_css_button,
+                style_button: 'primary', tag_button: 'Ver/Ocultar',tag_header:  $tag_header);
+
+            if(errores::$error){
+                return $this->retorno_error(
+                    mensaje: 'Error al generar header',data:  $header_apartado, header: $header,ws:  $ws);
+            }
+
+            $this->header_frontend->$key_header = $header_apartado;
         }
-
-        $this->header_frontend->apartado_1 = $header_apartado_1;
 
         return $r_modifica;
     }

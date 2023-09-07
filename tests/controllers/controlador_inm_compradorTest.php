@@ -57,9 +57,8 @@ class controlador_inm_compradorTest extends test {
         assertStringContainsStringIgnoringCase(" form-check-input' id='es_segundo_credito'", $data);
         assertStringContainsStringIgnoringCase("<label class='control-label' for='inm_plazo_credito_sc_id'>Plazo Segundo Credito</label>", $data);
         assertStringContainsStringIgnoringCase("<div class='controls'><select class='form-control selectpicker color-secondary  inm_plazo_credito_sc_id", $data);
-        assertStringContainsStringIgnoringCase("2. DATOS PARA DETERMINAR EL MONTO DE CRÉDITO\n", $data);
-        assertStringContainsStringIgnoringCase('<a class="btn btn-primary"  href="#apartado_2" role="button" id="collapse_a2">', $data);
-        assertStringContainsStringIgnoringCase('+/-', $data);
+        assertStringContainsStringIgnoringCase("<hr><h4>2. DATOS PARA DETERMINAR EL MONTO DE CRÉDITO <a class='btn btn-primary' role='button' id='collapse_a2'>Ver/Ocultar</a> </h4><hr", $data);
+        assertStringContainsStringIgnoringCase('<div id="apartado_2">', $data);
         assertStringContainsStringIgnoringCase("ss='control-label' for='descuento_pension_alimenticia_dh'>Descuento Pension Alimenticia Derechohabiente</label><di", $data);
         assertStringContainsStringIgnoringCase("untario' value='0' class='form-control' required id='monto_ahorro_voluntario", $data);
         assertStringContainsStringIgnoringCase("<input type='radio' name='con_discapacidad", $data);
@@ -70,9 +69,10 @@ class controlador_inm_compradorTest extends test {
         assertStringContainsStringIgnoringCase("e Cliente</label><div class='controls'><select class='form-control selectpick", $data);
         assertStringContainsStringIgnoringCase("<h4>", $data);
         assertStringContainsStringIgnoringCase("DATOS PARA DETERMINAR EL MONTO DE CRÉDITO", $data);
-        assertStringContainsStringIgnoringCase('<a class="btn btn-primary"  href="#apartado_2" role="button" id="collapse_a2">', $data);
+        assertStringContainsStringIgnoringCase("<hr><h4>5. DATOS DE IDENTIFICACIÓN DEL (DE LA) DERECHOHABIENTE / DATOS QUE SERÁN VALIDADOS <a class='btn btn-primary' role='button' ", $data);
         assertStringContainsStringIgnoringCase("for='nombre_empresa_patron'>Nombre de la Empresa/Patrón", $data);
         assertStringContainsStringIgnoringCase("iv class='controls'><input type='text' name='nombre_empresa_patron' value='' ", $data);
+        assertStringContainsStringIgnoringCase("<hr><h4>3. DATOS DE LA VIVIENDA/TERRENO DESTINO DEL CRÉDITO <a class='btn btn-primary' role='button' id='collapse_a3'>Ver/Ocultar</a> </h4><hr>", $data);
         assertStringContainsStringIgnoringCase("abel class='control-label' for='nrp_nep'>NÚMERO DE REGISTRO PATRONAL (NRP)", $data);
         assertStringContainsStringIgnoringCase("<label class='form-check-label chk form-check-label'>
                 <input type='radio' name='es_segundo_credito' value='NO' class='form-check-input es_segundo_credito form-check-input' id='es_segundo_credito' 
