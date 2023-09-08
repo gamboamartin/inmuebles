@@ -33,7 +33,7 @@ class controlador_inm_compradorTest extends test {
         errores::$error = false;
 
 
-        $ch = curl_init("http://localhost/inmuebles/index.php?seccion=inm_comprador&accion=alta&adm_menu_id=64&session_id=5850109279&adm_menu_id=64");
+        $ch = curl_init("http://localhost/inmuebles/index.php?seccion=inm_comprador&accion=alta&adm_menu_id=64&session_id=4810112241&adm_menu_id=64");
         $fp = fopen("inm_comprador.alta", "w");
 
         curl_setopt($ch, CURLOPT_FILE, $fp);
@@ -92,7 +92,7 @@ class controlador_inm_compradorTest extends test {
         errores::$error = false;
 
 
-        $ch = curl_init("http://localhost/inmuebles/index.php?seccion=inm_comprador&accion=asigna_ubicacion&adm_menu_id=64&session_id=1590259697&adm_menu_id=64&registro_id=1");
+        $ch = curl_init("http://localhost/inmuebles/index.php?seccion=inm_comprador&accion=asigna_ubicacion&adm_menu_id=64&session_id=4242668692&adm_menu_id=64&registro_id=1");
         $fp = fopen("inm_comprador.asigna_ubicacion", "w");
 
         curl_setopt($ch, CURLOPT_FILE, $fp);
@@ -167,7 +167,7 @@ class controlador_inm_compradorTest extends test {
         errores::$error = false;
 
 
-        $ch = curl_init("http://localhost/inmuebles/index.php?seccion=inm_comprador&accion=modifica&adm_menu_id=64&session_id=5850109279&adm_menu_id=64&registro_id=1");
+        $ch = curl_init("http://localhost/inmuebles/index.php?seccion=inm_comprador&accion=modifica&adm_menu_id=64&session_id=4810112241&adm_menu_id=64&registro_id=1");
         $fp = fopen("inm_comprador.modifica", "w");
 
         curl_setopt($ch, CURLOPT_FILE, $fp);

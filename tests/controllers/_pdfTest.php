@@ -150,6 +150,40 @@ class _pdfTest extends test {
         errores::$error = false;
     }
 
+    public function test_apartado_3(): void
+    {
+        errores::$error = false;
+
+        $_GET['seccion'] = 'inm_producto_infonavit';
+        $_GET['accion'] = 'lista';
+        $_SESSION['grupo_id'] = 1;
+        $_SESSION['usuario_id'] = 2;
+        $_GET['session_id'] = '1';
+
+
+        $pdf = new Fpdi();
+        $pdf->SetFont('Arial', 'B', 15);
+        $pdf->SetTextColor(0, 0, 0);
+        $pdf->AddPage();
+
+        $_pdf = new _pdf($pdf);
+        $_pdf = new liberator($_pdf);
+
+
+
+        $data = new stdClass();
+        $data->imp_rel_ubi_comp = array();
+        $data->imp_rel_ubi_comp['inm_rel_ubi_comp_precio_operacion'] = 0;
+        $data->inm_comprador = array();
+        $data->inm_comprador['inm_comprador_con_discapacidad'] = 'SI';
+        $data->inm_comprador['inm_destino_credito_id'] = '1';
+        $resultado = $_pdf->apartado_3($data);
+        $this->assertIsObject($resultado);
+        $this->assertNotTrue(errores::$error);
+        $this->assertEquals("setasign\Fpdi\Fpdi",get_class($resultado));
+        errores::$error = false;
+    }
+
     public function test_entidades_infonavit(): void
     {
         errores::$error = false;

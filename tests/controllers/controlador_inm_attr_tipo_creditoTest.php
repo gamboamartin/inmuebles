@@ -34,7 +34,7 @@ class controlador_inm_attr_tipo_creditoTest extends test {
         errores::$error = false;
 
 
-        $ch = curl_init("http://localhost/inmuebles/index.php?seccion=inm_attr_tipo_credito&accion=alta&adm_menu_id=64&session_id=5850109279&adm_menu_id=64");
+        $ch = curl_init("http://localhost/inmuebles/index.php?seccion=inm_attr_tipo_credito&accion=alta&adm_menu_id=64&session_id=4810112241&adm_menu_id=64");
         $fp = fopen("inm_attr_tipo_credito.alta", "w");
 
         curl_setopt($ch, CURLOPT_FILE, $fp);
@@ -46,7 +46,10 @@ class controlador_inm_attr_tipo_creditoTest extends test {
 
         $data = file_get_contents("inm_attr_tipo_credito.alta");
 
+
         assertStringContainsStringIgnoringCase("><div class='controls'><input type='text' name='descripcion' value='' class='form-control' required id='descripcion' placeholder='De", $data);
+
+
         unlink('inm_attr_tipo_credito.alta');
 
 
@@ -130,7 +133,7 @@ class controlador_inm_attr_tipo_creditoTest extends test {
         errores::$error = false;
 
 
-        $ch = curl_init("http://localhost/inmuebles/index.php?seccion=inm_attr_tipo_credito&accion=modifica&adm_menu_id=64&session_id=5850109279&adm_menu_id=64&registro_id=1");
+        $ch = curl_init("http://localhost/inmuebles/index.php?seccion=inm_attr_tipo_credito&accion=modifica&adm_menu_id=64&session_id=4810112241&adm_menu_id=64&registro_id=1");
         $fp = fopen("inm_attr_tipo_credito.modifica", "w");
 
         curl_setopt($ch, CURLOPT_FILE, $fp);

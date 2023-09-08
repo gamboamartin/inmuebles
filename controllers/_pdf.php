@@ -118,9 +118,33 @@ class _pdf{
      * Integra los elementos del apartado de de la solicitud
      * @param stdClass $data Datos de cliente
      * @return array|Fpdi
+     * @version 1.139.1
      */
     private function apartado_3(stdClass $data): Fpdi|array
     {
+        if(!isset($data->imp_rel_ubi_comp)){
+            return $this->error->error(mensaje: 'Error no existe $data->imp_rel_ubi_comp', data: $data);
+        }
+        if(!is_array($data->imp_rel_ubi_comp)){
+            return $this->error->error(mensaje: 'Error $data->imp_rel_ubi_comp no es un array', data: $data);
+        }
+
+        if(!isset($data->inm_comprador)){
+            return $this->error->error(mensaje: 'Error no existe $data->inm_comprador', data: $data);
+        }
+        if(!is_array($data->inm_comprador)){
+            return $this->error->error(mensaje: 'Error $data->inm_comprador no es un array', data: $data);
+        }
+
+        if(!isset($data->imp_rel_ubi_comp['inm_rel_ubi_comp_precio_operacion'])){
+            return $this->error->error(
+                mensaje: 'Error no existe $data->imp_rel_ubi_comp[inm_rel_ubi_comp_precio_operacion]', data: $data);
+        }
+        if(trim($data->imp_rel_ubi_comp['inm_rel_ubi_comp_precio_operacion']) === ''){
+            return $this->error->error(
+                mensaje: 'Error $data->imp_rel_ubi_comp[inm_rel_ubi_comp_precio_operacion] esta vacio', data: $data);
+        }
+
         $keys_ubicacion = $this->keys_ubicacion();
         if (errores::$error) {
             return $this->error->error(mensaje: 'Error al obtener keys_ubicacion', data: $keys_ubicacion);
