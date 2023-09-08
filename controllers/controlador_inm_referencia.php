@@ -178,7 +178,6 @@ class controlador_inm_referencia extends _ctl_base {
     /**
      * Inicializa los elementos mostrables para datatables
      * @return stdClass
-     * @version 1.3.0
      */
     private function init_datatable(): stdClass
     {

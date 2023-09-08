@@ -546,6 +546,10 @@ class _pdf{
         return $keys_cliente;
     }
 
+    /**
+     * Integra los keys de un comprador para pdf
+     * @return array
+     */
     private function keys_comprador(): array
     {
         $keys_comprador['inm_comprador_nombre_empresa_patron']= array('x'=>16,'y'=>249);
