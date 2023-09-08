@@ -106,6 +106,14 @@ class controlador_inm_ubicacion extends _ctl_base {
                 header: $header,ws:  $ws);
         }
 
+        $columns_ds = array('inm_tipo_ubicacion_descripcion');
+        $keys_selects = $this->key_select(cols:12, con_registros: true,filtro:  array(), key: 'inm_tipo_ubicacion_id',
+            keys_selects: $keys_selects, id_selected: -1, label: 'Tipo de Ubicacion', columns_ds: $columns_ds);
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects,
+                header: $header,ws:  $ws);
+        }
+
         $this->row_upd->costo_directo = 0;
 
 
@@ -359,6 +367,15 @@ class controlador_inm_ubicacion extends _ctl_base {
                 header: $header,ws:  $ws);
         }
 
+        $columns_ds = array('inm_tipo_ubicacion_descripcion');
+        $keys_selects = $this->key_select(cols:12, con_registros: true,filtro:  array(), key: 'inm_tipo_ubicacion_id',
+            keys_selects: $keys_selects, id_selected: $registro->inm_tipo_ubicacion_id, label: 'Tipo de Ubicacion',
+            columns_ds: $columns_ds);
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects,
+                header: $header,ws:  $ws);
+        }
+
         $base = $this->base_upd(keys_selects: $keys_selects, params: array(),params_ajustados: array());
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al integrar base',data:  $base, header: $header,ws:  $ws);
@@ -382,6 +399,8 @@ class controlador_inm_ubicacion extends _ctl_base {
         $init_data['dp_cp'] = "gamboamartin\\direccion_postal";
         $init_data['dp_colonia_postal'] = "gamboamartin\\direccion_postal";
         $init_data['dp_calle_pertenece'] = "gamboamartin\\direccion_postal";
+
+        $init_data['inm_tipo_ubicacion'] = "gamboamartin\\inmuebles";
         $campos_view = $this->campos_view_base(init_data: $init_data,keys:  $keys);
 
         if(errores::$error){
@@ -440,6 +459,7 @@ class controlador_inm_ubicacion extends _ctl_base {
      */
     private function init_datatable(): stdClass
     {
+        $columns["inm_tipo_ubicacion_descripcion"]["titulo"] = "Tipo de Ubicacion";
         $columns["inm_ubicacion_id"]["titulo"] = "Id";
         $columns["dp_municipio_descripcion"]["titulo"] = "Municipio";
         $columns["dp_cp_descripcion"]["titulo"] = "CP";
@@ -454,7 +474,8 @@ class controlador_inm_ubicacion extends _ctl_base {
 
         $filtro = array("inm_ubicacion.id","dp_municipio.descripcion",'dp_cp.descripcion','dp_colonia.descripcion',
             'dp_calle.descripcion','inm_ubicacion.numero_exterior','inm_ubicacion.numero_interior',
-            'inm_ubicacion.manzana','inm_ubicacion.lote','inm_ubicacion.cuenta_predial');
+            'inm_ubicacion.manzana','inm_ubicacion.lote','inm_ubicacion.cuenta_predial',
+            'inm_tipo_ubicacion.descripcion');
 
         $datatables = new stdClass();
         $datatables->columns = $columns;

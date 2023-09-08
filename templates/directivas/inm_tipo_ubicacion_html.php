@@ -4,7 +4,6 @@ use gamboamartin\errores\errores;
 use gamboamartin\inmuebles\models\inm_tipo_ubicacion;
 use gamboamartin\system\html_controler;
 use PDO;
-use stdClass;
 
 class inm_tipo_ubicacion_html extends html_controler {
 

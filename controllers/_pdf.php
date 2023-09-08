@@ -549,6 +549,7 @@ class _pdf{
     /**
      * Integra los keys de un comprador para pdf
      * @return array
+     * @version 1.141.1
      */
     private function keys_comprador(): array
     {

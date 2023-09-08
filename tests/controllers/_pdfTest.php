@@ -295,6 +295,32 @@ class _pdfTest extends test {
         errores::$error = false;
     }
 
+    public function test_keys_comprador(): void
+    {
+        errores::$error = false;
+
+        $_GET['seccion'] = 'inm_producto_infonavit';
+        $_GET['accion'] = 'lista';
+        $_SESSION['grupo_id'] = 1;
+        $_SESSION['usuario_id'] = 2;
+        $_GET['session_id'] = '1';
+
+
+        $pdf = new Fpdi();
+
+        $_pdf = new _pdf($pdf);
+        $_pdf = new liberator($_pdf);
+
+
+
+        $resultado = $_pdf->keys_comprador();
+        $this->assertIsArray($resultado);
+        $this->assertNotTrue(errores::$error);
+        $this->assertEquals(57,$resultado['inm_comprador_lada_nep']['x']);
+        $this->assertEquals(256,$resultado['inm_comprador_lada_nep']['y']);
+        errores::$error = false;
+    }
+
     public function test_keys_ubicacion(): void
     {
         errores::$error = false;
