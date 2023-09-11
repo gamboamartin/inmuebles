@@ -637,7 +637,7 @@ class inm_comprador extends _modelo_parent{
         }
 
         $keys_co_acreditado = array('nss','curp','rfc', 'apellido_paterno','apellido_materno','nombre', 'lada',
-            'numero','celular','correo','genero','nombre_empresa_patron','nrp','lada_nep');
+            'numero','celular','correo','genero','nombre_empresa_patron','nrp','lada_nep','numero_nep');
 
         $inm_co_acreditado_ins = array();
         foreach ($keys_co_acreditado as $campo_co_acreditado){

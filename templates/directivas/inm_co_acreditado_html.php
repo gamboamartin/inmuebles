@@ -97,10 +97,16 @@ class inm_co_acreditado_html extends html_controler {
      * @param array $campos Campos a inicializar
      * @param array $datas Datos previos
      * @return array
+     * @version 1.154.1
      */
     private function init_campos(array $campos, array $datas): array
     {
         foreach ($campos as $campo) {
+            $campo = trim($campo);
+            if($campo === ''){
+                return $this->error->error(mensaje: 'Error campo esta vacio', data: $campo);
+            }
+
             $datas = $this->init_campo(campo: $campo, data: $datas);
             if (errores::$error) {
                 return $this->error->error(mensaje: 'Error al inicializar datas', data: $datas);
