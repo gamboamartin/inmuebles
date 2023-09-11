@@ -403,13 +403,18 @@ class _keys_selects{
     }
 
 
-    private function input_full(controlador_inm_comprador $controler, string $function){
+    /**
+     * Obtiene todos los inputs para un controlador en ejecucion
+     * @param controlador_inm_comprador $controler Controlador en ejecucion
+     * @param string $function Funcion de retorno
+     * @return array|stdClass
+     */
+    private function input_full(controlador_inm_comprador $controler, string $function): array|stdClass
+    {
         $inm_comprador_id = $controler->html->hidden(name:'inm_comprador_id',value: $controler->registro_id);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al in_registro_id',data:  $inm_comprador_id);
         }
-
-
 
         $inputs = $this->inputs_base(controler: $controler,function: $function,inm_comprador_id:  $inm_comprador_id);
 
