@@ -73,6 +73,20 @@ class inm_co_acreditado_html extends html_controler {
 
     }
 
+    private function genera_inputs(stdClass $params){
+        $inputs = new stdClass();
+
+        foreach ($params->campos as $campo){
+            $input = $this->$campo(cols: $params->cols[$campo], disabled: $params->disableds[$campo],
+                name: $params->names[$campo]);
+            if(errores::$error){
+                return $this->error->error(mensaje: 'Error al generar input',data:  $input);
+            }
+            $inputs->$campo = $input;
+        }
+        return $inputs;
+    }
+
     /**
      * Inicializa un campo si este existe
      * @param string $campo Campo a inicializar
@@ -116,40 +130,27 @@ class inm_co_acreditado_html extends html_controler {
 
     }
 
-    final public function inputs(bool $integra_prefijo = false,array $cols_css = array(), array $disableds = array(),
-                                 array $names = array()): array|stdClass
+    /**
+     * Obtiene los cols para css
+     * @param array $cols_css Cols css previos
+     * @return array
+     */
+    private function init_cols(array $cols_css): array
     {
+        $cols_6 = array('apellido_materno','apellido_paterno','celular','curp','lada','lada_nep','nombre','nss',
+            'numero','numero_nep','rfc');
 
-        $campos = array('apellido_materno','apellido_paterno','celular','correo','curp','extension_nep','lada',
-            'lada_nep','nombre', 'nombre_empresa_patron','nrp','nss', 'numero','numero_nep','rfc');
+        foreach ($cols_6 as $campo){
+            if(!isset($cols_css[$campo])){
+                $cols_css[$campo] = 6;
+            }
+        }
 
-
-        if(!isset($cols_css['apellido_materno'])){
-            $cols_css['apellido_materno'] = 6;
-        }
-        if(!isset($cols_css['apellido_paterno'])){
-            $cols_css['apellido_paterno'] = 6;
-        }
-        if(!isset($cols_css['celular'])){
-            $cols_css['celular'] = 6;
-        }
         if(!isset($cols_css['correo'])){
             $cols_css['correo'] = 12;
         }
-        if(!isset($cols_css['curp'])){
-            $cols_css['curp'] = 6;
-        }
         if(!isset($cols_css['extension_nep'])){
             $cols_css['extension_nep'] = 4;
-        }
-        if(!isset($cols_css['lada'])){
-            $cols_css['lada'] = 6;
-        }
-        if(!isset($cols_css['lada_nep'])){
-            $cols_css['lada_nep'] = 4;
-        }
-        if(!isset($cols_css['nombre'])){
-            $cols_css['nombre'] = 6;
         }
         if(!isset($cols_css['nombre_empresa_patron'])){
             $cols_css['nombre_empresa_patron'] = 12;
@@ -157,19 +158,15 @@ class inm_co_acreditado_html extends html_controler {
         if(!isset($cols_css['nrp'])){
             $cols_css['nrp'] = 12;
         }
-        if(!isset($cols_css['nss'])){
-            $cols_css['nss'] = 6;
-        }
-        if(!isset($cols_css['numero'])){
-            $cols_css['numero'] = 6;
-        }
-        if(!isset($cols_css['numero_nep'])){
-            $cols_css['numero_nep'] = 4;
-        }
-        if(!isset($cols_css['rfc'])){
-            $cols_css['rfc'] = 6;
-        }
 
+        return $cols_css;
+    }
+
+    private function init_params(array $campos, array $cols_css, array $disableds, array $names){
+        $cols_css = $this->init_cols(cols_css: $cols_css);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al inicializar cols_css',data:  $cols_css);
+        }
 
         $names = $this->init_campos(campos: $campos,datas:  $names);
         if(errores::$error){
@@ -180,24 +177,29 @@ class inm_co_acreditado_html extends html_controler {
             return $this->error->error(mensaje: 'Error al inicializar disableds',data:  $disableds);
         }
 
+        $data = new stdClass();
+        $data->cols = $cols_css;
+        $data->names = $names;
+        $data->disableds = $disableds;
 
-        if($integra_prefijo){
-            foreach ($names as $campo=>$name){
-                $names[$campo] = 'inm_co_acreditado_'.$campo;
-            }
+        return $data;
+    }
+
+    final public function inputs(bool $integra_prefijo = false,array $cols_css = array(), array $disableds = array(),
+                                 array $names = array()): array|stdClass
+    {
+
+
+        $params = $this->params_inputs(cols_css: $cols_css,disableds: $disableds,integra_prefijo:  $integra_prefijo, names: $names);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al inicializar params',data:  $params);
         }
 
 
-        $inputs = new stdClass();
-
-        foreach ($campos as $campo){
-            $input = $this->$campo(cols: $cols_css[$campo], disabled: $disableds[$campo], name: $names[$campo]);
-            if(errores::$error){
-                return $this->error->error(mensaje: 'Error al generar input',data:  $input);
-            }
-            $inputs->$campo = $input;
+        $inputs = $this->genera_inputs(params: $params);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al generar input',data:  $inputs);
         }
-
 
         return $inputs;
     }
@@ -305,6 +307,24 @@ class inm_co_acreditado_html extends html_controler {
         return $this->input_text_required(cols: $cols,disabled:  $disabled,name:  $name,
             place_holder:  $place_holder,row_upd:  $row_upd,value_vacio:  $value_vacio,regex: $regex);
 
+    }
+
+    private function params_inputs(array $cols_css, array $disableds, bool $integra_prefijo, array $names){
+        $campos = array('apellido_materno','apellido_paterno','celular','correo','curp','extension_nep','lada',
+            'lada_nep','nombre', 'nombre_empresa_patron','nrp','nss', 'numero','numero_nep','rfc');
+
+        $params = $this->init_params(campos: $campos,cols_css:  $cols_css,disableds:  $disableds,names:  $names);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al inicializar params',data:  $params);
+        }
+
+        if($integra_prefijo){
+            foreach ($params->names as $campo=>$name){
+                $params->names[$campo] = 'inm_co_acreditado_'.$campo;
+            }
+        }
+        $params->campos = $campos;
+        return $params;
     }
 
     private function rfc(int $cols, bool $disabled = false, string $name = 'rfc', string $place_holder= 'RFC',
