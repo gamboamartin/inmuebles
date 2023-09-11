@@ -39,6 +39,7 @@ class controlador_inm_comprador extends _ctl_base {
     private inm_comprador_html $html_entidad;
 
     public stdClass $header_frontend;
+
     public function __construct(PDO      $link, html $html = new \gamboamartin\template_1\html(),
                                 stdClass $paths_conf = new stdClass())
     {
@@ -607,6 +608,16 @@ class controlador_inm_comprador extends _ctl_base {
             $this->inputs->inm_co_acreditado = $inm_co_acreditado_inputs;
 
         }
+
+        $button_upd = $this->html->boton_submit(class_button: 'modifica', class_control: 'btn-modifica',
+            style: 'success', tag: 'Modifica', id_button: 'btn_modifica');
+        if(errores::$error){
+            return $this->retorno_error(
+                mensaje: 'Error al generar button_upd',data:  $button_upd, header: $header,ws:  $ws);
+        }
+
+        $this->btn = $button_upd;
+
 
         return $r_modifica;
     }

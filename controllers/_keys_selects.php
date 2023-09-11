@@ -305,11 +305,11 @@ class _keys_selects{
      * Genera los inputs base de las vistas de comprador
      * @param controlador_inm_comprador $controler Controlador en ejecucion
      * @param string $function Funcion de retorno
-     * @param int $inm_comprador_id Comprador id
+     * @param string $inm_comprador_id Input
      * @return array|stdClass
      * @version 1.144.1
      */
-    private function inputs_base(controlador_inm_comprador $controler, string $function, int $inm_comprador_id): array|stdClass
+    private function inputs_base(controlador_inm_comprador $controler, string $function, string $inm_comprador_id): array|stdClass
     {
 
         $function = trim($function);
@@ -319,9 +319,7 @@ class _keys_selects{
         if(is_array($controler->inputs)){return $this->error->error(
             mensaje: 'Error $controler->inputs no esta inicializado', data: $controler->inputs);
         }
-        if($inm_comprador_id<=0){
-            return $this->error->error(mensaje: 'Error inm_comprador_id es menor a 0',data:  $inm_comprador_id);
-        }
+
 
         $hiddens = $this->hiddens(controler: $controler,funcion: $function);
         if(errores::$error){
@@ -408,9 +406,15 @@ class _keys_selects{
      * @param controlador_inm_comprador $controler Controlador en ejecucion
      * @param string $function Funcion de retorno
      * @return array|stdClass
+     * @version 1.146.1
      */
     private function input_full(controlador_inm_comprador $controler, string $function): array|stdClass
     {
+        $function = trim($function);
+        if($function === ''){
+            return $this->error->error(mensaje: 'Error function esta vacio',data:  $function);
+        }
+
         $inm_comprador_id = $controler->html->hidden(name:'inm_comprador_id',value: $controler->registro_id);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al in_registro_id',data:  $inm_comprador_id);

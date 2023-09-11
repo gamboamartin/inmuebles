@@ -138,6 +138,6 @@ if($controlador->row_upd->genero === 'F'){
 <?php echo $controlador->inputs->com_tipo_cliente_id; ?>
     </div>
 
-<?php include (new views())->ruta_templates.'botons/submit/modifica_bd.php';?>
+<?php echo $controlador->btn; ?>
 
 

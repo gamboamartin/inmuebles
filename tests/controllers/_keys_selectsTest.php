@@ -242,6 +242,38 @@ class _keys_selectsTest extends test {
         errores::$error = false;
     }
 
+    public function test_input_full(): void
+    {
+        errores::$error = false;
+
+        $_GET['seccion'] = 'inm_producto_infonavit';
+        $_GET['accion'] = 'lista';
+        $_SESSION['grupo_id'] = 1;
+        $_SESSION['usuario_id'] = 2;
+        $_GET['session_id'] = '1';
+
+
+        $controler = new controlador_inm_comprador(link: $this->link, paths_conf: $this->paths_conf);
+        $controler->inputs = new stdClass();
+
+        $ks = new _keys_selects();
+        $ks = new liberator($ks);
+
+        $function = 's';
+        $resultado = $ks->input_full($controler, $function);
+        $this->assertIsObject($resultado);
+        $this->assertNotTrue(errores::$error);
+        $this->assertEquals("<input type='hidden' name='id_retorno' value='-1'>",$resultado->id_retorno);
+        $this->assertEquals("<input type='hidden' name='btn_action_next' value='s'>",$resultado->btn_action_next);
+        $this->assertEquals("<input type='hidden' name='seccion_retorno' value='inm_producto_infonavit'>",$resultado->seccion_retorno);
+        $this->assertEquals("<input type='hidden' name='registro_id' value='-1'>",$resultado->registro_id);
+        $this->assertEquals("<input type='hidden' name='inm_comprador_id' value='-1'>",$resultado->inm_comprador_id);
+        $this->assertEquals("<div class='control-group col-sm-12'><label class='control-label' for='precio_operacion'>Precio de operacion</label><div class='controls'><input type='text' name='precio_operacion' value='' class='form-control' required id='precio_operacion' placeholder='Precio de operacion' /></div></div>",$resultado->precio_operacion);
+        $this->assertEquals('',$resultado->inm_ubicacion_id);
+        $this->assertEquals("<div class='control-group col-sm-12'><label class='control-label' for='inm_co_acreditado_id'>Co Acreditado</label><div class='controls'><select class='form-control selectpicker color-secondary  inm_co_acreditado_id' data-live-search='true' id='inm_co_acreditado_id' name='inm_co_acreditado_id' required ><option value=''  >Selecciona una opcion</option><option value='1'  >12345678912 XEXX010101MNEXXXA8 NOMBRE AP APELLIDO MATERNO</option></select></div></div>",$resultado->inm_co_acreditado_id);
+        errores::$error = false;
+    }
+
     public function test_inputs_form_base(): void
     {
         errores::$error = false;

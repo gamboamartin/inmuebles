@@ -48,6 +48,8 @@ let collapse_a14 = $("#collapse_a14");
 
 let collapse_a6 = $("#collapse_a6");
 
+let btn_modifica = $("#btn_modifica");
+
 apartado_1.hide();
 apartado_2.hide();
 apartado_3.hide();
@@ -130,9 +132,7 @@ collapse_a6.click(function() {
         inm_co_acreditado_celular.prop('disabled',true);
         inm_co_acreditado_correo.prop('disabled',true);
     }
-
     apartado_6.toggle();
-
 
 });
 
@@ -164,10 +164,11 @@ $("#collapse_all").click(function() {
         todo_aculto = true;
     }
 
-
 });
 
-btn.click(function() {
+
+let apartado_6_con_datos = false;
+btn_modifica.click(function() {
     apartado_1.show();
     apartado_2.show();
     apartado_3.show();
@@ -177,11 +178,66 @@ btn.click(function() {
     apartado_14.show();
     apartado_6.show();
 
-    //let inm_co_acreditado_nss = $("#inm_co_acreditado_nss");
-    //if(inm_co_acreditado_nss.val)
+    if(inm_co_acreditado_nss.val() !== ''){
+        apartado_6_con_datos = true;
+    }
+    if(inm_co_acreditado_curp.val() !== ''){
+        apartado_6_con_datos = true;
+    }
+    if(inm_co_acreditado_rfc.val() !== ''){
+        apartado_6_con_datos = true;
+    }
+    if(inm_co_acreditado_apellido_paterno.val() !== ''){
+        apartado_6_con_datos = true;
+    }
+    if(inm_co_acreditado_apellido_materno.val() !== ''){
+        apartado_6_con_datos = true;
+    }
+    if(inm_co_acreditado_nombre.val() !== ''){
+        apartado_6_con_datos = true;
+    }
+    if(inm_co_acreditado_lada.val() !== ''){
+        apartado_6_con_datos = true;
+    }
+    if(inm_co_acreditado_numero.val() !== ''){
+        apartado_6_con_datos = true;
+    }
+    if(inm_co_acreditado_celular.val() !== ''){
+        apartado_6_con_datos = true;
+    }
+    if(inm_co_acreditado_correo.val() !== ''){
+        apartado_6_con_datos = true;
+    }
+
+    if(apartado_6_con_datos){
+        inm_co_acreditado_nss.prop('disabled',false);
+        inm_co_acreditado_curp.prop('disabled',false);
+        inm_co_acreditado_rfc.prop('disabled',false);
+        inm_co_acreditado_apellido_paterno.prop('disabled',false);
+        inm_co_acreditado_apellido_materno.prop('disabled',false);
+        inm_co_acreditado_nombre.prop('disabled',false);
+        inm_co_acreditado_lada.prop('disabled',false);
+        inm_co_acreditado_numero.prop('disabled',false);
+        inm_co_acreditado_celular.prop('disabled',false);
+        inm_co_acreditado_correo.prop('disabled',false);
+    }
+    else{
+        inm_co_acreditado_nss.prop('disabled',true);
+        inm_co_acreditado_curp.prop('disabled',true);
+        inm_co_acreditado_rfc.prop('disabled',true);
+        inm_co_acreditado_apellido_paterno.prop('disabled',true);
+        inm_co_acreditado_apellido_materno.prop('disabled',true);
+        inm_co_acreditado_nombre.prop('disabled',true);
+        inm_co_acreditado_lada.prop('disabled',true);
+        inm_co_acreditado_numero.prop('disabled',true);
+        inm_co_acreditado_celular.prop('disabled',true);
+        inm_co_acreditado_correo.prop('disabled',true);
+    }
 
 
 });
+
+
 
 apellido_paterno_ct.change(function(){
 
