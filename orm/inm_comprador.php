@@ -666,6 +666,15 @@ class inm_comprador extends _modelo_parent{
             if (errores::$error) {
                 return $this->error->error(mensaje: 'Error al insertar co_acreditado', data: $alta_inm_co_acreditado);
             }
+
+            $inm_rel_co_acred_ins['inm_co_acreditado_id'] = $alta_inm_co_acreditado->registro_id;
+            $inm_rel_co_acred_ins['inm_comprador_id'] = $this->registro_id;
+
+            $alta_inm_rel_co_acred = (new inm_rel_co_acred(link: $this->link))->alta_registro(registro:$inm_rel_co_acred_ins);
+            if (errores::$error) {
+                return $this->error->error(mensaje: 'Error al insertar alta_inm_rel_co_acred', data: $alta_inm_rel_co_acred);
+            }
+
         }
 
 

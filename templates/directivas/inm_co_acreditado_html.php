@@ -134,6 +134,7 @@ class inm_co_acreditado_html extends html_controler {
      * Obtiene los cols para css
      * @param array $cols_css Cols css previos
      * @return array
+     * @version 1.156.1
      */
     private function init_cols(array $cols_css): array
     {
@@ -162,12 +163,19 @@ class inm_co_acreditado_html extends html_controler {
         return $cols_css;
     }
 
-    private function init_params(array $campos, array $cols_css, array $disableds, array $names){
+    /**
+     * @param array $campos
+     * @param array $cols_css
+     * @param array $disableds
+     * @param array $names
+     * @return array|stdClass
+     */
+    private function init_params(array $campos, array $cols_css, array $disableds, array $names): array|stdClass
+    {
         $cols_css = $this->init_cols(cols_css: $cols_css);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al inicializar cols_css',data:  $cols_css);
         }
-
         $names = $this->init_campos(campos: $campos,datas:  $names);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al inicializar names',data:  $names);
