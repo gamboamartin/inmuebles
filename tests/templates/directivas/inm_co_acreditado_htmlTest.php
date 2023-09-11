@@ -37,6 +37,38 @@ class inm_co_acreditado_htmlTest extends test {
         $this->paths_conf->views = '/var/www/html/inmuebles/config/views.php';
     }
 
+    public function test_init_campo(): void
+    {
+        errores::$error = false;
+
+        $_GET['seccion'] = 'inm_producto_infonavit';
+        $_GET['accion'] = 'lista';
+        $_SESSION['grupo_id'] = 1;
+        $_SESSION['usuario_id'] = 2;
+        $_GET['session_id'] = '1';
+
+        $html_ = new \gamboamartin\template_1\html();
+        $html = new inm_co_acreditado_html($html_);
+        $html = new liberator($html);
+
+
+        $campo = 'a';
+        $data = array();
+        $resultado = $html->init_campo($campo, $data);
+        $this->assertIsArray($resultado);
+        $this->assertNotTrue(errores::$error);
+        $this->assertEquals('a',$resultado['a']);
+
+        errores::$error = false;
+        $campo = 'b';
+        $data = array('b'=>'x');
+        $resultado = $html->init_campo($campo, $data);
+        $this->assertIsArray($resultado);
+        $this->assertNotTrue(errores::$error);
+        $this->assertEquals('x',$resultado['b']);
+        errores::$error = false;
+    }
+
     public function test_select_inm_co_acreditado_id(): void
     {
         errores::$error = false;

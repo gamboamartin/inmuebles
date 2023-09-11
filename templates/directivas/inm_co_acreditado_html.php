@@ -78,9 +78,14 @@ class inm_co_acreditado_html extends html_controler {
      * @param string $campo Campo a inicializar
      * @param array $data Datos previos
      * @return array
+     * @version 1.152.1
      */
     private function init_campo(string $campo, array $data): array
     {
+        $campo = trim($campo);
+        if($campo === ''){
+            return $this->error->error(mensaje: 'Error campo esta vacio', data: $campo);
+        }
         if(!isset($data[$campo])){
             $data[$campo] = $campo;
         }

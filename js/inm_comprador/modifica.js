@@ -106,6 +106,7 @@ let inm_co_acreditado_numero = $("#inm_co_acreditado_numero");
 let inm_co_acreditado_celular = $("#inm_co_acreditado_celular");
 let inm_co_acreditado_correo = $("#inm_co_acreditado_correo");
 let inm_co_acreditado_nombre_empresa_patron = $("#inm_co_acreditado_nombre_empresa_patron");
+let inm_co_acreditado_nrp = $("#inm_co_acreditado_nrp");
 
 function habilita_co_acreditado(){
     inm_co_acreditado_nss.prop('disabled',false);
@@ -119,6 +120,7 @@ function habilita_co_acreditado(){
     inm_co_acreditado_celular.prop('disabled',false);
     inm_co_acreditado_correo.prop('disabled',false);
     inm_co_acreditado_nombre_empresa_patron.prop('disabled',false);
+    inm_co_acreditado_nrp.prop('disabled',false);
 }
 
 function deshabilita_co_acreditado(){
@@ -133,6 +135,7 @@ function deshabilita_co_acreditado(){
     inm_co_acreditado_celular.prop('disabled',true);
     inm_co_acreditado_correo.prop('disabled',true);
     inm_co_acreditado_nombre_empresa_patron.prop('disabled',true);
+    inm_co_acreditado_nrp.prop('disabled',true);
 }
 
 let collapse_a6_open = false;
@@ -249,6 +252,14 @@ btn_modifica.click(function() {
         apartado_7_con_datos = true;
     }
     if(inm_co_acreditado_correo.val() !== ''){
+        apartado_6_con_datos = true;
+        apartado_7_con_datos = true;
+    }
+    if(inm_co_acreditado_nombre_empresa_patron.val() !== ''){
+        apartado_6_con_datos = true;
+        apartado_7_con_datos = true;
+    }
+    if(inm_co_acreditado_nrp.val() !== ''){
         apartado_6_con_datos = true;
         apartado_7_con_datos = true;
     }

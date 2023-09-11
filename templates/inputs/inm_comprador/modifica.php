@@ -135,6 +135,7 @@ if($controlador->row_upd->genero === 'F'){
 <?php echo $controlador->header_frontend->apartado_7; ?>
 <div  id="apartado_7">
     <?php echo $controlador->inputs->inm_co_acreditado->nombre_empresa_patron; ?>
+    <?php echo $controlador->inputs->inm_co_acreditado->nrp; ?>
 </div>
 
 <?php echo $controlador->header_frontend->apartado_13; ?>
