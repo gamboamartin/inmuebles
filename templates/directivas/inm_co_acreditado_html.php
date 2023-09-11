@@ -92,7 +92,14 @@ class inm_co_acreditado_html extends html_controler {
         return $data;
     }
 
-    private function init_campos(array $campos, array $datas){
+    /**
+     * Inicializa los campos de un array de parametros para inputs
+     * @param array $campos Campos a inicializar
+     * @param array $datas Datos previos
+     * @return array
+     */
+    private function init_campos(array $campos, array $datas): array
+    {
         foreach ($campos as $campo) {
             $datas = $this->init_campo(campo: $campo, data: $datas);
             if (errores::$error) {
