@@ -73,112 +73,108 @@ class inm_co_acreditado_html extends html_controler {
 
     }
 
-    final public function inputs(){
+    private function init_campo(string $campo, array $data): array
+    {
+        if(!isset($data[$campo])){
+            $data[$campo] = $campo;
+        }
+        return $data;
+    }
+
+    private function init_campos(array $campos, array $datas){
+        foreach ($campos as $campo) {
+            $datas = $this->init_campo(campo: $campo, data: $datas);
+            if (errores::$error) {
+                return $this->error->error(mensaje: 'Error al inicializar datas', data: $datas);
+            }
+        }
+        return $datas;
+
+    }
+
+    final public function inputs(bool $integra_prefijo = false,array $cols_css = array(), array $disableds = array(),
+                                 array $names = array()): array|stdClass
+    {
+
+        $campos = array('apellido_materno','apellido_paterno','celular','correo','curp','extension_nep','lada',
+            'lada_nep','nombre', 'nombre_empresa_patron','nrp','nss', 'numero','numero_nep','rfc');
+
+
+        if(!isset($cols_css['apellido_materno'])){
+            $cols_css['apellido_materno'] = 6;
+        }
+        if(!isset($cols_css['apellido_paterno'])){
+            $cols_css['apellido_paterno'] = 6;
+        }
+        if(!isset($cols_css['celular'])){
+            $cols_css['celular'] = 4;
+        }
+        if(!isset($cols_css['correo'])){
+            $cols_css['correo'] = 6;
+        }
+        if(!isset($cols_css['curp'])){
+            $cols_css['curp'] = 6;
+        }
+        if(!isset($cols_css['extension_nep'])){
+            $cols_css['extension_nep'] = 4;
+        }
+        if(!isset($cols_css['lada'])){
+            $cols_css['lada'] = 4;
+        }
+        if(!isset($cols_css['lada_nep'])){
+            $cols_css['lada_nep'] = 4;
+        }
+        if(!isset($cols_css['nombre'])){
+            $cols_css['nombre'] = 6;
+        }
+        if(!isset($cols_css['nombre_empresa_patron'])){
+            $cols_css['nombre_empresa_patron'] = 12;
+        }
+        if(!isset($cols_css['nrp'])){
+            $cols_css['nrp'] = 12;
+        }
+        if(!isset($cols_css['nss'])){
+            $cols_css['nss'] = 6;
+        }
+        if(!isset($cols_css['numero'])){
+            $cols_css['numero'] = 4;
+        }
+        if(!isset($cols_css['numero_nep'])){
+            $cols_css['numero_nep'] = 4;
+        }
+        if(!isset($cols_css['rfc'])){
+            $cols_css['rfc'] = 6;
+        }
+
+
+        $names = $this->init_campos(campos: $campos,datas:  $names);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al inicializar names',data:  $names);
+        }
+        $disableds = $this->init_campos(campos: $campos,datas:  $disableds);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al inicializar disableds',data:  $disableds);
+        }
+
+
+        if($integra_prefijo){
+            foreach ($names as $campo=>$name){
+                $names[$campo] = 'inm_co_acreditado_'.$campo;
+            }
+        }
+
+
         $inputs = new stdClass();
-        $inm_co_acreditado_nss = $this->nss(cols: 6);
-        if(errores::$error){
-            return $this->error->error(mensaje: 'Error al generar input',data:  $inm_co_acreditado_nss);
+
+        foreach ($campos as $campo){
+            $input = $this->$campo(cols: $cols_css[$campo], disabled: $disableds[$campo], name: $names[$campo]);
+            if(errores::$error){
+                return $this->error->error(mensaje: 'Error al generar input',data:  $input);
+            }
+            $inputs->$campo = $input;
         }
 
-        $inputs->nss = $inm_co_acreditado_nss;
 
-        $inm_co_acreditado_curp = $this->curp(cols: 6);
-        if(errores::$error){
-            return $this->error->error(mensaje: 'Error al generar input',data:  $inm_co_acreditado_curp);
-        }
-
-        $inputs->curp = $inm_co_acreditado_curp;
-
-        $inm_co_acreditado_rfc = $this->rfc(cols: 6);
-        if(errores::$error){
-            return $this->error->error(mensaje: 'Error al generar input',data:  $inm_co_acreditado_rfc);
-        }
-
-        $inputs->rfc = $inm_co_acreditado_rfc;
-
-        $inm_co_acreditado_apellido_paterno = $this->apellido_paterno(cols: 6);
-        if(errores::$error){
-            return $this->error->error(mensaje: 'Error al generar input',data:  $inm_co_acreditado_apellido_paterno);
-        }
-
-        $inputs->apellido_paterno = $inm_co_acreditado_apellido_paterno;
-
-        $inm_co_acreditado_apellido_materno = $this->apellido_materno(cols: 6);
-        if(errores::$error){
-            return $this->error->error(mensaje: 'Error al generar input',data:  $inm_co_acreditado_apellido_materno);
-        }
-
-        $inputs->apellido_materno = $inm_co_acreditado_apellido_materno;
-
-        $inm_co_acreditado_nombre = $this->nombre(cols: 6);
-        if(errores::$error){
-            return $this->error->error(mensaje: 'Error al generar input',data:  $inm_co_acreditado_nombre);
-        }
-
-        $inputs->nombre = $inm_co_acreditado_nombre;
-
-        $inm_co_acreditado_lada = $this->lada(cols: 4);
-        if(errores::$error){
-            return $this->error->error(mensaje: 'Error al generar input',data:  $inm_co_acreditado_lada);
-        }
-
-        $inputs->lada = $inm_co_acreditado_lada;
-
-        $inm_co_acreditado_numero = $this->numero(cols: 4);
-        if(errores::$error){
-            return $this->error->error(mensaje: 'Error al generar input',data:  $inm_co_acreditado_numero);
-        }
-
-        $inputs->numero = $inm_co_acreditado_numero;
-
-        $inm_co_acreditado_celular = $this->celular(cols: 4);
-        if(errores::$error){
-            return $this->error->error(mensaje: 'Error al generar input',data:  $inm_co_acreditado_celular);
-        }
-
-        $inputs->celular = $inm_co_acreditado_celular;
-
-        $inm_co_acreditado_correo = $this->correo(cols: 6);
-        if(errores::$error){
-            return $this->error->error(mensaje: 'Error al generar input',data:  $inm_co_acreditado_correo);
-        }
-
-        $inputs->correo = $inm_co_acreditado_correo;
-
-        $inm_co_acreditado_nombre_empresa_patron = $this->nombre_empresa_patron(cols: 12);
-        if(errores::$error){
-            return $this->error->error(mensaje: 'Error al generar input',data:  $inm_co_acreditado_nombre_empresa_patron);
-        }
-
-        $inputs->nombre_empresa_patron = $inm_co_acreditado_nombre_empresa_patron;
-
-        $inm_co_acreditado_nrp = $this->nrp(cols: 12);
-        if(errores::$error){
-            return $this->error->error(mensaje: 'Error al generar input',data:  $inm_co_acreditado_nrp);
-        }
-
-        $inputs->nrp = $inm_co_acreditado_nrp;
-
-        $inm_co_acreditado_lada_nep = $this->lada_nep(cols: 4);
-        if(errores::$error){
-            return $this->error->error(mensaje: 'Error al generar input',data:  $inm_co_acreditado_lada_nep);
-        }
-
-        $inputs->lada_nep = $inm_co_acreditado_lada_nep;
-
-        $inm_co_acreditado_numero_nep = $this->numero_nep(cols: 4);
-        if(errores::$error){
-            return $this->error->error(mensaje: 'Error al generar input',data:  $inm_co_acreditado_numero_nep);
-        }
-
-        $inputs->numero_nep = $inm_co_acreditado_numero_nep;
-
-        $inm_co_acreditado_extension_nep = $this->extension_nep(cols: 4);
-        if(errores::$error){
-            return $this->error->error(mensaje: 'Error al generar input',data:  $inm_co_acreditado_extension_nep);
-        }
-
-        $inputs->extension_nep = $inm_co_acreditado_extension_nep;
         return $inputs;
     }
 
@@ -248,18 +244,20 @@ class inm_co_acreditado_html extends html_controler {
      * @param bool $disabled atributo disabled input
      * @param string $name Name input
      * @param string $place_holder Marca de agua mostrable en input
+     * @param bool $required Atributo required
      * @param stdClass $row_upd Registro en proceso
      * @param bool $value_vacio Si vacio deja el input vacio
      * @return array|string
      */
     private function nss(int $cols, bool $disabled = false, string $name = 'nss', string $place_holder= 'NSS',
-                              stdClass $row_upd = new stdClass(), bool $value_vacio = false): array|string
+                         bool $required = true, stdClass $row_upd = new stdClass(),
+                         bool $value_vacio = false): array|string
     {
 
         $regex = $this->validacion->patterns['nss_html'];
 
-        return $this->input_text_required(cols: $cols,disabled:  $disabled,name:  $name,
-            place_holder:  $place_holder,row_upd:  $row_upd,value_vacio:  $value_vacio,regex: $regex);
+        return $this->input_text(cols: $cols,disabled:  $disabled,name:  $name,
+            place_holder:  $place_holder,row_upd:  $row_upd,value_vacio:  $value_vacio,regex: $regex,required: $required);
 
     }
 

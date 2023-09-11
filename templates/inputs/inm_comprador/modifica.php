@@ -103,6 +103,21 @@ if($controlador->row_upd->genero === 'F'){
 
     </div>
 
+<?php echo $controlador->header_frontend->apartado_6; ?>
+
+<div  id="apartado_6">
+    <?php echo $controlador->inputs->inm_co_acreditado->nss; ?>
+    <?php echo $controlador->inputs->inm_co_acreditado->curp; ?>
+    <?php echo $controlador->inputs->inm_co_acreditado->rfc; ?>
+    <?php echo $controlador->inputs->inm_co_acreditado->apellido_paterno; ?>
+    <?php echo $controlador->inputs->inm_co_acreditado->apellido_materno; ?>
+    <?php echo $controlador->inputs->inm_co_acreditado->nombre; ?>
+    <?php echo $controlador->inputs->inm_co_acreditado->lada; ?>
+    <?php echo $controlador->inputs->inm_co_acreditado->numero; ?>
+    <?php echo $controlador->inputs->inm_co_acreditado->celular; ?>
+    <?php echo $controlador->inputs->inm_co_acreditado->correo; ?>
+</div>
+
 <?php echo $controlador->header_frontend->apartado_13; ?>
 
     <div  id="apartado_13">
@@ -123,5 +138,6 @@ if($controlador->row_upd->genero === 'F'){
 <?php echo $controlador->inputs->com_tipo_cliente_id; ?>
     </div>
 
-
 <?php include (new views())->ruta_templates.'botons/submit/modifica_bd.php';?>
+
+
