@@ -211,6 +211,37 @@ class _keys_selectsTest extends test {
         errores::$error = false;
     }
 
+    public function test_inputs_base(): void
+    {
+        errores::$error = false;
+
+        $_GET['seccion'] = 'inm_producto_infonavit';
+        $_GET['accion'] = 'lista';
+        $_SESSION['grupo_id'] = 1;
+        $_SESSION['usuario_id'] = 2;
+        $_GET['session_id'] = '1';
+
+
+        $controler = new controlador_inm_comprador(link: $this->link, paths_conf: $this->paths_conf);
+        $controler->inputs = new stdClass();
+
+        $ks = new _keys_selects();
+        $ks = new liberator($ks);
+
+        $function = 'a';
+        $inm_comprador_id = 1;
+        $resultado = $ks->inputs_base($controler, $function, $inm_comprador_id);
+        $this->assertIsObject($resultado);
+        $this->assertNotTrue(errores::$error);
+        $this->assertEquals("<input type='hidden' name='id_retorno' value='-1'>",$resultado->id_retorno);
+        $this->assertEquals("<input type='hidden' name='btn_action_next' value='a'>",$resultado->btn_action_next);
+        $this->assertEquals("<input type='hidden' name='seccion_retorno' value='inm_producto_infonavit'>",$resultado->seccion_retorno);
+        $this->assertEquals("<input type='hidden' name='registro_id' value='-1'>",$resultado->registro_id);
+        $this->assertEquals("1",$resultado->inm_comprador_id);
+        $this->assertEquals("<div class='control-group col-sm-12'><label class='control-label' for='precio_operacion'>Precio de operacion</label><div class='controls'><input type='text' name='precio_operacion' value='' class='form-control' required id='precio_operacion' placeholder='Precio de operacion' /></div></div>",$resultado->precio_operacion);
+        errores::$error = false;
+    }
+
     public function test_inputs_form_base(): void
     {
         errores::$error = false;

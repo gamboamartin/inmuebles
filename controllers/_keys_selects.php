@@ -307,9 +307,22 @@ class _keys_selects{
      * @param string $function Funcion de retorno
      * @param int $inm_comprador_id Comprador id
      * @return array|stdClass
+     * @version 1.144.1
      */
     private function inputs_base(controlador_inm_comprador $controler, string $function, int $inm_comprador_id): array|stdClass
     {
+
+        $function = trim($function);
+        if($function === ''){
+            return $this->error->error(mensaje: 'Error function esta vacio',data:  $function);
+        }
+        if(is_array($controler->inputs)){return $this->error->error(
+            mensaje: 'Error $controler->inputs no esta inicializado', data: $controler->inputs);
+        }
+        if($inm_comprador_id<=0){
+            return $this->error->error(mensaje: 'Error inm_comprador_id es menor a 0',data:  $inm_comprador_id);
+        }
+
         $hiddens = $this->hiddens(controler: $controler,funcion: $function);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al obtener inputs',data:  $hiddens);

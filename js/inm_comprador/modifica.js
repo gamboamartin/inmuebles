@@ -89,16 +89,22 @@ collapse_a14.click(function() {
 
 });
 
+
+let inm_co_acreditado_nss = $("#inm_co_acreditado_nss");
+
 let collapse_a6_open = false;
 collapse_a6.click(function() {
-    apartado_6.toggle();
+
     if(!collapse_a6_open){
         collapse_a6_open = true;
+        inm_co_acreditado_nss.prop('disabled',false);
     }
     else{
         collapse_a6_open = false;
+        inm_co_acreditado_nss.prop('disabled',true);
     }
 
+    apartado_6.toggle();
 
 
 });
@@ -142,8 +148,11 @@ btn.click(function() {
     apartado_5.show();
     apartado_13.show();
     apartado_14.show();
-
     apartado_6.show();
+
+    //let inm_co_acreditado_nss = $("#inm_co_acreditado_nss");
+    //if(inm_co_acreditado_nss.val)
+
 
 });
 
