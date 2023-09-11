@@ -596,10 +596,9 @@ class controlador_inm_comprador extends _ctl_base {
 
             $this->header_frontend->$key_header = $header_apartado;
 
-            $cols_css['correo'] = 12;
 
             $inm_co_acreditado_inputs = (new inm_co_acreditado_html(html: $this->html_base))->inputs(
-                integra_prefijo: true, cols_css: $cols_css);
+                integra_prefijo: true);
             if(errores::$error){
                 return $this->retorno_error(
                     mensaje: 'Error al generar inputs',data:  $inm_co_acreditado_inputs, header: $header,ws:  $ws);

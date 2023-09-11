@@ -107,10 +107,10 @@ class inm_co_acreditado_html extends html_controler {
             $cols_css['apellido_paterno'] = 6;
         }
         if(!isset($cols_css['celular'])){
-            $cols_css['celular'] = 4;
+            $cols_css['celular'] = 6;
         }
         if(!isset($cols_css['correo'])){
-            $cols_css['correo'] = 6;
+            $cols_css['correo'] = 12;
         }
         if(!isset($cols_css['curp'])){
             $cols_css['curp'] = 6;
@@ -119,7 +119,7 @@ class inm_co_acreditado_html extends html_controler {
             $cols_css['extension_nep'] = 4;
         }
         if(!isset($cols_css['lada'])){
-            $cols_css['lada'] = 4;
+            $cols_css['lada'] = 6;
         }
         if(!isset($cols_css['lada_nep'])){
             $cols_css['lada_nep'] = 4;
@@ -137,7 +137,7 @@ class inm_co_acreditado_html extends html_controler {
             $cols_css['nss'] = 6;
         }
         if(!isset($cols_css['numero'])){
-            $cols_css['numero'] = 4;
+            $cols_css['numero'] = 6;
         }
         if(!isset($cols_css['numero_nep'])){
             $cols_css['numero_nep'] = 4;

@@ -134,9 +134,27 @@ class _keys_selects{
      * @param controlador_inm_comprador $controler Controlador en ejecucion
      * @param string $function Funcion de retorno
      * @return array|stdClass
+     * @version 1.148.1
      */
     final public function base_plantilla(controlador_inm_comprador $controler, string $function): array|stdClass
     {
+
+        if($controler->registro_id <=0){
+            return $this->error->error(mensaje: 'Error $controler->registro_id debe ser mayor a 0',
+                data:  $controler->registro_id);
+        }
+        if(is_array($controler->inputs)){
+            return $this->error->error(mensaje: 'Error $controler->inputs no esta inicializado',
+                data:  $controler->inputs);
+        }
+        if(count($controler->registro) === 0){
+            return $this->error->error(mensaje: 'Error controler->registro esta vacio',data:  $controler->registro);
+        }
+        $function = trim($function);
+        if($function === ''){
+            return $this->error->error(mensaje: 'Error function esta vacio',data:  $function);
+        }
+
         $registro = $controler->modelo->registro(registro_id: $controler->registro_id,retorno_obj: true);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al obtener registro',data:  $registro);
