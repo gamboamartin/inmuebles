@@ -89,8 +89,17 @@ collapse_a14.click(function() {
 
 });
 
+let collapse_a6_open = false;
 collapse_a6.click(function() {
     apartado_6.toggle();
+    if(!collapse_a6_open){
+        collapse_a6_open = true;
+    }
+    else{
+        collapse_a6_open = false;
+    }
+
+
 
 });
 

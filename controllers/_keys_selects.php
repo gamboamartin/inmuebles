@@ -303,9 +303,9 @@ class _keys_selects{
 
     /**
      * Genera los inputs base de las vistas de comprador
-     * @param controlador_inm_comprador $controler
-     * @param string $function
-     * @param int $inm_comprador_id
+     * @param controlador_inm_comprador $controler Controlador en ejecucion
+     * @param string $function Funcion de retorno
+     * @param int $inm_comprador_id Comprador id
      * @return array|stdClass
      */
     private function inputs_base(controlador_inm_comprador $controler, string $function, int $inm_comprador_id): array|stdClass
