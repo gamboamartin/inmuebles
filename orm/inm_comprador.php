@@ -637,21 +637,34 @@ class inm_comprador extends _modelo_parent{
         }
 
         $keys_co_acreditado = array('nss','curp','rfc', 'apellido_paterno','apellido_materno','nombre', 'lada',
-            'numero','celular','correo','genero');
+            'numero','celular','correo','genero','nombre_empresa_patron');
 
         $inm_co_acreditado_ins = array();
         foreach ($keys_co_acreditado as $campo_co_acreditado){
             $key_co_acreditado = 'inm_co_acreditado_'.$campo_co_acreditado;
             if(isset($registro[$key_co_acreditado])) {
-                $inm_co_acreditado_ins[$campo_co_acreditado] = $registro[$key_co_acreditado];
+                $value = trim($registro[$key_co_acreditado]);
+                if($value !=='') {
+                    $inm_co_acreditado_ins[$campo_co_acreditado] = $registro[$key_co_acreditado];
+                }
             }
         }
 
+        $aplica_alta_co_acreditado = false;
         if(count($inm_co_acreditado_ins)>0){
+            $aplica_alta_co_acreditado = true;
+            if(count($inm_co_acreditado_ins) === 1){
+                if(isset($inm_co_acreditado_ins['genero'])){
+                    $aplica_alta_co_acreditado = false;
+                }
+            }
+        }
+
+        if($aplica_alta_co_acreditado) {
             $alta_inm_co_acreditado = (new inm_co_acreditado(link: $this->link))->alta_registro(
-                registro:  $inm_co_acreditado_ins);
-            if(errores::$error){
-                return $this->error->error(mensaje: 'Error al insertar co_acreditado',data:  $alta_inm_co_acreditado);
+                registro: $inm_co_acreditado_ins);
+            if (errores::$error) {
+                return $this->error->error(mensaje: 'Error al insertar co_acreditado', data: $alta_inm_co_acreditado);
             }
         }
 

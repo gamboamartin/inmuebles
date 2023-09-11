@@ -73,6 +73,12 @@ class inm_co_acreditado_html extends html_controler {
 
     }
 
+    /**
+     * Inicializa un campo si este existe
+     * @param string $campo Campo a inicializar
+     * @param array $data Datos previos
+     * @return array
+     */
     private function init_campo(string $campo, array $data): array
     {
         if(!isset($data[$campo])){

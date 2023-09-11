@@ -105,6 +105,35 @@ let inm_co_acreditado_lada = $("#inm_co_acreditado_lada");
 let inm_co_acreditado_numero = $("#inm_co_acreditado_numero");
 let inm_co_acreditado_celular = $("#inm_co_acreditado_celular");
 let inm_co_acreditado_correo = $("#inm_co_acreditado_correo");
+let inm_co_acreditado_nombre_empresa_patron = $("#inm_co_acreditado_nombre_empresa_patron");
+
+function habilita_co_acreditado(){
+    inm_co_acreditado_nss.prop('disabled',false);
+    inm_co_acreditado_curp.prop('disabled',false);
+    inm_co_acreditado_rfc.prop('disabled',false);
+    inm_co_acreditado_apellido_paterno.prop('disabled',false);
+    inm_co_acreditado_apellido_materno.prop('disabled',false);
+    inm_co_acreditado_nombre.prop('disabled',false);
+    inm_co_acreditado_lada.prop('disabled',false);
+    inm_co_acreditado_numero.prop('disabled',false);
+    inm_co_acreditado_celular.prop('disabled',false);
+    inm_co_acreditado_correo.prop('disabled',false);
+    inm_co_acreditado_nombre_empresa_patron.prop('disabled',false);
+}
+
+function deshabilita_co_acreditado(){
+    inm_co_acreditado_nss.prop('disabled',true);
+    inm_co_acreditado_curp.prop('disabled',true);
+    inm_co_acreditado_rfc.prop('disabled',true);
+    inm_co_acreditado_apellido_paterno.prop('disabled',true);
+    inm_co_acreditado_apellido_materno.prop('disabled',true);
+    inm_co_acreditado_nombre.prop('disabled',true);
+    inm_co_acreditado_lada.prop('disabled',true);
+    inm_co_acreditado_numero.prop('disabled',true);
+    inm_co_acreditado_celular.prop('disabled',true);
+    inm_co_acreditado_correo.prop('disabled',true);
+    inm_co_acreditado_nombre_empresa_patron.prop('disabled',true);
+}
 
 let collapse_a6_open = false;
 let collapse_a7_open = false;
@@ -112,29 +141,11 @@ collapse_a6.click(function() {
 
     if(!collapse_a6_open){
         collapse_a6_open = true;
-        inm_co_acreditado_nss.prop('disabled',false);
-        inm_co_acreditado_curp.prop('disabled',false);
-        inm_co_acreditado_rfc.prop('disabled',false);
-        inm_co_acreditado_apellido_paterno.prop('disabled',false);
-        inm_co_acreditado_apellido_materno.prop('disabled',false);
-        inm_co_acreditado_nombre.prop('disabled',false);
-        inm_co_acreditado_lada.prop('disabled',false);
-        inm_co_acreditado_numero.prop('disabled',false);
-        inm_co_acreditado_celular.prop('disabled',false);
-        inm_co_acreditado_correo.prop('disabled',false);
+        habilita_co_acreditado();
     }
     else{
         collapse_a6_open = false;
-        inm_co_acreditado_nss.prop('disabled',true);
-        inm_co_acreditado_curp.prop('disabled',true);
-        inm_co_acreditado_rfc.prop('disabled',true);
-        inm_co_acreditado_apellido_paterno.prop('disabled',true);
-        inm_co_acreditado_apellido_materno.prop('disabled',true);
-        inm_co_acreditado_nombre.prop('disabled',true);
-        inm_co_acreditado_lada.prop('disabled',true);
-        inm_co_acreditado_numero.prop('disabled',true);
-        inm_co_acreditado_celular.prop('disabled',true);
-        inm_co_acreditado_correo.prop('disabled',true);
+        deshabilita_co_acreditado();
     }
     apartado_6.toggle();
 
@@ -145,29 +156,11 @@ collapse_a7.click(function() {
 
     if(!collapse_a7_open){
         collapse_a7_open = true;
-        inm_co_acreditado_nss.prop('disabled',false);
-        inm_co_acreditado_curp.prop('disabled',false);
-        inm_co_acreditado_rfc.prop('disabled',false);
-        inm_co_acreditado_apellido_paterno.prop('disabled',false);
-        inm_co_acreditado_apellido_materno.prop('disabled',false);
-        inm_co_acreditado_nombre.prop('disabled',false);
-        inm_co_acreditado_lada.prop('disabled',false);
-        inm_co_acreditado_numero.prop('disabled',false);
-        inm_co_acreditado_celular.prop('disabled',false);
-        inm_co_acreditado_correo.prop('disabled',false);
+        habilita_co_acreditado();
     }
     else{
         collapse_a7_open = false;
-        inm_co_acreditado_nss.prop('disabled',true);
-        inm_co_acreditado_curp.prop('disabled',true);
-        inm_co_acreditado_rfc.prop('disabled',true);
-        inm_co_acreditado_apellido_paterno.prop('disabled',true);
-        inm_co_acreditado_apellido_materno.prop('disabled',true);
-        inm_co_acreditado_nombre.prop('disabled',true);
-        inm_co_acreditado_lada.prop('disabled',true);
-        inm_co_acreditado_numero.prop('disabled',true);
-        inm_co_acreditado_celular.prop('disabled',true);
-        inm_co_acreditado_correo.prop('disabled',true);
+        deshabilita_co_acreditado();
     }
     apartado_7.toggle();
 
@@ -261,53 +254,17 @@ btn_modifica.click(function() {
     }
 
     if(apartado_6_con_datos){
-        inm_co_acreditado_nss.prop('disabled',false);
-        inm_co_acreditado_curp.prop('disabled',false);
-        inm_co_acreditado_rfc.prop('disabled',false);
-        inm_co_acreditado_apellido_paterno.prop('disabled',false);
-        inm_co_acreditado_apellido_materno.prop('disabled',false);
-        inm_co_acreditado_nombre.prop('disabled',false);
-        inm_co_acreditado_lada.prop('disabled',false);
-        inm_co_acreditado_numero.prop('disabled',false);
-        inm_co_acreditado_celular.prop('disabled',false);
-        inm_co_acreditado_correo.prop('disabled',false);
+        habilita_co_acreditado();
     }
     else{
-        inm_co_acreditado_nss.prop('disabled',true);
-        inm_co_acreditado_curp.prop('disabled',true);
-        inm_co_acreditado_rfc.prop('disabled',true);
-        inm_co_acreditado_apellido_paterno.prop('disabled',true);
-        inm_co_acreditado_apellido_materno.prop('disabled',true);
-        inm_co_acreditado_nombre.prop('disabled',true);
-        inm_co_acreditado_lada.prop('disabled',true);
-        inm_co_acreditado_numero.prop('disabled',true);
-        inm_co_acreditado_celular.prop('disabled',true);
-        inm_co_acreditado_correo.prop('disabled',true);
+        deshabilita_co_acreditado();
     }
 
     if(apartado_7_con_datos){
-        inm_co_acreditado_nss.prop('disabled',false);
-        inm_co_acreditado_curp.prop('disabled',false);
-        inm_co_acreditado_rfc.prop('disabled',false);
-        inm_co_acreditado_apellido_paterno.prop('disabled',false);
-        inm_co_acreditado_apellido_materno.prop('disabled',false);
-        inm_co_acreditado_nombre.prop('disabled',false);
-        inm_co_acreditado_lada.prop('disabled',false);
-        inm_co_acreditado_numero.prop('disabled',false);
-        inm_co_acreditado_celular.prop('disabled',false);
-        inm_co_acreditado_correo.prop('disabled',false);
+        habilita_co_acreditado();
     }
     else{
-        inm_co_acreditado_nss.prop('disabled',true);
-        inm_co_acreditado_curp.prop('disabled',true);
-        inm_co_acreditado_rfc.prop('disabled',true);
-        inm_co_acreditado_apellido_paterno.prop('disabled',true);
-        inm_co_acreditado_apellido_materno.prop('disabled',true);
-        inm_co_acreditado_nombre.prop('disabled',true);
-        inm_co_acreditado_lada.prop('disabled',true);
-        inm_co_acreditado_numero.prop('disabled',true);
-        inm_co_acreditado_celular.prop('disabled',true);
-        inm_co_acreditado_correo.prop('disabled',true);
+        deshabilita_co_acreditado();
     }
 
 
