@@ -132,6 +132,11 @@ if($controlador->row_upd->genero === 'F'){
 
 </div>
 
+<?php echo $controlador->header_frontend->apartado_7; ?>
+<div  id="apartado_7">
+
+</div>
+
 <?php echo $controlador->header_frontend->apartado_13; ?>
 
     <div  id="apartado_13">

@@ -133,6 +133,12 @@ class controlador_inm_comprador extends _ctl_base {
         return $r_alta;
     }
 
+    /**
+     * Formulario para la integracion de un co acreditado
+     * @param bool $header Si header retorna resultado en web
+     * @param bool $ws Si ws muestra resultado en json
+     * @return array|stdClass
+     */
     public function asigna_co_acreditado(bool $header, bool $ws = false): array|stdClass
     {
 
@@ -581,6 +587,7 @@ class controlador_inm_comprador extends _ctl_base {
         $headers['14'] = '14. CONTROL INTERNO';
 
         $headers['6'] = '6. DATOS DE IDENTIFICACIÓN QUE SERÁN VALIDADOS (OBLIGATORIOS EN CRÉDITO CONYUGAL, FAMILIAR O CORRESIDENCIAL)';
+        $headers['7'] = '7. DATOS DE LA EMPRESA O PATRÓN CO ACREDITADO';
 
         foreach ($headers as $n_apartado=>$tag_header){
             $id_css_button = "collapse_a$n_apartado";

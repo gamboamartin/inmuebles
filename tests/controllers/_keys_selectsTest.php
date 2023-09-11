@@ -115,7 +115,7 @@ class _keys_selectsTest extends test {
         $_SESSION['grupo_id'] = 1;
         $_SESSION['usuario_id'] = 2;
         $_GET['session_id'] = '1';
-        
+
 
         $ks = new _keys_selects();
         //$ks = new liberator($ks);
