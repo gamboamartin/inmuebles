@@ -621,6 +621,7 @@ class controlador_inm_comprador extends _ctl_base {
 
         return $r_modifica;
     }
+
     public function solicitud_infonavit(bool $header, bool $ws = false)
     {
 

@@ -636,6 +636,27 @@ class inm_comprador extends _modelo_parent{
             }
         }
 
+        $keys_co_acreditado = array('nss','curp','rfc', 'apellido_paterno','apellido_materno','nombre', 'lada',
+            'numero','celular','correo');
+
+        $inm_co_acreditado_ins = array();
+        foreach ($keys_co_acreditado as $campo_co_acreditado){
+            $key_co_acreditado = 'inm_co_acreditado_'.$campo_co_acreditado;
+            if(isset($registro[$key_co_acreditado])) {
+                $inm_co_acreditado_ins[$campo_co_acreditado] = $registro[$key_co_acreditado];
+            }
+        }
+
+        if(count($inm_co_acreditado_ins)>0){
+            $alta_inm_co_acreditado = (new inm_co_acreditado(link: $this->link))->alta_registro(
+                registro:  $inm_co_acreditado_ins);
+            if(errores::$error){
+                return $this->error->error(mensaje: 'Error al insertar co_acreditado',data:  $alta_inm_co_acreditado);
+            }
+        }
+
+
+
 
         return $r_modifica;
     }

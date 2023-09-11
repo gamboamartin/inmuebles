@@ -129,7 +129,14 @@ class _keys_selects{
         return $r_modifica;
     }
 
-    final public function base_plantilla(controlador_inm_comprador $controler, string $function){
+    /**
+     * Integra los key base para vistas generales
+     * @param controlador_inm_comprador $controler Controlador en ejecucion
+     * @param string $function Funcion de retorno
+     * @return array|stdClass
+     */
+    final public function base_plantilla(controlador_inm_comprador $controler, string $function): array|stdClass
+    {
         $registro = $controler->modelo->registro(registro_id: $controler->registro_id,retorno_obj: true);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al obtener registro',data:  $registro);
