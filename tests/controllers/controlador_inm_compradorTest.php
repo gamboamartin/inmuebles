@@ -87,6 +87,42 @@ class controlador_inm_compradorTest extends test {
 
     }
 
+    public function test_asigna_co_acreditado(): void
+    {
+        errores::$error = false;
+
+
+        $ch = curl_init("http://localhost/inmuebles/index.php?seccion=inm_comprador&accion=asigna_co_acreditado&adm_menu_id=64&session_id=5850109279&adm_menu_id=64&registro_id=1");
+        $fp = fopen("inm_comprador.asigna_co_acreditado", "w");
+
+        curl_setopt($ch, CURLOPT_FILE, $fp);
+        curl_setopt($ch, CURLOPT_HEADER, 0);
+
+        curl_exec($ch);
+        curl_close($ch);
+        fclose($fp);
+
+        $data = file_get_contents("inm_comprador.asigna_co_acreditado");
+        assertStringContainsStringIgnoringCase('<body class="">', $data);
+        assertStringContainsStringIgnoringCase('<div id="fb-root"></div>', $data);
+        assertStringContainsStringIgnoringCase('<div class="container container-wrapper">', $data);
+        assertStringContainsStringIgnoringCase('<section class="header-inner">', $data);
+        assertStringContainsStringIgnoringCase('<span class="sr-only">Toggle navigation</span>', $data);
+        assertStringContainsStringIgnoringCase('<button class="navbar-toggler hidden" type="button" data-toggle="collapse" data-target="#main-menu">', $data);
+        assertStringContainsStringIgnoringCase('<ul class="nav navbar-nav clearfix">', $data);
+        assertStringContainsStringIgnoringCase('<main class="main section-color-primary">', $data);
+        assertStringContainsStringIgnoringCase("<input type='hidden' name='registro_id' value='1'>", $data);
+        assertStringContainsStringIgnoringCase('<div class="row">', $data);
+        assertStringContainsStringIgnoringCase("<div class='control-group col-sm-12'><label class='control-label' for='inm_co_acreditado_id'>Co Acreditado</label><div class='controls'><select class='form-control selectpicker color-secondary  inm_co_acreditado_id' data-live-search='true' id='inm_co_acreditado_id' name='inm_co_acreditado_id' required ><option value=''  >", $data);
+        assertStringContainsStringIgnoringCase("Selecciona una opcion</option><option value='1'  >12345678912 XEXX010101MNEXXXA8 NOMBRE AP APELLIDO MATERNO</option></select></div></div>", $data);
+
+
+        errores::$error = false;
+
+        unlink("inm_comprador.asigna_co_acreditado");
+    }
+
+
     public function test_asigna_ubicacion(): void
     {
         errores::$error = false;

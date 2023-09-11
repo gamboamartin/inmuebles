@@ -138,6 +138,7 @@ class controlador_inm_comprador extends _ctl_base {
      * @param bool $header Si header retorna resultado en web
      * @param bool $ws Si ws muestra resultado en json
      * @return array|stdClass
+     * @version 1.150.1
      */
     public function asigna_co_acreditado(bool $header, bool $ws = false): array|stdClass
     {
@@ -152,9 +153,9 @@ class controlador_inm_comprador extends _ctl_base {
         $inputs = (new _keys_selects())->base_plantilla(controler: $this,function: __FUNCTION__);
 
         if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al obtener inputs_hidden',data:  $inputs, header: $header,ws:  $ws);
+            return $this->retorno_error(mensaje: 'Error al obtener inputs_hidden',data:  $inputs, header: $header,
+                ws:  $ws);
         }
-
 
         $link_inm_rel_co_acred_alta_bd = $this->obj_link->link_alta_bd(link: $this->link,seccion: 'inm_rel_co_acred');
         if(errores::$error){

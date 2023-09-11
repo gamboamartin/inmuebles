@@ -37,6 +37,7 @@ let apartado_13 = $("#apartado_13");
 let apartado_14 = $("#apartado_14");
 
 let apartado_6 = $("#apartado_6");
+let apartado_7 = $("#apartado_7");
 
 let collapse_a1 = $("#collapse_a1");
 let collapse_a2 = $("#collapse_a2");
@@ -47,6 +48,7 @@ let collapse_a13 = $("#collapse_a13");
 let collapse_a14 = $("#collapse_a14");
 
 let collapse_a6 = $("#collapse_a6");
+let collapse_a7 = $("#collapse_a7");
 
 let btn_modifica = $("#btn_modifica");
 
@@ -59,6 +61,7 @@ apartado_13.hide();
 apartado_14.hide();
 
 apartado_6.hide();
+apartado_7.hide();
 
 
 collapse_a1.click(function() {
@@ -104,6 +107,7 @@ let inm_co_acreditado_celular = $("#inm_co_acreditado_celular");
 let inm_co_acreditado_correo = $("#inm_co_acreditado_correo");
 
 let collapse_a6_open = false;
+let collapse_a7_open = false;
 collapse_a6.click(function() {
 
     if(!collapse_a6_open){
@@ -136,6 +140,40 @@ collapse_a6.click(function() {
 
 });
 
+
+collapse_a7.click(function() {
+
+    if(!collapse_a7_open){
+        collapse_a7_open = true;
+        inm_co_acreditado_nss.prop('disabled',false);
+        inm_co_acreditado_curp.prop('disabled',false);
+        inm_co_acreditado_rfc.prop('disabled',false);
+        inm_co_acreditado_apellido_paterno.prop('disabled',false);
+        inm_co_acreditado_apellido_materno.prop('disabled',false);
+        inm_co_acreditado_nombre.prop('disabled',false);
+        inm_co_acreditado_lada.prop('disabled',false);
+        inm_co_acreditado_numero.prop('disabled',false);
+        inm_co_acreditado_celular.prop('disabled',false);
+        inm_co_acreditado_correo.prop('disabled',false);
+    }
+    else{
+        collapse_a7_open = false;
+        inm_co_acreditado_nss.prop('disabled',true);
+        inm_co_acreditado_curp.prop('disabled',true);
+        inm_co_acreditado_rfc.prop('disabled',true);
+        inm_co_acreditado_apellido_paterno.prop('disabled',true);
+        inm_co_acreditado_apellido_materno.prop('disabled',true);
+        inm_co_acreditado_nombre.prop('disabled',true);
+        inm_co_acreditado_lada.prop('disabled',true);
+        inm_co_acreditado_numero.prop('disabled',true);
+        inm_co_acreditado_celular.prop('disabled',true);
+        inm_co_acreditado_correo.prop('disabled',true);
+    }
+    apartado_7.toggle();
+
+});
+
+
 let todo_aculto = true;
 
 $("#collapse_all").click(function() {
@@ -149,6 +187,7 @@ $("#collapse_all").click(function() {
         apartado_14.show();
 
         apartado_6.show();
+        apartado_7.show();
         todo_aculto = false;
     }
     else{
@@ -161,6 +200,7 @@ $("#collapse_all").click(function() {
         apartado_14.hide();
 
         apartado_6.hide();
+        apartado_7.hide();
         todo_aculto = true;
     }
 
@@ -168,6 +208,7 @@ $("#collapse_all").click(function() {
 
 
 let apartado_6_con_datos = false;
+let apartado_7_con_datos = false;
 btn_modifica.click(function() {
     apartado_1.show();
     apartado_2.show();
@@ -180,36 +221,71 @@ btn_modifica.click(function() {
 
     if(inm_co_acreditado_nss.val() !== ''){
         apartado_6_con_datos = true;
+        apartado_7_con_datos = true;
     }
     if(inm_co_acreditado_curp.val() !== ''){
         apartado_6_con_datos = true;
+        apartado_7_con_datos = true;
     }
     if(inm_co_acreditado_rfc.val() !== ''){
         apartado_6_con_datos = true;
+        apartado_7_con_datos = true;
     }
     if(inm_co_acreditado_apellido_paterno.val() !== ''){
         apartado_6_con_datos = true;
+        apartado_7_con_datos = true;
     }
     if(inm_co_acreditado_apellido_materno.val() !== ''){
         apartado_6_con_datos = true;
+        apartado_7_con_datos = true;
     }
     if(inm_co_acreditado_nombre.val() !== ''){
         apartado_6_con_datos = true;
+        apartado_7_con_datos = true;
     }
     if(inm_co_acreditado_lada.val() !== ''){
         apartado_6_con_datos = true;
+        apartado_7_con_datos = true;
     }
     if(inm_co_acreditado_numero.val() !== ''){
         apartado_6_con_datos = true;
+        apartado_7_con_datos = true;
     }
     if(inm_co_acreditado_celular.val() !== ''){
         apartado_6_con_datos = true;
+        apartado_7_con_datos = true;
     }
     if(inm_co_acreditado_correo.val() !== ''){
         apartado_6_con_datos = true;
+        apartado_7_con_datos = true;
     }
 
     if(apartado_6_con_datos){
+        inm_co_acreditado_nss.prop('disabled',false);
+        inm_co_acreditado_curp.prop('disabled',false);
+        inm_co_acreditado_rfc.prop('disabled',false);
+        inm_co_acreditado_apellido_paterno.prop('disabled',false);
+        inm_co_acreditado_apellido_materno.prop('disabled',false);
+        inm_co_acreditado_nombre.prop('disabled',false);
+        inm_co_acreditado_lada.prop('disabled',false);
+        inm_co_acreditado_numero.prop('disabled',false);
+        inm_co_acreditado_celular.prop('disabled',false);
+        inm_co_acreditado_correo.prop('disabled',false);
+    }
+    else{
+        inm_co_acreditado_nss.prop('disabled',true);
+        inm_co_acreditado_curp.prop('disabled',true);
+        inm_co_acreditado_rfc.prop('disabled',true);
+        inm_co_acreditado_apellido_paterno.prop('disabled',true);
+        inm_co_acreditado_apellido_materno.prop('disabled',true);
+        inm_co_acreditado_nombre.prop('disabled',true);
+        inm_co_acreditado_lada.prop('disabled',true);
+        inm_co_acreditado_numero.prop('disabled',true);
+        inm_co_acreditado_celular.prop('disabled',true);
+        inm_co_acreditado_correo.prop('disabled',true);
+    }
+
+    if(apartado_7_con_datos){
         inm_co_acreditado_nss.prop('disabled',false);
         inm_co_acreditado_curp.prop('disabled',false);
         inm_co_acreditado_rfc.prop('disabled',false);
