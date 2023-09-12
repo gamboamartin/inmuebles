@@ -343,13 +343,15 @@ class base_test{
     }
 
     public function alta_inm_ubicacion(PDO $link, string $cuenta_predial = 'CP', int $dp_calle_pertenece_id = 1,
-                                       int $id = 1, string $numero_exterior = 'NUM EXT'): array|\stdClass
+                                       int $id = 1,int $inm_tipo_ubicacion_id = 1,
+                                       string $numero_exterior = 'NUM EXT'): array|\stdClass
     {
 
         $registro['id'] = $id;
         $registro['dp_calle_pertenece_id'] = $dp_calle_pertenece_id;
         $registro['numero_exterior'] = $numero_exterior;
         $registro['cuenta_predial'] = $cuenta_predial;
+        $registro['inm_tipo_ubicacion_id'] = $inm_tipo_ubicacion_id;
 
         $alta = (new inm_ubicacion($link))->alta_registro($registro);
         if(errores::$error){
