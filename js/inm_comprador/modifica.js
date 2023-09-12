@@ -33,6 +33,17 @@ let apellido_paterno_ct = $("#apellido_paterno");
 let apellido_materno_ct = $("#apellido_materno");
 let nombre_ct = $("#nombre");
 
+let numero_exterior_ct = $("#numero_exterior");
+let numero_interior_ct = $("#numero_interior");
+let lada_com_ct = $("#lada_com");
+let lada_nep_ct = $("#lada_nep");
+let numero_nep_ct = $("#numero_nep");
+let extension_nep_ct = $("#extension_nep");
+let nss_ct = $("#nss");
+let numero_com_ct = $("#numero_com");
+let cel_com_ct = $("#cel_com");
+let correo_com_ct = $("#correo_com");
+
 let apartado_1 = $("#apartado_1");
 let apartado_2 = $("#apartado_2");
 let apartado_3 = $("#apartado_3");
@@ -87,6 +98,98 @@ in_monto_credito_solicitado_dh.change(function() {
 });
 
 in_monto_ahorro_voluntario.change(function() {
+    let value = $(this).val().trim();
+    $(this).val(value);
+
+});
+
+lada_nep_ct.change(function() {
+    let value = $(this).val().trim();
+    $(this).val(value);
+
+});
+
+numero_nep_ct.change(function() {
+    let value = $(this).val().trim();
+    $(this).val(value);
+
+});
+
+extension_nep_ct.change(function() {
+    let value = $(this).val().trim();
+    $(this).val(value);
+
+});
+
+
+nss_ct.change(function() {
+    let value = $(this).val().trim();
+    $(this).val(value);
+
+});
+
+curp_ct.change(function() {
+    let value = $(this).val().trim();
+    $(this).val(value);
+
+});
+
+
+rfc_ct.change(function() {
+    let value = $(this).val().trim();
+    $(this).val(value);
+
+});
+
+apellido_paterno_ct.change(function() {
+    let value = $(this).val().trim();
+    $(this).val(value);
+
+});
+
+apellido_materno_ct.change(function() {
+    let value = $(this).val().trim();
+    $(this).val(value);
+
+});
+
+nombre_ct.change(function() {
+    let value = $(this).val().trim();
+    $(this).val(value);
+
+});
+
+numero_exterior_ct.change(function() {
+    let value = $(this).val().trim();
+    $(this).val(value);
+
+});
+
+numero_interior_ct.change(function() {
+    let value = $(this).val().trim();
+    $(this).val(value);
+
+});
+
+lada_com_ct.change(function() {
+    let value = $(this).val().trim();
+    $(this).val(value);
+
+});
+
+numero_com_ct.change(function() {
+    let value = $(this).val().trim();
+    $(this).val(value);
+
+});
+
+cel_com_ct.change(function() {
+    let value = $(this).val().trim();
+    $(this).val(value);
+
+});
+
+correo_com_ct.change(function() {
     let value = $(this).val().trim();
     $(this).val(value);
 
@@ -353,7 +456,7 @@ apellido_materno_ct.change(function(){
 nombre_empresa_patron_ct.change(function(){
 
     let nombre_empresa_patron = $(this).val();
-    nombre_empresa_patron = nombre_empresa_patron.toUpperCase()
+    nombre_empresa_patron = nombre_empresa_patron.toUpperCase().trim();
     nombre_empresa_patron_ct.val(nombre_empresa_patron);
 
 });
@@ -369,7 +472,7 @@ rfc_ct.change(function(){
 nrp_nep_ct.change(function(){
 
     let nrp_nep = $(this).val();
-    nrp_nep = nrp_nep.toUpperCase()
+    nrp_nep = nrp_nep.toUpperCase().trim();
     nrp_nep_ct.val(nrp_nep);
 
 });

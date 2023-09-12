@@ -444,6 +444,12 @@ class inm_co_acreditado_html extends html_controler {
         return true;
     }
 
+    /**
+     * Valida los parametros para inputs
+     * @param stdClass $params parametros previos cargados
+     * @return bool|array
+     * @version 1.164.1
+     */
     private function valida_params(stdClass $params): bool|array
     {
         if(!isset($params->campos)){
