@@ -37,6 +37,35 @@ class inm_co_acreditado_htmlTest extends test {
         $this->paths_conf->views = '/var/www/html/inmuebles/config/views.php';
     }
 
+    public function test_genera_inputs(): void
+    {
+        errores::$error = false;
+
+        $_GET['seccion'] = 'inm_producto_infonavit';
+        $_GET['accion'] = 'lista';
+        $_SESSION['grupo_id'] = 1;
+        $_SESSION['usuario_id'] = 2;
+        $_GET['session_id'] = '1';
+
+        $html_ = new \gamboamartin\template_1\html();
+        $html = new inm_co_acreditado_html($html_);
+        $html = new liberator($html);
+
+
+        $params = new stdClass();
+        $params->campos = array();
+        $params->campos[] = 'nss';
+        $params->cols = array();
+        $params->disableds = array();
+        $params->names = array();
+
+        $resultado = $html->genera_inputs($params);
+        $this->assertIsObject($resultado);
+        $this->assertNotTrue(errores::$error);
+        $this->assertEquals("<div class='control-group col-sm-12'><label class='control-label' for='nss'>NSS</label><div class='controls'><input type='text' name='nss' value='' class='form-control nss' required id='nss' placeholder='NSS' pattern='(\d{2})(\d{2})(\d{2})\d{5}' title='NSS' /></div></div>",$resultado->nss);
+        errores::$error = false;
+    }
+
     public function test_init_campo(): void
     {
         errores::$error = false;

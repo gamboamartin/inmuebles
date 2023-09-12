@@ -11,6 +11,11 @@ let sl_inm_plazo_credito_sc_id = $("#inm_plazo_credito_sc_id");
 let sl_inm_tipo_discapacidad_id = $("#inm_tipo_discapacidad_id");
 let sl_inm_persona_discapacidad_id = $("#inm_persona_discapacidad_id");
 
+let in_descuento_pension_alimenticia_dh = $("#descuento_pension_alimenticia_dh");
+let in_descuento_pension_alimenticia_fc = $("#descuento_pension_alimenticia_fc");
+let in_monto_credito_solicitado_dh = $("#monto_credito_solicitado_dh");
+let in_monto_ahorro_voluntario = $("#monto_ahorro_voluntario");
+
 let dp_pais_id = -1;
 let dp_estado_id = -1;
 let dp_municipio_id = -1;
@@ -62,6 +67,30 @@ apartado_14.hide();
 
 apartado_6.hide();
 apartado_7.hide();
+
+in_descuento_pension_alimenticia_dh.change(function() {
+    let value = $(this).val().trim();
+    $(this).val(value);
+
+});
+
+in_descuento_pension_alimenticia_fc.change(function() {
+    let value = $(this).val().trim();
+    $(this).val(value);
+
+});
+
+in_monto_credito_solicitado_dh.change(function() {
+    let value = $(this).val().trim();
+    $(this).val(value);
+
+});
+
+in_monto_ahorro_voluntario.change(function() {
+    let value = $(this).val().trim();
+    $(this).val(value);
+
+});
 
 
 collapse_a1.click(function() {

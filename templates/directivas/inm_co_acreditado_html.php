@@ -81,16 +81,21 @@ class inm_co_acreditado_html extends html_controler {
      */
     private function genera_inputs(stdClass $params, stdClass $row_upd = new stdClass()): array|stdClass
     {
+
+        $valida = $this->valida_params(params: $params);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al validar parametros',data:  $valida);
+        }
+
         $inputs = new stdClass();
 
         foreach ($params->campos as $campo){
-            $input = $this->$campo(cols: $params->cols[$campo], disabled: $params->disableds[$campo],
-                name: $params->names[$campo], row_upd: $row_upd);
+            $inputs = $this->integra_input(campo: $campo,inputs:  $inputs,params:  $params,row_upd:  $row_upd);
             if(errores::$error){
                 return $this->error->error(mensaje: 'Error al generar input',data:  $input);
             }
-            $inputs->$campo = $input;
         }
+
         return $inputs;
     }
 
@@ -170,6 +175,20 @@ class inm_co_acreditado_html extends html_controler {
         return $cols_css;
     }
 
+    private function init_param(string $campo, stdClass $params): stdClass
+    {
+        if(!isset($params->cols[$campo])){
+            $params->cols[$campo] = 12;
+        }
+        if(!isset($params->disableds[$campo])){
+            $params->disableds[$campo] = false;
+        }
+        if(!isset($params->names[$campo])){
+            $params->names[$campo] = $campo;
+        }
+        return $params;
+    }
+
     /**
      * Integra los parametros para generacion de inputs
      * @param array $campos Campos a inicializar
@@ -219,6 +238,26 @@ class inm_co_acreditado_html extends html_controler {
             return $this->error->error(mensaje: 'Error al generar input',data:  $inputs);
         }
 
+        return $inputs;
+    }
+
+    private function integra_input(string $campo, stdClass $inputs, stdClass $params, stdClass $row_upd){
+        $valida = $this->valida_campo(campo: $campo);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al validar campo',data:  $valida);
+        }
+
+        $params = $this->init_param(campo: $campo,params:  $params);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al inicializar param',data:  $params);
+        }
+
+        $input = $this->$campo(cols: $params->cols[$campo], disabled: $params->disableds[$campo],
+            name: $params->names[$campo], row_upd: $row_upd);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al generar input',data:  $input);
+        }
+        $inputs->$campo = $input;
         return $inputs;
     }
 
@@ -391,6 +430,49 @@ class inm_co_acreditado_html extends html_controler {
             return $this->error->error(mensaje: 'Error al generar select', data: $select);
         }
         return $select;
+    }
+
+    private function valida_campo(string $campo): bool|array
+    {
+        $campo = trim($campo);
+        if($campo === ''){
+            return $this->error->error(mensaje: 'Error campo esta vacio',data:  $campo);
+        }
+        if(!method_exists($this,$campo)){
+            return $this->error->error(mensaje: 'Error no existe la funcion',data:  $campo);
+        }
+        return true;
+    }
+
+    private function valida_params(stdClass $params): bool|array
+    {
+        if(!isset($params->campos)){
+            return $this->error->error(mensaje: 'Error al params->campos no existe',data:  $params);
+        }
+        if(!is_array($params->campos)){
+            return $this->error->error(mensaje: 'Error al params->campos no es un array',data:  $params);
+        }
+
+        if(!isset($params->cols)){
+            return $this->error->error(mensaje: 'Error al params->cols no existe',data:  $params);
+        }
+        if(!is_array($params->cols)){
+            return $this->error->error(mensaje: 'Error al params->cols no es un array',data:  $params);
+        }
+
+        if(!isset($params->disableds)){
+            return $this->error->error(mensaje: 'Error al params->disableds no existe',data:  $params);
+        }
+        if(!is_array($params->disableds)){
+            return $this->error->error(mensaje: 'Error al params->disableds no es un array',data:  $params);
+        }
+        if(!isset($params->names)){
+            return $this->error->error(mensaje: 'Error al params->names no existe',data:  $params);
+        }
+        if(!is_array($params->names)){
+            return $this->error->error(mensaje: 'Error al params->names no es un array',data:  $params);
+        }
+        return true;
     }
 
 
