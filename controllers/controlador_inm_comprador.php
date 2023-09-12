@@ -36,7 +36,7 @@ class controlador_inm_comprador extends _ctl_base {
     public string $link_inm_rel_co_acred_alta_bd = '';
     public string $link_asigna_nuevo_co_acreditado_bd = '';
 
-    private inm_comprador_html $html_entidad;
+    public inm_comprador_html $html_entidad;
 
     public stdClass $header_frontend;
 
@@ -581,51 +581,15 @@ class controlador_inm_comprador extends _ctl_base {
 
         $this->buttons['btn_collapse_all'] = $btn_collapse_all;
 
-        $headers['1'] = '1. CRÉDITO SOLICITADO';
-        $headers['2'] = '2. DATOS PARA DETERMINAR EL MONTO DE CRÉDITO';
-        $headers['3'] = '3. DATOS DE LA VIVIENDA/TERRENO DESTINO DEL CRÉDITO';
-        $headers['4'] = '4. DATOS DE LA EMPRESA O PATRÓN';
-        $headers['5'] = '5. DATOS DE IDENTIFICACIÓN DEL (DE LA) DERECHOHABIENTE / DATOS QUE SERÁN VALIDADOS';
-        $headers['13'] = '13. DATOS FISCALES PARA FACTURACION';
-        $headers['14'] = '14. CONTROL INTERNO';
 
-        $this->aplica_seccion_co_acreditado = true;
 
-        if((int)$this->registro['inm_attr_tipo_credito_id']=== 6 || (int)$this->registro['inm_attr_tipo_credito_id']=== 8) {
-            $this->aplica_seccion_co_acreditado = false;
-        }
-        if($this->aplica_seccion_co_acreditado) {
-
-            $headers['6'] = '6. DATOS DE IDENTIFICACIÓN QUE SERÁN VALIDADOS (OBLIGATORIOS EN CRÉDITO CONYUGAL, FAMILIAR O CORRESIDENCIAL)';
-            $headers['7'] = '7. DATOS DE LA EMPRESA O PATRÓN CO ACREDITADO';
+        $headers = (new \gamboamartin\inmuebles\controllers\_inm_comprador())->frontend_co_acreditado(controler: $this);
+        if(errores::$error){
+            return $this->retorno_error(
+                mensaje: 'Error al integrar headers',data:  $headers, header: $header,ws:  $ws);
         }
 
 
-        foreach ($headers as $n_apartado=>$tag_header){
-            $id_css_button = "collapse_a$n_apartado";
-            $key_header = "apartado_$n_apartado";
-
-            $header_apartado = $this->html_entidad->header_collapsible(id_css_button: $id_css_button,
-                style_button: 'primary', tag_button: 'Ver/Ocultar',tag_header:  $tag_header);
-
-            if(errores::$error){
-                return $this->retorno_error(
-                    mensaje: 'Error al generar header',data:  $header_apartado, header: $header,ws:  $ws);
-            }
-
-            $this->header_frontend->$key_header = $header_apartado;
-
-
-            $inm_co_acreditado_inputs = (new inm_co_acreditado_html(html: $this->html_base))->inputs(
-                integra_prefijo: true);
-            if(errores::$error){
-                return $this->retorno_error(
-                    mensaje: 'Error al generar inputs',data:  $inm_co_acreditado_inputs, header: $header,ws:  $ws);
-            }
-
-            $this->inputs->inm_co_acreditado = $inm_co_acreditado_inputs;
-
-        }
 
         $button_upd = $this->html->boton_submit(class_button: 'modifica', class_control: 'btn-modifica',
             style: 'success', tag: 'Modifica', id_button: 'btn_modifica');

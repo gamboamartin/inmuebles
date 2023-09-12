@@ -320,7 +320,16 @@ class inm_co_acreditado_html extends html_controler {
 
     }
 
-    private function params_inputs(array $cols_css, array $disableds, bool $integra_prefijo, array $names){
+    /**
+     * Inicializa los parametros para inputs de co acreditado
+     * @param array $cols_css
+     * @param array $disableds
+     * @param bool $integra_prefijo
+     * @param array $names
+     * @return array|stdClass
+     */
+    private function params_inputs(array $cols_css, array $disableds, bool $integra_prefijo, array $names): array|stdClass
+    {
         $campos = array('apellido_materno','apellido_paterno','celular','correo','curp','extension_nep','lada',
             'lada_nep','nombre', 'nombre_empresa_patron','nrp','nss', 'numero','numero_nep','rfc');
 
