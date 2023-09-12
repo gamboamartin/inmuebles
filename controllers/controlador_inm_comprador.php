@@ -40,6 +40,8 @@ class controlador_inm_comprador extends _ctl_base {
 
     public stdClass $header_frontend;
 
+    public bool $aplica_seccion_co_acreditado = false;
+
     public function __construct(PDO      $link, html $html = new \gamboamartin\template_1\html(),
                                 stdClass $paths_conf = new stdClass())
     {
@@ -587,8 +589,17 @@ class controlador_inm_comprador extends _ctl_base {
         $headers['13'] = '13. DATOS FISCALES PARA FACTURACION';
         $headers['14'] = '14. CONTROL INTERNO';
 
-        $headers['6'] = '6. DATOS DE IDENTIFICACIÓN QUE SERÁN VALIDADOS (OBLIGATORIOS EN CRÉDITO CONYUGAL, FAMILIAR O CORRESIDENCIAL)';
-        $headers['7'] = '7. DATOS DE LA EMPRESA O PATRÓN CO ACREDITADO';
+        $this->aplica_seccion_co_acreditado = true;
+
+        if((int)$this->registro['inm_attr_tipo_credito_id']=== 6 || (int)$this->registro['inm_attr_tipo_credito_id']=== 8) {
+            $this->aplica_seccion_co_acreditado = false;
+        }
+        if($this->aplica_seccion_co_acreditado) {
+
+            $headers['6'] = '6. DATOS DE IDENTIFICACIÓN QUE SERÁN VALIDADOS (OBLIGATORIOS EN CRÉDITO CONYUGAL, FAMILIAR O CORRESIDENCIAL)';
+            $headers['7'] = '7. DATOS DE LA EMPRESA O PATRÓN CO ACREDITADO';
+        }
+
 
         foreach ($headers as $n_apartado=>$tag_header){
             $id_css_button = "collapse_a$n_apartado";

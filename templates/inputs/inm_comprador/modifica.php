@@ -103,8 +103,9 @@ if($controlador->row_upd->genero === 'F'){
 
     </div>
 
-<?php echo $controlador->header_frontend->apartado_6; ?>
+<?php if ($controlador->aplica_seccion_co_acreditado){ ?>
 
+<?php echo $controlador->header_frontend->apartado_6; ?>
 <div  id="apartado_6">
     <?php echo $controlador->inputs->inm_co_acreditado->nss; ?>
     <?php echo $controlador->inputs->inm_co_acreditado->curp; ?>
@@ -139,6 +140,8 @@ if($controlador->row_upd->genero === 'F'){
     <?php echo $controlador->inputs->inm_co_acreditado->lada_nep; ?>
     <?php echo $controlador->inputs->inm_co_acreditado->numero_nep; ?>
 </div>
+
+<?php } ?>
 
 <?php echo $controlador->header_frontend->apartado_13; ?>
 

@@ -164,10 +164,11 @@ class inm_co_acreditado_html extends html_controler {
     }
 
     /**
-     * @param array $campos
-     * @param array $cols_css
-     * @param array $disableds
-     * @param array $names
+     * Integra los parametros para generacion de inputs
+     * @param array $campos Campos a inicializar
+     * @param array $cols_css Columnas css
+     * @param array $disableds Disabled atributos
+     * @param array $names Names
      * @return array|stdClass
      */
     private function init_params(array $campos, array $cols_css, array $disableds, array $names): array|stdClass
@@ -198,7 +199,8 @@ class inm_co_acreditado_html extends html_controler {
     {
 
 
-        $params = $this->params_inputs(cols_css: $cols_css,disableds: $disableds,integra_prefijo:  $integra_prefijo, names: $names);
+        $params = $this->params_inputs(cols_css: $cols_css,disableds: $disableds,integra_prefijo:  $integra_prefijo,
+            names: $names);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al inicializar params',data:  $params);
         }
