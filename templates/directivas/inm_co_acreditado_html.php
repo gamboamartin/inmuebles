@@ -176,12 +176,18 @@ class inm_co_acreditado_html extends html_controler {
     }
 
     /**
-     * @param string $campo
-     * @param stdClass $params
-     * @return stdClass
+     * Inicializa los parametros de un input
+     * @param string $campo Campo a inicializar
+     * @param stdClass $params Parametros previos
+     * @return stdClass|array
+     * @version 1.165.1
      */
-    private function init_param(string $campo, stdClass $params): stdClass
+    private function init_param(string $campo, stdClass $params): stdClass|array
     {
+        $campo = trim($campo);
+        if($campo === ''){
+            return $this->error->error(mensaje: 'Error campo esta vacio',data:  $campo);
+        }
         if(!isset($params->cols[$campo])){
             $params->cols[$campo] = 12;
         }
@@ -255,13 +261,15 @@ class inm_co_acreditado_html extends html_controler {
     }
 
     /**
-     * @param string $campo
-     * @param stdClass $inputs
-     * @param stdClass $params
-     * @param stdClass $row_upd
+     * Integra un input basado en un campo
+     * @param string $campo Campo de base de datos
+     * @param stdClass $inputs Inputs previos generados
+     * @param stdClass $params Parametros previos
+     * @param stdClass $row_upd Registro en proceso
      * @return array|stdClass
      */
-    private function integra_input(string $campo, stdClass $inputs, stdClass $params, stdClass $row_upd): array|stdClass
+    private function integra_input(string $campo, stdClass $inputs, stdClass $params,
+                                   stdClass $row_upd): array|stdClass
     {
         $valida = $this->valida_campo(campo: $campo);
         if(errores::$error){

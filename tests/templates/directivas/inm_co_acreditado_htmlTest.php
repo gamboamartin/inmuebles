@@ -159,6 +159,33 @@ class inm_co_acreditado_htmlTest extends test {
         errores::$error = false;
     }
 
+    public function test_init_param(): void
+    {
+        errores::$error = false;
+
+        $_GET['seccion'] = 'inm_producto_infonavit';
+        $_GET['accion'] = 'lista';
+        $_SESSION['grupo_id'] = 1;
+        $_SESSION['usuario_id'] = 2;
+        $_GET['session_id'] = '1';
+
+        $html_ = new \gamboamartin\template_1\html();
+        $html = new inm_co_acreditado_html($html_);
+        $html = new liberator($html);
+
+
+        $campo = 'a';
+        $params = new stdClass();
+
+        $resultado = $html->init_param($campo, $params);
+        $this->assertIsObject($resultado);
+        $this->assertNotTrue(errores::$error);
+        $this->assertEquals(12,$resultado->cols['a']);
+        $this->assertFalse($resultado->disableds['a']);
+        $this->assertEquals('a',$resultado->names['a']);
+        errores::$error = false;
+    }
+
     public function test_init_params(): void
     {
         errores::$error = false;

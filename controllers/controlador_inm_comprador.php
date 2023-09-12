@@ -14,6 +14,7 @@ use gamboamartin\inmuebles\html\inm_co_acreditado_html;
 use gamboamartin\inmuebles\html\inm_comprador_html;
 use gamboamartin\inmuebles\models\_inm_comprador;
 use gamboamartin\inmuebles\models\inm_comprador;
+use gamboamartin\inmuebles\models\inm_referencia;
 use gamboamartin\system\_ctl_base;
 use gamboamartin\system\actions;
 use gamboamartin\system\links_menu;
@@ -41,6 +42,8 @@ class controlador_inm_comprador extends _ctl_base {
     public stdClass $header_frontend;
 
     public bool $aplica_seccion_co_acreditado = false;
+
+    public array $inm_referencias = array();
 
 
 
@@ -549,7 +552,6 @@ class controlador_inm_comprador extends _ctl_base {
      * @param bool $header Si header retorna resultado en web
      * @param bool $ws Si ws muestra resultado en json
      * @return array|stdClass
-     * @version 1.109.1
      */
     public function modifica(bool $header, bool $ws = false): array|stdClass
     {
@@ -583,17 +585,24 @@ class controlador_inm_comprador extends _ctl_base {
 
         $this->buttons['btn_collapse_all'] = $btn_collapse_all;
 
+
+
+        $inm_referencias = (new inm_referencia(link: $this->link))->inm_referencias(inm_comprador_id: $this->registro_id);
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al obtener inm_referencias',data:  $inm_referencias, header: $header,ws:  $ws);
+        }
+
+        $this->inm_referencias = $inm_referencias;
+
+
         $co_acreditados = (new inm_comprador(link: $this->link))->get_co_acreditados(inm_comprador_id: $this->registro_id);
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al obtener co_acreditados',data:  $co_acreditados, header: $header,ws:  $ws);
         }
 
-        $existe_co_acreditado = false;
         $inm_co_acreditado = new stdClass();
         if(count($co_acreditados) === 1){
-            $existe_co_acreditado = true;
             $inm_co_acreditado = (object)$co_acreditados[0];
-
         }
 
 
@@ -612,6 +621,8 @@ class controlador_inm_comprador extends _ctl_base {
         }
 
         $this->btn = $button_upd;
+
+
 
 
 
