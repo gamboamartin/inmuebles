@@ -52,7 +52,7 @@ class _inm_comprador{
         $controler->header_frontend->$key_header = $header_apartado;
 
         $inm_co_acreditado_inputs = (new inm_co_acreditado_html(html: $controler->html_base))->inputs(
-            integra_prefijo: true, row_upd: $row_upd);
+            entidad: 'inm_co_acreditado', integra_prefijo: true, row_upd: $row_upd);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al generar inputs',data:  $inm_co_acreditado_inputs);
         }

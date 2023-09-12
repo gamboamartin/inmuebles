@@ -2,13 +2,13 @@
 namespace gamboamartin\inmuebles\html;
 use gamboamartin\errores\errores;
 use gamboamartin\inmuebles\models\inm_co_acreditado;
-use gamboamartin\system\html_controler;
+
 use PDO;
 use stdClass;
 
-class inm_co_acreditado_html extends html_controler {
+class inm_co_acreditado_html extends _base {
 
-    private function apellido_materno(int $cols, bool $disabled = false, string $name = 'apellido_materno', string $place_holder= 'Apellido Materno',
+    private function apellido_materno(int $cols,  string $entidad, bool $disabled = false, string $name = 'apellido_materno', string $place_holder= 'Apellido Materno',
                                            stdClass $row_upd = new stdClass(), bool $value_vacio = false): array|string
     {
 
@@ -18,19 +18,9 @@ class inm_co_acreditado_html extends html_controler {
             row_upd: $row_upd, value_vacio: $value_vacio, class_css: $class_css);
 
     }
-    private function apellido_paterno(int $cols, bool $disabled = false, string $name = 'apellido_paterno', string $place_holder= 'Apellido Paterno',
-                               stdClass $row_upd = new stdClass(), bool $value_vacio = false): array|string
-    {
 
 
-        $class_css = array('inm_co_acreditado_apellido_paterno');
-
-        return $this->input_text(cols: $cols, disabled: $disabled, name: $name, place_holder: $place_holder,
-            row_upd: $row_upd, value_vacio: $value_vacio, class_css: $class_css);
-
-    }
-
-    private function celular(int $cols, bool $disabled = false, string $name = 'celular', string $place_holder= 'Celular',
+    private function celular(int $cols,  string $entidad, bool $disabled = false, string $name = 'celular', string $place_holder= 'Celular',
                                  stdClass $row_upd = new stdClass(), bool $value_vacio = false): array|string
     {
 
@@ -41,7 +31,7 @@ class inm_co_acreditado_html extends html_controler {
 
     }
 
-    private function correo(int $cols, bool $disabled = false, string $name = 'correo', string $place_holder= 'Correo',
+    private function correo(int $cols,  string $entidad, bool $disabled = false, string $name = 'correo', string $place_holder= 'Correo',
                                   stdClass $row_upd = new stdClass(), bool $value_vacio = false): array|string
     {
 
@@ -51,7 +41,7 @@ class inm_co_acreditado_html extends html_controler {
             place_holder:  $place_holder,row_upd:  $row_upd,value_vacio:  $value_vacio,regex: $regex);
 
     }
-    private function curp(int $cols, bool $disabled = false, string $name = 'curp', string $place_holder= 'CURP',
+    private function curp(int $cols,  string $entidad, bool $disabled = false, string $name = 'curp', string $place_holder= 'CURP',
                               stdClass $row_upd = new stdClass(), bool $value_vacio = false): array|string
     {
 
@@ -63,7 +53,7 @@ class inm_co_acreditado_html extends html_controler {
 
     }
 
-    private function extension_nep(int $cols, bool $disabled = false, string $name = 'extension_nep', string $place_holder= 'Extension',
+    private function extension_nep(int $cols,  string $entidad, bool $disabled = false, string $name = 'extension_nep', string $place_holder= 'Extension',
                                      stdClass $row_upd = new stdClass(), bool $value_vacio = false): array|string
     {
 
@@ -75,11 +65,14 @@ class inm_co_acreditado_html extends html_controler {
 
     /**
      * Genera los inputs para co acreditado
+     * @param string $entidad Entidad para integrar css
      * @param stdClass $params Parametros para inputs
      * @param stdClass $row_upd Registro en proceso
      * @return array|stdClass
+     * @version 1.167.1
      */
-    private function genera_inputs(stdClass $params, stdClass $row_upd = new stdClass()): array|stdClass
+    private function genera_inputs(
+        string $entidad, stdClass $params, stdClass $row_upd = new stdClass()): array|stdClass
     {
 
         $valida = $this->valida_params(params: $params);
@@ -90,7 +83,8 @@ class inm_co_acreditado_html extends html_controler {
         $inputs = new stdClass();
 
         foreach ($params->campos as $campo){
-            $inputs = $this->integra_input(campo: $campo,inputs:  $inputs,params:  $params,row_upd:  $row_upd);
+            $inputs = $this->integra_input(campo: $campo, entidad: $entidad, inputs: $inputs, params: $params,
+                row_upd: $row_upd);
             if(errores::$error){
                 return $this->error->error(mensaje: 'Error al generar input',data:  $inputs);
             }
@@ -234,6 +228,7 @@ class inm_co_acreditado_html extends html_controler {
 
     /**
      * Integra los inputs de co acreditados
+     * @param string $entidad Entidad para css
      * @param bool $integra_prefijo Si integra prefijo incluye el nombre dela tabla cada input
      * @param array $cols_css Col css
      * @param array $disableds Disableds atributos
@@ -241,8 +236,9 @@ class inm_co_acreditado_html extends html_controler {
      * @param stdClass $row_upd Registro en proceso
      * @return array|stdClass
      */
-    final public function inputs(bool $integra_prefijo = false,array $cols_css = array(), array $disableds = array(),
-                                 array $names = array(), stdClass $row_upd = new stdClass()): array|stdClass
+    final public function inputs(string $entidad, bool $integra_prefijo = false,array $cols_css = array(),
+                                 array $disableds = array(), array $names = array(),
+                                 stdClass $row_upd = new stdClass()): array|stdClass
     {
 
 
@@ -253,7 +249,7 @@ class inm_co_acreditado_html extends html_controler {
         }
 
 
-        $inputs = $this->genera_inputs(params: $params, row_upd: $row_upd);
+        $inputs = $this->genera_inputs(entidad: $entidad, params: $params, row_upd: $row_upd);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al generar input',data:  $inputs);
         }
@@ -264,13 +260,14 @@ class inm_co_acreditado_html extends html_controler {
     /**
      * Integra un input basado en un campo
      * @param string $campo Campo de base de datos
+     * @param string $entidad
      * @param stdClass $inputs Inputs previos generados
      * @param stdClass $params Parametros previos
      * @param stdClass $row_upd Registro en proceso
      * @return array|stdClass
      * @version 1.166.1
      */
-    private function integra_input(string $campo, stdClass $inputs, stdClass $params,
+    private function integra_input(string $campo, string $entidad, stdClass $inputs, stdClass $params,
                                    stdClass $row_upd): array|stdClass
     {
         $valida = $this->valida_campo(campo: $campo);
@@ -283,7 +280,7 @@ class inm_co_acreditado_html extends html_controler {
             return $this->error->error(mensaje: 'Error al inicializar param',data:  $params);
         }
 
-        $input = $this->$campo(cols: $params->cols[$campo], disabled: $params->disableds[$campo],
+        $input = $this->$campo(cols: $params->cols[$campo], disabled: $params->disableds[$campo], entidad: $entidad,
             name: $params->names[$campo], row_upd: $row_upd);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al generar input',data:  $input);
@@ -293,7 +290,7 @@ class inm_co_acreditado_html extends html_controler {
     }
 
 
-    private function lada(int $cols, bool $disabled = false, string $name = 'lada', string $place_holder= 'Lada',
+    private function lada(int $cols,  string $entidad, bool $disabled = false, string $name = 'lada', string $place_holder= 'Lada',
                                stdClass $row_upd = new stdClass(), bool $value_vacio = false): array|string
     {
 
@@ -304,7 +301,7 @@ class inm_co_acreditado_html extends html_controler {
 
     }
 
-    private function lada_nep(int $cols, bool $disabled = false, string $name = 'lada_nep', string $place_holder= 'Lada',
+    private function lada_nep(int $cols,  string $entidad, bool $disabled = false, string $name = 'lada_nep', string $place_holder= 'Lada',
                                stdClass $row_upd = new stdClass(), bool $value_vacio = false): array|string
     {
 
@@ -315,7 +312,7 @@ class inm_co_acreditado_html extends html_controler {
 
     }
 
-    private function nombre(int $cols, bool $disabled = false, string $name = 'nombre', string $place_holder= 'Nombre',
+    private function nombre(int $cols,  string $entidad, bool $disabled = false, string $name = 'nombre', string $place_holder= 'Nombre',
                                            stdClass $row_upd = new stdClass(), bool $value_vacio = false): array|string
     {
 
@@ -327,7 +324,7 @@ class inm_co_acreditado_html extends html_controler {
 
     }
 
-    private function nombre_empresa_patron(int $cols, bool $disabled = false, string $name = 'nombre_empresa_patron',
+    private function nombre_empresa_patron(int $cols,  string $entidad, bool $disabled = false, string $name = 'nombre_empresa_patron',
                                                 string $place_holder= 'Nombre Empresa Patron',
                                                 stdClass $row_upd = new stdClass(),
                                                 bool $value_vacio = false): array|string
@@ -341,7 +338,7 @@ class inm_co_acreditado_html extends html_controler {
 
     }
 
-    private function nrp(int $cols, bool $disabled = false, string $name = 'nrp',
+    private function nrp(int $cols,  string $entidad, bool $disabled = false, string $name = 'nrp',
                                                 string $place_holder= 'NRP',
                                                 stdClass $row_upd = new stdClass(),
                                                 bool $value_vacio = false): array|string
@@ -363,7 +360,7 @@ class inm_co_acreditado_html extends html_controler {
      * @param bool $value_vacio Si vacio deja el input vacio
      * @return array|string
      */
-    private function nss(int $cols, bool $disabled = false, string $name = 'nss', string $place_holder= 'NSS',
+    private function nss(int $cols,  string $entidad, bool $disabled = false, string $name = 'nss', string $place_holder= 'NSS',
                          bool $required = true, stdClass $row_upd = new stdClass(),
                          bool $value_vacio = false): array|string
     {
@@ -373,7 +370,7 @@ class inm_co_acreditado_html extends html_controler {
 
     }
 
-    private function numero(int $cols, bool $disabled = false, string $name = 'numero', string $place_holder= 'Numero',
+    private function numero(int $cols,  string $entidad, bool $disabled = false, string $name = 'numero', string $place_holder= 'Numero',
                                stdClass $row_upd = new stdClass(), bool $value_vacio = false): array|string
     {
 
@@ -384,7 +381,7 @@ class inm_co_acreditado_html extends html_controler {
 
     }
 
-    private function numero_nep(int $cols, bool $disabled = false, string $name = 'numero_nep', string $place_holder= 'Numero',
+    private function numero_nep(int $cols,  string $entidad, bool $disabled = false, string $name = 'numero_nep', string $place_holder= 'Numero',
                                  stdClass $row_upd = new stdClass(), bool $value_vacio = false): array|string
     {
 
@@ -423,7 +420,7 @@ class inm_co_acreditado_html extends html_controler {
         return $params;
     }
 
-    private function rfc(int $cols, bool $disabled = false, string $name = 'rfc', string $place_holder= 'RFC',
+    private function rfc(int $cols,  string $entidad, bool $disabled = false, string $name = 'rfc', string $place_holder= 'RFC',
                                stdClass $row_upd = new stdClass(), bool $value_vacio = false): array|string
     {
 

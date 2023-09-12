@@ -111,7 +111,8 @@ class _keys_selects{
 
         $controler->inputs->inm_co_acreditado = new stdClass();
 
-        $inputs_co_acreditado = (new inm_co_acreditado_html(html: $controler->html_base))->inputs();
+        $inputs_co_acreditado = (new inm_co_acreditado_html(html: $controler->html_base))->inputs(
+            entidad: 'inm_co_acreditado');
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al generar inputs',data:  $inputs_co_acreditado);
         }

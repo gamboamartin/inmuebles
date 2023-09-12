@@ -1,15 +1,10 @@
 <?php
 namespace gamboamartin\inmuebles\html;
 use gamboamartin\errores\errores;
-use gamboamartin\inmuebles\models\inm_attr_tipo_credito;
-use gamboamartin\inmuebles\models\inm_comprador;
-use gamboamartin\inmuebles\models\inm_producto_infonavit;
 use gamboamartin\inmuebles\models\inm_referencia;
-use gamboamartin\system\html_controler;
 use PDO;
-use stdClass;
 
-class inm_referencia_html extends html_controler {
+class inm_referencia_html extends _base {
 
     public function select_inm_referencia_id(int $cols, bool $con_registros, int $id_selected, PDO $link, array $columns_ds=array(),
                                       bool $disabled = false, array $filtro = array()): array|string

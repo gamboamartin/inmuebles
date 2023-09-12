@@ -147,9 +147,11 @@ if($controlador->row_upd->genero === 'F'){
     <div  id="apartado_8">
         <div class="col-md-12">
             <h4>7.1 Referencia 1</h4>
+            <?php echo $controlador->inputs->inm_referencias[0]->apellido_paterno; ?>
         </div>
         <div class="col-md-12">
             <h4>7.1 Referencia 2</h4>
+            <?php echo $controlador->inputs->inm_referencias[1]->apellido_paterno; ?>
         </div>
     </div>
 

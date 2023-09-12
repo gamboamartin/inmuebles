@@ -12,6 +12,7 @@ use base\controller\init;
 use gamboamartin\errores\errores;
 use gamboamartin\inmuebles\html\inm_co_acreditado_html;
 use gamboamartin\inmuebles\html\inm_comprador_html;
+use gamboamartin\inmuebles\html\inm_referencia_html;
 use gamboamartin\inmuebles\models\_inm_comprador;
 use gamboamartin\inmuebles\models\inm_comprador;
 use gamboamartin\inmuebles\models\inm_referencia;
@@ -593,6 +594,31 @@ class controlador_inm_comprador extends _ctl_base {
         }
 
         $this->inm_referencias = $inm_referencias;
+
+        $inm_referencias = array();
+
+        $inm_referencia = new stdClass();
+
+        $apellido_paterno = (new inm_referencia_html(html: $this->html_base))->apellido_paterno(
+            cols: 6,entidad: 'inm_referencia',name: 'inm_referencia_apellido_paterno_1');
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al obtener apellido_paterno',data:  $apellido_paterno, header: $header,ws:  $ws);
+        }
+        $inm_referencia->apellido_paterno = $apellido_paterno;
+
+        $inm_referencias[0] = $inm_referencia;
+
+        $inm_referencia = new stdClass();
+        $apellido_paterno = (new inm_referencia_html(html: $this->html_base))->apellido_paterno(
+            cols: 6,entidad: 'inm_referencia',name: 'inm_referencia_apellido_paterno_2');
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al obtener apellido_paterno',data:  $apellido_paterno, header: $header,ws:  $ws);
+        }
+        $inm_referencia->apellido_paterno = $apellido_paterno;
+        $inm_referencias[1] = $inm_referencia;
+
+
+        $this->inputs->inm_referencias = $inm_referencias;
 
 
         $co_acreditados = (new inm_comprador(link: $this->link))->get_co_acreditados(inm_comprador_id: $this->registro_id);
