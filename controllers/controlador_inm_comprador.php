@@ -613,6 +613,20 @@ class controlador_inm_comprador extends _ctl_base {
         }
         $inm_referencia->apellido_materno = $apellido_materno;
 
+        $nombre = (new inm_referencia_html(html: $this->html_base))->nombre(
+            cols: 6,entidad: 'inm_referencia',name: 'inm_referencia_nombre_1');
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al obtener apellido_materno',data:  $nombre, header: $header,ws:  $ws);
+        }
+        $inm_referencia->nombre = $nombre;
+
+        $lada = (new inm_referencia_html(html: $this->html_base))->lada(
+            cols: 6,entidad: 'inm_referencia',name: 'inm_referencia_lada_1');
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al obtener apellido_materno',data:  $lada, header: $header,ws:  $ws);
+        }
+        $inm_referencia->lada = $lada;
+
 
         $inm_referencias[0] = $inm_referencia;
 
@@ -631,6 +645,20 @@ class controlador_inm_comprador extends _ctl_base {
             return $this->retorno_error(mensaje: 'Error al obtener apellido_materno',data:  $apellido_paterno, header: $header,ws:  $ws);
         }
         $inm_referencia->apellido_materno = $apellido_materno;
+
+        $nombre = (new inm_referencia_html(html: $this->html_base))->nombre(
+            cols: 6,entidad: 'inm_referencia',name: 'inm_referencia_nombre_1');
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al obtener apellido_materno',data:  $nombre, header: $header,ws:  $ws);
+        }
+        $inm_referencia->nombre = $nombre;
+
+        $lada = (new inm_referencia_html(html: $this->html_base))->lada(
+            cols: 6,entidad: 'inm_referencia',name: 'inm_referencia_lada_1');
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al obtener apellido_materno',data:  $lada, header: $header,ws:  $ws);
+        }
+        $inm_referencia->lada = $lada;
 
 
         $inm_referencias[1] = $inm_referencia;

@@ -282,16 +282,7 @@ class inm_co_acreditado_html extends _base {
     }
 
 
-    private function lada(int $cols,  string $entidad, bool $disabled = false, string $name = 'lada', string $place_holder= 'Lada',
-                               stdClass $row_upd = new stdClass(), bool $value_vacio = false): array|string
-    {
 
-        $regex = $this->validacion->patterns['lada_html'];
-
-        return $this->input_text_required(cols: $cols,disabled:  $disabled,name:  $name,
-            place_holder:  $place_holder,row_upd:  $row_upd,value_vacio:  $value_vacio,regex: $regex);
-
-    }
 
     private function lada_nep(int $cols,  string $entidad, bool $disabled = false, string $name = 'lada_nep', string $place_holder= 'Lada',
                                stdClass $row_upd = new stdClass(), bool $value_vacio = false): array|string
@@ -304,17 +295,7 @@ class inm_co_acreditado_html extends _base {
 
     }
 
-    private function nombre(int $cols,  string $entidad, bool $disabled = false, string $name = 'nombre', string $place_holder= 'Nombre',
-                                           stdClass $row_upd = new stdClass(), bool $value_vacio = false): array|string
-    {
 
-
-        $class_css = array('inm_co_acreditado_nombre');
-
-        return $this->input_text(cols: $cols, disabled: $disabled, name: $name, place_holder: $place_holder,
-            row_upd: $row_upd, value_vacio: $value_vacio, class_css: $class_css);
-
-    }
 
     private function nombre_empresa_patron(int $cols,  string $entidad, bool $disabled = false, string $name = 'nombre_empresa_patron',
                                                 string $place_holder= 'Nombre Empresa Patron',

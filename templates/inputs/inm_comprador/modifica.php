@@ -149,11 +149,15 @@ if($controlador->row_upd->genero === 'F'){
             <h4>7.1 Referencia 1</h4>
             <?php echo $controlador->inputs->inm_referencias[0]->apellido_paterno; ?>
             <?php echo $controlador->inputs->inm_referencias[0]->apellido_materno; ?>
+            <?php echo $controlador->inputs->inm_referencias[0]->nombre; ?>
+            <?php echo $controlador->inputs->inm_referencias[0]->lada; ?>
         </div>
         <div class="col-md-12">
             <h4>7.1 Referencia 2</h4>
             <?php echo $controlador->inputs->inm_referencias[1]->apellido_paterno; ?>
             <?php echo $controlador->inputs->inm_referencias[1]->apellido_materno; ?>
+            <?php echo $controlador->inputs->inm_referencias[1]->nombre; ?>
+            <?php echo $controlador->inputs->inm_referencias[1]->lada; ?>
         </div>
     </div>
 
