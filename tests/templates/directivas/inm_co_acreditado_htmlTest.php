@@ -212,6 +212,33 @@ class inm_co_acreditado_htmlTest extends test {
         errores::$error = false;
     }
 
+    public function test_integra_input(): void
+    {
+        errores::$error = false;
+
+        $_GET['seccion'] = 'inm_producto_infonavit';
+        $_GET['accion'] = 'lista';
+        $_SESSION['grupo_id'] = 1;
+        $_SESSION['usuario_id'] = 2;
+        $_GET['session_id'] = '1';
+
+        $html_ = new \gamboamartin\template_1\html();
+        $html = new inm_co_acreditado_html($html_);
+        $html = new liberator($html);
+
+
+        $campo = 'apellido_paterno';
+        $params = new stdClass();
+        $inputs = new stdClass();
+        $row_upd = new stdClass();
+
+        $resultado = $html->integra_input($campo, $inputs, $params, $row_upd);
+        $this->assertIsObject($resultado);
+        $this->assertNotTrue(errores::$error);
+        $this->assertEquals("<div class='control-group col-sm-12'><label class='control-label' for='apellido_paterno'>Apellido Paterno</label><div class='controls'><input type='text' name='apellido_paterno' value='' class='inm_co_acreditado_apellido_paterno form-control apellido_paterno' required id='apellido_paterno' placeholder='Apellido Paterno' title='Apellido Paterno' /></div></div>",$resultado->apellido_paterno);
+        errores::$error = false;
+    }
+
     public function test_params_inputs(): void
     {
         errores::$error = false;

@@ -233,11 +233,12 @@ class inm_co_acreditado_html extends html_controler {
     }
 
     /**
-     * @param bool $integra_prefijo
-     * @param array $cols_css
-     * @param array $disableds
-     * @param array $names
-     * @param stdClass $row_upd
+     * Integra los inputs de co acreditados
+     * @param bool $integra_prefijo Si integra prefijo incluye el nombre dela tabla cada input
+     * @param array $cols_css Col css
+     * @param array $disableds Disableds atributos
+     * @param array $names Names de inputs
+     * @param stdClass $row_upd Registro en proceso
      * @return array|stdClass
      */
     final public function inputs(bool $integra_prefijo = false,array $cols_css = array(), array $disableds = array(),
@@ -267,6 +268,7 @@ class inm_co_acreditado_html extends html_controler {
      * @param stdClass $params Parametros previos
      * @param stdClass $row_upd Registro en proceso
      * @return array|stdClass
+     * @version 1.166.1
      */
     private function integra_input(string $campo, stdClass $inputs, stdClass $params,
                                    stdClass $row_upd): array|stdClass

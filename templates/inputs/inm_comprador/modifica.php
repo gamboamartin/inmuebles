@@ -145,7 +145,12 @@ if($controlador->row_upd->genero === 'F'){
 
 <?php echo $controlador->header_frontend->apartado_8; ?>
     <div  id="apartado_8">
-
+        <div class="col-md-12">
+            <h4>7.1 Referencia 1</h4>
+        </div>
+        <div class="col-md-12">
+            <h4>7.1 Referencia 2</h4>
+        </div>
     </div>
 
 
