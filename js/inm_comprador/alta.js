@@ -11,6 +11,11 @@ let sl_inm_plazo_credito_sc_id = $("#inm_plazo_credito_sc_id");
 let sl_inm_tipo_discapacidad_id = $("#inm_tipo_discapacidad_id");
 let sl_inm_persona_discapacidad_id = $("#inm_persona_discapacidad_id");
 
+let in_descuento_pension_alimenticia_dh = $("#descuento_pension_alimenticia_dh");
+let in_descuento_pension_alimenticia_fc = $("#descuento_pension_alimenticia_fc");
+let in_monto_credito_solicitado_dh = $("#monto_credito_solicitado_dh");
+let in_monto_ahorro_voluntario = $("#monto_ahorro_voluntario");
+
 let chk_es_segundo_credito = $(".es_segundo_credito");
 let chk_con_discapacidad = $(".con_discapacidad");
 
@@ -21,6 +26,17 @@ let rfc_ct = $("#rfc");
 let apellido_paterno_ct = $("#apellido_paterno");
 let apellido_materno_ct = $("#apellido_materno");
 let nombre_ct = $("#nombre");
+let numero_exterior_ct = $("#numero_exterior");
+let numero_interior_ct = $("#numero_interior");
+let lada_com_ct = $("#lada_com");
+let lada_nep_ct = $("#lada_nep");
+let numero_nep_ct = $("#numero_nep");
+let extension_nep_ct = $("#extension_nep");
+let nss_ct = $("#nss");
+let numero_com_ct = $("#numero_com");
+let cel_com_ct = $("#cel_com");
+let correo_com_ct = $("#correo_com");
+
 
 let apartado_1 = $("#apartado_1");
 let apartado_2 = $("#apartado_2");
@@ -45,6 +61,122 @@ let dp_estado_id = -1;
 let dp_municipio_id = -1;
 let dp_cp_id = -1;
 let dp_colonia_postal_id = -1;
+
+
+in_descuento_pension_alimenticia_dh.change(function() {
+    let value = $(this).val().trim();
+    $(this).val(value);
+
+});
+
+in_descuento_pension_alimenticia_fc.change(function() {
+    let value = $(this).val().trim();
+    $(this).val(value);
+
+});
+
+in_monto_credito_solicitado_dh.change(function() {
+    let value = $(this).val().trim();
+    $(this).val(value);
+
+});
+
+in_monto_ahorro_voluntario.change(function() {
+    let value = $(this).val().trim();
+    $(this).val(value);
+
+});
+
+lada_nep_ct.change(function() {
+    let value = $(this).val().trim();
+    $(this).val(value);
+
+});
+
+numero_nep_ct.change(function() {
+    let value = $(this).val().trim();
+    $(this).val(value);
+
+});
+
+extension_nep_ct.change(function() {
+    let value = $(this).val().trim();
+    $(this).val(value);
+
+});
+
+nss_ct.change(function() {
+    let value = $(this).val().trim();
+    $(this).val(value);
+
+});
+
+curp_ct.change(function() {
+    let value = $(this).val().trim();
+    $(this).val(value);
+
+});
+
+
+rfc_ct.change(function() {
+    let value = $(this).val().trim();
+    $(this).val(value);
+
+});
+
+apellido_paterno_ct.change(function() {
+    let value = $(this).val().trim();
+    $(this).val(value);
+
+});
+
+apellido_materno_ct.change(function() {
+    let value = $(this).val().trim();
+    $(this).val(value);
+
+});
+
+nombre_ct.change(function() {
+    let value = $(this).val().trim();
+    $(this).val(value);
+
+});
+
+numero_exterior_ct.change(function() {
+    let value = $(this).val().trim();
+    $(this).val(value);
+
+});
+
+numero_interior_ct.change(function() {
+    let value = $(this).val().trim();
+    $(this).val(value);
+
+});
+
+lada_com_ct.change(function() {
+    let value = $(this).val().trim();
+    $(this).val(value);
+
+});
+
+numero_com_ct.change(function() {
+    let value = $(this).val().trim();
+    $(this).val(value);
+
+});
+
+cel_com_ct.change(function() {
+    let value = $(this).val().trim();
+    $(this).val(value);
+
+});
+
+correo_com_ct.change(function() {
+    let value = $(this).val().trim();
+    $(this).val(value);
+
+});
 
 let btn = $(".btn-success");
 
@@ -152,7 +284,7 @@ apellido_materno_ct.change(function(){
 nombre_empresa_patron_ct.change(function(){
 
     let nombre_empresa_patron = $(this).val();
-    nombre_empresa_patron = nombre_empresa_patron.toUpperCase()
+    nombre_empresa_patron = nombre_empresa_patron.toUpperCase().trim();
     nombre_empresa_patron_ct.val(nombre_empresa_patron);
 
 });
@@ -168,7 +300,7 @@ rfc_ct.change(function(){
 nrp_nep_ct.change(function(){
 
     let nrp_nep = $(this).val();
-    nrp_nep = nrp_nep.toUpperCase()
+    nrp_nep = nrp_nep.toUpperCase().trim();
     nrp_nep_ct.val(nrp_nep);
 
 });

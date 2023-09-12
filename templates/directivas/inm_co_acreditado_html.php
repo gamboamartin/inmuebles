@@ -170,6 +170,7 @@ class inm_co_acreditado_html extends html_controler {
      * @param array $disableds Disabled atributos
      * @param array $names Names
      * @return array|stdClass
+     * @version 1.159.1
      */
     private function init_params(array $campos, array $cols_css, array $disableds, array $names): array|stdClass
     {
