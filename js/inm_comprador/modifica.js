@@ -44,6 +44,21 @@ let numero_com_ct = $("#numero_com");
 let cel_com_ct = $("#cel_com");
 let correo_com_ct = $("#correo_com");
 
+let inm_co_acreditado_nss = $("#inm_co_acreditado_nss");
+let inm_co_acreditado_curp = $("#inm_co_acreditado_curp");
+let inm_co_acreditado_rfc = $("#inm_co_acreditado_rfc");
+let inm_co_acreditado_apellido_paterno = $("#inm_co_acreditado_apellido_paterno");
+let inm_co_acreditado_apellido_materno = $("#inm_co_acreditado_apellido_materno");
+let inm_co_acreditado_nombre = $("#inm_co_acreditado_nombre");
+let inm_co_acreditado_lada = $("#inm_co_acreditado_lada");
+let inm_co_acreditado_numero = $("#inm_co_acreditado_numero");
+let inm_co_acreditado_celular = $("#inm_co_acreditado_celular");
+let inm_co_acreditado_correo = $("#inm_co_acreditado_correo");
+let inm_co_acreditado_nombre_empresa_patron = $("#inm_co_acreditado_nombre_empresa_patron");
+let inm_co_acreditado_nrp = $("#inm_co_acreditado_nrp");
+let inm_co_acreditado_lada_nep = $("#inm_co_acreditado_lada_nep");
+let inm_co_acreditado_numero_nep = $("#inm_co_acreditado_numero_nep");
+
 let apartado_1 = $("#apartado_1");
 let apartado_2 = $("#apartado_2");
 let apartado_3 = $("#apartado_3");
@@ -192,8 +207,78 @@ cel_com_ct.change(function() {
 correo_com_ct.change(function() {
     let value = $(this).val().trim();
     $(this).val(value);
-
 });
+
+inm_co_acreditado_nss.change(function() {
+    let value = $(this).val().trim();
+    $(this).val(value);
+});
+
+inm_co_acreditado_curp.change(function() {
+    let value = $(this).val().trim().toUpperCase();
+    $(this).val(value);
+});
+
+inm_co_acreditado_rfc.change(function() {
+    let value = $(this).val().trim().toUpperCase();
+    $(this).val(value);
+});
+
+inm_co_acreditado_apellido_paterno.change(function() {
+    let value = $(this).val().trim().toUpperCase();
+    $(this).val(value);
+});
+
+inm_co_acreditado_apellido_materno.change(function() {
+    let value = $(this).val().trim().toUpperCase();
+    $(this).val(value);
+});
+
+inm_co_acreditado_nombre.change(function() {
+    let value = $(this).val().trim().toUpperCase();
+    $(this).val(value);
+});
+
+inm_co_acreditado_lada.change(function() {
+    let value = $(this).val().trim();
+    $(this).val(value);
+});
+
+inm_co_acreditado_numero.change(function() {
+    let value = $(this).val().trim();
+    $(this).val(value);
+});
+
+inm_co_acreditado_celular.change(function() {
+    let value = $(this).val().trim();
+    $(this).val(value);
+});
+
+inm_co_acreditado_correo.change(function() {
+    let value = $(this).val().trim();
+    $(this).val(value);
+});
+
+inm_co_acreditado_nombre_empresa_patron.change(function() {
+    let value = $(this).val().trim().toUpperCase();
+    $(this).val(value);
+});
+
+inm_co_acreditado_nrp.change(function() {
+    let value = $(this).val().trim().toUpperCase();
+    $(this).val(value);
+});
+
+inm_co_acreditado_lada_nep.change(function() {
+    let value = $(this).val().trim();
+    $(this).val(value);
+});
+
+inm_co_acreditado_numero_nep.change(function() {
+    let value = $(this).val().trim();
+    $(this).val(value);
+});
+
 
 
 collapse_a1.click(function() {
@@ -227,20 +312,7 @@ collapse_a14.click(function() {
 });
 
 
-let inm_co_acreditado_nss = $("#inm_co_acreditado_nss");
-let inm_co_acreditado_curp = $("#inm_co_acreditado_curp");
-let inm_co_acreditado_rfc = $("#inm_co_acreditado_rfc");
-let inm_co_acreditado_apellido_paterno = $("#inm_co_acreditado_apellido_paterno");
-let inm_co_acreditado_apellido_materno = $("#inm_co_acreditado_apellido_materno");
-let inm_co_acreditado_nombre = $("#inm_co_acreditado_nombre");
-let inm_co_acreditado_lada = $("#inm_co_acreditado_lada");
-let inm_co_acreditado_numero = $("#inm_co_acreditado_numero");
-let inm_co_acreditado_celular = $("#inm_co_acreditado_celular");
-let inm_co_acreditado_correo = $("#inm_co_acreditado_correo");
-let inm_co_acreditado_nombre_empresa_patron = $("#inm_co_acreditado_nombre_empresa_patron");
-let inm_co_acreditado_nrp = $("#inm_co_acreditado_nrp");
-let inm_co_acreditado_lada_nep = $("#inm_co_acreditado_lada_nep");
-let inm_co_acreditado_numero_nep = $("#inm_co_acreditado_numero_nep");
+
 
 function habilita_co_acreditado(){
     inm_co_acreditado_nss.prop('disabled',false);

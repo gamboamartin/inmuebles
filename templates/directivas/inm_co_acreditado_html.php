@@ -92,7 +92,7 @@ class inm_co_acreditado_html extends html_controler {
         foreach ($params->campos as $campo){
             $inputs = $this->integra_input(campo: $campo,inputs:  $inputs,params:  $params,row_upd:  $row_upd);
             if(errores::$error){
-                return $this->error->error(mensaje: 'Error al generar input',data:  $input);
+                return $this->error->error(mensaje: 'Error al generar input',data:  $inputs);
             }
         }
 
@@ -175,6 +175,11 @@ class inm_co_acreditado_html extends html_controler {
         return $cols_css;
     }
 
+    /**
+     * @param string $campo
+     * @param stdClass $params
+     * @return stdClass
+     */
     private function init_param(string $campo, stdClass $params): stdClass
     {
         if(!isset($params->cols[$campo])){
@@ -221,6 +226,14 @@ class inm_co_acreditado_html extends html_controler {
         return $data;
     }
 
+    /**
+     * @param bool $integra_prefijo
+     * @param array $cols_css
+     * @param array $disableds
+     * @param array $names
+     * @param stdClass $row_upd
+     * @return array|stdClass
+     */
     final public function inputs(bool $integra_prefijo = false,array $cols_css = array(), array $disableds = array(),
                                  array $names = array(), stdClass $row_upd = new stdClass()): array|stdClass
     {
@@ -241,7 +254,15 @@ class inm_co_acreditado_html extends html_controler {
         return $inputs;
     }
 
-    private function integra_input(string $campo, stdClass $inputs, stdClass $params, stdClass $row_upd){
+    /**
+     * @param string $campo
+     * @param stdClass $inputs
+     * @param stdClass $params
+     * @param stdClass $row_upd
+     * @return array|stdClass
+     */
+    private function integra_input(string $campo, stdClass $inputs, stdClass $params, stdClass $row_upd): array|stdClass
+    {
         $valida = $this->valida_campo(campo: $campo);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al validar campo',data:  $valida);
@@ -432,6 +453,12 @@ class inm_co_acreditado_html extends html_controler {
         return $select;
     }
 
+    /**
+     * Valida que un campo para parametros sea valido
+     * @param string $campo Campo a validar
+     * @return bool|array
+     * @version 1.164.1
+     */
     private function valida_campo(string $campo): bool|array
     {
         $campo = trim($campo);

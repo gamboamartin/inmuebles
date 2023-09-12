@@ -24,8 +24,16 @@ class _inm_comprador{
         return $aplica_seccion_co_acreditado;
     }
 
+    /**
+     * @param controlador_inm_comprador $controler
+     * @param int $n_apartado
+     * @param string $tag_header
+     * @param stdClass $row_upd
+     * @return array|stdClass
+     */
     private function data_co_acreditado(controlador_inm_comprador $controler, int $n_apartado, string $tag_header,
-                                        stdClass $row_upd = new stdClass()){
+                                        stdClass $row_upd = new stdClass()): array|stdClass
+    {
 
         $header_apartado = $this->header_apartado(html_entidad: $controler->html_entidad,n_apartado:  $n_apartado,
             tag_header: $tag_header);
