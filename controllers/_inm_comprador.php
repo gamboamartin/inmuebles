@@ -24,7 +24,8 @@ class _inm_comprador{
         return $aplica_seccion_co_acreditado;
     }
 
-    private function data_co_acreditado(controlador_inm_comprador $controler, int $n_apartado, string $tag_header){
+    private function data_co_acreditado(controlador_inm_comprador $controler, int $n_apartado, string $tag_header,
+                                        stdClass $row_upd = new stdClass()){
 
         $header_apartado = $this->header_apartado(html_entidad: $controler->html_entidad,n_apartado:  $n_apartado,
             tag_header: $tag_header);
@@ -43,7 +44,7 @@ class _inm_comprador{
         $controler->header_frontend->$key_header = $header_apartado;
 
         $inm_co_acreditado_inputs = (new inm_co_acreditado_html(html: $controler->html_base))->inputs(
-            integra_prefijo: true);
+            integra_prefijo: true, row_upd: $row_upd);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al generar inputs',data:  $inm_co_acreditado_inputs);
         }
@@ -52,7 +53,7 @@ class _inm_comprador{
         return $controler->inputs;
     }
 
-    final public function frontend_co_acreditado(controlador_inm_comprador $controler){
+    final public function frontend_co_acreditado(controlador_inm_comprador $controler, stdClass $row_upd = new stdClass()){
         $aplica_seccion_co_acreditado = $this->aplica_seccion_co_acreditado(inm_comprador: $controler->registro);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al validar co_acreditado',data:  $aplica_seccion_co_acreditado);
@@ -67,7 +68,8 @@ class _inm_comprador{
 
         foreach ($headers as $n_apartado=>$tag_header){
 
-            $inputs = $this->data_co_acreditado(controler: $controler,n_apartado:  $n_apartado,tag_header:  $tag_header);
+            $inputs = $this->data_co_acreditado(controler: $controler,n_apartado:  $n_apartado,tag_header:  $tag_header,
+                row_upd: $row_upd);
 
             if(errores::$error){
                 return $this->error->error(mensaje: 'Error al generar inputs co acreditado',data:  $inputs);

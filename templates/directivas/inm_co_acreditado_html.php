@@ -73,12 +73,18 @@ class inm_co_acreditado_html extends html_controler {
 
     }
 
-    private function genera_inputs(stdClass $params){
+    /**
+     * @param stdClass $params
+     * @param stdClass $row_upd
+     * @return array|stdClass
+     */
+    private function genera_inputs(stdClass $params, stdClass $row_upd = new stdClass()): array|stdClass
+    {
         $inputs = new stdClass();
 
         foreach ($params->campos as $campo){
             $input = $this->$campo(cols: $params->cols[$campo], disabled: $params->disableds[$campo],
-                name: $params->names[$campo]);
+                name: $params->names[$campo], row_upd: $row_upd);
             if(errores::$error){
                 return $this->error->error(mensaje: 'Error al generar input',data:  $input);
             }
@@ -196,7 +202,7 @@ class inm_co_acreditado_html extends html_controler {
     }
 
     final public function inputs(bool $integra_prefijo = false,array $cols_css = array(), array $disableds = array(),
-                                 array $names = array()): array|stdClass
+                                 array $names = array(), stdClass $row_upd = new stdClass()): array|stdClass
     {
 
 
@@ -207,7 +213,7 @@ class inm_co_acreditado_html extends html_controler {
         }
 
 
-        $inputs = $this->genera_inputs(params: $params);
+        $inputs = $this->genera_inputs(params: $params, row_upd: $row_upd);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al generar input',data:  $inputs);
         }
@@ -290,11 +296,9 @@ class inm_co_acreditado_html extends html_controler {
                          bool $required = true, stdClass $row_upd = new stdClass(),
                          bool $value_vacio = false): array|string
     {
-
         $regex = $this->validacion->patterns['nss_html'];
-
-        return $this->input_text(cols: $cols,disabled:  $disabled,name:  $name,
-            place_holder:  $place_holder,row_upd:  $row_upd,value_vacio:  $value_vacio,regex: $regex,required: $required);
+        return $this->input_text(cols: $cols,disabled:  $disabled,name:  $name, place_holder:  $place_holder,
+            row_upd:  $row_upd,value_vacio:  $value_vacio,regex: $regex,required: $required);
 
     }
 
@@ -322,11 +326,12 @@ class inm_co_acreditado_html extends html_controler {
 
     /**
      * Inicializa los parametros para inputs de co acreditado
-     * @param array $cols_css
-     * @param array $disableds
-     * @param bool $integra_prefijo
-     * @param array $names
+     * @param array $cols_css Cols cd inputs
+     * @param array $disableds Disableds de inputs
+     * @param bool $integra_prefijo Si integra el prefijo anexa la tabla
+     * @param array $names Names de inputs
      * @return array|stdClass
+     * @version 1.161.1
      */
     private function params_inputs(array $cols_css, array $disableds, bool $integra_prefijo, array $names): array|stdClass
     {

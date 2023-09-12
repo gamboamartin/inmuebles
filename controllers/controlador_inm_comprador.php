@@ -42,6 +42,8 @@ class controlador_inm_comprador extends _ctl_base {
 
     public bool $aplica_seccion_co_acreditado = false;
 
+
+
     public function __construct(PDO      $link, html $html = new \gamboamartin\template_1\html(),
                                 stdClass $paths_conf = new stdClass())
     {
@@ -581,15 +583,26 @@ class controlador_inm_comprador extends _ctl_base {
 
         $this->buttons['btn_collapse_all'] = $btn_collapse_all;
 
+        $co_acreditados = (new inm_comprador(link: $this->link))->get_co_acreditados(inm_comprador_id: $this->registro_id);
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al obtener co_acreditados',data:  $co_acreditados, header: $header,ws:  $ws);
+        }
+
+        $existe_co_acreditado = false;
+        $inm_co_acreditado = new stdClass();
+        if(count($co_acreditados) === 1){
+            $existe_co_acreditado = true;
+            $inm_co_acreditado = (object)$co_acreditados[0];
+
+        }
 
 
-        $headers = (new \gamboamartin\inmuebles\controllers\_inm_comprador())->frontend_co_acreditado(controler: $this);
+        $headers = (new \gamboamartin\inmuebles\controllers\_inm_comprador())->frontend_co_acreditado(controler: $this,
+            row_upd: $inm_co_acreditado);
         if(errores::$error){
             return $this->retorno_error(
                 mensaje: 'Error al integrar headers',data:  $headers, header: $header,ws:  $ws);
         }
-
-
 
         $button_upd = $this->html->boton_submit(class_button: 'modifica', class_control: 'btn-modifica',
             style: 'success', tag: 'Modifica', id_button: 'btn_modifica');
@@ -599,6 +612,9 @@ class controlador_inm_comprador extends _ctl_base {
         }
 
         $this->btn = $button_upd;
+
+
+
 
 
         return $r_modifica;

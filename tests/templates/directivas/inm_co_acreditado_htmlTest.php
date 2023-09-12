@@ -156,6 +156,32 @@ class inm_co_acreditado_htmlTest extends test {
         errores::$error = false;
     }
 
+    public function test_params_inputs(): void
+    {
+        errores::$error = false;
+
+        $_GET['seccion'] = 'inm_producto_infonavit';
+        $_GET['accion'] = 'lista';
+        $_SESSION['grupo_id'] = 1;
+        $_SESSION['usuario_id'] = 2;
+        $_GET['session_id'] = '1';
+
+        $html_ = new \gamboamartin\template_1\html();
+        $html = new inm_co_acreditado_html($html_);
+        $html = new liberator($html);
+
+
+        $cols_css = array();
+        $disableds = array();
+        $names = array();
+        $integra_prefijo = false;
+        $resultado = $html->params_inputs($cols_css, $disableds, $integra_prefijo, $names);
+        $this->assertIsObject($resultado);
+        $this->assertNotTrue(errores::$error);
+        $this->assertEquals(6,$resultado->cols['curp']);
+        errores::$error = false;
+    }
+
     public function test_select_inm_co_acreditado_id(): void
     {
         errores::$error = false;
@@ -179,7 +205,7 @@ class inm_co_acreditado_htmlTest extends test {
 
         $alta = (new base_test())->alta_inm_co_acreditado(link: $this->link);
         if(errores::$error){
-            $error = (new errores())->error(mensaje:'Error al eliminar',data:  $del);
+            $error = (new errores())->error(mensaje:'Error al eliminar',data:  $alta);
             print_r($error);
             exit;
         }

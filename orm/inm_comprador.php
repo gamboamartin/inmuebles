@@ -441,10 +441,28 @@ class inm_comprador extends _modelo_parent{
         $com_cliente = $this->com_cliente(com_cliente_id: $imp_rel_comprador_com_cliente['com_cliente_id'],
             retorno_obj: $retorno_obj);
         if(errores::$error){
-            return $this->error->error(
-                mensaje: 'Error al obtener com_cliente',data:  $com_cliente);
+            return $this->error->error(mensaje: 'Error al obtener com_cliente',data:  $com_cliente);
         }
         return $com_cliente;
+    }
+
+    final public function get_co_acreditados(int $inm_comprador_id){
+        $filtro['inm_comprador.id'] = $inm_comprador_id;
+        $r_inm_rel_co_acredit = (new inm_rel_co_acred(link: $this->link))->filtro_and(filtro: $filtro);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al obtener inm_rel_co_acredit',data:  $r_inm_rel_co_acredit);
+        }
+        $rels = $r_inm_rel_co_acredit->registros;
+        $co_acreditados = array();
+        foreach ($rels as $rel){
+            $co_acreditado = (new inm_co_acreditado(link: $this->link))->registro(registro_id: $rel['inm_co_acreditado_id']);
+            if(errores::$error){
+                return $this->error->error(mensaje: 'Error al obtener co_acreditado',data:  $co_acreditado);
+            }
+            $co_acreditados[] = $co_acreditado;
+        }
+        return $co_acreditados;
+
     }
 
     private function inm_rel_com_cliente_ins(int $com_cliente_id, int $inm_comprador_id): array
