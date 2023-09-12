@@ -59,7 +59,7 @@ class inm_co_acreditado_htmlTest extends test {
         $params->disableds = array();
         $params->names = array();
 
-        $resultado = $html->genera_inputs($params);
+        $resultado = $html->genera_inputs('',$params);
         $this->assertIsObject($resultado);
         $this->assertNotTrue(errores::$error);
         $this->assertEquals("<div class='control-group col-sm-12'><label class='control-label' for='nss'>NSS</label><div class='controls'><input type='text' name='nss' value='' class='form-control nss' required id='nss' placeholder='NSS' pattern='(\d{2})(\d{2})(\d{2})\d{5}' title='NSS' /></div></div>",$resultado->nss);
@@ -212,6 +212,30 @@ class inm_co_acreditado_htmlTest extends test {
         errores::$error = false;
     }
 
+    public function test_inputs(): void
+    {
+        errores::$error = false;
+
+        $_GET['seccion'] = 'inm_producto_infonavit';
+        $_GET['accion'] = 'lista';
+        $_SESSION['grupo_id'] = 1;
+        $_SESSION['usuario_id'] = 2;
+        $_GET['session_id'] = '1';
+
+        $html_ = new \gamboamartin\template_1\html();
+        $html = new inm_co_acreditado_html($html_);
+        //$html = new liberator($html);
+
+
+        $entidad = '';
+
+        $resultado = $html->inputs($entidad);
+        $this->assertIsObject($resultado);
+        $this->assertNotTrue(errores::$error);
+        $this->assertEquals("<div class='control-group col-sm-6'><label class='control-label' for='curp'>CURP</label><div class='controls'><input type='text' name='curp' value='' class='inm_co_acreditado_curp form-control curp' disabled required id='curp' placeholder='CURP' pattern='([A-Z][AEIOUX][A-Z]{2}\d{2}(?:0[1-9]|1[0-2])(?:0[1-9]|[12]\d|3[01])[HM](?:AS|B[CS]|C[CLMSH]|D[FG]|G[TR]|HG|JC|M[CNS]|N[ETL]|OC|PL|Q[TR]|S[PLR]|T[CSL]|VZ|YN|ZS)[B-DF-HJ-NP-TV-Z]{3}[A-Z\d])(\d)' title='CURP' /></div></div>",$resultado->curp);
+        errores::$error = false;
+    }
+
     public function test_integra_input(): void
     {
         errores::$error = false;
@@ -232,7 +256,7 @@ class inm_co_acreditado_htmlTest extends test {
         $inputs = new stdClass();
         $row_upd = new stdClass();
 
-        $resultado = $html->integra_input($campo, $inputs, $params, $row_upd);
+        $resultado = $html->integra_input($campo,'inm_co_acreditado', $inputs, $params, $row_upd);
         $this->assertIsObject($resultado);
         $this->assertNotTrue(errores::$error);
         $this->assertEquals("<div class='control-group col-sm-12'><label class='control-label' for='apellido_paterno'>Apellido Paterno</label><div class='controls'><input type='text' name='apellido_paterno' value='' class='inm_co_acreditado_apellido_paterno form-control apellido_paterno' required id='apellido_paterno' placeholder='Apellido Paterno' title='Apellido Paterno' /></div></div>",$resultado->apellido_paterno);

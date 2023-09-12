@@ -8,16 +8,7 @@ use stdClass;
 
 class inm_co_acreditado_html extends _base {
 
-    private function apellido_materno(int $cols,  string $entidad, bool $disabled = false, string $name = 'apellido_materno', string $place_holder= 'Apellido Materno',
-                                           stdClass $row_upd = new stdClass(), bool $value_vacio = false): array|string
-    {
 
-        $class_css = array('inm_co_acreditado_apellido_materno');
-
-        return $this->input_text(cols: $cols, disabled: $disabled, name: $name, place_holder: $place_holder,
-            row_upd: $row_upd, value_vacio: $value_vacio, class_css: $class_css);
-
-    }
 
 
     private function celular(int $cols,  string $entidad, bool $disabled = false, string $name = 'celular', string $place_holder= 'Celular',
@@ -235,6 +226,7 @@ class inm_co_acreditado_html extends _base {
      * @param array $names Names de inputs
      * @param stdClass $row_upd Registro en proceso
      * @return array|stdClass
+     * @version 1.168.1
      */
     final public function inputs(string $entidad, bool $integra_prefijo = false,array $cols_css = array(),
                                  array $disableds = array(), array $names = array(),

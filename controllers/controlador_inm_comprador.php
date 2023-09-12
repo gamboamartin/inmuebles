@@ -606,6 +606,14 @@ class controlador_inm_comprador extends _ctl_base {
         }
         $inm_referencia->apellido_paterno = $apellido_paterno;
 
+        $apellido_materno = (new inm_referencia_html(html: $this->html_base))->apellido_materno(
+            cols: 6,entidad: 'inm_referencia',name: 'inm_referencia_apellido_materno_1');
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al obtener apellido_materno',data:  $apellido_paterno, header: $header,ws:  $ws);
+        }
+        $inm_referencia->apellido_materno = $apellido_materno;
+
+
         $inm_referencias[0] = $inm_referencia;
 
         $inm_referencia = new stdClass();
@@ -615,6 +623,16 @@ class controlador_inm_comprador extends _ctl_base {
             return $this->retorno_error(mensaje: 'Error al obtener apellido_paterno',data:  $apellido_paterno, header: $header,ws:  $ws);
         }
         $inm_referencia->apellido_paterno = $apellido_paterno;
+
+
+        $apellido_materno = (new inm_referencia_html(html: $this->html_base))->apellido_materno(
+            cols: 6,entidad: 'inm_referencia',name: 'inm_referencia_apellido_materno_2');
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al obtener apellido_materno',data:  $apellido_paterno, header: $header,ws:  $ws);
+        }
+        $inm_referencia->apellido_materno = $apellido_materno;
+
+
         $inm_referencias[1] = $inm_referencia;
 
 
@@ -647,9 +665,6 @@ class controlador_inm_comprador extends _ctl_base {
         }
 
         $this->btn = $button_upd;
-
-
-
 
 
         return $r_modifica;
