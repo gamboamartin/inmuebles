@@ -668,6 +668,8 @@ class inm_comprador extends _modelo_parent{
             }
         }
 
+
+
         $aplica_alta_co_acreditado = false;
         if(count($inm_co_acreditado_ins)>0){
             $aplica_alta_co_acreditado = true;
@@ -679,18 +681,41 @@ class inm_comprador extends _modelo_parent{
         }
 
         if($aplica_alta_co_acreditado) {
-            $alta_inm_co_acreditado = (new inm_co_acreditado(link: $this->link))->alta_registro(
-                registro: $inm_co_acreditado_ins);
-            if (errores::$error) {
-                return $this->error->error(mensaje: 'Error al insertar co_acreditado', data: $alta_inm_co_acreditado);
+
+            $co_acreditados = $this->get_co_acreditados(inm_comprador_id: $id);
+            if(errores::$error){
+                return $this->error->error(mensaje: 'Error al obtener co_acreditados',data:  $co_acreditados);
             }
 
-            $inm_rel_co_acred_ins['inm_co_acreditado_id'] = $alta_inm_co_acreditado->registro_id;
-            $inm_rel_co_acred_ins['inm_comprador_id'] = $this->registro_id;
+            $existe_co_acreditado = false;
+            $inm_co_acreditado = new stdClass();
+            if(count($co_acreditados) === 1){
+                $existe_co_acreditado = true;
+                $inm_co_acreditado = (object)$co_acreditados[0];
 
-            $alta_inm_rel_co_acred = (new inm_rel_co_acred(link: $this->link))->alta_registro(registro:$inm_rel_co_acred_ins);
-            if (errores::$error) {
-                return $this->error->error(mensaje: 'Error al insertar alta_inm_rel_co_acred', data: $alta_inm_rel_co_acred);
+            }
+
+            if(!$existe_co_acreditado) {
+                $alta_inm_co_acreditado = (new inm_co_acreditado(link: $this->link))->alta_registro(
+                    registro: $inm_co_acreditado_ins);
+                if (errores::$error) {
+                    return $this->error->error(mensaje: 'Error al insertar co_acreditado', data: $alta_inm_co_acreditado);
+                }
+
+                $inm_rel_co_acred_ins['inm_co_acreditado_id'] = $alta_inm_co_acreditado->registro_id;
+                $inm_rel_co_acred_ins['inm_comprador_id'] = $this->registro_id;
+
+                $alta_inm_rel_co_acred = (new inm_rel_co_acred(link: $this->link))->alta_registro(registro: $inm_rel_co_acred_ins);
+                if (errores::$error) {
+                    return $this->error->error(mensaje: 'Error al insertar alta_inm_rel_co_acred', data: $alta_inm_rel_co_acred);
+                }
+            }
+            else{
+                $modifica_co_acreditado = (new inm_co_acreditado(link: $this->link))->modifica_bd(
+                    registro: $inm_co_acreditado_ins,id:  $inm_co_acreditado->inm_co_acreditado_id);
+                if (errores::$error) {
+                    return $this->error->error(mensaje: 'Error al modificar co acreditado', data: $modifica_co_acreditado);
+                }
             }
 
         }

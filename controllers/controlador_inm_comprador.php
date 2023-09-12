@@ -615,8 +615,6 @@ class controlador_inm_comprador extends _ctl_base {
 
 
 
-
-
         return $r_modifica;
     }
 

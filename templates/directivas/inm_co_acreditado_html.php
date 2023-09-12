@@ -74,8 +74,9 @@ class inm_co_acreditado_html extends html_controler {
     }
 
     /**
-     * @param stdClass $params
-     * @param stdClass $row_upd
+     * Genera los inputs para co acreditado
+     * @param stdClass $params Parametros para inputs
+     * @param stdClass $row_upd Registro en proceso
      * @return array|stdClass
      */
     private function genera_inputs(stdClass $params, stdClass $row_upd = new stdClass()): array|stdClass
