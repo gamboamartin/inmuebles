@@ -385,6 +385,8 @@ class inm_comprador extends _modelo_parent{
             return $this->error->error(mensaje: 'Error al modificar comprador',data:  $r_modifica);
         }
 
+        //print_r($registro);exit;
+
         $transacciones = (new _base_comprador())->transacciones_posterior_upd(inm_comprador_upd: $registro,
             inm_comprador_id:  $id,modelo_inm_comprador:  $this,r_modifica:  $r_modifica);
         if(errores::$error){

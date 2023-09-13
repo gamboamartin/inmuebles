@@ -18,8 +18,8 @@ class inm_referencia extends _modelo_parent{
             'dp_estado'=>'dp_municipio','dp_pais'=>'dp_estado','dp_colonia'=>'dp_colonia_postal',
             'dp_calle'=>'dp_calle_pertenece');
 
-        $campos_obligatorios = array('inm_comprador_id','apellido_paterno','apellido_materno', 'nombre','lada',
-            'numero', 'celular','dp_calle_pertenece_id','numero_dom');
+        $campos_obligatorios = array('inm_comprador_id','apellido_paterno', 'nombre','lada', 'numero', 'celular',
+            'dp_calle_pertenece_id','numero_dom');
 
         $columnas_extra= array();
         $renombres= array();
@@ -67,7 +67,7 @@ class inm_referencia extends _modelo_parent{
      */
     private function descripcion(array $registro): string|array
     {
-        $keys = array('nombre','apellido_paterno','apellido_materno');
+        $keys = array('nombre','apellido_paterno');
         $valida = $this->validacion->valida_existencia_keys(keys: $keys,registro:  $registro,valida_vacio: false);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al validar $registro',data: $valida);;
@@ -78,6 +78,12 @@ class inm_referencia extends _modelo_parent{
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al validar $registro',data: $valida);;
         }
+
+        if(!isset($registro['apellido_materno'])){
+            $registro['apellido_materno'] = '';
+        }
+
+
 
         $descripcion = $registro['nombre'];
         $descripcion .= ' '.$registro['apellido_paterno'];
