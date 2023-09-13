@@ -10,6 +10,7 @@ namespace gamboamartin\inmuebles\controllers;
 
 use base\controller\init;
 use gamboamartin\errores\errores;
+use gamboamartin\inmuebles\html\_base;
 use gamboamartin\inmuebles\html\inm_co_acreditado_html;
 use gamboamartin\inmuebles\html\inm_comprador_html;
 use gamboamartin\inmuebles\html\inm_referencia_html;
@@ -75,7 +76,6 @@ class controlador_inm_comprador extends _ctl_base {
      * @param bool $header Si header retorna resultado en web
      * @param bool $ws Si ws muestra resultado en json
      * @return array|string
-     * @version 1.102.1
      */
     public function alta(bool $header, bool $ws = false): array|string
     {
@@ -85,56 +85,10 @@ class controlador_inm_comprador extends _ctl_base {
                 mensaje: 'Error al inicializar alta',data:  $r_alta, header: $header,ws:  $ws);
         }
 
-        $keys_selects = (new _inm_comprador())->keys_selects(controler: $this);
+        $inputs = (new _base(html: $this->html_base))->data_front_alta(controler: $this);
         if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al integrar row_upd',data:  $keys_selects,
-                header: $header,ws:  $ws);
+            return $this->retorno_error(mensaje: 'Error al obtener inputs',data:  $inputs, header: $header,ws:  $ws);
         }
-
-        $inputs = $this->inputs(keys_selects: $keys_selects);
-        if(errores::$error){
-            return $this->retorno_error(
-                mensaje: 'Error al obtener inputs',data:  $inputs, header: $header,ws:  $ws);
-        }
-
-        $radios = (new _inm_comprador())->radios(checked_default_cd: 1, checked_default_esc: 2, controler: $this);
-        if(errores::$error){
-            return $this->retorno_error(
-                mensaje: 'Error al integrar radios',data:  $radios, header: $header,ws:  $ws);
-        }
-
-
-        $btn_collapse_all = $this->html->button_para_java(id_css: 'collapse_all',style:  'primary',tag:  'Ver/Ocultar Todo');
-        if(errores::$error){
-            return $this->retorno_error(
-                mensaje: 'Error al btn_collapse_all',data:  $btn_collapse_all, header: $header,ws:  $ws);
-        }
-
-        $this->buttons['btn_collapse_all'] = $btn_collapse_all;
-
-        $headers['1'] = '1. CRÉDITO SOLICITADO';
-        $headers['2'] = '2. DATOS PARA DETERMINAR EL MONTO DE CRÉDITO';
-        $headers['3'] = '3. DATOS DE LA VIVIENDA/TERRENO DESTINO DEL CRÉDITO';
-        $headers['4'] = '4. DATOS DE LA EMPRESA O PATRÓN';
-        $headers['5'] = '5. DATOS DE IDENTIFICACIÓN DEL (DE LA) DERECHOHABIENTE / DATOS QUE SERÁN VALIDADOS';
-        $headers['13'] = '13. DATOS FISCALES PARA FACTURACION';
-        $headers['14'] = '14. CONTROL INTERNO';
-
-        foreach ($headers as $n_apartado=>$tag_header){
-            $id_css_button = "collapse_a$n_apartado";
-            $key_header = "apartado_$n_apartado";
-
-            $header_apartado = $this->html_entidad->header_collapsible(id_css_button: $id_css_button,
-                style_button: 'primary', tag_button: 'Ver/Ocultar',tag_header:  $tag_header);
-
-            if(errores::$error){
-                return $this->retorno_error(
-                    mensaje: 'Error al generar header',data:  $header_apartado, header: $header,ws:  $ws);
-            }
-
-            $this->header_frontend->$key_header = $header_apartado;
-        }
-
 
 
 
@@ -587,7 +541,6 @@ class controlador_inm_comprador extends _ctl_base {
         $this->buttons['btn_collapse_all'] = $btn_collapse_all;
 
 
-
         $inm_referencias = (new inm_referencia(link: $this->link))->inm_referencias(inm_comprador_id: $this->registro_id);
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al obtener inm_referencias',data:  $inm_referencias, header: $header,ws:  $ws);
@@ -599,67 +552,20 @@ class controlador_inm_comprador extends _ctl_base {
 
         $inm_referencia = new stdClass();
 
-        $apellido_paterno = (new inm_referencia_html(html: $this->html_base))->apellido_paterno(
-            cols: 6,entidad: 'inm_referencia',name: 'inm_referencia_apellido_paterno_1');
+        $inm_referencia = (new inm_referencia_html(html: $this->html_base))->base_ref(indice: 1,inm_referencia:  $inm_referencia);
         if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al obtener apellido_paterno',data:  $apellido_paterno, header: $header,ws:  $ws);
+            return $this->retorno_error(mensaje: 'Error al integrar referencia',data:  $inm_referencia, header: $header,ws:  $ws);
         }
-        $inm_referencia->apellido_paterno = $apellido_paterno;
-
-        $apellido_materno = (new inm_referencia_html(html: $this->html_base))->apellido_materno(
-            cols: 6,entidad: 'inm_referencia',name: 'inm_referencia_apellido_materno_1');
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al obtener apellido_materno',data:  $apellido_paterno, header: $header,ws:  $ws);
-        }
-        $inm_referencia->apellido_materno = $apellido_materno;
-
-        $nombre = (new inm_referencia_html(html: $this->html_base))->nombre(
-            cols: 6,entidad: 'inm_referencia',name: 'inm_referencia_nombre_1');
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al obtener apellido_materno',data:  $nombre, header: $header,ws:  $ws);
-        }
-        $inm_referencia->nombre = $nombre;
-
-        $lada = (new inm_referencia_html(html: $this->html_base))->lada(
-            cols: 6,entidad: 'inm_referencia',name: 'inm_referencia_lada_1');
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al obtener apellido_materno',data:  $lada, header: $header,ws:  $ws);
-        }
-        $inm_referencia->lada = $lada;
-
 
         $inm_referencias[0] = $inm_referencia;
 
         $inm_referencia = new stdClass();
-        $apellido_paterno = (new inm_referencia_html(html: $this->html_base))->apellido_paterno(
-            cols: 6,entidad: 'inm_referencia',name: 'inm_referencia_apellido_paterno_2');
+
+
+        $inm_referencia = (new inm_referencia_html(html: $this->html_base))->base_ref(indice: 2,inm_referencia:  $inm_referencia);
         if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al obtener apellido_paterno',data:  $apellido_paterno, header: $header,ws:  $ws);
+            return $this->retorno_error(mensaje: 'Error al integrar referencia',data:  $inm_referencia, header: $header,ws:  $ws);
         }
-        $inm_referencia->apellido_paterno = $apellido_paterno;
-
-
-        $apellido_materno = (new inm_referencia_html(html: $this->html_base))->apellido_materno(
-            cols: 6,entidad: 'inm_referencia',name: 'inm_referencia_apellido_materno_2');
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al obtener apellido_materno',data:  $apellido_paterno, header: $header,ws:  $ws);
-        }
-        $inm_referencia->apellido_materno = $apellido_materno;
-
-        $nombre = (new inm_referencia_html(html: $this->html_base))->nombre(
-            cols: 6,entidad: 'inm_referencia',name: 'inm_referencia_nombre_1');
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al obtener apellido_materno',data:  $nombre, header: $header,ws:  $ws);
-        }
-        $inm_referencia->nombre = $nombre;
-
-        $lada = (new inm_referencia_html(html: $this->html_base))->lada(
-            cols: 6,entidad: 'inm_referencia',name: 'inm_referencia_lada_1');
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al obtener apellido_materno',data:  $lada, header: $header,ws:  $ws);
-        }
-        $inm_referencia->lada = $lada;
-
 
         $inm_referencias[1] = $inm_referencia;
 

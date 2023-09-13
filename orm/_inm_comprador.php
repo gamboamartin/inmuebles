@@ -474,6 +474,9 @@ class _inm_comprador{
      */
     private function row_upd_montos(controlador_inm_comprador $controler): stdClass
     {
+        if(!isset($controler->row_upd)){
+            echo 'hola';
+        }
         $controler->row_upd->descuento_pension_alimenticia_dh = 0;
         $controler->row_upd->monto_credito_solicitado_dh = 0;
         $controler->row_upd->descuento_pension_alimenticia_fc = 0;

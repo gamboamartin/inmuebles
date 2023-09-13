@@ -151,6 +151,8 @@ if($controlador->row_upd->genero === 'F'){
             <?php echo $controlador->inputs->inm_referencias[0]->apellido_materno; ?>
             <?php echo $controlador->inputs->inm_referencias[0]->nombre; ?>
             <?php echo $controlador->inputs->inm_referencias[0]->lada; ?>
+            <?php echo $controlador->inputs->inm_referencias[0]->numero; ?>
+            <?php echo $controlador->inputs->inm_referencias[0]->celular; ?>
         </div>
         <div class="col-md-12">
             <h4>7.1 Referencia 2</h4>
@@ -158,6 +160,8 @@ if($controlador->row_upd->genero === 'F'){
             <?php echo $controlador->inputs->inm_referencias[1]->apellido_materno; ?>
             <?php echo $controlador->inputs->inm_referencias[1]->nombre; ?>
             <?php echo $controlador->inputs->inm_referencias[1]->lada; ?>
+            <?php echo $controlador->inputs->inm_referencias[1]->numero; ?>
+            <?php echo $controlador->inputs->inm_referencias[1]->celular; ?>
         </div>
     </div>
 

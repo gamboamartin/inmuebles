@@ -11,16 +11,7 @@ class inm_co_acreditado_html extends _base {
 
 
 
-    private function celular(int $cols,  string $entidad, bool $disabled = false, string $name = 'celular', string $place_holder= 'Celular',
-                                 stdClass $row_upd = new stdClass(), bool $value_vacio = false): array|string
-    {
 
-        $regex = $this->validacion->patterns['telefono_mx_html'];
-
-        return $this->input_text_required(cols: $cols,disabled:  $disabled,name:  $name,
-            place_holder:  $place_holder,row_upd:  $row_upd,value_vacio:  $value_vacio,regex: $regex);
-
-    }
 
     private function correo(int $cols,  string $entidad, bool $disabled = false, string $name = 'correo', string $place_holder= 'Correo',
                                   stdClass $row_upd = new stdClass(), bool $value_vacio = false): array|string
@@ -325,6 +316,7 @@ class inm_co_acreditado_html extends _base {
     /**
      * Integra un input de tipo nss
      * @param int $cols Columnas css
+     * @param string $entidad Entidad para prefijo css
      * @param bool $disabled atributo disabled input
      * @param string $name Name input
      * @param string $place_holder Marca de agua mostrable en input
@@ -343,16 +335,7 @@ class inm_co_acreditado_html extends _base {
 
     }
 
-    private function numero(int $cols,  string $entidad, bool $disabled = false, string $name = 'numero', string $place_holder= 'Numero',
-                               stdClass $row_upd = new stdClass(), bool $value_vacio = false): array|string
-    {
 
-        $regex = $this->validacion->patterns['tel_sin_lada_html'];
-
-        return $this->input_text_required(cols: $cols,disabled:  $disabled,name:  $name,
-            place_holder:  $place_holder,row_upd:  $row_upd,value_vacio:  $value_vacio,regex: $regex);
-
-    }
 
     private function numero_nep(int $cols,  string $entidad, bool $disabled = false, string $name = 'numero_nep', string $place_holder= 'Numero',
                                  stdClass $row_upd = new stdClass(), bool $value_vacio = false): array|string
