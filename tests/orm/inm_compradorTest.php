@@ -226,6 +226,40 @@ class inm_compradorTest extends test {
         errores::$error = false;
     }
 
+    public function test_integra_descripcion(): void
+    {
+        errores::$error = false;
+
+        $_GET['seccion'] = 'inm_producto_infonavit';
+        $_GET['accion'] = 'lista';
+        $_SESSION['grupo_id'] = 1;
+        $_SESSION['usuario_id'] = 2;
+        $_GET['session_id'] = '1';
+
+        $inm = new inm_comprador(link: $this->link);
+        $inm = new liberator($inm);
+
+
+
+        $registro = array();
+        $registro['nombre'] = 'D';
+        $registro['apellido_paterno'] = 'D';
+        $registro['nss'] = 'D';
+        $registro['curp'] = 'D';
+        $registro['rfc'] = 'D';
+        $resultado = $inm->integra_descripcion($registro);
+        $this->assertIsArray($resultado);
+        $this->assertNotTrue(errores::$error);
+        $this->assertEquals('D',$resultado['nombre']);
+        $this->assertEquals('D',$resultado['apellido_paterno']);
+        $this->assertEquals('D',$resultado['nss']);
+        $this->assertEquals('D',$resultado['curp']);
+        $this->assertEquals('D',$resultado['rfc']);
+        $this->assertEquals('D D  D D D',$resultado['descripcion']);
+
+        errores::$error = false;
+    }
+
 
 
 

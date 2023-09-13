@@ -375,6 +375,7 @@ class inm_comprador extends _modelo_parent{
      * Integra la descripcion en un registro de alta
      * @param array $registro Registro en proceso
      * @return array
+     * @version 1.178.1
      */
     private function integra_descripcion(array $registro): array
     {
@@ -404,8 +405,7 @@ class inm_comprador extends _modelo_parent{
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al modificar comprador',data:  $r_modifica);
         }
-
-        //print_r($registro);exit;
+        
 
         $transacciones = (new _base_comprador())->transacciones_posterior_upd(inm_comprador_upd: $registro,
             inm_comprador_id:  $id,modelo_inm_comprador:  $this,r_modifica:  $r_modifica);

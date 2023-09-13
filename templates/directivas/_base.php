@@ -139,7 +139,7 @@ class _base extends html_controler{
             $inm_referencia_data['dp_cp_id'] = -1;
         }
         $filtro = array();
-        $filtro['dp_municipio.id'] = $inm_referencia_data['dp_municipio_id'];
+        $filtro['dp_estado.id'] = $inm_referencia_data['dp_estado_id'];
         $dp_cp_id = $this->dp_cp_id(cols: 6, id_selected: $inm_referencia_data['dp_cp_id'], filtro: $filtro,
             indice: $indice, link: $link);
         if(errores::$error){
@@ -151,7 +151,7 @@ class _base extends html_controler{
             $inm_referencia_data['dp_colonia_postal_id'] = -1;
         }
         $filtro = array();
-        $filtro['dp_cp.id'] = $inm_referencia_data['dp_cp_id'];
+        $filtro['dp_estado.id'] = $inm_referencia_data['dp_estado_id'];
 
         $dp_colonia_postal_id = $this->dp_colonia_postal_id(cols: 6, filtro: $filtro,
             id_selected: $inm_referencia_data['dp_colonia_postal_id'], indice: $indice, link: $link);
@@ -164,7 +164,7 @@ class _base extends html_controler{
             $inm_referencia_data['dp_calle_pertenece_id'] = -1;
         }
         $filtro = array();
-        $filtro['dp_colonia_postal.id'] = $inm_referencia_data['dp_colonia_postal_id'];
+        $filtro['dp_estado.id'] = $inm_referencia_data['dp_estado_id'];
         $dp_calle_pertenece_id = $this->dp_calle_pertenece_id(cols: 6, filtro: $filtro,
             id_selected: $inm_referencia_data['dp_calle_pertenece_id'], indice: $indice, link: $link);
         if(errores::$error){
