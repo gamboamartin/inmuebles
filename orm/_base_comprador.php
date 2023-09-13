@@ -97,12 +97,12 @@ class _base_comprador{
         if(!isset($registro['apellido_materno'])){
             $registro['apellido_materno'] = '';
         }
-        $descripcion = $registro['nombre'];
-        $descripcion .= ' '.$registro['apellido_paterno'];
-        $descripcion .= ' '.$registro['apellido_materno'];
-        $descripcion .= ' '.$registro['nss'];
-        $descripcion .= ' '.$registro['curp'];
-        $descripcion .= ' '.$registro['rfc'];
+
+        $descripcion = (new _base_paquete())->descripcion(registro: $registro);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al obtener descripcion', data: $descripcion);
+        }
+
         return $descripcion;
     }
 
@@ -197,6 +197,13 @@ class _base_comprador{
             return $this->error->error(mensaje: 'Error al obtener data_co_acreditado',data:  $data_co_acreditado);
         }
         $result->data_co_acreditado = $data_co_acreditado;
+
+        $data_referencias = (new _referencias())->operaciones_referencia(inm_comprador_id: $inm_comprador_id,
+            inm_comprador_upd:  $inm_comprador_upd,modelo_inm_comprador: $modelo_inm_comprador);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al obtener data_co_acreditado',data:  $data_co_acreditado);
+        }
+        $result->data_referencias = $data_referencias;
 
         return $result;
     }

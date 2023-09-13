@@ -364,6 +364,17 @@ class inm_comprador extends _modelo_parent{
 
     }
 
+    final public function get_referencias(int $inm_comprador_id){
+        $filtro['inm_comprador.id'] = $inm_comprador_id;
+        $r_inm_referencia = (new inm_referencia(link: $this->link))->filtro_and(filtro: $filtro);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al obtener r_inm_referencia',data:  $r_inm_referencia);
+        }
+
+        return $r_inm_referencia->registros;
+
+    }
+
     public function modifica_bd(array $registro, int $id, bool $reactiva = false,
                                 array $keys_integra_ds = array('codigo', 'descripcion')): array|stdClass
     {

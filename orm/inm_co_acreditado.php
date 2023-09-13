@@ -83,12 +83,10 @@ class inm_co_acreditado extends _modelo_parent{
             return $this->error->error(mensaje: 'Error al validar registro',data:  $valida);
         }
 
-        $descripcion = $registro['nombre'];
-        $descripcion .= ' '.$registro['apellido_paterno'];
-        $descripcion .= ' '.$registro['apellido_materno'];
-        $descripcion .= ' '.$registro['nss'];
-        $descripcion .= ' '.$registro['curp'];
-        $descripcion .= ' '.$registro['rfc'];
+        $descripcion = (new _base_paquete())->descripcion(registro: $registro);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al obtener descripcion', data: $descripcion);
+        }
         return $descripcion;
     }
 
