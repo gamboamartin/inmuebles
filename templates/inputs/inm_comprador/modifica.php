@@ -153,6 +153,13 @@ if($controlador->row_upd->genero === 'F'){
             <?php echo $controlador->inputs->inm_referencias[0]->lada; ?>
             <?php echo $controlador->inputs->inm_referencias[0]->numero; ?>
             <?php echo $controlador->inputs->inm_referencias[0]->celular; ?>
+            <?php echo $controlador->inputs->inm_referencias[0]->dp_pais_id; ?>
+            <?php echo $controlador->inputs->inm_referencias[0]->dp_estado_id; ?>
+            <?php echo $controlador->inputs->inm_referencias[0]->dp_municipio_id; ?>
+            <?php echo $controlador->inputs->inm_referencias[0]->dp_cp_id; ?>
+            <?php echo $controlador->inputs->inm_referencias[0]->dp_colonia_postal_id; ?>
+            <?php echo $controlador->inputs->inm_referencias[0]->dp_calle_pertenece_id; ?>
+            <?php echo $controlador->inputs->inm_referencias[0]->numero_dom; ?>
         </div>
         <div class="col-md-12">
             <h4>7.1 Referencia 2</h4>
@@ -162,6 +169,13 @@ if($controlador->row_upd->genero === 'F'){
             <?php echo $controlador->inputs->inm_referencias[1]->lada; ?>
             <?php echo $controlador->inputs->inm_referencias[1]->numero; ?>
             <?php echo $controlador->inputs->inm_referencias[1]->celular; ?>
+            <?php echo $controlador->inputs->inm_referencias[1]->dp_pais_id; ?>
+            <?php echo $controlador->inputs->inm_referencias[1]->dp_estado_id; ?>
+            <?php echo $controlador->inputs->inm_referencias[1]->dp_municipio_id; ?>
+            <?php echo $controlador->inputs->inm_referencias[1]->dp_cp_id; ?>
+            <?php echo $controlador->inputs->inm_referencias[1]->dp_colonia_postal_id; ?>
+            <?php echo $controlador->inputs->inm_referencias[1]->dp_calle_pertenece_id; ?>
+            <?php echo $controlador->inputs->inm_referencias[1]->numero_dom; ?>
         </div>
     </div>
 

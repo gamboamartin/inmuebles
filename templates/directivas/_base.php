@@ -5,6 +5,13 @@ use gamboamartin\errores\errores;
 use gamboamartin\inmuebles\controllers\controlador_inm_comprador;
 use gamboamartin\inmuebles\models\_inm_comprador;
 use gamboamartin\system\html_controler;
+use html\dp_calle_pertenece_html;
+use html\dp_colonia_postal_html;
+use html\dp_cp_html;
+use html\dp_estado_html;
+use html\dp_municipio_html;
+use html\dp_pais_html;
+use PDO;
 use stdClass;
 
 class _base extends html_controler{
@@ -36,7 +43,7 @@ class _base extends html_controler{
 
     }
 
-    private function base_ref(int $indice,stdClass $inm_referencia){
+    private function base_ref(int $indice,stdClass $inm_referencia, PDO $link){
         $apellido_paterno = $this->apellido_paterno(cols: 6,entidad: 'inm_referencia',
             name: 'inm_referencia_apellido_paterno_'.$indice, required: false);
         if(errores::$error){
@@ -78,6 +85,48 @@ class _base extends html_controler{
             return $this->error->error(mensaje: 'Error al obtener celular',data:  $celular);
         }
         $inm_referencia->celular = $celular;
+
+        $dp_pais_id = $this->dp_pais_id(cols: 6, indice: $indice, link: $link);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al obtener dp_pais_id',data:  $dp_pais_id);
+        }
+        $inm_referencia->dp_pais_id = $dp_pais_id;
+
+        $dp_estado_id = $this->dp_estado_id(cols: 6, indice: $indice, link: $link);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al obtener dp_estado_id',data:  $dp_estado_id);
+        }
+        $inm_referencia->dp_estado_id = $dp_estado_id;
+
+        $dp_municipio_id = $this->dp_municipio_id(cols: 6, indice: $indice, link: $link);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al obtener dp_municipio_id',data:  $dp_municipio_id);
+        }
+        $inm_referencia->dp_municipio_id = $dp_municipio_id;
+
+        $dp_cp_id = $this->dp_cp_id(cols: 6, indice: $indice, link: $link);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al obtener dp_cp_id',data:  $dp_cp_id);
+        }
+        $inm_referencia->dp_cp_id = $dp_cp_id;
+
+        $dp_colonia_postal_id = $this->dp_colonia_postal_id(cols: 6, indice: $indice, link: $link);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al obtener dp_colonia_postal_id',data:  $dp_colonia_postal_id);
+        }
+        $inm_referencia->dp_colonia_postal_id = $dp_colonia_postal_id;
+
+        $dp_calle_pertenece_id = $this->dp_calle_pertenece_id(cols: 6, indice: $indice, link: $link);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al obtener dp_calle_pertenece_id',data:  $dp_calle_pertenece_id);
+        }
+        $inm_referencia->dp_calle_pertenece_id = $dp_calle_pertenece_id;
+
+        $numero_dom = $this->numero_dom(cols: 12,entidad: 'inm_referencia',name: 'inm_referencia_numero_dom_'.$indice);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al obtener numero_dom',data:  $numero_dom);
+        }
+        $inm_referencia->numero_dom = $numero_dom;
 
         return $inm_referencia;
     }
@@ -121,6 +170,60 @@ class _base extends html_controler{
         $data->inputs = $inputs;
         $data->headers = $headers;
         return $data;
+    }
+
+    private function dp_calle_pertenece_id(int $cols, int $indice, PDO $link){
+        $dp_calle_pertenece_id = (new dp_calle_pertenece_html(html: $this->html_base))->select_dp_calle_pertenece_id(cols: $cols,
+            con_registros:  true,id_selected:  -1,link:  $link, name: 'inm_referencia_dp_calle_pertenece_id_'.$indice);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al generar input',data:  $dp_calle_pertenece_id);
+        }
+        return $dp_calle_pertenece_id;
+    }
+    private function dp_colonia_postal_id(int $cols, int $indice, PDO $link){
+        $dp_colonia_postal_id = (new dp_colonia_postal_html(html: $this->html_base))->select_dp_colonia_postal_id(cols: $cols,
+            con_registros:  true,id_selected:  -1,link:  $link, name: 'inm_referencia_dp_colonia_postal_id_'.$indice);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al generar input',data:  $dp_colonia_postal_id);
+        }
+        return $dp_colonia_postal_id;
+    }
+
+    private function dp_cp_id(int $cols, int $indice, PDO $link){
+        $dp_cp_id = (new dp_cp_html(html: $this->html_base))->select_dp_cp_id(cols: $cols,
+            con_registros: true, id_selected: -1, link: $link, filtro: array('dp_estado.id'=>14),
+            name: 'inm_referencia_dp_cp_id_'.$indice);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al generar input',data:  $dp_cp_id);
+        }
+        return $dp_cp_id;
+    }
+    private function dp_estado_id(int $cols, int $indice, PDO $link){
+        $dp_estado_id = (new dp_estado_html(html: $this->html_base))->select_dp_estado_id(cols: $cols,
+            con_registros: true, id_selected: 14, link: $link, filtro: array('dp_pais.id'=>151),
+            name: 'inm_referencia_dp_estado_id_'.$indice);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al generar input',data:  $dp_estado_id);
+        }
+        return $dp_estado_id;
+    }
+
+    private function dp_municipio_id(int $cols, int $indice, PDO $link){
+        $dp_municipio_id = (new dp_municipio_html(html: $this->html_base))->select_dp_municipio_id(cols: $cols,
+            con_registros: true, id_selected: -1, link: $link, filtro: array('dp_estado.id'=>14),
+            name: 'inm_referencia_dp_municipio_id_'.$indice);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al generar input',data:  $dp_municipio_id);
+        }
+        return $dp_municipio_id;
+    }
+    private function dp_pais_id(int $cols, int $indice, PDO $link){
+        $dp_pais_id = (new dp_pais_html(html: $this->html_base))->select_dp_pais_id(cols: $cols,
+            con_registros:  true,id_selected:  151,link:  $link, name: 'inm_referencia_dp_pais_id_'.$indice);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al generar input',data:  $dp_pais_id);
+        }
+        return $dp_pais_id;
     }
 
     private function header_frontend(controlador_inm_comprador $controler,int $n_apartado, string $tag_header){
@@ -172,12 +275,12 @@ class _base extends html_controler{
         return $data;
     }
 
-    final public function inm_referencias(){
+    final public function inm_referencias(PDO $link){
         $inm_referencias = array();
 
         $inm_referencia = new stdClass();
 
-        $inm_referencia = $this->base_ref(indice: 1,inm_referencia:  $inm_referencia);
+        $inm_referencia = $this->base_ref(indice: 1,inm_referencia:  $inm_referencia,link: $link);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al integrar referencia',data:  $inm_referencia);
         }
@@ -187,7 +290,7 @@ class _base extends html_controler{
         $inm_referencia = new stdClass();
 
 
-        $inm_referencia = $this->base_ref(indice: 2,inm_referencia:  $inm_referencia);
+        $inm_referencia = $this->base_ref(indice: 2,inm_referencia:  $inm_referencia, link: $link);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al integrar referencia',data:  $inm_referencia);
         }
@@ -268,6 +371,18 @@ class _base extends html_controler{
 
         return $this->input_text(cols: $cols, disabled: $disabled, name: $name, place_holder: $place_holder,
             row_upd: $row_upd, value_vacio: $value_vacio, class_css: $class_css, regex: $regex, required: $required);
+
+    }
+
+    final protected function numero_dom(int $cols,  string $entidad, bool $disabled = false, string $name = 'numero_dom',
+                                    string $place_holder= 'Numero Domicilio', bool $required = false,
+                                    stdClass $row_upd = new stdClass(), bool $value_vacio = false): array|string
+    {
+
+        $class_css = array($entidad.'_numero_dom');
+
+        return $this->input_text(cols: $cols, disabled: $disabled, name: $name, place_holder: $place_holder,
+            row_upd: $row_upd, value_vacio: $value_vacio, class_css: $class_css, required: $required);
 
     }
 }

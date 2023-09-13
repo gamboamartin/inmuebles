@@ -90,8 +90,6 @@ class controlador_inm_comprador extends _ctl_base {
             return $this->retorno_error(mensaje: 'Error al obtener inputs',data:  $inputs, header: $header,ws:  $ws);
         }
 
-
-
         return $r_alta;
     }
 
@@ -549,7 +547,7 @@ class controlador_inm_comprador extends _ctl_base {
         $this->inm_referencias = $inm_referencias;
 
 
-        $inm_referencias_html = (new inm_referencia_html(html: $this->html_base))->inm_referencias();
+        $inm_referencias_html = (new inm_referencia_html(html: $this->html_base))->inm_referencias(link: $this->link);
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al integrar referencia',data:  $inm_referencias_html, header: $header,ws:  $ws);
         }
