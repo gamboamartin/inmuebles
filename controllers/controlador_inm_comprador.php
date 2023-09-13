@@ -548,29 +548,15 @@ class controlador_inm_comprador extends _ctl_base {
 
         $this->inm_referencias = $inm_referencias;
 
-        $inm_referencias = array();
 
-        $inm_referencia = new stdClass();
-
-        $inm_referencia = (new inm_referencia_html(html: $this->html_base))->base_ref(indice: 1,inm_referencia:  $inm_referencia);
+        $inm_referencias_html = (new inm_referencia_html(html: $this->html_base))->inm_referencias();
         if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al integrar referencia',data:  $inm_referencia, header: $header,ws:  $ws);
+            return $this->retorno_error(mensaje: 'Error al integrar referencia',data:  $inm_referencias_html, header: $header,ws:  $ws);
         }
 
-        $inm_referencias[0] = $inm_referencia;
-
-        $inm_referencia = new stdClass();
 
 
-        $inm_referencia = (new inm_referencia_html(html: $this->html_base))->base_ref(indice: 2,inm_referencia:  $inm_referencia);
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al integrar referencia',data:  $inm_referencia, header: $header,ws:  $ws);
-        }
-
-        $inm_referencias[1] = $inm_referencia;
-
-
-        $this->inputs->inm_referencias = $inm_referencias;
+        $this->inputs->inm_referencias = $inm_referencias_html;
 
 
         $co_acreditados = (new inm_comprador(link: $this->link))->get_co_acreditados(inm_comprador_id: $this->registro_id);

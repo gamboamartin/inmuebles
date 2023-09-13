@@ -194,7 +194,7 @@ class _inm_compradorTest extends test {
         //$controler->row_upd = new stdClass();
         //$controler->inputs = new stdClass();
 
-        $del = (new base_test())->del_inm_rel_ubi_comp(link: $this->link);
+        $del = (new base_test())->del_inm_comprador(link: $this->link);
         if(errores::$error){
             $error = (new errores())->error(mensaje:'Error al eliminar', data: $del);
             print_r($error);exit;

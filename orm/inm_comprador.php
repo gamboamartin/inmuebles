@@ -83,7 +83,13 @@ class inm_comprador extends _modelo_parent{
         $registro_entrada = $this->registro;
 
         if(!isset($this->registro['descripcion'])){
-            $descripcion = $this->descripcion(registro: $this->registro );
+            $keys = array('nombre','apellido_paterno','nss','curp','rfc');
+            $valida = $this->validacion->valida_existencia_keys(keys: $keys,registro:  $this->registro);
+            if(errores::$error){
+                return $this->error->error(mensaje: 'Error al validar registro', data: $valida);
+            }
+
+            $descripcion = (new _base_comprador())->descripcion(registro: $this->registro );
             if(errores::$error){
                 return $this->error->error(mensaje: 'Error al obtener descripcion',data:  $descripcion);
             }
@@ -139,8 +145,8 @@ class inm_comprador extends _modelo_parent{
             return $this->error->error(mensaje: 'Error al insertar',data:  $r_alta_bd);
         }
 
-        $integra_relacion_com_cliente = $this->integra_relacion_com_cliente(inm_comprador_id: $r_alta_bd->registro_id,
-            registro_entrada: $registro_entrada);
+        $integra_relacion_com_cliente = (new _base_comprador())->integra_relacion_com_cliente(inm_comprador_id: $r_alta_bd->registro_id,
+            link: $this->link, registro_entrada: $registro_entrada);
         if (errores::$error) {
             return $this->error->error(mensaje: 'Error al obtener cliente', data: $integra_relacion_com_cliente);
         }
@@ -203,89 +209,6 @@ class inm_comprador extends _modelo_parent{
 
         return $data;
 
-    }
-
-    /**
-     * Obtiene el cliente fiscal asignado al comprador de vivienda
-     * @param int $com_cliente_id Identificador de cliente
-     * @param bool $retorno_obj Retorna un objeto en caso de ser verdadero
-     * @return array|object
-     * @version 1.64.1
-     */
-    private function com_cliente(int $com_cliente_id, bool $retorno_obj = false): object|array
-    {
-
-        if($com_cliente_id<=0){
-            return $this->error->error(mensaje: 'Error com_cliente_id es menor a 0',data:  $com_cliente_id);
-        }
-
-        $filtro['com_cliente.id'] = $com_cliente_id;
-
-        $r_com_cliente = (new com_cliente(link: $this->link))->filtro_and(filtro:$filtro);
-        if(errores::$error){
-            return $this->error->error(
-                mensaje: 'Error al obtener com_cliente',data:  $r_com_cliente);
-        }
-
-        if($r_com_cliente->n_registros === 0){
-            return $this->error->error(
-                mensaje: 'Error no existe com_cliente',data:  $r_com_cliente);
-        }
-
-        if($r_com_cliente->n_registros > 1){
-            return $this->error->error(
-                mensaje: 'Error de integridad existe mas de un com_cliente',data:  $r_com_cliente);
-        }
-
-        $com_cliente = $r_com_cliente->registros[0];
-        if($retorno_obj){
-            $com_cliente = (object)$com_cliente;
-        }
-
-        return $com_cliente;
-    }
-
-    private function com_cliente_ins(string $numero_interior, string $razon_social, array $registro_entrada): array
-    {
-        $keys = array('rfc','dp_calle_pertenece_id','numero_exterior','lada_com','numero_com',
-            'cat_sat_regimen_fiscal_id','cat_sat_moneda_id','cat_sat_forma_pago_id','cat_sat_metodo_pago_id',
-            'cat_sat_uso_cfdi_id','com_tipo_cliente_id','cat_sat_tipo_persona_id');
-
-        $valida = $this->validacion->valida_existencia_keys(keys: $keys,registro:  $registro_entrada);
-        if(errores::$error){
-            return $this->error->error(mensaje: 'Error al validar registro_entrada',data:  $valida);
-        }
-
-        $keys = array('dp_calle_pertenece_id','lada_com','numero_com',
-            'cat_sat_regimen_fiscal_id','cat_sat_moneda_id','cat_sat_forma_pago_id','cat_sat_metodo_pago_id',
-            'cat_sat_uso_cfdi_id','com_tipo_cliente_id','cat_sat_tipo_persona_id');
-
-        $valida = $this->validacion->valida_ids(keys: $keys,registro:  $registro_entrada);
-        if(errores::$error){
-            return $this->error->error(mensaje: 'Error al validar registro_entrada',data:  $valida);
-        }
-
-        $razon_social = trim($razon_social);
-        if($razon_social === ''){
-            return $this->error->error(mensaje: 'Error razon_social vacia',data:  $razon_social);
-        }
-
-        $com_cliente_ins['razon_social'] = trim($razon_social);
-        $com_cliente_ins['rfc'] = $registro_entrada['rfc'];
-        $com_cliente_ins['dp_calle_pertenece_id'] = $registro_entrada['dp_calle_pertenece_id'];
-        $com_cliente_ins['numero_exterior'] = $registro_entrada['numero_exterior'];
-        $com_cliente_ins['numero_interior'] = $numero_interior;
-        $com_cliente_ins['telefono'] = $registro_entrada['lada_com'].$registro_entrada['numero_com'];
-        $com_cliente_ins['cat_sat_regimen_fiscal_id'] = $registro_entrada['cat_sat_regimen_fiscal_id'];
-        $com_cliente_ins['cat_sat_moneda_id'] = $registro_entrada['cat_sat_moneda_id'];
-        $com_cliente_ins['cat_sat_forma_pago_id'] = $registro_entrada['cat_sat_forma_pago_id'];
-        $com_cliente_ins['cat_sat_metodo_pago_id'] = $registro_entrada['cat_sat_metodo_pago_id'];
-        $com_cliente_ins['cat_sat_uso_cfdi_id'] = $registro_entrada['cat_sat_uso_cfdi_id'];
-        $com_cliente_ins['cat_sat_tipo_de_comprobante_id'] = 1;
-        $com_cliente_ins['codigo'] = $registro_entrada['rfc'];
-        $com_cliente_ins['com_tipo_cliente_id'] = $registro_entrada['com_tipo_cliente_id'];
-        $com_cliente_ins['cat_sat_tipo_persona_id'] = $registro_entrada['cat_sat_tipo_persona_id'];
-        return $com_cliente_ins;
     }
 
     /**
@@ -354,30 +277,6 @@ class inm_comprador extends _modelo_parent{
 
     }
 
-    /**
-     * Genera la descripcion de un comprador basado en datos del registro a insertar
-     * @param array $registro Registro en proceso
-     * @return string|array
-     */
-    private function descripcion(array $registro): string|array
-    {
-        $keys = array('nombre','apellido_paterno','nss','curp','rfc');
-        $valida = $this->validacion->valida_existencia_keys(keys: $keys,registro:  $registro);
-        if(errores::$error){
-            return $this->error->error(mensaje: 'Error al validar registro', data: $valida);
-        }
-        if(!isset($registro['apellido_materno'])){
-            $registro['apellido_materno'] = '';
-        }
-        $descripcion = $registro['nombre'];
-        $descripcion .= ' '.$registro['apellido_paterno'];
-        $descripcion .= ' '.$registro['apellido_materno'];
-        $descripcion .= ' '.$registro['nss'];
-        $descripcion .= ' '.$registro['curp'];
-        $descripcion .= ' '.$registro['rfc'];
-        return $descripcion;
-    }
-
     public function elimina_bd(int $id): array|stdClass
     {
         $filtro['inm_comprador.id'] = $id;
@@ -431,15 +330,15 @@ class inm_comprador extends _modelo_parent{
         if($inm_comprador_id<=0){
             return $this->error->error(mensaje: 'Error inm_comprador_id es menor a 0',data:  $inm_comprador_id);
         }
-        $imp_rel_comprador_com_cliente = $this->inm_rel_comprador_cliente(inm_comprador_id: $inm_comprador_id);
+        $imp_rel_comprador_com_cliente = (new _base_comprador())->inm_rel_comprador_cliente(
+            inm_comprador_id: $inm_comprador_id,link: $this->link);
         if(errores::$error){
             return $this->error->error(
                 mensaje: 'Error al obtener imp_rel_comprador_com_cliente',data:  $imp_rel_comprador_com_cliente);
         }
 
-
-        $com_cliente = $this->com_cliente(com_cliente_id: $imp_rel_comprador_com_cliente['com_cliente_id'],
-            retorno_obj: $retorno_obj);
+        $com_cliente = (new _base_comprador())->com_cliente(com_cliente_id: $imp_rel_comprador_com_cliente['com_cliente_id'],
+            link: $this->link, retorno_obj: $retorno_obj);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al obtener com_cliente',data:  $com_cliente);
         }
@@ -465,129 +364,6 @@ class inm_comprador extends _modelo_parent{
 
     }
 
-    private function inm_rel_com_cliente_ins(int $com_cliente_id, int $inm_comprador_id): array
-    {
-        $inm_rel_comprador_com_cliente_ins['inm_comprador_id'] = $inm_comprador_id;
-        $inm_rel_comprador_com_cliente_ins['com_cliente_id'] = $com_cliente_id;
-        return $inm_rel_comprador_com_cliente_ins;
-    }
-
-    /**
-     * Obtiene la relacion entre un cliente y un comprador
-     * @param int $inm_comprador_id Comprador identificador
-     * @return array
-     * @version 1.63.1
-     */
-    private function inm_rel_comprador_cliente(int $inm_comprador_id): array
-    {
-        if($inm_comprador_id<=0){
-            return $this->error->error(mensaje: 'Error inm_comprador_id es menor a 0',data:  $inm_comprador_id);
-        }
-        $filtro['inm_comprador.id'] = $inm_comprador_id;
-
-        $r_imp_rel_comprador_com_cliente = (new inm_rel_comprador_com_cliente(link: $this->link))->filtro_and(
-            filtro:$filtro);
-        if(errores::$error){
-            return $this->error->error(
-                mensaje: 'Error al obtener imp_rel_comprador_com_cliente',data:  $r_imp_rel_comprador_com_cliente);
-        }
-
-        if($r_imp_rel_comprador_com_cliente->n_registros === 0){
-            return $this->error->error(mensaje: 'Error no existe inm_rel_comprador_com_cliente',
-                data:  $r_imp_rel_comprador_com_cliente);
-        }
-
-        if($r_imp_rel_comprador_com_cliente->n_registros > 1){
-            return $this->error->error(
-                mensaje: 'Error de integridad existe mas de un inm_rel_comprador_com_cliente',
-                data:  $r_imp_rel_comprador_com_cliente);
-        }
-
-        return $r_imp_rel_comprador_com_cliente->registros[0];
-    }
-
-    private function inserta_com_cliente(array $registro_entrada){
-
-        $keys = array('rfc','dp_calle_pertenece_id','numero_exterior','lada_com','numero_com',
-            'cat_sat_regimen_fiscal_id','cat_sat_moneda_id','cat_sat_forma_pago_id','cat_sat_metodo_pago_id',
-            'cat_sat_uso_cfdi_id','com_tipo_cliente_id','cat_sat_tipo_persona_id');
-
-        $valida = $this->validacion->valida_existencia_keys(keys: $keys,registro:  $registro_entrada);
-        if(errores::$error){
-            return $this->error->error(mensaje: 'Error al validar registro_entrada',data:  $valida);
-        }
-
-        $keys = array('dp_calle_pertenece_id','lada_com','numero_com',
-            'cat_sat_regimen_fiscal_id','cat_sat_moneda_id','cat_sat_forma_pago_id','cat_sat_metodo_pago_id',
-            'cat_sat_uso_cfdi_id','com_tipo_cliente_id','cat_sat_tipo_persona_id');
-
-        $valida = $this->validacion->valida_ids(keys: $keys,registro:  $registro_entrada);
-        if(errores::$error){
-            return $this->error->error(mensaje: 'Error al validar registro_entrada',data:  $valida);
-        }
-
-
-        $com_cliente_ins = $this->row_com_cliente_ins(registro_entrada: $registro_entrada);
-
-        if (errores::$error) {
-            return $this->error->error(mensaje: 'Error al integrar registro de cliente', data: $com_cliente_ins);
-        }
-
-        $r_com_cliente = (new com_cliente(link: $this->link))->alta_registro(registro: $com_cliente_ins);
-        if (errores::$error) {
-            return $this->error->error(mensaje: 'Error al insertar cliente', data: $r_com_cliente);
-        }
-        return $r_com_cliente;
-    }
-
-    private function inserta_inm_rel_comprador_com_cliente(int $com_cliente_id, int $inm_comprador_id){
-        $inm_rel_comprador_com_cliente_ins = $this->inm_rel_com_cliente_ins(com_cliente_id: $com_cliente_id,
-            inm_comprador_id: $inm_comprador_id);
-        if (errores::$error) {
-            return $this->error->error(mensaje: 'Error al integrar row rel com cliente', data: $inm_rel_comprador_com_cliente_ins);
-        }
-
-        $r_inm_rel_comprador_com_cliente_ins = (new inm_rel_comprador_com_cliente(link: $this->link))->alta_registro(
-            registro: $inm_rel_comprador_com_cliente_ins);
-        if(errores::$error){
-            return $this->error->error(mensaje: 'Error al insertar relacion',
-                data:  $r_inm_rel_comprador_com_cliente_ins);
-        }
-        return $r_inm_rel_comprador_com_cliente_ins;
-    }
-
-    private function integra_relacion_com_cliente(int $inm_comprador_id, array $registro_entrada){
-        $keys = array('rfc','dp_calle_pertenece_id','numero_exterior','lada_com','numero_com',
-            'cat_sat_regimen_fiscal_id','cat_sat_moneda_id','cat_sat_forma_pago_id','cat_sat_metodo_pago_id',
-            'cat_sat_uso_cfdi_id','com_tipo_cliente_id','cat_sat_tipo_persona_id');
-
-        $valida = $this->validacion->valida_existencia_keys(keys: $keys,registro:  $registro_entrada);
-        if(errores::$error){
-            return $this->error->error(mensaje: 'Error al validar registro_entrada',data:  $valida);
-        }
-
-        $keys = array('dp_calle_pertenece_id','lada_com','numero_com',
-            'cat_sat_regimen_fiscal_id','cat_sat_moneda_id','cat_sat_forma_pago_id','cat_sat_metodo_pago_id',
-            'cat_sat_uso_cfdi_id','com_tipo_cliente_id','cat_sat_tipo_persona_id');
-
-        $valida = $this->validacion->valida_ids(keys: $keys,registro:  $registro_entrada);
-        if(errores::$error){
-            return $this->error->error(mensaje: 'Error al validar registro_entrada',data:  $valida);
-        }
-
-        $r_com_cliente = $this->transacciona_com_cliente(registro_entrada: $registro_entrada);
-        if (errores::$error) {
-            return $this->error->error(mensaje: 'Error al obtener cliente', data: $r_com_cliente);
-        }
-        $r_inm_rel_comprador_com_cliente = $this->inserta_inm_rel_comprador_com_cliente(
-            com_cliente_id: $r_com_cliente->registro_id,inm_comprador_id:  $inm_comprador_id);
-        if (errores::$error) {
-            return $this->error->error(mensaje: 'Error al integrar r_inm_rel_comprador_com_cliente',
-                data: $r_inm_rel_comprador_com_cliente);
-        }
-        return $r_inm_rel_comprador_com_cliente;
-    }
-
     public function modifica_bd(array $registro, int $id, bool $reactiva = false,
                                 array $keys_integra_ds = array('codigo', 'descripcion')): array|stdClass
     {
@@ -598,308 +374,30 @@ class inm_comprador extends _modelo_parent{
             return $this->error->error(mensaje: 'Error al modificar comprador',data:  $r_modifica);
         }
 
-        $row_upd_post = array();
-        $aplica_upd_posterior = false;
-
-        if($r_modifica->registro_actualizado->inm_comprador_es_segundo_credito === 'NO'){
-            $row_upd_post['inm_plazo_credito_sc_id'] = 7;
-            $aplica_upd_posterior = true;
-
+        $transacciones = (new _base_comprador())->transacciones_posterior_upd(inm_comprador_upd: $registro,
+            inm_comprador_id:  $id,modelo_inm_comprador:  $this,r_modifica:  $r_modifica);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al generar transacciones',data:  $transacciones);
         }
-
-        if($r_modifica->registro_actualizado->inm_comprador_con_discapacidad === 'NO'){
-            $row_upd_post['inm_tipo_discapacidad_id'] = 5;
-            $row_upd_post['inm_persona_discapacidad_id'] = 6;
-            $aplica_upd_posterior = true;
-
-        }
-
-        if($aplica_upd_posterior){
-            $r_modifica_post = parent::modifica_bd(registro: $row_upd_post,id:  $id);
-            if(errores::$error){
-                return $this->error->error(mensaje: 'Error al modificar comprador',data:  $r_modifica_post);
-            }
-        }
-
-        $com_cliente_upd = array();
-        $com_cliente_upd['razon_social'] = $r_modifica->registro_actualizado->inm_comprador_nombre;
-        $com_cliente_upd['razon_social'] .= ' '.$r_modifica->registro_actualizado->inm_comprador_apellido_paterno;
-        $com_cliente_upd['razon_social'] .= ' '.$r_modifica->registro_actualizado->inm_comprador_apellido_materno;
-        $keys_com_cliente = array('com_tipo_cliente_id','rfc','dp_calle_pertenece_id','numero_exterior',
-            'numero_interior','telefono','cat_sat_regimen_fiscal_id','cat_sat_moneda_id','cat_sat_forma_pago_id',
-            'cat_sat_metodo_pago_id','cat_sat_uso_cfdi_id','cat_sat_tipo_persona_id');
-
-        foreach ($keys_com_cliente as $key_com_cliente){
-           if(isset($registro[$key_com_cliente])){
-               $com_cliente_upd[$key_com_cliente] = $registro[$key_com_cliente];
-           }
-        }
-        if(count($com_cliente_upd) > 0){
-            $filtro['inm_comprador.id'] = $id;
-            $r_im_rel_comprador_com_cliente = (new inm_rel_comprador_com_cliente(link: $this->link))->filtro_and(filtro: $filtro);
-            if(errores::$error){
-                return $this->error->error(mensaje: 'Error al obtener relacion',data:  $r_im_rel_comprador_com_cliente);
-            }
-            if($r_im_rel_comprador_com_cliente->n_registros === 0){
-                return $this->error->error(mensaje: 'Error inm_rel_comprador_com_cliente no existe',data:  $r_im_rel_comprador_com_cliente);
-            }
-            if($r_im_rel_comprador_com_cliente->n_registros > 1){
-                return $this->error->error(mensaje: 'Error de integridad inm_rel_comprador_com_cliente tiene mas de un registro',data:  $r_im_rel_comprador_com_cliente);
-            }
-            $im_rel_comprador_com_cliente = $r_im_rel_comprador_com_cliente->registros[0];
-
-            $r_com_cliente = (new com_cliente(link: $this->link))->modifica_bd(registro: $registro,id:  $im_rel_comprador_com_cliente['com_cliente_id']);
-            if(errores::$error){
-                return $this->error->error(mensaje: 'Error al modificar cliente',data:  $r_com_cliente);
-            }
-        }
-
-        $keys_co_acreditado = array('nss','curp','rfc', 'apellido_paterno','apellido_materno','nombre', 'lada',
-            'numero','celular','correo','genero','nombre_empresa_patron','nrp','lada_nep','numero_nep');
-
-        $inm_co_acreditado_ins = array();
-        foreach ($keys_co_acreditado as $campo_co_acreditado){
-            $key_co_acreditado = 'inm_co_acreditado_'.$campo_co_acreditado;
-            if(isset($registro[$key_co_acreditado])) {
-                $value = trim($registro[$key_co_acreditado]);
-                if($value !=='') {
-                    $inm_co_acreditado_ins[$campo_co_acreditado] = $registro[$key_co_acreditado];
-                }
-            }
-        }
-
-
-
-        $aplica_alta_co_acreditado = false;
-        if(count($inm_co_acreditado_ins)>0){
-            $aplica_alta_co_acreditado = true;
-            if(count($inm_co_acreditado_ins) === 1){
-                if(isset($inm_co_acreditado_ins['genero'])){
-                    $aplica_alta_co_acreditado = false;
-                }
-            }
-        }
-
-        if($aplica_alta_co_acreditado) {
-
-            $co_acreditados = $this->get_co_acreditados(inm_comprador_id: $id);
-            if(errores::$error){
-                return $this->error->error(mensaje: 'Error al obtener co_acreditados',data:  $co_acreditados);
-            }
-
-            $existe_co_acreditado = false;
-            $inm_co_acreditado = new stdClass();
-            if(count($co_acreditados) === 1){
-                $existe_co_acreditado = true;
-                $inm_co_acreditado = (object)$co_acreditados[0];
-
-            }
-
-            if(!$existe_co_acreditado) {
-                $alta_inm_co_acreditado = (new inm_co_acreditado(link: $this->link))->alta_registro(
-                    registro: $inm_co_acreditado_ins);
-                if (errores::$error) {
-                    return $this->error->error(mensaje: 'Error al insertar co_acreditado', data: $alta_inm_co_acreditado);
-                }
-
-                $inm_rel_co_acred_ins['inm_co_acreditado_id'] = $alta_inm_co_acreditado->registro_id;
-                $inm_rel_co_acred_ins['inm_comprador_id'] = $this->registro_id;
-
-                $alta_inm_rel_co_acred = (new inm_rel_co_acred(link: $this->link))->alta_registro(registro: $inm_rel_co_acred_ins);
-                if (errores::$error) {
-                    return $this->error->error(mensaje: 'Error al insertar alta_inm_rel_co_acred', data: $alta_inm_rel_co_acred);
-                }
-            }
-            else{
-                $modifica_co_acreditado = (new inm_co_acreditado(link: $this->link))->modifica_bd(
-                    registro: $inm_co_acreditado_ins,id:  $inm_co_acreditado->inm_co_acreditado_id);
-                if (errores::$error) {
-                    return $this->error->error(mensaje: 'Error al modificar co acreditado', data: $modifica_co_acreditado);
-                }
-            }
-
-        }
-
-
-
 
         return $r_modifica;
     }
 
-
-
-    private function numero_interior(array $registro_entrada){
-        $numero_interior = '';
-        if(isset($registro_entrada['numero_interior'])){
-            $numero_interior = $registro_entrada['numero_interior'];
-        }
-        return $numero_interior;
-    }
-
-    private function r_com_cliente(array $filtro, array $registro_entrada){
-        $r_com_cliente_f = (new com_cliente(link: $this->link))->filtro_and(filtro: $filtro);
-        if (errores::$error) {
-            return $this->error->error(mensaje: 'Error al obtener cliente', data: $r_com_cliente_f);
-        }
-        if($r_com_cliente_f->n_registros === 0){
-            return $this->error->error(mensaje: 'Error no existe cliente', data: $r_com_cliente_f);
-        }
-        if($r_com_cliente_f->n_registros > 1){
-            return $this->error->error(mensaje: 'Error existe mas de un cliente', data: $r_com_cliente_f);
-        }
-
-        $r_com_cliente = new stdClass();
-        $r_com_cliente->registro_id = $r_com_cliente_f->registros[0]['com_cliente_id'];
-
-        $row_upd['rfc'] = $registro_entrada['rfc'];
-
-        $razon_social = trim($registro_entrada['nombre']);
-        $razon_social .= ' '.trim($registro_entrada['apellido_paterno']);
-        $razon_social .= ' '.trim($registro_entrada['apellido_materno']);
-        $razon_social = trim($razon_social);
-
-        $row_upd['razon_social'] = $razon_social;
-        $row_upd['dp_calle_pertenece_id'] = $registro_entrada['dp_calle_pertenece_id'];
-        $row_upd['numero_exterior'] = $registro_entrada['numero_exterior'];
-
-        $telefono = trim($registro_entrada['lada_com']).trim($registro_entrada['numero_com']);
-
-        $row_upd['telefono'] = trim($telefono);
-        $row_upd['cat_sat_regimen_fiscal_id'] = $registro_entrada['cat_sat_regimen_fiscal_id'];
-        $row_upd['cat_sat_moneda_id'] = $registro_entrada['cat_sat_moneda_id'];
-        $row_upd['cat_sat_forma_pago_id'] = $registro_entrada['cat_sat_forma_pago_id'];
-        $row_upd['cat_sat_metodo_pago_id'] = $registro_entrada['cat_sat_metodo_pago_id'];
-        $row_upd['cat_sat_uso_cfdi_id'] = $registro_entrada['cat_sat_uso_cfdi_id'];
-        $row_upd['cat_sat_tipo_persona_id'] = $registro_entrada['cat_sat_tipo_persona_id'];
-        $row_upd['com_tipo_cliente_id'] = $registro_entrada['com_tipo_cliente_id'];
-
-
-
-        $r_com_cliente_upd = (new com_cliente(link: $this->link))->modifica_bd(registro: $row_upd,
-            id:  $r_com_cliente->registro_id);
-        if (errores::$error) {
-            return $this->error->error(mensaje: 'Error al actualizar cliente', data: $r_com_cliente_upd);
-        }
-
-
-
-        return $r_com_cliente;
-
-    }
-
-    private function razon_social(array $registro_entrada): string
-    {
-        $razon_social = $registro_entrada['nombre'];
-        $razon_social .= $registro_entrada['apellido_paterno'];
-        $razon_social .= $registro_entrada['apellido_materno'];
-        return $razon_social;
-    }
-
-    private function result_com_cliente(bool $existe_cliente, array $filtro, array $registro_entrada){
-        $keys = array('rfc','dp_calle_pertenece_id','numero_exterior','lada_com','numero_com',
-            'cat_sat_regimen_fiscal_id','cat_sat_moneda_id','cat_sat_forma_pago_id','cat_sat_metodo_pago_id',
-            'cat_sat_uso_cfdi_id','com_tipo_cliente_id','cat_sat_tipo_persona_id');
-
-        $valida = $this->validacion->valida_existencia_keys(keys: $keys,registro:  $registro_entrada);
+    final public function upd_post(int $id, stdClass $r_modifica){
+        $data_upd = (new _base_comprador())->data_upd_post(r_modifica: $r_modifica);
         if(errores::$error){
-            return $this->error->error(mensaje: 'Error al validar registro_entrada',data:  $valida);
+            return $this->error->error(mensaje: 'Error al obtener datos',data:  $data_upd);
         }
 
-        $keys = array('dp_calle_pertenece_id','lada_com','numero_com',
-            'cat_sat_regimen_fiscal_id','cat_sat_moneda_id','cat_sat_forma_pago_id','cat_sat_metodo_pago_id',
-            'cat_sat_uso_cfdi_id','com_tipo_cliente_id','cat_sat_tipo_persona_id');
-
-        $valida = $this->validacion->valida_ids(keys: $keys,registro:  $registro_entrada);
-        if(errores::$error){
-            return $this->error->error(mensaje: 'Error al validar registro_entrada',data:  $valida);
-        }
-
-        if(!$existe_cliente) {
-            $r_com_cliente = $this->inserta_com_cliente(registro_entrada: $registro_entrada);
-            if (errores::$error) {
-                return $this->error->error(mensaje: 'Error al insertar cliente', data: $r_com_cliente);
+        $r_modifica_post = new stdClass();
+        if($data_upd->aplica_upd_posterior){
+            $r_modifica_post = parent::modifica_bd(registro: $data_upd->row_upd_post,id:  $id);
+            if(errores::$error){
+                return $this->error->error(mensaje: 'Error al modificar comprador',data:  $r_modifica_post);
             }
         }
-        else{
-            $r_com_cliente = $this->r_com_cliente(filtro: $filtro, registro_entrada: $registro_entrada);
-            if (errores::$error) {
-                return $this->error->error(mensaje: 'Error al obtener cliente', data: $r_com_cliente);
-            }
-        }
-        return $r_com_cliente;
-    }
-
-    private function row_com_cliente_ins(array $registro_entrada){
-
-        $keys = array('rfc','dp_calle_pertenece_id','numero_exterior','lada_com','numero_com',
-            'cat_sat_regimen_fiscal_id','cat_sat_moneda_id','cat_sat_forma_pago_id','cat_sat_metodo_pago_id',
-            'cat_sat_uso_cfdi_id','com_tipo_cliente_id','cat_sat_tipo_persona_id');
-
-        $valida = $this->validacion->valida_existencia_keys(keys: $keys,registro:  $registro_entrada);
-        if(errores::$error){
-            return $this->error->error(mensaje: 'Error al validar registro_entrada',data:  $valida);
-        }
-
-        $keys = array('dp_calle_pertenece_id','lada_com','numero_com',
-            'cat_sat_regimen_fiscal_id','cat_sat_moneda_id','cat_sat_forma_pago_id','cat_sat_metodo_pago_id',
-            'cat_sat_uso_cfdi_id','com_tipo_cliente_id','cat_sat_tipo_persona_id');
-
-        $valida = $this->validacion->valida_ids(keys: $keys,registro:  $registro_entrada);
-        if(errores::$error){
-            return $this->error->error(mensaje: 'Error al validar registro_entrada',data:  $valida);
-        }
-
-
-
-        $razon_social = $this->razon_social(registro_entrada: $registro_entrada);
-        if(errores::$error){
-            return $this->error->error(mensaje: 'Error al generar razon social',data:  $razon_social);
-        }
-
-        $numero_interior = $this->numero_interior(registro_entrada: $registro_entrada);
-        if(errores::$error){
-            return $this->error->error(mensaje: 'Error al generar numero_interior',data:  $numero_interior);
-        }
-
-        $com_cliente_ins = $this->com_cliente_ins(numero_interior: $numero_interior,
-            razon_social:  $razon_social,registro_entrada:  $registro_entrada);
-
-        if (errores::$error) {
-            return $this->error->error(mensaje: 'Error al integrar registro de cliente', data: $com_cliente_ins);
-        }
-        return $com_cliente_ins;
-    }
-
-    private function transacciona_com_cliente(array $registro_entrada){
-        $keys = array('rfc','dp_calle_pertenece_id','numero_exterior','lada_com','numero_com',
-            'cat_sat_regimen_fiscal_id','cat_sat_moneda_id','cat_sat_forma_pago_id','cat_sat_metodo_pago_id',
-            'cat_sat_uso_cfdi_id','com_tipo_cliente_id','cat_sat_tipo_persona_id');
-
-        $valida = $this->validacion->valida_existencia_keys(keys: $keys,registro:  $registro_entrada);
-        if(errores::$error){
-            return $this->error->error(mensaje: 'Error al validar registro_entrada',data:  $valida);
-        }
-
-        $keys = array('dp_calle_pertenece_id','lada_com','numero_com',
-            'cat_sat_regimen_fiscal_id','cat_sat_moneda_id','cat_sat_forma_pago_id','cat_sat_metodo_pago_id',
-            'cat_sat_uso_cfdi_id','com_tipo_cliente_id','cat_sat_tipo_persona_id');
-
-        $valida = $this->validacion->valida_ids(keys: $keys,registro:  $registro_entrada);
-        if(errores::$error){
-            return $this->error->error(mensaje: 'Error al validar registro_entrada',data:  $valida);
-        }
-
-        $filtro['com_cliente.rfc'] = $registro_entrada['rfc'];
-        $existe_cliente = (new com_cliente(link: $this->link))->existe(filtro: $filtro);
-        if(errores::$error){
-            return $this->error->error(mensaje: 'Error al validar si existe',data:  $existe_cliente);
-        }
-
-        $r_com_cliente = $this->result_com_cliente(existe_cliente: $existe_cliente,filtro:  $filtro,registro_entrada:  $registro_entrada);
-        if (errores::$error) {
-            return $this->error->error(mensaje: 'Error al obtener cliente', data: $r_com_cliente);
-        }
-        return $r_com_cliente;
+        $r_modifica_post->data_upd = $data_upd;
+        return $r_modifica_post;
     }
 
 

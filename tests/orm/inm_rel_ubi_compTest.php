@@ -50,7 +50,7 @@ class inm_rel_ubi_compTest extends test {
         //$inm = new liberator($inm);
 
 
-        $del = (new base_test())->del_inm_rel_ubi_comp(link: $this->link);
+        $del = (new base_test())->del_inm_comprador(link: $this->link);
         if(errores::$error){
             $error = (new errores())->error(mensaje:'Error al eliminar', data: $del);
             print_r($error);exit;

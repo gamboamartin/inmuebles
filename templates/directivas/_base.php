@@ -10,63 +10,70 @@ use stdClass;
 class _base extends html_controler{
 
     final protected function apellido_materno(int $cols,  string $entidad, bool $disabled = false,
-                                           string $name = 'apellido_materno', string $place_holder= 'Apellido Materno',
-                                           stdClass $row_upd = new stdClass(), bool $value_vacio = false): array|string
+                                              string $name = 'apellido_materno', string $place_holder= 'Apellido Materno',
+                                              bool $required = true, stdClass $row_upd = new stdClass(),
+                                              bool $value_vacio = false): array|string
     {
 
         $class_css = array($entidad.'_apellido_materno');
 
         return $this->input_text(cols: $cols, disabled: $disabled, name: $name, place_holder: $place_holder,
-            row_upd: $row_upd, value_vacio: $value_vacio, class_css: $class_css);
+            row_upd: $row_upd, value_vacio: $value_vacio, class_css: $class_css, required: $required);
 
     }
-    final protected function apellido_paterno(
-        int $cols, string $entidad, bool $disabled = false, string $name = 'apellido_paterno',
-        string $place_holder= 'Apellido Paterno', stdClass $row_upd = new stdClass(),
-        bool $value_vacio = false): array|string
+    final protected function apellido_paterno(int $cols, string $entidad, bool $disabled = false,
+                                              string $name = 'apellido_paterno',
+                                              string $place_holder= 'Apellido Paterno', bool $required =true,
+                                              stdClass $row_upd = new stdClass(),
+                                              bool $value_vacio = false): array|string
     {
 
 
         $class_css = array($entidad.'_apellido_paterno');
 
         return $this->input_text(cols: $cols, disabled: $disabled, name: $name, place_holder: $place_holder,
-            row_upd: $row_upd, value_vacio: $value_vacio, class_css: $class_css);
+            row_upd: $row_upd, value_vacio: $value_vacio, class_css: $class_css,required: $required);
 
     }
 
-    final public function base_ref(int $indice,stdClass $inm_referencia){
-        $apellido_paterno = $this->apellido_paterno(cols: 6,entidad: 'inm_referencia',name: 'inm_referencia_apellido_paterno_'.$indice);
+    private function base_ref(int $indice,stdClass $inm_referencia){
+        $apellido_paterno = $this->apellido_paterno(cols: 6,entidad: 'inm_referencia',
+            name: 'inm_referencia_apellido_paterno_'.$indice, required: false);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al obtener apellido_paterno',data:  $apellido_paterno);
         }
         $inm_referencia->apellido_paterno = $apellido_paterno;
 
 
-        $apellido_materno = $this->apellido_materno(cols: 6,entidad: 'inm_referencia',name: 'inm_referencia_apellido_materno_'.$indice);
+        $apellido_materno = $this->apellido_materno(cols: 6,entidad: 'inm_referencia',
+            name: 'inm_referencia_apellido_materno_'.$indice, required: false);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al obtener apellido_materno',data:  $apellido_materno);
         }
         $inm_referencia->apellido_materno = $apellido_materno;
 
-        $nombre = $this->nombre(cols: 6,entidad: 'inm_referencia',name: 'inm_referencia_nombre_'.$indice);
+        $nombre = $this->nombre(cols: 6,entidad: 'inm_referencia',name: 'inm_referencia_nombre_'.$indice,
+            required: false);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al obtener nombre',data:  $nombre);
         }
         $inm_referencia->nombre = $nombre;
 
-        $lada = $this->lada(cols: 6,entidad: 'inm_referencia',name: 'inm_referencia_lada_'.$indice);
+        $lada = $this->lada(cols: 6,entidad: 'inm_referencia',name: 'inm_referencia_lada_'.$indice,required: false);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al obtener lada',data:  $lada);
         }
         $inm_referencia->lada = $lada;
 
-        $numero = $this->numero(cols: 6,entidad: 'inm_referencia',name: 'inm_referencia_numero_'.$indice);
+        $numero = $this->numero(cols: 6,entidad: 'inm_referencia',name: 'inm_referencia_numero_'.$indice,
+            required: false);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al obtener numero',data:  $numero);
         }
         $inm_referencia->numero = $numero;
 
-        $celular = $this->celular(cols: 6,entidad: 'inm_referencia',name: 'inm_referencia_celular_'.$indice);
+        $celular = $this->celular(cols: 6,entidad: 'inm_referencia',name: 'inm_referencia_celular_'.$indice,
+            required: false);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al obtener celular',data:  $celular);
         }
@@ -75,14 +82,16 @@ class _base extends html_controler{
         return $inm_referencia;
     }
 
-    final protected function celular(int $cols,  string $entidad, bool $disabled = false, string $name = 'celular', string $place_holder= 'Celular',
-                             stdClass $row_upd = new stdClass(), bool $value_vacio = false): array|string
+    final protected function celular(int $cols,  string $entidad, bool $disabled = false, string $name = 'celular',
+                                     string $place_holder= 'Celular', bool $required = true,
+                                     stdClass $row_upd = new stdClass(), bool $value_vacio = false): array|string
     {
 
         $regex = $this->validacion->patterns['telefono_mx_html'];
+        $class_css = array($entidad.'_celular');
 
-        return $this->input_text_required(cols: $cols,disabled:  $disabled,name:  $name,
-            place_holder:  $place_holder,row_upd:  $row_upd,value_vacio:  $value_vacio,regex: $regex);
+        return $this->input_text(cols: $cols, disabled: $disabled, name: $name, place_holder: $place_holder,
+            row_upd: $row_upd, value_vacio: $value_vacio, class_css: $class_css, regex: $regex, required: $required);
 
     }
 
@@ -163,6 +172,31 @@ class _base extends html_controler{
         return $data;
     }
 
+    final public function inm_referencias(){
+        $inm_referencias = array();
+
+        $inm_referencia = new stdClass();
+
+        $inm_referencia = $this->base_ref(indice: 1,inm_referencia:  $inm_referencia);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al integrar referencia',data:  $inm_referencia);
+        }
+
+        $inm_referencias[0] = $inm_referencia;
+
+        $inm_referencia = new stdClass();
+
+
+        $inm_referencia = $this->base_ref(indice: 2,inm_referencia:  $inm_referencia);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al integrar referencia',data:  $inm_referencia);
+        }
+
+        $inm_referencias[1] = $inm_referencia;
+
+        return $inm_referencias;
+    }
+
     /**
      * Obtiene todos los datos de inputs alta
      * @param controlador_inm_comprador $controler Controlador en ejecucion
@@ -198,37 +232,42 @@ class _base extends html_controler{
 
     }
 
-    final protected function lada(int $cols,  string $entidad, bool $disabled = false, string $name = 'lada', string $place_holder= 'Lada',
-                          stdClass $row_upd = new stdClass(), bool $value_vacio = false): array|string
+    final protected function lada(int $cols,  string $entidad, bool $disabled = false, string $name = 'lada',
+                                  string $place_holder= 'Lada',bool $required = true,
+                                  stdClass $row_upd = new stdClass(), bool $value_vacio = false): array|string
     {
 
         $regex = $this->validacion->patterns['lada_html'];
+        $class_css = array($entidad.'_lada');
 
-        return $this->input_text_required(cols: $cols,disabled:  $disabled,name:  $name,
-            place_holder:  $place_holder,row_upd:  $row_upd,value_vacio:  $value_vacio,regex: $regex);
+        return $this->input_text(cols: $cols, disabled: $disabled, name: $name, place_holder: $place_holder,
+            row_upd: $row_upd, value_vacio: $value_vacio, class_css: $class_css, regex: $regex, required: $required);
 
     }
 
-    final protected function nombre(int $cols,  string $entidad, bool $disabled = false, string $name = 'nombre', string $place_holder= 'Nombre',
-                            stdClass $row_upd = new stdClass(), bool $value_vacio = false): array|string
+    final protected function nombre(int $cols,  string $entidad, bool $disabled = false, string $name = 'nombre',
+                                    string $place_holder= 'Nombre', bool $required = true,
+                                    stdClass $row_upd = new stdClass(), bool $value_vacio = false): array|string
     {
 
 
         $class_css = array($entidad.'_nombre');
 
         return $this->input_text(cols: $cols, disabled: $disabled, name: $name, place_holder: $place_holder,
-            row_upd: $row_upd, value_vacio: $value_vacio, class_css: $class_css);
+            row_upd: $row_upd, value_vacio: $value_vacio, class_css: $class_css, required: $required);
 
     }
 
-    final protected function numero(int $cols,  string $entidad, bool $disabled = false, string $name = 'numero', string $place_holder= 'Numero',
-                            stdClass $row_upd = new stdClass(), bool $value_vacio = false): array|string
+    final protected function numero(int $cols,  string $entidad, bool $disabled = false, string $name = 'numero',
+                                    string $place_holder= 'Numero', bool $required = true,
+                                    stdClass $row_upd = new stdClass(), bool $value_vacio = false): array|string
     {
 
         $regex = $this->validacion->patterns['tel_sin_lada_html'];
+        $class_css = array($entidad.'_numero');
 
-        return $this->input_text_required(cols: $cols,disabled:  $disabled,name:  $name,
-            place_holder:  $place_holder,row_upd:  $row_upd,value_vacio:  $value_vacio,regex: $regex);
+        return $this->input_text(cols: $cols, disabled: $disabled, name: $name, place_holder: $place_holder,
+            row_upd: $row_upd, value_vacio: $value_vacio, class_css: $class_css, regex: $regex, required: $required);
 
     }
 }
