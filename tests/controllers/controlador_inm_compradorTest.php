@@ -214,6 +214,7 @@ class controlador_inm_compradorTest extends test {
         fclose($fp);
 
         $data = file_get_contents("inm_comprador.modifica");
+       // print_r($data);exit;
 
         $this->assertStringContainsStringIgnoringCase("for='inm_producto_infonavit_id'>Producto</label><div class='controls'><selec",$data);
         $this->assertStringContainsStringIgnoringCase("e' id='inm_attr_tipo_credito_id' name='inm_attr_tipo_credito_id' required ><option value=''  >Sele",$data);

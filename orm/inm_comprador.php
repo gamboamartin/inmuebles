@@ -82,29 +82,18 @@ class inm_comprador extends _modelo_parent{
     {
         $registro_entrada = $this->registro;
 
-        if(!isset($this->registro['descripcion'])){
-            $keys = array('nombre','apellido_paterno','nss','curp','rfc');
-            $valida = $this->validacion->valida_existencia_keys(keys: $keys,registro:  $this->registro);
-            if(errores::$error){
-                return $this->error->error(mensaje: 'Error al validar registro', data: $valida);
-            }
 
-            $descripcion = (new _base_comprador())->descripcion(registro: $this->registro );
-            if(errores::$error){
-                return $this->error->error(mensaje: 'Error al obtener descripcion',data:  $descripcion);
-            }
+        $registro = $this->integra_descripcion(registro: $this->registro);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al integrar descripcion',data:  $registro);
+        }
 
-            $this->registro['descripcion'] = $descripcion;
+        $registro = $this->default_infonavit(registro: $registro);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error integrar data default',data:  $registro);
         }
-        if(!isset($this->registro['inm_plazo_credito_sc_id'])){
-            $this->registro['inm_plazo_credito_sc_id'] = 7;
-        }
-        if(!isset($this->registro['inm_tipo_discapacidad_id'])){
-            $this->registro['inm_tipo_discapacidad_id'] = 5;
-        }
-        if(!isset($this->registro['inm_persona_discapacidad_id'])){
-            $this->registro['inm_persona_discapacidad_id'] = 6;
-        }
+
+        $this->registro = $registro;
 
         $keys = array('lada_nep','numero_nep','lada_com','numero_com');
         $valida = $this->validacion->valida_existencia_keys(keys: $keys,registro:  $this->registro);
@@ -112,16 +101,9 @@ class inm_comprador extends _modelo_parent{
             return $this->error->error(mensaje: 'Error al validar registro',data:  $valida);
         }
 
-
-        $numero_completo_nep = $this->registro['lada_nep'].$this->registro['numero_nep'];
-
-        $numero_completo_nep = trim($numero_completo_nep);
-        if($numero_completo_nep === ''){
-            return $this->error->error(mensaje: 'Error numero_completo_nep esta vacio',data:  $numero_completo_nep);
-        }
-
-        if(strlen($numero_completo_nep)!==10){
-            return $this->error->error(mensaje: 'Error numero_completo_nep no es de 10 digitos',data:  $numero_completo_nep);
+        $numero_completo_nep = $this->numero_completo_nep(registro: $registro);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al validar numero_completo_nep',data:  $numero_completo_nep);
         }
 
         $numero_completo_com = $this->registro['lada_com'].$this->registro['numero_com'];
@@ -277,6 +259,20 @@ class inm_comprador extends _modelo_parent{
 
     }
 
+    private function default_infonavit(array $registro): array
+    {
+        if(!isset($registro['inm_plazo_credito_sc_id'])){
+            $registro['inm_plazo_credito_sc_id'] = 7;
+        }
+        if(!isset($registro['inm_tipo_discapacidad_id'])){
+            $registro['inm_tipo_discapacidad_id'] = 5;
+        }
+        if(!isset($registro['inm_persona_discapacidad_id'])){
+            $registro['inm_persona_discapacidad_id'] = 6;
+        }
+        return $registro;
+    }
+
     public function elimina_bd(int $id): array|stdClass
     {
         $filtro['inm_comprador.id'] = $id;
@@ -375,6 +371,30 @@ class inm_comprador extends _modelo_parent{
 
     }
 
+    /**
+     * Integra la descripcion en un registro de alta
+     * @param array $registro Registro en proceso
+     * @return array
+     */
+    private function integra_descripcion(array $registro): array
+    {
+        if(!isset($registro['descripcion'])){
+            $keys = array('nombre','apellido_paterno','nss','curp','rfc');
+            $valida = $this->validacion->valida_existencia_keys(keys: $keys,registro:  $registro);
+            if(errores::$error){
+                return $this->error->error(mensaje: 'Error al validar registro', data: $valida);
+            }
+
+            $descripcion = (new _base_comprador())->descripcion(registro: $registro );
+            if(errores::$error){
+                return $this->error->error(mensaje: 'Error al obtener descripcion',data:  $descripcion);
+            }
+
+            $registro['descripcion'] = $descripcion;
+        }
+        return $registro;
+    }
+
     public function modifica_bd(array $registro, int $id, bool $reactiva = false,
                                 array $keys_integra_ds = array('codigo', 'descripcion')): array|stdClass
     {
@@ -394,6 +414,21 @@ class inm_comprador extends _modelo_parent{
         }
 
         return $r_modifica;
+    }
+
+    private function numero_completo_nep(array $registro): array|string
+    {
+        $numero_completo_nep = $registro['lada_nep'].$registro['numero_nep'];
+
+        $numero_completo_nep = trim($numero_completo_nep);
+        if($numero_completo_nep === ''){
+            return $this->error->error(mensaje: 'Error numero_completo_nep esta vacio',data:  $numero_completo_nep);
+        }
+
+        if(strlen($numero_completo_nep)!==10){
+            return $this->error->error(mensaje: 'Error numero_completo_nep no es de 10 digitos',data:  $numero_completo_nep);
+        }
+        return $numero_completo_nep;
     }
 
     final public function upd_post(int $id, stdClass $r_modifica){

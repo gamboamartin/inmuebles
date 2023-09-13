@@ -104,7 +104,9 @@ class _referencias{
                 return $this->error->error(mensaje: 'Error al asignar campo', data: $inm_referencia_ins);
             }
         }
-        $inm_referencia_ins['inm_comprador_id'] = $inm_comprador_id;
+        if(count($inm_referencia_ins)>0) {
+            $inm_referencia_ins['inm_comprador_id'] = $inm_comprador_id;
+        }
         return $inm_referencia_ins;
     }
 
@@ -196,6 +198,7 @@ class _referencias{
         if (errores::$error) {
             return $this->error->error(mensaje: 'Error al asignar campo', data: $inm_referencia_ins);
         }
+
         $result->inm_referencia_ins = $inm_referencia_ins;
 
         $aplica_alta_referencia = $this->aplica_alta_referencia(inm_referencia_ins: $inm_referencia_ins);

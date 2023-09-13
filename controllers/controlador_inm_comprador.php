@@ -544,15 +544,16 @@ class controlador_inm_comprador extends _ctl_base {
             return $this->retorno_error(mensaje: 'Error al obtener inm_referencias',data:  $inm_referencias, header: $header,ws:  $ws);
         }
 
+       // print_r($inm_referencias);exit;
+
         $this->inm_referencias = $inm_referencias;
 
 
-        $inm_referencias_html = (new inm_referencia_html(html: $this->html_base))->inm_referencias(link: $this->link);
+        $inm_referencias_html = (new inm_referencia_html(html: $this->html_base))->inm_referencias(
+            inm_referencias_data: $inm_referencias,link: $this->link);
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al integrar referencia',data:  $inm_referencias_html, header: $header,ws:  $ws);
         }
-
-
 
         $this->inputs->inm_referencias = $inm_referencias_html;
 
