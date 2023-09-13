@@ -106,9 +106,10 @@ class _inm_referenciasTest extends test {
         $campo_referencia = 'a';
         $inm_referencia_ins = array();
         $registro = array();
-        $registro['inm_referencia_a'] = 'd';
+        $registro['inm_referencia_a_1'] = 'd';
 
-        $resultado = $_inm->integra_value_referencia($campo_referencia, $inm_referencia_ins, $registro);
+        $resultado = $_inm->integra_value_referencia($campo_referencia, 1, $inm_referencia_ins, $registro);
+        //print_r($resultado);exit;
         $this->assertIsArray($resultado);
         $this->assertNotTrue(errores::$error);
         $this->assertEquals("d",$resultado['a']);
