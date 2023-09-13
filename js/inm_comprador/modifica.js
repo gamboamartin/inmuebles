@@ -59,6 +59,52 @@ let inm_co_acreditado_nrp = $("#inm_co_acreditado_nrp");
 let inm_co_acreditado_lada_nep = $("#inm_co_acreditado_lada_nep");
 let inm_co_acreditado_numero_nep = $("#inm_co_acreditado_numero_nep");
 
+let inm_referencia_apellido_paterno_1 = $("#inm_referencia_apellido_paterno_1");
+let inm_referencia_apellido_materno_1 = $("#inm_referencia_apellido_materno_1");
+let inm_referencia_nombre_1 = $("#inm_referencia_nombre_1");
+let inm_referencia_lada_1 = $("#inm_referencia_lada_1");
+let inm_referencia_numero_1 = $("#inm_referencia_numero_1");
+let inm_referencia_celular_1 = $("#inm_referencia_celular_1");
+let inm_referencia_numero_dom_1 = $("#inm_referencia_numero_dom_1");
+
+inm_referencia_apellido_paterno_1.change(function() {
+    let value = $(this).val().trim().toUpperCase();
+    $(this).val(value);
+
+});
+inm_referencia_apellido_materno_1.change(function() {
+    let value = $(this).val().trim().toUpperCase();
+    $(this).val(value);
+
+});
+inm_referencia_nombre_1.change(function() {
+    let value = $(this).val().trim().toUpperCase();
+    $(this).val(value);
+
+});
+inm_referencia_lada_1.change(function() {
+    let value = $(this).val().trim().toUpperCase();
+    $(this).val(value);
+
+});
+inm_referencia_numero_1.change(function() {
+    let value = $(this).val().trim().toUpperCase();
+    $(this).val(value);
+
+});
+
+inm_referencia_celular_1.change(function() {
+    let value = $(this).val().trim().toUpperCase();
+    $(this).val(value);
+
+});
+
+inm_referencia_numero_dom_1.change(function() {
+    let value = $(this).val().trim().toUpperCase();
+    $(this).val(value);
+
+});
+
 let apartado_1 = $("#apartado_1");
 let apartado_2 = $("#apartado_2");
 let apartado_3 = $("#apartado_3");

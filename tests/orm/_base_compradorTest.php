@@ -79,6 +79,33 @@ class _base_compradorTest extends test {
         errores::$error = false;
     }
 
+    public function test_descripcion(): void
+    {
+        errores::$error = false;
+
+        $_GET['seccion'] = 'inm_producto_infonavit';
+        $_GET['accion'] = 'lista';
+        $_SESSION['grupo_id'] = 1;
+        $_SESSION['usuario_id'] = 2;
+        $_GET['session_id'] = '1';
+
+        $inm = new _base_comprador();
+        //$inm = new liberator($inm);
+
+
+        $registro = array();
+        $registro['nombre'] = 'Z';
+        $registro['apellido_paterno'] = 'Z';
+        $registro['nss'] = 'Z';
+        $registro['curp'] = 'Z';
+        $registro['rfc'] = 'Z';
+        $resultado = $inm->descripcion(registro: $registro);
+        $this->assertIsString($resultado);
+        $this->assertNotTrue(errores::$error);
+        $this->assertEquals("Z Z  Z Z Z",$resultado);
+        errores::$error = false;
+    }
+
     public function test_inm_rel_comprador_cliente(): void
     {
         errores::$error = false;

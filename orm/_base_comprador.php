@@ -86,6 +86,7 @@ class _base_comprador{
      * Genera la descripcion de un comprador basado en datos del registro a insertar
      * @param array $registro Registro en proceso
      * @return string|array
+     * @version 1.176.1
      */
     final public function descripcion(array $registro): string|array
     {
