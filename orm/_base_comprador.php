@@ -199,12 +199,21 @@ class _base_comprador{
         }
         $result->data_co_acreditado = $data_co_acreditado;
 
-        $data_referencias = (new _referencias())->operaciones_referencia(inm_comprador_id: $inm_comprador_id,
-            inm_comprador_upd:  $inm_comprador_upd,modelo_inm_comprador: $modelo_inm_comprador);
+
+        /*$data_referencias = (new _referencias())->operaciones_referencia(indice: 1,
+            inm_comprador_id: $inm_comprador_id, inm_comprador_upd: $inm_comprador_upd, modelo_inm_comprador: $modelo_inm_comprador);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al obtener data_referencias',data:  $data_referencias);
         }
-        $result->data_referencias = $data_referencias;
+
+        $data_referencias = (new _referencias())->operaciones_referencia(indice: 2,
+            inm_comprador_id: $inm_comprador_id, inm_comprador_upd: $inm_comprador_upd, modelo_inm_comprador: $modelo_inm_comprador);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al obtener data_referencias',data:  $data_referencias);
+        }
+
+
+        $result->data_referencias = $data_referencias;*/
 
         return $result;
     }

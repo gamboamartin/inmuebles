@@ -259,6 +259,12 @@ class inm_comprador extends _modelo_parent{
 
     }
 
+    /**
+     * Integra los elementos de alta default
+     * @param array $registro Registro en proceso
+     * @return array
+     * @version 1.179.1
+     */
     private function default_infonavit(array $registro): array
     {
         if(!isset($registro['inm_plazo_credito_sc_id'])){
@@ -405,7 +411,7 @@ class inm_comprador extends _modelo_parent{
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al modificar comprador',data:  $r_modifica);
         }
-        
+
 
         $transacciones = (new _base_comprador())->transacciones_posterior_upd(inm_comprador_upd: $registro,
             inm_comprador_id:  $id,modelo_inm_comprador:  $this,r_modifica:  $r_modifica);
@@ -416,6 +422,10 @@ class inm_comprador extends _modelo_parent{
         return $r_modifica;
     }
 
+    /**
+     * @param array $registro
+     * @return array|string
+     */
     private function numero_completo_nep(array $registro): array|string
     {
         $numero_completo_nep = $registro['lada_nep'].$registro['numero_nep'];

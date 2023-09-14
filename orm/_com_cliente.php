@@ -29,7 +29,13 @@ class _com_cliente{
         return $r_com_cliente;
     }
 
-    private  function com_cliente_id(int $inm_comprador_id, PDO $link){
+    /**
+     * @param int $inm_comprador_id
+     * @param PDO $link
+     * @return array|int
+     */
+    private  function com_cliente_id(int $inm_comprador_id, PDO $link): int|array
+    {
         $filtro['inm_comprador.id'] = $inm_comprador_id;
         $r_im_rel_comprador_com_cliente = (new inm_rel_comprador_com_cliente(link: $link))->filtro_and(filtro: $filtro);
         if(errores::$error){
@@ -88,7 +94,12 @@ class _com_cliente{
         return $com_cliente_ins;
     }
 
-    private function com_cliente_upd(stdClass $registro){
+    /**
+     * @param stdClass $registro
+     * @return array
+     */
+    private function com_cliente_upd(stdClass $registro): array
+    {
         $com_cliente_upd = array();
 
         $razon_social = $this->razon_social(con_prefijo: true, registro: $registro);
@@ -105,7 +116,12 @@ class _com_cliente{
         return $com_cliente_upd;
     }
 
-    private function init_keys_com_cliente(array $com_cliente_upd){
+    /**
+     * @param array $com_cliente_upd
+     * @return array
+     */
+    private function init_keys_com_cliente(array $com_cliente_upd): array
+    {
         $keys_com_cliente = $this->key_com_cliente();
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al obtener keys_com_cliente',data:  $keys_com_cliente);
@@ -177,6 +193,9 @@ class _com_cliente{
         return $r_inm_rel_comprador_com_cliente_ins;
     }
 
+    /**
+     * @return string[]
+     */
     private function key_com_cliente(): array
     {
         return array('com_tipo_cliente_id','rfc','dp_calle_pertenece_id','numero_exterior',
@@ -259,6 +278,11 @@ class _com_cliente{
 
     }
 
+    /**
+     * @param bool $con_prefijo
+     * @param stdClass $registro
+     * @return string
+     */
     private function razon_social(bool $con_prefijo, stdClass $registro): string
     {
         $key_nombre = 'nombre';

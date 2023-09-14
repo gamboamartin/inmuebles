@@ -18,11 +18,6 @@ class _referencias{
         $aplica_alta_referencia = false;
         if(count($inm_referencia_ins)>0){
             $aplica_alta_referencia = true;
-            if(count($inm_referencia_ins) === 1){
-                if(isset($inm_referencia_ins['genero'])){
-                    $aplica_alta_referencia = false;
-                }
-            }
         }
         return $aplica_alta_referencia;
     }
@@ -188,16 +183,16 @@ class _referencias{
         return $inm_referencia_ins;
     }
 
-    final public function operaciones_referencia(int $inm_comprador_id, array $inm_comprador_upd, inm_comprador $modelo_inm_comprador){
+    final public function operaciones_referencia(int $indice, int $inm_comprador_id, array $inm_comprador_upd, inm_comprador $modelo_inm_comprador){
 
         $result = new stdClass();
 
-
-        $inm_referencia_ins = $this->inm_referencia_ins(indice: 1, inm_comprador_id: $inm_comprador_id,
+        $inm_referencia_ins = $this->inm_referencia_ins(indice: $indice, inm_comprador_id: $inm_comprador_id,
             registro: $inm_comprador_upd);
         if (errores::$error) {
             return $this->error->error(mensaje: 'Error al asignar campo', data: $inm_referencia_ins);
         }
+
 
         $result->inm_referencia_ins = $inm_referencia_ins;
 
