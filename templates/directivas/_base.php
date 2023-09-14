@@ -349,7 +349,7 @@ class _base extends html_controler{
         $inm_referencia = new stdClass();
 
 
-        $inm_referencia = $this->base_ref(indice: 2, inm_referencia: $inm_referencia, inm_referencia_data: array(), link: $link);
+        $inm_referencia = $this->base_ref(indice: 2, inm_referencia: $inm_referencia, inm_referencia_data: $inm_referencias_data[1], link: $link);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al integrar referencia',data:  $inm_referencia);
         }

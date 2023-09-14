@@ -296,11 +296,35 @@ class inm_compradorTest extends test {
         errores::$error = false;
     }
 
+    public function test_numero_completo_nep(): void
+    {
+        errores::$error = false;
+
+        $_GET['seccion'] = 'inm_producto_infonavit';
+        $_GET['accion'] = 'lista';
+        $_SESSION['grupo_id'] = 1;
+        $_SESSION['usuario_id'] = 2;
+        $_GET['session_id'] = '1';
+
+        $inm = new inm_comprador(link: $this->link);
+        $inm = new liberator($inm);
 
 
 
-
-
+        $registro = array();
+        $registro['nombre'] = 'D';
+        $registro['apellido_paterno'] = 'D';
+        $registro['nss'] = 'D';
+        $registro['curp'] = 'D';
+        $registro['rfc'] = 'D';
+        $registro['lada_nep'] = '012';
+        $registro['numero_nep'] = '0156789';
+        $resultado = $inm->numero_completo_nep($registro);
+        $this->assertIsString($resultado);
+        $this->assertNotTrue(errores::$error);
+        $this->assertEquals('0120156789',$resultado);
+        errores::$error = false;
+    }
 
 }
 

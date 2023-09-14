@@ -56,14 +56,13 @@ class _referencias{
 
     }
 
-    private function data_referencia(array $referencias): stdClass
+    private function data_referencia(int $indice,array $referencias): stdClass
     {
         $existe_referencia = false;
         $inm_referencia = new stdClass();
-        if(count($referencias) === 1){
+        if(isset($referencias[$indice-1])){
             $existe_referencia = true;
-            $inm_referencia = (object)$referencias[0];
-
+            $inm_referencia = (object)$referencias[$indice-1];
         }
 
         $data = new stdClass();
@@ -73,13 +72,13 @@ class _referencias{
         return $data;
     }
 
-    private function get_data_referencia(int $inm_comprador_id, inm_comprador $modelo_inm_comprador){
+    private function get_data_referencia(int $indice,int $inm_comprador_id, inm_comprador $modelo_inm_comprador){
         $referencias = $modelo_inm_comprador->get_referencias(inm_comprador_id: $inm_comprador_id);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al obtener referencias',data:  $referencias);
         }
 
-        $data_referencias = $this->data_referencia(referencias: $referencias);
+        $data_referencias = $this->data_referencia(indice: $indice, referencias: $referencias);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al obtener data_referencias',data:  $data_referencias);
         }
@@ -102,6 +101,7 @@ class _referencias{
         if(count($inm_referencia_ins)>0) {
             $inm_referencia_ins['inm_comprador_id'] = $inm_comprador_id;
         }
+
         return $inm_referencia_ins;
     }
 
@@ -200,11 +200,12 @@ class _referencias{
         if (errores::$error) {
             return $this->error->error(mensaje: 'Error al validar si aplica alta inm_referencia_ins', data: $inm_referencia_ins);
         }
+
         $result->aplica_alta_referencia = $aplica_alta_referencia;
 
         if($aplica_alta_referencia) {
-            $data_referencia = $this->transacciones_referencia(
-                inm_referencia_ins: $inm_referencia_ins,inm_comprador_id:  $inm_comprador_id,modelo_inm_comprador:  $modelo_inm_comprador);
+            $data_referencia = $this->transacciones_referencia(indice: $indice, inm_referencia_ins: $inm_referencia_ins,
+                inm_comprador_id: $inm_comprador_id, modelo_inm_comprador: $modelo_inm_comprador);
             if(errores::$error){
                 return $this->error->error(mensaje: 'Error al obtener data_referencia',data:  $data_referencia);
             }
@@ -213,14 +214,16 @@ class _referencias{
         return $result;
     }
 
-    private function transacciones_referencia(array $inm_referencia_ins, int $inm_comprador_id, inm_comprador $modelo_inm_comprador){
+    private function transacciones_referencia(int $indice,array $inm_referencia_ins, int $inm_comprador_id, inm_comprador $modelo_inm_comprador){
 
         $data_result = new stdClass();
 
-        $data_referencia = $this->get_data_referencia(inm_comprador_id: $inm_comprador_id,modelo_inm_comprador: $modelo_inm_comprador);
+        $data_referencia = $this->get_data_referencia(indice: $indice, inm_comprador_id: $inm_comprador_id,
+            modelo_inm_comprador: $modelo_inm_comprador);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al obtener data_referencia',data:  $data_referencia);
         }
+
         $data_result->data_referencia = $data_referencia;
 
         if(!$data_referencia->existe_referencia) {
