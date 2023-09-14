@@ -53,43 +53,43 @@ class _base extends html_controler{
         }
 
         $apellido_paterno = $this->apellido_paterno(cols: 6, entidad: 'inm_referencia', disabled: true,
-            name: 'inm_referencia_apellido_paterno_'.$indice, required: false, row_upd: $row_upd);
+            name: 'inm_referencia_apellido_paterno_'.$indice, row_upd: $row_upd);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al obtener apellido_paterno',data:  $apellido_paterno);
         }
         $inm_referencia->apellido_paterno = $apellido_paterno;
 
 
-        $apellido_materno = $this->apellido_materno(cols: 6, entidad: 'inm_referencia',
-            disabled: true, name: 'inm_referencia_apellido_materno_'.$indice, required: false, row_upd: $row_upd);
+        $apellido_materno = $this->apellido_materno(cols: 6, entidad: 'inm_referencia', disabled: true,
+            name: 'inm_referencia_apellido_materno_'.$indice, required: false, row_upd: $row_upd);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al obtener apellido_materno',data:  $apellido_materno);
         }
         $inm_referencia->apellido_materno = $apellido_materno;
 
         $nombre = $this->nombre(cols: 6, entidad: 'inm_referencia', disabled: true,
-            name: 'inm_referencia_nombre_'.$indice, required: false, row_upd: $row_upd);
+            name: 'inm_referencia_nombre_'.$indice, row_upd: $row_upd);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al obtener nombre',data:  $nombre);
         }
         $inm_referencia->nombre = $nombre;
 
         $lada = $this->lada(cols: 6, entidad: 'inm_referencia', disabled: true, name: 'inm_referencia_lada_'.$indice,
-            required: false, row_upd: $row_upd);
+            row_upd: $row_upd);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al obtener lada',data:  $lada);
         }
         $inm_referencia->lada = $lada;
 
         $numero = $this->numero(cols: 6, entidad: 'inm_referencia', disabled: true,
-            name: 'inm_referencia_numero_'.$indice, required: false, row_upd: $row_upd);
+            name: 'inm_referencia_numero_'.$indice, row_upd: $row_upd);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al obtener numero',data:  $numero);
         }
         $inm_referencia->numero = $numero;
 
         $celular = $this->celular(cols: 6, entidad: 'inm_referencia', disabled: true,
-            name: 'inm_referencia_celular_'.$indice, required: false, row_upd: $row_upd);
+            name: 'inm_referencia_celular_'.$indice, row_upd: $row_upd);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al obtener celular',data:  $celular);
         }
@@ -163,14 +163,15 @@ class _base extends html_controler{
         $filtro = array();
         $filtro['dp_estado.id'] = $inm_referencia_data['dp_estado_id'];
         $dp_calle_pertenece_id = $this->dp_calle_pertenece_id(cols: 6, disabled: true,
-            filtro: $filtro, id_selected: $inm_referencia_data['dp_calle_pertenece_id'], indice: $indice, link: $link);
+            filtro: $filtro, id_selected: $inm_referencia_data['dp_calle_pertenece_id'], indice: $indice, link: $link,
+            required:true);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al obtener dp_calle_pertenece_id',data:  $dp_calle_pertenece_id);
         }
         $inm_referencia->dp_calle_pertenece_id = $dp_calle_pertenece_id;
 
         $numero_dom = $this->numero_dom(cols: 12, entidad: 'inm_referencia', disabled: true,
-            name: 'inm_referencia_numero_dom_'.$indice, row_upd: $row_upd);
+            name: 'inm_referencia_numero_dom_'.$indice, required: true, row_upd: $row_upd);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al obtener numero_dom',data:  $numero_dom);
         }
@@ -220,10 +221,11 @@ class _base extends html_controler{
         return $data;
     }
 
-    private function dp_calle_pertenece_id(int $cols, bool $disabled, array $filtro, int $id_selected, int $indice, PDO $link){
+    private function dp_calle_pertenece_id(int $cols, bool $disabled, array $filtro, int $id_selected, int $indice,
+                                           PDO $link, bool $required){
         $dp_calle_pertenece_id = (new dp_calle_pertenece_html(html: $this->html_base))->select_dp_calle_pertenece_id(
             cols: $cols, con_registros: true, id_selected: $id_selected, link: $link, disabled: $disabled,
-            filtro: $filtro, name: 'inm_referencia_dp_calle_pertenece_id_'.$indice);
+            filtro: $filtro, name: 'inm_referencia_dp_calle_pertenece_id_'.$indice, required: $required);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al generar input',data:  $dp_calle_pertenece_id);
         }
