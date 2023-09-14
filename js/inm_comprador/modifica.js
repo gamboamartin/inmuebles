@@ -720,6 +720,35 @@ $("#inm_referencia_dp_colonia_postal_id_1").change(function(){
     dp_asigna_calles_pertenece(dp_colonia_postal_id,'',"#inm_referencia_dp_calle_pertenece_id_1");
 });
 
+
+
+
+
+$("#inm_referencia_dp_pais_id_2").change(function(){
+    dp_pais_id = $(this).val();
+    dp_asigna_estados(dp_pais_id,'',"#inm_referencia_dp_estado_id_2");
+});
+
+$("#inm_referencia_dp_estado_id_2").change(function(){
+    dp_estado_id = $(this).val();
+    dp_asigna_municipios(dp_estado_id,'',"#inm_referencia_dp_municipio_id_2");
+});
+
+$("#inm_referencia_dp_municipio_id_2").change(function(){
+    dp_municipio_id = $(this).val();
+    dp_asigna_cps(dp_municipio_id,'',"#inm_referencia_dp_cp_id_2");
+});
+
+$("#inm_referencia_dp_cp_id_2").change(function(){
+    dp_cp_id = $(this).val();
+    dp_asigna_colonias_postales(dp_cp_id,'','#inm_referencia_dp_colonia_postal_id_2',);
+});
+
+$("#inm_referencia_dp_colonia_postal_id_2").change(function(){
+    dp_colonia_postal_id = $(this).val();
+    dp_asigna_calles_pertenece(dp_colonia_postal_id,'',"#inm_referencia_dp_calle_pertenece_id_2");
+});
+
 sl_dp_pais_id.change(function(){
     dp_pais_id = $(this).val();
     dp_asigna_estados(dp_pais_id);
