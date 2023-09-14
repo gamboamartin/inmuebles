@@ -544,8 +544,6 @@ class controlador_inm_comprador extends _ctl_base {
             return $this->retorno_error(mensaje: 'Error al obtener inm_referencias',data:  $inm_referencias, header: $header,ws:  $ws);
         }
 
-       // print_r($inm_referencias);exit;
-
         $this->inm_referencias = $inm_referencias;
 
 
@@ -584,6 +582,23 @@ class controlador_inm_comprador extends _ctl_base {
         }
 
         $this->btn = $button_upd;
+
+
+        $boton_edit_1 = $this->html->button_para_java(id_css: 'edit_ref_1',style: 'success',tag: 'Edita');
+        if(errores::$error){
+            return $this->retorno_error(
+                mensaje: 'Error al generar boton_edit_1',data:  $boton_edit_1, header: $header,ws:  $ws);
+        }
+
+        $this->buttons['edita_ref_1'] = $boton_edit_1;
+
+        $boton_edit_2 = $this->html->button_para_java(id_css: 'edit_ref_2',style: 'success',tag: 'Edita');
+        if(errores::$error){
+            return $this->retorno_error(
+                mensaje: 'Error al generar boton_edit_2',data:  $boton_edit_2, header: $header,ws:  $ws);
+        }
+
+        $this->buttons['edita_ref_2'] = $boton_edit_2;
 
 
         return $r_modifica;

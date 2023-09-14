@@ -76,6 +76,38 @@ let inm_referencia_numero_2 = $("#inm_referencia_numero_2");
 let inm_referencia_celular_2 = $("#inm_referencia_celular_2");
 let inm_referencia_numero_dom_2 = $("#inm_referencia_numero_dom_2");
 
+
+let edit_ref_1 = $("#edit_ref_1");
+
+edit_ref_1.click(function() {
+
+    inm_referencia_apellido_paterno_1.prop('disabled',false);
+    inm_referencia_apellido_materno_1.prop('disabled',false);
+    inm_referencia_nombre_1.prop('disabled',false);
+    inm_referencia_lada_1.prop('disabled',false);
+    inm_referencia_numero_1.prop('disabled',false);
+    inm_referencia_celular_1.prop('disabled',false);
+    inm_referencia_numero_dom_1.prop('disabled',false);
+    $("#inm_referencia_dp_pais_id_1").prop('disabled',false);
+    $("#inm_referencia_dp_pais_id_1").selectpicker('refresh');
+
+    $("#inm_referencia_dp_estado_id_1").prop('disabled',false);
+    $("#inm_referencia_dp_estado_id_1").selectpicker('refresh');
+
+    $("#inm_referencia_dp_municipio_id_1").prop('disabled',false);
+    $("#inm_referencia_dp_municipio_id_1").selectpicker('refresh');
+
+    $("#inm_referencia_dp_cp_id_1").prop('disabled',false);
+    $("#inm_referencia_dp_cp_id_1").selectpicker('refresh');
+
+    $("#inm_referencia_dp_colonia_postal_id_1").prop('disabled',false);
+    $("#inm_referencia_dp_colonia_postal_id_1").selectpicker('refresh');
+
+    $("#inm_referencia_dp_calle_pertenece_id_1").prop('disabled',false);
+    $("#inm_referencia_dp_calle_pertenece_id_1").selectpicker('refresh');
+
+});
+
 inm_referencia_apellido_paterno_1.change(function() {
     let value = $(this).val().trim().toUpperCase();
     $(this).val(value);

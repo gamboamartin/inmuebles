@@ -147,6 +147,8 @@ if($controlador->row_upd->genero === 'F'){
     <div  id="apartado_8">
         <div class="col-md-12">
             <h4>7.1 Referencia 1</h4>
+            <?php echo $controlador->buttons['edita_ref_1']; ?>
+            <hr>
             <?php echo $controlador->inputs->inm_referencias[0]->apellido_paterno; ?>
             <?php echo $controlador->inputs->inm_referencias[0]->apellido_materno; ?>
             <?php echo $controlador->inputs->inm_referencias[0]->nombre; ?>
@@ -163,6 +165,8 @@ if($controlador->row_upd->genero === 'F'){
         </div>
         <div class="col-md-12">
             <h4>7.1 Referencia 2</h4>
+            <?php echo $controlador->buttons['edita_ref_2']; ?>
+            <hr>
             <?php echo $controlador->inputs->inm_referencias[1]->apellido_paterno; ?>
             <?php echo $controlador->inputs->inm_referencias[1]->apellido_materno; ?>
             <?php echo $controlador->inputs->inm_referencias[1]->nombre; ?>
