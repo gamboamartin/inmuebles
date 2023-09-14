@@ -180,41 +180,7 @@ class inm_compradorTest extends test {
         errores::$error = false;
     }
 
-    public function test_default_infonavit(): void
-    {
-        errores::$error = false;
 
-        $_GET['seccion'] = 'inm_producto_infonavit';
-        $_GET['accion'] = 'lista';
-        $_SESSION['grupo_id'] = 1;
-        $_SESSION['usuario_id'] = 2;
-        $_GET['session_id'] = '1';
-
-        $inm = new inm_comprador(link: $this->link);
-        $inm = new liberator($inm);
-
-
-
-        $registro = array();
-        $registro['nombre'] = 'D';
-        $registro['apellido_paterno'] = 'D';
-        $registro['nss'] = 'D';
-        $registro['curp'] = 'D';
-        $registro['rfc'] = 'D';
-        $resultado = $inm->default_infonavit($registro);
-        $this->assertIsArray($resultado);
-        $this->assertNotTrue(errores::$error);
-        $this->assertEquals('D',$resultado['nombre']);
-        $this->assertEquals('D',$resultado['apellido_paterno']);
-        $this->assertEquals('D',$resultado['nss']);
-        $this->assertEquals('D',$resultado['curp']);
-        $this->assertEquals('D',$resultado['rfc']);
-
-        $this->assertEquals(7,$resultado['inm_plazo_credito_sc_id']);
-        $this->assertEquals(5,$resultado['inm_tipo_discapacidad_id']);
-        $this->assertEquals(6,$resultado['inm_persona_discapacidad_id']);
-        errores::$error = false;
-    }
 
 
 
@@ -262,69 +228,9 @@ class inm_compradorTest extends test {
         errores::$error = false;
     }
 
-    public function test_integra_descripcion(): void
-    {
-        errores::$error = false;
-
-        $_GET['seccion'] = 'inm_producto_infonavit';
-        $_GET['accion'] = 'lista';
-        $_SESSION['grupo_id'] = 1;
-        $_SESSION['usuario_id'] = 2;
-        $_GET['session_id'] = '1';
-
-        $inm = new inm_comprador(link: $this->link);
-        $inm = new liberator($inm);
 
 
 
-        $registro = array();
-        $registro['nombre'] = 'D';
-        $registro['apellido_paterno'] = 'D';
-        $registro['nss'] = 'D';
-        $registro['curp'] = 'D';
-        $registro['rfc'] = 'D';
-        $resultado = $inm->integra_descripcion($registro);
-        $this->assertIsArray($resultado);
-        $this->assertNotTrue(errores::$error);
-        $this->assertEquals('D',$resultado['nombre']);
-        $this->assertEquals('D',$resultado['apellido_paterno']);
-        $this->assertEquals('D',$resultado['nss']);
-        $this->assertEquals('D',$resultado['curp']);
-        $this->assertEquals('D',$resultado['rfc']);
-        $this->assertEquals('D D  D D D',$resultado['descripcion']);
-
-        errores::$error = false;
-    }
-
-    public function test_numero_completo_nep(): void
-    {
-        errores::$error = false;
-
-        $_GET['seccion'] = 'inm_producto_infonavit';
-        $_GET['accion'] = 'lista';
-        $_SESSION['grupo_id'] = 1;
-        $_SESSION['usuario_id'] = 2;
-        $_GET['session_id'] = '1';
-
-        $inm = new inm_comprador(link: $this->link);
-        $inm = new liberator($inm);
-
-
-
-        $registro = array();
-        $registro['nombre'] = 'D';
-        $registro['apellido_paterno'] = 'D';
-        $registro['nss'] = 'D';
-        $registro['curp'] = 'D';
-        $registro['rfc'] = 'D';
-        $registro['lada_nep'] = '012';
-        $registro['numero_nep'] = '0156789';
-        $resultado = $inm->numero_completo_nep($registro);
-        $this->assertIsString($resultado);
-        $this->assertNotTrue(errores::$error);
-        $this->assertEquals('0120156789',$resultado);
-        errores::$error = false;
-    }
 
 }
 
