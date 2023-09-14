@@ -165,6 +165,7 @@ class _alta_comprador{
      * Obtiene el numero completo con lada y numero
      * @param array $registro Registro en proceso
      * @return array|string
+     * @version 2.1.0
      */
     private function numero_completo_com(array $registro): array|string
     {

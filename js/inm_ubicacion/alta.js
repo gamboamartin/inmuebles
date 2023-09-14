@@ -14,6 +14,36 @@ let dp_municipio_id = -1;
 let dp_cp_id = -1;
 let dp_colonia_postal_id = -1;
 
+let numero_exterior = $("#numero_exterior");
+let numero_interior = $("#numero_interior");
+let manzana = $("#manzana");
+let lote = $("#lote");
+let cuenta_predial = $("#cuenta_predial");
+
+
+numero_exterior.change(function(){
+    let value = $(this).val().trim().toUpperCase();
+    $(this).val(value)
+});
+
+numero_interior.change(function(){
+    let value = $(this).val().trim().toUpperCase();
+    $(this).val(value)
+});
+
+manzana.change(function(){
+    let value = $(this).val().trim().toUpperCase();
+    $(this).val(value)
+});
+lote.change(function(){
+    let value = $(this).val().trim().toUpperCase();
+    $(this).val(value)
+});
+
+cuenta_predial.change(function(){
+    let value = $(this).val().trim().toUpperCase();
+    $(this).val(value)
+});
 
 sl_dp_pais_id.change(function(){
     dp_pais_id = $(this).val();
