@@ -79,8 +79,9 @@ let inm_referencia_numero_dom_2 = $("#inm_referencia_numero_dom_2");
 
 let edit_ref_1 = $("#edit_ref_1");
 
-edit_ref_1.click(function() {
 
+
+function habilita_ref_1(){
     inm_referencia_apellido_paterno_1.prop('disabled',false);
     inm_referencia_apellido_materno_1.prop('disabled',false);
     inm_referencia_nombre_1.prop('disabled',false);
@@ -105,9 +106,47 @@ edit_ref_1.click(function() {
 
     $("#inm_referencia_dp_calle_pertenece_id_1").prop('disabled',false);
     $("#inm_referencia_dp_calle_pertenece_id_1").selectpicker('refresh');
+}
+
+function deshabilita_ref_1(){
+    inm_referencia_apellido_paterno_1.prop('disabled',true);
+    inm_referencia_apellido_materno_1.prop('disabled',true);
+    inm_referencia_nombre_1.prop('disabled',true);
+    inm_referencia_lada_1.prop('disabled',true);
+    inm_referencia_numero_1.prop('disabled',true);
+    inm_referencia_celular_1.prop('disabled',true);
+    inm_referencia_numero_dom_1.prop('disabled',true);
+    $("#inm_referencia_dp_pais_id_1").prop('disabled',true);
+    $("#inm_referencia_dp_pais_id_1").selectpicker('refresh');
+
+    $("#inm_referencia_dp_estado_id_1").prop('disabled',true);
+    $("#inm_referencia_dp_estado_id_1").selectpicker('refresh');
+
+    $("#inm_referencia_dp_municipio_id_1").prop('disabled',true);
+    $("#inm_referencia_dp_municipio_id_1").selectpicker('refresh');
+
+    $("#inm_referencia_dp_cp_id_1").prop('disabled',true);
+    $("#inm_referencia_dp_cp_id_1").selectpicker('refresh');
+
+    $("#inm_referencia_dp_colonia_postal_id_1").prop('disabled',true);
+    $("#inm_referencia_dp_colonia_postal_id_1").selectpicker('refresh');
+
+    $("#inm_referencia_dp_calle_pertenece_id_1").prop('disabled',true);
+    $("#inm_referencia_dp_calle_pertenece_id_1").selectpicker('refresh');
+}
+
+let ref_1_habilitado = false
+edit_ref_1.click(function() {
+    if(!ref_1_habilitado) {
+        habilita_ref_1();
+        ref_1_habilitado = true;
+    }
+    else{
+        deshabilita_ref_1();
+        ref_1_habilitado = false;
+    }
 
 });
-
 inm_referencia_apellido_paterno_1.change(function() {
     let value = $(this).val().trim().toUpperCase();
     $(this).val(value);

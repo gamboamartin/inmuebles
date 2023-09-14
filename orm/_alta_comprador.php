@@ -113,7 +113,15 @@ class _alta_comprador{
         return $numero_completo;
     }
 
-    private function numero_completo_base(string $key_lada, string $key_numero, array $registro){
+    /**
+     * Valida que un numero telefonico con lada sea valido
+     * @param string $key_lada Key del campo lada
+     * @param string $key_numero Key del campo numero
+     * @param array $registro Registro en proceso de validacion
+     * @return array|true
+     */
+    private function numero_completo_base(string $key_lada, string $key_numero, array $registro): bool|array
+    {
         $keys = array($key_lada,$key_numero);
         $valida = $this->validacion->valida_existencia_keys(keys: $keys,registro:  $registro);
         if(errores::$error){
