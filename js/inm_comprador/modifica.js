@@ -164,6 +164,7 @@ let apartado_14 = $("#apartado_14");
 
 let apartado_6 = $("#apartado_6");
 let apartado_7 = $("#apartado_7");
+let apartado_8 = $("#apartado_8");
 
 let collapse_a1 = $("#collapse_a1");
 let collapse_a2 = $("#collapse_a2");
@@ -175,6 +176,7 @@ let collapse_a14 = $("#collapse_a14");
 
 let collapse_a6 = $("#collapse_a6");
 let collapse_a7 = $("#collapse_a7");
+let collapse_a8 = $("#collapse_a8");
 
 let btn_modifica = $("#btn_modifica");
 
@@ -188,6 +190,7 @@ apartado_14.hide();
 
 apartado_6.hide();
 apartado_7.hide();
+apartado_8.hide();
 
 in_descuento_pension_alimenticia_dh.change(function() {
     let value = $(this).val().trim();
@@ -474,6 +477,11 @@ collapse_a7.click(function() {
 
 });
 
+collapse_a8.click(function() {
+    apartado_8.toggle();
+
+});
+
 
 let todo_aculto = true;
 
@@ -489,6 +497,7 @@ $("#collapse_all").click(function() {
 
         apartado_6.show();
         apartado_7.show();
+        apartado_8.show();
         todo_aculto = false;
     }
     else{
@@ -502,6 +511,7 @@ $("#collapse_all").click(function() {
 
         apartado_6.hide();
         apartado_7.hide();
+        apartado_8.hide();
         todo_aculto = true;
     }
 
@@ -519,6 +529,7 @@ btn_modifica.click(function() {
     apartado_13.show();
     apartado_14.show();
     apartado_6.show();
+    apartado_8.show();
 
     if(inm_co_acreditado_nss.val() !== ''){
         apartado_6_con_datos = true;
