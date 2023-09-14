@@ -98,10 +98,11 @@ class _alta_comprador{
      * @param string $key_numero Key del numero
      * @param array $registro Registro en proceso
      * @return array|string
+     * @version 1.189.1
      */
     private function numero_completo(string $key_lada, string $key_numero, array $registro): array|string
     {
-        
+
         $valida = $this->numero_completo_base(key_lada: $key_lada,key_numero:  $key_numero,registro:  $registro);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al validar numero',data:  $valida);
@@ -160,6 +161,11 @@ class _alta_comprador{
         return true;
     }
 
+    /**
+     * Obtiene el numero completo con lada y numero
+     * @param array $registro Registro en proceso
+     * @return array|string
+     */
     private function numero_completo_com(array $registro): array|string
     {
         $numero_completo_com = $this->numero_completo(key_lada:'lada_com',key_numero:  'numero_com',

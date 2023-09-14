@@ -78,6 +78,7 @@ let inm_referencia_numero_dom_2 = $("#inm_referencia_numero_dom_2");
 
 
 let edit_ref_1 = $("#edit_ref_1");
+let edit_ref_2 = $("#edit_ref_2");
 
 
 
@@ -114,6 +115,39 @@ function habilita_ref_1(){
     edit_ref_1.html('Cancela');
 }
 
+function habilita_ref_2(){
+    inm_referencia_apellido_paterno_2.prop('disabled',false);
+    inm_referencia_apellido_materno_2.prop('disabled',false);
+    inm_referencia_nombre_2.prop('disabled',false);
+    inm_referencia_lada_2.prop('disabled',false);
+    inm_referencia_numero_2.prop('disabled',false);
+    inm_referencia_celular_2.prop('disabled',false);
+    inm_referencia_numero_dom_2.prop('disabled',false);
+    $("#inm_referencia_dp_pais_id_2").prop('disabled',false);
+    $("#inm_referencia_dp_pais_id_2").selectpicker('refresh');
+
+    $("#inm_referencia_dp_estado_id_2").prop('disabled',false);
+    $("#inm_referencia_dp_estado_id_2").selectpicker('refresh');
+
+    $("#inm_referencia_dp_municipio_id_2").prop('disabled',false);
+    $("#inm_referencia_dp_municipio_id_2").selectpicker('refresh');
+
+    $("#inm_referencia_dp_cp_id_2").prop('disabled',false);
+    $("#inm_referencia_dp_cp_id_2").selectpicker('refresh');
+
+    $("#inm_referencia_dp_colonia_postal_id_2").prop('disabled',false);
+    $("#inm_referencia_dp_colonia_postal_id_2").selectpicker('refresh');
+
+    $("#inm_referencia_dp_calle_pertenece_id_2").prop('disabled',false);
+    $("#inm_referencia_dp_calle_pertenece_id_2").selectpicker('refresh');
+
+    edit_ref_2.removeClass('btn-success');
+    edit_ref_2.addClass('btn-warning');
+
+    edit_ref_2.empty();
+    edit_ref_2.html('Cancela');
+}
+
 function deshabilita_ref_1(){
     inm_referencia_apellido_paterno_1.prop('disabled',true);
     inm_referencia_apellido_materno_1.prop('disabled',true);
@@ -146,7 +180,40 @@ function deshabilita_ref_1(){
     edit_ref_1.html('Edita');
 }
 
+function deshabilita_ref_2(){
+    inm_referencia_apellido_paterno_2.prop('disabled',true);
+    inm_referencia_apellido_materno_2.prop('disabled',true);
+    inm_referencia_nombre_2.prop('disabled',true);
+    inm_referencia_lada_2.prop('disabled',true);
+    inm_referencia_numero_2.prop('disabled',true);
+    inm_referencia_celular_2.prop('disabled',true);
+    inm_referencia_numero_dom_2.prop('disabled',true);
+    $("#inm_referencia_dp_pais_id_2").prop('disabled',true);
+    $("#inm_referencia_dp_pais_id_2").selectpicker('refresh');
+
+    $("#inm_referencia_dp_estado_id_2").prop('disabled',true);
+    $("#inm_referencia_dp_estado_id_2").selectpicker('refresh');
+
+    $("#inm_referencia_dp_municipio_id_2").prop('disabled',true);
+    $("#inm_referencia_dp_municipio_id_2").selectpicker('refresh');
+
+    $("#inm_referencia_dp_cp_id_2").prop('disabled',true);
+    $("#inm_referencia_dp_cp_id_2").selectpicker('refresh');
+
+    $("#inm_referencia_dp_colonia_postal_id_2").prop('disabled',true);
+    $("#inm_referencia_dp_colonia_postal_id_2").selectpicker('refresh');
+
+    $("#inm_referencia_dp_calle_pertenece_id_2").prop('disabled',true);
+    $("#inm_referencia_dp_calle_pertenece_id_2").selectpicker('refresh');
+
+    edit_ref_2.removeClass('btn-warning');
+    edit_ref_2.addClass('btn-success');
+    edit_ref_2.empty();
+    edit_ref_2.html('Edita');
+}
+
 let ref_1_habilitado = false
+
 edit_ref_1.click(function() {
     if(!ref_1_habilitado) {
         habilita_ref_1();
@@ -155,6 +222,20 @@ edit_ref_1.click(function() {
     else{
         deshabilita_ref_1();
         ref_1_habilitado = false;
+    }
+
+});
+
+let ref_2_habilitado = false
+
+edit_ref_2.click(function() {
+    if(!ref_2_habilitado) {
+        habilita_ref_2();
+        ref_2_habilitado = true;
+    }
+    else{
+        deshabilita_ref_2();
+        ref_2_habilitado = false;
     }
 
 });

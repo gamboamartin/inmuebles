@@ -104,6 +104,36 @@ class _alta_compradorTest extends test {
         errores::$error = false;
     }
 
+    public function test_numero_completo(): void
+    {
+        errores::$error = false;
+
+        $_GET['seccion'] = 'inm_producto_infonavit';
+        $_GET['accion'] = 'lista';
+        $_SESSION['grupo_id'] = 1;
+        $_SESSION['usuario_id'] = 2;
+        $_GET['session_id'] = '1';
+
+        $inm = new _alta_comprador();
+        $inm = new liberator($inm);
+
+
+
+        $registro = array();
+        $key_lada = 'a';
+        $key_numero = 'z';
+
+        $registro['a'] = '111';
+        $registro['z'] = '1111111';
+
+        $resultado = $inm->numero_completo($key_lada, $key_numero, $registro);
+        $this->assertIsString($resultado);
+        $this->assertNotTrue(errores::$error);
+        $this->assertEquals('1111111111',$resultado);
+
+        errores::$error = false;
+    }
+
     public function test_numero_completo_base(): void
     {
         errores::$error = false;
