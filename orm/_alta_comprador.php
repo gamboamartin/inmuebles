@@ -92,9 +92,16 @@ class _alta_comprador{
         return $registro;
     }
 
-    private function numero_completo(string $key_lada, string $key_numero, array $registro){
-
-
+    /**
+     * Valida un numero telefonico sea correcto
+     * @param string $key_lada Key de la lada
+     * @param string $key_numero Key del numero
+     * @param array $registro Registro en proceso
+     * @return array|string
+     */
+    private function numero_completo(string $key_lada, string $key_numero, array $registro): array|string
+    {
+        
         $valida = $this->numero_completo_base(key_lada: $key_lada,key_numero:  $key_numero,registro:  $registro);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al validar numero',data:  $valida);
@@ -119,9 +126,18 @@ class _alta_comprador{
      * @param string $key_numero Key del campo numero
      * @param array $registro Registro en proceso de validacion
      * @return array|true
+     * @version 1.188.1
      */
     private function numero_completo_base(string $key_lada, string $key_numero, array $registro): bool|array
     {
+        $key_lada = trim($key_lada);
+        if($key_lada === ''){
+            return $this->error->error(mensaje: 'Error key_lada esta vacio',data:  $key_lada);
+        }
+        $key_numero = trim($key_numero);
+        if($key_numero === ''){
+            return $this->error->error(mensaje: 'Error key_numero esta vacio',data:  $key_numero);
+        }
         $keys = array($key_lada,$key_numero);
         $valida = $this->validacion->valida_existencia_keys(keys: $keys,registro:  $registro);
         if(errores::$error){

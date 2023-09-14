@@ -106,6 +106,12 @@ function habilita_ref_1(){
 
     $("#inm_referencia_dp_calle_pertenece_id_1").prop('disabled',false);
     $("#inm_referencia_dp_calle_pertenece_id_1").selectpicker('refresh');
+
+    edit_ref_1.removeClass('btn-success');
+    edit_ref_1.addClass('btn-warning');
+
+    edit_ref_1.empty();
+    edit_ref_1.html('Cancela');
 }
 
 function deshabilita_ref_1(){
@@ -133,6 +139,11 @@ function deshabilita_ref_1(){
 
     $("#inm_referencia_dp_calle_pertenece_id_1").prop('disabled',true);
     $("#inm_referencia_dp_calle_pertenece_id_1").selectpicker('refresh');
+
+    edit_ref_1.removeClass('btn-warning');
+    edit_ref_1.addClass('btn-success');
+    edit_ref_1.empty();
+    edit_ref_1.html('Edita');
 }
 
 let ref_1_habilitado = false
