@@ -324,6 +324,7 @@ class controlador_inm_comprador extends _ctl_base {
         $init_data['inm_tipo_discapacidad'] = "gamboamartin\\inmuebles";
         $init_data['inm_persona_discapacidad'] = "gamboamartin\\inmuebles";
         $init_data['inm_estado_civil'] = "gamboamartin\\inmuebles";
+        $init_data['inm_institucion_hipotecaria'] = "gamboamartin\\inmuebles";
 
         $init_data['dp_pais'] = "gamboamartin\\direccion_postal";
         $init_data['dp_estado'] = "gamboamartin\\direccion_postal";
@@ -401,10 +402,12 @@ class controlador_inm_comprador extends _ctl_base {
         $columns["inm_comprador_curp"]["titulo"] = "CURP";
         $columns["inm_comprador_etapa"]["titulo"] = "Etapa";
         $columns["inm_comprador_proceso"]["titulo"] = "Proceso Actual";
+        $columns["inm_institucion_hipotecaria_descripcion"]["titulo"] = "Institucion Hip";
 
 
         $filtro = array("inm_comprador.id",'inm_comprador.nombre','inm_comprador.apellido_paterno',
-            'inm_comprador.apellido_materno','inm_comprador.nss','inm_comprador.curp','inm_comprador.proceso');
+            'inm_comprador.apellido_materno','inm_comprador.nss','inm_comprador.curp','inm_comprador.proceso',
+            'inm_institucion_hipotecaria.descripcion');
 
         $datatables = new stdClass();
         $datatables->columns = $columns;

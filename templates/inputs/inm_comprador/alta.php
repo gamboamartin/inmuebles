@@ -6,6 +6,7 @@
 <?php echo $controlador->header_frontend->apartado_1; ?>
 
     <div  id="apartado_1">
+        <?php echo $controlador->inputs->inm_institucion_hipotecaria_id; ?>
         <?php echo $controlador->inputs->inm_producto_infonavit_id; ?>
         <?php echo $controlador->inputs->inm_attr_tipo_credito_id; ?>
         <?php echo $controlador->inputs->inm_destino_credito_id; ?>

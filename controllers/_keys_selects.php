@@ -332,6 +332,9 @@ class _keys_selects{
         if(!isset($row_upd->inm_persona_discapacidad_id)){
             $row_upd->inm_persona_discapacidad_id = 6;
         }
+        if(!isset($row_upd->inm_institucion_hipotecaria_id)){
+            $row_upd->inm_institucion_hipotecaria_id = 1;
+        }
         return $row_upd;
     }
 
@@ -935,6 +938,16 @@ class _keys_selects{
             key: 'inm_persona_discapacidad_id', keys_selects: $keys_selects,
             id_selected: $row_upd->inm_persona_discapacidad_id, label: 'Persona Discapacidad',
             columns_ds: $columns_ds, disabled: $disabled);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        }
+
+        $columns_ds = array();
+        $columns_ds[] = 'inm_institucion_hipotecaria_descripcion';
+        $keys_selects = $controler->key_select(cols:12, con_registros: true,filtro:  array(),
+            key: 'inm_institucion_hipotecaria_id', keys_selects: $keys_selects,
+            id_selected: $row_upd->inm_institucion_hipotecaria_id, label: 'Institucion Hipotecaria',
+            columns_ds: $columns_ds, disabled: false);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
