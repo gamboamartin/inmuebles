@@ -194,7 +194,7 @@ class _com_cliente{
     }
 
     /**
-     *
+     * Integra los keys de un cliente
      * @return string[]
      */
     private function key_com_cliente(): array

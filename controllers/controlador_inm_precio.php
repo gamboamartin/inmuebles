@@ -9,6 +9,7 @@
 namespace gamboamartin\inmuebles\controllers;
 
 use base\controller\init;
+use DateTime;
 use gamboamartin\errores\errores;
 use gamboamartin\inmuebles\html\inm_precio_html;
 use gamboamartin\inmuebles\models\inm_precio;
@@ -45,6 +46,20 @@ class controlador_inm_precio extends _ctl_base {
             return $this->retorno_error(
                 mensaje: 'Error al inicializar alta',data:  $r_alta, header: $header,ws:  $ws);
         }
+
+        $this->row_upd->porcentaje_descuento_maximo = 0;
+        $this->row_upd->monto_descuento_maximo = 0;
+        $this->row_upd->porcentaje_comisiones_maximo = 0;
+        $this->row_upd->monto_comisiones_maximo = 0;
+        $this->row_upd->porcentaje_devolucion_maximo = 0;
+        $this->row_upd->monto_devolucion_maximo = 0;
+        $this->row_upd->fecha_inicial = date('Y-m-d');
+
+        $fecha_final = new DateTime();
+        $fecha_final->modify('last day of this month');
+        $this->row_upd->fecha_final = $fecha_final->format('Y-m-d');
+
+
         $keys_selects = array();
 
         $keys_selects = $this->key_select(cols:12, con_registros: true,filtro:  array(), key: 'inm_ubicacion_id',
@@ -68,6 +83,24 @@ class controlador_inm_precio extends _ctl_base {
                 mensaje: 'Error al obtener inputs',data:  $inputs, header: $header,ws:  $ws);
         }
 
+        $fecha_inicial = $this->html->input_fecha(cols: 6,row_upd:  $this->row_upd,value_vacio:  false,
+            name: 'fecha_inicial', value: $this->row_upd->fecha_inicial);
+        if(errores::$error){
+            return $this->retorno_error(
+                mensaje: 'Error al obtener fecha_inicial',data:  $fecha_inicial, header: $header,ws:  $ws);
+        }
+
+        $this->inputs->fecha_inicial = $fecha_inicial;
+
+        $fecha_final = $this->html->input_fecha(cols: 6,row_upd:  $this->row_upd,value_vacio:  false,
+            name: 'fecha_final', value: $this->row_upd->fecha_final);
+        if(errores::$error){
+            return $this->retorno_error(
+                mensaje: 'Error al obtener fecha_final',data:  $fecha_final, header: $header,ws:  $ws);
+        }
+
+        $this->inputs->fecha_final = $fecha_final;
+
         return $r_alta;
     }
 
@@ -75,7 +108,7 @@ class controlador_inm_precio extends _ctl_base {
     {
         $keys = new stdClass();
         $keys->inputs = array('precio_venta','porcentaje_descuento_maximo','porcentaje_comisiones_maximo',
-            'monto_descuento_maximo','monto_comisiones_maximo','fecha_inicial','fecha_final',
+            'monto_descuento_maximo','monto_comisiones_maximo',
             'porcentaje_devolucion_maximo','monto_devolucion_maximo');
         $keys->selects = array();
 
@@ -87,6 +120,8 @@ class controlador_inm_precio extends _ctl_base {
         if(errores::$error){
             return $this->errores->error(mensaje: 'Error al inicializar campo view',data:  $campos_view);
         }
+
+
 
 
         return $campos_view;
@@ -123,6 +158,24 @@ class controlador_inm_precio extends _ctl_base {
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al integrar base',data:  $base, header: $header,ws:  $ws);
         }
+
+        $fecha_inicial = $this->html->input_fecha(cols: 6,row_upd:  $this->row_upd,value_vacio:  false,
+            name: 'fecha_inicial', value: $this->row_upd->fecha_inicial);
+        if(errores::$error){
+            return $this->retorno_error(
+                mensaje: 'Error al obtener fecha_inicial',data:  $fecha_inicial, header: $header,ws:  $ws);
+        }
+
+        $this->inputs->fecha_inicial = $fecha_inicial;
+
+        $fecha_final = $this->html->input_fecha(cols: 6,row_upd:  $this->row_upd,value_vacio:  false,
+            name: 'fecha_final', value: $this->row_upd->fecha_final);
+        if(errores::$error){
+            return $this->retorno_error(
+                mensaje: 'Error al obtener fecha_final',data:  $fecha_final, header: $header,ws:  $ws);
+        }
+
+        $this->inputs->fecha_final = $fecha_final;
 
         return $r_modifica;
     }

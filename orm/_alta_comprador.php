@@ -41,9 +41,16 @@ class _alta_comprador{
      * Inicializa un registro para su alta
      * @param array $registro Registro en proceso
      * @return array
+     * @version
      */
     final public function init_row_alta(array $registro): array
     {
+        $keys = array('nombre','apellido_paterno','nss','curp','rfc');
+        $valida = $this->validacion->valida_existencia_keys(keys: $keys,registro:  $registro);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al validar registro', data: $valida);
+        }
+
         $registro = $this->integra_descripcion(registro: $registro);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al integrar descripcion',data:  $registro);

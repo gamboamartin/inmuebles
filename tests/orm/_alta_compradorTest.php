@@ -72,6 +72,42 @@ class _alta_compradorTest extends test {
         errores::$error = false;
     }
 
+    public function test_init_row_alta(): void
+    {
+        errores::$error = false;
+
+        $_GET['seccion'] = 'inm_producto_infonavit';
+        $_GET['accion'] = 'lista';
+        $_SESSION['grupo_id'] = 1;
+        $_SESSION['usuario_id'] = 2;
+        $_GET['session_id'] = '1';
+
+        $inm = new _alta_comprador();
+        //$inm = new liberator($inm);
+
+
+        $registro = array();
+        $registro['nombre'] = 'A';
+        $registro['apellido_paterno'] = 'B';
+        $registro['nss'] = '5566755443';
+        $registro['curp'] = 'XEXX010101MNEXXXA8';
+        $registro['rfc'] = 'GAF660911675';
+        $registro['lada_nep'] = '123';
+        $registro['numero_nep'] = '1235434';
+        $registro['lada_com'] = '43';
+        $registro['numero_com'] = '43554433';
+
+        $resultado = $inm->init_row_alta($registro);
+        $this->assertIsArray($resultado);
+        $this->assertNotTrue(errores::$error);
+        $this->assertEquals('A',$resultado['nombre']);
+        $this->assertEquals('B',$resultado['apellido_paterno']);
+        $this->assertEquals('5566755443',$resultado['nss']);
+        $this->assertEquals('XEXX010101MNEXXXA8',$resultado['curp']);
+        $this->assertEquals(7,$resultado['inm_plazo_credito_sc_id']);
+        errores::$error = false;
+    }
+
     public function test_integra_descripcion(): void
     {
         errores::$error = false;
