@@ -144,20 +144,7 @@ class _base_comprador{
     }
 
     final public function integra_relacion_com_cliente(int $inm_comprador_id, PDO $link, array $registro_entrada){
-        $keys = array('rfc','dp_calle_pertenece_id','numero_exterior','lada_com','numero_com',
-            'cat_sat_regimen_fiscal_id','cat_sat_moneda_id','cat_sat_forma_pago_id','cat_sat_metodo_pago_id',
-            'cat_sat_uso_cfdi_id','com_tipo_cliente_id','cat_sat_tipo_persona_id');
-
-        $valida = $this->validacion->valida_existencia_keys(keys: $keys,registro:  $registro_entrada);
-        if(errores::$error){
-            return $this->error->error(mensaje: 'Error al validar registro_entrada',data:  $valida);
-        }
-
-        $keys = array('dp_calle_pertenece_id','lada_com','numero_com',
-            'cat_sat_regimen_fiscal_id','cat_sat_moneda_id','cat_sat_forma_pago_id','cat_sat_metodo_pago_id',
-            'cat_sat_uso_cfdi_id','com_tipo_cliente_id','cat_sat_tipo_persona_id');
-
-        $valida = $this->validacion->valida_ids(keys: $keys,registro:  $registro_entrada);
+        $valida = (new _com_cliente())->valida_base_com(registro_entrada: $registro_entrada);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al validar registro_entrada',data:  $valida);
         }

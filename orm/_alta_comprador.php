@@ -41,7 +41,7 @@ class _alta_comprador{
      * Inicializa un registro para su alta
      * @param array $registro Registro en proceso
      * @return array
-     * @version
+     * @version 2.9.0
      */
     final public function init_row_alta(array $registro): array
     {

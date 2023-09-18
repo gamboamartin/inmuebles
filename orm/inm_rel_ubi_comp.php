@@ -73,21 +73,15 @@ class inm_rel_ubi_comp extends _modelo_parent{
             return $this->error->error(mensaje: 'Error al generar descripcion',data:  $registro);
         }
 
-        $inm_comprador = (new inm_comprador(link: $this->link))->registro(registro_id: $this->registro['inm_comprador_id']);
-        if(errores::$error){
-            return $this->error->error(mensaje: 'Error al obtener inm_comprador',data:  $inm_comprador);
-        }
-
-        $inm_ubicacion = (new inm_ubicacion(link: $this->link))->registro(registro_id: $this->registro['inm_ubicacion_id']);
-        if(errores::$error){
-            return $this->error->error(mensaje: 'Error al obtener inm_ubicacion',data:  $inm_ubicacion);
-        }
 
         $datos = $this->datos_row(registro: $registro);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al obtener datos',data:  $datos);
         }
 
+        if(round($datos->inm_precio->inm_precio_precio_venta,2) !== round($this->registro['precio_operacion'],2)){
+            return $this->error->error(mensaje: 'Error al validar precio de operacion',data:  $datos);
+        }
 
         $this->registro = $registro;
 

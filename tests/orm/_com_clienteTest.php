@@ -37,6 +37,28 @@ class _com_clienteTest extends test {
         $this->paths_conf->views = '/var/www/html/inmuebles/config/views.php';
     }
 
+    public function test_numero_interior(): void
+    {
+        errores::$error = false;
+
+        $_GET['seccion'] = 'inm_producto_infonavit';
+        $_GET['accion'] = 'lista';
+        $_SESSION['grupo_id'] = 1;
+        $_SESSION['usuario_id'] = 2;
+        $_GET['session_id'] = '1';
+
+        $inm = new _com_cliente();
+        $inm = new liberator($inm);
+
+        $registro_entrada = array();
+
+        $resultado = $inm->numero_interior($registro_entrada);
+        $this->assertIsString($resultado);
+        $this->assertNotTrue(errores::$error);
+        $this->assertEquals('',$resultado);
+        errores::$error = false;
+    }
+
     public function test_razon_social(): void
     {
         errores::$error = false;
