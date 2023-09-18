@@ -196,6 +196,7 @@ class _com_cliente{
      * @param PDO $link Conexion a base de datos
      * @param array $registro_entrada registro en proceso
      * @return array|stdClass
+     * @version 2.17.0
      */
     private function inserta_com_cliente(PDO $link, array $registro_entrada): array|stdClass
     {
@@ -279,9 +280,10 @@ class _com_cliente{
     }
 
     /**
-     * @param array $filtro
-     * @param PDO $link
-     * @param array $registro_entrada
+     * Integra el resultado de transaccion de un cliente conforme al inm_comprador
+     * @param array $filtro Filtro de validacion
+     * @param PDO $link Conexion a la base de datos
+     * @param array $registro_entrada Registro en proceso
      * @return array|stdClass
      */
     private function r_com_cliente(array $filtro, PDO $link, array $registro_entrada): array|stdClass
@@ -320,8 +322,6 @@ class _com_cliente{
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al maquetar row', data: $row_upd);
         }
-
-
 
         $r_com_cliente_upd = (new com_cliente(link: $link))->modifica_bd(registro: $row_upd,
             id:  $r_com_cliente->registro_id);

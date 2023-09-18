@@ -110,6 +110,50 @@ class _com_clienteTest extends test {
         errores::$error = false;
     }
 
+    public function test_inserta_com_cliente(): void
+    {
+        errores::$error = false;
+
+        $_GET['seccion'] = 'inm_producto_infonavit';
+        $_GET['accion'] = 'lista';
+        $_SESSION['grupo_id'] = 1;
+        $_SESSION['usuario_id'] = 2;
+        $_GET['session_id'] = '1';
+
+        $del = (new base_test())->del_com_cliente(link: $this->link);
+        if(errores::$error){
+            $error = (new errores())->error(mensaje: 'Error al eliminar cliente',data:  $del);
+            print_r($error);
+            exit;
+        }
+
+        $inm = new _com_cliente();
+        $inm = new liberator($inm);
+
+        $registro_entrada = array();
+        $registro_entrada['rfc'] = 'AAA010101AAA';
+        $registro_entrada['dp_calle_pertenece_id'] = '1';
+        $registro_entrada['numero_exterior'] = 'A';
+        $registro_entrada['lada_com'] = '11';
+        $registro_entrada['numero_com'] = '22222222';
+        $registro_entrada['cat_sat_regimen_fiscal_id'] = '601';
+        $registro_entrada['cat_sat_moneda_id'] = '1';
+        $registro_entrada['cat_sat_forma_pago_id'] = '1';
+        $registro_entrada['cat_sat_metodo_pago_id'] = '1';
+        $registro_entrada['cat_sat_uso_cfdi_id'] = '1';
+        $registro_entrada['com_tipo_cliente_id'] = '1';
+        $registro_entrada['cat_sat_tipo_persona_id'] = '4';
+        $registro_entrada['nombre'] = 'Z';
+        $registro_entrada['apellido_paterno'] = 'k';
+
+        $resultado = $inm->inserta_com_cliente(link: $this->link,registro_entrada:  $registro_entrada);
+        $this->assertIsObject($resultado);
+        $this->assertNotTrue(errores::$error);
+        $this->assertEquals('AAA010101AAA',$resultado->registro['com_cliente_rfc']);
+        $this->assertEquals('Z k',$resultado->registro['com_cliente_razon_social']);
+        errores::$error = false;
+    }
+
     public function test_numero_interior(): void
     {
         errores::$error = false;
