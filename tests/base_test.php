@@ -11,6 +11,7 @@ use gamboamartin\errores\errores;
 use gamboamartin\inmuebles\models\inm_co_acreditado;
 use gamboamartin\inmuebles\models\inm_comprador;
 use gamboamartin\inmuebles\models\inm_conf_empresa;
+use gamboamartin\inmuebles\models\inm_precio;
 use gamboamartin\inmuebles\models\inm_referencia;
 use gamboamartin\inmuebles\models\inm_rel_co_acred;
 use gamboamartin\inmuebles\models\inm_rel_comprador_com_cliente;
@@ -194,6 +195,24 @@ class base_test{
         $registro['org_empresa_id'] = $org_empresa_id;
 
         $alta = (new inm_conf_empresa($link))->alta_registro($registro);
+        if(errores::$error){
+            return (new errores())->error(mensaje: 'Error al insertar', data: $alta);
+        }
+        return $alta;
+    }
+
+    public function alta_inm_precio(PDO $link, string $fecha_final = '2030-01-01', string $fecha_inicial = '2020-01-01',
+                                    int $id = 1, int $inm_institucion_hipotecaria_id = 1, int $inm_ubicacion_id = 1,
+                                    float $precio_venta = 450000): array|\stdClass
+    {
+
+        $registro['id'] = $id;
+        $registro['inm_ubicacion_id'] = $inm_ubicacion_id;
+        $registro['precio_venta'] = $precio_venta;
+        $registro['fecha_inicial'] = $fecha_inicial;
+        $registro['fecha_final'] = $fecha_final;
+        $registro['inm_institucion_hipotecaria_id'] = $inm_institucion_hipotecaria_id;
+        $alta = (new inm_precio($link))->alta_registro($registro);
         if(errores::$error){
             return (new errores())->error(mensaje: 'Error al insertar', data: $alta);
         }
@@ -525,6 +544,16 @@ class base_test{
     public function del_inm_doc_comprador(PDO $link): array
     {
         $del = $this->del($link, 'gamboamartin\\inmuebles\\models\\inm_doc_comprador');
+        if(errores::$error){
+            return (new errores())->error('Error al eliminar', $del);
+        }
+        return $del;
+    }
+
+    public function del_inm_precio(PDO $link): array
+    {
+
+        $del = $this->del($link, 'gamboamartin\\inmuebles\\models\\inm_precio');
         if(errores::$error){
             return (new errores())->error('Error al eliminar', $del);
         }

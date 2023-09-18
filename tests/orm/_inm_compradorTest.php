@@ -216,6 +216,7 @@ class _inm_compradorTest extends test {
         }
 
 
+
         $inm_comprador_id = 1;
         $link = $this->link;
         $resultado = $_inm->inm_ubicaciones($inm_comprador_id, $link);

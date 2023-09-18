@@ -223,10 +223,16 @@ class _com_cliente{
         return $r_com_cliente;
     }
 
-    private function numero_interior(array $registro_entrada){
+    /**
+     * Integra el numero interior ajustado en caso de no existir
+     * @param array $registro_entrada Registro en proceso
+     * @return string
+     */
+    private function numero_interior(array $registro_entrada): string
+    {
         $numero_interior = '';
         if(isset($registro_entrada['numero_interior'])){
-            $numero_interior = $registro_entrada['numero_interior'];
+            $numero_interior = trim($registro_entrada['numero_interior']);
         }
         return $numero_interior;
     }

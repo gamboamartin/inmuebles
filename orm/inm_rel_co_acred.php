@@ -60,26 +60,18 @@ class inm_rel_co_acred extends _modelo_parent{
         }
         else{
 
-            $r_registro = $this->filtro_and(filtro: $filtro);
+            $data = $this->inm_rel_co_acred_filtro(filtro: $filtro);
             if(errores::$error){
-                return $this->error->error(mensaje: 'Error al obtener relacion', data: $r_registro);
+                return $this->error->error(mensaje: 'Error al obtener relacion', data: $data);
             }
-
-            $registro_puro = $this->registro(registro_id: $r_registro->registros[0]['inm_rel_ubi_comp_id'],
-                columnas_en_bruto: true,retorno_obj: true);
-            if(errores::$error){
-                return $this->error->error(mensaje: 'Error al obtener relacion', data: $registro_puro);
-            }
-
-            $registro = $r_registro->registros[0];
             
 
-            $r_alta_bd = $this->data_result_transaccion(mensaje: 'Registro insertado con éxito', registro: $registro,
-                registro_ejecutado: $this->registro, registro_id: $r_registro->registros[0]['inm_rel_co_acred_id'],
-                registro_puro: $registro_puro,
+            $r_alta_bd = $this->data_result_transaccion(mensaje: 'Registro insertado con éxito', registro: $data->registro,
+                registro_ejecutado: $this->registro, registro_id: $data->r_registro->registros[0]['inm_rel_co_acred_id'],
+                registro_puro: $data->registro_puro,
                 sql: 'Registro existente');
             if(errores::$error){
-                return $this->error->error(mensaje: 'Error al maquetar respuesta registro', data: $registro);
+                return $this->error->error(mensaje: 'Error al maquetar respuesta registro', data: $r_alta_bd);
             }
 
         }
@@ -88,6 +80,27 @@ class inm_rel_co_acred extends _modelo_parent{
 
         return $r_alta_bd;
 
+    }
+
+    private function inm_rel_co_acred_filtro(array $filtro){
+        $r_registro = $this->filtro_and(filtro: $filtro);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al obtener relacion', data: $r_registro);
+        }
+
+        $registro_puro = $this->registro(registro_id: $r_registro->registros[0]['inm_rel_co_acred_id'],
+            columnas_en_bruto: true,retorno_obj: true);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al obtener relacion', data: $registro_puro);
+        }
+
+        $registro = $r_registro->registros[0];
+
+        $data = new stdClass();
+        $data->r_registro = $r_registro;
+        $data->registro_puro = $registro_puro;
+        $data->registro = $registro;
+        return $data;
     }
 
 
