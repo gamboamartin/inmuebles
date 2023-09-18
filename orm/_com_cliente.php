@@ -301,10 +301,12 @@ class _com_cliente{
         $r_com_cliente->registro_id = $r_com_cliente_f->registros[0]['com_cliente_id'];
 
 
-        $razon_social = trim($registro_entrada['nombre']);
-        $razon_social .= ' '.trim($registro_entrada['apellido_paterno']);
-        $razon_social .= ' '.trim($registro_entrada['apellido_materno']);
-        $razon_social = trim($razon_social);
+
+        $razon_social = $this->razon_social(con_prefijo: false,registro: (object) $registro_entrada);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al maquetar razon_social', data: $razon_social);
+        }
+
         $telefono = trim($registro_entrada['lada_com']).trim($registro_entrada['numero_com']);
 
         $numero_interior = '';
@@ -398,6 +400,7 @@ class _com_cliente{
      * Integra un registro de tipo cliente para su insersion
      * @param array $registro_entrada Registro de tipo inm_comprador
      * @return array
+     * @version 2.16.0
      */
     private function row_com_cliente_ins(array $registro_entrada): array
     {
@@ -405,6 +408,12 @@ class _com_cliente{
         $valida = $this->valida_base_com(registro_entrada: $registro_entrada);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al validar registro_entrada',data:  $valida);
+        }
+
+        $keys = array('nombre','apellido_paterno');
+        $valida = $this->validacion->valida_existencia_keys(keys: $keys,registro:  $registro_entrada);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al valida registro',data:  $valida);
         }
 
 
