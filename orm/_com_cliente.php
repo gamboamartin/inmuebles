@@ -105,13 +105,15 @@ class _com_cliente{
     }
 
     /**
-     * @param string $numero_interior
-     * @param string $razon_social
-     * @param array $registro
-     * @param string $telefono
+     * Integra los elementos de un array para transaccionar con com cliente
+     * @param string $numero_interior Numero interior de domicilio
+     * @param string $razon_social razon social del cliente
+     * @param array $registro Registro en proceso de tipo inm_comprador
+     * @param string $telefono Telefono ajustado a 10 digitos
      * @return array
      */
-    private function com_cliente_data_transaccion(string $numero_interior, string $razon_social, array $registro, string $telefono): array
+    private function com_cliente_data_transaccion(string $numero_interior, string $razon_social, array $registro,
+                                                  string $telefono): array
     {
         $com_cliente_data['razon_social'] = trim($razon_social);
         $com_cliente_data['rfc'] = $registro['rfc'];
@@ -398,7 +400,8 @@ class _com_cliente{
     }
 
     /**
-     * @param array|stdClass $registro_entrada
+     * Valida los elementos base que debe tener un comprador para hacer la transaccion con com_cliente
+     * @param array|stdClass $registro_entrada Registro en proceso
      * @return array|true
      */
     final public function valida_base_com(array|stdClass $registro_entrada): bool|array
@@ -407,7 +410,6 @@ class _com_cliente{
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al validar registro_entrada',data:  $valida);
         }
-
 
         $valida = $this->valida_ids_com(registro_entrada: $registro_entrada);
         if(errores::$error){
@@ -439,6 +441,7 @@ class _com_cliente{
      * Valida los ids de tipo comercial que deben existir en inm_comprador
      * @param array|stdClass $registro_entrada registro en proceso
      * @return array
+     * @version 2.12.0
      *
      */
     private function valida_ids_com(array|stdClass $registro_entrada): array

@@ -137,6 +137,42 @@ class _com_clienteTest extends test {
 
     }
 
+    public function test_valida_ids_com(): void
+    {
+        errores::$error = false;
+
+        $_GET['seccion'] = 'inm_producto_infonavit';
+        $_GET['accion'] = 'lista';
+        $_SESSION['grupo_id'] = 1;
+        $_SESSION['usuario_id'] = 2;
+        $_GET['session_id'] = '1';
+
+        $inm = new _com_cliente();
+        $inm = new liberator($inm);
+
+        $registro_entrada = array();
+        $registro_entrada['rfc'] = 'AAA0101016HG';
+        $registro_entrada['dp_calle_pertenece_id'] = '1';
+        $registro_entrada['numero_exterior'] = '1';
+        $registro_entrada['lada_com'] = '1';
+        $registro_entrada['numero_com'] = '1';
+        $registro_entrada['cat_sat_regimen_fiscal_id'] = '1';
+        $registro_entrada['cat_sat_moneda_id'] = '1';
+        $registro_entrada['cat_sat_forma_pago_id'] = '1';
+        $registro_entrada['cat_sat_metodo_pago_id'] = '1';
+        $registro_entrada['cat_sat_uso_cfdi_id'] = '1';
+        $registro_entrada['com_tipo_cliente_id'] = '1';
+        $registro_entrada['cat_sat_tipo_persona_id'] = '1';
+
+        $resultado = $inm->valida_ids_com($registro_entrada);
+        $this->assertIsArray($resultado);
+        $this->assertNotTrue(errores::$error);
+
+
+        errores::$error = false;
+
+    }
+
 
 }
 
