@@ -170,7 +170,7 @@ class inm_ubicacion extends _inm_ubicaciones {
         foreach ($inm_ubicaciones as $indice=>$inm_ubicacion){
             $inm_precio = (new inm_precio(link: $this->link))->precio(fecha: date('Y-m-d'),
                 inm_ubicacion_id:  $inm_ubicacion['inm_ubicacion_id'],
-                inm_institucion_hipotecaria_id:  $inm_comprador->inm_institucion_hipotecaria_id);
+                inm_institucion_hipotecaria_id:  $inm_comprador->inm_institucion_hipotecaria_id,valida_existe: false);
 
             if(errores::$error){
                 return $this->error->error(mensaje: 'Error al obtener inm_precio',data: $inm_precio);
@@ -178,8 +178,8 @@ class inm_ubicacion extends _inm_ubicaciones {
 
             $inm_precio_precio_venta = 0;
 
-            if(isset($inm_precio['inm_precio_precio_venta'])){
-                $inm_precio_precio_venta = round($inm_precio['inm_precio_precio_venta'],2);
+            if(isset($inm_precio->inm_precio_precio_venta)){
+                $inm_precio_precio_venta = round($inm_precio->inm_precio_precio_venta,2);
             }
             $inm_ubicaciones[$indice]['inm_ubicacion_precio'] = round($inm_precio_precio_venta,2);
 

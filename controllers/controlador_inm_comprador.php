@@ -276,11 +276,13 @@ class controlador_inm_comprador extends _ctl_base {
 
 
         $extra_params_keys[] = 'inm_ubicacion_precio';
-        $ubicaciones_con_precio = (new inm_ubicacion(link: $this->link))->ubicaciones_con_precio(etapa: 'ALTA',inm_comprador_id:  $this->registro_id);
+        $ubicaciones_con_precio = (new inm_ubicacion(link: $this->link))->ubicaciones_con_precio(etapa: 'ALTA',
+            inm_comprador_id:  $this->registro_id);
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al obtener ubicaciones con precio',data:  $ubicaciones_con_precio,
                 header: $header,ws:  $ws);
         }
+
         $inm_ubicacion_id = (new _inm_comprador())->inm_ubicacion_id_input(controler: $this,
             extra_params_keys: $extra_params_keys, registros: $ubicaciones_con_precio);
         if(errores::$error){

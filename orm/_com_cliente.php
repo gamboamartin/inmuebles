@@ -104,6 +104,13 @@ class _com_cliente{
         return $com_cliente_upd;
     }
 
+    /**
+     * @param string $numero_interior
+     * @param string $razon_social
+     * @param array $registro
+     * @param string $telefono
+     * @return array
+     */
     private function com_cliente_data_transaccion(string $numero_interior, string $razon_social, array $registro, string $telefono): array
     {
         $com_cliente_data['razon_social'] = trim($razon_social);
@@ -390,7 +397,12 @@ class _com_cliente{
         return $r_com_cliente;
     }
 
-    final public function valida_base_com(array|stdClass $registro_entrada){
+    /**
+     * @param array|stdClass $registro_entrada
+     * @return array|true
+     */
+    final public function valida_base_com(array|stdClass $registro_entrada): bool|array
+    {
         $valida = $this->valida_existencia_keys_com(registro_entrada: $registro_entrada);;
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al validar registro_entrada',data:  $valida);
@@ -424,8 +436,10 @@ class _com_cliente{
     }
 
     /**
-     * @param array|stdClass $registro_entrada
+     * Valida los ids de tipo comercial que deben existir en inm_comprador
+     * @param array|stdClass $registro_entrada registro en proceso
      * @return array
+     *
      */
     private function valida_ids_com(array|stdClass $registro_entrada): array
     {
