@@ -57,6 +57,7 @@ class _com_cliente{
      * @param string $razon_social Razon social de comprador
      * @param array $registro_entrada Registro en proceso
      * @return array
+     * @version 2.15.0
      */
     private function com_cliente_ins(string $numero_interior, string $razon_social, array $registro_entrada): array
     {
@@ -191,8 +192,9 @@ class _com_cliente{
     }
 
     /**
-     * @param PDO $link
-     * @param array $registro_entrada
+     * Inserta un cliente con datos de inm_comprador
+     * @param PDO $link Conexion a base de datos
+     * @param array $registro_entrada registro en proceso
      * @return array|stdClass
      */
     private function inserta_com_cliente(PDO $link, array $registro_entrada): array|stdClass
@@ -276,7 +278,14 @@ class _com_cliente{
         return $numero_interior;
     }
 
-    private function r_com_cliente(array $filtro, PDO $link, array $registro_entrada){
+    /**
+     * @param array $filtro
+     * @param PDO $link
+     * @param array $registro_entrada
+     * @return array|stdClass
+     */
+    private function r_com_cliente(array $filtro, PDO $link, array $registro_entrada): array|stdClass
+    {
         $r_com_cliente_f = (new com_cliente(link: $link))->filtro_and(filtro: $filtro);
         if (errores::$error) {
             return $this->error->error(mensaje: 'Error al obtener cliente', data: $r_com_cliente_f);

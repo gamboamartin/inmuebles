@@ -72,6 +72,44 @@ class _com_clienteTest extends test {
         errores::$error = false;
     }
 
+    public function test_com_cliente_ins(): void
+    {
+        errores::$error = false;
+
+        $_GET['seccion'] = 'inm_producto_infonavit';
+        $_GET['accion'] = 'lista';
+        $_SESSION['grupo_id'] = 1;
+        $_SESSION['usuario_id'] = 2;
+        $_GET['session_id'] = '1';
+
+        $inm = new _com_cliente();
+        $inm = new liberator($inm);
+
+        $numero_interior = '';
+        $razon_social = 'A';
+        $registro_entrada = array();
+        $registro_entrada['rfc'] = 'A';
+        $registro_entrada['dp_calle_pertenece_id'] = '1';
+        $registro_entrada['numero_exterior'] = 'A';
+        $registro_entrada['lada_com'] = '11';
+        $registro_entrada['numero_com'] = '22222222';
+        $registro_entrada['cat_sat_regimen_fiscal_id'] = '1';
+        $registro_entrada['cat_sat_moneda_id'] = '1';
+        $registro_entrada['cat_sat_forma_pago_id'] = '1';
+        $registro_entrada['cat_sat_metodo_pago_id'] = '1';
+        $registro_entrada['cat_sat_uso_cfdi_id'] = '1';
+        $registro_entrada['com_tipo_cliente_id'] = '1';
+        $registro_entrada['cat_sat_tipo_persona_id'] = '1';
+
+
+
+        $resultado = $inm->com_cliente_ins($numero_interior, $razon_social, $registro_entrada);
+        $this->assertIsArray($resultado);
+        $this->assertNotTrue(errores::$error);
+        $this->assertEquals('A',$resultado['codigo']);
+        errores::$error = false;
+    }
+
     public function test_numero_interior(): void
     {
         errores::$error = false;
