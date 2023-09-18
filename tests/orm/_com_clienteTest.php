@@ -37,6 +37,41 @@ class _com_clienteTest extends test {
         $this->paths_conf->views = '/var/www/html/inmuebles/config/views.php';
     }
 
+    public function test_com_cliente_data_transaccion(): void
+    {
+        errores::$error = false;
+
+        $_GET['seccion'] = 'inm_producto_infonavit';
+        $_GET['accion'] = 'lista';
+        $_SESSION['grupo_id'] = 1;
+        $_SESSION['usuario_id'] = 2;
+        $_GET['session_id'] = '1';
+
+        $inm = new _com_cliente();
+        $inm = new liberator($inm);
+
+        $numero_interior = '';
+        $razon_social = 'a';
+        $registro = array();
+        $telefono = 'v';
+        $registro['cat_sat_forma_pago_id'] = 1;
+        $registro['cat_sat_metodo_pago_id'] = 1;
+        $registro['cat_sat_moneda_id'] = 1;
+        $registro['cat_sat_regimen_fiscal_id'] = 1;
+        $registro['cat_sat_tipo_persona_id'] = 1;
+        $registro['cat_sat_uso_cfdi_id'] = 1;
+        $registro['com_tipo_cliente_id'] = 1;
+        $registro['dp_calle_pertenece_id'] = 1;
+        $registro['numero_exterior'] = 1;
+        $registro['rfc'] = 1;
+
+        $resultado = $inm->com_cliente_data_transaccion($numero_interior, $razon_social, $registro, $telefono);
+        $this->assertIsArray($resultado);
+        $this->assertNotTrue(errores::$error);
+        $this->assertEquals('v',$resultado['telefono']);
+        errores::$error = false;
+    }
+
     public function test_numero_interior(): void
     {
         errores::$error = false;

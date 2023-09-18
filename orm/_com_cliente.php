@@ -112,10 +112,38 @@ class _com_cliente{
      * @param array $registro Registro en proceso de tipo inm_comprador
      * @param string $telefono Telefono ajustado a 10 digitos
      * @return array
+     * @version 2.14.0
      */
     private function com_cliente_data_transaccion(string $numero_interior, string $razon_social, array $registro,
                                                   string $telefono): array
     {
+        $numero_interior = trim($numero_interior);
+        $razon_social = trim($razon_social);
+        if($razon_social === ''){
+            return $this->error->error(mensaje: 'Error razon_social esta vacia',data:  $razon_social);
+        }
+        $telefono = trim($telefono);
+        if($telefono === ''){
+            return $this->error->error(mensaje: 'Error telefono esta vacio',data:  $telefono);
+        }
+
+        $keys = array('cat_sat_forma_pago_id','cat_sat_metodo_pago_id','cat_sat_moneda_id','cat_sat_regimen_fiscal_id',
+            'cat_sat_tipo_persona_id', 'cat_sat_uso_cfdi_id','com_tipo_cliente_id','dp_calle_pertenece_id',
+            'numero_exterior','rfc');
+
+        $valida = $this->validacion->valida_existencia_keys(keys: $keys,registro:  $registro);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al validar registro',data:  $valida);
+        }
+
+        $keys = array('cat_sat_forma_pago_id','cat_sat_metodo_pago_id','cat_sat_moneda_id','cat_sat_regimen_fiscal_id',
+            'cat_sat_tipo_persona_id', 'cat_sat_uso_cfdi_id','com_tipo_cliente_id','dp_calle_pertenece_id');
+
+        $valida = $this->validacion->valida_ids(keys: $keys,registro:  $registro);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al validar registro',data:  $valida);
+        }
+
         $com_cliente_data['razon_social'] = trim($razon_social);
         $com_cliente_data['rfc'] = $registro['rfc'];
         $com_cliente_data['dp_calle_pertenece_id'] = $registro['dp_calle_pertenece_id'];
@@ -358,7 +386,8 @@ class _com_cliente{
     }
 
     /**
-     * @param array $registro_entrada
+     * Integra un registro de tipo cliente para su insersion
+     * @param array $registro_entrada Registro de tipo inm_comprador
      * @return array
      */
     private function row_com_cliente_ins(array $registro_entrada): array
