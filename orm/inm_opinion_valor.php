@@ -12,7 +12,10 @@ class inm_opinion_valor extends _modelo_parent{
     public function __construct(PDO $link)
     {
         $tabla = 'inm_opinion_valor';
-        $columnas = array($tabla=>false,'inm_ubicacion'=>$tabla,'inm_valuador'=>$tabla);
+        $columnas = array($tabla=>false,'inm_ubicacion'=>$tabla,'inm_valuador'=>$tabla,
+            'dp_calle_pertenece'=>'inm_ubicacion','dp_colonia_postal'=>'dp_calle_pertenece',
+            'dp_cp'=>'dp_colonia_postal','dp_municipio'=>'dp_cp','dp_estado'=>'dp_municipio','dp_pais'=>'dp_estado',
+            'dp_colonia'=>'dp_colonia_postal','dp_calle'=>'dp_calle_pertenece');
 
         $campos_obligatorios = array('inm_ubicacion_id','inm_valuador_id','monto_resultado','fecha','costo');
 

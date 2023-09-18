@@ -136,7 +136,7 @@ class controlador_inm_opinion_valor extends _ctl_base {
         $columns["dp_calle_descripcion"]["titulo"] = "Calle";
         $columns["inm_ubicacion_numero_exterior"]["titulo"] = "Ext";
         $columns["inm_opinion_valor_fecha"]["titulo"] = "Fecha";
-        $columns["inm_opinion_monto_resultado"]["titulo"] = "Resultado";
+        $columns["inm_opinion_valor_monto_resultado"]["titulo"] = "Resultado";
 
         $filtro = array("inm_opinion_valor.id","inm_valuador.descripcion",'dp_municipio.descripcion',
             'dp_cp.descripcion','dp_colonia.descripcion','dp_calle.descripcion','inm_ubicacion.numero_exterior',
