@@ -52,9 +52,10 @@ class _com_cliente{
     }
 
     /**
-     * @param string $numero_interior
-     * @param string $razon_social
-     * @param array $registro_entrada
+     * Integra los elementos de un registro de insersion de cliente
+     * @param string $numero_interior Numero interior del domicilio
+     * @param string $razon_social Razon social de comprador
+     * @param array $registro_entrada Registro en proceso
      * @return array
      */
     private function com_cliente_ins(string $numero_interior, string $razon_social, array $registro_entrada): array
@@ -161,7 +162,13 @@ class _com_cliente{
         return $inm_rel_comprador_com_cliente_ins;
     }
 
-    private function inserta_com_cliente(PDO $link, array $registro_entrada){
+    /**
+     * @param PDO $link
+     * @param array $registro_entrada
+     * @return array|stdClass
+     */
+    private function inserta_com_cliente(PDO $link, array $registro_entrada): array|stdClass
+    {
 
         $valida = $this->valida_base_com(registro_entrada: $registro_entrada);
         if(errores::$error){
@@ -350,9 +357,12 @@ class _com_cliente{
         return $r_com_cliente;
     }
 
-
-
-    private function row_com_cliente_ins(array $registro_entrada){
+    /**
+     * @param array $registro_entrada
+     * @return array
+     */
+    private function row_com_cliente_ins(array $registro_entrada): array
+    {
 
         $valida = $this->valida_base_com(registro_entrada: $registro_entrada);
         if(errores::$error){
@@ -403,6 +413,7 @@ class _com_cliente{
      * Valida los elementos base que debe tener un comprador para hacer la transaccion con com_cliente
      * @param array|stdClass $registro_entrada Registro en proceso
      * @return array|true
+     * @version 2.13.0
      */
     final public function valida_base_com(array|stdClass $registro_entrada): bool|array
     {
