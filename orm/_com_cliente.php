@@ -117,7 +117,8 @@ class _com_cliente{
     }
 
     /**
-     * @param array $com_cliente_upd
+     * Inicializa los keys de un cliente
+     * @param array $com_cliente_upd Cliente a ajustar
      * @return array
      */
     private function init_keys_com_cliente(array $com_cliente_upd): array
@@ -283,9 +284,10 @@ class _com_cliente{
      * Integra la razon social para el alta de com cliente
      * @param bool $con_prefijo Si integra prefijo o no de inm_comprador
      * @param stdClass $registro Registro en proceso
-     * @return string
+     * @return string|array
+     * @version 2.7.0
      */
-    private function razon_social(bool $con_prefijo, stdClass $registro): string
+    private function razon_social(bool $con_prefijo, stdClass $registro): string|array
     {
         $key_nombre = 'nombre';
         $key_apellido_paterno = 'apellido_paterno';
@@ -299,6 +301,18 @@ class _com_cliente{
 
         if(!isset($registro->$key_apellido_materno)){
             $registro->$key_apellido_materno = '';
+        }
+
+        $keys = array($key_nombre,$key_apellido_paterno,$key_apellido_materno);
+        $valida = $this->validacion->valida_existencia_keys(keys: $keys,registro:  $registro, valida_vacio: false);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al valida registro',data:  $valida);
+        }
+
+        $keys = array($key_nombre,$key_apellido_paterno);
+        $valida = $this->validacion->valida_existencia_keys(keys: $keys,registro:  $registro);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al valida registro',data:  $valida);
         }
 
         $razon_social = $registro->$key_nombre;
