@@ -37,7 +37,13 @@ class _alta_comprador{
         return $registro;
     }
 
-    final public function init_row_alta(array $registro){
+    /**
+     * Inicializa un registro para su alta
+     * @param array $registro Registro en proceso
+     * @return array
+     */
+    final public function init_row_alta(array $registro): array
+    {
         $registro = $this->integra_descripcion(registro: $registro);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al integrar descripcion',data:  $registro);
@@ -253,7 +259,14 @@ class _alta_comprador{
         return $pr_sub_proceso;
     }
 
-    private function valida_base_comprador(array $registro){
+    /**
+     * Valida elementos base de comprador
+     * @param array $registro Registro en proceso
+     * @return array|true
+     * @version 2.5.0
+     */
+    private function valida_base_comprador(array $registro): true|array
+    {
         $keys = array('lada_nep','numero_nep','lada_com','numero_com');
         $valida = $this->validacion->valida_existencia_keys(keys: $keys,registro:  $registro);
         if(errores::$error){

@@ -194,6 +194,7 @@ class _com_cliente{
     }
 
     /**
+     *
      * @return string[]
      */
     private function key_com_cliente(): array
@@ -279,8 +280,9 @@ class _com_cliente{
     }
 
     /**
-     * @param bool $con_prefijo
-     * @param stdClass $registro
+     * Integra la razon social para el alta de com cliente
+     * @param bool $con_prefijo Si integra prefijo o no de inm_comprador
+     * @param stdClass $registro Registro en proceso
      * @return string
      */
     private function razon_social(bool $con_prefijo, stdClass $registro): string

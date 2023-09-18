@@ -54,6 +54,14 @@ class controlador_inm_precio extends _ctl_base {
                 header: $header,ws:  $ws);
         }
 
+        $keys_selects = $this->key_select(cols:12, con_registros: true,filtro:  array(),
+            key: 'inm_institucion_hipotecaria_id',
+            keys_selects: $keys_selects, id_selected: -1, label: 'Institucion', columns_ds: array());
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects,
+                header: $header,ws:  $ws);
+        }
+
         $inputs = $this->inputs(keys_selects: $keys_selects);
         if(errores::$error){
             return $this->retorno_error(
@@ -73,6 +81,7 @@ class controlador_inm_precio extends _ctl_base {
 
         $init_data = array();
         $init_data['inm_ubicacion'] = "gamboamartin\\inmuebles";
+        $init_data['inm_institucion_hipotecaria'] = "gamboamartin\\inmuebles";
         $campos_view = $this->campos_view_base(init_data: $init_data,keys:  $keys);
 
         if(errores::$error){
@@ -98,6 +107,13 @@ class controlador_inm_precio extends _ctl_base {
 
         $keys_selects = $this->key_select(cols:12, con_registros: true,filtro:  array(), key: 'inm_ubicacion_id',
             keys_selects: $keys_selects, id_selected: $this->row_upd->inm_ubicacion_id, label: 'Ubicacion', columns_ds: array());
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects,
+                header: $header,ws:  $ws);
+        }
+
+        $keys_selects = $this->key_select(cols:12, con_registros: true,filtro:  array(), key: 'inm_institucion_hipotecaria_id',
+            keys_selects: $keys_selects, id_selected: $this->row_upd->inm_institucion_hipotecaria_id, label: 'Institucion', columns_ds: array());
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects,
                 header: $header,ws:  $ws);
@@ -129,10 +145,11 @@ class controlador_inm_precio extends _ctl_base {
         $columns["inm_ubicacion_numero_interior"]["titulo"] = "Int";
         $columns["inm_ubicacion_cuenta_predial"]["titulo"] = "Predial";
         $columns["inm_tipo_ubicacion_descripcion"]["titulo"] = "Predial";
+        $columns["inm_institucion_hipotecaria_descripcion"]["titulo"] = "Institucion";
 
         $filtro = array("inm_precio.id","inm_precio.fecha_inicial",'inm_precio.fecha_final','dp_colonia.descripcion',
             'dp_cp.descripcion','dp_municipio.descripcion','dp_calle.descripcion','inm_ubicacion.cuenta_predial',
-            'inm_tipo_ubicacion.descripcion');
+            'inm_tipo_ubicacion.descripcion','inm_institucion_hipotecaria.descripcion');
 
         $datatables = new stdClass();
         $datatables->columns = $columns;

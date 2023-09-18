@@ -218,5 +218,34 @@ class _alta_compradorTest extends test {
         errores::$error = false;
     }
 
+    public function test_valida_base_comprador(): void
+    {
+        errores::$error = false;
+
+        $_GET['seccion'] = 'inm_producto_infonavit';
+        $_GET['accion'] = 'lista';
+        $_SESSION['grupo_id'] = 1;
+        $_SESSION['usuario_id'] = 2;
+        $_GET['session_id'] = '1';
+
+        $inm = new _alta_comprador();
+        $inm = new liberator($inm);
+
+
+
+        $registro = array();
+        $registro['lada_nep'] = '12';
+        $registro['numero_nep'] = '12456677';
+        $registro['lada_com'] = '333';
+        $registro['numero_com'] = '5678902';
+        $registro['rfc'] = 'GAVM830930876';
+
+        $resultado = $inm->valida_base_comprador($registro);
+        $this->assertIsBool($resultado);
+        $this->assertNotTrue(errores::$error);
+        $this->assertTrue($resultado);
+        errores::$error = false;
+    }
+
 }
 
