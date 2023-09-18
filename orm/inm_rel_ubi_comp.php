@@ -79,6 +79,7 @@ class inm_rel_ubi_comp extends _modelo_parent{
             return $this->error->error(mensaje: 'Error al obtener datos',data:  $datos);
         }
 
+
         if(round($datos->inm_precio->inm_precio_precio_venta,2) !== round($this->registro['precio_operacion'],2)){
             return $this->error->error(mensaje: 'Error al validar precio de operacion',data:  $datos);
         }
@@ -166,7 +167,7 @@ class inm_rel_ubi_comp extends _modelo_parent{
 
         $inm_precio = (new inm_precio(link: $this->link))->precio(fecha: date('Y-m-d'),
             inm_ubicacion_id: $registro['inm_ubicacion_id'],
-            inm_institucion_hipotecaria_id: $inm_comprador->inm_institucion_hipotecaria_id);;
+            inm_institucion_hipotecaria_id: $inm_comprador->inm_institucion_hipotecaria_id);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al obtener inm_precio',data:  $inm_precio);
         }

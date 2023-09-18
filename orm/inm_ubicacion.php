@@ -141,6 +141,53 @@ class inm_ubicacion extends _inm_ubicaciones {
         return $registro;
     }
 
+    final public function ubicaciones_con_precio(string $etapa, int $inm_comprador_id, bool $todas = false){
+
+        $inm_comprador = (new inm_comprador(link: $this->link))->registro(registro_id: $inm_comprador_id,retorno_obj: true);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al obtener comprador',data: $inm_comprador);
+        }
+
+        $filtro['inm_ubicacion.etapa'] = $etapa;
+
+        if(!$todas) {
+            $r_inm_ubicacion = $this->filtro_and(filtro: $filtro);
+            if (errores::$error) {
+                return $this->error->error(mensaje: 'Error al obtener ubicaciones', data: $r_inm_ubicacion);
+            }
+        }
+        else{
+            $r_inm_ubicacion_data = $this->registros_activos();
+            if (errores::$error) {
+                return $this->error->error(mensaje: 'Error al obtener ubicaciones', data: $r_inm_ubicacion_data);
+            }
+
+            $r_inm_ubicacion = new stdClass();
+            $r_inm_ubicacion->registros = $r_inm_ubicacion_data;
+        }
+        $inm_ubicaciones = $r_inm_ubicacion->registros;
+
+        foreach ($inm_ubicaciones as $indice=>$inm_ubicacion){
+            $inm_precio = (new inm_precio(link: $this->link))->precio(fecha: date('Y-m-d'),
+                inm_ubicacion_id:  $inm_ubicacion['inm_ubicacion_id'],
+                inm_institucion_hipotecaria_id:  $inm_comprador->inm_institucion_hipotecaria_id);
+
+            if(errores::$error){
+                return $this->error->error(mensaje: 'Error al obtener inm_precio',data: $inm_precio);
+            }
+
+            $inm_precio_precio_venta = 0;
+
+            if(isset($inm_precio['inm_precio_precio_venta'])){
+                $inm_precio_precio_venta = round($inm_precio['inm_precio_precio_venta'],2);
+            }
+            $inm_ubicaciones[$indice]['inm_ubicacion_precio'] = round($inm_precio_precio_venta,2);
+
+        }
+        return $inm_ubicaciones;
+
+    }
+
 
 
 

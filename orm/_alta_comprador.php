@@ -272,7 +272,7 @@ class _alta_comprador{
      * @return array|true
      * @version 2.5.0
      */
-    private function valida_base_comprador(array $registro): true|array
+    private function valida_base_comprador(array $registro): bool|array
     {
         $keys = array('lada_nep','numero_nep','lada_com','numero_com');
         $valida = $this->validacion->valida_existencia_keys(keys: $keys,registro:  $registro);

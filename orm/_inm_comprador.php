@@ -250,16 +250,21 @@ class _inm_comprador{
     /**
      * Genera un select con datos de la ubicacion
      * @param controlador_inm_comprador $controler Controlador en ejecucion
+     * @param array $extra_params_keys Extra params para options
+     * @param array $registros Registros para options
      * @return array|string
      * @version 1.103.1
      */
-    final public function inm_ubicacion_id_input(controlador_inm_comprador $controler): array|string
+    final public function inm_ubicacion_id_input(
+        controlador_inm_comprador $controler, array $extra_params_keys = array(),
+        array $registros = array()): array|string
     {
         $columns_ds = array('inm_ubicacion_id','dp_estado_descripcion','dp_municipio_descripcion',
             'dp_cp_descripcion','dp_colonia_descripcion','dp_calle_descripcion','inm_ubicacion_numero_exterior');
 
         $inm_ubicacion_id = (new inm_ubicacion_html(html: $controler->html_base))->select_inm_ubicacion_id(
-            cols: 12, con_registros: true,id_selected: -1,link:  $controler->link, columns_ds: $columns_ds);
+            cols: 12, con_registros: true,id_selected: -1,link:  $controler->link, columns_ds: $columns_ds,
+            extra_params_keys: $extra_params_keys, registros: $registros);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al inm_ubicacion_id',data:  $inm_ubicacion_id);
         }

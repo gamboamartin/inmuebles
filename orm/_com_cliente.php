@@ -408,6 +408,7 @@ class _com_cliente{
      * Valida la existencia de campos en un registro
      * @param array|stdClass $registro_entrada Registro de comprador
      * @return array|bool
+     * @version 2.10.0
      */
     private function valida_existencia_keys_com(array|stdClass $registro_entrada): bool|array
     {
@@ -422,7 +423,12 @@ class _com_cliente{
         return $valida;
     }
 
-    private function valida_ids_com(array|stdClass $registro_entrada){
+    /**
+     * @param array|stdClass $registro_entrada
+     * @return array
+     */
+    private function valida_ids_com(array|stdClass $registro_entrada): array
+    {
         $keys = array('cat_sat_forma_pago_id','cat_sat_metodo_pago_id','cat_sat_moneda_id','cat_sat_regimen_fiscal_id',
             'cat_sat_tipo_persona_id', 'cat_sat_uso_cfdi_id','com_tipo_cliente_id','dp_calle_pertenece_id', 'lada_com',
             'numero_com');

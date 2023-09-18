@@ -115,10 +115,11 @@ class inm_precio extends _modelo_parent{
      * @param int $inm_ubicacion_id
      * @param int $inm_institucion_hipotecaria_id
      * @param bool $retorno_obj
+     * @param bool $valida_existe
      * @return array|stdClass
      */
     final public function precio(string $fecha, int $inm_ubicacion_id, int $inm_institucion_hipotecaria_id,
-                                 bool $retorno_obj = true): array|stdClass
+                                 bool $retorno_obj = true, bool $valida_existe = true): array|stdClass
     {
         $fecha = trim($fecha);;
         if($fecha === ''){
@@ -146,12 +147,20 @@ class inm_precio extends _modelo_parent{
             return $this->error->error(mensaje: 'Error al obtener precio',data:  $r_inm_precio);
         }
 
+
+        if($valida_existe) {
+
+            if ($r_inm_precio->n_registros === 0) {
+                return $this->error->error(mensaje: 'Error no existe precio configurado', data: $r_inm_precio);
+            }
+            if ($r_inm_precio->n_registros > 1) {
+                return $this->error->error(mensaje: 'Error existe mas de un precio configurado', data: $r_inm_precio);
+            }
+        }
         if($r_inm_precio->n_registros === 0){
-            return $this->error->error(mensaje: 'Error no existe precio configurado',data:  $r_inm_precio);
+            $r_inm_precio->registros[0] = array();
         }
-        if($r_inm_precio->n_registros > 1){
-            return $this->error->error(mensaje: 'Error existe mas de un precio configurado',data:  $r_inm_precio);
-        }
+
 
         $inm_precio = $r_inm_precio->registros[0];
         if($retorno_obj){
