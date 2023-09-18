@@ -160,10 +160,33 @@ class controlador_inm_opinion_valor extends _ctl_base {
         }
 
         $keys_selects = array();
+
+        $keys_selects = $this->key_select(cols:12, con_registros: true,filtro:  array(), key: 'inm_ubicacion_id',
+            keys_selects: $keys_selects, id_selected: $this->row_upd->inm_ubicacion_id, label: 'Ubicacion');
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects,
+                header: $header,ws:  $ws);
+        }
+
+        $keys_selects = $this->key_select(cols:12, con_registros: true,filtro:  array(), key: 'inm_valuador_id',
+            keys_selects: $keys_selects, id_selected: $this->row_upd->inm_valuador_id, label: 'Valuador');
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects,
+                header: $header,ws:  $ws);
+        }
         $base = $this->base_upd(keys_selects: $keys_selects, params: array(),params_ajustados: array());
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al integrar base',data:  $base, header: $header,ws:  $ws);
         }
+
+        $fecha = $this->html->input_fecha(cols: 6,row_upd:  $this->row_upd,value_vacio:  false,
+            value: $this->row_upd->fecha);
+        if(errores::$error){
+            return $this->retorno_error(
+                mensaje: 'Error al obtener input fecha',data:  $fecha, header: $header,ws:  $ws);
+        }
+
+        $this->inputs->fecha = $fecha;
 
         return $r_modifica;
     }
