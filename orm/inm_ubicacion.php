@@ -27,7 +27,7 @@ class inm_ubicacion extends _inm_ubicaciones {
         $renombres= array();
 
         $atributos_criticos = array('manzana','lote','dp_calle_pertenece_id','etapa','cuenta_predial',
-            'inm_tipo_ubicacion_id');
+            'inm_tipo_ubicacion_id','n_opiniones_valor');
 
         parent::__construct(link: $link, tabla: $tabla, campos_obligatorios: $campos_obligatorios,
             columnas: $columnas, columnas_extra: $columnas_extra, renombres: $renombres,
@@ -52,6 +52,12 @@ class inm_ubicacion extends _inm_ubicaciones {
             modelo: $this, modelo_etapa: $this->modelo_etapa, registro_id: $r_alta_bd->registro_id);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al insertar etapa', data: $r_alta_etapa);
+        }
+
+        $regenera = $this->regenera_opinion_valor(
+            inm_ubicacion_id: $r_alta_bd->registro_puro->inm_ubicacion_id);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al regenerar opinion de valor', data: $regenera);
         }
 
 
@@ -139,6 +145,28 @@ class inm_ubicacion extends _inm_ubicaciones {
 
         $registro['descripcion'] = $descripcion;
         return $registro;
+    }
+
+    private function n_opiniones_valor(int $inm_ubicacion_id){
+        $filtro['inm_ubicacion.id'] = $inm_ubicacion_id;
+        $n_opiniones = (new inm_opinion_valor(link: $this->link))->cuenta(filtro: $filtro);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al obtener n_opiniones',data: $n_opiniones);
+        }
+        return $n_opiniones;
+    }
+
+    final public function regenera_opinion_valor(int $inm_ubicacion_id){
+        $n_opiniones = $this->n_opiniones_valor(inm_ubicacion_id: $inm_ubicacion_id);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al obtener n_opiniones',data: $n_opiniones);
+        }
+        $inm_ubicacion_upd['n_opiniones_valor'] = $n_opiniones;
+        $upd = parent::modifica_bd(registro: $inm_ubicacion_upd,id:  $inm_ubicacion_id);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al actualizar n_opiniones',data: $upd);
+        }
+        return $upd;
     }
 
     final public function ubicaciones_con_precio(string $etapa, int $inm_comprador_id, bool $todas = false){
