@@ -289,6 +289,65 @@ class controlador_inm_ubicacion extends _ctl_base {
         return $r_modifica;
     }
 
+    protected function campos_view(): array
+    {
+        $keys = new stdClass();
+        $keys->inputs = array('descripcion', 'manzana', 'lote','costo_directo','numero_exterior','numero_interior',
+            'cuenta_predial');
+        $keys->selects = array();
+
+
+        $init_data = array();
+        $init_data['dp_pais'] = "gamboamartin\\direccion_postal";
+        $init_data['dp_estado'] = "gamboamartin\\direccion_postal";
+        $init_data['dp_municipio'] = "gamboamartin\\direccion_postal";
+        $init_data['dp_cp'] = "gamboamartin\\direccion_postal";
+        $init_data['dp_colonia_postal'] = "gamboamartin\\direccion_postal";
+        $init_data['dp_calle_pertenece'] = "gamboamartin\\direccion_postal";
+
+        $init_data['inm_tipo_ubicacion'] = "gamboamartin\\inmuebles";
+        $campos_view = $this->campos_view_base(init_data: $init_data,keys:  $keys);
+
+        if(errores::$error){
+            return $this->errores->error(mensaje: 'Error al inicializar campo view',data:  $campos_view);
+        }
+
+
+        return $campos_view;
+    }
+
+    /**
+     * Inicializa los elementos mostrables para datatables
+     * @return stdClass
+     */
+    private function init_datatable(): stdClass
+    {
+        $columns["inm_tipo_ubicacion_descripcion"]["titulo"] = "Tipo de Ubicacion";
+        $columns["inm_ubicacion_id"]["titulo"] = "Id";
+        $columns["dp_municipio_descripcion"]["titulo"] = "Municipio";
+        $columns["dp_cp_descripcion"]["titulo"] = "CP";
+        $columns["dp_colonia_descripcion"]["titulo"] = "Colonia";
+        $columns["dp_calle_descripcion"]["titulo"] = "Calle";
+        $columns["inm_ubicacion_numero_exterior"]["titulo"] = "Ext";
+        $columns["inm_ubicacion_numero_interior"]["titulo"] = "Int";
+        $columns["inm_ubicacion_manzana"]["titulo"] = "Manzana";
+        $columns["inm_ubicacion_lote"]["titulo"] = "Lote";
+        $columns["inm_ubicacion_etapa"]["titulo"] = "Etapa";
+        $columns["inm_ubicacion_cuenta_predial"]["titulo"] = "Predial";
+        $columns["inm_ubicacion_n_opiniones_valor"]["titulo"] = "Op Valor";
+
+        $filtro = array("inm_ubicacion.id","dp_municipio.descripcion",'dp_cp.descripcion','dp_colonia.descripcion',
+            'dp_calle.descripcion','inm_ubicacion.numero_exterior','inm_ubicacion.numero_interior',
+            'inm_ubicacion.manzana','inm_ubicacion.lote','inm_ubicacion.cuenta_predial',
+            'inm_tipo_ubicacion.descripcion');
+
+        $datatables = new stdClass();
+        $datatables->columns = $columns;
+        $datatables->filtro = $filtro;
+
+        return $datatables;
+    }
+
     public function modifica(bool $header, bool $ws = false): array|stdClass
     {
 
@@ -384,32 +443,7 @@ class controlador_inm_ubicacion extends _ctl_base {
         return $r_modifica;
     }
 
-    protected function campos_view(): array
-    {
-        $keys = new stdClass();
-        $keys->inputs = array('descripcion', 'manzana', 'lote','costo_directo','numero_exterior','numero_interior',
-            'cuenta_predial');
-        $keys->selects = array();
 
-
-        $init_data = array();
-        $init_data['dp_pais'] = "gamboamartin\\direccion_postal";
-        $init_data['dp_estado'] = "gamboamartin\\direccion_postal";
-        $init_data['dp_municipio'] = "gamboamartin\\direccion_postal";
-        $init_data['dp_cp'] = "gamboamartin\\direccion_postal";
-        $init_data['dp_colonia_postal'] = "gamboamartin\\direccion_postal";
-        $init_data['dp_calle_pertenece'] = "gamboamartin\\direccion_postal";
-
-        $init_data['inm_tipo_ubicacion'] = "gamboamartin\\inmuebles";
-        $campos_view = $this->campos_view_base(init_data: $init_data,keys:  $keys);
-
-        if(errores::$error){
-            return $this->errores->error(mensaje: 'Error al inicializar campo view',data:  $campos_view);
-        }
-
-
-        return $campos_view;
-    }
 
     protected function key_selects_txt(array $keys_selects): array
     {
@@ -453,36 +487,7 @@ class controlador_inm_ubicacion extends _ctl_base {
         return $keys_selects;
     }
 
-    /**
-     * Inicializa los elementos mostrables para datatables
-     * @return stdClass
-     */
-    private function init_datatable(): stdClass
-    {
-        $columns["inm_tipo_ubicacion_descripcion"]["titulo"] = "Tipo de Ubicacion";
-        $columns["inm_ubicacion_id"]["titulo"] = "Id";
-        $columns["dp_municipio_descripcion"]["titulo"] = "Municipio";
-        $columns["dp_cp_descripcion"]["titulo"] = "CP";
-        $columns["dp_colonia_descripcion"]["titulo"] = "Colonia";
-        $columns["dp_calle_descripcion"]["titulo"] = "Calle";
-        $columns["inm_ubicacion_numero_exterior"]["titulo"] = "Ext";
-        $columns["inm_ubicacion_numero_interior"]["titulo"] = "Int";
-        $columns["inm_ubicacion_manzana"]["titulo"] = "Manzana";
-        $columns["inm_ubicacion_lote"]["titulo"] = "Lote";
-        $columns["inm_ubicacion_etapa"]["titulo"] = "Etapa";
-        $columns["inm_ubicacion_cuenta_predial"]["titulo"] = "Predial";
 
-        $filtro = array("inm_ubicacion.id","dp_municipio.descripcion",'dp_cp.descripcion','dp_colonia.descripcion',
-            'dp_calle.descripcion','inm_ubicacion.numero_exterior','inm_ubicacion.numero_interior',
-            'inm_ubicacion.manzana','inm_ubicacion.lote','inm_ubicacion.cuenta_predial',
-            'inm_tipo_ubicacion.descripcion');
-
-        $datatables = new stdClass();
-        $datatables->columns = $columns;
-        $datatables->filtro = $filtro;
-
-        return $datatables;
-    }
 
 
 }

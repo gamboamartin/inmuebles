@@ -88,6 +88,8 @@ class inm_ubicacion extends _inm_ubicaciones {
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al eliminar',data:  $r_elimina_bd);
         }
+
+
         return $r_elimina_bd;
     }
 
