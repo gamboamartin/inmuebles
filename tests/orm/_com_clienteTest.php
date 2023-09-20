@@ -135,6 +135,33 @@ class _com_clienteTest extends test {
         errores::$error = false;
     }
 
+    public function test_data_upd(): void
+    {
+        errores::$error = false;
+
+        $_GET['seccion'] = 'inm_producto_infonavit';
+        $_GET['accion'] = 'lista';
+        $_SESSION['grupo_id'] = 1;
+        $_SESSION['usuario_id'] = 2;
+        $_GET['session_id'] = '1';
+
+
+        $inm = new _com_cliente();
+        $inm = new liberator($inm);
+
+
+        $registro_entrada = array();
+        $registro_entrada['nombre'] = 'A';
+        $registro_entrada['apellido_paterno'] = 'A';
+        $registro_entrada['lada_com'] = 'A';
+        $registro_entrada['numero_com'] = 'A';
+        $resultado = $inm->data_upd($registro_entrada);
+        $this->assertIsObject($resultado);
+        $this->assertNotTrue(errores::$error);
+        $this->assertEquals('A A',$resultado->razon_social);
+        errores::$error = false;
+    }
+
     public function test_inserta_com_cliente(): void
     {
         errores::$error = false;

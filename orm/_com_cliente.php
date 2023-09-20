@@ -192,9 +192,16 @@ class _com_cliente{
      * Integra los datos para una actualizacion de cliente
      * @param array|stdClass $registro_entrada Registro previo
      * @return array|stdClass
+     * @version 2.27.0
      */
     private function data_upd(array|stdClass $registro_entrada): array|stdClass
     {
+        $keys = array('lada_com','numero_com');
+        $valida = $this->validacion->valida_existencia_keys(keys: $keys,registro:  $registro_entrada);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al validar registro entrada', data: $valida);
+        }
+
         $razon_social = $this->razon_social(con_prefijo: false,registro: (object) $registro_entrada);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al maquetar razon_social', data: $razon_social);
@@ -236,6 +243,11 @@ class _com_cliente{
         return $com_cliente_upd;
     }
 
+    /**
+     * @param int $com_cliente_id
+     * @param int $inm_comprador_id
+     * @return array
+     */
     private function inm_rel_com_cliente_ins(int $com_cliente_id, int $inm_comprador_id): array
     {
         $inm_rel_comprador_com_cliente_ins['inm_comprador_id'] = $inm_comprador_id;
@@ -409,13 +421,15 @@ class _com_cliente{
     }
 
     /**
-     * @param bool $existe_cliente
-     * @param array $filtro
-     * @param PDO $link
-     * @param array $registro_entrada
+     * Obtiene el resultado de la relacion con cliente
+     * @param bool $existe_cliente Si existe cliente actualiza si no inserta
+     * @param array $filtro Filtro de datos
+     * @param PDO $link conexion a la base de datos
+     * @param array $registro_entrada registro de entrada de comprador
      * @return array|stdClass
      */
-    private function result_com_cliente(bool $existe_cliente, array $filtro, PDO $link, array $registro_entrada): array|stdClass
+    private function result_com_cliente(bool $existe_cliente, array $filtro, PDO $link,
+                                        array $registro_entrada): array|stdClass
     {
         $valida = $this->valida_base_com(registro_entrada: $registro_entrada);
         if(errores::$error){
@@ -497,7 +511,13 @@ class _com_cliente{
         return $row_upd;
     }
 
-    final public function transacciona_com_cliente(PDO $link, array $registro_entrada){
+    /**
+     * @param PDO $link
+     * @param array $registro_entrada
+     * @return array|stdClass
+     */
+    final public function transacciona_com_cliente(PDO $link, array $registro_entrada): array|stdClass
+    {
         $valida = $this->valida_base_com(registro_entrada: $registro_entrada);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al validar registro_entrada',data:  $valida);
