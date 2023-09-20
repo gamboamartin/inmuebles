@@ -501,6 +501,48 @@ class _com_clienteTest extends test {
         errores::$error = false;
     }
 
+    public function test_transacciona_com_cliente(): void
+    {
+        errores::$error = false;
+
+        $_GET['seccion'] = 'inm_producto_infonavit';
+        $_GET['accion'] = 'lista';
+        $_SESSION['grupo_id'] = 1;
+        $_SESSION['usuario_id'] = 2;
+        $_GET['session_id'] = '1';
+
+
+        $inm = new _com_cliente();
+        //$inm = new liberator($inm);
+
+
+
+        $registro_entrada = array();
+        $link = $this->link;
+
+        $registro_entrada['rfc'] = 'AAA010101HHH';
+        $registro_entrada['dp_calle_pertenece_id'] = '1';
+        $registro_entrada['numero_exterior'] = '1';
+        $registro_entrada['lada_com'] = '1';
+        $registro_entrada['numero_com'] = '1';
+        $registro_entrada['cat_sat_regimen_fiscal_id'] = '601';
+        $registro_entrada['cat_sat_moneda_id'] = '1';
+        $registro_entrada['cat_sat_forma_pago_id'] = '1';
+        $registro_entrada['cat_sat_metodo_pago_id'] = '1';
+        $registro_entrada['cat_sat_uso_cfdi_id'] = '1';
+        $registro_entrada['com_tipo_cliente_id'] = '1';
+        $registro_entrada['cat_sat_tipo_persona_id'] = '4';
+        $registro_entrada['nombre'] = '4';
+        $registro_entrada['apellido_paterno'] = '4';
+
+
+        $resultado = $inm->transacciona_com_cliente($link, $registro_entrada);
+        $this->assertIsObject($resultado);
+        $this->assertNotTrue(errores::$error);
+
+        errores::$error = false;
+    }
+
     public function test_valida_base_com(): void
     {
         errores::$error = false;

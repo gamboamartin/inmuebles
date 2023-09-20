@@ -69,7 +69,14 @@ class _alta_comprador{
         return $registro;
     }
 
-    private function inserta_sub_proceso(int $inm_comprador_id, PDO $link, int $pr_sub_proceso_id){
+    /**
+     * @param int $inm_comprador_id
+     * @param PDO $link
+     * @param int $pr_sub_proceso_id
+     * @return array|stdClass
+     */
+    private function inserta_sub_proceso(int $inm_comprador_id, PDO $link, int $pr_sub_proceso_id): array|stdClass
+    {
         $inm_comprador_proceso_ins['inm_comprador_id'] = $inm_comprador_id;
         $inm_comprador_proceso_ins['pr_sub_proceso_id'] = $pr_sub_proceso_id;
         $inm_comprador_proceso_ins['fecha'] = date('Y-m-d');
@@ -206,9 +213,17 @@ class _alta_comprador{
         return $numero_completo_nep;
     }
 
-    final public function posterior_alta(int $inm_comprador_id, PDO $link, array $registro_entrada, string $tabla){
-        $integra_relacion_com_cliente = (new _base_comprador())->integra_relacion_com_cliente(inm_comprador_id: $inm_comprador_id,
-            link: $link, registro_entrada: $registro_entrada);
+    /**
+     * @param int $inm_comprador_id
+     * @param PDO $link
+     * @param array $registro_entrada
+     * @param string $tabla
+     * @return array|stdClass
+     */
+    final public function posterior_alta(int $inm_comprador_id, PDO $link, array $registro_entrada, string $tabla): array|stdClass
+    {
+        $integra_relacion_com_cliente = (new _base_comprador())->integra_relacion_com_cliente(
+            inm_comprador_id: $inm_comprador_id, link: $link, registro_entrada: $registro_entrada);
         if (errores::$error) {
             return $this->error->error(mensaje: 'Error al obtener cliente', data: $integra_relacion_com_cliente);
         }
@@ -225,7 +240,16 @@ class _alta_comprador{
         return $data;
     }
 
-    private function pr_sub_proceso(PDO $link, string $pr_proceso_descripcion, string $pr_sub_proceso_descripcion,string $tabla){
+    /**
+     * @param PDO $link
+     * @param string $pr_proceso_descripcion
+     * @param string $pr_sub_proceso_descripcion
+     * @param string $tabla
+     * @return array
+     */
+    private function pr_sub_proceso(PDO $link, string $pr_proceso_descripcion, string $pr_sub_proceso_descripcion,
+                                    string $tabla): array
+    {
         $filtro['adm_seccion.descripcion'] = $tabla;
         $filtro['pr_sub_proceso.descripcion'] = $pr_sub_proceso_descripcion;
         $filtro['pr_proceso.descripcion'] =$pr_proceso_descripcion;
@@ -251,7 +275,17 @@ class _alta_comprador{
         return $r_pr_sub_proceso->registros[0];
     }
 
-    private function sub_proceso(int $inm_comprador_id, PDO $link, string $pr_proceso_descripcion, string $pr_sub_proceso_descripcion, string $tabla){
+    /**
+     * @param int $inm_comprador_id
+     * @param PDO $link
+     * @param string $pr_proceso_descripcion
+     * @param string $pr_sub_proceso_descripcion
+     * @param string $tabla
+     * @return array
+     */
+    private function sub_proceso(int $inm_comprador_id, PDO $link, string $pr_proceso_descripcion,
+                                 string $pr_sub_proceso_descripcion, string $tabla): array
+    {
         $pr_sub_proceso = $this->pr_sub_proceso(link: $link,
             pr_proceso_descripcion: $pr_proceso_descripcion, pr_sub_proceso_descripcion: $pr_sub_proceso_descripcion, tabla: $tabla);
         if (errores::$error) {

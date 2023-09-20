@@ -143,7 +143,15 @@ class _base_comprador{
         return $r_imp_rel_comprador_com_cliente->registros[0];
     }
 
-    final public function integra_relacion_com_cliente(int $inm_comprador_id, PDO $link, array $registro_entrada){
+    /**
+     * @param int $inm_comprador_id
+     * @param PDO $link
+     * @param array $registro_entrada
+     * @return array|stdClass
+     */
+    final public function integra_relacion_com_cliente(int $inm_comprador_id, PDO $link,
+                                                       array $registro_entrada): array|stdClass
+    {
         $valida = (new _com_cliente())->valida_base_com(registro_entrada: $registro_entrada);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al validar registro_entrada',data:  $valida);

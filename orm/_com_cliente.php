@@ -273,17 +273,20 @@ class _com_cliente{
     }
 
     /**
-     * @param int $com_cliente_id
-     * @param int $inm_comprador_id
-     * @param PDO $link
+     * Inserta la relacion entre un cliente y un comprador
+     * @param int $com_cliente_id Cliente id
+     * @param int $inm_comprador_id Comprador id
+     * @param PDO $link Conexion a la base de datos
      * @return array|stdClass
      */
-    final public function inserta_inm_rel_comprador_com_cliente(int $com_cliente_id, int $inm_comprador_id, PDO $link): array|stdClass
+    final public function inserta_inm_rel_comprador_com_cliente(int $com_cliente_id, int $inm_comprador_id,
+                                                                PDO $link): array|stdClass
     {
         $inm_rel_comprador_com_cliente_ins = $this->inm_rel_com_cliente_ins(com_cliente_id: $com_cliente_id,
             inm_comprador_id: $inm_comprador_id);
         if (errores::$error) {
-            return $this->error->error(mensaje: 'Error al integrar row rel com cliente', data: $inm_rel_comprador_com_cliente_ins);
+            return $this->error->error(mensaje: 'Error al integrar row rel com cliente',
+                data: $inm_rel_comprador_com_cliente_ins);
         }
 
         $r_inm_rel_comprador_com_cliente_ins = (new inm_rel_comprador_com_cliente(link: $link))->alta_registro(
@@ -537,12 +540,17 @@ class _com_cliente{
      * @param PDO $link Conexion a la base de datos
      * @param array $registro_entrada Registro de inm_comprador
      * @return array|stdClass
+     * @version 2.31.0
      */
     final public function transacciona_com_cliente(PDO $link, array $registro_entrada): array|stdClass
     {
         $valida = $this->valida_base_com(registro_entrada: $registro_entrada);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al validar registro_entrada',data:  $valida);
+        }
+        $valida = $this->valida_data_result_cliente(registro_entrada: $registro_entrada);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al validar registro',data:  $valida);
         }
 
         $filtro['com_cliente.rfc'] = $registro_entrada['rfc'];
