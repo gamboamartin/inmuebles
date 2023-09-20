@@ -70,9 +70,10 @@ class _alta_comprador{
     }
 
     /**
-     * @param int $inm_comprador_id
-     * @param PDO $link
-     * @param int $pr_sub_proceso_id
+     * Inserta el subproceso del comprador
+     * @param int $inm_comprador_id Comprador id
+     * @param PDO $link Conexion a la base de datos
+     * @param int $pr_sub_proceso_id Identificador de subproceso
      * @return array|stdClass
      */
     private function inserta_sub_proceso(int $inm_comprador_id, PDO $link, int $pr_sub_proceso_id): array|stdClass
@@ -80,6 +81,12 @@ class _alta_comprador{
         $inm_comprador_proceso_ins['inm_comprador_id'] = $inm_comprador_id;
         $inm_comprador_proceso_ins['pr_sub_proceso_id'] = $pr_sub_proceso_id;
         $inm_comprador_proceso_ins['fecha'] = date('Y-m-d');
+
+        $valida = (new inm_comprador_proceso(link: $link))->valida_init(registro: $inm_comprador_proceso_ins);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al validar $registro', data: $valida);
+        }
+
         $r_alta_sp = (new inm_comprador_proceso(link: $link))->alta_registro(registro: $inm_comprador_proceso_ins);
         if (errores::$error) {
             return $this->error->error(mensaje: 'Error al insertar sub proceso en comprador', data: $r_alta_sp);

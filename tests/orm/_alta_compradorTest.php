@@ -108,6 +108,30 @@ class _alta_compradorTest extends test {
         errores::$error = false;
     }
 
+    public function test_inserta_sub_proceso(): void
+    {
+        errores::$error = false;
+
+        $_GET['seccion'] = 'inm_producto_infonavit';
+        $_GET['accion'] = 'lista';
+        $_SESSION['grupo_id'] = 1;
+        $_SESSION['usuario_id'] = 2;
+        $_GET['session_id'] = '1';
+
+        $inm = new _alta_comprador();
+        $inm = new liberator($inm);
+
+
+        $link = $this->link;
+        $inm_comprador_id = 1;
+        $pr_sub_proceso_id = 2;
+        $resultado = $inm->inserta_sub_proceso($inm_comprador_id, $link, $pr_sub_proceso_id);
+        $this->assertIsObject($resultado);
+        $this->assertNotTrue(errores::$error);
+        $this->assertEquals('ALTA',$resultado->registro['pr_sub_proceso_descripcion']);
+        errores::$error = false;
+    }
+
     public function test_integra_descripcion(): void
     {
         errores::$error = false;
