@@ -655,6 +655,13 @@ class controlador_inm_ubicacion extends _ctl_base {
         }
         $this->link_opinion_valor_alta_bd = $link_opinion_valor_alta_bd;
 
+        $inm_opiniones_valor = (new inm_ubicacion(link: $this->link))->opiniones_valor(inm_ubicacion_id: $this->registro_id);
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al obtener inm_opiniones_valor', data:  $inm_opiniones_valor,
+                header: $header,ws:  $ws);
+        }
+        $this->inm_opiniones_valor = $inm_opiniones_valor;
+
 
         return $r_modifica;
     }

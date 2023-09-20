@@ -27,7 +27,7 @@ class inm_ubicacion extends _inm_ubicaciones {
         $renombres= array();
 
         $atributos_criticos = array('manzana','lote','dp_calle_pertenece_id','etapa','cuenta_predial',
-            'inm_tipo_ubicacion_id','n_opiniones_valor');
+            'inm_tipo_ubicacion_id','n_opiniones_valor','monto_opinion_promedio');
 
         parent::__construct(link: $link, tabla: $tabla, campos_obligatorios: $campos_obligatorios,
             columnas: $columnas, columnas_extra: $columnas_extra, renombres: $renombres,
@@ -163,6 +163,26 @@ class inm_ubicacion extends _inm_ubicaciones {
         return $r_modifica_bd;
     }
 
+    private function monto_opinion_promedio(int $inm_ubicacion_id){
+
+        $n_opiniones = $this->n_opiniones_valor(inm_ubicacion_id: $inm_ubicacion_id);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al obtener n_opiniones',data: $n_opiniones);
+        }
+
+        $filtro['inm_ubicacion.id'] = $inm_ubicacion_id;
+
+        $campos['total_montos'] = 'inm_opinion_valor.monto_resultado';
+        $r_inm_opinion_valor = (new inm_opinion_valor(link: $this->link))->suma(campos: $campos,filtro: $filtro);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al obtener montos',data: $r_inm_opinion_valor);
+        }
+
+        $total_montos = round($r_inm_opinion_valor['total_montos'],2);
+
+        return round($total_montos / $n_opiniones,2);
+    }
+
     private function n_opiniones_valor(int $inm_ubicacion_id){
         $filtro['inm_ubicacion.id'] = $inm_ubicacion_id;
         $n_opiniones = (new inm_opinion_valor(link: $this->link))->cuenta(filtro: $filtro);
@@ -187,6 +207,19 @@ class inm_ubicacion extends _inm_ubicaciones {
             return $this->error->error(mensaje: 'Error al obtener n_opiniones',data: $n_opiniones);
         }
         $inm_ubicacion_upd['n_opiniones_valor'] = $n_opiniones;
+        $upd = parent::modifica_bd(registro: $inm_ubicacion_upd,id:  $inm_ubicacion_id);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al actualizar n_opiniones',data: $upd);
+        }
+        return $upd;
+    }
+
+    final public function regenera_monto_opinion_promedio(int $inm_ubicacion_id){
+        $promedio = $this->monto_opinion_promedio(inm_ubicacion_id: $inm_ubicacion_id);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al obtener promedio',data: $promedio);
+        }
+        $inm_ubicacion_upd['monto_opinion_promedio'] = $promedio;
         $upd = parent::modifica_bd(registro: $inm_ubicacion_upd,id:  $inm_ubicacion_id);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al actualizar n_opiniones',data: $upd);

@@ -164,6 +164,54 @@ class _com_cliente{
     }
 
     /**
+     * Obtiene el id de un cliente filtrado
+     * @param PDO $link Conexion a la base de datos
+     * @param array $filtro Filtro de datos
+     * @return array|int
+     */
+    private function com_cliente_id_filtrado(PDO $link, array $filtro): int|array
+    {
+        $r_com_cliente_f = (new com_cliente(link: $link))->filtro_and(filtro: $filtro);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al obtener cliente', data: $r_com_cliente_f);
+        }
+        if($r_com_cliente_f->n_registros === 0){
+            return $this->error->error(mensaje: 'Error no existe cliente', data: $r_com_cliente_f);
+        }
+        if($r_com_cliente_f->n_registros > 1){
+            return $this->error->error(mensaje: 'Error existe mas de un cliente', data: $r_com_cliente_f);
+        }
+        return (int)$r_com_cliente_f->registros[0]['com_cliente_id'];
+    }
+
+    /**
+     * Integra los datos para una actualizacion de cliente
+     * @param array|stdClass $registro_entrada Registro previo
+     * @return array|stdClass
+     */
+    private function data_upd(array|stdClass $registro_entrada): array|stdClass
+    {
+        $razon_social = $this->razon_social(con_prefijo: false,registro: (object) $registro_entrada);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al maquetar razon_social', data: $razon_social);
+        }
+        $telefono = trim($registro_entrada['lada_com']).trim($registro_entrada['numero_com']);
+
+        $numero_interior = '';
+
+        if(isset($registro_entrada['numero_interior'])) {
+            $numero_interior = trim($registro_entrada['numero_interior']);
+        }
+
+        $data = new stdClass();
+        $data->razon_social = $razon_social;
+        $data->telefono = $telefono;
+        $data->numero_interior = $numero_interior;
+
+        return $data;
+    }
+
+    /**
      * Inicializa los keys de un cliente
      * @param array $com_cliente_upd Cliente a ajustar
      * @return array
@@ -288,37 +336,18 @@ class _com_cliente{
      */
     private function r_com_cliente(array $filtro, PDO $link, array $registro_entrada): array|stdClass
     {
-        $r_com_cliente_f = (new com_cliente(link: $link))->filtro_and(filtro: $filtro);
-        if (errores::$error) {
-            return $this->error->error(mensaje: 'Error al obtener cliente', data: $r_com_cliente_f);
-        }
-        if($r_com_cliente_f->n_registros === 0){
-            return $this->error->error(mensaje: 'Error no existe cliente', data: $r_com_cliente_f);
-        }
-        if($r_com_cliente_f->n_registros > 1){
-            return $this->error->error(mensaje: 'Error existe mas de un cliente', data: $r_com_cliente_f);
+
+        $com_cliente_id_filtrado = $this->com_cliente_id_filtrado(link: $link,filtro:  $filtro);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al obtener com_cliente_id_filtrado',
+                data: $com_cliente_id_filtrado);
         }
 
         $r_com_cliente = new stdClass();
-        $r_com_cliente->registro_id = $r_com_cliente_f->registros[0]['com_cliente_id'];
+        $r_com_cliente->registro_id = $com_cliente_id_filtrado;
 
 
-
-        $razon_social = $this->razon_social(con_prefijo: false,registro: (object) $registro_entrada);
-        if(errores::$error){
-            return $this->error->error(mensaje: 'Error al maquetar razon_social', data: $razon_social);
-        }
-
-        $telefono = trim($registro_entrada['lada_com']).trim($registro_entrada['numero_com']);
-
-        $numero_interior = '';
-
-        if(isset($registro_entrada['numero_interior'])) {
-            $numero_interior = trim($registro_entrada['numero_interior']);
-        }
-
-        $row_upd = $this->com_cliente_data_transaccion(numero_interior: $numero_interior,
-            razon_social:  $razon_social,registro:  $registro_entrada,telefono:  $telefono);
+        $row_upd = $this->row_upd(registro_entrada: $registro_entrada);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al maquetar row', data: $row_upd);
         }
@@ -434,6 +463,26 @@ class _com_cliente{
             return $this->error->error(mensaje: 'Error al integrar registro de cliente', data: $com_cliente_ins);
         }
         return $com_cliente_ins;
+    }
+
+    /**
+     * Ajusta los campos para una actualizacion de un cliente
+     * @param array|stdClass $registro_entrada Registro en proceso
+     * @return array
+     */
+    private function row_upd(array|stdClass $registro_entrada): array
+    {
+        $data_upd = $this->data_upd(registro_entrada: $registro_entrada);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al obtener datos', data: $data_upd);
+        }
+
+        $row_upd = $this->com_cliente_data_transaccion(numero_interior: $data_upd->numero_interior,
+            razon_social:  $data_upd->razon_social,registro:  $registro_entrada,telefono:  $data_upd->telefono);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al maquetar row', data: $row_upd);
+        }
+        return $row_upd;
     }
 
     final public function transacciona_com_cliente(PDO $link, array $registro_entrada){
