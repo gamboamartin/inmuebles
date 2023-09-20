@@ -380,7 +380,7 @@ class _com_cliente{
      * @param int $inm_comprador_id Comprador id
      * @param PDO $link Conexion a la base de datos
      * @return array|stdClass
-
+     * @version 2.38.0
      */
     final public function inserta_inm_rel_comprador_com_cliente(int $com_cliente_id, int $inm_comprador_id,
                                                                 PDO $link): array|stdClass
@@ -731,7 +731,14 @@ class _com_cliente{
         return true;
     }
 
-    private function valida_data_result_cliente(array|stdClass $registro_entrada){
+    /**
+     * Valida los elementos de alta de un cliente
+     * @param array|stdClass $registro_entrada registro de comprador
+     * @return array|true
+     * @version 2.38.0
+     */
+    final public function valida_data_result_cliente(array|stdClass $registro_entrada): bool|array
+    {
         $keys = array('lada_com','numero_com','nombre','apellido_paterno');
         $valida = $this->validacion->valida_existencia_keys(keys: $keys,registro:  $registro_entrada);
         if(errores::$error){

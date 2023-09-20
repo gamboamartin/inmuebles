@@ -162,6 +162,44 @@ class _base_compradorTest extends test {
         errores::$error = false;
     }
 
+    public function test_integra_relacion_com_cliente(): void
+    {
+        errores::$error = false;
+
+        $_GET['seccion'] = 'inm_producto_infonavit';
+        $_GET['accion'] = 'lista';
+        $_SESSION['grupo_id'] = 1;
+        $_SESSION['usuario_id'] = 2;
+        $_GET['session_id'] = '1';
+
+        $inm = new _base_comprador();
+        //$inm = new liberator($inm);
+
+
+        $inm_comprador_id = 1;
+        $link = $this->link;;
+        $registro_entrada = array();
+        $registro_entrada['rfc'] = 'GAFF770616J87';
+        $registro_entrada['dp_calle_pertenece_id'] = '1';
+        $registro_entrada['numero_exterior'] = 'A';
+        $registro_entrada['lada_com'] = '11';
+        $registro_entrada['numero_com'] = '33445566';
+        $registro_entrada['cat_sat_regimen_fiscal_id'] = '601';
+        $registro_entrada['cat_sat_moneda_id'] = '1';
+        $registro_entrada['cat_sat_forma_pago_id'] = '1';
+        $registro_entrada['cat_sat_metodo_pago_id'] = '1';
+        $registro_entrada['cat_sat_uso_cfdi_id'] = '1';
+        $registro_entrada['com_tipo_cliente_id'] = '1';
+        $registro_entrada['cat_sat_tipo_persona_id'] = '4';
+        $registro_entrada['nombre'] = '1';
+        $registro_entrada['apellido_paterno'] = '1';
+
+        $resultado = $inm->integra_relacion_com_cliente($inm_comprador_id, $link, $registro_entrada);
+        $this->assertIsObject($resultado);
+        $this->assertNotTrue(errores::$error);
+        errores::$error = false;
+    }
+
 
 
 

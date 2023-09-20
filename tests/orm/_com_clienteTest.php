@@ -71,7 +71,6 @@ class _com_clienteTest extends test {
         $this->assertEquals('v',$resultado['telefono']);
         errores::$error = false;
     }
-
     public function test_com_cliente_id_filtrado(): void
     {
         errores::$error = false;
@@ -96,7 +95,6 @@ class _com_clienteTest extends test {
         $this->assertEquals(1,$resultado);
         errores::$error = false;
     }
-
     public function test_com_cliente_ins(): void
     {
         errores::$error = false;
@@ -134,7 +132,6 @@ class _com_clienteTest extends test {
         $this->assertEquals('A',$resultado['codigo']);
         errores::$error = false;
     }
-
     public function test_data_rel(): void
     {
         errores::$error = false;
@@ -167,7 +164,6 @@ class _com_clienteTest extends test {
         $this->assertNotTrue($resultado->existe);
         errores::$error = false;
     }
-
     public function test_data_upd(): void
     {
         errores::$error = false;
@@ -194,7 +190,6 @@ class _com_clienteTest extends test {
         $this->assertEquals('A A',$resultado->razon_social);
         errores::$error = false;
     }
-
     public function test_existe_relacion(): void
     {
         errores::$error = false;
@@ -243,7 +238,6 @@ class _com_clienteTest extends test {
         $this->assertTrue($resultado);
         errores::$error = false;
     }
-
     public function test_get_relacion(): void
     {
         errores::$error = false;
@@ -291,7 +285,6 @@ class _com_clienteTest extends test {
         $this->assertEquals(1,$resultado->n_registros);
         errores::$error = false;
     }
-
     public function test_inm_rel_com_cliente_ins(): void
     {
         errores::$error = false;
@@ -359,7 +352,6 @@ class _com_clienteTest extends test {
         $this->assertEquals('Z k',$resultado->registro['com_cliente_razon_social']);
         errores::$error = false;
     }
-
     public function test_inserta_inm_rel_comprador_com_cliente(): void
     {
         errores::$error = false;
@@ -825,6 +817,44 @@ class _com_clienteTest extends test {
         $registro_entrada['cat_sat_tipo_persona_id'] = '1';
 
         $resultado = $inm->valida_base_com($registro_entrada);
+        $this->assertIsBool($resultado);
+        $this->assertNotTrue(errores::$error);
+        $this->assertTrue($resultado);
+
+        errores::$error = false;
+    }
+
+    public function test_valida_data_result_cliente(): void
+    {
+        errores::$error = false;
+
+        $_GET['seccion'] = 'inm_producto_infonavit';
+        $_GET['accion'] = 'lista';
+        $_SESSION['grupo_id'] = 1;
+        $_SESSION['usuario_id'] = 2;
+        $_GET['session_id'] = '1';
+
+
+
+        $inm = new _com_cliente();
+
+        $registro_entrada = array();
+        $registro_entrada['lada_com'] = 'A';
+        $registro_entrada['numero_com'] = 'A';
+        $registro_entrada['nombre'] = 'A';
+        $registro_entrada['apellido_paterno'] = 'A';
+        $registro_entrada['cat_sat_forma_pago_id'] = '1';
+        $registro_entrada['cat_sat_metodo_pago_id'] = '1';
+        $registro_entrada['cat_sat_moneda_id'] = '1';
+        $registro_entrada['cat_sat_regimen_fiscal_id'] = '1';
+        $registro_entrada['cat_sat_tipo_persona_id'] = '1';
+        $registro_entrada['cat_sat_uso_cfdi_id'] = '1';
+        $registro_entrada['com_tipo_cliente_id'] = '1';
+        $registro_entrada['dp_calle_pertenece_id'] = '1';
+        $registro_entrada['numero_exterior'] = '1';
+        $registro_entrada['rfc'] = '1';
+
+        $resultado = $inm->valida_data_result_cliente(registro_entrada: $registro_entrada);
         $this->assertIsBool($resultado);
         $this->assertNotTrue(errores::$error);
         $this->assertTrue($resultado);

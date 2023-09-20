@@ -157,6 +157,13 @@ class _base_comprador{
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al validar registro_entrada',data:  $valida);
         }
+        $valida = (new _com_cliente())->valida_data_result_cliente(registro_entrada: $registro_entrada);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al validar registro',data:  $valida);
+        }
+        if($inm_comprador_id <=0){
+            return $this->error->error(mensaje: 'Error inm_comprador_id debe ser mayor a 0',data:  $inm_comprador_id);
+        }
 
         $r_com_cliente = (new _com_cliente())->transacciona_com_cliente(link: $link, registro_entrada: $registro_entrada);
         if (errores::$error) {
