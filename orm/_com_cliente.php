@@ -238,9 +238,16 @@ class _com_cliente{
      * @param int $inm_comprador_id Identificador de comprador
      * @param PDO $link Conexion a la base de datos
      * @return array|bool
+     * @version 2.34.0
      */
     private function existe_relacion(int $com_cliente_id, int $inm_comprador_id, PDO $link): bool|array
     {
+        if($inm_comprador_id<=0){
+            return $this->error->error(mensaje: 'Error inm_comprador_id debe ser mayor a 0', data: $inm_comprador_id);
+        }
+        if($com_cliente_id<=0){
+            return $this->error->error(mensaje: 'Error com_cliente_id debe ser mayor a 0', data: $com_cliente_id);
+        }
         $filtro['inm_comprador.id'] = $inm_comprador_id;
         $filtro['com_cliente.id'] = $com_cliente_id;
 
