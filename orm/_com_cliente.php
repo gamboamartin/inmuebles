@@ -176,7 +176,23 @@ class _com_cliente{
         return (int)$r_com_cliente_f->registros[0]['com_cliente_id'];
     }
 
-    private function data_rel(int $com_cliente_id, int $inm_comprador_id, PDO $link){
+    /**
+     * Obtiene los datos de relacion previo a la transaccion de integracion
+     * @param int $com_cliente_id Cliente id
+     * @param int $inm_comprador_id Comprador id
+     * @param PDO $link Conexion a la base de datos
+     * @return array|stdClass
+     * @version 2.35.0
+     */
+    private function data_rel(int $com_cliente_id, int $inm_comprador_id, PDO $link): array|stdClass
+    {
+        if($inm_comprador_id <=0){
+            return $this->error->error(mensaje: 'Error inm_comprador_id debe ser mayor a 0',data:  $inm_comprador_id);
+        }
+        if($com_cliente_id <=0){
+            return $this->error->error(mensaje: 'Error com_cliente_id debe ser mayor a 0',data:  $com_cliente_id);
+        }
+
         $inm_rel_comprador_com_cliente_ins = $this->inm_rel_com_cliente_ins(com_cliente_id: $com_cliente_id,
             inm_comprador_id: $inm_comprador_id);
         if (errores::$error) {
@@ -259,7 +275,15 @@ class _com_cliente{
 
     }
 
-    private function get_relacion(int $com_cliente_id, int $inm_comprador_id, PDO $link){
+    /**
+     * Obtiene la relacion entre un cliente y un comprador
+     * @param int $com_cliente_id Identificador de cliente
+     * @param int $inm_comprador_id Identificador de comprador
+     * @param PDO $link Conexion a la base de datos
+     * @return array|stdClass
+     */
+    private function get_relacion(int $com_cliente_id, int $inm_comprador_id, PDO $link): array|stdClass
+    {
         $filtro['inm_comprador.id'] = $inm_comprador_id;
         $filtro['com_cliente.id'] = $com_cliente_id;
 
