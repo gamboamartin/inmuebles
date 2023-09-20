@@ -24,7 +24,10 @@ use stdClass;
 class controlador_inm_ubicacion extends _ctl_base {
 
     public string $link_rel_ubi_comp_alta_bd = '';
+    public string $link_opinion_valor_alta_bd = '';
     public array $imp_compradores = array();
+
+    public array $inm_opiniones_valor = array();
     public function __construct(PDO      $link, html $html = new \gamboamartin\template_1\html(),
                                 stdClass $paths_conf = new stdClass())
     {
@@ -621,7 +624,8 @@ class controlador_inm_ubicacion extends _ctl_base {
 
         $this->inputs->inm_valuador_id = $inm_valuador_id;
 
-        $monto_resultado = $this->html->input_monto(cols: 12,row_upd:  new stdClass(),value_vacio:  false);
+        $monto_resultado = $this->html->input_monto(cols: 12,row_upd:  new stdClass(),value_vacio:  false,
+            name: 'monto_resultado',place_holder: 'Monto Resultado');
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al obtener monto_resultado',data:  $monto_resultado, header: $header,ws:  $ws);
         }
@@ -635,13 +639,22 @@ class controlador_inm_ubicacion extends _ctl_base {
 
         $this->inputs->fecha = $fecha;
 
-        $costo = $this->html->input_monto(cols: 12,row_upd:  new stdClass(),value_vacio:  false,name: 'costo');
+        $costo = $this->html->input_monto(cols: 12,row_upd:  new stdClass(),value_vacio:  false,name: 'costo',
+            place_holder: 'Costo de opinion');
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al obtener monto_resultado',data:  $monto_resultado, header: $header,ws:  $ws);
         }
 
         $this->inputs->costo = $costo;
-        
+
+
+        $link_opinion_valor_alta_bd = $this->obj_link->link_alta_bd(link: $this->link,seccion: 'inm_opinion_valor');
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al obtener link_opinion_valor_lata_bd',
+                data:  $link_opinion_valor_alta_bd, header: $header,ws:  $ws);
+        }
+        $this->link_opinion_valor_alta_bd = $link_opinion_valor_alta_bd;
+
 
         return $r_modifica;
     }

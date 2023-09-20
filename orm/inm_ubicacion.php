@@ -172,6 +172,15 @@ class inm_ubicacion extends _inm_ubicaciones {
         return $n_opiniones;
     }
 
+    final public function opiniones_valor(int $inm_ubicacion_id){
+        $filtro['inm_ubicacion.id'] = $inm_ubicacion_id;
+        $r_inm_opinion_valor = (new inm_opinion_valor(link: $this->link))->filtro_and(filtro: $filtro);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al obtener opiniones',data: $r_inm_opinion_valor);
+        }
+        return $r_inm_opinion_valor->registros;
+    }
+
     final public function regenera_opinion_valor(int $inm_ubicacion_id){
         $n_opiniones = $this->n_opiniones_valor(inm_ubicacion_id: $inm_ubicacion_id);
         if(errores::$error){
