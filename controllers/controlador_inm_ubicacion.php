@@ -28,6 +28,7 @@ class controlador_inm_ubicacion extends _ctl_base {
     public array $imp_compradores = array();
 
     public array $inm_opiniones_valor = array();
+    public int $n_opiniones_valor = 0;
     public function __construct(PDO      $link, html $html = new \gamboamartin\template_1\html(),
                                 stdClass $paths_conf = new stdClass())
     {
@@ -662,6 +663,8 @@ class controlador_inm_ubicacion extends _ctl_base {
                 header: $header,ws:  $ws);
         }
         $this->inm_opiniones_valor = $inm_opiniones_valor;
+
+        $this->n_opiniones_valor = count($this->inm_opiniones_valor);
 
 
         return $r_modifica;

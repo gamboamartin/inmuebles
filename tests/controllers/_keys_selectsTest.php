@@ -66,6 +66,12 @@ class _keys_selectsTest extends test {
         $this->assertEquals("Error al obtener com_cliente",$resultado['mensaje_limpio']);
         errores::$error = false;
 
+        $del = (new base_test())->del_com_cliente(link: $this->link);
+        if(errores::$error){
+            $error = (new errores())->error(mensaje:'Error al del', data: $del);
+            print_r($error);exit;
+        }
+
         $alta = (new base_test())->alta_inm_comprador(link: $this->link);
         if(errores::$error){
             $error = (new errores())->error(mensaje:'Error al insertar', data: $alta);

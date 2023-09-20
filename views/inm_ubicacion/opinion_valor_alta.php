@@ -70,11 +70,19 @@
                                     <tr>
                                     <?php }  ?>
                                     </tbody>
+                                    <thead>
+                                    <tr>
+                                        <th>Total</th>
+                                        <th><?php echo $controlador->n_opiniones_valor; ?></th>
+                                    </tr>
+                                    </thead>
                                 </table>
                             </div>
                         </div>
                     </div>
                 </div>
+            </div>
+        </div>
     </div>
 </main>
 

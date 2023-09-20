@@ -232,8 +232,9 @@ class _com_cliente{
     }
 
     /**
-     * @param int $com_cliente_id
-     * @param int $inm_comprador_id
+     * Genera el registro de insersion para la relacion de cliente con comprador
+     * @param int $com_cliente_id Identificador de cliente
+     * @param int $inm_comprador_id Identificador de comprador
      * @return array
      */
     private function inm_rel_com_cliente_ins(int $com_cliente_id, int $inm_comprador_id): array
@@ -337,9 +338,18 @@ class _com_cliente{
      * @param PDO $link Conexion a la base de datos
      * @param array $registro_entrada Registro en proceso
      * @return array|stdClass
+     * @version 2.29.0
      */
     private function r_com_cliente(array $filtro, PDO $link, array $registro_entrada): array|stdClass
     {
+
+        if(count($filtro) === 0){
+            return $this->error->error(mensaje: 'Error filtro esta vacio', data: $filtro);
+        }
+        $valida = $this->valida_data_result_cliente(registro_entrada: $registro_entrada);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al validar registro',data:  $valida);
+        }
 
         $com_cliente_id_filtrado = $this->com_cliente_id_filtrado(link: $link,filtro:  $filtro);
         if(errores::$error){
@@ -487,13 +497,9 @@ class _com_cliente{
      */
     private function row_upd(array|stdClass $registro_entrada): array
     {
-        $keys = array('lada_com','numero_com','nombre','apellido_paterno');
-        $valida = $this->validacion->valida_existencia_keys(keys: $keys,registro:  $registro_entrada);
-        if(errores::$error){
-            return $this->error->error(mensaje: 'Error al validar registro entrada', data: $valida);
-        }
 
-        $valida = $this->valida_data_transaccion_cliente(registro_entrada: $registro_entrada);
+
+        $valida = $this->valida_data_result_cliente(registro_entrada: $registro_entrada);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al validar registro',data:  $valida);
         }
@@ -512,8 +518,9 @@ class _com_cliente{
     }
 
     /**
-     * @param PDO $link
-     * @param array $registro_entrada
+     * Genera las transacciones de relacion con un cliente
+     * @param PDO $link Conexion a la base de datos
+     * @param array $registro_entrada Registro de inm_comprador
      * @return array|stdClass
      */
     final public function transacciona_com_cliente(PDO $link, array $registro_entrada): array|stdClass
@@ -553,6 +560,20 @@ class _com_cliente{
         $valida = $this->valida_ids_com(registro_entrada: $registro_entrada);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al validar registro_entrada',data:  $valida);
+        }
+        return true;
+    }
+
+    private function valida_data_result_cliente(array|stdClass $registro_entrada){
+        $keys = array('lada_com','numero_com','nombre','apellido_paterno');
+        $valida = $this->validacion->valida_existencia_keys(keys: $keys,registro:  $registro_entrada);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al validar registro entrada', data: $valida);
+        }
+
+        $valida = $this->valida_data_transaccion_cliente(registro_entrada: $registro_entrada);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al validar registro',data:  $valida);
         }
         return true;
     }
