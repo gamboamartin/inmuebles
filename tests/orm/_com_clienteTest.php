@@ -244,6 +244,54 @@ class _com_clienteTest extends test {
         errores::$error = false;
     }
 
+    public function test_get_relacion(): void
+    {
+        errores::$error = false;
+
+        $_GET['seccion'] = 'inm_producto_infonavit';
+        $_GET['accion'] = 'lista';
+        $_SESSION['grupo_id'] = 1;
+        $_SESSION['usuario_id'] = 2;
+        $_GET['session_id'] = '1';
+
+        $inm = new _com_cliente();
+        $inm = new liberator($inm);
+
+        $del = (new base_test())->del_inm_rel_comprador_com_cliente(link: $this->link);
+        if(errores::$error){
+            $error = (new errores())->error(mensaje: 'Error al eliminar',data:  $del);
+            print_r($error);
+            exit;
+        }
+        $com_cliente_id = 1;
+        $inm_comprador_id = 1;
+        $link = $this->link;
+
+        $resultado = $inm->get_relacion($com_cliente_id, $inm_comprador_id, $link);
+        $this->assertIsObject($resultado);
+        $this->assertNotTrue(errores::$error);
+        $this->assertEquals(0,$resultado->n_registros);
+
+        errores::$error = false;
+
+        $alta = (new base_test())->alta_inm_rel_comprador_com_cliente(link: $this->link);
+        if(errores::$error){
+            $error = (new errores())->error(mensaje: 'Error al alta',data:  $alta);
+            print_r($error);
+            exit;
+        }
+
+        $com_cliente_id = 1;
+        $inm_comprador_id = 1;
+        $link = $this->link;
+
+        $resultado = $inm->get_relacion($com_cliente_id, $inm_comprador_id, $link);
+        $this->assertIsObject($resultado);
+        $this->assertNotTrue(errores::$error);
+        $this->assertEquals(1,$resultado->n_registros);
+        errores::$error = false;
+    }
+
     public function test_inm_rel_com_cliente_ins(): void
     {
         errores::$error = false;

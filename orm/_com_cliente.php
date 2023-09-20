@@ -281,9 +281,18 @@ class _com_cliente{
      * @param int $inm_comprador_id Identificador de comprador
      * @param PDO $link Conexion a la base de datos
      * @return array|stdClass
+     * @version 2.36.0
      */
     private function get_relacion(int $com_cliente_id, int $inm_comprador_id, PDO $link): array|stdClass
     {
+        if($inm_comprador_id <=0){
+            return $this->error->error(mensaje: 'Error inm_comprador_id debe ser mayor a 0',data:  $inm_comprador_id);
+        }
+        if($com_cliente_id <=0){
+            return $this->error->error(mensaje: 'Error com_cliente_id debe ser mayor a 0',data:  $com_cliente_id);
+        }
+
+
         $filtro['inm_comprador.id'] = $inm_comprador_id;
         $filtro['com_cliente.id'] = $com_cliente_id;
 
@@ -570,7 +579,15 @@ class _com_cliente{
         return $r_com_cliente;
     }
 
-    private function result_relacion(bool $existe, array $inm_rel_comprador_com_cliente_ins, PDO $link){
+    /**
+     * Integra las relaciones entre un cliente y un comprador
+     * @param bool $existe Si no existe inserta sino obtiene
+     * @param array $inm_rel_comprador_com_cliente_ins Registro a validar
+     * @param PDO $link Conexion a la base de datos
+     * @return array|stdClass
+     */
+    private function result_relacion(bool $existe, array $inm_rel_comprador_com_cliente_ins, PDO $link): array|stdClass
+    {
         if(!$existe) {
             $r_inm_rel_comprador_com_cliente_ins = (new inm_rel_comprador_com_cliente(link: $link))->alta_registro(
                 registro: $inm_rel_comprador_com_cliente_ins);
