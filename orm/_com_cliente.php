@@ -168,9 +168,13 @@ class _com_cliente{
      * @param PDO $link Conexion a la base de datos
      * @param array $filtro Filtro de datos
      * @return array|int
+     * @version 2.27.0
      */
     private function com_cliente_id_filtrado(PDO $link, array $filtro): int|array
     {
+        if(count($filtro) === 0){
+            return $this->error->error(mensaje: 'Error filtro esta vacio', data: $filtro);
+        }
         $r_com_cliente_f = (new com_cliente(link: $link))->filtro_and(filtro: $filtro);
         if (errores::$error) {
             return $this->error->error(mensaje: 'Error al obtener cliente', data: $r_com_cliente_f);
@@ -404,7 +408,15 @@ class _com_cliente{
         return trim($razon_social);
     }
 
-    private function result_com_cliente(bool $existe_cliente, array $filtro, PDO $link, array $registro_entrada){
+    /**
+     * @param bool $existe_cliente
+     * @param array $filtro
+     * @param PDO $link
+     * @param array $registro_entrada
+     * @return array|stdClass
+     */
+    private function result_com_cliente(bool $existe_cliente, array $filtro, PDO $link, array $registro_entrada): array|stdClass
+    {
         $valida = $this->valida_base_com(registro_entrada: $registro_entrada);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al validar registro_entrada',data:  $valida);

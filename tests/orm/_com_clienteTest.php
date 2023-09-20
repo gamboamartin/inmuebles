@@ -72,6 +72,31 @@ class _com_clienteTest extends test {
         errores::$error = false;
     }
 
+    public function test_com_cliente_id_filtrado(): void
+    {
+        errores::$error = false;
+
+        $_GET['seccion'] = 'inm_producto_infonavit';
+        $_GET['accion'] = 'lista';
+        $_SESSION['grupo_id'] = 1;
+        $_SESSION['usuario_id'] = 2;
+        $_GET['session_id'] = '1';
+
+
+        $inm = new _com_cliente();
+        $inm = new liberator($inm);
+
+
+        $link = $this->link;
+        $filtro = array();
+        $filtro['com_cliente.id'] = 1;
+        $resultado = $inm->com_cliente_id_filtrado($link, $filtro);
+        $this->assertIsInt($resultado);
+        $this->assertNotTrue(errores::$error);
+        $this->assertEquals(1,$resultado);
+        errores::$error = false;
+    }
+
     public function test_com_cliente_ins(): void
     {
         errores::$error = false;
