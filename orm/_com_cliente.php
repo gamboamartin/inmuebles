@@ -176,6 +176,28 @@ class _com_cliente{
         return (int)$r_com_cliente_f->registros[0]['com_cliente_id'];
     }
 
+    private function data_rel(int $com_cliente_id, int $inm_comprador_id, PDO $link){
+        $inm_rel_comprador_com_cliente_ins = $this->inm_rel_com_cliente_ins(com_cliente_id: $com_cliente_id,
+            inm_comprador_id: $inm_comprador_id);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al integrar row rel com cliente',
+                data: $inm_rel_comprador_com_cliente_ins);
+        }
+
+
+        $existe = $this->existe_relacion(com_cliente_id: $com_cliente_id,inm_comprador_id:  $inm_comprador_id,
+            link:  $link);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al validar si existe relacion', data: $existe);
+        }
+
+        $data = new stdClass();
+        $data->inm_rel_comprador_com_cliente_ins = $inm_rel_comprador_com_cliente_ins;
+        $data->existe = $existe;
+
+        return $data;
+    }
+
     /**
      * Integra los datos para una actualizacion de cliente
      * @param array|stdClass $registro_entrada Registro previo
@@ -208,6 +230,39 @@ class _com_cliente{
         $data->numero_interior = $numero_interior;
 
         return $data;
+    }
+
+    /**
+     * Valida si existe una relacion entre cliente y comprador
+     * @param int $com_cliente_id Identificador de cliente
+     * @param int $inm_comprador_id Identificador de comprador
+     * @param PDO $link Conexion a la base de datos
+     * @return array|bool
+     */
+    private function existe_relacion(int $com_cliente_id, int $inm_comprador_id, PDO $link): bool|array
+    {
+        $filtro['inm_comprador.id'] = $inm_comprador_id;
+        $filtro['com_cliente.id'] = $com_cliente_id;
+
+        $existe = (new inm_rel_comprador_com_cliente(link: $link))->existe(filtro: $filtro);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al validar si existe dato', data: $existe);
+        }
+        return $existe;
+
+    }
+
+    private function get_relacion(int $com_cliente_id, int $inm_comprador_id, PDO $link){
+        $filtro['inm_comprador.id'] = $inm_comprador_id;
+        $filtro['com_cliente.id'] = $com_cliente_id;
+
+        $r_inm_rel_comprador_com_cliente_ins = (new inm_rel_comprador_com_cliente(link: $link))->filtro_and(
+            filtro: $filtro);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al obtener relacion',
+                data: $r_inm_rel_comprador_com_cliente_ins);
+        }
+        return $r_inm_rel_comprador_com_cliente_ins;
     }
 
     /**
@@ -285,23 +340,33 @@ class _com_cliente{
      * @param int $inm_comprador_id Comprador id
      * @param PDO $link Conexion a la base de datos
      * @return array|stdClass
+
      */
     final public function inserta_inm_rel_comprador_com_cliente(int $com_cliente_id, int $inm_comprador_id,
                                                                 PDO $link): array|stdClass
     {
-        $inm_rel_comprador_com_cliente_ins = $this->inm_rel_com_cliente_ins(com_cliente_id: $com_cliente_id,
-            inm_comprador_id: $inm_comprador_id);
-        if (errores::$error) {
-            return $this->error->error(mensaje: 'Error al integrar row rel com cliente',
-                data: $inm_rel_comprador_com_cliente_ins);
+
+        if($inm_comprador_id <=0){
+            return $this->error->error(mensaje: 'Error inm_comprador_id debe ser mayor a 0',data:  $inm_comprador_id);
+        }
+        if($com_cliente_id <=0){
+            return $this->error->error(mensaje: 'Error com_cliente_id debe ser mayor a 0',data:  $com_cliente_id);
         }
 
-        $r_inm_rel_comprador_com_cliente_ins = (new inm_rel_comprador_com_cliente(link: $link))->alta_registro(
-            registro: $inm_rel_comprador_com_cliente_ins);
-        if(errores::$error){
-            return $this->error->error(mensaje: 'Error al insertar relacion',
-                data:  $r_inm_rel_comprador_com_cliente_ins);
+
+        $data_rel = $this->data_rel(com_cliente_id: $com_cliente_id,inm_comprador_id:  $inm_comprador_id,link:  $link);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al obtener datos de relacion', data: $data_rel);
         }
+
+        $r_inm_rel_comprador_com_cliente_ins = $this->result_relacion(existe: $data_rel->existe,
+            inm_rel_comprador_com_cliente_ins:  $data_rel->inm_rel_comprador_com_cliente_ins, link: $link);
+
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al obtener relacion', data: $r_inm_rel_comprador_com_cliente_ins);
+        }
+
+
         return $r_inm_rel_comprador_com_cliente_ins;
     }
 
@@ -472,6 +537,29 @@ class _com_cliente{
             }
         }
         return $r_com_cliente;
+    }
+
+    private function result_relacion(bool $existe, array $inm_rel_comprador_com_cliente_ins, PDO $link){
+        if(!$existe) {
+            $r_inm_rel_comprador_com_cliente_ins = (new inm_rel_comprador_com_cliente(link: $link))->alta_registro(
+                registro: $inm_rel_comprador_com_cliente_ins);
+            if (errores::$error) {
+                return $this->error->error(mensaje: 'Error al insertar relacion',
+                    data: $r_inm_rel_comprador_com_cliente_ins);
+            }
+        }
+        else{
+
+            $r_inm_rel_comprador_com_cliente_ins = $this->get_relacion(
+                com_cliente_id: $inm_rel_comprador_com_cliente_ins['com_cliente_id'],
+                inm_comprador_id:  $inm_rel_comprador_com_cliente_ins['inm_comprador_id'],link:  $link);
+
+            if (errores::$error) {
+                return $this->error->error(mensaje: 'Error al obtener relacion',
+                    data: $r_inm_rel_comprador_com_cliente_ins);
+            }
+        }
+        return $r_inm_rel_comprador_com_cliente_ins;
     }
 
     /**

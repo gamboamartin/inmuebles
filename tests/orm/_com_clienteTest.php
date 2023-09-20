@@ -230,6 +230,47 @@ class _com_clienteTest extends test {
         errores::$error = false;
     }
 
+    public function test_inserta_inm_rel_comprador_com_cliente(): void
+    {
+        errores::$error = false;
+
+        $_GET['seccion'] = 'inm_producto_infonavit';
+        $_GET['accion'] = 'lista';
+        $_SESSION['grupo_id'] = 1;
+        $_SESSION['usuario_id'] = 2;
+        $_GET['session_id'] = '1';
+
+
+        $inm = new _com_cliente();
+        //$inm = new liberator($inm);
+
+        $del = (new base_test())->del_com_cliente(link: $this->link);
+        if(errores::$error){
+            $error = (new errores())->error(mensaje:'Error al del',data:  $del);
+            print_r($error);
+            exit;
+
+        }
+
+        $alta = (new base_test())->alta_com_cliente(link: $this->link);
+        if(errores::$error){
+            $error = (new errores())->error(mensaje:'Error al insertar',data:  $alta);
+            print_r($error);
+            exit;
+
+        }
+
+        $com_cliente_id = 1;
+        $inm_comprador_id = 1;
+        $link = $this->link;
+        $resultado = $inm->inserta_inm_rel_comprador_com_cliente($com_cliente_id, $inm_comprador_id, $link);
+
+        $this->assertIsObject($resultado);
+        $this->assertNotTrue(errores::$error);
+
+        errores::$error = false;
+    }
+
     public function test_numero_interior(): void
     {
         errores::$error = false;
