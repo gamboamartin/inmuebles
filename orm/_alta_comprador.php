@@ -242,15 +242,33 @@ class _alta_comprador{
 
     /**
      * Obtiene el sub proceso definido para operar registro
-     * @param PDO $link
-     * @param string $pr_proceso_descripcion
-     * @param string $pr_sub_proceso_descripcion
-     * @param string $tabla
+     * @param PDO $link Conexion a la base de datos
+     * @param string $pr_proceso_descripcion Descripcion de proceso
+     * @param string $pr_sub_proceso_descripcion Descripcion de subproceso
+     * @param string $tabla Entidad name
      * @return array
+     * @version 2.39.0
      */
     private function pr_sub_proceso(PDO $link, string $pr_proceso_descripcion, string $pr_sub_proceso_descripcion,
                                     string $tabla): array
     {
+
+        $pr_proceso_descripcion = trim($pr_proceso_descripcion);
+        if($pr_proceso_descripcion === ''){
+            return $this->error->error(mensaje: 'Error pr_proceso_descripcion esta vacio',
+                data: $pr_proceso_descripcion);
+        }
+        $pr_sub_proceso_descripcion = trim($pr_sub_proceso_descripcion);
+        if($pr_sub_proceso_descripcion === ''){
+            return $this->error->error(mensaje: 'Error pr_sub_proceso_descripcion esta vacio',
+                data: $pr_sub_proceso_descripcion);
+        }
+
+        $tabla = trim($tabla);
+        if($tabla === ''){
+            return $this->error->error(mensaje: 'Error tabla esta vacio', data: $tabla);
+        }
+
         $filtro['adm_seccion.descripcion'] = $tabla;
         $filtro['pr_sub_proceso.descripcion'] = $pr_sub_proceso_descripcion;
         $filtro['pr_proceso.descripcion'] =$pr_proceso_descripcion;

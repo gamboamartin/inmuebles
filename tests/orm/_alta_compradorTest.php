@@ -254,6 +254,31 @@ class _alta_compradorTest extends test {
         errores::$error = false;
     }
 
+    public function test_pr_sub_proceso(): void
+    {
+        errores::$error = false;
+
+        $_GET['seccion'] = 'inm_producto_infonavit';
+        $_GET['accion'] = 'lista';
+        $_SESSION['grupo_id'] = 1;
+        $_SESSION['usuario_id'] = 2;
+        $_GET['session_id'] = '1';
+
+        $inm = new _alta_comprador();
+        $inm = new liberator($inm);
+
+
+        $link = $this->link;
+        $pr_proceso_descripcion = 'INMOBILIARIA CLIENTES';
+        $pr_sub_proceso_descripcion = 'ALTA';
+        $tabla = 'inm_comprador';
+        $resultado = $inm->pr_sub_proceso($link, $pr_proceso_descripcion, $pr_sub_proceso_descripcion, $tabla);
+        $this->assertIsaRRAY($resultado);
+        $this->assertNotTrue(errores::$error);
+        $this->assertEquals('ALTA',$resultado['pr_sub_proceso_descripcion']);
+        errores::$error = false;
+    }
+
     public function test_valida_base_comprador(): void
     {
         errores::$error = false;

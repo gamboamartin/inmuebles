@@ -60,7 +60,8 @@ class inm_comprador_proceso extends _modelo_parent{
     }
 
     /**
-     * @param array $registro
+     * Inserta un elementos de comprador proceso
+     * @param array $registro registro a insertar
      * @return array|stdClass
      */
     public function alta_registro(array $registro): array|stdClass
