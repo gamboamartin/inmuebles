@@ -585,6 +585,7 @@ class _com_cliente{
      * @param array $inm_rel_comprador_com_cliente_ins Registro a validar
      * @param PDO $link Conexion a la base de datos
      * @return array|stdClass
+     * @version 2.37.0
      */
     private function result_relacion(bool $existe, array $inm_rel_comprador_com_cliente_ins, PDO $link): array|stdClass
     {
