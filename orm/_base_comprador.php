@@ -144,9 +144,10 @@ class _base_comprador{
     }
 
     /**
-     * @param int $inm_comprador_id
-     * @param PDO $link
-     * @param array $registro_entrada
+     * Integra una relacion entre un cliente y un comprador
+     * @param int $inm_comprador_id id de comprador
+     * @param PDO $link Conexion de base de datos
+     * @param array $registro_entrada registro de comprador
      * @return array|stdClass
      */
     final public function integra_relacion_com_cliente(int $inm_comprador_id, PDO $link,

@@ -241,6 +241,7 @@ class _alta_comprador{
     }
 
     /**
+     * Obtiene el sub proceso definido para operar registro
      * @param PDO $link
      * @param string $pr_proceso_descripcion
      * @param string $pr_sub_proceso_descripcion

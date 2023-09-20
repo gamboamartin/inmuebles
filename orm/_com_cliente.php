@@ -236,9 +236,16 @@ class _com_cliente{
      * @param int $com_cliente_id Identificador de cliente
      * @param int $inm_comprador_id Identificador de comprador
      * @return array
+     * @version 2.32.0
      */
     private function inm_rel_com_cliente_ins(int $com_cliente_id, int $inm_comprador_id): array
     {
+        if($inm_comprador_id <=0){
+            return $this->error->error(mensaje: 'Error inm_comprador_id debe ser mayor a 0',data:  $inm_comprador_id);
+        }
+        if($com_cliente_id <=0){
+            return $this->error->error(mensaje: 'Error com_cliente_id debe ser mayor a 0',data:  $com_cliente_id);
+        }
         $inm_rel_comprador_com_cliente_ins['inm_comprador_id'] = $inm_comprador_id;
         $inm_rel_comprador_com_cliente_ins['com_cliente_id'] = $com_cliente_id;
         return $inm_rel_comprador_com_cliente_ins;
