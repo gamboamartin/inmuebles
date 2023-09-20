@@ -63,17 +63,12 @@ class inm_opinion_valor extends _modelo_parent{
             return $this->error->error(mensaje: 'Error al insertar opcion', data: $r_alta_bd);
         }
 
-        $regenera = (new inm_ubicacion(link: $this->link))->regenera_opinion_valor(
+        $regenera = (new inm_ubicacion(link: $this->link))->regenera_data_opinion(
             inm_ubicacion_id: $r_alta_bd->registro_puro->inm_ubicacion_id);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al regenerar opinion de valor', data: $regenera);
         }
 
-        $regenera = (new inm_ubicacion(link: $this->link))->regenera_monto_opinion_promedio(
-            inm_ubicacion_id: $r_alta_bd->registro_puro->inm_ubicacion_id);
-        if(errores::$error){
-            return $this->error->error(mensaje: 'Error al regenerar opinion de valor', data: $regenera);
-        }
 
         return $r_alta_bd;
     }
@@ -85,17 +80,13 @@ class inm_opinion_valor extends _modelo_parent{
             return $this->error->error(mensaje: 'Error al eliminar opinion', data: $r_elimina_bd);
         }
 
-        $regenera = (new inm_ubicacion(link: $this->link))->regenera_opinion_valor(
+        $regenera = (new inm_ubicacion(link: $this->link))->regenera_data_opinion(
             inm_ubicacion_id: $r_elimina_bd->registro_puro->inm_ubicacion_id);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al regenerar opinion de valor', data: $regenera);
         }
 
-        $regenera = (new inm_ubicacion(link: $this->link))->regenera_monto_opinion_promedio(
-            inm_ubicacion_id: $r_elimina_bd->registro_puro->inm_ubicacion_id);
-        if(errores::$error){
-            return $this->error->error(mensaje: 'Error al regenerar opinion de valor', data: $regenera);
-        }
+
         return $r_elimina_bd;
     }
 
@@ -108,16 +99,12 @@ class inm_opinion_valor extends _modelo_parent{
             return $this->error->error(mensaje: 'Error al modificar opinion', data: $r_modifica_bd);
         }
 
-        $regenera = (new inm_ubicacion(link: $this->link))->regenera_opinion_valor(
+        $regenera = (new inm_ubicacion(link: $this->link))->regenera_data_opinion(
             inm_ubicacion_id: $r_modifica_bd->registro_actualizado->inm_ubicacion_id);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al regenerar opinion de valor', data: $regenera);
         }
-        $regenera = (new inm_ubicacion(link: $this->link))->regenera_monto_opinion_promedio(
-            inm_ubicacion_id: $r_modifica_bd->registro_actualizado->inm_ubicacion_id);
-        if(errores::$error){
-            return $this->error->error(mensaje: 'Error al regenerar opinion de valor', data: $regenera);
-        }
+
         return $r_modifica_bd;
     }
 

@@ -128,19 +128,7 @@ class _com_cliente{
             return $this->error->error(mensaje: 'Error telefono esta vacio',data:  $telefono);
         }
 
-        $keys = array('cat_sat_forma_pago_id','cat_sat_metodo_pago_id','cat_sat_moneda_id','cat_sat_regimen_fiscal_id',
-            'cat_sat_tipo_persona_id', 'cat_sat_uso_cfdi_id','com_tipo_cliente_id','dp_calle_pertenece_id',
-            'numero_exterior','rfc');
-
-        $valida = $this->validacion->valida_existencia_keys(keys: $keys,registro:  $registro);
-        if(errores::$error){
-            return $this->error->error(mensaje: 'Error al validar registro',data:  $valida);
-        }
-
-        $keys = array('cat_sat_forma_pago_id','cat_sat_metodo_pago_id','cat_sat_moneda_id','cat_sat_regimen_fiscal_id',
-            'cat_sat_tipo_persona_id', 'cat_sat_uso_cfdi_id','com_tipo_cliente_id','dp_calle_pertenece_id');
-
-        $valida = $this->validacion->valida_ids(keys: $keys,registro:  $registro);
+        $valida = $this->valida_data_transaccion_cliente(registro_entrada: $registro);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al validar registro',data:  $valida);
         }
@@ -196,7 +184,7 @@ class _com_cliente{
      */
     private function data_upd(array|stdClass $registro_entrada): array|stdClass
     {
-        $keys = array('lada_com','numero_com');
+        $keys = array('lada_com','numero_com','nombre','apellido_paterno');
         $valida = $this->validacion->valida_existencia_keys(keys: $keys,registro:  $registro_entrada);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al validar registro entrada', data: $valida);
@@ -495,9 +483,21 @@ class _com_cliente{
      * Ajusta los campos para una actualizacion de un cliente
      * @param array|stdClass $registro_entrada Registro en proceso
      * @return array
+     * @version 2.28.0
      */
     private function row_upd(array|stdClass $registro_entrada): array
     {
+        $keys = array('lada_com','numero_com','nombre','apellido_paterno');
+        $valida = $this->validacion->valida_existencia_keys(keys: $keys,registro:  $registro_entrada);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al validar registro entrada', data: $valida);
+        }
+
+        $valida = $this->valida_data_transaccion_cliente(registro_entrada: $registro_entrada);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al validar registro',data:  $valida);
+        }
+
         $data_upd = $this->data_upd(registro_entrada: $registro_entrada);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al obtener datos', data: $data_upd);
@@ -554,6 +554,34 @@ class _com_cliente{
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al validar registro_entrada',data:  $valida);
         }
+        return true;
+    }
+
+    /**
+     * Valida los datos previos a una transaccion con cliente
+     * @param array|stdClass $registro_entrada Registro de comprador
+     * @return array|true
+     * @version 2.28.0
+     */
+    private function valida_data_transaccion_cliente(array|stdClass $registro_entrada): bool|array
+    {
+        $keys = array('cat_sat_forma_pago_id','cat_sat_metodo_pago_id','cat_sat_moneda_id','cat_sat_regimen_fiscal_id',
+            'cat_sat_tipo_persona_id', 'cat_sat_uso_cfdi_id','com_tipo_cliente_id','dp_calle_pertenece_id',
+            'numero_exterior','rfc');
+
+        $valida = $this->validacion->valida_existencia_keys(keys: $keys,registro:  $registro_entrada);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al validar registro',data:  $valida);
+        }
+
+        $keys = array('cat_sat_forma_pago_id','cat_sat_metodo_pago_id','cat_sat_moneda_id','cat_sat_regimen_fiscal_id',
+            'cat_sat_tipo_persona_id', 'cat_sat_uso_cfdi_id','com_tipo_cliente_id','dp_calle_pertenece_id');
+
+        $valida = $this->validacion->valida_ids(keys: $keys,registro:  $registro_entrada);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al validar registro',data:  $valida);
+        }
+
         return true;
     }
 

@@ -309,6 +309,47 @@ class _com_clienteTest extends test {
         errores::$error = false;
     }
 
+    public function test_row_upd(): void
+    {
+        errores::$error = false;
+
+        $_GET['seccion'] = 'inm_producto_infonavit';
+        $_GET['accion'] = 'lista';
+        $_SESSION['grupo_id'] = 1;
+        $_SESSION['usuario_id'] = 2;
+        $_GET['session_id'] = '1';
+
+
+        $inm = new _com_cliente();
+        $inm = new liberator($inm);
+
+
+        $registro_entrada = array();
+        $registro_entrada['lada_com'] ='A';
+        $registro_entrada['numero_com'] ='A';
+        $registro_entrada['nombre'] ='A';
+        $registro_entrada['apellido_paterno'] ='A';
+        $registro_entrada['cat_sat_forma_pago_id'] ='1';
+        $registro_entrada['cat_sat_metodo_pago_id'] ='1';
+        $registro_entrada['cat_sat_moneda_id'] ='1';
+        $registro_entrada['cat_sat_regimen_fiscal_id'] ='1';
+        $registro_entrada['cat_sat_tipo_persona_id'] ='1';
+        $registro_entrada['cat_sat_uso_cfdi_id'] ='1';
+        $registro_entrada['com_tipo_cliente_id'] ='1';
+        $registro_entrada['dp_calle_pertenece_id'] ='1';
+        $registro_entrada['numero_exterior'] ='A';
+        $registro_entrada['rfc'] ='A';
+
+
+
+        $resultado = $inm->row_upd($registro_entrada);
+        $this->assertIsArray($resultado);
+        $this->assertNotTrue(errores::$error);
+        $this->assertEquals("A A",$resultado['razon_social']);
+
+        errores::$error = false;
+    }
+
     public function test_valida_base_com(): void
     {
         errores::$error = false;
@@ -344,6 +385,46 @@ class _com_clienteTest extends test {
         errores::$error = false;
     }
 
+    public function test_valida_data_transaccion_cliente(): void
+    {
+        errores::$error = false;
+
+        $_GET['seccion'] = 'inm_producto_infonavit';
+        $_GET['accion'] = 'lista';
+        $_SESSION['grupo_id'] = 1;
+        $_SESSION['usuario_id'] = 2;
+        $_GET['session_id'] = '1';
+
+
+        $inm = new _com_cliente();
+        $inm = new liberator($inm);
+
+
+        $registro_entrada = array();
+        $registro_entrada['lada_com'] ='A';
+        $registro_entrada['numero_com'] ='A';
+        $registro_entrada['nombre'] ='A';
+        $registro_entrada['apellido_paterno'] ='A';
+        $registro_entrada['cat_sat_forma_pago_id'] ='1';
+        $registro_entrada['cat_sat_metodo_pago_id'] ='1';
+        $registro_entrada['cat_sat_moneda_id'] ='1';
+        $registro_entrada['cat_sat_regimen_fiscal_id'] ='1';
+        $registro_entrada['cat_sat_tipo_persona_id'] ='1';
+        $registro_entrada['cat_sat_uso_cfdi_id'] ='1';
+        $registro_entrada['com_tipo_cliente_id'] ='1';
+        $registro_entrada['dp_calle_pertenece_id'] ='1';
+        $registro_entrada['numero_exterior'] ='A';
+        $registro_entrada['rfc'] ='A';
+
+
+
+        $resultado = $inm->valida_data_transaccion_cliente($registro_entrada);
+        $this->assertIsBool($resultado);
+        $this->assertNotTrue(errores::$error);
+        $this->assertTrue($resultado);
+
+        errores::$error = false;
+    }
     public function test_valida_existencia_keys_com(): void
     {
         errores::$error = false;
