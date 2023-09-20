@@ -325,6 +325,101 @@ class _com_clienteTest extends test {
         errores::$error = false;
     }
 
+    public function test_result_com_cliente(): void
+    {
+        errores::$error = false;
+
+        $_GET['seccion'] = 'inm_producto_infonavit';
+        $_GET['accion'] = 'lista';
+        $_SESSION['grupo_id'] = 1;
+        $_SESSION['usuario_id'] = 2;
+        $_GET['session_id'] = '1';
+
+
+        $inm = new _com_cliente();
+        $inm = new liberator($inm);
+
+        $del = (new base_test())->del_com_cliente(link: $this->link);
+        if(errores::$error){
+            $error = (new errores())->error(mensaje: 'Error al del cliente',data:  $del);
+            print_r($error);
+            exit;
+        }
+
+        $alta = (new base_test())->alta_com_cliente(link: $this->link);
+        if(errores::$error){
+            $error = (new errores())->error(mensaje: 'Error al alta cliente',data:  $alta);
+            print_r($error);
+            exit;
+        }
+
+        $registro_entrada = array();
+        $link = $this->link;
+        $existe_cliente = true;
+        $filtro = array();
+        $filtro['com_cliente.id'] = 1;
+
+        $registro_entrada['rfc'] = 'AAA880202A01';
+        $registro_entrada['dp_calle_pertenece_id'] = '1';
+        $registro_entrada['numero_exterior'] = '1';
+        $registro_entrada['lada_com'] = '1';
+        $registro_entrada['numero_com'] = '1';
+        $registro_entrada['cat_sat_regimen_fiscal_id'] = '601';
+        $registro_entrada['cat_sat_moneda_id'] = '1';
+        $registro_entrada['cat_sat_forma_pago_id'] = '1';
+        $registro_entrada['cat_sat_metodo_pago_id'] = '1';
+        $registro_entrada['cat_sat_uso_cfdi_id'] = '1';
+        $registro_entrada['com_tipo_cliente_id'] = '1';
+        $registro_entrada['cat_sat_tipo_persona_id'] = '4';
+        $registro_entrada['nombre'] = '1';
+        $registro_entrada['apellido_paterno'] = '1';
+
+
+
+        $resultado = $inm->result_com_cliente($existe_cliente, $filtro, $link, $registro_entrada);
+        $this->assertIsObject($resultado);
+        $this->assertNotTrue(errores::$error);
+        $this->assertEquals(1,$resultado->registro_id);
+
+        errores::$error = false;
+
+        $del = (new base_test())->del_com_cliente(link: $this->link);
+        if(errores::$error){
+            $error = (new errores())->error(mensaje: 'Error al del cliente',data:  $del);
+            print_r($error);
+            exit;
+        }
+
+        $registro_entrada = array();
+        $link = $this->link;
+        $filtro = array();
+        $existe_cliente = false;
+
+        $registro_entrada['rfc'] = 'AAA090909654';
+        $registro_entrada['dp_calle_pertenece_id'] = '1';
+        $registro_entrada['numero_exterior'] = '1';
+        $registro_entrada['lada_com'] = '1';
+        $registro_entrada['numero_com'] = '1';
+        $registro_entrada['cat_sat_regimen_fiscal_id'] = '601';
+        $registro_entrada['cat_sat_moneda_id'] = '1';
+        $registro_entrada['cat_sat_forma_pago_id'] = '1';
+        $registro_entrada['cat_sat_metodo_pago_id'] = '1';
+        $registro_entrada['cat_sat_uso_cfdi_id'] = '1';
+        $registro_entrada['com_tipo_cliente_id'] = '1';
+        $registro_entrada['cat_sat_tipo_persona_id'] = '4';
+        $registro_entrada['nombre'] = '1';
+        $registro_entrada['apellido_paterno'] = '1';
+
+        $filtro['com_cliente.id'] = 1;
+
+        $resultado = $inm->result_com_cliente($existe_cliente, $filtro, $link, $registro_entrada);
+        $this->assertIsObject($resultado);
+        $this->assertNotTrue(errores::$error);
+        $this->assertEquals("AAA090909654",$resultado->registro['com_cliente_rfc']);
+
+        errores::$error = false;
+    }
+
     public function test_row_com_cliente_ins(): void
     {
         errores::$error = false;

@@ -74,6 +74,7 @@
                                     <tr>
                                         <th>Total</th>
                                         <th><?php echo $controlador->n_opiniones_valor; ?></th>
+                                        <th>Promedio: <?php echo $controlador->monto_opinion_promedio; ?></th>
                                     </tr>
                                     </thead>
                                 </table>

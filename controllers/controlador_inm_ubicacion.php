@@ -29,6 +29,7 @@ class controlador_inm_ubicacion extends _ctl_base {
 
     public array $inm_opiniones_valor = array();
     public int $n_opiniones_valor = 0;
+    public float $monto_opinion_promedio = 0.0;
     public function __construct(PDO      $link, html $html = new \gamboamartin\template_1\html(),
                                 stdClass $paths_conf = new stdClass())
     {
@@ -665,6 +666,14 @@ class controlador_inm_ubicacion extends _ctl_base {
         $this->inm_opiniones_valor = $inm_opiniones_valor;
 
         $this->n_opiniones_valor = count($this->inm_opiniones_valor);
+
+        $monto_opinion_promedio = (new inm_ubicacion(link: $this->link))->monto_opinion_promedio(inm_ubicacion_id: $this->registro_id);
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al obtener promedio', data:  $monto_opinion_promedio,
+                header: $header,ws:  $ws);
+        }
+
+        $this->monto_opinion_promedio = $monto_opinion_promedio;
 
 
         return $r_modifica;

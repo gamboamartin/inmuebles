@@ -165,7 +165,7 @@ class inm_ubicacion extends _inm_ubicaciones {
         return $r_modifica_bd;
     }
 
-    private function monto_opinion_promedio(int $inm_ubicacion_id){
+    final public function monto_opinion_promedio(int $inm_ubicacion_id){
 
         $n_opiniones = $this->n_opiniones_valor(inm_ubicacion_id: $inm_ubicacion_id);
         if(errores::$error){
@@ -222,8 +222,6 @@ class inm_ubicacion extends _inm_ubicaciones {
         return $upd;
 
     }
-
-
 
     final public function ubicaciones_con_precio(string $etapa, int $inm_comprador_id, bool $todas = false){
 

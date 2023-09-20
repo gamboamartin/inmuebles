@@ -272,7 +272,14 @@ class _com_cliente{
         return $r_com_cliente;
     }
 
-    final public function inserta_inm_rel_comprador_com_cliente(int $com_cliente_id, int $inm_comprador_id, PDO $link){
+    /**
+     * @param int $com_cliente_id
+     * @param int $inm_comprador_id
+     * @param PDO $link
+     * @return array|stdClass
+     */
+    final public function inserta_inm_rel_comprador_com_cliente(int $com_cliente_id, int $inm_comprador_id, PDO $link): array|stdClass
+    {
         $inm_rel_comprador_com_cliente_ins = $this->inm_rel_com_cliente_ins(com_cliente_id: $com_cliente_id,
             inm_comprador_id: $inm_comprador_id);
         if (errores::$error) {
@@ -425,6 +432,7 @@ class _com_cliente{
      * @param PDO $link conexion a la base de datos
      * @param array $registro_entrada registro de entrada de comprador
      * @return array|stdClass
+     * @version 2.30.0
      */
     private function result_com_cliente(bool $existe_cliente, array $filtro, PDO $link,
                                         array $registro_entrada): array|stdClass
@@ -432,6 +440,13 @@ class _com_cliente{
         $valida = $this->valida_base_com(registro_entrada: $registro_entrada);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al validar registro_entrada',data:  $valida);
+        }
+        if(count($filtro) === 0){
+            return $this->error->error(mensaje: 'Error filtro esta vacio', data: $filtro);
+        }
+        $valida = $this->valida_data_result_cliente(registro_entrada: $registro_entrada);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al validar registro',data:  $valida);
         }
 
         if(!$existe_cliente) {
