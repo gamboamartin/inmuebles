@@ -13,6 +13,7 @@ use gamboamartin\errores\errores;
 use gamboamartin\inmuebles\html\inm_comprador_html;
 use gamboamartin\inmuebles\html\inm_ubicacion_html;
 use gamboamartin\inmuebles\html\inm_valuador_html;
+use gamboamartin\inmuebles\models\inm_costo;
 use gamboamartin\inmuebles\models\inm_rel_ubi_comp;
 use gamboamartin\inmuebles\models\inm_ubicacion;
 use gamboamartin\system\_ctl_base;
@@ -30,6 +31,8 @@ class controlador_inm_ubicacion extends _ctl_base {
     public array $inm_opiniones_valor = array();
     public int $n_opiniones_valor = 0;
     public float $monto_opinion_promedio = 0.0;
+
+    public array $inm_costos = array();
     public function __construct(PDO      $link, html $html = new \gamboamartin\template_1\html(),
                                 stdClass $paths_conf = new stdClass())
     {
@@ -446,62 +449,12 @@ class controlador_inm_ubicacion extends _ctl_base {
             return $this->retorno_error(mensaje: 'Error al obtener inputs_hidden',data:  $inputs, header: $header,ws:  $ws);
         }
 
-        $inm_valuador_id = (new inm_valuador_html(html: $this->html_base))->select_inm_valuador_id(cols: 12,
-            con_registros:  true,id_selected:  -1,link:  $this->link);
-
+        $r_inm_costos = (new inm_costo(link: $this->link))->filtro_and(filtro: array('inm_ubicacion.id'=>$this->registro_id));
         if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al obtener inm_valuador_id',data:  $inm_valuador_id, header: $header,ws:  $ws);
+            return $this->retorno_error(mensaje: 'Error al obtener r_inm_costos',data:  $r_inm_costos, header: $header,ws:  $ws);
         }
 
-        $this->inputs->inm_valuador_id = $inm_valuador_id;
-
-        $monto_resultado = $this->html->input_monto(cols: 12,row_upd:  new stdClass(),value_vacio:  false,
-            name: 'monto_resultado',place_holder: 'Monto Resultado');
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al obtener monto_resultado',data:  $monto_resultado, header: $header,ws:  $ws);
-        }
-
-        $this->inputs->monto_resultado = $monto_resultado;
-
-        $fecha = $this->html->input_fecha(cols: 12,row_upd:  new stdClass(),value_vacio:  false);
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al obtener fecha',data:  $fecha, header: $header,ws:  $ws);
-        }
-
-        $this->inputs->fecha = $fecha;
-
-        $costo = $this->html->input_monto(cols: 12,row_upd:  new stdClass(),value_vacio:  false,name: 'costo',
-            place_holder: 'Costo de opinion');
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al obtener monto_resultado',data:  $monto_resultado, header: $header,ws:  $ws);
-        }
-
-        $this->inputs->costo = $costo;
-
-
-        $link_opinion_valor_alta_bd = $this->obj_link->link_alta_bd(link: $this->link,seccion: 'inm_opinion_valor');
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al obtener link_opinion_valor_lata_bd',
-                data:  $link_opinion_valor_alta_bd, header: $header,ws:  $ws);
-        }
-        $this->link_opinion_valor_alta_bd = $link_opinion_valor_alta_bd;
-
-        $inm_opiniones_valor = (new inm_ubicacion(link: $this->link))->opiniones_valor(inm_ubicacion_id: $this->registro_id);
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al obtener inm_opiniones_valor', data:  $inm_opiniones_valor,
-                header: $header,ws:  $ws);
-        }
-        $this->inm_opiniones_valor = $inm_opiniones_valor;
-
-        $this->n_opiniones_valor = count($this->inm_opiniones_valor);
-
-        $monto_opinion_promedio = (new inm_ubicacion(link: $this->link))->monto_opinion_promedio(inm_ubicacion_id: $this->registro_id);
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al obtener promedio', data:  $monto_opinion_promedio,
-                header: $header,ws:  $ws);
-        }
-
-        $this->monto_opinion_promedio = $monto_opinion_promedio;
+        $this->inm_costos = $r_inm_costos->registros;
 
 
         return $r_modifica;

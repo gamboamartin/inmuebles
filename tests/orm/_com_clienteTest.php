@@ -584,6 +584,34 @@ class _com_clienteTest extends test {
         errores::$error = false;
     }
 
+    public function test_modifica_com_cliente(): void
+    {
+        errores::$error = false;
+
+        $_GET['seccion'] = 'inm_producto_infonavit';
+        $_GET['accion'] = 'lista';
+        $_SESSION['grupo_id'] = 1;
+        $_SESSION['usuario_id'] = 2;
+        $_GET['session_id'] = '1';
+
+
+        $inm = new _com_cliente();
+        $inm = new liberator($inm);
+
+
+        $link = $this->link;
+
+        $inm_comprador = new stdClass();
+        $inm_comprador->inm_comprador_nombre = 'Z';
+        $inm_comprador->inm_comprador_apellido_paterno = 'P';
+        $inm_comprador->inm_comprador_id = 1;
+        $resultado = $inm->modifica_com_cliente($inm_comprador, $link);
+        $this->assertIsObject($resultado);
+        $this->assertNotTrue(errores::$error);
+        $this->assertEquals('Z P',$resultado->registro_actualizado->com_cliente_razon_social);
+        errores::$error = false;
+    }
+
     public function test_numero_interior(): void
     {
         errores::$error = false;

@@ -31,10 +31,11 @@ class _co_acreditado{
     }
 
     /**
-     * @param string $campo_co_acreditado
-     * @param array $inm_co_acreditado_ins
-     * @param string $key_co_acreditado
-     * @param array $registro
+     * Asigna un campo para su alta
+     * @param string $campo_co_acreditado Campo  a integrar
+     * @param array $inm_co_acreditado_ins Registro previo cargado
+     * @param string $key_co_acreditado Key a integrar
+     * @param array $registro registro de comprador modifica
      * @return array
      */
     private function asigna_campo_co_acreditado(string $campo_co_acreditado, array $inm_co_acreditado_ins,
