@@ -101,8 +101,20 @@ class _alta_comprador{
         return $registro;
     }
 
+    /**
+     * Inserta una etapa proceso de un comprador
+     * @param string $accion Accion de etapa
+     * @param string $etapa Etapa
+     * @param int $inm_comprador_id Id de comprador
+     * @param PDO $link Conexion a la base de datos
+     * @param string $pr_proceso_descripcion Descripcion de proceso
+     * @param string $tabla Entidad de ejecucion
+     * @return array|stdClass
+     */
     private function inm_comprador_etapa_alta(string $accion, string $etapa, int $inm_comprador_id, PDO $link,
-                                              string $pr_proceso_descripcion, string $tabla){
+                                              string $pr_proceso_descripcion, string $tabla): array|stdClass
+    {
+
         $pr_etapa_proceso = $this->pr_etapa_proceso(accion: $accion, etapa: $etapa, link: $link,
             pr_proceso_descripcion: $pr_proceso_descripcion, tabla: $tabla);
         if (errores::$error) {
@@ -125,12 +137,23 @@ class _alta_comprador{
     }
 
     /**
-     * @param int $inm_comprador_id
-     * @param array $pr_etapa_proceso
+     * Genera un registro para insersion de comprador etapa
+     * @param int $inm_comprador_id Id de comprador
+     * @param array $pr_etapa_proceso datos de proceso
      * @return array
+     * @version 2.47.0
      */
     private function inm_comprador_etapa_ins(int $inm_comprador_id, array $pr_etapa_proceso): array
     {
+        $keys = array('pr_etapa_proceso_id');
+        $valida = $this->validacion->valida_ids(keys: $keys, registro: $pr_etapa_proceso);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al validar pr_etapa_proceso', data: $valida);
+        }
+        if($inm_comprador_id <= 0){
+            return $this->error->error(mensaje: 'Error inm_comprador_id debe ser mayor a 0', data: $inm_comprador_id);
+        }
+
         $inm_comprador_etapa_ins['pr_etapa_proceso_id'] = $pr_etapa_proceso['pr_etapa_proceso_id'];
         $inm_comprador_etapa_ins['inm_comprador_id'] = $inm_comprador_id;
         $inm_comprador_etapa_ins['fecha'] = date('Y-m-d');
@@ -339,7 +362,8 @@ class _alta_comprador{
         }
 
         $r_inm_comprador_etapa = $this->inm_comprador_etapa_alta(accion: $accion, etapa: $etapa,
-            inm_comprador_id: $inm_comprador_id, link: $link, pr_proceso_descripcion: $pr_proceso_descripcion, tabla: $tabla);
+            inm_comprador_id: $inm_comprador_id, link: $link, pr_proceso_descripcion: $pr_proceso_descripcion,
+            tabla: $tabla);
         if (errores::$error) {
             return $this->error->error(mensaje: 'Error al insertar etapa', data: $r_inm_comprador_etapa);
         }
@@ -359,6 +383,7 @@ class _alta_comprador{
      * @param string $pr_proceso_descripcion Descripcion del proceso parent
      * @param string $tabla tabla de aplicacion
      * @return array
+     * @version 2.47.0
      */
     private function pr_etapa_proceso(string $accion, string $etapa, PDO $link,
                                       string $pr_proceso_descripcion, string $tabla): array

@@ -141,6 +141,34 @@ class _alta_compradorTest extends test {
         errores::$error = false;
     }
 
+    public function test_inm_comprador_etapa_ins(): void
+    {
+        errores::$error = false;
+
+        $_GET['seccion'] = 'inm_producto_infonavit';
+        $_GET['accion'] = 'lista';
+        $_SESSION['grupo_id'] = 1;
+        $_SESSION['usuario_id'] = 2;
+        $_GET['session_id'] = '1';
+
+        $inm = new _alta_comprador();
+        $inm = new liberator($inm);
+
+
+        $inm_comprador_id = 1;
+        $pr_etapa_proceso = array();
+        $pr_etapa_proceso['pr_etapa_proceso_id'] = 1;
+
+        $resultado = $inm->inm_comprador_etapa_ins($inm_comprador_id, $pr_etapa_proceso);
+        $this->assertIsArray($resultado);
+        $this->assertNotTrue(errores::$error);
+        $this->assertEquals('1',$resultado['pr_etapa_proceso_id']);
+        $this->assertEquals('1',$resultado['inm_comprador_id']);
+        $this->assertEquals(date('Y-m-d'),$resultado['fecha']);
+        errores::$error = false;
+    }
+
+
     public function test_inserta_sub_proceso(): void
     {
         errores::$error = false;
