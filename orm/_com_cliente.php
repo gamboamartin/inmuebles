@@ -22,9 +22,13 @@ class _com_cliente{
      * @param int $inm_comprador_id Comprador ligado a cliente
      * @param PDO $link Conexion a la base de datos
      * @return array|stdClass
+     * @version 2.63.0
      */
     private function actualiza_com_cliente(array $com_cliente_upd, int $inm_comprador_id, PDO $link): array|stdClass
     {
+        if($inm_comprador_id <= 0){
+            return $this->error->error(mensaje: 'Error inm_comprador_id es menor a 0',data:  $inm_comprador_id);
+        }
         $com_cliente_id = $this->com_cliente_id(inm_comprador_id: $inm_comprador_id,link: $link);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al obtener com_cliente_id',data:  $com_cliente_id);
@@ -449,8 +453,9 @@ class _com_cliente{
     }
 
     /**
-     * @param stdClass $inm_comprador
-     * @param PDO $link
+     * Modifica los datos de un cliente relacionado con el comprador
+     * @param stdClass $inm_comprador Registro de comprador
+     * @param PDO $link Conexion de base de datos
      * @return array|stdClass
      */
     final public function modifica_com_cliente(stdClass $inm_comprador, PDO $link): array|stdClass
