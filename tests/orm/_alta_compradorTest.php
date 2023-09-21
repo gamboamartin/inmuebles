@@ -450,6 +450,14 @@ class _alta_compradorTest extends test {
         $_SESSION['usuario_id'] = 2;
         $_GET['session_id'] = '1';
 
+        $del = (new base_test())->del_inm_comprador_proceso(link: $this->link);
+        if(errores::$error){
+            $error = (new errores())->error(mensaje: 'Error al eliminar',data:  $del);
+            print_r($error);
+            exit;
+        }
+
+
         $inm = new _alta_comprador();
         $inm = new liberator($inm);
 
@@ -460,6 +468,7 @@ class _alta_compradorTest extends test {
         $pr_proceso_descripcion = 'INMOBILIARIA CLIENTES';
         $tabla = 'inm_comprador';
         $resultado = $inm->sub_proceso($inm_comprador_id, $link, $pr_proceso_descripcion, $pr_sub_proceso_descripcion, $tabla);
+       // print_r($resultado);exit;
         $this->assertIsArray($resultado);
         $this->assertNotTrue(errores::$error);
 
