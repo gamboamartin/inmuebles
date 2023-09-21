@@ -407,9 +407,16 @@ class inm_comprador extends _modelo_parent{
      * @param stdClass $data_upd Datos de upd
      * @param int $id Id de comprador
      * @return array|stdClass
+     * @version 2.58.0
      */
     private function result_upd_post(stdClass $data_upd, int $id): array|stdClass
     {
+        if($id <= 0){
+            return $this->error->error(mensaje: 'Error id debe ser mayor a 0',data:  $id);
+        }
+        if(!isset($data_upd->aplica_upd_posterior)){
+            return $this->error->error(mensaje: 'Error $data_upd->aplica_upd_posterior no existe',data:  $data_upd);
+        }
         $r_modifica_post = new stdClass();
         if($data_upd->aplica_upd_posterior){
 

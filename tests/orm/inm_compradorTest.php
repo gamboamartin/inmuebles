@@ -435,6 +435,41 @@ class inm_compradorTest extends test {
         errores::$error = false;
     }
 
+    public function test_result_upd_post(): void
+    {
+        errores::$error = false;
+
+        $_GET['seccion'] = 'inm_producto_infonavit';
+        $_GET['accion'] = 'lista';
+        $_SESSION['grupo_id'] = 1;
+        $_SESSION['usuario_id'] = 2;
+        $_GET['session_id'] = '1';
+
+        $inm = new inm_comprador(link: $this->link);
+        $inm = new liberator($inm);
+
+
+
+        $data_upd = new stdClass();
+        $data_upd->aplica_upd_posterior = false;
+        $id = 1;
+
+        $resultado = $inm->result_upd_post($data_upd, $id);
+        $this->assertIsObject($resultado);
+        $this->assertNotTrue(errores::$error);
+        errores::$error = false;
+
+        $data_upd = new stdClass();
+        $data_upd->aplica_upd_posterior = true;
+        $id = 1;
+
+        $resultado = $inm->result_upd_post($data_upd, $id);
+        $this->assertIsObject($resultado);
+        $this->assertNotTrue(errores::$error);
+        $this->assertEquals(1,$resultado->registro_id);
+        errores::$error = false;
+    }
+
     public function test_upd_post(): void
     {
         errores::$error = false;

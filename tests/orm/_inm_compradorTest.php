@@ -314,6 +314,7 @@ class _inm_compradorTest extends test {
         errores::$error = false;
     }
 
+
     public function test_row_upd_base(): void
     {
         errores::$error = false;
