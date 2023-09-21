@@ -71,6 +71,59 @@ class _com_clienteTest extends test {
         $this->assertEquals('v',$resultado['telefono']);
         errores::$error = false;
     }
+
+    public function test_com_cliente_id(): void
+    {
+        errores::$error = false;
+
+        $_GET['seccion'] = 'inm_producto_infonavit';
+        $_GET['accion'] = 'lista';
+        $_SESSION['grupo_id'] = 1;
+        $_SESSION['usuario_id'] = 2;
+        $_GET['session_id'] = '1';
+
+        $inm = new _com_cliente();
+        $inm = new liberator($inm);
+
+        $del = (new base_test())->del_com_cliente(link: $this->link);
+        if(errores::$error){
+            $error = (new errores())->error(mensaje: 'Error al eliminar',data:  $del);
+            print_r($error);
+            exit;
+        }
+        $del = (new base_test())->del_inm_comprador(link: $this->link);
+        if(errores::$error){
+            $error = (new errores())->error(mensaje: 'Error al eliminar',data:  $del);
+            print_r($error);
+            exit;
+        }
+
+
+        $inm_comprador_id = 1;
+        $link = $this->link;
+
+        $resultado = $inm->com_cliente_id($inm_comprador_id, $link);
+        $this->assertIsArray($resultado);
+        $this->assertTrue(errores::$error);
+        $this->assertEquals("Error inm_rel_comprador_com_cliente no existe",$resultado['mensaje_limpio']);
+        errores::$error = false;
+
+        $inm_comprador_id = 1;
+        $link = $this->link;
+
+        $alta = (new base_test())->alta_inm_comprador(link: $this->link);
+        if(errores::$error){
+            $error = (new errores())->error(mensaje: 'Error al alta',data:  $alta);
+            print_r($error);
+            exit;
+        }
+
+        $resultado = $inm->com_cliente_id($inm_comprador_id, $link);
+
+        $this->assertIsInt($resultado);
+        $this->assertNotTrue(errores::$error);
+        errores::$error = false;
+    }
     public function test_com_cliente_id_filtrado(): void
     {
         errores::$error = false;
@@ -85,6 +138,20 @@ class _com_clienteTest extends test {
         $inm = new _com_cliente();
         $inm = new liberator($inm);
 
+        $del = (new base_test())->del_com_cliente(link: $this->link);
+        if(errores::$error){
+            $error = (new errores())->error(mensaje: 'Error al del',data:  $del);
+            print_r($error);
+            exit;
+        }
+
+
+        $alta = (new base_test())->alta_com_cliente(link: $this->link);
+        if(errores::$error){
+            $error = (new errores())->error(mensaje: 'Error al alta',data:  $alta);
+            print_r($error);
+            exit;
+        }
 
         $link = $this->link;
         $filtro = array();

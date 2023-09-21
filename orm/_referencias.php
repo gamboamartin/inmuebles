@@ -13,6 +13,10 @@ class _referencias{
         $this->error = new errores();
     }
 
+    /**
+     * @param array $inm_referencia_ins
+     * @return bool
+     */
     private function aplica_alta_referencia(array $inm_referencia_ins): bool
     {
         $aplica_alta_referencia = false;
@@ -85,7 +89,14 @@ class _referencias{
         return $data_referencias;
     }
 
-    private function inm_referencia_ins(int $indice, int $inm_comprador_id,array $registro){
+    /**
+     * @param int $indice
+     * @param int $inm_comprador_id
+     * @param array $registro
+     * @return array
+     */
+    private function inm_referencia_ins(int $indice, int $inm_comprador_id,array $registro): array
+    {
         $keys_referencia = array('apellido_paterno','nombre', 'lada', 'numero','celular','inm_comprador_id',
             'dp_calle_pertenece_id','numero_dom');
 

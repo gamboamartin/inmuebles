@@ -17,9 +17,10 @@ class _com_cliente{
     }
 
     /**
-     * @param array $com_cliente_upd
-     * @param int $inm_comprador_id
-     * @param PDO $link
+     * Actualiza un registro de tipo cliente
+     * @param array $com_cliente_upd Registro con datos a actualizar
+     * @param int $inm_comprador_id Comprador ligado a cliente
+     * @param PDO $link Conexion a la base de datos
      * @return array|stdClass
      */
     private function actualiza_com_cliente(array $com_cliente_upd, int $inm_comprador_id, PDO $link): array|stdClass
@@ -41,9 +42,13 @@ class _com_cliente{
      * @param int $inm_comprador_id Id de comprador
      * @param PDO $link Conexion a la base de datos
      * @return array|int
+     * @version 2.62.0
      */
-    private  function com_cliente_id(int $inm_comprador_id, PDO $link): int|array
+    private function com_cliente_id(int $inm_comprador_id, PDO $link): int|array
     {
+        if($inm_comprador_id <=0 ){
+            return $this->error->error(mensaje: 'Error inm_comprador_id es menor a 0',data:  $inm_comprador_id);
+        }
         $filtro['inm_comprador.id'] = $inm_comprador_id;
         $r_im_rel_comprador_com_cliente = (new inm_rel_comprador_com_cliente(link: $link))->filtro_and(filtro: $filtro);
         if(errores::$error){
@@ -443,7 +448,13 @@ class _com_cliente{
             'cat_sat_metodo_pago_id','cat_sat_uso_cfdi_id','cat_sat_tipo_persona_id');
     }
 
-    final public function modifica_com_cliente(stdClass $inm_comprador, PDO $link){
+    /**
+     * @param stdClass $inm_comprador
+     * @param PDO $link
+     * @return array|stdClass
+     */
+    final public function modifica_com_cliente(stdClass $inm_comprador, PDO $link): array|stdClass
+    {
         $com_cliente_upd = $this->com_cliente_upd(registro: $inm_comprador);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al obtener com_cliente_upd',data:  $com_cliente_upd);

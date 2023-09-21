@@ -11,6 +11,11 @@ class _co_acreditado{
     public function __construct(){
         $this->error = new errores();
     }
+
+    /**
+     * @param array $inm_co_acreditado_ins
+     * @return bool
+     */
     private function aplica_alta_co_acreditado(array $inm_co_acreditado_ins): bool
     {
         $aplica_alta_co_acreditado = false;
@@ -25,6 +30,13 @@ class _co_acreditado{
         return $aplica_alta_co_acreditado;
     }
 
+    /**
+     * @param string $campo_co_acreditado
+     * @param array $inm_co_acreditado_ins
+     * @param string $key_co_acreditado
+     * @param array $registro
+     * @return array
+     */
     private function asigna_campo_co_acreditado(string $campo_co_acreditado, array $inm_co_acreditado_ins,
                                                 string $key_co_acreditado, array $registro): array
     {
@@ -34,6 +46,10 @@ class _co_acreditado{
 
     }
 
+    /**
+     * @param array $co_acreditados
+     * @return stdClass
+     */
     private function data_co_acreditado(array $co_acreditados): stdClass
     {
         $existe_co_acreditado = false;
@@ -51,7 +67,13 @@ class _co_acreditado{
         return $data;
     }
 
-    private function get_data_co_acreditado(int $inm_comprador_id, inm_comprador $modelo_inm_comprador){
+    /**
+     * @param int $inm_comprador_id
+     * @param inm_comprador $modelo_inm_comprador
+     * @return array|stdClass
+     */
+    private function get_data_co_acreditado(int $inm_comprador_id, inm_comprador $modelo_inm_comprador): array|stdClass
+    {
         $co_acreditados = $modelo_inm_comprador->get_co_acreditados(inm_comprador_id: $inm_comprador_id);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al obtener co_acreditados',data:  $co_acreditados);
@@ -64,7 +86,12 @@ class _co_acreditado{
         return $data_co_acreditado;
     }
 
-    private function inm_co_acreditado_ins(array $registro){
+    /**
+     * @param array $registro
+     * @return array
+     */
+    private function inm_co_acreditado_ins(array $registro): array
+    {
         $keys_co_acreditado = array('nss','curp','rfc', 'apellido_paterno','apellido_materno','nombre', 'lada',
             'numero','celular','correo','genero','nombre_empresa_patron','nrp','lada_nep','numero_nep');
 
@@ -79,6 +106,11 @@ class _co_acreditado{
         return $inm_co_acreditado_ins;
     }
 
+    /**
+     * @param int $inm_co_acreditado_id
+     * @param int $inm_comprador_id
+     * @return array
+     */
     private function inm_rel_co_acreditado_ins(int $inm_co_acreditado_id, int $inm_comprador_id): array
     {
         $inm_rel_co_acred_ins['inm_co_acreditado_id'] = $inm_co_acreditado_id;
@@ -86,7 +118,14 @@ class _co_acreditado{
         return $inm_rel_co_acred_ins;
     }
 
-    private function inserta_data_co_acreditado(array $inm_co_acreditado_ins, int $inm_comprador_id, PDO $link){
+    /**
+     * @param array $inm_co_acreditado_ins
+     * @param int $inm_comprador_id
+     * @param PDO $link
+     * @return array|stdClass
+     */
+    private function inserta_data_co_acreditado(array $inm_co_acreditado_ins, int $inm_comprador_id, PDO $link): array|stdClass
+    {
         $alta_inm_co_acreditado = (new inm_co_acreditado(link: $link))->alta_registro(registro: $inm_co_acreditado_ins);
         if (errores::$error) {
             return $this->error->error(mensaje: 'Error al insertar co_acreditado', data: $alta_inm_co_acreditado);
@@ -111,7 +150,15 @@ class _co_acreditado{
     }
 
 
-    private function integra_campo_co_acreditado(string $campo_co_acreditado, array $inm_co_acreditado_ins, string $key_co_acreditado, array $registro){
+    /**
+     * @param string $campo_co_acreditado
+     * @param array $inm_co_acreditado_ins
+     * @param string $key_co_acreditado
+     * @param array $registro
+     * @return array
+     */
+    private function integra_campo_co_acreditado(string $campo_co_acreditado, array $inm_co_acreditado_ins, string $key_co_acreditado, array $registro): array
+    {
         $value = trim($registro[$key_co_acreditado]);
         if($value !=='') {
             $inm_co_acreditado_ins = $this->asigna_campo_co_acreditado(campo_co_acreditado: $campo_co_acreditado,
@@ -125,7 +172,14 @@ class _co_acreditado{
         return $inm_co_acreditado_ins;
     }
 
-    private function integra_value_co_acreditado(string $campo_co_acreditado, array $inm_co_acreditado_ins, array $registro){
+    /**
+     * @param string $campo_co_acreditado
+     * @param array $inm_co_acreditado_ins
+     * @param array $registro
+     * @return array
+     */
+    private function integra_value_co_acreditado(string $campo_co_acreditado, array $inm_co_acreditado_ins, array $registro): array
+    {
         $key_co_acreditado = 'inm_co_acreditado_'.$campo_co_acreditado;
         if(isset($registro[$key_co_acreditado])) {
             $inm_co_acreditado_ins = $this->integra_campo_co_acreditado(campo_co_acreditado: $campo_co_acreditado,
@@ -139,7 +193,14 @@ class _co_acreditado{
         return $inm_co_acreditado_ins;
     }
 
-    final public function operaciones_co_acreditado(int $inm_comprador_id, array $inm_comprador_upd, inm_comprador $modelo_inm_comprador){
+    /**
+     * @param int $inm_comprador_id
+     * @param array $inm_comprador_upd
+     * @param inm_comprador $modelo_inm_comprador
+     * @return array|stdClass
+     */
+    final public function operaciones_co_acreditado(int $inm_comprador_id, array $inm_comprador_upd, inm_comprador $modelo_inm_comprador): array|stdClass
+    {
 
         $result = new stdClass();
 
@@ -166,7 +227,14 @@ class _co_acreditado{
         return $result;
     }
 
-    private function transacciones_co_acreditado(array $inm_co_acreditado_ins, int $inm_comprador_id, inm_comprador $modelo_inm_comprador){
+    /**
+     * @param array $inm_co_acreditado_ins
+     * @param int $inm_comprador_id
+     * @param inm_comprador $modelo_inm_comprador
+     * @return array|stdClass
+     */
+    private function transacciones_co_acreditado(array $inm_co_acreditado_ins, int $inm_comprador_id, inm_comprador $modelo_inm_comprador): array|stdClass
+    {
 
         $data_result = new stdClass();
 
