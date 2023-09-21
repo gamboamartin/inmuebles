@@ -531,5 +531,139 @@ class _alta_compradorTest extends test {
         errores::$error = false;
     }
 
+    public function test_valida_transacciones(): void
+    {
+        errores::$error = false;
+
+        $_GET['seccion'] = 'inm_producto_infonavit';
+        $_GET['accion'] = 'lista';
+        $_SESSION['grupo_id'] = 1;
+        $_SESSION['usuario_id'] = 2;
+        $_GET['session_id'] = '1';
+
+        $inm = new _alta_comprador();
+        //$inm = new liberator($inm);
+
+
+
+        $inm_comprador_id = -1;
+        $registro_entrada = array();
+        $registro_entrada['rfc'] = 'A';
+        $registro_entrada['dp_calle_pertenece_id'] = 'A';
+        $registro_entrada['numero_exterior'] = 'A';
+        $registro_entrada['lada_com'] = 'A';
+        $registro_entrada['numero_com'] = 'A';
+        $registro_entrada['cat_sat_regimen_fiscal_id'] = 'A';
+        $registro_entrada['cat_sat_moneda_id'] = 'A';
+        $registro_entrada['cat_sat_forma_pago_id'] = 'A';
+        $registro_entrada['cat_sat_metodo_pago_id'] = 'A';
+        $registro_entrada['cat_sat_uso_cfdi_id'] = 'A';
+        $registro_entrada['com_tipo_cliente_id'] = 'A';
+        $registro_entrada['cat_sat_tipo_persona_id'] = 'A';
+
+
+        $resultado = $inm->valida_transacciones($inm_comprador_id, $registro_entrada);
+        $this->assertIsArray($resultado);
+        $this->assertTrue(errores::$error);
+        $this->assertEquals("Error al validar registro_entrada",$resultado['mensaje_limpio']);
+        errores::$error = false;
+
+        $inm_comprador_id = -1;
+        $registro_entrada = array();
+        $registro_entrada['rfc'] = 'A';
+        $registro_entrada['dp_calle_pertenece_id'] = '1';
+        $registro_entrada['numero_exterior'] = 'A';
+        $registro_entrada['lada_com'] = 'A';
+        $registro_entrada['numero_com'] = 'A';
+        $registro_entrada['cat_sat_regimen_fiscal_id'] = '1';
+        $registro_entrada['cat_sat_moneda_id'] = '1';
+        $registro_entrada['cat_sat_forma_pago_id'] = '1';
+        $registro_entrada['cat_sat_metodo_pago_id'] = '1';
+        $registro_entrada['cat_sat_uso_cfdi_id'] = '1';
+        $registro_entrada['com_tipo_cliente_id'] = '1';
+        $registro_entrada['cat_sat_tipo_persona_id'] = '1';
+
+
+        $resultado = $inm->valida_transacciones($inm_comprador_id, $registro_entrada);
+
+        $this->assertIsArray($resultado);
+        $this->assertTrue(errores::$error);
+        $this->assertEquals("Error al validar registro_entrada",$resultado['mensaje_limpio']);
+        errores::$error = false;
+
+        $inm_comprador_id = -1;
+        $registro_entrada = array();
+        $registro_entrada['rfc'] = 'A';
+        $registro_entrada['dp_calle_pertenece_id'] = '1';
+        $registro_entrada['numero_exterior'] = 'A';
+        $registro_entrada['lada_com'] = '123';
+        $registro_entrada['numero_com'] = '1234567';
+        $registro_entrada['cat_sat_regimen_fiscal_id'] = '1';
+        $registro_entrada['cat_sat_moneda_id'] = '1';
+        $registro_entrada['cat_sat_forma_pago_id'] = '1';
+        $registro_entrada['cat_sat_metodo_pago_id'] = '1';
+        $registro_entrada['cat_sat_uso_cfdi_id'] = '1';
+        $registro_entrada['com_tipo_cliente_id'] = '1';
+        $registro_entrada['cat_sat_tipo_persona_id'] = '1';
+
+
+        $resultado = $inm->valida_transacciones($inm_comprador_id, $registro_entrada);
+        $this->assertIsArray($resultado);
+        $this->assertTrue(errores::$error);
+        $this->assertEquals("Error al validar registro",$resultado['mensaje_limpio']);
+        errores::$error = false;
+
+        $inm_comprador_id = -1;
+        $registro_entrada = array();
+        $registro_entrada['rfc'] = 'A';
+        $registro_entrada['dp_calle_pertenece_id'] = '1';
+        $registro_entrada['numero_exterior'] = 'A';
+        $registro_entrada['lada_com'] = '123';
+        $registro_entrada['numero_com'] = '1234567';
+        $registro_entrada['cat_sat_regimen_fiscal_id'] = '1';
+        $registro_entrada['cat_sat_moneda_id'] = '1';
+        $registro_entrada['cat_sat_forma_pago_id'] = '1';
+        $registro_entrada['cat_sat_metodo_pago_id'] = '1';
+        $registro_entrada['cat_sat_uso_cfdi_id'] = '1';
+        $registro_entrada['com_tipo_cliente_id'] = '1';
+        $registro_entrada['cat_sat_tipo_persona_id'] = '1';
+        $registro_entrada['nombre'] = '1';
+        $registro_entrada['apellido_paterno'] = '1';
+
+
+        $resultado = $inm->valida_transacciones($inm_comprador_id, $registro_entrada);
+
+        $this->assertIsArray($resultado);
+        $this->assertTrue(errores::$error);
+        $this->assertEquals("Error inm_comprador_id debe ser mayor a 0",$resultado['mensaje_limpio']);
+        errores::$error = false;
+
+        $inm_comprador_id = 1;
+        $registro_entrada = array();
+        $registro_entrada['rfc'] = 'A';
+        $registro_entrada['dp_calle_pertenece_id'] = '1';
+        $registro_entrada['numero_exterior'] = 'A';
+        $registro_entrada['lada_com'] = '123';
+        $registro_entrada['numero_com'] = '1234567';
+        $registro_entrada['cat_sat_regimen_fiscal_id'] = '1';
+        $registro_entrada['cat_sat_moneda_id'] = '1';
+        $registro_entrada['cat_sat_forma_pago_id'] = '1';
+        $registro_entrada['cat_sat_metodo_pago_id'] = '1';
+        $registro_entrada['cat_sat_uso_cfdi_id'] = '1';
+        $registro_entrada['com_tipo_cliente_id'] = '1';
+        $registro_entrada['cat_sat_tipo_persona_id'] = '1';
+        $registro_entrada['nombre'] = '1';
+        $registro_entrada['apellido_paterno'] = '1';
+
+
+        $resultado = $inm->valida_transacciones($inm_comprador_id, $registro_entrada);
+
+        $this->assertIsBool($resultado);
+        $this->assertNotTrue(errores::$error);
+        $this->assertTrue($resultado);
+        errores::$error = false;
+
+    }
+
 }
 

@@ -127,6 +127,11 @@ class _alta_comprador{
         return $inm_comprador_etapa;
     }
 
+    /**
+     * @param int $inm_comprador_id
+     * @param array $pr_etapa_proceso
+     * @return array
+     */
     private function inm_comprador_etapa_ins(int $inm_comprador_id, array $pr_etapa_proceso): array
     {
         $inm_comprador_etapa_ins['pr_etapa_proceso_id'] = $pr_etapa_proceso['pr_etapa_proceso_id'];
@@ -293,6 +298,7 @@ class _alta_comprador{
      * @param string $etapa Etapa de proceso
      * @param int $inm_comprador_id Comprador id
      * @param PDO $link Conexion a la base de datos
+     * @param string $pr_proceso_descripcion Descripcion de proceso
      * @param array $registro_entrada Registro de tipo comprador
      * @param string $tabla Tabla de ejecucion
      * @return array|stdClass
@@ -348,7 +354,19 @@ class _alta_comprador{
         return $data;
     }
 
-    private function pr_etapa_proceso(string $accion, string $etapa, PDO $link, string $pr_proceso_descripcion, string $tabla){
+    /**
+     * Obtiene el proceso de ejecucion del comprador
+     * @param string $accion Accion a validar
+     * @param string $etapa Etapa a validar
+     * @param PDO $link Conexion a la base de datos
+     * @param string $pr_proceso_descripcion Descripcion del proceso parent
+     * @param string $tabla tabla de aplicacion
+     * @return array
+     */
+    private function pr_etapa_proceso(string $accion, string $etapa, PDO $link,
+                                      string $pr_proceso_descripcion, string $tabla): array
+    {
+
         $filtro = $this->filtro_etapa_proceso(accion: $accion, etapa: $etapa,
             pr_proceso_descripcion: $pr_proceso_descripcion, tabla: $tabla);
         if (errores::$error) {
@@ -523,9 +541,11 @@ class _alta_comprador{
     }
 
     /**
-     * @param int $inm_comprador_id
-     * @param array $registro_entrada
+     * Valida las transacciones de insersion de un comprador
+     * @param int $inm_comprador_id Identificador de comprador
+     * @param array $registro_entrada registro de comprador
      * @return array|true
+     * @version 2.44.0
      */
     final public function valida_transacciones(int $inm_comprador_id, array $registro_entrada): bool|array
     {
