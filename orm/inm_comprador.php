@@ -228,9 +228,14 @@ class inm_comprador extends _modelo_parent{
      *  inm_rel_ubi_comp, inm_comprador_proceso
      * @param int $id Id de registro
      * @return array|stdClass
+     * @version 2.51.0
      */
     public function elimina_bd(int $id): array|stdClass
     {
+        if($id <= 0){
+            return  $this->error->error(mensaje: 'El id no puede ser menor a 0 en '.$this->tabla, data: $id);
+        }
+
         $filtro['inm_comprador.id'] = $id;
         $del = (new inm_rel_comprador_com_cliente(link: $this->link))->elimina_con_filtro_and(filtro:$filtro);
         if(errores::$error){

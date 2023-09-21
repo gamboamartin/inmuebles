@@ -237,7 +237,48 @@ class inm_compradorTest extends test {
     }
 
 
+    public function test_elimina_bd(): void
+    {
+        errores::$error = false;
 
+        $_GET['seccion'] = 'inm_producto_infonavit';
+        $_GET['accion'] = 'lista';
+        $_SESSION['grupo_id'] = 1;
+        $_SESSION['usuario_id'] = 2;
+        $_GET['session_id'] = '1';
+
+
+
+        $inm = new inm_comprador(link: $this->link);
+        //$inm = new liberator($inm);
+
+        $id = 1;
+
+        $del = (new base_test())->del_inm_comprador(link: $this->link);
+        if(errores::$error){
+            $error = (new errores())->error(mensaje:'Error al eliminar', data: $del);
+            print_r($error);exit;
+        }
+
+        $resultado = $inm->elimina_bd(id: $id);
+        $this->assertIsArray($resultado);
+        $this->assertTrue(errores::$error);
+        $this->assertEquals("Error al eliminar registro de comprador",$resultado['mensaje_limpio']);
+
+        errores::$error = false;
+
+        $alta = (new base_test())->alta_inm_comprador(link: $this->link);
+        if(errores::$error){
+            $error = (new errores())->error(mensaje:'Error al alta', data: $alta);
+            print_r($error);exit;
+        }
+
+        $resultado = $inm->elimina_bd(id: $id);
+        $this->assertIsObject($resultado);
+        $this->assertNotTrue(errores::$error);
+        $this->assertEquals(1,$resultado->registro['inm_comprador_id']);
+        errores::$error = false;
+    }
 
 
     public function test_get_com_cliente(): void
