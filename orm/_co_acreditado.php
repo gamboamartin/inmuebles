@@ -170,7 +170,7 @@ class _co_acreditado{
      * @param array $registro Registro en proceso
      * @return array
      */
-    PUBLIC function integra_campo_co_acreditado(string $campo_co_acreditado, array $inm_co_acreditado_ins,
+    private function integra_campo_co_acreditado(string $campo_co_acreditado, array $inm_co_acreditado_ins,
                                                  string $key_co_acreditado, array $registro): array
     {
         $campo_co_acreditado = trim($campo_co_acreditado);
@@ -287,7 +287,17 @@ class _co_acreditado{
 
     }
 
-    private function valida_data_co_acreditado(string $campo_co_acreditado, string $key_co_acreditado, array $registro){
+    /**
+     * Valida que los elementos para integrar un campo de insersion en co acreditado sea valido
+     * @param string $campo_co_acreditado Campo de co_acreditado
+     * @param string $key_co_acreditado Key a integrar
+     * @param array $registro Registro en proceso
+     * @return array|true
+     * @version 2.67.0
+     */
+    private function valida_data_co_acreditado(string $campo_co_acreditado, string $key_co_acreditado,
+                                               array $registro): bool|array
+    {
         $campo_co_acreditado = trim($campo_co_acreditado);
         if($campo_co_acreditado === ''){
             return $this->error->error(mensaje: 'Error campo_co_acreditado esta vacio',data:  $campo_co_acreditado);

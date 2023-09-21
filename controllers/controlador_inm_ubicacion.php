@@ -458,6 +458,12 @@ class controlador_inm_ubicacion extends _ctl_base {
 
         $this->inm_costos = $r_inm_costos->registros;
 
+        $costo = (new inm_ubicacion(link: $this->link))->get_costo(inm_ubicacion_id: $this->registro_id);
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al obtener costo',data:  $costo, header: $header,ws:  $ws);
+        }
+        $this->costo = $costo;
+
 
         return $r_modifica;
     }

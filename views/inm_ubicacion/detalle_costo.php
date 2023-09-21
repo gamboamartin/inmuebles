@@ -75,8 +75,7 @@
                                     </tbody>
                                     <thead>
                                     <tr>
-                                        <th>Total</th>
-                                        <th><?php echo $controlador->costo; ?></th>
+                                        <th colspan="7">Total: <?php echo $controlador->costo; ?></th>
                                     </tr>
                                     </thead>
                                 </table>
