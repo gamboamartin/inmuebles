@@ -349,6 +349,16 @@ class base_test{
             }
         }
 
+        $filtro['inm_ubicacion.id'] = $inm_ubicacion_id;
+
+        $existe = (new inm_precio(link: $link))->existe(filtro: $filtro);
+        if(!$existe){
+            $alta = $this->alta_inm_precio(link: $link,inm_ubicacion_id: $inm_ubicacion_id);
+            if(errores::$error){
+                return (new errores())->error(mensaje: 'Error al insertar inm_comprador', data: $alta);
+            }
+        }
+
 
         $registro['id'] = $id;
         $registro['inm_comprador_id'] = $inm_comprador_id;

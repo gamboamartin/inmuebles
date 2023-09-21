@@ -180,9 +180,13 @@ class inm_ubicacion extends _inm_ubicaciones {
             return $this->error->error(mensaje: 'Error al obtener montos',data: $r_inm_opinion_valor);
         }
 
-        $total_montos = round($r_inm_opinion_valor['total_montos'],2);
 
-        return round($total_montos / $n_opiniones,2);
+        $total_montos = 0;
+        if($n_opiniones > 0){
+            $total_montos = round($r_inm_opinion_valor['total_montos'],2);
+        }
+
+        return round($total_montos ,2);
     }
 
     private function n_opiniones_valor(int $inm_ubicacion_id){
