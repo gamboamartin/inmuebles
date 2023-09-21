@@ -55,7 +55,7 @@ class inm_ubicacion extends _inm_ubicaciones {
         }
 
         $regenera = $this->regenera_data_opinion(
-            inm_ubicacion_id: $r_alta_bd->registro_puro->inm_ubicacion_id);
+            inm_ubicacion_id: $r_alta_bd->registro_puro->id);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al regenerar opinion de valor', data: $regenera);
         }
