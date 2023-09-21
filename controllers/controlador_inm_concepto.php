@@ -94,6 +94,12 @@ class controlador_inm_concepto extends _ctl_base {
         }
 
         $keys_selects = array();
+
+        $keys_selects = $this->key_select(cols:12, con_registros: true,filtro:  array(), key: 'inm_tipo_concepto_id',
+            keys_selects: $keys_selects, id_selected: $this->row_upd->inm_tipo_concepto_id, label: 'Tipo de Concepto');
+        if(errores::$error){
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        }
         $base = $this->base_upd(keys_selects: $keys_selects, params: array(),params_ajustados: array());
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al integrar base',data:  $base, header: $header,ws:  $ws);
@@ -109,8 +115,8 @@ class controlador_inm_concepto extends _ctl_base {
     private function init_datatable(): stdClass
     {
         $columns["inm_concepto_id"]["titulo"] = "Id";
-        $columns["inm_tipo_concepto_descripcion"]["titulo"] = "Descripcion";
-        $columns["inm_concepto_descripcion"]["titulo"] = "Descripcion";
+        $columns["inm_tipo_concepto_descripcion"]["titulo"] = "Tipo";
+        $columns["inm_concepto_descripcion"]["titulo"] = "Concepto";
 
 
         $filtro = array("inm_concepto.id","inm_tipo_concepto.descripcion",'inm_concepto.descripcion');

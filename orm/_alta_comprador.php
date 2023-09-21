@@ -526,6 +526,7 @@ class _alta_comprador{
      * @param string $pr_proceso_descripcion Proceso a validar
      * @param string $tabla Tabla de integracion
      * @return bool|array
+     * @version 2.46.0
      */
     private function valida_data_etapa(string $accion, string $etapa, string $pr_proceso_descripcion,
                                        string $tabla): bool|array

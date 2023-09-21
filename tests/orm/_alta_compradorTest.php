@@ -535,6 +535,77 @@ class _alta_compradorTest extends test {
         errores::$error = false;
     }
 
+    public function test_valida_data_etapa(): void
+    {
+        errores::$error = false;
+
+        $_GET['seccion'] = 'inm_producto_infonavit';
+        $_GET['accion'] = 'lista';
+        $_SESSION['grupo_id'] = 1;
+        $_SESSION['usuario_id'] = 2;
+        $_GET['session_id'] = '1';
+
+        $inm = new _alta_comprador();
+        $inm = new liberator($inm);
+
+        $accion = '';
+        $etapa = '';
+        $pr_proceso_descripcion = '';
+        $tabla = '';
+
+        $resultado = $inm->valida_data_etapa($accion, $etapa, $pr_proceso_descripcion, $tabla);
+        $this->assertIsArray($resultado);
+        $this->assertTrue(errores::$error);
+        $this->assertEquals("Error accion esta vacia",$resultado['mensaje_limpio']);
+        errores::$error = false;
+
+        $accion = 'a';
+        $etapa = '';
+        $pr_proceso_descripcion = '';
+        $tabla = '';
+
+        $resultado = $inm->valida_data_etapa($accion, $etapa, $pr_proceso_descripcion, $tabla);
+
+        $this->assertIsArray($resultado);
+        $this->assertTrue(errores::$error);
+        $this->assertEquals("Error etapa esta vacia",$resultado['mensaje_limpio']);
+        errores::$error = false;
+
+        $accion = 'a';
+        $etapa = 'b';
+        $pr_proceso_descripcion = '';
+        $tabla = '';
+
+        $resultado = $inm->valida_data_etapa($accion, $etapa, $pr_proceso_descripcion, $tabla);
+
+        $this->assertIsArray($resultado);
+        $this->assertTrue(errores::$error);
+        $this->assertEquals("Error pr_proceso_descripcion esta vacia",$resultado['mensaje_limpio']);
+
+        errores::$error = false;
+        $accion = 'a';
+        $etapa = 'b';
+        $pr_proceso_descripcion = 'c';
+        $tabla = '';
+
+        $resultado = $inm->valida_data_etapa($accion, $etapa, $pr_proceso_descripcion, $tabla);
+        $this->assertIsArray($resultado);
+        $this->assertTrue(errores::$error);
+        $this->assertEquals("Error tabla esta vacia",$resultado['mensaje_limpio']);
+        errores::$error = false;
+
+        $accion = 'a';
+        $etapa = 'b';
+        $pr_proceso_descripcion = 'c';
+        $tabla = 'd';
+
+        $resultado = $inm->valida_data_etapa($accion, $etapa, $pr_proceso_descripcion, $tabla);
+        $this->assertIsBool($resultado);
+        $this->assertNotTrue(errores::$error);
+        $this->assertTrue($resultado);
+        errores::$error = false;
+    }
+
     public function test_valida_sub_proceso(): void
     {
         errores::$error = false;
