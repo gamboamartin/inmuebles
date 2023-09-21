@@ -332,7 +332,14 @@ class inm_comprador extends _modelo_parent{
 
     }
 
-    final public function get_referencias(int $inm_comprador_id){
+    /**
+     * Obtiene las referencias de un comprador
+     * @param int $inm_comprador_id Comprador id
+     * @return array
+     * @version 2.53.0
+     */
+    final public function get_referencias(int $inm_comprador_id): array
+    {
         if($inm_comprador_id <= 0){
             return $this->error->error(mensaje: 'Error inm_comprador_id debe ser mayor a 0',data:  $inm_comprador_id);
         }
@@ -370,7 +377,14 @@ class inm_comprador extends _modelo_parent{
     }
 
 
-    final public function upd_post(int $id, stdClass $r_modifica){
+    /**
+     * Ejecuta transacciones posteriores a la actualizacion de un comprador
+     * @param int $id Id de comprador
+     * @param stdClass $r_modifica resultado de modificacion
+     * @return array|stdClass
+     */
+    final public function upd_post(int $id, stdClass $r_modifica): array|stdClass
+    {
         $data_upd = (new _base_comprador())->data_upd_post(r_modifica: $r_modifica);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al obtener datos',data:  $data_upd);

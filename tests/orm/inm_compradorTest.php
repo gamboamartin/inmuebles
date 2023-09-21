@@ -366,6 +366,50 @@ class inm_compradorTest extends test {
         errores::$error = false;
     }
 
+    public function test_get_referencias(): void
+    {
+        errores::$error = false;
+
+        $_GET['seccion'] = 'inm_producto_infonavit';
+        $_GET['accion'] = 'lista';
+        $_SESSION['grupo_id'] = 1;
+        $_SESSION['usuario_id'] = 2;
+        $_GET['session_id'] = '1';
+
+        $inm = new inm_comprador(link: $this->link);
+        //$inm = new liberator($inm);
+
+
+        $del = (new base_test())->del_inm_referencia(link: $this->link);
+        if(errores::$error){
+            $error = (new errores())->error(mensaje:'Error al eliminar', data: $del);
+            print_r($error);exit;
+        }
+
+
+        $inm_comprador_id = 1;
+        $resultado = $inm->get_referencias($inm_comprador_id);
+        $this->assertIsArray($resultado);
+        $this->assertNotTrue(errores::$error);
+        $this->assertEmpty($resultado);
+
+
+        errores::$error = false;
+
+        $alta = (new base_test())->alta_inm_referencia(link: $this->link);
+        if(errores::$error){
+            $error = (new errores())->error(mensaje:'Error al alta', data: $alta);
+            print_r($error);exit;
+        }
+
+        $inm_comprador_id = 1;
+        $resultado = $inm->get_referencias($inm_comprador_id);
+        $this->assertIsArray($resultado);
+        $this->assertNotTrue(errores::$error);
+        $this->assertEquals(1,$resultado[0]['inm_referencia_id']);
+        errores::$error = false;
+    }
+
 
 
 

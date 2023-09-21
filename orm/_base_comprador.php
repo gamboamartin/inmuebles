@@ -59,6 +59,11 @@ class _base_comprador{
         return $com_cliente;
     }
 
+    /**
+     * Inicializa los elementos default posterior upd
+     * @param stdClass $r_modifica Resultado de modificacion
+     * @return stdClass
+     */
     final public function data_upd_post(stdClass $r_modifica): stdClass
     {
         $row_upd_post = array();

@@ -47,6 +47,7 @@ class controlador_inm_costo extends _ctl_base {
         }
         $this->row_upd->inm_ubicacion_id = -1;
         $this->row_upd->inm_concepto_id = -1;
+        $this->row_upd->fecha = date('Y-m-d');
         $keys_selects = array();
 
         $keys_selects = $this->key_select(cols:12, con_registros: true,filtro:  array(), key: 'inm_ubicacion_id',
@@ -67,6 +68,15 @@ class controlador_inm_costo extends _ctl_base {
             return $this->retorno_error(
                 mensaje: 'Error al obtener inputs',data:  $inputs, header: $header,ws:  $ws);
         }
+
+        $fecha = $this->html->input_fecha(cols: 4,row_upd:  $this->row_upd,value_vacio:  false,
+            value: $this->row_upd->fecha);
+        if(errores::$error){
+            return $this->retorno_error(
+                mensaje: 'Error al obtener input fecha',data:  $fecha, header: $header,ws:  $ws);
+        }
+
+        $this->inputs->fecha = $fecha;
 
         return $r_alta;
     }
@@ -153,7 +163,7 @@ class controlador_inm_costo extends _ctl_base {
         if(errores::$error){
             return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
-        $keys_selects = (new init())->key_select_txt(cols: 12,key: 'monto',
+        $keys_selects = (new init())->key_select_txt(cols: 4,key: 'monto',
             keys_selects:$keys_selects, place_holder: 'Monto');
         if(errores::$error){
             return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
@@ -163,8 +173,8 @@ class controlador_inm_costo extends _ctl_base {
         if(errores::$error){
             return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
-        $keys_selects = (new init())->key_select_txt(cols: 12,key: 'referencia',
-            keys_selects:$keys_selects, place_holder: 'Fecha');
+        $keys_selects = (new init())->key_select_txt(cols: 4,key: 'referencia',
+            keys_selects:$keys_selects, place_holder: 'Ref');
         if(errores::$error){
             return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
