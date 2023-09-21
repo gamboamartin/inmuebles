@@ -122,6 +122,15 @@ class inm_comprador extends _modelo_parent{
         int $inm_comprador_id, array $inm_co_acreditado): array|stdClass
     {
 
+        $valida = (new inm_co_acreditado(link: $this->link))->valida_data_alta(inm_co_acreditado: $inm_co_acreditado);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al validar inm_co_acreditado',data:  $valida);
+        }
+        $valida = (new inm_co_acreditado(link: $this->link))->valida_alta(inm_co_acreditado: $inm_co_acreditado);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al validar registro',data:  $valida);
+        }
+
         $alta_inm_co_acreditado = (new inm_co_acreditado(link: $this->link))->alta_registro
         (registro: $inm_co_acreditado);
         if(errores::$error){

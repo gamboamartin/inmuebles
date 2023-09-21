@@ -118,6 +118,61 @@ class inm_compradorTest extends test {
         errores::$error = false;
     }
 
+    public function test_asigna_nuevo_co_acreditado_bd(): void
+    {
+        errores::$error = false;
+
+        $_GET['seccion'] = 'inm_producto_infonavit';
+        $_GET['accion'] = 'lista';
+        $_SESSION['grupo_id'] = 1;
+        $_SESSION['usuario_id'] = 2;
+        $_GET['session_id'] = '1';
+
+        $del = (new base_test())->del_inm_comprador(link: $this->link);
+        if(errores::$error){
+            $error = (new errores())->error(mensaje: 'Error al eliminar',data:  $del);
+            print_r($error);
+            exit;
+        }
+
+        $alta = (new base_test())->alta_inm_comprador(link: $this->link);
+        if(errores::$error){
+            $error = (new errores())->error(mensaje: 'Error al insertar',data:  $alta);
+            print_r($error);
+            exit;
+        }
+
+        $inm = new inm_comprador(link: $this->link);
+        //$inm = new liberator($inm);
+
+        $inm_comprador_id = 1;
+        $inm_co_acreditado = array();
+        $inm_co_acreditado['nombre'] = 'A';
+        $inm_co_acreditado['apellido_paterno'] = 'A';
+        $inm_co_acreditado['nss'] = '12345678901';
+        $inm_co_acreditado['curp'] = 'XEXX010101HNEXXXA4';
+        $inm_co_acreditado['rfc'] = 'XXX010101AAA';
+        $inm_co_acreditado['apellido_materno'] = 'A';
+        $inm_co_acreditado['lada'] = '12';
+        $inm_co_acreditado['numero'] = '12345677';
+        $inm_co_acreditado['celular'] = '1234567890';
+        $inm_co_acreditado['genero'] = 'A';
+        $inm_co_acreditado['correo'] = 'a@a.com';
+        $inm_co_acreditado['nombre_empresa_patron'] = 'A';
+        $inm_co_acreditado['nrp'] = 'A';
+        $inm_co_acreditado['lada_nep'] = 'A';
+        $inm_co_acreditado['numero_nep'] = 'A';
+
+
+        $resultado = $inm->asigna_nuevo_co_acreditado_bd($inm_comprador_id, $inm_co_acreditado);
+        $this->assertIsObject($resultado);
+        $this->assertNotTrue(errores::$error);
+        $this->assertEquals("A A A 12345678901 XEXX010101HNEXXXA4 XXX010101AAA",
+            $resultado->inm_co_acreditado->registro['inm_co_acreditado_descripcion']);
+
+        errores::$error = false;
+    }
+
 
     public function test_data_pdf(): void
     {
