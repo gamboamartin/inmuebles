@@ -78,6 +78,11 @@ class inm_comprador extends _modelo_parent{
         $this->etiqueta = 'Comprador de Vivienda';
     }
 
+    /**
+     * Inserta un comprador, un cliente, una relacion entre comprador y cliente proceso comprador y etapa comprador
+     * @param array $keys_integra_ds Keys para descripcion select
+     * @return array|stdClass
+     */
     public function alta_bd(array $keys_integra_ds = array('codigo', 'descripcion')): array|stdClass
     {
         $registro_entrada = $this->registro;
@@ -95,29 +100,41 @@ class inm_comprador extends _modelo_parent{
             return $this->error->error(mensaje: 'Error al insertar',data:  $r_alta_bd);
         }
 
-        $transacciones = (new _alta_comprador())->posterior_alta(inm_comprador_id: $r_alta_bd->registro_id,
-            link: $this->link, registro_entrada: $registro_entrada, tabla: $this->tabla);;
+        $transacciones = (new _alta_comprador())->posterior_alta(accion: __FUNCTION__, etapa: 'ALTA',
+            inm_comprador_id: $r_alta_bd->registro_id, link: $this->link, pr_proceso_descripcion: 'INMOBILIARIA CLIENTES',
+            registro_entrada: $registro_entrada, tabla: $this->tabla);
         if (errores::$error) {
             return $this->error->error(mensaje: 'Error al insertar transacciones', data: $transacciones);
         }
-
 
         return $r_alta_bd;
 
     }
 
-    final public function asigna_nuevo_co_acreditado_bd(int $inm_comprador_id, array $inm_co_acreditado){
+    /**
+     * Asigna un co acreditado a un comprador
+     * @param int $inm_comprador_id Identificador
+     * @param array $inm_co_acreditado Registro de co acreditado
+     * @return array|stdClass
+     */
+    final public function asigna_nuevo_co_acreditado_bd(
+        int $inm_comprador_id, array $inm_co_acreditado): array|stdClass
+    {
 
-        $alta_inm_co_acreditado = (new inm_co_acreditado(link: $this->link))->alta_registro(registro: $inm_co_acreditado);
+        $alta_inm_co_acreditado = (new inm_co_acreditado(link: $this->link))->alta_registro
+        (registro: $inm_co_acreditado);
         if(errores::$error){
-            return $this->error->error(mensaje: 'Error al insertar alta_inm_co_acreditado',data:  $alta_inm_co_acreditado);
+            return $this->error->error(mensaje: 'Error al insertar alta_inm_co_acreditado',
+                data:  $alta_inm_co_acreditado);
         }
         $inm_rel_co_acred_ins['inm_co_acreditado_id'] = $alta_inm_co_acreditado->registro_id;
         $inm_rel_co_acred_ins['inm_comprador_id'] = $inm_comprador_id;
 
-        $alta_inm_rel_co_acred = (new inm_rel_co_acred(link: $this->link))->alta_registro(registro: $inm_rel_co_acred_ins);
+        $alta_inm_rel_co_acred = (new inm_rel_co_acred(link: $this->link))->alta_registro(
+            registro: $inm_rel_co_acred_ins);
         if(errores::$error){
-            return $this->error->error(mensaje: 'Error al insertar alta_inm_rel_co_acred',data:  $alta_inm_rel_co_acred);
+            return $this->error->error(mensaje: 'Error al insertar alta_inm_rel_co_acred',
+                data:  $alta_inm_rel_co_acred);
         }
 
         $data = new stdClass();

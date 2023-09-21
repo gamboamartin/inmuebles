@@ -156,7 +156,14 @@ class inm_comprador_proceso extends _modelo_parent{
 
     }
 
-    final public function valida_init(array $registro){
+    /**
+     * Valida que los elementos de entrada sean correctos
+     * @param array $registro Registro en proceso
+     * @return array|true
+     * @version 2.42.0
+     */
+    final public function valida_init(array $registro): bool|array
+    {
         $keys = array('inm_comprador_id','pr_sub_proceso_id','fecha');
         $valida = $this->validacion->valida_existencia_keys(keys: $keys,registro:  $registro);
         if(errores::$error){

@@ -2,6 +2,7 @@
 namespace gamboamartin\inmuebles\tests\controllers;
 
 
+use gamboamartin\comercial\models\com_cliente;
 use gamboamartin\errores\errores;
 use gamboamartin\inmuebles\controllers\_keys_selects;
 use gamboamartin\inmuebles\controllers\controlador_inm_attr_tipo_credito;
@@ -12,6 +13,10 @@ use gamboamartin\inmuebles\models\_alta_comprador;
 use gamboamartin\inmuebles\models\_base_comprador;
 use gamboamartin\inmuebles\models\_inm_comprador;
 use gamboamartin\inmuebles\models\_inm_ubicaciones;
+use gamboamartin\inmuebles\models\inm_comprador;
+use gamboamartin\inmuebles\models\inm_comprador_etapa;
+use gamboamartin\inmuebles\models\inm_comprador_proceso;
+use gamboamartin\inmuebles\models\inm_rel_comprador_com_cliente;
 use gamboamartin\inmuebles\models\inm_ubicacion;
 use gamboamartin\inmuebles\tests\base_test;
 use gamboamartin\test\liberator;
@@ -69,6 +74,34 @@ class _alta_compradorTest extends test {
         $this->assertEquals(7,$resultado['inm_plazo_credito_sc_id']);
         $this->assertEquals(5,$resultado['inm_tipo_discapacidad_id']);
         $this->assertEquals(6,$resultado['inm_persona_discapacidad_id']);
+        errores::$error = false;
+    }
+
+    public function test_filtro_etapa_proceso(): void
+    {
+        errores::$error = false;
+
+        $_GET['seccion'] = 'inm_producto_infonavit';
+        $_GET['accion'] = 'lista';
+        $_SESSION['grupo_id'] = 1;
+        $_SESSION['usuario_id'] = 2;
+        $_GET['session_id'] = '1';
+
+        $inm = new _alta_comprador();
+         $inm = new liberator($inm);
+
+
+        $accion = 'a';
+        $etapa = 'b';
+        $pr_proceso_descripcion = 'c';
+        $tabla = 'd';
+        $resultado = $inm->filtro_etapa_proceso($accion, $etapa, $pr_proceso_descripcion, $tabla);
+        $this->assertIsArray($resultado);
+        $this->assertNotTrue(errores::$error);
+        $this->assertEquals('d',$resultado['adm_seccion.descripcion']);
+        $this->assertEquals('a',$resultado['adm_accion.descripcion']);
+        $this->assertEquals('b',$resultado['pr_etapa.descripcion']);
+        $this->assertEquals('c',$resultado['pr_proceso.descripcion']);
         errores::$error = false;
     }
 
@@ -278,6 +311,110 @@ class _alta_compradorTest extends test {
         errores::$error = false;
     }
 
+    public function test_posterior_alta(): void
+    {
+        errores::$error = false;
+
+        $_GET['seccion'] = 'inm_producto_infonavit';
+        $_GET['accion'] = 'lista';
+        $_SESSION['grupo_id'] = 1;
+        $_SESSION['usuario_id'] = 2;
+        $_GET['session_id'] = '1';
+
+        $inm = new _alta_comprador();
+       // $inm = new liberator($inm);
+
+
+
+        $del = (new base_test())->del_inm_comprador(link: $this->link);
+        if(errores::$error){
+            $error = (new errores())->error(mensaje: 'Error al eliminar',data:  $del);
+            print_r($error);
+            exit;
+        }
+
+        $del = (new base_test())->del_com_cliente(link: $this->link);
+        if(errores::$error){
+            $error = (new errores())->error(mensaje: 'Error al eliminar',data:  $del);
+            print_r($error);
+            exit;
+        }
+        $alta = (new base_test())->alta_inm_comprador(link: $this->link);
+        if(errores::$error){
+            $error = (new errores())->error(mensaje: 'Error al alta',data:  $alta);
+            print_r($error);
+            exit;
+        }
+
+        $del = (new base_test())->del_inm_comprador_proceso(link: $this->link);
+        if(errores::$error){
+            $error = (new errores())->error(mensaje: 'Error al eliminar',data:  $del);
+            print_r($error);
+            exit;
+        }
+        $del = (new base_test())->del_inm_comprador_etapa(link: $this->link);
+        if(errores::$error){
+            $error = (new errores())->error(mensaje: 'Error al eliminar',data:  $del);
+            print_r($error);
+            exit;
+        }
+
+        $link = $this->link;
+        $inm_comprador_id = 1;
+        $registro_entrada = array();
+        $tabla = 'inm_comprador';
+        $registro_entrada['rfc'] = 'AAA010101AAA';
+        $registro_entrada['dp_calle_pertenece_id'] = '1';
+        $registro_entrada['numero_exterior'] = '1';
+        $registro_entrada['lada_com'] = '111';
+        $registro_entrada['numero_com'] = '1234567';
+        $registro_entrada['cat_sat_regimen_fiscal_id'] = '601';
+        $registro_entrada['cat_sat_moneda_id'] = '1';
+        $registro_entrada['cat_sat_forma_pago_id'] = '1';
+        $registro_entrada['cat_sat_metodo_pago_id'] = '1';
+        $registro_entrada['cat_sat_uso_cfdi_id'] = '1';
+        $registro_entrada['com_tipo_cliente_id'] = '1';
+        $registro_entrada['cat_sat_tipo_persona_id'] = '4';
+        $registro_entrada['nombre'] = '1';
+        $registro_entrada['apellido_paterno'] = '1';
+        $resultado = $inm->posterior_alta(accion: 'alta_bd', etapa: 'ALTA', inm_comprador_id: $inm_comprador_id,
+            link: $link, pr_proceso_descripcion: 'INMOBILIARIA CLIENTES', registro_entrada: $registro_entrada,
+            tabla: $tabla);
+        //print_r($resultado);exit;
+        $this->assertIsObject($resultado);
+        $this->assertNotTrue(errores::$error);
+        $this->assertIsObject($resultado->integra_relacion_com_cliente);
+
+        $filtro['inm_comprador.id'] = 1;
+        $r_inm_rel_comprador_com_cliente = (new inm_rel_comprador_com_cliente(link: $this->link))->filtro_and(filtro:$filtro);
+        $this->assertIsObject($r_inm_rel_comprador_com_cliente);
+        $this->assertNotTrue(errores::$error);
+        $this->assertEquals(1,$r_inm_rel_comprador_com_cliente->registros[0]['inm_comprador_id']);
+
+        $com_cliente_id = $r_inm_rel_comprador_com_cliente->registros[0]['com_cliente_id'];
+
+        $r_com_cliente = (new com_cliente(link: $this->link))->registro(registro_id: $com_cliente_id);
+
+        $this->assertIsArray($r_com_cliente);
+        $this->assertNotTrue(errores::$error);
+        $this->assertEquals("AAA010101AAA",$r_com_cliente['com_cliente_rfc']);
+
+        $filtro['inm_comprador.id'] = 1;
+        $r_inm_comprador_proceso = (new inm_comprador_proceso(link: $this->link))->filtro_and(filtro:$filtro);
+        $this->assertIsObject($r_inm_comprador_proceso);
+        $this->assertNotTrue(errores::$error);
+        $this->assertGreaterThanOrEqual(1,$r_inm_comprador_proceso->n_registros);
+
+        $filtro['inm_comprador.id'] = 1;
+        $r_inm_comprador_etapa = (new inm_comprador_etapa(link: $this->link))->filtro_and(filtro:$filtro);
+        $this->assertIsObject($r_inm_comprador_etapa);
+        $this->assertNotTrue(errores::$error);
+        $this->assertGreaterThanOrEqual(1,$r_inm_comprador_etapa->n_registros);
+
+
+        errores::$error = false;
+    }
+
     public function test_pr_sub_proceso(): void
     {
         errores::$error = false;
@@ -300,6 +437,32 @@ class _alta_compradorTest extends test {
         $this->assertIsaRRAY($resultado);
         $this->assertNotTrue(errores::$error);
         $this->assertEquals('ALTA',$resultado['pr_sub_proceso_descripcion']);
+        errores::$error = false;
+    }
+
+    public function test_sub_proceso(): void
+    {
+        errores::$error = false;
+
+        $_GET['seccion'] = 'inm_producto_infonavit';
+        $_GET['accion'] = 'lista';
+        $_SESSION['grupo_id'] = 1;
+        $_SESSION['usuario_id'] = 2;
+        $_GET['session_id'] = '1';
+
+        $inm = new _alta_comprador();
+        $inm = new liberator($inm);
+
+
+        $link = $this->link;
+        $inm_comprador_id = 1;
+        $pr_sub_proceso_descripcion = 'ALTA';
+        $pr_proceso_descripcion = 'INMOBILIARIA CLIENTES';
+        $tabla = 'inm_comprador';
+        $resultado = $inm->sub_proceso($inm_comprador_id, $link, $pr_proceso_descripcion, $pr_sub_proceso_descripcion, $tabla);
+        $this->assertIsArray($resultado);
+        $this->assertNotTrue(errores::$error);
+
         errores::$error = false;
     }
 
@@ -326,6 +489,33 @@ class _alta_compradorTest extends test {
         $registro['rfc'] = 'GAVM830930876';
 
         $resultado = $inm->valida_base_comprador($registro);
+        $this->assertIsBool($resultado);
+        $this->assertNotTrue(errores::$error);
+        $this->assertTrue($resultado);
+        errores::$error = false;
+    }
+
+    public function test_valida_sub_proceso(): void
+    {
+        errores::$error = false;
+
+        $_GET['seccion'] = 'inm_producto_infonavit';
+        $_GET['accion'] = 'lista';
+        $_SESSION['grupo_id'] = 1;
+        $_SESSION['usuario_id'] = 2;
+        $_GET['session_id'] = '1';
+
+        $inm = new _alta_comprador();
+        $inm = new liberator($inm);
+
+
+
+        $pr_proceso_descripcion = 'a';
+        $pr_sub_proceso_descripcion = 'V';
+        $tabla = 'D';
+
+
+        $resultado = $inm->valida_sub_proceso($pr_proceso_descripcion, $pr_sub_proceso_descripcion, $tabla);
         $this->assertIsBool($resultado);
         $this->assertNotTrue(errores::$error);
         $this->assertTrue($resultado);

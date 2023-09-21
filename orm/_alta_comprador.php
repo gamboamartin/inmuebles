@@ -3,6 +3,7 @@
 namespace gamboamartin\inmuebles\models;
 
 use gamboamartin\errores\errores;
+use gamboamartin\proceso\models\pr_etapa_proceso;
 use gamboamartin\proceso\models\pr_sub_proceso;
 use gamboamartin\validacion\validacion;
 use PDO;
@@ -38,6 +39,45 @@ class _alta_comprador{
     }
 
     /**
+     * Integra un filtro para la obtencion de una etapa
+     * @param string $accion Accion de ejecucion
+     * @param string $etapa Etapa a integrar
+     * @param string $pr_proceso_descripcion Proceso que pertenece
+     * @param string $tabla Tabla de la entidad
+     * @return array
+     * @version 2.42.0
+     */
+    private function filtro_etapa_proceso(string $accion, string $etapa, string $pr_proceso_descripcion,
+                                          string $tabla): array
+    {
+        $accion = trim($accion);
+        $etapa = trim($etapa);
+        $pr_proceso_descripcion = trim($pr_proceso_descripcion);
+        $tabla = trim($tabla);
+
+        if($accion == ''){
+            return $this->error->error(mensaje: 'Error accion esta vacia', data: $accion);
+        }
+        if($etapa == ''){
+            return $this->error->error(mensaje: 'Error etapa esta vacia', data: $etapa);
+        }
+        if($pr_proceso_descripcion == ''){
+            return $this->error->error(mensaje: 'Error pr_proceso_descripcion esta vacia',
+                data: $pr_proceso_descripcion);
+        }
+        if($tabla == ''){
+            return $this->error->error(mensaje: 'Error tabla esta vacia', data: $tabla);
+        }
+
+
+        $filtro['adm_seccion.descripcion'] = $tabla;
+        $filtro['adm_accion.descripcion'] = $accion;
+        $filtro['pr_etapa.descripcion'] = $etapa;
+        $filtro['pr_proceso.descripcion'] = $pr_proceso_descripcion;
+        return $filtro;
+    }
+
+    /**
      * Inicializa un registro para su alta
      * @param array $registro Registro en proceso
      * @return array
@@ -69,12 +109,39 @@ class _alta_comprador{
         return $registro;
     }
 
+    private function inm_comprador_etapa_alta(string $accion, string $etapa, int $inm_comprador_id, PDO $link, string $pr_proceso_descripcion, string $tabla){
+        $pr_etapa_proceso = $this->pr_etapa_proceso(accion: $accion, etapa: $etapa, link: $link, pr_proceso_descripcion: $pr_proceso_descripcion, tabla: $tabla);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al obtener pr_etapa_proceso', data: $pr_etapa_proceso);
+        }
+
+        $inm_comprador_etapa_ins = $this->inm_comprador_etapa_ins(inm_comprador_id: $inm_comprador_id,pr_etapa_proceso:  $pr_etapa_proceso);;
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al obtener inm_comprador_etapa_ins', data: $inm_comprador_etapa_ins);
+        }
+
+        $inm_comprador_etapa = (new inm_comprador_etapa(link: $link))->alta_registro(registro: $inm_comprador_etapa_ins);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al insertar etapa', data: $inm_comprador_etapa);
+        }
+        return $inm_comprador_etapa;
+    }
+
+    private function inm_comprador_etapa_ins(int $inm_comprador_id, array $pr_etapa_proceso): array
+    {
+        $inm_comprador_etapa_ins['pr_etapa_proceso_id'] = $pr_etapa_proceso['pr_etapa_proceso_id'];
+        $inm_comprador_etapa_ins['inm_comprador_id'] = $inm_comprador_id;
+        $inm_comprador_etapa_ins['fecha'] = date('Y-m-d');
+        return $inm_comprador_etapa_ins;
+    }
+
     /**
      * Inserta el subproceso del comprador
      * @param int $inm_comprador_id Comprador id
      * @param PDO $link Conexion a la base de datos
      * @param int $pr_sub_proceso_id Identificador de subproceso
      * @return array|stdClass
+     * @version 2.42.0
      */
     private function inserta_sub_proceso(int $inm_comprador_id, PDO $link, int $pr_sub_proceso_id): array|stdClass
     {
@@ -221,14 +288,40 @@ class _alta_comprador{
     }
 
     /**
-     * @param int $inm_comprador_id
-     * @param PDO $link
-     * @param array $registro_entrada
-     * @param string $tabla
+     * Ejecuta la insersion de un com_cliente, la relacion entre cliente y comprador y la etapa de un comprador
+     * @param string $accion Accion de etapa o ejecucion
+     * @param string $etapa Etapa de proceso
+     * @param int $inm_comprador_id Comprador id
+     * @param PDO $link Conexion a la base de datos
+     * @param array $registro_entrada Registro de tipo comprador
+     * @param string $tabla Tabla de ejecucion
      * @return array|stdClass
      */
-    final public function posterior_alta(int $inm_comprador_id, PDO $link, array $registro_entrada, string $tabla): array|stdClass
+    final public function posterior_alta(string $accion,string $etapa, int $inm_comprador_id, PDO $link,
+                                         string $pr_proceso_descripcion, array $registro_entrada, string $tabla): array|stdClass
     {
+
+        $valida = $this->valida_transacciones(inm_comprador_id: $inm_comprador_id,
+            registro_entrada:  $registro_entrada);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al validar registro',data:  $valida);
+        }
+        $tabla = trim($tabla);
+
+        if($tabla === ''){
+            return $this->error->error(mensaje: 'Error tabla esta vacia', data: $tabla);
+        }
+
+        $accion = trim($accion);
+        if($accion === ''){
+            return $this->error->error(mensaje: 'Error accion esta vacia', data: $accion);
+        }
+
+        $etapa = trim($etapa);
+        if($etapa === ''){
+            return $this->error->error(mensaje: 'Error etapa esta vacia', data: $etapa);
+        }
+
         $integra_relacion_com_cliente = (new _base_comprador())->integra_relacion_com_cliente(
             inm_comprador_id: $inm_comprador_id, link: $link, registro_entrada: $registro_entrada);
         if (errores::$error) {
@@ -236,15 +329,45 @@ class _alta_comprador{
         }
 
         $sub_proceso = $this->sub_proceso(inm_comprador_id: $inm_comprador_id,
-            link: $link, pr_proceso_descripcion: 'INMOBILIARIA CLIENTES', pr_sub_proceso_descripcion: 'ALTA', tabla: $tabla);
+            link: $link, pr_proceso_descripcion: 'INMOBILIARIA CLIENTES', pr_sub_proceso_descripcion: 'ALTA',
+            tabla: $tabla);
         if (errores::$error) {
             return $this->error->error(mensaje: 'Error al insertar sub proceso', data: $sub_proceso);
+        }
+
+        $r_inm_comprador_etapa = $this->inm_comprador_etapa_alta(accion: $accion, etapa: $etapa,
+            inm_comprador_id: $inm_comprador_id, link: $link, pr_proceso_descripcion: $pr_proceso_descripcion, tabla: $tabla);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al insertar etapa', data: $r_inm_comprador_etapa);
         }
 
         $data = new stdClass();
         $data->integra_relacion_com_cliente = $integra_relacion_com_cliente;
         $data->sub_proceso = $sub_proceso;
+        $data->r_inm_comprador_etapa = $r_inm_comprador_etapa;
         return $data;
+    }
+
+    private function pr_etapa_proceso(string $accion, string $etapa, PDO $link, string $pr_proceso_descripcion, string $tabla){
+        $filtro = $this->filtro_etapa_proceso(accion: $accion, etapa: $etapa,
+            pr_proceso_descripcion: $pr_proceso_descripcion, tabla: $tabla);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al insertar etapa', data: $filtro);
+        }
+        $r_pr_etapa_proceso = (new pr_etapa_proceso(link: $link))->filtro_and(filtro: $filtro);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al obtener etapa proceso', data: $r_pr_etapa_proceso);
+        }
+
+        if($r_pr_etapa_proceso->n_registros === 0){
+            return $this->error->error(mensaje: 'Error r_pr_etapa_proceso no existe', data: $r_pr_etapa_proceso);
+        }
+
+        if($r_pr_etapa_proceso->n_registros > 1){
+            return $this->error->error(mensaje: 'Error de integridad', data: $r_pr_etapa_proceso);
+        }
+
+        return $r_pr_etapa_proceso->registros[0];
     }
 
     /**
@@ -261,19 +384,14 @@ class _alta_comprador{
     {
 
         $pr_proceso_descripcion = trim($pr_proceso_descripcion);
-        if($pr_proceso_descripcion === ''){
-            return $this->error->error(mensaje: 'Error pr_proceso_descripcion esta vacio',
-                data: $pr_proceso_descripcion);
-        }
         $pr_sub_proceso_descripcion = trim($pr_sub_proceso_descripcion);
-        if($pr_sub_proceso_descripcion === ''){
-            return $this->error->error(mensaje: 'Error pr_sub_proceso_descripcion esta vacio',
-                data: $pr_sub_proceso_descripcion);
-        }
-
         $tabla = trim($tabla);
-        if($tabla === ''){
-            return $this->error->error(mensaje: 'Error tabla esta vacio', data: $tabla);
+
+
+        $valida = $this->valida_sub_proceso(pr_proceso_descripcion: $pr_proceso_descripcion,
+            pr_sub_proceso_descripcion:  $pr_sub_proceso_descripcion,tabla:  $tabla);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al validar datos de entrada', data: $valida);
         }
 
         $filtro['adm_seccion.descripcion'] = $tabla;
@@ -302,18 +420,34 @@ class _alta_comprador{
     }
 
     /**
-     * @param int $inm_comprador_id
-     * @param PDO $link
-     * @param string $pr_proceso_descripcion
-     * @param string $pr_sub_proceso_descripcion
-     * @param string $tabla
+     * Transacciona el sub proceso a ajustar en la entidad de comprador
+     * @param int $inm_comprador_id Comprador id
+     * @param PDO $link Conexion a la base de datos
+     * @param string $pr_proceso_descripcion Descripcion del proceso
+     * @param string $pr_sub_proceso_descripcion Descripcion del sub proceso
+     * @param string $tabla Tabla de integracion
      * @return array
+     * @version 2.42.0
      */
     private function sub_proceso(int $inm_comprador_id, PDO $link, string $pr_proceso_descripcion,
                                  string $pr_sub_proceso_descripcion, string $tabla): array
     {
-        $pr_sub_proceso = $this->pr_sub_proceso(link: $link,
-            pr_proceso_descripcion: $pr_proceso_descripcion, pr_sub_proceso_descripcion: $pr_sub_proceso_descripcion, tabla: $tabla);
+        if($inm_comprador_id<=0){
+            return $this->error->error(mensaje: 'Error inm_comprador_id es menor a 0', data: $inm_comprador_id);
+        }
+
+        $pr_proceso_descripcion = trim($pr_proceso_descripcion);
+        $pr_sub_proceso_descripcion = trim($pr_sub_proceso_descripcion);
+        $tabla = trim($tabla);
+
+        $valida = $this->valida_sub_proceso(pr_proceso_descripcion: $pr_proceso_descripcion,
+            pr_sub_proceso_descripcion:  $pr_sub_proceso_descripcion,tabla:  $tabla);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al validar datos de entrada', data: $valida);
+        }
+
+        $pr_sub_proceso = $this->pr_sub_proceso(link: $link, pr_proceso_descripcion: $pr_proceso_descripcion,
+            pr_sub_proceso_descripcion: $pr_sub_proceso_descripcion, tabla: $tabla);
         if (errores::$error) {
             return $this->error->error(mensaje: 'Error al obtener sub proceso', data: $pr_sub_proceso);
         }
@@ -355,6 +489,57 @@ class _alta_comprador{
             return $this->error->error(mensaje: 'Error al validar rfc',data:  $valida);
         }
 
+        return true;
+    }
+
+    /**
+     * Valida los datos base de entrada de proceso
+     * @param string $pr_proceso_descripcion Descripcion de proceso
+     * @param string $pr_sub_proceso_descripcion Descripcion de subproceso
+     * @param string $tabla Tabla o entidad de integracion
+     * @return bool|array
+     * @version 2.42.0
+     */
+    private function valida_sub_proceso(string $pr_proceso_descripcion, string $pr_sub_proceso_descripcion,
+                                        string $tabla): bool|array
+    {
+        $pr_proceso_descripcion = trim($pr_proceso_descripcion);
+        if($pr_proceso_descripcion === ''){
+            return $this->error->error(mensaje: 'Error pr_proceso_descripcion esta vacio',
+                data: $pr_proceso_descripcion);
+        }
+        $pr_sub_proceso_descripcion = trim($pr_sub_proceso_descripcion);
+        if($pr_sub_proceso_descripcion === ''){
+            return $this->error->error(mensaje: 'Error pr_sub_proceso_descripcion esta vacio',
+                data: $pr_sub_proceso_descripcion);
+        }
+
+        $tabla = trim($tabla);
+        if($tabla === ''){
+            return $this->error->error(mensaje: 'Error tabla esta vacio', data: $tabla);
+        }
+
+        return true;
+    }
+
+    /**
+     * @param int $inm_comprador_id
+     * @param array $registro_entrada
+     * @return array|true
+     */
+    final public function valida_transacciones(int $inm_comprador_id, array $registro_entrada): bool|array
+    {
+        $valida = (new _com_cliente())->valida_base_com(registro_entrada: $registro_entrada);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al validar registro_entrada',data:  $valida);
+        }
+        $valida = (new _com_cliente())->valida_data_result_cliente(registro_entrada: $registro_entrada);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al validar registro',data:  $valida);
+        }
+        if($inm_comprador_id <=0){
+            return $this->error->error(mensaje: 'Error inm_comprador_id debe ser mayor a 0',data:  $inm_comprador_id);
+        }
         return true;
     }
 }

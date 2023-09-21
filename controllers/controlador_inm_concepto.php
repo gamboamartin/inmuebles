@@ -45,7 +45,15 @@ class controlador_inm_concepto extends _ctl_base {
             return $this->retorno_error(
                 mensaje: 'Error al inicializar alta',data:  $r_alta, header: $header,ws:  $ws);
         }
+        $this->row_upd->inm_tipo_concepto_id = -1;
         $keys_selects = array();
+
+        $keys_selects = $this->key_select(cols:12, con_registros: true,filtro:  array(), key: 'inm_tipo_concepto_id',
+            keys_selects: $keys_selects, id_selected: $this->row_upd->inm_tipo_concepto_id, label: 'Tipo de Concepto');
+        if(errores::$error){
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        }
+
         $inputs = $this->inputs(keys_selects: $keys_selects);
         if(errores::$error){
             return $this->retorno_error(
