@@ -99,7 +99,8 @@ class _co_acreditado{
     }
 
     /**
-     * @param array $registro
+     * Integra los campos para insertar un registro de co acreditado
+     * @param array $registro registro en proceso
      * @return array
      */
     private function inm_co_acreditado_ins(array $registro): array
@@ -169,6 +170,7 @@ class _co_acreditado{
      * @param string $key_co_acreditado Key de base modifica
      * @param array $registro Registro en proceso
      * @return array
+     * @version 2.68.0
      */
     private function integra_campo_co_acreditado(string $campo_co_acreditado, array $inm_co_acreditado_ins,
                                                  string $key_co_acreditado, array $registro): array
@@ -196,13 +198,20 @@ class _co_acreditado{
     }
 
     /**
-     * @param string $campo_co_acreditado
-     * @param array $inm_co_acreditado_ins
-     * @param array $registro
+     * Integra un valor de un campo para insertar un co acreditado
+     * @param string $campo_co_acreditado Campo a integrar
+     * @param array $inm_co_acreditado_ins Registro previo cargado
+     * @param array $registro Registro en proceso
      * @return array
+     * @version 2.68.0
      */
-    private function integra_value_co_acreditado(string $campo_co_acreditado, array $inm_co_acreditado_ins, array $registro): array
+    private function integra_value_co_acreditado(string $campo_co_acreditado, array $inm_co_acreditado_ins,
+                                                 array $registro): array
     {
+        $campo_co_acreditado = trim($campo_co_acreditado);
+        if($campo_co_acreditado === ''){
+            return $this->error->error(mensaje: 'Error campo_co_acreditado esta vacio', data: $campo_co_acreditado);
+        }
         $key_co_acreditado = 'inm_co_acreditado_'.$campo_co_acreditado;
         if(isset($registro[$key_co_acreditado])) {
             $inm_co_acreditado_ins = $this->integra_campo_co_acreditado(campo_co_acreditado: $campo_co_acreditado,
