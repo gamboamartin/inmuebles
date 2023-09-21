@@ -410,6 +410,33 @@ class inm_compradorTest extends test {
         errores::$error = false;
     }
 
+    public function test_upd_post(): void
+    {
+        errores::$error = false;
+
+        $_GET['seccion'] = 'inm_producto_infonavit';
+        $_GET['accion'] = 'lista';
+        $_SESSION['grupo_id'] = 1;
+        $_SESSION['usuario_id'] = 2;
+        $_GET['session_id'] = '1';
+
+        $inm = new inm_comprador(link: $this->link);
+        //$inm = new liberator($inm);
+
+
+
+        $id = 1;
+        $r_modifica = new stdClass();
+        $r_modifica->registro_actualizado = new stdClass();
+        $r_modifica->registro_actualizado->inm_comprador_es_segundo_credito = 'NO';
+        $r_modifica->registro_actualizado->inm_comprador_con_discapacidad = 'NO';
+        $resultado = $inm->upd_post($id, $r_modifica);
+        $this->assertIsObject($resultado);
+        $this->assertNotTrue(errores::$error);
+        $this->assertEquals(1,$resultado->registro_actualizado->inm_comprador_id);
+        errores::$error = false;
+    }
+
 
 
 

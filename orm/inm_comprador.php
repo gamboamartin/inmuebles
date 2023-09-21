@@ -374,6 +374,34 @@ class inm_comprador extends _modelo_parent{
         return $r_modifica;
     }
 
+    private function r_modifica_post(stdClass $data_upd, int $id){
+        $registro_previo = $this->registro(registro_id: $id,columnas_en_bruto: true,retorno_obj: true);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al obtener registro_previo',data:  $registro_previo);
+        }
+        if(!isset($data_upd->row_upd_post['descripcion'])){
+            $data_upd->row_upd_post['descripcion'] = $registro_previo->descripcion;
+        }
+
+        $r_modifica_post = parent::modifica_bd(registro: $data_upd->row_upd_post,id:  $id);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al modificar comprador',data:  $r_modifica_post);
+        }
+        return $r_modifica_post;
+    }
+
+    private function result_upd_post(stdClass $data_upd, int $id){
+        $r_modifica_post = new stdClass();
+        if($data_upd->aplica_upd_posterior){
+
+            $r_modifica_post = $this->r_modifica_post(data_upd: $data_upd,id:  $id);
+            if(errores::$error){
+                return $this->error->error(mensaje: 'Error al modificar comprador',data:  $r_modifica_post);
+            }
+        }
+        return $r_modifica_post;
+    }
+
 
     /**
      * Ejecuta transacciones posteriores a la actualizacion de un comprador
@@ -383,18 +411,24 @@ class inm_comprador extends _modelo_parent{
      */
     final public function upd_post(int $id, stdClass $r_modifica): array|stdClass
     {
+        $valida = (new _base_comprador())->valida_r_modifica(r_modifica: $r_modifica);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al validar r_modifica', data: $valida);
+        }
+        if($id<=0){
+            return $this->error->error(mensaje: 'Error id debe ser mayor a 0',data:  $id);
+        }
+
         $data_upd = (new _base_comprador())->data_upd_post(r_modifica: $r_modifica);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al obtener datos',data:  $data_upd);
         }
 
-        $r_modifica_post = new stdClass();
-        if($data_upd->aplica_upd_posterior){
-            $r_modifica_post = parent::modifica_bd(registro: $data_upd->row_upd_post,id:  $id);
-            if(errores::$error){
-                return $this->error->error(mensaje: 'Error al modificar comprador',data:  $r_modifica_post);
-            }
+        $r_modifica_post = $this->result_upd_post(data_upd: $data_upd, id: $id);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al modificar comprador',data:  $r_modifica_post);
         }
+
         $r_modifica_post->data_upd = $data_upd;
         return $r_modifica_post;
     }
