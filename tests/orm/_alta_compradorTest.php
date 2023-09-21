@@ -141,6 +141,99 @@ class _alta_compradorTest extends test {
         errores::$error = false;
     }
 
+    public function test_inm_comprador_etapa_alta(): void
+    {
+        errores::$error = false;
+
+        $_GET['seccion'] = 'inm_producto_infonavit';
+        $_GET['accion'] = 'lista';
+        $_SESSION['grupo_id'] = 1;
+        $_SESSION['usuario_id'] = 2;
+        $_GET['session_id'] = '1';
+
+        $inm = new _alta_comprador();
+        $inm = new liberator($inm);
+
+
+        $accion = 'a';
+        $etapa = 'b';
+        $inm_comprador_id= -1;
+        $link= $this->link;
+        $pr_proceso_descripcion= 'c';
+        $tabla= 'd';
+
+        $resultado = $inm->inm_comprador_etapa_alta($accion, $etapa, $inm_comprador_id, $link, $pr_proceso_descripcion,
+            $tabla);
+        $this->assertIsArray($resultado);
+        $this->assertTrue(errores::$error);
+        $this->assertEquals('Error inm_comprador_id debe ser mayor a 0',$resultado['mensaje_limpio']);
+        errores::$error = false;
+
+        $accion = 'alta_bd';
+        $etapa = 'b';
+        $inm_comprador_id= -1;
+        $link= $this->link;
+        $pr_proceso_descripcion= 'c';
+        $tabla= 'd';
+
+        $resultado = $inm->inm_comprador_etapa_alta($accion, $etapa, $inm_comprador_id, $link, $pr_proceso_descripcion,
+            $tabla);
+
+        $this->assertIsArray($resultado);
+        $this->assertTrue(errores::$error);
+        $this->assertEquals('Error inm_comprador_id debe ser mayor a 0',$resultado['mensaje_limpio']);
+        errores::$error = false;
+
+        $accion = 'alta_bd';
+        $etapa = 'ALTA';
+        $inm_comprador_id= -1;
+        $link= $this->link;
+        $pr_proceso_descripcion= 'c';
+        $tabla= 'd';
+
+        $resultado = $inm->inm_comprador_etapa_alta($accion, $etapa, $inm_comprador_id, $link, $pr_proceso_descripcion,
+            $tabla);
+
+        $this->assertIsArray($resultado);
+        $this->assertTrue(errores::$error);
+        $this->assertEquals('Error inm_comprador_id debe ser mayor a 0',$resultado['mensaje_limpio']);
+
+
+        errores::$error = false;
+
+        $accion = 'alta_bd';
+        $etapa = 'ALTA';
+        $inm_comprador_id= -1;
+        $link= $this->link;
+        $pr_proceso_descripcion= 'INMOBILIARIA CLIENTES';
+        $tabla= 'd';
+
+        $resultado = $inm->inm_comprador_etapa_alta($accion, $etapa, $inm_comprador_id, $link, $pr_proceso_descripcion,
+            $tabla);
+
+        $this->assertIsArray($resultado);
+        $this->assertTrue(errores::$error);
+        $this->assertEquals('Error inm_comprador_id debe ser mayor a 0',$resultado['mensaje_limpio']);
+
+        errores::$error = false;
+
+        $accion = 'alta_bd';
+        $etapa = 'ALTA';
+        $inm_comprador_id= 1;
+        $link= $this->link;
+        $pr_proceso_descripcion= 'INMOBILIARIA CLIENTES';
+        $tabla= 'inm_comprador';
+
+        $resultado = $inm->inm_comprador_etapa_alta($accion, $etapa, $inm_comprador_id, $link, $pr_proceso_descripcion,
+            $tabla);
+
+
+        $this->assertIsObject($resultado);
+        $this->assertNotTrue(errores::$error);
+        $this->assertEquals('Registro insertado con éxito',$resultado->mensaje);
+        errores::$error = false;
+    }
+
     public function test_inm_comprador_etapa_ins(): void
     {
         errores::$error = false;

@@ -110,10 +110,26 @@ class _alta_comprador{
      * @param string $pr_proceso_descripcion Descripcion de proceso
      * @param string $tabla Entidad de ejecucion
      * @return array|stdClass
+     * @version 2.48.0
      */
     private function inm_comprador_etapa_alta(string $accion, string $etapa, int $inm_comprador_id, PDO $link,
                                               string $pr_proceso_descripcion, string $tabla): array|stdClass
     {
+
+        $accion = trim($accion);
+        $etapa = trim($etapa);
+        $pr_proceso_descripcion = trim($pr_proceso_descripcion);
+        $tabla = trim($tabla);
+
+        $valida =$this->valida_data_etapa(accion: $accion,etapa:  $etapa,
+            pr_proceso_descripcion:  $pr_proceso_descripcion,tabla:  $tabla);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al validar datos de etapa', data: $valida);
+        }
+
+        if($inm_comprador_id <= 0){
+            return $this->error->error(mensaje: 'Error inm_comprador_id debe ser mayor a 0', data: $inm_comprador_id);
+        }
 
         $pr_etapa_proceso = $this->pr_etapa_proceso(accion: $accion, etapa: $etapa, link: $link,
             pr_proceso_descripcion: $pr_proceso_descripcion, tabla: $tabla);
@@ -322,9 +338,11 @@ class _alta_comprador{
      * @param array $registro_entrada Registro de tipo comprador
      * @param string $tabla Tabla de ejecucion
      * @return array|stdClass
+     * @version 2.48.0
      */
-    final public function posterior_alta(string $accion,string $etapa, int $inm_comprador_id, PDO $link,
-                                         string $pr_proceso_descripcion, array $registro_entrada, string $tabla): array|stdClass
+    final public function posterior_alta(
+        string $accion,string $etapa, int $inm_comprador_id, PDO $link, string $pr_proceso_descripcion,
+        array $registro_entrada, string $tabla): array|stdClass
     {
 
         $valida = $this->valida_transacciones(inm_comprador_id: $inm_comprador_id,

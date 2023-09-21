@@ -82,6 +82,7 @@ class inm_comprador extends _modelo_parent{
      * Inserta un comprador, un cliente, una relacion entre comprador y cliente proceso comprador y etapa comprador
      * @param array $keys_integra_ds Keys para descripcion select
      * @return array|stdClass
+     * @version 2.48.0
      */
     public function alta_bd(array $keys_integra_ds = array('codigo', 'descripcion')): array|stdClass
     {
@@ -100,9 +101,9 @@ class inm_comprador extends _modelo_parent{
             return $this->error->error(mensaje: 'Error al insertar',data:  $r_alta_bd);
         }
 
-        $transacciones = (new _alta_comprador())->posterior_alta(accion: __FUNCTION__, etapa: 'ALTA',
-            inm_comprador_id: $r_alta_bd->registro_id, link: $this->link, pr_proceso_descripcion: 'INMOBILIARIA CLIENTES',
-            registro_entrada: $registro_entrada, tabla: $this->tabla);
+        $transacciones = (new _alta_comprador())->posterior_alta(
+            accion: __FUNCTION__, etapa: 'ALTA', inm_comprador_id: $r_alta_bd->registro_id, link: $this->link,
+            pr_proceso_descripcion: 'INMOBILIARIA CLIENTES', registro_entrada: $registro_entrada, tabla: $this->tabla);
         if (errores::$error) {
             return $this->error->error(mensaje: 'Error al insertar transacciones', data: $transacciones);
         }
