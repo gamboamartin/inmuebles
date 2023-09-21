@@ -116,7 +116,14 @@ class inm_co_acreditado extends _modelo_parent{
         return $r_imp_rel_co_acred->registros;
     }
 
-    final public function valida_alta(array $inm_co_acreditado){
+    /**
+     * .Valida los tipos de datos
+     * @param array $inm_co_acreditado Registro a validar
+     * @return array|true
+     * @version 2.50.0
+     */
+    final public function valida_alta(array $inm_co_acreditado): bool|array
+    {
         $keys = array('lada','numero','celular','genero','correo','nombre_empresa_patron','nrp','lada_nep',
             'numero_nep','nss');
         $valida = $this->validacion->valida_existencia_keys(keys: $keys,registro:  $inm_co_acreditado);
@@ -124,24 +131,13 @@ class inm_co_acreditado extends _modelo_parent{
             return $this->error->error(mensaje: 'Error al validar registro',data:  $valida);
         }
 
-        $valida_nss = $this->validacion->valida_pattern('nss', $inm_co_acreditado['nss']);
-        if(!$valida_nss){
-            return $this->error->error(mensaje: 'Error al validar nss',data:  $this->validacion->patterns['nss']);
-        }
+        $keys_val = array('nss','curp','rfc','lada','correo');
 
-        $valida_curp = $this->validacion->valida_pattern('curp', $inm_co_acreditado['curp']);
-        if(!$valida_curp){
-            return $this->error->error(mensaje: 'Error al validar curp',data:  $this->validacion->patterns['curp']);
-        }
-
-        $valida_rfc = $this->validacion->valida_pattern('rfc', $inm_co_acreditado['rfc']);
-        if(!$valida_rfc){
-            return $this->error->error(mensaje: 'Error al validar rfc',data:  $this->validacion->patterns['rfc']);
-        }
-
-        $valida_lada = $this->validacion->valida_pattern('lada', $inm_co_acreditado['lada']);
-        if(!$valida_lada){
-            return $this->error->error(mensaje: 'Error al validar lada',data:  $this->validacion->patterns['lada']);
+        foreach ($keys_val as $key){
+            $valida = $this->validacion->valida_pattern($key, $inm_co_acreditado[$key]);
+            if(!$valida){
+                return $this->error->error(mensaje: 'Error al validar '.$key,data:  $this->validacion->patterns[$key]);
+            }
         }
 
         $valida_numero = $this->validacion->valida_pattern('tel_sin_lada', $inm_co_acreditado['numero']);
@@ -155,15 +151,18 @@ class inm_co_acreditado extends _modelo_parent{
             return $this->error->error(mensaje: 'Error al validar celular',data:
                 $this->validacion->patterns['telefono_mx']);
         }
-        $valida_correo = $this->validacion->valida_pattern('correo', $inm_co_acreditado['correo']);
-        if(!$valida_correo){
-            return $this->error->error(mensaje: 'Error al validar correo',data:
-                $this->validacion->patterns['correo']);
-        }
+
         return true;
     }
 
-    final public function valida_data_alta(array $inm_co_acreditado){
+    /**
+     * Valida que los elementos base de un co acreditado sean validos
+     * @param array $inm_co_acreditado Registro a validar
+     * @return array|true
+     * @version 2.50.0
+     */
+    final public function valida_data_alta(array $inm_co_acreditado): bool|array
+    {
         $keys = array('nombre','apellido_paterno','nss','curp','rfc','apellido_materno');
         $valida = $this->validacion->valida_existencia_keys(keys: $keys,registro:  $inm_co_acreditado,
             valida_vacio: false);

@@ -117,6 +117,7 @@ class inm_comprador extends _modelo_parent{
      * @param int $inm_comprador_id Identificador
      * @param array $inm_co_acreditado Registro de co acreditado
      * @return array|stdClass
+     * @version 2.50.0
      */
     final public function asigna_nuevo_co_acreditado_bd(
         int $inm_comprador_id, array $inm_co_acreditado): array|stdClass
@@ -221,8 +222,13 @@ class inm_comprador extends _modelo_parent{
 
     }
 
-
-
+    /**
+     * Elimina todas las relaciones de comprador y con ella a si misma
+     * @relaciones inm_rel_comprador_com_cliente, inm_comprador_etapa, inm_referencia, inm_rel_co_acred,
+     *  inm_rel_ubi_comp, inm_comprador_proceso
+     * @param int $id Id de registro
+     * @return array|stdClass
+     */
     public function elimina_bd(int $id): array|stdClass
     {
         $filtro['inm_comprador.id'] = $id;

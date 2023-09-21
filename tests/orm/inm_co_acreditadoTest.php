@@ -83,6 +83,73 @@ class inm_co_acreditadoTest extends test {
         errores::$error = false;
     }
 
+    public function test_valida_alta(): void
+    {
+        errores::$error = false;
+
+        $_GET['seccion'] = 'inm_producto_infonavit';
+        $_GET['accion'] = 'lista';
+        $_SESSION['grupo_id'] = 1;
+        $_SESSION['usuario_id'] = 2;
+        $_GET['session_id'] = '1';
+
+        $inm = new inm_co_acreditado(link: $this->link);
+        //$inm = new liberator($inm);
+
+
+
+        $inm_co_acreditado = array();
+        $inm_co_acreditado['nombre'] = 'A';
+        $inm_co_acreditado['apellido_paterno'] = 'A';
+        $inm_co_acreditado['nss'] = '12345678901';
+        $inm_co_acreditado['curp'] = 'XEXX010101HNEXXXA4';
+        $inm_co_acreditado['rfc'] = 'AAA020202ABC';
+        $inm_co_acreditado['apellido_materno'] = 'A';
+        $inm_co_acreditado['lada'] = '111';
+        $inm_co_acreditado['numero'] = '1234567';
+        $inm_co_acreditado['celular'] = '1234567890';
+        $inm_co_acreditado['genero'] = 'A';
+        $inm_co_acreditado['correo'] = 'a@a.com';
+        $inm_co_acreditado['nombre_empresa_patron'] = 'A';
+        $inm_co_acreditado['nrp'] = 'A';
+        $inm_co_acreditado['lada_nep'] = 'A';
+        $inm_co_acreditado['numero_nep'] = 'A';
+        $resultado = $inm->valida_alta($inm_co_acreditado);
+        $this->assertIsBool($resultado);
+        $this->assertNotTrue(errores::$error);
+        $this->assertTrue($resultado);
+        errores::$error = false;
+    }
+
+    public function test_valida_data_alta(): void
+    {
+        errores::$error = false;
+
+        $_GET['seccion'] = 'inm_producto_infonavit';
+        $_GET['accion'] = 'lista';
+        $_SESSION['grupo_id'] = 1;
+        $_SESSION['usuario_id'] = 2;
+        $_GET['session_id'] = '1';
+
+        $inm = new inm_co_acreditado(link: $this->link);
+        //$inm = new liberator($inm);
+
+
+
+        $inm_co_acreditado = array();
+        $inm_co_acreditado['nombre'] = 'A';
+        $inm_co_acreditado['apellido_paterno'] = 'A';
+        $inm_co_acreditado['nss'] = 'A';
+        $inm_co_acreditado['curp'] = 'A';
+        $inm_co_acreditado['rfc'] = 'A';
+        $inm_co_acreditado['apellido_materno'] = 'A';
+        $resultado = $inm->valida_data_alta($inm_co_acreditado);
+        $this->assertIsBool($resultado);
+        $this->assertNotTrue(errores::$error);
+        $this->assertTrue($resultado);
+        errores::$error = false;
+    }
+
 
 }
 
