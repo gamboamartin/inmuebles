@@ -126,6 +126,20 @@ class controlador_inm_costo extends _ctl_base {
             return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
 
+        $base = $this->base_upd(keys_selects: $keys_selects, params: array(),params_ajustados: array());
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al integrar base',data:  $base, header: $header,ws:  $ws);
+        }
+
+        $fecha = $this->html->input_fecha(cols: 4,row_upd:  $this->row_upd,value_vacio:  false,
+            value: $this->row_upd->fecha);
+        if(errores::$error){
+            return $this->retorno_error(
+                mensaje: 'Error al obtener input fecha',data:  $fecha, header: $header,ws:  $ws);
+        }
+
+        $this->inputs->fecha = $fecha;
+
         return $r_modifica;
     }
 

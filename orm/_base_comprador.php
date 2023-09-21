@@ -62,10 +62,31 @@ class _base_comprador{
     /**
      * Inicializa los elementos default posterior upd
      * @param stdClass $r_modifica Resultado de modificacion
-     * @return stdClass
+     * @return stdClass|array
+     * @version 2.54.0
      */
-    final public function data_upd_post(stdClass $r_modifica): stdClass
+    final public function data_upd_post(stdClass $r_modifica): stdClass|array
     {
+
+        if(!isset($r_modifica->registro_actualizado)){
+            return $this->error->error(mensaje: 'Error $r_modifica->registro_actualizado no existe',
+                data: $r_modifica);
+        }
+        if(!is_object($r_modifica->registro_actualizado)){
+            return $this->error->error(mensaje: 'Error $r_modifica->registro_actualizado debe ser un obj',
+                data: $r_modifica);
+        }
+        if(!isset($r_modifica->registro_actualizado->inm_comprador_es_segundo_credito)){
+            return $this->error->error(
+                mensaje: 'Error$r_modifica->registro_actualizado->inm_comprador_es_segundo_credito no existe',
+                data: $r_modifica);
+        }
+        if(!isset($r_modifica->registro_actualizado->inm_comprador_con_discapacidad)){
+            return $this->error->error(
+                mensaje: 'Error$r_modifica->registro_actualizado->inm_comprador_con_discapacidad no existe',
+                data: $r_modifica);
+        }
+
         $row_upd_post = array();
         $aplica_upd_posterior = false;
 

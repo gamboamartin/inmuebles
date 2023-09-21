@@ -354,8 +354,6 @@ class inm_comprador extends _modelo_parent{
 
     }
 
-
-
     public function modifica_bd(array $registro, int $id, bool $reactiva = false,
                                 array $keys_integra_ds = array('codigo', 'descripcion')): array|stdClass
     {

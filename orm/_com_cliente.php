@@ -42,10 +42,13 @@ class _com_cliente{
             return $this->error->error(mensaje: 'Error al obtener relacion',data:  $r_im_rel_comprador_com_cliente);
         }
         if($r_im_rel_comprador_com_cliente->n_registros === 0){
-            return $this->error->error(mensaje: 'Error inm_rel_comprador_com_cliente no existe',data:  $r_im_rel_comprador_com_cliente);
+            return $this->error->error(mensaje: 'Error inm_rel_comprador_com_cliente no existe',
+                data:  $r_im_rel_comprador_com_cliente);
         }
         if($r_im_rel_comprador_com_cliente->n_registros > 1){
-            return $this->error->error(mensaje: 'Error de integridad inm_rel_comprador_com_cliente tiene mas de un registro',data:  $r_im_rel_comprador_com_cliente);
+            return $this->error->error(
+                mensaje: 'Error de integridad inm_rel_comprador_com_cliente tiene mas de un registro',
+                data:  $r_im_rel_comprador_com_cliente);
         }
         $inm_rel_comprador_com_cliente = $r_im_rel_comprador_com_cliente->registros[0];
         return (int)$inm_rel_comprador_com_cliente['com_cliente_id'];
@@ -85,7 +88,8 @@ class _com_cliente{
     }
 
     /**
-     * @param stdClass $registro
+     * Ajusta un row para actualizar un cliente
+     * @param stdClass $registro Registro de tipo comprador
      * @return array
      */
     private function com_cliente_upd(stdClass $registro): array
