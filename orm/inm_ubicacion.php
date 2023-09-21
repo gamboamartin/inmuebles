@@ -94,6 +94,20 @@ class inm_ubicacion extends _inm_ubicaciones {
         return $r_elimina_bd;
     }
 
+    final public function get_costo(int $inm_ubicacion_id){
+        $filtro['unm_ubicacion.id'] = $inm_ubicacion_id;
+
+        $campos['costo'] = 'inm_costo.monto';
+
+        $r_inm_costo = (new inm_costo(link: $this->link))->suma(campos: $campos,filtro: $filtro);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al obtener costo', data: $r_inm_costo);
+        }
+
+        return round($r_inm_costo['costo'],2);
+
+    }
+
 
     protected function init_row(array $registro):array{
 

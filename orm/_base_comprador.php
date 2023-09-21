@@ -63,6 +63,7 @@ class _base_comprador{
      * Inicializa los elementos default posterior upd
      * @param stdClass $r_modifica Resultado de modificacion
      * @return stdClass|array
+     * @version 2.57.0
      */
     final public function data_upd_post(stdClass $r_modifica): stdClass|array
     {

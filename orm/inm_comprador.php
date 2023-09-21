@@ -374,7 +374,19 @@ class inm_comprador extends _modelo_parent{
         return $r_modifica;
     }
 
-    private function r_modifica_post(stdClass $data_upd, int $id){
+    /**
+     * Transacciona un elemento para su actualizacion posterior
+     * @param stdClass $data_upd Datos de actualizacion
+     * @param int $id Id de comprador
+     * @return array|stdClass
+     * @version 2.57.0
+     */
+    private function r_modifica_post(stdClass $data_upd, int $id): array|stdClass
+    {
+        if($id <=0){
+            return  $this->error->error(mensaje: 'Error al obtener registro id debe ser mayor a 0', data: $id);
+        }
+
         $registro_previo = $this->registro(registro_id: $id,columnas_en_bruto: true,retorno_obj: true);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al obtener registro_previo',data:  $registro_previo);
@@ -390,7 +402,14 @@ class inm_comprador extends _modelo_parent{
         return $r_modifica_post;
     }
 
-    private function result_upd_post(stdClass $data_upd, int $id){
+    /**
+     * Integra el resultado post upd si es que aplica cambio
+     * @param stdClass $data_upd Datos de upd
+     * @param int $id Id de comprador
+     * @return array|stdClass
+     */
+    private function result_upd_post(stdClass $data_upd, int $id): array|stdClass
+    {
         $r_modifica_post = new stdClass();
         if($data_upd->aplica_upd_posterior){
 
