@@ -1,6 +1,7 @@
 <?php
 namespace gamboamartin\inmuebles\models;
 use gamboamartin\errores\errores;
+use gamboamartin\validacion\validacion;
 use PDO;
 use stdClass;
 
@@ -37,10 +38,27 @@ class _co_acreditado{
      * @param string $key_co_acreditado Key a integrar
      * @param array $registro registro de comprador modifica
      * @return array
+     * @version 2.65.0
      */
     private function asigna_campo_co_acreditado(string $campo_co_acreditado, array $inm_co_acreditado_ins,
                                                 string $key_co_acreditado, array $registro): array
     {
+        $campo_co_acreditado = trim($campo_co_acreditado);
+        if($campo_co_acreditado === ''){
+            return $this->error->error(mensaje: 'Error campo_co_acreditado esta vacio',data:  $campo_co_acreditado);
+        }
+        $key_co_acreditado = trim($key_co_acreditado);
+        if($key_co_acreditado === ''){
+            return $this->error->error(mensaje: 'Error key_co_acreditado esta vacio',data:  $key_co_acreditado);
+        }
+
+
+        $keys = array($key_co_acreditado);
+        $valida = (new validacion())->valida_existencia_keys(keys: $keys,registro:  $registro,valida_vacio: false);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al validar',data:  $valida);
+        }
+
         $inm_co_acreditado_ins[$campo_co_acreditado] = $registro[$key_co_acreditado];
 
         return $inm_co_acreditado_ins;

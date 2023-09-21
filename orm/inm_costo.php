@@ -12,7 +12,8 @@ class inm_costo extends _modelo_parent{
     public function __construct(PDO $link)
     {
         $tabla = 'inm_costo';
-        $columnas = array($tabla=>false,'inm_concepto'=>$tabla,'inm_ubicacion'=>$tabla);
+        $columnas = array($tabla=>false,'inm_concepto'=>$tabla,'inm_ubicacion'=>$tabla,
+            'inm_tipo_concepto'=>'inm_concepto');
 
         $campos_obligatorios = array('inm_concepto_id','inm_ubicacion_id','monto','fecha','referencia');
 
