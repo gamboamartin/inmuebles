@@ -67,6 +67,34 @@ class _co_acreditadoTest extends test {
 
     }
 
+    public function test_integra_campo_co_acreditado(): void
+    {
+        errores::$error = false;
+
+        $_GET['seccion'] = 'inm_producto_infonavit';
+        $_GET['accion'] = 'lista';
+        $_SESSION['grupo_id'] = 1;
+        $_SESSION['usuario_id'] = 2;
+        $_GET['session_id'] = '1';
+
+
+        $inm = new _co_acreditado();
+        $inm = new liberator($inm);
+
+
+        $registro = array();
+        $key_co_acreditado = 'z';
+        $inm_co_acreditado_ins = array();
+        $campo_co_acreditado = 'd';
+        $registro['z'] = 'FF';
+        $resultado = $inm->integra_campo_co_acreditado($campo_co_acreditado, $inm_co_acreditado_ins,
+            $key_co_acreditado, $registro);
+        $this->assertIsArray($resultado);
+        $this->assertNotTrue(errores::$error);
+        $this->assertEquals('FF',$resultado['d']);
+        errores::$error = false;
+    }
+
 
 }
 

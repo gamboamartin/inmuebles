@@ -44,17 +44,10 @@ class _co_acreditado{
                                                 string $key_co_acreditado, array $registro): array
     {
         $campo_co_acreditado = trim($campo_co_acreditado);
-        if($campo_co_acreditado === ''){
-            return $this->error->error(mensaje: 'Error campo_co_acreditado esta vacio',data:  $campo_co_acreditado);
-        }
         $key_co_acreditado = trim($key_co_acreditado);
-        if($key_co_acreditado === ''){
-            return $this->error->error(mensaje: 'Error key_co_acreditado esta vacio',data:  $key_co_acreditado);
-        }
 
-
-        $keys = array($key_co_acreditado);
-        $valida = (new validacion())->valida_existencia_keys(keys: $keys,registro:  $registro,valida_vacio: false);
+        $valida = $this->valida_data_co_acreditado(campo_co_acreditado: $campo_co_acreditado,
+            key_co_acreditado:  $key_co_acreditado,registro:  $registro);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al validar',data:  $valida);
         }
@@ -170,14 +163,25 @@ class _co_acreditado{
 
 
     /**
-     * @param string $campo_co_acreditado
-     * @param array $inm_co_acreditado_ins
-     * @param string $key_co_acreditado
-     * @param array $registro
+     * Integra un campo de co acreditado para su alta
+     * @param string $campo_co_acreditado Campo a integrar
+     * @param array $inm_co_acreditado_ins Registro previo para insersion
+     * @param string $key_co_acreditado Key de base modifica
+     * @param array $registro Registro en proceso
      * @return array
      */
-    private function integra_campo_co_acreditado(string $campo_co_acreditado, array $inm_co_acreditado_ins, string $key_co_acreditado, array $registro): array
+    PUBLIC function integra_campo_co_acreditado(string $campo_co_acreditado, array $inm_co_acreditado_ins,
+                                                 string $key_co_acreditado, array $registro): array
     {
+        $campo_co_acreditado = trim($campo_co_acreditado);
+        $key_co_acreditado = trim($key_co_acreditado);
+
+        $valida = $this->valida_data_co_acreditado(campo_co_acreditado: $campo_co_acreditado,
+            key_co_acreditado:  $key_co_acreditado,registro:  $registro);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al validar',data:  $valida);
+        }
+
         $value = trim($registro[$key_co_acreditado]);
         if($value !=='') {
             $inm_co_acreditado_ins = $this->asigna_campo_co_acreditado(campo_co_acreditado: $campo_co_acreditado,
@@ -281,5 +285,22 @@ class _co_acreditado{
         }
         return $data_result;
 
+    }
+
+    private function valida_data_co_acreditado(string $campo_co_acreditado, string $key_co_acreditado, array $registro){
+        $campo_co_acreditado = trim($campo_co_acreditado);
+        if($campo_co_acreditado === ''){
+            return $this->error->error(mensaje: 'Error campo_co_acreditado esta vacio',data:  $campo_co_acreditado);
+        }
+        $key_co_acreditado = trim($key_co_acreditado);
+        if($key_co_acreditado === ''){
+            return $this->error->error(mensaje: 'Error key_co_acreditado esta vacio',data:  $key_co_acreditado);
+        }
+        $keys = array($key_co_acreditado);
+        $valida = (new validacion())->valida_existencia_keys(keys: $keys,registro:  $registro,valida_vacio: false);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al validar',data:  $valida);
+        }
+        return true;
     }
 }
