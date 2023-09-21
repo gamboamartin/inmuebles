@@ -145,7 +145,7 @@ class controlador_inm_compradorTest extends test {
             exit;
         }
 
-        $ch = curl_init("http://localhost/inmuebles/index.php?seccion=inm_comprador&accion=asigna_ubicacion&adm_menu_id=64&session_id=8813699014&adm_menu_id=64&registro_id=1");
+        $ch = curl_init("http://localhost/inmuebles/index.php?seccion=inm_comprador&accion=asigna_ubicacion&adm_menu_id=64&session_id=5343136711&adm_menu_id=64&registro_id=1");
         $fp = fopen("inm_comprador.asigna_ubicacion", "w");
 
         curl_setopt($ch, CURLOPT_FILE, $fp);

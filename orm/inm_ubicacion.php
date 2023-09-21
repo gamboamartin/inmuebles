@@ -27,7 +27,7 @@ class inm_ubicacion extends _inm_ubicaciones {
         $renombres= array();
 
         $atributos_criticos = array('manzana','lote','dp_calle_pertenece_id','etapa','cuenta_predial',
-            'inm_tipo_ubicacion_id','n_opiniones_valor','monto_opinion_promedio');
+            'inm_tipo_ubicacion_id','n_opiniones_valor','monto_opinion_promedio','costo');
 
         parent::__construct(link: $link, tabla: $tabla, campos_obligatorios: $campos_obligatorios,
             columnas: $columnas, columnas_extra: $columnas_extra, renombres: $renombres,

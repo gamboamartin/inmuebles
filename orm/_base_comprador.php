@@ -227,6 +227,12 @@ class _base_comprador{
         return $result;
     }
 
+    /**
+     * Valida que los elementos base existen en un modificacion de comprador
+     * @param stdClass $r_modifica Resultado de modifica_bd
+     * @return bool|array
+     * @version 2.56.0
+     */
     final public function valida_r_modifica(stdClass $r_modifica): bool|array
     {
         if(!isset($r_modifica->registro_actualizado)){

@@ -225,6 +225,31 @@ class _base_compradorTest extends test {
         errores::$error = false;
     }
 
+    public function test_valida_r_modifica(): void
+    {
+        errores::$error = false;
+
+        $_GET['seccion'] = 'inm_producto_infonavit';
+        $_GET['accion'] = 'lista';
+        $_SESSION['grupo_id'] = 1;
+        $_SESSION['usuario_id'] = 2;
+        $_GET['session_id'] = '1';
+
+        $inm = new _base_comprador();
+        //$inm = new liberator($inm);
+
+
+        $r_modifica = new stdClass();
+        $r_modifica->registro_actualizado = new stdClass();
+        $r_modifica->registro_actualizado->inm_comprador_es_segundo_credito = '';
+        $r_modifica->registro_actualizado->inm_comprador_con_discapacidad = '';
+
+        $resultado = $inm->valida_r_modifica($r_modifica);
+        $this->assertIsBool($resultado);
+        $this->assertNotTrue(errores::$error);
+        errores::$error = false;
+    }
+
 
 
 
