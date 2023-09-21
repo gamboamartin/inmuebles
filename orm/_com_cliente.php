@@ -16,7 +16,14 @@ class _com_cliente{
         $this->validacion = new validacion();
     }
 
-    private function actualiza_com_cliente(array $com_cliente_upd, int $inm_comprador_id, PDO $link){
+    /**
+     * @param array $com_cliente_upd
+     * @param int $inm_comprador_id
+     * @param PDO $link
+     * @return array|stdClass
+     */
+    private function actualiza_com_cliente(array $com_cliente_upd, int $inm_comprador_id, PDO $link): array|stdClass
+    {
         $com_cliente_id = $this->com_cliente_id(inm_comprador_id: $inm_comprador_id,link: $link);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al obtener com_cliente_id',data:  $com_cliente_id);
@@ -92,9 +99,17 @@ class _com_cliente{
      * Ajusta un row para actualizar un cliente
      * @param stdClass $registro Registro de tipo comprador
      * @return array
+     * @version 2.61.0
      */
     private function com_cliente_upd(stdClass $registro): array
     {
+
+        $keys = array('inm_comprador_nombre','inm_comprador_apellido_paterno');
+        $valida = $this->validacion->valida_existencia_keys(keys: $keys,registro:  $registro);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al al validar $registro',data:  $valida);
+        }
+
         $com_cliente_upd = array();
 
         $razon_social = $this->razon_social(con_prefijo: true, registro: $registro);
