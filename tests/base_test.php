@@ -268,6 +268,17 @@ class base_test{
             }
         }
 
+        $existe = (new inm_comprador(link: $link))->existe_by_id(registro_id: $inm_comprador_id);
+        if(errores::$error){
+            return (new errores())->error(mensaje: 'Error al validar si existe inm_comprador_id', data: $existe);
+        }
+        if(!$existe){
+            $alta = $this->alta_inm_comprador(link: $link, id: $inm_comprador_id);
+            if(errores::$error){
+                return (new errores())->error(mensaje: 'Error al insertar inm_comprador_id', data: $alta);
+            }
+        }
+
         $registro['id'] = $id;
         $registro['inm_co_acreditado_id'] = $inm_co_acreditado_id;
         $registro['inm_comprador_id'] = $inm_comprador_id;

@@ -302,7 +302,17 @@ class inm_comprador extends _modelo_parent{
         return $com_cliente;
     }
 
-    final public function get_co_acreditados(int $inm_comprador_id){
+    /**
+     * Obtiene los co acreditados de un comprador
+     * @param int $inm_comprador_id Identificador de comprador
+     * @return array
+     * @version 2.52.0
+     */
+    final public function get_co_acreditados(int $inm_comprador_id): array
+    {
+        if($inm_comprador_id <= 0){
+            return $this->error->error(mensaje: 'Error inm_comprador_id debe ser mayor a 0',data:  $inm_comprador_id);
+        }
         $filtro['inm_comprador.id'] = $inm_comprador_id;
         $r_inm_rel_co_acredit = (new inm_rel_co_acred(link: $this->link))->filtro_and(filtro: $filtro);
         if(errores::$error){
@@ -311,7 +321,8 @@ class inm_comprador extends _modelo_parent{
         $rels = $r_inm_rel_co_acredit->registros;
         $co_acreditados = array();
         foreach ($rels as $rel){
-            $co_acreditado = (new inm_co_acreditado(link: $this->link))->registro(registro_id: $rel['inm_co_acreditado_id']);
+            $co_acreditado = (new inm_co_acreditado(link: $this->link))->registro(
+                registro_id: $rel['inm_co_acreditado_id']);
             if(errores::$error){
                 return $this->error->error(mensaje: 'Error al obtener co_acreditado',data:  $co_acreditado);
             }
@@ -322,6 +333,10 @@ class inm_comprador extends _modelo_parent{
     }
 
     final public function get_referencias(int $inm_comprador_id){
+        if($inm_comprador_id <= 0){
+            return $this->error->error(mensaje: 'Error inm_comprador_id debe ser mayor a 0',data:  $inm_comprador_id);
+        }
+
         $filtro['inm_comprador.id'] = $inm_comprador_id;
         $r_inm_referencia = (new inm_referencia(link: $this->link))->filtro_and(filtro: $filtro);
         if(errores::$error){
