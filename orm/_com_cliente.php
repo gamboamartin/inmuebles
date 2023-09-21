@@ -30,8 +30,9 @@ class _com_cliente{
     }
 
     /**
-     * @param int $inm_comprador_id
-     * @param PDO $link
+     * Obtiene el id de un cliente con referencia a su comprador
+     * @param int $inm_comprador_id Id de comprador
+     * @param PDO $link Conexion a la base de datos
      * @return array|int
      */
     private  function com_cliente_id(int $inm_comprador_id, PDO $link): int|array
@@ -417,6 +418,7 @@ class _com_cliente{
     /**
      * Integra los keys de un cliente
      * @return string[]
+     * @version 2.59.0
      */
     private function key_com_cliente(): array
     {

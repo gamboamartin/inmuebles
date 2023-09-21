@@ -393,6 +393,40 @@ class _com_clienteTest extends test {
         errores::$error = false;
     }
 
+    public function test_key_com_cliente(): void
+    {
+        errores::$error = false;
+
+        $_GET['seccion'] = 'inm_producto_infonavit';
+        $_GET['accion'] = 'lista';
+        $_SESSION['grupo_id'] = 1;
+        $_SESSION['usuario_id'] = 2;
+        $_GET['session_id'] = '1';
+
+
+
+        $inm = new _com_cliente();
+        $inm = new liberator($inm);
+
+
+        $resultado = $inm->key_com_cliente();
+        $this->assertIsArray($resultado);
+        $this->assertNotTrue(errores::$error);
+        $this->assertEquals('com_tipo_cliente_id',$resultado[0]);
+        $this->assertEquals('rfc',$resultado[1]);
+        $this->assertEquals('dp_calle_pertenece_id',$resultado[2]);
+        $this->assertEquals('numero_exterior',$resultado[3]);
+        $this->assertEquals('numero_interior',$resultado[4]);
+        $this->assertEquals('telefono',$resultado[5]);
+        $this->assertEquals('cat_sat_regimen_fiscal_id',$resultado[6]);
+        $this->assertEquals('cat_sat_moneda_id',$resultado[7]);
+        $this->assertEquals('cat_sat_forma_pago_id',$resultado[8]);
+        $this->assertEquals('cat_sat_metodo_pago_id',$resultado[9]);
+        $this->assertEquals('cat_sat_uso_cfdi_id',$resultado[10]);
+        $this->assertEquals('cat_sat_tipo_persona_id',$resultado[11]);
+        errores::$error = false;
+    }
+
     public function test_numero_interior(): void
     {
         errores::$error = false;

@@ -434,6 +434,7 @@ class inm_comprador extends _modelo_parent{
      * @param int $id Id de comprador
      * @param stdClass $r_modifica resultado de modificacion
      * @return array|stdClass
+     * @version 2.59.0
      */
     final public function upd_post(int $id, stdClass $r_modifica): array|stdClass
     {
