@@ -261,12 +261,24 @@ inm_referencia_lada_1.change(function() {
 });
 inm_referencia_numero_1.change(function() {
     let value = $(this).val().trim().toUpperCase();
+    value = value.replace(' ','');
+    value = value.replace(' ','');
+    value = value.replace(' ','');
+    value = value.replace(' ','');
+    value = value.replace(' ','');
+    value = value.replace(' ','');
     $(this).val(value);
 
 });
 
 inm_referencia_celular_1.change(function() {
     let value = $(this).val().trim().toUpperCase();
+    value = value.replace(' ','');
+    value = value.replace(' ','');
+    value = value.replace(' ','');
+    value = value.replace(' ','');
+    value = value.replace(' ','');
+    value = value.replace(' ','');
     $(this).val(value);
 
 });
@@ -296,17 +308,35 @@ inm_referencia_nombre_2.change(function() {
 });
 inm_referencia_lada_2.change(function() {
     let value = $(this).val().trim().toUpperCase();
+    value = value.replace(' ','');
+    value = value.replace(' ','');
+    value = value.replace(' ','');
+    value = value.replace(' ','');
+    value = value.replace(' ','');
+    value = value.replace(' ','');
     $(this).val(value);
 
 });
 inm_referencia_numero_2.change(function() {
     let value = $(this).val().trim().toUpperCase();
+    value = value.replace(' ','');
+    value = value.replace(' ','');
+    value = value.replace(' ','');
+    value = value.replace(' ','');
+    value = value.replace(' ','');
+    value = value.replace(' ','');
     $(this).val(value);
 
 });
 
 inm_referencia_celular_2.change(function() {
     let value = $(this).val().trim().toUpperCase();
+    value = value.replace(' ','');
+    value = value.replace(' ','');
+    value = value.replace(' ','');
+    value = value.replace(' ','');
+    value = value.replace(' ','');
+    value = value.replace(' ','');
     $(this).val(value);
 
 });
@@ -381,18 +411,33 @@ in_monto_ahorro_voluntario.change(function() {
 
 lada_nep_ct.change(function() {
     let value = $(this).val().trim();
+    value = value.replace(' ','');
+    value = value.replace(' ','');
+    value = value.replace(' ','');
+    value = value.replace(' ','');
+    value = value.replace(' ','');
     $(this).val(value);
 
 });
 
 numero_nep_ct.change(function() {
     let value = $(this).val().trim();
+    value = value.replace(' ','');
+    value = value.replace(' ','');
+    value = value.replace(' ','');
+    value = value.replace(' ','');
+    value = value.replace(' ','');
     $(this).val(value);
 
 });
 
 extension_nep_ct.change(function() {
     let value = $(this).val().trim();
+    value = value.replace(' ','');
+    value = value.replace(' ','');
+    value = value.replace(' ','');
+    value = value.replace(' ','');
+    value = value.replace(' ','');
     $(this).val(value);
 
 });
@@ -400,12 +445,22 @@ extension_nep_ct.change(function() {
 
 nss_ct.change(function() {
     let value = $(this).val().trim();
+    value = value.replace(' ','');
+    value = value.replace(' ','');
+    value = value.replace(' ','');
+    value = value.replace(' ','');
+    value = value.replace(' ','');
     $(this).val(value);
 
 });
 
 curp_ct.change(function() {
     let value = $(this).val().trim();
+    value = value.replace(' ','');
+    value = value.replace(' ','');
+    value = value.replace(' ','');
+    value = value.replace(' ','');
+    value = value.replace(' ','');
     $(this).val(value);
 
 });
@@ -413,6 +468,11 @@ curp_ct.change(function() {
 
 rfc_ct.change(function() {
     let value = $(this).val().trim();
+    value = value.replace(' ','');
+    value = value.replace(' ','');
+    value = value.replace(' ','');
+    value = value.replace(' ','');
+    value = value.replace(' ','');
     $(this).val(value);
 
 });
@@ -449,39 +509,75 @@ numero_interior_ct.change(function() {
 
 lada_com_ct.change(function() {
     let value = $(this).val().trim();
+    value = value.replace(' ','');
+    value = value.replace(' ','');
+    value = value.replace(' ','');
+    value = value.replace(' ','');
+    value = value.replace(' ','');
     $(this).val(value);
 
 });
 
 numero_com_ct.change(function() {
     let value = $(this).val().trim();
+    value = value.replace(' ','');
+    value = value.replace(' ','');
+    value = value.replace(' ','');
+    value = value.replace(' ','');
+    value = value.replace(' ','');
+    value = value.replace(' ','');
     $(this).val(value);
 
 });
 
 cel_com_ct.change(function() {
     let value = $(this).val().trim();
+    value = value.replace(' ','');
+    value = value.replace(' ','');
+    value = value.replace(' ','');
+    value = value.replace(' ','');
+    value = value.replace(' ','');
+    value = value.replace(' ','');
     $(this).val(value);
 
 });
 
 correo_com_ct.change(function() {
     let value = $(this).val().trim();
+    value = value.replace(' ','');
+    value = value.replace(' ','');
+    value = value.replace(' ','');
+    value = value.toLowerCase();
     $(this).val(value);
 });
 
 inm_co_acreditado_nss.change(function() {
     let value = $(this).val().trim();
+    value = value.replace(' ','');
+    value = value.replace(' ','');
+    value = value.replace(' ','');
+    value = value.replace(' ','');
+    value = value.replace(' ','');
     $(this).val(value);
 });
 
 inm_co_acreditado_curp.change(function() {
     let value = $(this).val().trim().toUpperCase();
+    value = value.replace(' ','');
+    value = value.replace(' ','');
+    value = value.replace(' ','');
+    value = value.replace(' ','');
+    value = value.replace(' ','');
     $(this).val(value);
 });
 
 inm_co_acreditado_rfc.change(function() {
     let value = $(this).val().trim().toUpperCase();
+    value = value.replace(' ','');
+    value = value.replace(' ','');
+    value = value.replace(' ','');
+    value = value.replace(' ','');
+    value = value.replace(' ','');
     $(this).val(value);
 });
 
@@ -507,16 +603,33 @@ inm_co_acreditado_lada.change(function() {
 
 inm_co_acreditado_numero.change(function() {
     let value = $(this).val().trim();
+    value = value.replace(' ','');
+    value = value.replace(' ','');
+    value = value.replace(' ','');
+    value = value.replace(' ','');
+    value = value.replace(' ','');
     $(this).val(value);
 });
 
 inm_co_acreditado_celular.change(function() {
     let value = $(this).val().trim();
+    value = value.replace(' ','');
+    value = value.replace(' ','');
+    value = value.replace(' ','');
+    value = value.replace(' ','');
+    value = value.replace(' ','');
+    value = value.replace(' ','');
+    value = value.replace(' ','');
     $(this).val(value);
 });
 
 inm_co_acreditado_correo.change(function() {
     let value = $(this).val().trim();
+    value = value.replace(' ','');
+    value = value.replace(' ','');
+    value = value.replace(' ','');
+    value = value.replace(' ','');
+    value = value.toLowerCase();
     $(this).val(value);
 });
 
@@ -527,16 +640,32 @@ inm_co_acreditado_nombre_empresa_patron.change(function() {
 
 inm_co_acreditado_nrp.change(function() {
     let value = $(this).val().trim().toUpperCase();
+    value = value.replace(' ','');
+    value = value.replace(' ','');
+    value = value.replace(' ','');
+    value = value.replace(' ','');
+    value = value.replace(' ','');
     $(this).val(value);
 });
 
 inm_co_acreditado_lada_nep.change(function() {
     let value = $(this).val().trim();
+    value = value.replace(' ','');
+    value = value.replace(' ','');
+    value = value.replace(' ','');
+    value = value.replace(' ','');
+    value = value.replace(' ','');
     $(this).val(value);
 });
 
 inm_co_acreditado_numero_nep.change(function() {
     let value = $(this).val().trim();
+    value = value.replace(' ','');
+    value = value.replace(' ','');
+    value = value.replace(' ','');
+    value = value.replace(' ','');
+    value = value.replace(' ','');
+    value = value.replace(' ','');
     $(this).val(value);
 });
 
@@ -814,6 +943,10 @@ nrp_nep_ct.change(function(){
 
     let nrp_nep = $(this).val();
     nrp_nep = nrp_nep.toUpperCase().trim();
+    nrp_nep = nrp_nep.replace(' ','');
+    nrp_nep = nrp_nep.replace(' ','');
+    nrp_nep = nrp_nep.replace(' ','');
+    nrp_nep = nrp_nep.replace(' ','');
     nrp_nep_ct.val(nrp_nep);
 
 });
@@ -822,6 +955,9 @@ curp_ct.change(function(){
 
     let curp = $(this).val();
     curp = curp.toUpperCase()
+    curp = curp.replace(' ','');
+    curp = curp.replace(' ','');
+    curp = curp.replace(' ','');
     curp_ct.val(curp);
 
 });

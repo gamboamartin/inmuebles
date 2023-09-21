@@ -55,18 +55,10 @@ class _alta_comprador{
         $pr_proceso_descripcion = trim($pr_proceso_descripcion);
         $tabla = trim($tabla);
 
-        if($accion == ''){
-            return $this->error->error(mensaje: 'Error accion esta vacia', data: $accion);
-        }
-        if($etapa == ''){
-            return $this->error->error(mensaje: 'Error etapa esta vacia', data: $etapa);
-        }
-        if($pr_proceso_descripcion == ''){
-            return $this->error->error(mensaje: 'Error pr_proceso_descripcion esta vacia',
-                data: $pr_proceso_descripcion);
-        }
-        if($tabla == ''){
-            return $this->error->error(mensaje: 'Error tabla esta vacia', data: $tabla);
+        $valida =$this->valida_data_etapa(accion: $accion,etapa:  $etapa,
+            pr_proceso_descripcion:  $pr_proceso_descripcion,tabla:  $tabla);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al validar datos de etapa', data: $valida);
         }
 
 
@@ -109,18 +101,23 @@ class _alta_comprador{
         return $registro;
     }
 
-    private function inm_comprador_etapa_alta(string $accion, string $etapa, int $inm_comprador_id, PDO $link, string $pr_proceso_descripcion, string $tabla){
-        $pr_etapa_proceso = $this->pr_etapa_proceso(accion: $accion, etapa: $etapa, link: $link, pr_proceso_descripcion: $pr_proceso_descripcion, tabla: $tabla);
+    private function inm_comprador_etapa_alta(string $accion, string $etapa, int $inm_comprador_id, PDO $link,
+                                              string $pr_proceso_descripcion, string $tabla){
+        $pr_etapa_proceso = $this->pr_etapa_proceso(accion: $accion, etapa: $etapa, link: $link,
+            pr_proceso_descripcion: $pr_proceso_descripcion, tabla: $tabla);
         if (errores::$error) {
             return $this->error->error(mensaje: 'Error al obtener pr_etapa_proceso', data: $pr_etapa_proceso);
         }
 
-        $inm_comprador_etapa_ins = $this->inm_comprador_etapa_ins(inm_comprador_id: $inm_comprador_id,pr_etapa_proceso:  $pr_etapa_proceso);;
+        $inm_comprador_etapa_ins = $this->inm_comprador_etapa_ins(inm_comprador_id: $inm_comprador_id,
+            pr_etapa_proceso:  $pr_etapa_proceso);;
         if (errores::$error) {
-            return $this->error->error(mensaje: 'Error al obtener inm_comprador_etapa_ins', data: $inm_comprador_etapa_ins);
+            return $this->error->error(mensaje: 'Error al obtener inm_comprador_etapa_ins',
+                data: $inm_comprador_etapa_ins);
         }
 
-        $inm_comprador_etapa = (new inm_comprador_etapa(link: $link))->alta_registro(registro: $inm_comprador_etapa_ins);
+        $inm_comprador_etapa = (new inm_comprador_etapa(link: $link))->alta_registro(
+            registro: $inm_comprador_etapa_ins);
         if (errores::$error) {
             return $this->error->error(mensaje: 'Error al insertar etapa', data: $inm_comprador_etapa);
         }
@@ -367,10 +364,22 @@ class _alta_comprador{
                                       string $pr_proceso_descripcion, string $tabla): array
     {
 
+        $accion = trim($accion);
+        $etapa = trim($etapa);
+        $pr_proceso_descripcion = trim($pr_proceso_descripcion);
+        $tabla = trim($tabla);
+
+        $valida =$this->valida_data_etapa(accion: $accion,etapa:  $etapa,
+            pr_proceso_descripcion:  $pr_proceso_descripcion,tabla:  $tabla);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al validar datos de etapa', data: $valida);
+        }
+
+
         $filtro = $this->filtro_etapa_proceso(accion: $accion, etapa: $etapa,
             pr_proceso_descripcion: $pr_proceso_descripcion, tabla: $tabla);
         if (errores::$error) {
-            return $this->error->error(mensaje: 'Error al insertar etapa', data: $filtro);
+            return $this->error->error(mensaje: 'Error al obtener filtro', data: $filtro);
         }
         $r_pr_etapa_proceso = (new pr_etapa_proceso(link: $link))->filtro_and(filtro: $filtro);
         if (errores::$error) {
@@ -505,6 +514,39 @@ class _alta_comprador{
         $valida = $this->validacion->valida_rfc(key: 'rfc',registro:  $registro);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al validar rfc',data:  $valida);
+        }
+
+        return true;
+    }
+
+    /**
+     * Valida la entrada de datos de una etapa
+     * @param string $accion Accion a validar
+     * @param string $etapa Etapa a validar
+     * @param string $pr_proceso_descripcion Proceso a validar
+     * @param string $tabla Tabla de integracion
+     * @return bool|array
+     */
+    private function valida_data_etapa(string $accion, string $etapa, string $pr_proceso_descripcion,
+                                       string $tabla): bool|array
+    {
+        $accion = trim($accion);
+        $etapa = trim($etapa);
+        $pr_proceso_descripcion = trim($pr_proceso_descripcion);
+        $tabla = trim($tabla);
+
+        if($accion == ''){
+            return $this->error->error(mensaje: 'Error accion esta vacia', data: $accion);
+        }
+        if($etapa == ''){
+            return $this->error->error(mensaje: 'Error etapa esta vacia', data: $etapa);
+        }
+        if($pr_proceso_descripcion == ''){
+            return $this->error->error(mensaje: 'Error pr_proceso_descripcion esta vacia',
+                data: $pr_proceso_descripcion);
+        }
+        if($tabla == ''){
+            return $this->error->error(mensaje: 'Error tabla esta vacia', data: $tabla);
         }
 
         return true;
