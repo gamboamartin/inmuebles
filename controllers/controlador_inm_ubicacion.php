@@ -342,6 +342,7 @@ class controlador_inm_ubicacion extends _ctl_base {
         $columns["inm_ubicacion_cuenta_predial"]["titulo"] = "Predial";
         $columns["inm_ubicacion_n_opiniones_valor"]["titulo"] = "Op Valor";
         $columns["inm_ubicacion_monto_opinion_promedio"]["titulo"] = "Valor Est";
+        $columns["inm_ubicacion_costo"]["titulo"] = "Costo";
 
         $filtro = array("inm_ubicacion.id","dp_municipio.descripcion",'dp_cp.descripcion','dp_colonia.descripcion',
             'dp_calle.descripcion','inm_ubicacion.numero_exterior','inm_ubicacion.numero_interior',

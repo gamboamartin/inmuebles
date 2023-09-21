@@ -314,6 +314,7 @@ class _com_cliente{
      * Inicializa los keys de un cliente
      * @param array $com_cliente_upd Cliente a ajustar
      * @return array
+     * @version 2.60.0
      */
     private function init_keys_com_cliente(array $com_cliente_upd): array
     {
