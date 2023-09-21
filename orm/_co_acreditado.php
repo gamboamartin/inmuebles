@@ -17,6 +17,7 @@ class _co_acreditado{
      * Valida si aplica o no un alta de co_acreditado
      * @param array $inm_co_acreditado_ins Registro a validar
      * @return bool
+     * @version 2.70.0
      */
     private function aplica_alta_co_acreditado(array $inm_co_acreditado_ins): bool
     {
@@ -60,7 +61,8 @@ class _co_acreditado{
     }
 
     /**
-     * @param array $co_acreditados
+     * Integra los datos para una transaccion de co acreditado
+     * @param array $co_acreditados Conjunto de co acreditados
      * @return stdClass
      */
     private function data_co_acreditado(array $co_acreditados): stdClass
