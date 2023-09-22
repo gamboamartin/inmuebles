@@ -54,8 +54,6 @@ class inm_co_acreditado extends _modelo_parent{
             return $this->error->error(mensaje: 'Error al validar registro',data:  $valida);
         }
 
-
-
         if(!isset($this->registro['descripcion'])){
             $descripcion = $this->descripcion(registro: $this->registro );
             if(errores::$error){

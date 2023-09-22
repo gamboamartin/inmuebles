@@ -156,10 +156,23 @@ class _co_acreditado{
      * @param int $inm_comprador_id Comprador id
      * @param PDO $link Conexion a la base de datos
      * @return array|stdClass
+     * @version 2.73.0
      */
     private function inserta_data_co_acreditado(array $inm_co_acreditado_ins, int $inm_comprador_id,
                                                 PDO $link): array|stdClass
     {
+        $valida = (new inm_co_acreditado(link: $link))->valida_data_alta(inm_co_acreditado: $inm_co_acreditado_ins);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al validar inm_co_acreditado',data:  $valida);
+        }
+        $valida = (new inm_co_acreditado(link: $link))->valida_alta(inm_co_acreditado: $inm_co_acreditado_ins);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al validar registro',data:  $valida);
+        }
+        if($inm_comprador_id <= 0){
+            return $this->error->error(mensaje: 'Error inm_comprador_id es menor a 0', data: $inm_comprador_id);
+        }
+
         $alta_inm_co_acreditado = (new inm_co_acreditado(link: $link))->alta_registro(registro: $inm_co_acreditado_ins);
         if (errores::$error) {
             return $this->error->error(mensaje: 'Error al insertar co_acreditado', data: $alta_inm_co_acreditado);
