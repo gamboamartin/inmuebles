@@ -260,9 +260,10 @@ class _co_acreditado{
     }
 
     /**
-     * @param int $inm_comprador_id
-     * @param array $inm_comprador_upd
-     * @param inm_comprador $modelo_inm_comprador
+     * Transacciones datos de comprador, inserta un co acreditado y una relacion
+     * @param int $inm_comprador_id Comprador a integrar
+     * @param array $inm_comprador_upd datos de registro en proceso
+     * @param inm_comprador $modelo_inm_comprador Modelo de comprador
      * @return array|stdClass
      */
     final public function operaciones_co_acreditado(int $inm_comprador_id, array $inm_comprador_upd,
@@ -302,10 +303,25 @@ class _co_acreditado{
      * @param int $inm_comprador_id Comprador id
      * @param inm_comprador $modelo_inm_comprador Modelo de comprador
      * @return array|stdClass
+     * @version 2.74.0
      */
     private function transacciones_co_acreditado(array $inm_co_acreditado_ins, int $inm_comprador_id,
                                                  inm_comprador $modelo_inm_comprador): array|stdClass
     {
+
+        if($inm_comprador_id <= 0){
+            return $this->error->error(mensaje: 'Error inm_comprador_id debe ser mayor a 0',data:  $inm_comprador_id);
+        }
+        $valida = (new inm_co_acreditado(link: $modelo_inm_comprador->link))->valida_data_alta(
+            inm_co_acreditado: $inm_co_acreditado_ins);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al validar inm_co_acreditado',data:  $valida);
+        }
+        $valida = (new inm_co_acreditado(link: $modelo_inm_comprador->link))->valida_alta(
+            inm_co_acreditado: $inm_co_acreditado_ins);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al validar registro',data:  $valida);
+        }
 
         $data_result = new stdClass();
 

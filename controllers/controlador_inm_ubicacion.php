@@ -317,6 +317,17 @@ class controlador_inm_ubicacion extends _ctl_base {
 
         $this->inputs->inm_concepto_id = $inm_concepto_id;
 
+        $referencia = (new inm_concepto_html(html: $this->html_base))->input_text_required(cols: 12,disabled: false,
+            name: 'referencia',place_holder: 'Referencia',row_upd: new stdClass(),value_vacio: false);
+
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al integrar referencia',data:  $referencia, header: $header,ws:  $ws);
+        }
+
+        $this->inputs->referencia = $referencia;
+
+        $this->inputs->inm_concepto_id = $inm_concepto_id;
+
         return $base->base->r_modifica;
     }
 
