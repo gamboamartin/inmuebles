@@ -95,8 +95,8 @@ class _co_acreditado{
 
         $inm_co_acreditado_ins = array();
         foreach ($keys_co_acreditado as $campo_co_acreditado){
-            $inm_co_acreditado_ins = $this->integra_value_co_acreditado(
-                campo_co_acreditado: $campo_co_acreditado,inm_co_acreditado_ins:  $inm_co_acreditado_ins, registro: $registro);
+            $inm_co_acreditado_ins = (new _relaciones_comprador())->integra_value(campo: $campo_co_acreditado,
+                entidad: 'inm_co_acreditado', indice: -1, inm_ins: $inm_co_acreditado_ins, registro: $registro);
             if (errores::$error) {
                 return $this->error->error(mensaje: 'Error al asignar campo', data: $inm_co_acreditado_ins);
             }
@@ -173,32 +173,7 @@ class _co_acreditado{
 
 
 
-    /**
-     * Integra un valor de un campo para insertar un co acreditado
-     * @param string $campo_co_acreditado Campo a integrar
-     * @param array $inm_co_acreditado_ins Registro previo cargado
-     * @param array $registro Registro en proceso
-     * @return array
-     * @version 2.68.0
-     */
-    private function integra_value_co_acreditado(string $campo_co_acreditado, array $inm_co_acreditado_ins,
-                                                 array $registro): array
-    {
-        $campo_co_acreditado = trim($campo_co_acreditado);
-        if($campo_co_acreditado === ''){
-            return $this->error->error(mensaje: 'Error campo_co_acreditado esta vacio', data: $campo_co_acreditado);
-        }
-        $key_co_acreditado = 'inm_co_acreditado_'.$campo_co_acreditado;
-        if(isset($registro[$key_co_acreditado])) {
-            $inm_co_acreditado_ins = (new _relaciones_comprador())->integra_campo(campo: $campo_co_acreditado,
-                inm_ins: $inm_co_acreditado_ins, key: $key_co_acreditado, registro: $registro);
 
-            if (errores::$error) {
-                return $this->error->error(mensaje: 'Error al asignar campo', data: $inm_co_acreditado_ins);
-            }
-        }
-        return $inm_co_acreditado_ins;
-    }
 
     /**
      * Transacciones datos de comprador, inserta un co acreditado y una relacion

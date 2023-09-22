@@ -71,9 +71,8 @@ class _referencias{
 
         $inm_referencia_ins = array();
         foreach ($keys_referencia as $campo_referencia){
-            $inm_referencia_ins = $this->integra_value_referencia(
-                campo_referencia: $campo_referencia, indice: $indice, inm_referencia_ins: $inm_referencia_ins,
-                registro: $registro);
+            $inm_referencia_ins = (new _relaciones_comprador())->integra_value(campo: $campo_referencia,
+                entidad: 'inm_referencia', indice: $indice, inm_ins: $inm_referencia_ins, registro: $registro);
             if (errores::$error) {
                 return $this->error->error(mensaje: 'Error al asignar campo', data: $inm_referencia_ins);
             }
@@ -100,32 +99,7 @@ class _referencias{
 
 
 
-    /**
-     * @param string $campo_referencia
-     * @param int $indice
-     * @param array $inm_referencia_ins
-     * @param array $registro
-     * @return array
-     */
-    private function integra_value_referencia(string $campo_referencia, int $indice, array $inm_referencia_ins,
-                                              array $registro): array
-    {
-        $campo_referencia = trim($campo_referencia);
-        if($campo_referencia === ''){
-            return $this->error->error(mensaje: 'Error campo_referencia esta vacio',data:  $campo_referencia);
-        }
 
-        $key_referencia = 'inm_referencia_'.$campo_referencia.'_'.$indice;
-        if(isset($registro[$key_referencia])) {
-            $inm_referencia_ins = (new _relaciones_comprador())->integra_campo(campo: $campo_referencia,
-                inm_ins: $inm_referencia_ins, key: $key_referencia, registro: $registro);
-
-            if (errores::$error) {
-                return $this->error->error(mensaje: 'Error al asignar campo', data: $inm_referencia_ins);
-            }
-        }
-        return $inm_referencia_ins;
-    }
 
     final public function operaciones_referencia(int $indice, int $inm_comprador_id, array $inm_comprador_upd, inm_comprador $modelo_inm_comprador){
 

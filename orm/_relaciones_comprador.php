@@ -57,7 +57,7 @@ class _relaciones_comprador{
      * @return array
      * @version 2.68.0
      */
-    final public function integra_campo(string $campo, array $inm_ins, string $key, array $registro): array
+    private function integra_campo(string $campo, array $inm_ins, string $key, array $registro): array
     {
         $campo = trim($campo);
         $key = trim($key);
@@ -73,6 +73,38 @@ class _relaciones_comprador{
 
             if(errores::$error){
                 return $this->error->error(mensaje: 'Error al asignar campo',data:  $inm_ins);
+            }
+        }
+        return $inm_ins;
+    }
+
+    /**
+     * Integra un valor de un campo para insertar un co acreditado
+     * @param string $campo Campo a integrar
+     * @param int $indice Indice extra de integracion a name input
+     * @param array $inm_ins Registro previo cargado
+     * @param array $registro Registro en proceso
+     * @param string $entidad de relacion
+     * @return array
+     * @version 2.68.0
+     */
+    final public function integra_value(string $campo, string $entidad, int $indice, array $inm_ins,
+                                        array $registro): array
+    {
+        $campo = trim($campo);
+        if($campo === ''){
+            return $this->error->error(mensaje: 'Error campo esta vacio', data: $campo);
+        }
+
+        $key = $entidad.'_'.$campo;
+        if($indice>-1){
+            $key = $entidad.'_'.$campo.'_'.$indice;
+        }
+        if(isset($registro[$key])) {
+            $inm_ins = $this->integra_campo(campo: $campo, inm_ins: $inm_ins, key: $key, registro: $registro);
+
+            if (errores::$error) {
+                return $this->error->error(mensaje: 'Error al asignar campo', data: $inm_ins);
             }
         }
         return $inm_ins;

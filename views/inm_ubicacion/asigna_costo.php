@@ -24,7 +24,7 @@
                     <?php echo $controlador->inputs->referencia; ?>
                     <?php echo $controlador->inputs->fecha; ?>
                     <?php echo $controlador->inputs->monto; ?>
-                    <?php echo $controlador->inputs->descripcion; ?>
+                    <?php echo $controlador->inputs->inm_costo_descripcion; ?>
 
                     <?php echo $controlador->forms_inputs_modifica; ?>
 
