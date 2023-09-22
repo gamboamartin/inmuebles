@@ -71,6 +71,35 @@ class _relaciones_compradorTest extends test {
 
     }
 
+    public function test_inm_ins(): void
+    {
+        errores::$error = false;
+
+        $_GET['seccion'] = 'inm_producto_infonavit';
+        $_GET['accion'] = 'lista';
+        $_SESSION['grupo_id'] = 1;
+        $_SESSION['usuario_id'] = 2;
+        $_GET['session_id'] = '1';
+
+
+        $inm = new _relaciones_comprador();
+        //$inm = new liberator($inm);
+
+
+        $registro = array();
+        $registro['inm_co_acreditado_nss'] = '1';
+
+        $keys = array('nss','curp','rfc', 'apellido_paterno','apellido_materno','nombre', 'lada',
+            'numero','celular','correo','genero','nombre_empresa_patron','nrp','lada_nep','numero_nep');
+
+        $resultado = $inm->inm_ins(entidad: 'inm_co_acreditado',indice: -1,inm_comprador_id: 1,keys:  $keys,
+            registro:  $registro);
+        $this->assertIsArray($resultado);
+        $this->assertNotTrue(errores::$error);
+        $this->assertEquals('1',$resultado['nss']);
+        errores::$error = false;
+    }
+
     public function test_integra_campo(): void
     {
         errores::$error = false;
@@ -111,7 +140,7 @@ class _relaciones_compradorTest extends test {
 
 
         $inm = new _relaciones_comprador();
-        //$inm = new liberator($inm);
+        $inm = new liberator($inm);
 
 
         $registro = array();

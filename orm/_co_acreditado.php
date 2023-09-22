@@ -82,27 +82,7 @@ class _co_acreditado{
         return $data_co_acreditado;
     }
 
-    /**
-     * Integra los campos para insertar un registro de co acreditado
-     * @param array $registro registro en proceso
-     * @return array
-     * @version 2.69.0
-     */
-    private function inm_co_acreditado_ins(array $registro): array
-    {
-        $keys_co_acreditado = array('nss','curp','rfc', 'apellido_paterno','apellido_materno','nombre', 'lada',
-            'numero','celular','correo','genero','nombre_empresa_patron','nrp','lada_nep','numero_nep');
 
-        $inm_co_acreditado_ins = array();
-        foreach ($keys_co_acreditado as $campo_co_acreditado){
-            $inm_co_acreditado_ins = (new _relaciones_comprador())->integra_value(campo: $campo_co_acreditado,
-                entidad: 'inm_co_acreditado', indice: -1, inm_ins: $inm_co_acreditado_ins, registro: $registro);
-            if (errores::$error) {
-                return $this->error->error(mensaje: 'Error al asignar campo', data: $inm_co_acreditado_ins);
-            }
-        }
-        return $inm_co_acreditado_ins;
-    }
 
     /**
      * Genera un registro de insersion de un co acreditado
@@ -189,7 +169,11 @@ class _co_acreditado{
 
         $result = new stdClass();
 
-        $inm_co_acreditado_ins = $this->inm_co_acreditado_ins(registro: $inm_comprador_upd);
+        $keys = array('nss','curp','rfc', 'apellido_paterno','apellido_materno','nombre', 'lada',
+            'numero','celular','correo','genero','nombre_empresa_patron','nrp','lada_nep','numero_nep');
+
+        $inm_co_acreditado_ins = (new _relaciones_comprador())->inm_ins(entidad: 'inm_co_acreditado', indice: -1,
+            inm_comprador_id: $inm_comprador_id, keys: $keys, registro: $inm_comprador_upd);
         if (errores::$error) {
             return $this->error->error(mensaje: 'Error al asignar campo', data: $inm_co_acreditado_ins);
         }

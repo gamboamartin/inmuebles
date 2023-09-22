@@ -49,6 +49,34 @@ class _relaciones_comprador{
     }
 
     /**
+     * Integra los campos para insertar un registro de co acreditado
+     * @param string $entidad Entidad de relacion
+     * @param int $indice Indice de form
+     * @param int $inm_comprador_id Comprador
+     * @param array $keys Key a integrar
+     * @param array $registro registro en proceso
+     * @return array
+     * @version 2.69.0
+     */
+    final public function inm_ins(string $entidad, int $indice, int $inm_comprador_id, array $keys,
+                                  array $registro): array
+    {
+
+        $inm_ins = array();
+        foreach ($keys as $campo){
+            $inm_ins = $this->integra_value(campo: $campo, entidad: $entidad, indice: $indice,
+                inm_ins: $inm_ins, registro: $registro);
+            if (errores::$error) {
+                return $this->error->error(mensaje: 'Error al asignar campo', data: $inm_ins);
+            }
+        }
+        if(count($inm_ins)>0) {
+            $inm_ins['inm_comprador_id'] = $inm_comprador_id;
+        }
+        return $inm_ins;
+    }
+
+    /**
      * Integra un campo de co acreditado para su alta
      * @param string $campo Campo a integrar
      * @param array $inm_ins Registro previo para insersion
@@ -88,8 +116,7 @@ class _relaciones_comprador{
      * @return array
      * @version 2.68.0
      */
-    final public function integra_value(string $campo, string $entidad, int $indice, array $inm_ins,
-                                        array $registro): array
+    private function integra_value(string $campo, string $entidad, int $indice, array $inm_ins, array $registro): array
     {
         $campo = trim($campo);
         if($campo === ''){

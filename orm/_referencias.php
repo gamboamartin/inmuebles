@@ -58,31 +58,7 @@ class _referencias{
         return $data_referencias;
     }
 
-    /**
-     * @param int $indice
-     * @param int $inm_comprador_id
-     * @param array $registro
-     * @return array
-     */
-    private function inm_referencia_ins(int $indice, int $inm_comprador_id,array $registro): array
-    {
-        $keys_referencia = array('apellido_paterno','nombre', 'lada', 'numero','celular','inm_comprador_id',
-            'dp_calle_pertenece_id','numero_dom');
 
-        $inm_referencia_ins = array();
-        foreach ($keys_referencia as $campo_referencia){
-            $inm_referencia_ins = (new _relaciones_comprador())->integra_value(campo: $campo_referencia,
-                entidad: 'inm_referencia', indice: $indice, inm_ins: $inm_referencia_ins, registro: $registro);
-            if (errores::$error) {
-                return $this->error->error(mensaje: 'Error al asignar campo', data: $inm_referencia_ins);
-            }
-        }
-        if(count($inm_referencia_ins)>0) {
-            $inm_referencia_ins['inm_comprador_id'] = $inm_comprador_id;
-        }
-
-        return $inm_referencia_ins;
-    }
 
     private function inserta_data_referencia(array $inm_referencia_ins, PDO $link){
         $alta_inm_referencia = (new inm_referencia(link: $link))->alta_registro(registro: $inm_referencia_ins);
@@ -101,12 +77,16 @@ class _referencias{
 
 
 
-    final public function operaciones_referencia(int $indice, int $inm_comprador_id, array $inm_comprador_upd, inm_comprador $modelo_inm_comprador){
+    final public function operaciones_referencia(int $indice, int $inm_comprador_id, array $inm_comprador_upd,
+                                                 inm_comprador $modelo_inm_comprador){
 
         $result = new stdClass();
 
-        $inm_referencia_ins = $this->inm_referencia_ins(indice: $indice, inm_comprador_id: $inm_comprador_id,
-            registro: $inm_comprador_upd);
+        $keys = array('apellido_paterno','nombre', 'lada', 'numero','celular','inm_comprador_id',
+            'dp_calle_pertenece_id','numero_dom');
+
+        $inm_referencia_ins = (new _relaciones_comprador())->inm_ins(entidad: 'inm_referencia', indice: $indice,
+            inm_comprador_id: $inm_comprador_id, keys: $keys, registro: $inm_comprador_upd);
         if (errores::$error) {
             return $this->error->error(mensaje: 'Error al asignar campo', data: $inm_referencia_ins);
         }

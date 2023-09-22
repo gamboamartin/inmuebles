@@ -344,6 +344,15 @@ class controlador_inm_ubicacion extends _ctl_base {
         $this->inputs->monto = $monto;
 
 
+        $inm_costo_descripcion = (new inm_concepto_html(html: $this->html_base))->input_descripcion(cols: 12,row_upd: new stdClass(),value_vacio: false);
+
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al integrar inm_costo_descripcion',data:  $inm_costo_descripcion, header: $header,ws:  $ws);
+        }
+
+        $this->inputs->inm_costo_descripcion = $inm_costo_descripcion;
+
+
         return $base->base->r_modifica;
     }
 
