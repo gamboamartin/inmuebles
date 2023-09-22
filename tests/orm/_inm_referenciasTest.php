@@ -33,37 +33,7 @@ class _inm_referenciasTest extends test {
         $this->paths_conf->views = '/var/www/html/inmuebles/config/views.php';
     }
 
-
-
-
-
-    public function test_integra_campo_referencia(): void
-    {
-        errores::$error = false;
-
-        $_GET['seccion'] = 'inm_producto_infonavit';
-        $_GET['accion'] = 'lista';
-        $_SESSION['grupo_id'] = 1;
-        $_SESSION['usuario_id'] = 2;
-        $_GET['session_id'] = '1';
-
-        $_inm = new _referencias();
-        $_inm = new liberator($_inm);
-
-        $campo_referencia = 'e';
-        $inm_referencia_ins = array();
-        $key_referencia = 'd';
-        $registro = array();
-        $registro['d'] = 'z';
-
-        $resultado = $_inm->integra_campo_referencia($campo_referencia, $inm_referencia_ins, $key_referencia, $registro);
-        $this->assertIsArray($resultado);
-        $this->assertNotTrue(errores::$error);
-        $this->assertEquals("z",$resultado['e']);
-
-
-        errores::$error = false;
-    }
+    
 
     public function test_integra_value_referencia(): void
     {

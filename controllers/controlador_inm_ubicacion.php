@@ -335,6 +335,15 @@ class controlador_inm_ubicacion extends _ctl_base {
         $this->inputs->fecha = $fecha;
 
 
+        $monto = (new inm_concepto_html(html: $this->html_base))->input_monto(cols: 12,row_upd: new stdClass(),value_vacio: false);
+
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al integrar monto',data:  $monto, header: $header,ws:  $ws);
+        }
+
+        $this->inputs->monto = $monto;
+
+
         return $base->base->r_modifica;
     }
 

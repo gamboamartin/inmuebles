@@ -54,7 +54,7 @@ class _relaciones_compradorTest extends test {
 
 
         $inm = new _relaciones_comprador();
-        //$inm = new liberator($inm);
+        $inm = new liberator($inm);
 
 
         $registro = array();
@@ -69,6 +69,60 @@ class _relaciones_compradorTest extends test {
         $this->assertEquals('p',$resultado['a']);
         errores::$error = false;
 
+    }
+
+    public function test_integra_campo_co_acreditado(): void
+    {
+        errores::$error = false;
+
+        $_GET['seccion'] = 'inm_producto_infonavit';
+        $_GET['accion'] = 'lista';
+        $_SESSION['grupo_id'] = 1;
+        $_SESSION['usuario_id'] = 2;
+        $_GET['session_id'] = '1';
+
+
+        $inm = new _relaciones_comprador();
+        //$inm = new liberator($inm);
+
+
+        $registro = array();
+        $key_co_acreditado = 'z';
+        $inm_co_acreditado_ins = array();
+        $campo_co_acreditado = 'd';
+        $registro['z'] = 'FF';
+        $resultado = $inm->integra_campo($campo_co_acreditado, $inm_co_acreditado_ins,
+            $key_co_acreditado, $registro);
+        $this->assertIsArray($resultado);
+        $this->assertNotTrue(errores::$error);
+        $this->assertEquals('FF',$resultado['d']);
+        errores::$error = false;
+    }
+
+    public function test_valida_data(): void
+    {
+        errores::$error = false;
+
+        $_GET['seccion'] = 'inm_producto_infonavit';
+        $_GET['accion'] = 'lista';
+        $_SESSION['grupo_id'] = 1;
+        $_SESSION['usuario_id'] = 2;
+        $_GET['session_id'] = '1';
+
+
+        $inm = new _relaciones_comprador();
+        $inm = new liberator($inm);
+
+
+        $registro = array();
+        $key_co_acreditado = 'z';
+        $campo_co_acreditado = 'd';
+        $registro['z'] = 'FF';
+        $resultado = $inm->valida_data($campo_co_acreditado, $key_co_acreditado, $registro);
+        $this->assertIsBool($resultado);
+        $this->assertNotTrue(errores::$error);
+
+        errores::$error = false;
     }
 
 

@@ -98,43 +98,7 @@ class _referencias{
         return $data;
     }
 
-    /**
-     *
-     * @param string $campo_referencia
-     * @param array $inm_referencia_ins
-     * @param string $key_referencia
-     * @param array $registro
-     * @return array
-     */
-    private function integra_campo_referencia(string $campo_referencia, array $inm_referencia_ins,
-                                             string $key_referencia, array $registro): array
-    {
-        $key_referencia = trim($key_referencia);
-        if($key_referencia === ''){
-            return $this->error->error(mensaje: 'Error key_referencia esta vacio',data:  $key_referencia);
-        }
-        $campo_referencia = trim($campo_referencia);
-        if($campo_referencia === ''){
-            return $this->error->error(mensaje: 'Error campo_referencia esta vacio',data:  $campo_referencia);
-        }
-        $keys = array($key_referencia);
-        $valida = (new validacion())->valida_existencia_keys(keys: $keys,registro:  $registro,valida_vacio: false);
-        if(errores::$error){
-            return $this->error->error(mensaje: 'Error al validar registro',data:  $valida);
-        }
 
-        $value = trim($registro[$key_referencia]);
-        if($value !=='') {
-            $inm_referencia_ins = (new _relaciones_comprador())->asigna_campo(campo: $campo_referencia,
-                inm_ins:  $inm_referencia_ins, key:  $key_referencia,
-                registro:  $registro);
-
-            if(errores::$error){
-                return $this->error->error(mensaje: 'Error al asignar campo',data:  $inm_referencia_ins);
-            }
-        }
-        return $inm_referencia_ins;
-    }
 
     /**
      * @param string $campo_referencia
@@ -153,9 +117,8 @@ class _referencias{
 
         $key_referencia = 'inm_referencia_'.$campo_referencia.'_'.$indice;
         if(isset($registro[$key_referencia])) {
-            $inm_referencia_ins = $this->integra_campo_referencia(campo_referencia: $campo_referencia,
-                inm_referencia_ins: $inm_referencia_ins, key_referencia: $key_referencia,
-                registro: $registro);
+            $inm_referencia_ins = (new _relaciones_comprador())->integra_campo(campo: $campo_referencia,
+                inm_ins: $inm_referencia_ins, key: $key_referencia, registro: $registro);
 
             if (errores::$error) {
                 return $this->error->error(mensaje: 'Error al asignar campo', data: $inm_referencia_ins);

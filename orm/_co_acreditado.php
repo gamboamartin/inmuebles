@@ -171,38 +171,7 @@ class _co_acreditado{
     }
 
 
-    /**
-     * Integra un campo de co acreditado para su alta
-     * @param string $campo_co_acreditado Campo a integrar
-     * @param array $inm_co_acreditado_ins Registro previo para insersion
-     * @param string $key_co_acreditado Key de base modifica
-     * @param array $registro Registro en proceso
-     * @return array
-     * @version 2.68.0
-     */
-    private function integra_campo_co_acreditado(string $campo_co_acreditado, array $inm_co_acreditado_ins,
-                                                 string $key_co_acreditado, array $registro): array
-    {
-        $campo_co_acreditado = trim($campo_co_acreditado);
-        $key_co_acreditado = trim($key_co_acreditado);
 
-        $valida = $this->valida_data_co_acreditado(campo_co_acreditado: $campo_co_acreditado,
-            key_co_acreditado:  $key_co_acreditado,registro:  $registro);
-        if(errores::$error){
-            return $this->error->error(mensaje: 'Error al validar',data:  $valida);
-        }
-
-        $value = trim($registro[$key_co_acreditado]);
-        if($value !=='') {
-            $inm_co_acreditado_ins = (new _relaciones_comprador())->asigna_campo(campo: $campo_co_acreditado,
-                inm_ins:  $inm_co_acreditado_ins, key:  $key_co_acreditado, registro:  $registro);
-
-            if(errores::$error){
-                return $this->error->error(mensaje: 'Error al asignar campo',data:  $inm_co_acreditado_ins);
-            }
-        }
-        return $inm_co_acreditado_ins;
-    }
 
     /**
      * Integra un valor de un campo para insertar un co acreditado
@@ -221,9 +190,8 @@ class _co_acreditado{
         }
         $key_co_acreditado = 'inm_co_acreditado_'.$campo_co_acreditado;
         if(isset($registro[$key_co_acreditado])) {
-            $inm_co_acreditado_ins = $this->integra_campo_co_acreditado(campo_co_acreditado: $campo_co_acreditado,
-                inm_co_acreditado_ins: $inm_co_acreditado_ins, key_co_acreditado: $key_co_acreditado,
-                registro: $registro);
+            $inm_co_acreditado_ins = (new _relaciones_comprador())->integra_campo(campo: $campo_co_acreditado,
+                inm_ins: $inm_co_acreditado_ins, key: $key_co_acreditado, registro: $registro);
 
             if (errores::$error) {
                 return $this->error->error(mensaje: 'Error al asignar campo', data: $inm_co_acreditado_ins);
@@ -326,30 +294,5 @@ class _co_acreditado{
 
     }
 
-    /**
-     * Valida que los elementos para integrar un campo de insersion en co acreditado sea valido
-     * @param string $campo_co_acreditado Campo de co_acreditado
-     * @param string $key_co_acreditado Key a integrar
-     * @param array $registro Registro en proceso
-     * @return array|true
-     * @version 2.67.0
-     */
-    private function valida_data_co_acreditado(string $campo_co_acreditado, string $key_co_acreditado,
-                                               array $registro): bool|array
-    {
-        $campo_co_acreditado = trim($campo_co_acreditado);
-        if($campo_co_acreditado === ''){
-            return $this->error->error(mensaje: 'Error campo_co_acreditado esta vacio',data:  $campo_co_acreditado);
-        }
-        $key_co_acreditado = trim($key_co_acreditado);
-        if($key_co_acreditado === ''){
-            return $this->error->error(mensaje: 'Error key_co_acreditado esta vacio',data:  $key_co_acreditado);
-        }
-        $keys = array($key_co_acreditado);
-        $valida = (new validacion())->valida_existencia_keys(keys: $keys,registro:  $registro,valida_vacio: false);
-        if(errores::$error){
-            return $this->error->error(mensaje: 'Error al validar',data:  $valida);
-        }
-        return true;
-    }
+
 }

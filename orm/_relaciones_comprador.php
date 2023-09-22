@@ -24,7 +24,7 @@ class _relaciones_comprador{
      * @return array
      * @version 1.172.1
      */
-    final public function asigna_campo(string $campo, array $inm_ins, string $key, array $registro): array
+    private function asigna_campo(string $campo, array $inm_ins, string $key, array $registro): array
     {
         $campo = trim($campo);
         if($campo === ''){
@@ -46,5 +46,61 @@ class _relaciones_comprador{
 
         return $inm_ins;
 
+    }
+
+    /**
+     * Integra un campo de co acreditado para su alta
+     * @param string $campo Campo a integrar
+     * @param array $inm_ins Registro previo para insersion
+     * @param string $key Key de base modifica
+     * @param array $registro Registro en proceso
+     * @return array
+     * @version 2.68.0
+     */
+    final public function integra_campo(string $campo, array $inm_ins, string $key, array $registro): array
+    {
+        $campo = trim($campo);
+        $key = trim($key);
+
+        $valida = $this->valida_data(campo: $campo, key:  $key,registro:  $registro);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al validar',data:  $valida);
+        }
+
+        $value = trim($registro[$key]);
+        if($value !=='') {
+            $inm_ins = $this->asigna_campo(campo: $campo, inm_ins:  $inm_ins, key:  $key, registro:  $registro);
+
+            if(errores::$error){
+                return $this->error->error(mensaje: 'Error al asignar campo',data:  $inm_ins);
+            }
+        }
+        return $inm_ins;
+    }
+
+    /**
+     * Valida que los elementos para integrar un campo de insersion en co acreditado sea valido
+     * @param string $campo Campo de co_acreditado
+     * @param string $key Key a integrar
+     * @param array $registro Registro en proceso
+     * @return array|true
+     * @version 2.67.0
+     */
+    private function valida_data(string $campo, string $key, array $registro): bool|array
+    {
+        $campo = trim($campo);
+        if($campo === ''){
+            return $this->error->error(mensaje: 'Error campo esta vacio',data:  $campo);
+        }
+        $key = trim($key);
+        if($key === ''){
+            return $this->error->error(mensaje: 'Error key esta vacio',data:  $key);
+        }
+        $keys = array($key);
+        $valida = (new validacion())->valida_existencia_keys(keys: $keys,registro:  $registro,valida_vacio: false);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al validar',data:  $valida);
+        }
+        return true;
     }
 }
