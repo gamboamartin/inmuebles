@@ -16,6 +16,26 @@ class _relaciones_comprador{
     }
 
     /**
+     * Valida si aplica o no un alta de co_acreditado
+     * @param array $inm_ins Registro a validar
+     * @return bool
+     * @version 2.70.0
+     */
+    final public function aplica_alta(array $inm_ins): bool
+    {
+        $aplica_alta = false;
+        if(count($inm_ins)>0){
+            $aplica_alta = true;
+            if(count($inm_ins) === 1){
+                if(isset($inm_ins['genero'])){
+                    $aplica_alta = false;
+                }
+            }
+        }
+        return $aplica_alta;
+    }
+
+    /**
      * Asigna un valor de un campo de referencia para su integracion con otro catalogo
      * @param string $campo Campo a integrar
      * @param array $inm_ins registro previo a insertar

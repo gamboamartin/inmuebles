@@ -39,31 +39,7 @@ class _co_acreditadoTest extends test {
         $this->paths_conf->views = '/var/www/html/inmuebles/config/views.php';
     }
 
-    public function test_aplica_alta_co_acreditado(): void
-    {
-        errores::$error = false;
 
-        $_GET['seccion'] = 'inm_producto_infonavit';
-        $_GET['accion'] = 'lista';
-        $_SESSION['grupo_id'] = 1;
-        $_SESSION['usuario_id'] = 2;
-        $_GET['session_id'] = '1';
-
-
-        $inm = new _co_acreditado();
-        $inm = new liberator($inm);
-
-
-        $inm_co_acreditado_ins = array();
-        $inm_co_acreditado_ins[]  ='x';
-
-
-        $resultado = $inm->aplica_alta_co_acreditado($inm_co_acreditado_ins);
-        $this->assertIsBool($resultado);
-        $this->assertNotTrue(errores::$error);
-        $this->assertTrue($resultado);
-        errores::$error = false;
-    }
 
 
 

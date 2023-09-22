@@ -11,7 +11,7 @@
 
                 <div class="widget  widget-box box-container form-main widget-form-cart" id="form">
 
-                    <form method="post" action="<?php echo $controlador->link_opinion_valor_alta_bd; ?>"
+                    <form method="post" action="<?php echo $controlador->link_costo_alta_bd; ?>"
                           class="form-additional">
 
                     <?php include (new views())->ruta_templates."head/title.php"; ?>

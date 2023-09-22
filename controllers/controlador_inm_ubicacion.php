@@ -27,6 +27,7 @@ class controlador_inm_ubicacion extends _ctl_base {
 
     public string $link_rel_ubi_comp_alta_bd = '';
     public string $link_opinion_valor_alta_bd = '';
+    public string $link_costo_alta_bd = '';
     public array $imp_compradores = array();
 
     public array $inm_opiniones_valor = array();
@@ -351,6 +352,13 @@ class controlador_inm_ubicacion extends _ctl_base {
         }
 
         $this->inputs->inm_costo_descripcion = $inm_costo_descripcion;
+
+        $link_costo_alta_bd = $this->obj_link->link_alta_bd(link: $this->link,seccion: 'inm_costo');
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al obtener link_costo_alta_bd', data:  $link_costo_alta_bd,
+                header: $header,ws:  $ws);
+        }
+        $this->link_costo_alta_bd = $link_costo_alta_bd;
 
 
         return $base->base->r_modifica;

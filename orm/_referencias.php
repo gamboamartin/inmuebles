@@ -13,21 +13,6 @@ class _referencias{
         $this->error = new errores();
     }
 
-    /**
-     * @param array $inm_referencia_ins
-     * @return bool
-     */
-    private function aplica_alta_referencia(array $inm_referencia_ins): bool
-    {
-        $aplica_alta_referencia = false;
-        if(count($inm_referencia_ins)>0){
-            $aplica_alta_referencia = true;
-        }
-        return $aplica_alta_referencia;
-    }
-
-
-
 
     private function data_referencia(int $indice,array $referencias): stdClass
     {
@@ -74,9 +59,6 @@ class _referencias{
     }
 
 
-
-
-
     final public function operaciones_referencia(int $indice, int $inm_comprador_id, array $inm_comprador_upd,
                                                  inm_comprador $modelo_inm_comprador){
 
@@ -85,24 +67,24 @@ class _referencias{
         $keys = array('apellido_paterno','nombre', 'lada', 'numero','celular','inm_comprador_id',
             'dp_calle_pertenece_id','numero_dom');
 
-        $inm_referencia_ins = (new _relaciones_comprador())->inm_ins(entidad: 'inm_referencia', indice: $indice,
+        $inm_ins = (new _relaciones_comprador())->inm_ins(entidad: 'inm_referencia', indice: $indice,
             inm_comprador_id: $inm_comprador_id, keys: $keys, registro: $inm_comprador_upd);
         if (errores::$error) {
-            return $this->error->error(mensaje: 'Error al asignar campo', data: $inm_referencia_ins);
+            return $this->error->error(mensaje: 'Error al asignar campo', data: $inm_ins);
         }
 
 
-        $result->inm_referencia_ins = $inm_referencia_ins;
+        $result->inm_referencia_ins = $inm_ins;
 
-        $aplica_alta_referencia = $this->aplica_alta_referencia(inm_referencia_ins: $inm_referencia_ins);
+        $aplica_alta = (new _relaciones_comprador())->aplica_alta(inm_ins: $inm_ins);
         if (errores::$error) {
-            return $this->error->error(mensaje: 'Error al validar si aplica alta inm_referencia_ins', data: $inm_referencia_ins);
+            return $this->error->error(mensaje: 'Error al validar si aplica alta inm_referencia_ins', data: $inm_ins);
         }
 
-        $result->aplica_alta_referencia = $aplica_alta_referencia;
+        $result->aplica_alta_referencia = $aplica_alta;
 
-        if($aplica_alta_referencia) {
-            $data_referencia = $this->transacciones_referencia(indice: $indice, inm_referencia_ins: $inm_referencia_ins,
+        if($aplica_alta) {
+            $data_referencia = $this->transacciones_referencia(indice: $indice, inm_referencia_ins: $inm_ins,
                 inm_comprador_id: $inm_comprador_id, modelo_inm_comprador: $modelo_inm_comprador);
             if(errores::$error){
                 return $this->error->error(mensaje: 'Error al obtener data_referencia',data:  $data_referencia);

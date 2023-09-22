@@ -13,25 +13,7 @@ class _co_acreditado{
         $this->error = new errores();
     }
 
-    /**
-     * Valida si aplica o no un alta de co_acreditado
-     * @param array $inm_co_acreditado_ins Registro a validar
-     * @return bool
-     * @version 2.70.0
-     */
-    private function aplica_alta_co_acreditado(array $inm_co_acreditado_ins): bool
-    {
-        $aplica_alta_co_acreditado = false;
-        if(count($inm_co_acreditado_ins)>0){
-            $aplica_alta_co_acreditado = true;
-            if(count($inm_co_acreditado_ins) === 1){
-                if(isset($inm_co_acreditado_ins['genero'])){
-                    $aplica_alta_co_acreditado = false;
-                }
-            }
-        }
-        return $aplica_alta_co_acreditado;
-    }
+
 
 
     /**
@@ -151,10 +133,6 @@ class _co_acreditado{
     }
 
 
-
-
-
-
     /**
      * Transacciones datos de comprador, inserta un co acreditado y una relacion
      * @param int $inm_comprador_id Comprador a integrar
@@ -172,23 +150,23 @@ class _co_acreditado{
         $keys = array('nss','curp','rfc', 'apellido_paterno','apellido_materno','nombre', 'lada',
             'numero','celular','correo','genero','nombre_empresa_patron','nrp','lada_nep','numero_nep');
 
-        $inm_co_acreditado_ins = (new _relaciones_comprador())->inm_ins(entidad: 'inm_co_acreditado', indice: -1,
+        $inm_ins = (new _relaciones_comprador())->inm_ins(entidad: 'inm_co_acreditado', indice: -1,
             inm_comprador_id: $inm_comprador_id, keys: $keys, registro: $inm_comprador_upd);
         if (errores::$error) {
-            return $this->error->error(mensaje: 'Error al asignar campo', data: $inm_co_acreditado_ins);
+            return $this->error->error(mensaje: 'Error al asignar campo', data: $inm_ins);
         }
-        $result->inm_co_acreditado_ins = $inm_co_acreditado_ins;
+        $result->inm_co_acreditado_ins = $inm_ins;
 
-        $aplica_alta_co_acreditado = $this->aplica_alta_co_acreditado(inm_co_acreditado_ins: $inm_co_acreditado_ins);
+        $aplica_alta = (new _relaciones_comprador())->aplica_alta(inm_ins: $inm_ins);
         if (errores::$error) {
             return $this->error->error(mensaje: 'Error al validar si aplica alta co acreditado',
-                data: $inm_co_acreditado_ins);
+                data: $inm_ins);
         }
-        $result->aplica_alta_co_acreditado = $aplica_alta_co_acreditado;
+        $result->aplica_alta_co_acreditado = $aplica_alta;
 
-        if($aplica_alta_co_acreditado) {
+        if($aplica_alta) {
             $data_co_acreditado = $this->transacciones_co_acreditado(
-                inm_co_acreditado_ins: $inm_co_acreditado_ins,inm_comprador_id:  $inm_comprador_id,
+                inm_co_acreditado_ins: $inm_ins,inm_comprador_id:  $inm_comprador_id,
                 modelo_inm_comprador:  $modelo_inm_comprador);
             if(errores::$error){
                 return $this->error->error(mensaje: 'Error al obtener data_co_acreditado',data:  $data_co_acreditado);
