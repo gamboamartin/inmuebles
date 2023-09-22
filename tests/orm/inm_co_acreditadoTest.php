@@ -83,6 +83,7 @@ class inm_co_acreditadoTest extends test {
         errores::$error = false;
     }
 
+
     public function test_valida_alta(): void
     {
         errores::$error = false;

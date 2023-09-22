@@ -135,9 +135,16 @@ class _co_acreditado{
      * @param int $inm_co_acreditado_id Co acreditado id
      * @param int $inm_comprador_id Comprador id
      * @return array
+     * @version 2.72.0
      */
     private function inm_rel_co_acreditado_ins(int $inm_co_acreditado_id, int $inm_comprador_id): array
     {
+        if($inm_comprador_id <= 0){
+            return $this->error->error(mensaje: 'Error inm_comprador_id es menor a 0', data: $inm_comprador_id);
+        }
+        if($inm_co_acreditado_id <= 0){
+            return $this->error->error(mensaje: 'Error inm_co_acreditado_id es menor a 0', data: $inm_co_acreditado_id);
+        }
         $inm_rel_co_acred_ins['inm_co_acreditado_id'] = $inm_co_acreditado_id;
         $inm_rel_co_acred_ins['inm_comprador_id'] = $inm_comprador_id;
         return $inm_rel_co_acred_ins;
@@ -150,7 +157,8 @@ class _co_acreditado{
      * @param PDO $link Conexion a la base de datos
      * @return array|stdClass
      */
-    private function inserta_data_co_acreditado(array $inm_co_acreditado_ins, int $inm_comprador_id, PDO $link): array|stdClass
+    private function inserta_data_co_acreditado(array $inm_co_acreditado_ins, int $inm_comprador_id,
+                                                PDO $link): array|stdClass
     {
         $alta_inm_co_acreditado = (new inm_co_acreditado(link: $link))->alta_registro(registro: $inm_co_acreditado_ins);
         if (errores::$error) {
