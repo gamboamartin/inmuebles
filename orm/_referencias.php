@@ -26,39 +26,8 @@ class _referencias{
         return $aplica_alta_referencia;
     }
 
-    /**
-     * Asigna un valor de un campo de referencia para su integracion con otro catalogo
-     * @param string $campo_referencia Campo a integrar
-     * @param array $inm_referencia_ins registro previo a insertar
-     * @param string $key_referencia Key a integrar
-     * @param array $registro Registro en proceso
-     * @return array
-     * @version 1.172.1
-     */
-    private function asigna_campo_referencia(string $campo_referencia, array $inm_referencia_ins,
-                                                string $key_referencia, array $registro): array
-    {
-        $campo_referencia = trim($campo_referencia);
-        if($campo_referencia === ''){
-            return $this->error->error(mensaje: 'Error campo_referencia esta vacio',data:  $campo_referencia);
-        }
-        $key_referencia = trim($key_referencia);
-        if($key_referencia === ''){
-            return $this->error->error(mensaje: 'Error key_referencia esta vacio',data:  $key_referencia);
-        }
-
-        $keys = array($key_referencia);
-        $valida = (new validacion())->valida_existencia_keys(keys: $keys,registro:  $registro,valida_vacio: false);
-        if(errores::$error){
-            return $this->error->error(mensaje: 'Error al validar registro',data:  $valida);
-        }
 
 
-        $inm_referencia_ins[$campo_referencia] = $registro[$key_referencia];
-
-        return $inm_referencia_ins;
-
-    }
 
     private function data_referencia(int $indice,array $referencias): stdClass
     {
@@ -130,6 +99,7 @@ class _referencias{
     }
 
     /**
+     *
      * @param string $campo_referencia
      * @param array $inm_referencia_ins
      * @param string $key_referencia
@@ -155,8 +125,8 @@ class _referencias{
 
         $value = trim($registro[$key_referencia]);
         if($value !=='') {
-            $inm_referencia_ins = $this->asigna_campo_referencia(campo_referencia: $campo_referencia,
-                inm_referencia_ins:  $inm_referencia_ins, key_referencia:  $key_referencia,
+            $inm_referencia_ins = (new _relaciones_comprador())->asigna_campo(campo: $campo_referencia,
+                inm_ins:  $inm_referencia_ins, key:  $key_referencia,
                 registro:  $registro);
 
             if(errores::$error){

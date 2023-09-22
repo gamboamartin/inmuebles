@@ -65,34 +65,7 @@ class _co_acreditadoTest extends test {
         errores::$error = false;
     }
 
-    public function test_asigna_campo_co_acreditado(): void
-    {
-        errores::$error = false;
 
-        $_GET['seccion'] = 'inm_producto_infonavit';
-        $_GET['accion'] = 'lista';
-        $_SESSION['grupo_id'] = 1;
-        $_SESSION['usuario_id'] = 2;
-        $_GET['session_id'] = '1';
-
-
-        $inm = new _co_acreditado();
-        $inm = new liberator($inm);
-
-
-        $registro = array();
-        $key_co_acreditado = 'b';
-        $inm_co_acreditado_ins = array();
-        $campo_co_acreditado = 'a';
-        $registro['b'] = 'p';
-        $resultado = $inm->asigna_campo_co_acreditado($campo_co_acreditado, $inm_co_acreditado_ins, $key_co_acreditado, $registro);
-
-        $this->assertIsArray($resultado);
-        $this->assertNotTrue(errores::$error);
-        $this->assertEquals('p',$resultado['a']);
-        errores::$error = false;
-
-    }
 
     public function test_data_co_acreditado(): void
     {
@@ -294,6 +267,31 @@ class _co_acreditadoTest extends test {
         $this->assertIsArray($resultado);
         $this->assertNotTrue(errores::$error);
         $this->assertEquals('P',$resultado['d']);
+        errores::$error = false;
+    }
+
+    public function test_operaciones_co_acreditado(): void
+    {
+        errores::$error = false;
+
+        $_GET['seccion'] = 'inm_producto_infonavit';
+        $_GET['accion'] = 'lista';
+        $_SESSION['grupo_id'] = 1;
+        $_SESSION['usuario_id'] = 2;
+        $_GET['session_id'] = '1';
+
+
+        $inm = new _co_acreditado();
+        //$inm = new liberator($inm);
+
+
+        $inm_comprador_id = -1;
+        $inm_comprador_upd = array();
+        $modelo_inm_comprador = new inm_comprador(link: $this->link);
+        $resultado = $inm->operaciones_co_acreditado($inm_comprador_id, $inm_comprador_upd, $modelo_inm_comprador);
+        $this->assertIsObject($resultado);
+        $this->assertNotTrue(errores::$error);
+
         errores::$error = false;
     }
 

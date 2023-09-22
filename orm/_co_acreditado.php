@@ -33,32 +33,6 @@ class _co_acreditado{
         return $aplica_alta_co_acreditado;
     }
 
-    /**
-     * Asigna un campo para su alta
-     * @param string $campo_co_acreditado Campo  a integrar
-     * @param array $inm_co_acreditado_ins Registro previo cargado
-     * @param string $key_co_acreditado Key a integrar
-     * @param array $registro registro de comprador modifica
-     * @return array
-     * @version 2.65.0
-     */
-    private function asigna_campo_co_acreditado(string $campo_co_acreditado, array $inm_co_acreditado_ins,
-                                                string $key_co_acreditado, array $registro): array
-    {
-        $campo_co_acreditado = trim($campo_co_acreditado);
-        $key_co_acreditado = trim($key_co_acreditado);
-
-        $valida = $this->valida_data_co_acreditado(campo_co_acreditado: $campo_co_acreditado,
-            key_co_acreditado:  $key_co_acreditado,registro:  $registro);
-        if(errores::$error){
-            return $this->error->error(mensaje: 'Error al validar',data:  $valida);
-        }
-
-        $inm_co_acreditado_ins[$campo_co_acreditado] = $registro[$key_co_acreditado];
-
-        return $inm_co_acreditado_ins;
-
-    }
 
     /**
      * Integra los datos para una transaccion de co acreditado
@@ -220,9 +194,8 @@ class _co_acreditado{
 
         $value = trim($registro[$key_co_acreditado]);
         if($value !=='') {
-            $inm_co_acreditado_ins = $this->asigna_campo_co_acreditado(campo_co_acreditado: $campo_co_acreditado,
-                inm_co_acreditado_ins:  $inm_co_acreditado_ins, key_co_acreditado:  $key_co_acreditado,
-                registro:  $registro);
+            $inm_co_acreditado_ins = (new _relaciones_comprador())->asigna_campo(campo: $campo_co_acreditado,
+                inm_ins:  $inm_co_acreditado_ins, key:  $key_co_acreditado, registro:  $registro);
 
             if(errores::$error){
                 return $this->error->error(mensaje: 'Error al asignar campo',data:  $inm_co_acreditado_ins);
@@ -265,6 +238,7 @@ class _co_acreditado{
      * @param array $inm_comprador_upd datos de registro en proceso
      * @param inm_comprador $modelo_inm_comprador Modelo de comprador
      * @return array|stdClass
+     * @version 2.75.0
      */
     final public function operaciones_co_acreditado(int $inm_comprador_id, array $inm_comprador_upd,
                                                     inm_comprador $modelo_inm_comprador): array|stdClass

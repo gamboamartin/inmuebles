@@ -326,7 +326,14 @@ class controlador_inm_ubicacion extends _ctl_base {
 
         $this->inputs->referencia = $referencia;
 
-        $this->inputs->inm_concepto_id = $inm_concepto_id;
+        $fecha = (new inm_concepto_html(html: $this->html_base))->input_fecha(cols: 12,row_upd: new stdClass(),value_vacio: false);
+
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al integrar fecha',data:  $fecha, header: $header,ws:  $ws);
+        }
+
+        $this->inputs->fecha = $fecha;
+
 
         return $base->base->r_modifica;
     }
