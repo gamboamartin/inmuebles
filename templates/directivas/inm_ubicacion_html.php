@@ -1,6 +1,7 @@
 <?php
 namespace gamboamartin\inmuebles\html;
 use gamboamartin\errores\errores;
+use gamboamartin\inmuebles\controllers\controlador_inm_ubicacion;
 use gamboamartin\inmuebles\models\inm_ubicacion;
 use gamboamartin\system\html_controler;
 use gamboamartin\template\directivas;
@@ -8,6 +9,21 @@ use PDO;
 use stdClass;
 
 class inm_ubicacion_html extends html_controler {
+
+    final public function form_ubicacion(controlador_inm_ubicacion $controlador): string
+    {
+        $keys = array('dp_estado_id','dp_municipio_id','dp_cp_id','dp_colonia_postal_id','dp_calle_pertenece_id',
+            'numero_exterior','numero_interior','manzana','lote','inm_ubicacion_id','seccion_retorno',
+            'btn_action_next','id_retorno');
+
+
+        $inputs = '';
+        foreach ($keys as $input){
+            $inputs .= $controlador->inputs->$input;
+        }
+
+        return $inputs;
+    }
 
     /**
      * Genera un input select de ubicaciones

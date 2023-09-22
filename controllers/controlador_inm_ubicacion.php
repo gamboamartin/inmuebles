@@ -424,6 +424,15 @@ class controlador_inm_ubicacion extends _ctl_base {
             return $this->retorno_error(mensaje: 'Error al obtener inputs_hidden',data:  $inputs, header: $header,ws:  $ws);
         }
 
+
+
+        $form_ubicacion = (new inm_ubicacion_html(html: $this->html_base))->form_ubicacion(controlador: $this);
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al integrar form',data:  $form_ubicacion, header: $header,ws:  $ws);
+        }
+
+        $this->forms_inputs_modifica = $form_ubicacion;
+
         $r_inm_costos = (new inm_costo(link: $this->link))->filtro_and(filtro: array('inm_ubicacion.id'=>$this->registro_id));
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al obtener r_inm_costos',data:  $r_inm_costos, header: $header,ws:  $ws);
@@ -591,6 +600,17 @@ class controlador_inm_ubicacion extends _ctl_base {
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al obtener inputs_hidden',data:  $inputs, header: $header,ws:  $ws);
         }
+
+
+
+        $form_ubicacion = (new inm_ubicacion_html(html: $this->html_base))->form_ubicacion(controlador: $this);
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al integrar form',data:  $form_ubicacion, header: $header,ws:  $ws);
+        }
+
+
+
+        $this->forms_inputs_modifica = $form_ubicacion;
 
         $r_inm_costos = (new inm_costo(link: $this->link))->filtro_and(filtro: array('inm_ubicacion.id'=>$this->registro_id));
         if(errores::$error){

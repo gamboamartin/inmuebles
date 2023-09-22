@@ -64,6 +64,7 @@ class _co_acreditado{
      * Integra los datos para una transaccion de co acreditado
      * @param array $co_acreditados Conjunto de co acreditados
      * @return stdClass
+     * @version 2.71.0
      */
     private function data_co_acreditado(array $co_acreditados): stdClass
     {
@@ -83,12 +84,18 @@ class _co_acreditado{
     }
 
     /**
-     * @param int $inm_comprador_id
-     * @param inm_comprador $modelo_inm_comprador
+     * Obtiene los datos de los co acreditados ligados a un comprador
+     * @param int $inm_comprador_id Comprador id
+     * @param inm_comprador $modelo_inm_comprador Modelo de comprador
      * @return array|stdClass
+     * @version 2.71.0
      */
     private function get_data_co_acreditado(int $inm_comprador_id, inm_comprador $modelo_inm_comprador): array|stdClass
     {
+        if($inm_comprador_id <= 0){
+            return $this->error->error(mensaje: 'Error inm_comprador_id debe ser mayor a 0',data:  $inm_comprador_id);
+        }
+
         $co_acreditados = $modelo_inm_comprador->get_co_acreditados(inm_comprador_id: $inm_comprador_id);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al obtener co_acreditados',data:  $co_acreditados);
@@ -124,8 +131,9 @@ class _co_acreditado{
     }
 
     /**
-     * @param int $inm_co_acreditado_id
-     * @param int $inm_comprador_id
+     * Genera un registro de insersion de un co acreditado
+     * @param int $inm_co_acreditado_id Co acreditado id
+     * @param int $inm_comprador_id Comprador id
      * @return array
      */
     private function inm_rel_co_acreditado_ins(int $inm_co_acreditado_id, int $inm_comprador_id): array
@@ -136,9 +144,10 @@ class _co_acreditado{
     }
 
     /**
-     * @param array $inm_co_acreditado_ins
-     * @param int $inm_comprador_id
-     * @param PDO $link
+     * Inserta un conjunto de co acreaditados y los liga a un comprador
+     * @param array $inm_co_acreditado_ins Conjunto de co acreaditados
+     * @param int $inm_comprador_id Comprador id
+     * @param PDO $link Conexion a la base de datos
      * @return array|stdClass
      */
     private function inserta_data_co_acreditado(array $inm_co_acreditado_ins, int $inm_comprador_id, PDO $link): array|stdClass
@@ -235,7 +244,8 @@ class _co_acreditado{
      * @param inm_comprador $modelo_inm_comprador
      * @return array|stdClass
      */
-    final public function operaciones_co_acreditado(int $inm_comprador_id, array $inm_comprador_upd, inm_comprador $modelo_inm_comprador): array|stdClass
+    final public function operaciones_co_acreditado(int $inm_comprador_id, array $inm_comprador_upd,
+                                                    inm_comprador $modelo_inm_comprador): array|stdClass
     {
 
         $result = new stdClass();
@@ -248,13 +258,15 @@ class _co_acreditado{
 
         $aplica_alta_co_acreditado = $this->aplica_alta_co_acreditado(inm_co_acreditado_ins: $inm_co_acreditado_ins);
         if (errores::$error) {
-            return $this->error->error(mensaje: 'Error al validar si aplica alta co acreditado', data: $inm_co_acreditado_ins);
+            return $this->error->error(mensaje: 'Error al validar si aplica alta co acreditado',
+                data: $inm_co_acreditado_ins);
         }
         $result->aplica_alta_co_acreditado = $aplica_alta_co_acreditado;
 
         if($aplica_alta_co_acreditado) {
             $data_co_acreditado = $this->transacciones_co_acreditado(
-                inm_co_acreditado_ins: $inm_co_acreditado_ins,inm_comprador_id:  $inm_comprador_id,modelo_inm_comprador:  $modelo_inm_comprador);
+                inm_co_acreditado_ins: $inm_co_acreditado_ins,inm_comprador_id:  $inm_comprador_id,
+                modelo_inm_comprador:  $modelo_inm_comprador);
             if(errores::$error){
                 return $this->error->error(mensaje: 'Error al obtener data_co_acreditado',data:  $data_co_acreditado);
             }
@@ -264,17 +276,20 @@ class _co_acreditado{
     }
 
     /**
-     * @param array $inm_co_acreditado_ins
-     * @param int $inm_comprador_id
-     * @param inm_comprador $modelo_inm_comprador
+     * Genera las transacciones de un co acreditado, ya sea a insercion o modificacion
+     * @param array $inm_co_acreditado_ins Co acreditados
+     * @param int $inm_comprador_id Comprador id
+     * @param inm_comprador $modelo_inm_comprador Modelo de comprador
      * @return array|stdClass
      */
-    private function transacciones_co_acreditado(array $inm_co_acreditado_ins, int $inm_comprador_id, inm_comprador $modelo_inm_comprador): array|stdClass
+    private function transacciones_co_acreditado(array $inm_co_acreditado_ins, int $inm_comprador_id,
+                                                 inm_comprador $modelo_inm_comprador): array|stdClass
     {
 
         $data_result = new stdClass();
 
-        $data_co_acreditado = $this->get_data_co_acreditado(inm_comprador_id: $inm_comprador_id,modelo_inm_comprador: $modelo_inm_comprador);
+        $data_co_acreditado = $this->get_data_co_acreditado(inm_comprador_id: $inm_comprador_id,
+            modelo_inm_comprador: $modelo_inm_comprador);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al obtener data_co_acreditado',data:  $data_co_acreditado);
         }
