@@ -9,6 +9,7 @@ use gamboamartin\errores\errores;
 use gamboamartin\inmuebles\html\inm_co_acreditado_html;
 use gamboamartin\inmuebles\models\_inm_comprador;
 use gamboamartin\inmuebles\models\inm_comprador;
+use gamboamartin\inmuebles\models\inm_ubicacion;
 use gamboamartin\js_base\valida;
 use gamboamartin\validacion\validacion;
 use stdClass;
@@ -300,33 +301,44 @@ class _keys_selects{
 
     /**
      * Inicializa los key id de elementos fiscales
+     * @param inm_ubicacion $modelo
      * @param stdClass $row_upd Registro en proceso
      * @return stdClass
      * @version 1.56.1
      */
-    private function init_row_upd_fiscales(stdClass $row_upd): stdClass
+    private function init_row_upd_fiscales(modelo $modelo, stdClass $row_upd): stdClass
     {
-        if(!isset($row_upd->cat_sat_regimen_fiscal_id)){
-            $row_upd->cat_sat_regimen_fiscal_id = 605;
+
+        $entidades_pref = array('cat_sat_regimen_fiscal','cat_sat_moneda','cat_sat_forma_pago','cat_sat_metodo_pago',
+            'cat_sat_uso_cfdi','cat_sat_tipo_persona');
+
+        $com_cliente = new com_cliente(link: $modelo->link);
+        foreach ($entidades_pref as $entidad){
+            $entidad_id = $com_cliente->id_preferido_detalle(entidad_preferida: $entidad);
+            if(errores::$error){
+                return $this->error->error(mensaje: 'Error al obtener id',data:  $entidad_id);
+            }
+            $key_entidad_id = $entidad.'_id';
+            if(!isset($row_upd->$key_entidad_id)){
+                $row_upd->$key_entidad_id = $entidad_id;
+            }
         }
-        if(!isset($row_upd->cat_sat_moneda_id)){
-            $row_upd->cat_sat_moneda_id = 161;
+
+
+        $entidades_pref = array('bn_cuenta');
+
+        foreach ($entidades_pref as $entidad){
+            $entidad_id = $modelo->id_preferido_detalle(entidad_preferida: $entidad);
+            if(errores::$error){
+                return $this->error->error(mensaje: 'Error al obtener id',data:  $entidad_id);
+            }
+            $key_entidad_id = $entidad.'_id';
+            if(!isset($row_upd->$key_entidad_id)){
+                $row_upd->$key_entidad_id = $entidad_id;
+            }
         }
-        if(!isset($row_upd->cat_sat_forma_pago_id)){
-            $row_upd->cat_sat_forma_pago_id = 99;
-        }
-        if(!isset($row_upd->cat_sat_metodo_pago_id)){
-            $row_upd->cat_sat_metodo_pago_id = 2;
-        }
-        if(!isset($row_upd->cat_sat_uso_cfdi_id)){
-            $row_upd->cat_sat_uso_cfdi_id = 22;
-        }
-        if(!isset($row_upd->cat_sat_tipo_persona_id)){
-            $row_upd->cat_sat_tipo_persona_id = 5;
-        }
-        if(!isset($row_upd->bn_cuenta_id)){
-            $row_upd->bn_cuenta_id = -1;
-        }
+
+
         return $row_upd;
     }
 
@@ -814,7 +826,7 @@ class _keys_selects{
     private function ks_fiscales(controlador_inm_comprador $controler, array $keys_selects, stdClass $row_upd): array
     {
 
-        $row_upd = $this->init_row_upd_fiscales(row_upd: $row_upd);
+        $row_upd = $this->init_row_upd_fiscales(modelo: $controler->modelo, row_upd: $row_upd);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al maquetar row_upd',data:  $row_upd);
         }

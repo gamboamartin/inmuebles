@@ -37,11 +37,14 @@ class base_test{
         return $alta;
     }
 
-    public function alta_com_cliente(PDO $link, $id = 1): array|\stdClass
+    public function alta_com_cliente(PDO $link, int $cat_sat_regimen_fiscal_id = 601, int $cat_sat_tipo_persona_id = 4,
+                                     string $codigo = '1',string $descripcion = 'YADIRA MAGALY MONTAÑEZ FELIX',
+                                     int $id = 1): array|\stdClass
     {
 
         $alta = (new \gamboamartin\comercial\test\base_test())->alta_com_cliente(link: $link, cat_sat_metodo_pago_id: 1,
-            cat_sat_regimen_fiscal_id: 601, cat_sat_tipo_persona_id: 4, id: $id);
+            cat_sat_regimen_fiscal_id: $cat_sat_regimen_fiscal_id, cat_sat_tipo_persona_id: $cat_sat_tipo_persona_id,
+            codigo: $codigo, descripcion: $descripcion, id: $id);
         if(errores::$error){
             return (new errores())->error(mensaje: 'Error al insertar', data: $alta);
         }

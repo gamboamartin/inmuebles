@@ -385,8 +385,16 @@ class _relaciones_comprador{
 
     }
 
+    /**
+     * @param int $indice
+     * @param array $inm_referencia_ins
+     * @param int $inm_comprador_id
+     * @param inm_comprador $modelo_inm_comprador
+     * @return array|stdClass
+     */
     final public function transacciones_referencia(int $indice,array $inm_referencia_ins, int $inm_comprador_id,
-                                              inm_comprador $modelo_inm_comprador){
+                                              inm_comprador $modelo_inm_comprador): array|stdClass
+    {
 
         $data_result = new stdClass();
 

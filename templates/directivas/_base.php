@@ -195,8 +195,6 @@ class _base extends html_controler{
 
     final public function data_front_alta(controlador_inm_comprador $controler){
 
-
-
         $inputs = $this->inputs_alta(controler: $controler);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al obtener inputs',data:  $inputs);

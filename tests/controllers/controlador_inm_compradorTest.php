@@ -92,6 +92,22 @@ class controlador_inm_compradorTest extends test {
     {
         errores::$error = false;
 
+        $_SESSION['usuario_id'] = 2;
+
+        $del = (new base_test())->del_inm_comprador(link: $this->link);
+        if(errores::$error){
+            $error = (new errores())->error(mensaje: 'Error al del',data:  $del);
+            print_r($error);;
+            exit;
+        }
+
+
+        $alta = (new base_test())->alta_inm_comprador(link: $this->link);
+        if(errores::$error){
+            $error = (new errores())->error(mensaje: 'Error al insertar',data:  $alta);
+            print_r($error);;
+            exit;
+        }
 
         $ch = curl_init("http://localhost/inmuebles/index.php?seccion=inm_comprador&accion=asigna_co_acreditado&adm_menu_id=64&session_id=4075502287&adm_menu_id=64&registro_id=1");
         $fp = fopen("inm_comprador.asigna_co_acreditado", "w");

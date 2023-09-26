@@ -225,20 +225,34 @@ class _keys_selectsTest extends test {
         $_SESSION['usuario_id'] = 2;
         $_GET['session_id'] = '1';
 
+        $del = (new base_test())->del_com_cliente(link: $this->link);
+        if(errores::$error){
+            $error = (new errores())->error(mensaje: 'Error al eliminar', data: $del);
+            print_r($error);
+            exit;
+        }
+
+        $alta = (new base_test())->alta_com_cliente(link: $this->link);
+        if(errores::$error){
+            $error = (new errores())->error(mensaje: 'Error al alta', data: $alta);
+            print_r($error);
+            exit;
+        }
+
         $ks = new _keys_selects();
         $ks = new liberator($ks);
-
+        $modelo = new inm_comprador(link: $this->link);
         $row_upd = new stdClass();
-        $resultado = $ks->init_row_upd_fiscales($row_upd);
+        $resultado = $ks->init_row_upd_fiscales($modelo, $row_upd);
         $this->assertIsObject($resultado);
         $this->assertNotTrue(errores::$error);
-        $this->assertEquals(605,$resultado->cat_sat_regimen_fiscal_id);
-        $this->assertEquals(161,$resultado->cat_sat_moneda_id);
-        $this->assertEquals(99,$resultado->cat_sat_forma_pago_id);
-        $this->assertEquals(2,$resultado->cat_sat_metodo_pago_id);
-        $this->assertEquals(22,$resultado->cat_sat_uso_cfdi_id);
-        $this->assertEquals(5,$resultado->cat_sat_tipo_persona_id);
-        $this->assertEquals(-1,$resultado->bn_cuenta_id);
+        $this->assertEquals(601,$resultado->cat_sat_regimen_fiscal_id);
+        $this->assertEquals(1,$resultado->cat_sat_moneda_id);
+        $this->assertEquals(1,$resultado->cat_sat_forma_pago_id);
+        $this->assertEquals(1,$resultado->cat_sat_metodo_pago_id);
+        $this->assertEquals(1,$resultado->cat_sat_uso_cfdi_id);
+        $this->assertEquals(4,$resultado->cat_sat_tipo_persona_id);
+        $this->assertEquals(1,$resultado->bn_cuenta_id);
         errores::$error = false;
     }
 
@@ -530,6 +544,19 @@ class _keys_selectsTest extends test {
 
         $ks = new _keys_selects();
         $ks = new liberator($ks);
+
+        $del = (new base_test())->del_com_cliente(link: $this->link);
+        if(errores::$error){
+            $error = (new errores())->error(mensaje:'Error al del', data: $del);
+            print_r($error);exit;
+        }
+
+        $alta = (new base_test())->alta_com_cliente(link: $this->link, cat_sat_regimen_fiscal_id: 605,
+            cat_sat_tipo_persona_id: 5, codigo: 2, descripcion: 'A', id: 2);
+        if(errores::$error){
+            $error = (new errores())->error(mensaje:'Error al insertar', data: $alta);
+            print_r($error);exit;
+        }
 
         $controler = new controlador_inm_comprador(link: $this->link, paths_conf: $this->paths_conf);
         $row_upd = new stdClass();
