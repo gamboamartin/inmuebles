@@ -2,6 +2,7 @@
 namespace gamboamartin\inmuebles\tests\controllers;
 
 
+use gamboamartin\comercial\models\com_cliente;
 use gamboamartin\errores\errores;
 use gamboamartin\inmuebles\controllers\_dps_init;
 use gamboamartin\inmuebles\controllers\controlador_inm_attr_tipo_credito;
@@ -45,16 +46,17 @@ class _dps_initTest extends test {
         $dps = new liberator($dps);
 
         $row_upd = new stdClass();
-        $resultado = $dps->dps_init_ids($row_upd);
+        $modelo = new com_cliente(link: $this->link);
+        $resultado = $dps->dps_init_ids($modelo, $row_upd);
 
         $this->assertIsObject($resultado);
         $this->assertNotTrue(errores::$error);
         $this->assertEquals(151,$resultado->dp_pais_id);
         $this->assertEquals(14,$resultado->dp_estado_id);
-        $this->assertEquals(-1,$resultado->dp_municipio_id);
-        $this->assertEquals(-1,$resultado->dp_cp_id);
-        $this->assertEquals(-1,$resultado->dp_colonia_postal_id);
-        $this->assertEquals(-1,$resultado->dp_calle_pertenece_id);
+        $this->assertEquals(1649,$resultado->dp_municipio_id);
+        $this->assertEquals(2,$resultado->dp_cp_id);
+        $this->assertEquals(23,$resultado->dp_colonia_postal_id);
+        $this->assertEquals(1,$resultado->dp_calle_pertenece_id);
         errores::$error = false;
 
 
@@ -89,6 +91,7 @@ class _dps_initTest extends test {
         $this->assertIsArray($resultado);
         $this->assertNotTrue(errores::$error);
         $this->assertEquals('a_descripcion',$resultado['a_id']->columns_ds[0]);
+        errores::$error = false;
     }
 
     public function test_ks_dp(): void
@@ -121,7 +124,8 @@ class _dps_initTest extends test {
         $this->assertEquals('Municipio',$resultado['dp_municipio_id']->label);
         $this->assertTrue($resultado['dp_cp_id']->con_registros);
         $this->assertEquals(6,$resultado['dp_colonia_postal_id']->cols);
-        $this->assertEquals(-1,$resultado['dp_calle_pertenece_id']->id_selected);
+        $this->assertEquals(1,$resultado['dp_calle_pertenece_id']->id_selected);
+        errores::$error = false;
     }
 
 

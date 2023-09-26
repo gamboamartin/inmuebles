@@ -2,6 +2,8 @@
 
 namespace gamboamartin\inmuebles\controllers;
 
+use base\orm\modelo;
+use gamboamartin\comercial\models\com_cliente;
 use gamboamartin\errores\errores;
 use gamboamartin\system\_ctl_base;
 use stdClass;
@@ -16,30 +18,30 @@ class _dps_init{
 
     /**
      * Inicializa los elementos de domicilio
+     * @param modelo $modelo Modelo de cliente
      * @param stdClass $row_upd Registro en proceso
-     * @return stdClass
+     * @return stdClass|array
      * @version 1.46.1
      */
-    private function dps_init_ids(stdClass $row_upd): stdClass
+    private function dps_init_ids(modelo $modelo, stdClass $row_upd): stdClass|array
     {
-        if(!isset($row_upd->dp_pais_id)){
-            $row_upd->dp_pais_id = 151;
+
+        $entidades_pref[] = 'dp_pais';
+        $entidades_pref[] = 'dp_estado';
+        $entidades_pref[] = 'dp_municipio';
+        $entidades_pref[] = 'dp_cp';
+        $entidades_pref[] = 'dp_colonia_postal';
+        $entidades_pref[] = 'dp_calle_pertenece';
+
+        foreach ($entidades_pref as $entidad){
+            $entidad_id = $modelo->id_preferido_detalle(entidad_preferida: $entidad);
+            if(errores::$error){
+                return $this->error->error(mensaje: 'Error al obtener id pref',data:  $entidad_id);
+            }
+            $key_entidad_id = $entidad.'_id';
+            $row_upd->$key_entidad_id = $entidad_id;
         }
-        if(!isset($row_upd->dp_estado_id)){
-            $row_upd->dp_estado_id = 14;
-        }
-        if(!isset($row_upd->dp_municipio_id)){
-            $row_upd->dp_municipio_id = -1;
-        }
-        if(!isset($row_upd->dp_cp_id)){
-            $row_upd->dp_cp_id = -1;
-        }
-        if(!isset($row_upd->dp_colonia_postal_id)){
-            $row_upd->dp_colonia_postal_id = -1;
-        }
-        if(!isset($row_upd->dp_calle_pertenece_id)){
-            $row_upd->dp_calle_pertenece_id = -1;
-        }
+
         return $row_upd;
     }
 
@@ -88,7 +90,9 @@ class _dps_init{
     final public function ks_dp(_ctl_base $controler, array $keys_selects, stdClass $row_upd): array
     {
 
-        $row_upd = $this->dps_init_ids(row_upd: $row_upd);
+        $modelo_cliente = new com_cliente(link: $controler->link);
+
+        $row_upd = $this->dps_init_ids(modelo: $modelo_cliente, row_upd: $row_upd);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al inicializar row_upd',data:  $row_upd);
         }
