@@ -194,6 +194,7 @@ class _base extends html_controler{
     }
 
     final public function data_front_alta(controlador_inm_comprador $controler){
+
         $inputs = $this->inputs_alta(controler: $controler);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al obtener inputs',data:  $inputs);
@@ -371,10 +372,12 @@ class _base extends html_controler{
      */
     private function inputs_alta(controlador_inm_comprador $controler): array|stdClass
     {
+
         if(!is_object($controler->inputs)){
             return $this->error->error(mensaje: 'Error controlador->inputs debe se run objeto',
                 data: $controler->inputs);
         }
+
         $keys_selects = (new _inm_comprador())->keys_selects(controler: $controler);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al integrar row_upd',data:  $keys_selects);

@@ -3,6 +3,7 @@
 namespace gamboamartin\inmuebles\controllers;
 
 use base\controller\init;
+use base\orm\modelo;
 use gamboamartin\errores\errores;
 use gamboamartin\inmuebles\html\inm_co_acreditado_html;
 use gamboamartin\inmuebles\models\_inm_comprador;
@@ -308,33 +309,34 @@ class _keys_selects{
 
     /**
      * Inicializa los elementos por default de datos de infonavit
+     * @param inm_comprador $modelo Modelo de ejecucion
      * @param stdClass $row_upd Registro en proceso
-     * @return stdClass
+     * @return stdClass|array
      * @version 1.41.0
      */
-    private function init_row_upd_infonavit(stdClass $row_upd): stdClass
+    private function init_row_upd_infonavit(modelo $modelo, stdClass $row_upd): stdClass|array
     {
-        if(!isset($row_upd->inm_producto_infonavit_id)){
-            $row_upd->inm_producto_infonavit_id = -1;
+
+        $entidades_pref[] = 'inm_producto_infonavit';
+        $entidades_pref[] = 'inm_attr_tipo_credito';
+        $entidades_pref[] = 'inm_destino_credito';
+        $entidades_pref[] = 'inm_plazo_credito_sc';
+        $entidades_pref[] = 'inm_tipo_discapacidad';
+        $entidades_pref[] = 'inm_persona_discapacidad';
+        $entidades_pref[] = 'inm_institucion_hipotecaria';
+
+        foreach ($entidades_pref as $entidad){
+            $entidad_id = $modelo->id_preferido_detalle(entidad_preferida: $entidad);
+            if(errores::$error){
+                return $this->error->error(mensaje: 'Error al obtener entidad', data: $entidad_id);
+            }
+            $key_entidad_id = $entidad.'_id';
+            if(!isset($row_upd->$key_entidad_id)){
+                $row_upd->$key_entidad_id = $entidad_id;
+            }
         }
-        if(!isset($row_upd->inm_attr_tipo_credito_id)){
-            $row_upd->inm_attr_tipo_credito_id = -1;
-        }
-        if(!isset($row_upd->inm_destino_credito_id)){
-            $row_upd->inm_destino_credito_id = -1;
-        }
-        if(!isset($row_upd->inm_plazo_credito_sc_id)){
-            $row_upd->inm_plazo_credito_sc_id = 7;
-        }
-        if(!isset($row_upd->inm_tipo_discapacidad_id)){
-            $row_upd->inm_tipo_discapacidad_id = 5;
-        }
-        if(!isset($row_upd->inm_persona_discapacidad_id)){
-            $row_upd->inm_persona_discapacidad_id = 6;
-        }
-        if(!isset($row_upd->inm_institucion_hipotecaria_id)){
-            $row_upd->inm_institucion_hipotecaria_id = 1;
-        }
+
+
         return $row_upd;
     }
 
@@ -864,7 +866,7 @@ class _keys_selects{
     private function ks_infonavit(controlador_inm_comprador $controler, array $keys_selects, stdClass $row_upd): array
     {
 
-        $row_upd = $this->init_row_upd_infonavit(row_upd: $row_upd);
+        $row_upd = $this->init_row_upd_infonavit(modelo: $controler->modelo, row_upd: $row_upd);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al inicializa row_upd',data:  $row_upd);
         }
@@ -873,6 +875,7 @@ class _keys_selects{
         $keys_selects = $controler->key_select(cols:6, con_registros: true,filtro:  array(),
             key: 'inm_producto_infonavit_id', keys_selects: $keys_selects,
             id_selected: $row_upd->inm_producto_infonavit_id, label: 'Producto', columns_ds: $columns_ds);
+
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
@@ -880,9 +883,9 @@ class _keys_selects{
         $columns_ds = array();
         $columns_ds[] = 'inm_tipo_credito_descripcion';
         $columns_ds[] = 'inm_attr_tipo_credito_descripcion';
-        $keys_selects = $controler->key_select(cols:6, con_registros: true,filtro:  array(), key: 'inm_attr_tipo_credito_id',
-            keys_selects: $keys_selects, id_selected: $row_upd->inm_attr_tipo_credito_id, label: 'Tipo de Credito',
-            columns_ds: $columns_ds);
+        $keys_selects = $controler->key_select(cols:6, con_registros: true,filtro:  array(),
+            key: 'inm_attr_tipo_credito_id', keys_selects: $keys_selects,
+            id_selected: $row_upd->inm_attr_tipo_credito_id, label: 'Tipo de Credito', columns_ds: $columns_ds);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
@@ -890,9 +893,9 @@ class _keys_selects{
         $columns_ds = array();
         $columns_ds[] = 'inm_destino_credito_descripcion';
 
-        $keys_selects = $controler->key_select(cols:12, con_registros: true,filtro:  array(), key: 'inm_destino_credito_id',
-            keys_selects: $keys_selects, id_selected: $row_upd->inm_destino_credito_id, label: 'Destino del Credito',
-            columns_ds: $columns_ds);
+        $keys_selects = $controler->key_select(cols:12, con_registros: true,filtro:  array(),
+            key: 'inm_destino_credito_id', keys_selects: $keys_selects, id_selected: $row_upd->inm_destino_credito_id,
+            label: 'Destino del Credito', columns_ds: $columns_ds);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
@@ -947,11 +950,10 @@ class _keys_selects{
         $keys_selects = $controler->key_select(cols:12, con_registros: true,filtro:  array(),
             key: 'inm_institucion_hipotecaria_id', keys_selects: $keys_selects,
             id_selected: $row_upd->inm_institucion_hipotecaria_id, label: 'Institucion Hipotecaria',
-            columns_ds: $columns_ds, disabled: false);
+            columns_ds: $columns_ds);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
-
 
 
         return $keys_selects;

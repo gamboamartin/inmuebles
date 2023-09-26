@@ -13,22 +13,6 @@ class _referencias{
         $this->error = new errores();
     }
 
-
-
-    private function inserta_data_referencia(array $inm_referencia_ins, PDO $link){
-        $alta_inm_referencia = (new inm_referencia(link: $link))->alta_registro(registro: $inm_referencia_ins);
-        if (errores::$error) {
-            return $this->error->error(mensaje: 'Error al insertar alta_inm_referencia', data: $alta_inm_referencia);
-        }
-
-
-        $data = new stdClass();
-        $data->alta_inm_referencia = $alta_inm_referencia;
-
-        return $data;
-    }
-
-
     final public function operaciones_referencia(int $indice, int $inm_comprador_id, array $inm_comprador_upd,
                                                  inm_comprador $modelo_inm_comprador){
 
@@ -77,7 +61,7 @@ class _referencias{
         $data_result->data_referencia = $data_referencia;
 
         if(!$data_referencia->existe_relacion) {
-            $data_ins = $this->inserta_data_referencia(inm_referencia_ins: $inm_referencia_ins,
+            $data_ins = (new _relaciones_comprador())->inserta_data_referencia(inm_referencia_ins: $inm_referencia_ins,
                 link:  $modelo_inm_comprador->link);
             if (errores::$error) {
                 return $this->error->error(mensaje: 'Error al insertar datos de referencia', data: $data_ins);

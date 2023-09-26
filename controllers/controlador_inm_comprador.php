@@ -86,6 +86,8 @@ class controlador_inm_comprador extends _ctl_base {
                 mensaje: 'Error al inicializar alta',data:  $r_alta, header: $header,ws:  $ws);
         }
 
+
+
         $inputs = (new _base(html: $this->html_base))->data_front_alta(controler: $this);
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al obtener inputs',data:  $inputs, header: $header,ws:  $ws);

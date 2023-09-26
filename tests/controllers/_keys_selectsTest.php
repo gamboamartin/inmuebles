@@ -8,7 +8,9 @@ use gamboamartin\inmuebles\controllers\controlador_inm_attr_tipo_credito;
 use gamboamartin\inmuebles\controllers\controlador_inm_comprador;
 use gamboamartin\inmuebles\controllers\controlador_inm_plazo_credito_sc;
 use gamboamartin\inmuebles\controllers\controlador_inm_producto_infonavit;
+use gamboamartin\inmuebles\models\inm_comprador;
 use gamboamartin\inmuebles\tests\base_test;
+use gamboamartin\js_base\eventos\adm_seccion;
 use gamboamartin\test\liberator;
 use gamboamartin\test\test;
 
@@ -255,12 +257,13 @@ class _keys_selectsTest extends test {
         $ks = new liberator($ks);
 
         $row_upd = new stdClass();
-        $resultado = $ks->init_row_upd_infonavit($row_upd);
+        $modelo = new inm_comprador(link: $this->link);
+        $resultado = $ks->init_row_upd_infonavit(modelo: $modelo,row_upd: $row_upd);
         $this->assertIsObject($resultado);
         $this->assertNotTrue(errores::$error);
-        $this->assertEquals(-1,$resultado->inm_producto_infonavit_id);
-        $this->assertEquals(-1,$resultado->inm_attr_tipo_credito_id);
-        $this->assertEquals(-1,$resultado->inm_destino_credito_id);
+        $this->assertEquals(1,$resultado->inm_producto_infonavit_id);
+        $this->assertEquals(1,$resultado->inm_attr_tipo_credito_id);
+        $this->assertEquals(1,$resultado->inm_destino_credito_id);
         $this->assertEquals(7,$resultado->inm_plazo_credito_sc_id);
         $this->assertEquals(5,$resultado->inm_tipo_discapacidad_id);
         $this->assertEquals(6,$resultado->inm_persona_discapacidad_id);

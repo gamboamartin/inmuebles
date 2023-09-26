@@ -342,6 +342,7 @@ class _inm_comprador{
      */
     final public function keys_selects(controlador_inm_comprador $controler): array
     {
+
         $row_upd = $this->row_upd_base(controler: $controler);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al integrar row_upd',data:  $row_upd);
@@ -351,6 +352,7 @@ class _inm_comprador{
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
+
         return $keys_selects;
     }
 

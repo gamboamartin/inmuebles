@@ -175,6 +175,81 @@ class _relaciones_compradorTest extends test {
         errores::$error = false;
     }
 
+    public function test_inm_rel_co_acreditado_ins(): void
+    {
+        errores::$error = false;
+
+        $_GET['seccion'] = 'inm_producto_infonavit';
+        $_GET['accion'] = 'lista';
+        $_SESSION['grupo_id'] = 1;
+        $_SESSION['usuario_id'] = 2;
+        $_GET['session_id'] = '1';
+
+
+        $inm = new _relaciones_comprador();
+        $inm = new liberator($inm);
+
+
+        $inm_co_acreditado_id = 1;
+        $inm_comprador_id = 1;
+
+        $resultado = $inm->inm_rel_co_acreditado_ins($inm_co_acreditado_id, $inm_comprador_id);
+        $this->assertIsArray($resultado);
+        $this->assertNotTrue(errores::$error);
+        $this->assertEquals('1',$resultado['inm_co_acreditado_id']);
+        $this->assertEquals('1',$resultado['inm_comprador_id']);
+        errores::$error = false;
+    }
+
+    public function test_inserta_data_co_acreditado(): void
+    {
+        errores::$error = false;
+
+        $_GET['seccion'] = 'inm_producto_infonavit';
+        $_GET['accion'] = 'lista';
+        $_SESSION['grupo_id'] = 1;
+        $_SESSION['usuario_id'] = 2;
+        $_GET['session_id'] = '1';
+
+        $del = (new base_test())->del_inm_co_acreditado(link: $this->link);
+        if(errores::$error){
+            $error = (new errores())->error(mensaje:'Error al del', data: $del);
+            print_r($error);exit;
+        }
+
+        $inm = new _relaciones_comprador();
+        $inm = new liberator($inm);
+
+
+
+        $inm_co_acreditado_ins = array();
+        $inm_comprador_id = 1;
+        $link = $this->link;
+
+        $inm_co_acreditado_ins['nombre'] = 'A';
+        $inm_co_acreditado_ins['apellido_paterno'] = 'A';
+        $inm_co_acreditado_ins['nss'] = '12345678909';
+        $inm_co_acreditado_ins['curp'] = 'XEXX010101HNEXXXA4';
+        $inm_co_acreditado_ins['rfc'] = 'CVA121201HJ7';
+        $inm_co_acreditado_ins['apellido_materno'] = 'A';
+        $inm_co_acreditado_ins['lada'] = '11';
+        $inm_co_acreditado_ins['numero'] = '12345678';
+        $inm_co_acreditado_ins['celular'] = '1234445556';
+        $inm_co_acreditado_ins['genero'] = 'A';
+        $inm_co_acreditado_ins['correo'] = 'a@b.com.mx';
+        $inm_co_acreditado_ins['nombre_empresa_patron'] = 'A';
+        $inm_co_acreditado_ins['nrp'] = 'A';
+        $inm_co_acreditado_ins['lada_nep'] = 'A';
+        $inm_co_acreditado_ins['numero_nep'] = 'A';
+
+        $resultado = $inm->inserta_data_co_acreditado($inm_co_acreditado_ins, $inm_comprador_id, $link);
+        // print_r($resultado);exit;
+        $this->assertIsObject($resultado);
+        $this->assertNotTrue(errores::$error);
+        $this->assertEquals('Registro insertado con éxito',$resultado->alta_inm_co_acreditado->mensaje);
+        errores::$error = false;
+    }
+
     public function test_integra_campo(): void
     {
         errores::$error = false;
