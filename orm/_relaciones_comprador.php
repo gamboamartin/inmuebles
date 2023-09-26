@@ -33,6 +33,16 @@ class _relaciones_comprador{
                     $aplica_alta = false;
                 }
             }
+            if(count($inm_ins) === 1){
+                if(isset($inm_ins['inm_comprador_id'])){
+                    $aplica_alta = false;
+                }
+            }
+            if(count($inm_ins) === 2){
+                if(isset($inm_ins['inm_comprador_id'])){
+                    $aplica_alta = false;
+                }
+            }
         }
         return $aplica_alta;
     }
@@ -386,10 +396,11 @@ class _relaciones_comprador{
     }
 
     /**
-     * @param int $indice
-     * @param array $inm_referencia_ins
-     * @param int $inm_comprador_id
-     * @param inm_comprador $modelo_inm_comprador
+     * Da de alta las referencias relacionadas con el comprador, si no existe la modifica
+     * @param int $indice Indice de referencia 1 o 2
+     * @param array $inm_referencia_ins Referencias a insertar
+     * @param int $inm_comprador_id Identificador de referencia
+     * @param inm_comprador $modelo_inm_comprador Modelo de comprador
      * @return array|stdClass
      */
     final public function transacciones_referencia(int $indice,array $inm_referencia_ins, int $inm_comprador_id,

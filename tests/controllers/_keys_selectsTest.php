@@ -579,8 +579,6 @@ class _keys_selectsTest extends test {
         $_GET['session_id'] = '1';
 
 
-
-
         $ks = new _keys_selects();
         $ks = new liberator($ks);
 
