@@ -368,7 +368,6 @@ class _base extends html_controler{
      * Obtiene todos los datos de inputs alta
      * @param controlador_inm_comprador $controler Controlador en ejecucion
      * @return array|stdClass
-     * @version 1.170.1
      */
     private function inputs_alta(controlador_inm_comprador $controler): array|stdClass
     {

@@ -339,7 +339,6 @@ class _inm_comprador{
      * Integra los parametros de los inputs
      * @param controlador_inm_comprador $controler Controlador en ejecucion
      * @return array
-     * @version 11.90.1
      */
     final public function keys_selects(controlador_inm_comprador $controler): array
     {
@@ -434,7 +433,6 @@ class _inm_comprador{
      * Ajusta los key base para los inputs
      * @param controlador_inm_comprador $controler Controlador en ejecucion
      * @return array|stdClass
-     * @version 1.89.1
      */
     private function row_upd_base(controlador_inm_comprador $controler): array|stdClass
     {
@@ -454,41 +452,26 @@ class _inm_comprador{
      * Inicializa los ids default
      * @param controlador_inm_comprador $controler Controlador en ejecucion
      * @return stdClass
-     * @version 1.87.1
      */
     private function row_upd_ids(controlador_inm_comprador $controler): stdClass
     {
         $modelo_preferido = $controler->modelo;
-        $inm_producto_infonavit_id = $modelo_preferido->id_preferido_detalle(
-            entidad_preferida:  'inm_producto_infonavit');
-        if(errores::$error){
-            return $this->error->error(mensaje: 'Error al obtener inm_producto_infonavit_id',
-                data:  $inm_producto_infonavit_id);
-        }
-        $inm_attr_tipo_credito_id = $modelo_preferido->id_preferido_detalle(
-            entidad_preferida:  'inm_attr_tipo_credito');
-        if(errores::$error){
-            return $this->error->error(mensaje: 'Error al obtener inm_attr_tipo_credito_id',
-                data:  $inm_attr_tipo_credito_id);
-        }
-        $inm_destino_credito_id = $modelo_preferido->id_preferido_detalle(
-            entidad_preferida:  'inm_destino_credito');
-        if(errores::$error){
-            return $this->error->error(mensaje: 'Error al obtener inm_destino_credito_id',
-                data:  $inm_attr_tipo_credito_id);
-        }
-        $bn_cuenta_id = $modelo_preferido->id_preferido_detalle(
-            entidad_preferida:  'bn_cuenta');
-        if(errores::$error){
-            return $this->error->error(mensaje: 'Error al obtener bn_cuenta_id',
-                data:  $bn_cuenta_id);
-        }
 
-        $controler->row_upd->inm_producto_infonavit_id = $inm_producto_infonavit_id;
-        $controler->row_upd->inm_attr_tipo_credito_id = $inm_attr_tipo_credito_id;
-        $controler->row_upd->inm_destino_credito_id = $inm_destino_credito_id;
-        $controler->row_upd->bn_cuenta_id = $bn_cuenta_id;
+        $entidades_pref[] = 'inm_producto_infonavit';
+        $entidades_pref[] = 'inm_attr_tipo_credito';
+        $entidades_pref[] = 'inm_destino_credito';
+        $entidades_pref[] = 'bn_cuenta';
 
+
+        foreach ($entidades_pref as $entidad){
+            $entidad_id = $modelo_preferido->id_preferido_detalle(entidad_preferida:  $entidad);
+            if(errores::$error){
+                return $this->error->error(mensaje: 'Error al obtener '.$entidad, data:  $entidad_id);
+            }
+            $key_entidad_id = $entidad.'_id';
+            $controler->row_upd->$key_entidad_id = $entidad_id;
+
+        }
 
         return $controler->row_upd;
     }
@@ -502,9 +485,7 @@ class _inm_comprador{
      */
     private function row_upd_montos(controlador_inm_comprador $controler): stdClass
     {
-        if(!isset($controler->row_upd)){
-            echo 'hola';
-        }
+
         $controler->row_upd->descuento_pension_alimenticia_dh = 0;
         $controler->row_upd->monto_credito_solicitado_dh = 0;
         $controler->row_upd->descuento_pension_alimenticia_fc = 0;
