@@ -224,7 +224,38 @@ class _relaciones_comprador{
         return $data;
     }
 
-    private function inserta_data_referencia(array $inm_referencia_ins, PDO $link){
+    /**
+     * Inserta los elementos de una referencia
+     * @param array $inm_referencia_ins Referencia a integrar
+     * @param PDO $link Conexion a la base de datos
+     * @return array|stdClass
+     * @version 2.85.0
+     */
+    private function inserta_data_referencia(array $inm_referencia_ins, PDO $link): array|stdClass
+    {
+        $valida = (new inm_referencia(link: $link))->valida_data_descripcion(registro: $inm_referencia_ins);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al validar $registro',data: $valida);
+        }
+        $keys = array('inm_comprador_id','dp_calle_pertenece_id');
+        $valida = $this->validacion->valida_ids(keys: $keys,registro:  $inm_referencia_ins);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al validar $registro',data: $valida);
+        }
+        $keys = array('lada','numero','celular','numero_dom');
+        $valida = $this->validacion->valida_existencia_keys(keys: $keys,registro:  $inm_referencia_ins);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al validar $registro',data: $valida);
+        }
+        $valida = $this->validacion->valida_lada(lada: $inm_referencia_ins['lada']);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al validar lada',data: $valida);
+        }
+        $valida = $this->validacion->valida_numero_sin_lada(tel: $inm_referencia_ins['numero']);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al validar numero',data: $valida);
+        }
+
         $alta_inm_referencia = (new inm_referencia(link: $link))->alta_registro(registro: $inm_referencia_ins);
         if (errores::$error) {
             return $this->error->error(mensaje: 'Error al insertar alta_inm_referencia', data: $alta_inm_referencia);

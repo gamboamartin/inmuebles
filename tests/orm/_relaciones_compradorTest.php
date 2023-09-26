@@ -250,6 +250,47 @@ class _relaciones_compradorTest extends test {
         errores::$error = false;
     }
 
+    public function test_inserta_data_referencia(): void
+    {
+        errores::$error = false;
+
+        $_GET['seccion'] = 'inm_producto_infonavit';
+        $_GET['accion'] = 'lista';
+        $_SESSION['grupo_id'] = 1;
+        $_SESSION['usuario_id'] = 2;
+        $_GET['session_id'] = '1';
+
+        $del = (new base_test())->del_inm_referencia(link: $this->link);
+        if(errores::$error){
+            $error = (new errores())->error(mensaje:'Error al del', data: $del);
+            print_r($error);exit;
+        }
+
+        $inm = new _relaciones_comprador();
+        $inm = new liberator($inm);
+
+
+        $inm_referencia_ins = array();
+        $inm_referencia_ins['nombre'] = 'A';
+        $inm_referencia_ins['apellido_paterno'] = 'A';
+        $inm_referencia_ins['inm_comprador_id'] = '1';
+        $inm_referencia_ins['lada'] = '12';
+        $inm_referencia_ins['numero'] = '2345678';
+        $inm_referencia_ins['celular'] = '1234567890';
+        $inm_referencia_ins['dp_calle_pertenece_id'] = '1';
+        $inm_referencia_ins['numero_dom'] = '1';
+        $link = $this->link;
+
+
+        $resultado = $inm->inserta_data_referencia($inm_referencia_ins, $link);
+       // print_r($resultado);exit;
+
+        $this->assertIsObject($resultado);
+        $this->assertNotTrue(errores::$error);
+        $this->assertEquals('Registro insertado con éxito',$resultado->alta_inm_referencia->mensaje);
+        errores::$error = false;
+    }
+
     public function test_integra_campo(): void
     {
         errores::$error = false;

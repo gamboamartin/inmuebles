@@ -4,6 +4,7 @@ namespace gamboamartin\inmuebles\controllers;
 
 use base\controller\init;
 use base\orm\modelo;
+use gamboamartin\comercial\models\com_cliente;
 use gamboamartin\errores\errores;
 use gamboamartin\inmuebles\html\inm_co_acreditado_html;
 use gamboamartin\inmuebles\models\_inm_comprador;
@@ -57,12 +58,34 @@ class _keys_selects{
      */
     private function base(controlador_inm_comprador $controler, array $keys_selects, stdClass $row_upd): array
     {
-        if(!isset($row_upd->com_tipo_cliente_id)){
-            $row_upd->com_tipo_cliente_id = -1;
+
+        $entidades_pref[] = 'com_tipo_cliente';
+
+        foreach ($entidades_pref as $entidad){
+            $entidad_id = (new com_cliente(link: $controler->link))->id_preferido_detalle(entidad_preferida: $entidad);
+            if(errores::$error){
+                return $this->error->error(mensaje: 'Error al entidad_id',data:  $entidad_id);
+            }
+            $key_entidad_id = $entidad.'_id';
+            if(!isset($row_upd->$key_entidad_id)) {
+                $row_upd->$key_entidad_id = $entidad_id;
+            }
         }
-        if(!isset($row_upd->inm_estado_civil_id)){
-            $row_upd->inm_estado_civil_id = -1;
+
+        $entidades_pref = array();
+        $entidades_pref[] = 'inm_estado_civil';
+
+        foreach ($entidades_pref as $entidad){
+            $entidad_id = $controler->modelo->id_preferido_detalle(entidad_preferida: $entidad);
+            if(errores::$error){
+                return $this->error->error(mensaje: 'Error al entidad_id',data:  $entidad_id);
+            }
+            $key_entidad_id = $entidad.'_id';
+            if(!isset($row_upd->$key_entidad_id)) {
+                $row_upd->$key_entidad_id = $entidad_id;
+            }
         }
+
 
         $columns_ds = array('com_tipo_cliente_descripcion');
         $keys_selects = $controler->key_select(cols:12, con_registros: true,filtro:  array(),

@@ -38,8 +38,9 @@ class _referencias{
         $result->aplica_alta_referencia = $aplica_alta;
 
         if($aplica_alta) {
-            $data_referencia = (new _relaciones_comprador())->transacciones_referencia(indice: $indice, inm_referencia_ins: $inm_ins,
-                inm_comprador_id: $inm_comprador_id, modelo_inm_comprador: $modelo_inm_comprador);
+            $data_referencia = (new _relaciones_comprador())->transacciones_referencia(
+                indice: $indice, inm_referencia_ins: $inm_ins, inm_comprador_id: $inm_comprador_id,
+                modelo_inm_comprador: $modelo_inm_comprador);
             if(errores::$error){
                 return $this->error->error(mensaje: 'Error al obtener data_referencia',data:  $data_referencia);
             }

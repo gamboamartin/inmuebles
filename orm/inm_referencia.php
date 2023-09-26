@@ -41,6 +41,37 @@ class inm_referencia extends _modelo_parent{
 
     public function alta_bd(array $keys_integra_ds = array('codigo', 'descripcion')): array|stdClass
     {
+
+        $valida = $this->valida_data_descripcion(registro: $this->registro);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al validar $registro',data: $valida);
+        }
+        $keys = array('inm_comprador_id','dp_calle_pertenece_id');
+        $valida = $this->validacion->valida_ids(keys: $keys,registro:  $this->registro);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al validar $registro',data: $valida);
+        }
+
+        $keys = array('lada','numero','celular','numero_dom');
+        $valida = $this->validacion->valida_existencia_keys(keys: $keys,registro:  $this->registro);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al validar $registro',data: $valida);
+        }
+
+        $valida = $this->validacion->valida_lada(lada: $this->registro['lada']);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al validar lada',data: $valida);
+        }
+
+        $valida = $this->validacion->valida_numero_sin_lada(tel: $this->registro['numero']);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al validar numero',data: $valida);
+        }
+        $valida = $this->validacion->valida_numero_tel_mx(tel: $this->registro['celular']);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al validar celular',data: $valida);
+        }
+
         if(!isset($this->registro['descripcion'])){
             $descripcion = $this->descripcion(registro: $this->registro );
             if(errores::$error){
@@ -67,22 +98,15 @@ class inm_referencia extends _modelo_parent{
      */
     private function descripcion(array $registro): string|array
     {
-        $keys = array('nombre','apellido_paterno');
-        $valida = $this->validacion->valida_existencia_keys(keys: $keys,registro:  $registro,valida_vacio: false);
-        if(errores::$error){
-            return $this->error->error(mensaje: 'Error al validar $registro',data: $valida);;
-        }
 
-        $keys = array('nombre','apellido_paterno');
-        $valida = $this->validacion->valida_existencia_keys(keys: $keys,registro:  $registro);
+        $valida = $this->valida_data_descripcion(registro: $registro);
         if(errores::$error){
-            return $this->error->error(mensaje: 'Error al validar $registro',data: $valida);;
+            return $this->error->error(mensaje: 'Error al validar $registro',data: $valida);
         }
 
         if(!isset($registro['apellido_materno'])){
             $registro['apellido_materno'] = '';
         }
-
 
 
         $descripcion = $registro['nombre'];
@@ -111,6 +135,20 @@ class inm_referencia extends _modelo_parent{
             return $this->error->error(mensaje: 'Error al obtener r_inm_referencia',data:  $r_inm_referencia);
         }
         return $r_inm_referencia->registros;
+    }
+
+    final public function valida_data_descripcion(array $registro){
+        $keys = array('nombre','apellido_paterno');
+        $valida = $this->validacion->valida_existencia_keys(keys: $keys,registro:  $registro,valida_vacio: false);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al validar $registro',data: $valida);
+        }
+
+        $valida = $this->validacion->valida_existencia_keys(keys: $keys,registro:  $registro);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al validar $registro',data: $valida);
+        }
+        return true;
     }
 
 
