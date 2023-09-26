@@ -3,6 +3,7 @@ namespace gamboamartin\inmuebles\models;
 
 use gamboamartin\errores\errores;
 use gamboamartin\validacion\validacion;
+use stdClass;
 
 class _relaciones_comprador{
 
@@ -67,6 +68,66 @@ class _relaciones_comprador{
         return $inm_ins;
 
     }
+
+    /**
+     * Integra los datos para una transaccion de co acreditado
+     * @param int $indice Indice de datos
+     * @param array $relaciones Conjunto de co acreditados
+     * @return stdClass
+     * @version 2.71.0
+     */
+    private function data_relacion(int $indice,array $relaciones): stdClass
+    {
+        $existe_relacion = false;
+        $inm_relacion = new stdClass();
+        if(isset($relaciones[$indice-1])){
+            $existe_relacion = true;
+            $inm_relacion = (object)$relaciones[$indice-1];
+        }
+
+        $data = new stdClass();
+        $data->existe_relacion = $existe_relacion;
+        $data->inm_relacion = $inm_relacion;
+
+        return $data;
+    }
+
+    /**
+     * Obtiene los datos de los co acreditados ligados a un comprador
+     * @param string $name_relacion
+     * @param int $indice
+     * @param int $inm_comprador_id Comprador id
+     * @param inm_comprador $modelo_inm_comprador Modelo de comprador
+     * @return array|stdClass
+     * @version 2.71.0
+     */
+    final public function get_data_relacion(string $name_relacion, int $indice,int $inm_comprador_id,
+                                       inm_comprador $modelo_inm_comprador): array|stdClass
+    {
+        if($inm_comprador_id <= 0){
+            return $this->error->error(mensaje: 'Error inm_comprador_id debe ser mayor a 0',data:  $inm_comprador_id);
+        }
+
+        if($name_relacion === 'inm_referencia') {
+            $relaciones = $modelo_inm_comprador->get_referencias(inm_comprador_id: $inm_comprador_id);
+            if (errores::$error) {
+                return $this->error->error(mensaje: 'Error al obtener referencias', data: $relaciones);
+            }
+        }
+        else{
+            $relaciones = $modelo_inm_comprador->get_co_acreditados(inm_comprador_id: $inm_comprador_id);
+            if(errores::$error){
+                return $this->error->error(mensaje: 'Error al obtener relaciones',data:  $relaciones);
+            }
+        }
+
+        $data_relaciones = $this->data_relacion(indice: $indice, relaciones: $relaciones);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al obtener data_relaciones',data:  $data_relaciones);
+        }
+        return $data_relaciones;
+    }
+
 
     /**
      * Integra los campos para insertar un registro de co acreditado

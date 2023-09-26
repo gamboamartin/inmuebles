@@ -107,7 +107,6 @@ class _dps_init{
             return $this->error->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
 
-
         $filtro = array();
         $filtro['dp_estado.id'] = $row_upd->dp_estado_id;
 
@@ -116,7 +115,6 @@ class _dps_init{
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
-
 
         $keys_selects = $this->key_con_descripcion(controler: $controler,entidad: 'dp_cp',
             keys_selects:  $keys_selects,label: 'CP',row_upd:  $row_upd, filtro: $filtro);

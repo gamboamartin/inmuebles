@@ -15,57 +15,6 @@ class _co_acreditado{
 
 
 
-
-    /**
-     * Integra los datos para una transaccion de co acreditado
-     * @param array $co_acreditados Conjunto de co acreditados
-     * @return stdClass
-     * @version 2.71.0
-     */
-    private function data_co_acreditado(array $co_acreditados): stdClass
-    {
-        $existe_co_acreditado = false;
-        $inm_co_acreditado = new stdClass();
-        if(count($co_acreditados) === 1){
-            $existe_co_acreditado = true;
-            $inm_co_acreditado = (object)$co_acreditados[0];
-
-        }
-
-        $data = new stdClass();
-        $data->existe_co_acreditado = $existe_co_acreditado;
-        $data->inm_co_acreditado = $inm_co_acreditado;
-
-        return $data;
-    }
-
-    /**
-     * Obtiene los datos de los co acreditados ligados a un comprador
-     * @param int $inm_comprador_id Comprador id
-     * @param inm_comprador $modelo_inm_comprador Modelo de comprador
-     * @return array|stdClass
-     * @version 2.71.0
-     */
-    private function get_data_co_acreditado(int $inm_comprador_id, inm_comprador $modelo_inm_comprador): array|stdClass
-    {
-        if($inm_comprador_id <= 0){
-            return $this->error->error(mensaje: 'Error inm_comprador_id debe ser mayor a 0',data:  $inm_comprador_id);
-        }
-
-        $co_acreditados = $modelo_inm_comprador->get_co_acreditados(inm_comprador_id: $inm_comprador_id);
-        if(errores::$error){
-            return $this->error->error(mensaje: 'Error al obtener co_acreditados',data:  $co_acreditados);
-        }
-
-        $data_co_acreditado = $this->data_co_acreditado(co_acreditados: $co_acreditados);
-        if(errores::$error){
-            return $this->error->error(mensaje: 'Error al obtener data_co_acreditado',data:  $data_co_acreditado);
-        }
-        return $data_co_acreditado;
-    }
-
-
-
     /**
      * Genera un registro de insersion de un co acreditado
      * @param int $inm_co_acreditado_id Co acreditado id
@@ -204,14 +153,14 @@ class _co_acreditado{
 
         $data_result = new stdClass();
 
-        $data_co_acreditado = $this->get_data_co_acreditado(inm_comprador_id: $inm_comprador_id,
-            modelo_inm_comprador: $modelo_inm_comprador);
+        $data_co_acreditado = (new _relaciones_comprador())->get_data_relacion(name_relacion: 'inm_con_acreditado',
+            indice: 1, inm_comprador_id: $inm_comprador_id, modelo_inm_comprador: $modelo_inm_comprador);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al obtener data_co_acreditado',data:  $data_co_acreditado);
         }
         $data_result->data_co_acreditado = $data_co_acreditado;
 
-        if(!$data_co_acreditado->existe_co_acreditado) {
+        if(!$data_co_acreditado->existe_relacion) {
             $data_ins = $this->inserta_data_co_acreditado(inm_co_acreditado_ins: $inm_co_acreditado_ins,
                 inm_comprador_id:  $inm_comprador_id,link:  $modelo_inm_comprador->link);
             if (errores::$error) {
@@ -221,7 +170,7 @@ class _co_acreditado{
         }
         else{
             $modifica_co_acreditado = (new inm_co_acreditado(link: $modelo_inm_comprador->link))->modifica_bd(
-                registro: $inm_co_acreditado_ins,id:  $data_co_acreditado->inm_co_acreditado->inm_co_acreditado_id);
+                registro: $inm_co_acreditado_ins,id:  $data_co_acreditado->inm_relacion->inm_co_acreditado_id);
             if (errores::$error) {
                 return $this->error->error(mensaje: 'Error al modificar co acreditado', data: $modifica_co_acreditado);
             }

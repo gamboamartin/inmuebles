@@ -63,61 +63,105 @@ class controlador_inm_ubicacion extends _ctl_base {
                 mensaje: 'Error al inicializar alta',data:  $r_alta, header: $header,ws:  $ws);
         }
 
+        $modelo_preferido = new inm_ubicacion(link: $this->link);
+
+        $dp_pais_id = $modelo_preferido->id_preferido_detalle(entidad_preferida: 'dp_pais');
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al obtener pais',data:  $dp_pais_id,
+                header: $header,ws:  $ws);
+        }
+        $dp_estado_id = $modelo_preferido->id_preferido_detalle(entidad_preferida: 'dp_estado');
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al obtener dp_estado_id',data:  $dp_estado_id,
+                header: $header,ws:  $ws);
+        }
+        $dp_municipio_id = $modelo_preferido->id_preferido_detalle(entidad_preferida: 'dp_municipio');
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al obtener dp_municipio_id',data:  $dp_municipio_id,
+                header: $header,ws:  $ws);
+        }
+        $dp_cp_id = $modelo_preferido->id_preferido_detalle(entidad_preferida: 'dp_cp');
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al obtener dp_cp_id',data:  $dp_cp_id,
+                header: $header,ws:  $ws);
+        }
+        $dp_colonia_postal_id = $modelo_preferido->id_preferido_detalle(entidad_preferida: 'dp_colonia_postal');
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al obtener dp_colonia_postal_id',data:  $dp_colonia_postal_id,
+                header: $header,ws:  $ws);
+        }
+        $dp_calle_pertenece_id = $modelo_preferido->id_preferido_detalle(entidad_preferida: 'dp_calle_pertenece');
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al obtener dp_calle_pertenece_id',
+                data:  $dp_calle_pertenece_id, header: $header,ws:  $ws);
+        }
+
+
         $columns_ds = array('dp_pais_descripcion');
         $keys_selects = $this->key_select(cols:6, con_registros: true,filtro:  array(), key: 'dp_pais_id',
-            keys_selects: array(), id_selected: 151, label: 'Pais', columns_ds : $columns_ds);
+            keys_selects: array(), id_selected: $dp_pais_id, label: 'Pais', columns_ds : $columns_ds);
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects,
                 header: $header,ws:  $ws);
         }
         $filtro = array();
-        $filtro['dp_pais.id'] = 151;
+        $filtro['dp_pais.id'] = $dp_pais_id;
 
         $columns_ds = array('dp_estado_descripcion');
 
         $keys_selects = $this->key_select(cols:6, con_registros: true,filtro:  $filtro, key: 'dp_estado_id',
-            keys_selects: $keys_selects, id_selected: 14, label: 'Estado', columns_ds: $columns_ds);
+            keys_selects: $keys_selects, id_selected: $dp_estado_id, label: 'Estado', columns_ds: $columns_ds);
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects,
                 header: $header,ws:  $ws);
         }
 
         $filtro = array();
-        $filtro['dp_estado.id'] = 14;
+        $filtro['dp_estado.id'] = $dp_estado_id;
 
         $columns_ds = array('dp_municipio_descripcion');
 
         $keys_selects = $this->key_select(cols:6, con_registros: true,filtro:  $filtro, key: 'dp_municipio_id',
-            keys_selects: $keys_selects, id_selected: -1, label: 'Municipio', columns_ds: $columns_ds);
+            keys_selects: $keys_selects, id_selected: $dp_municipio_id, label: 'Municipio', columns_ds: $columns_ds);
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects,
                 header: $header,ws:  $ws);
         }
 
         $columns_ds = array('dp_cp_descripcion');
+        $filtro = array();
+        $filtro['dp_municipio.id'] = $dp_municipio_id;
 
         $keys_selects = $this->key_select(cols:6, con_registros: true,filtro:  $filtro, key: 'dp_cp_id',
-            keys_selects: $keys_selects, id_selected: -1, label: 'CP', columns_ds: $columns_ds);
+            keys_selects: $keys_selects, id_selected:$dp_cp_id, label: 'CP', columns_ds: $columns_ds);
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects,
                 header: $header,ws:  $ws);
         }
 
         $columns_ds = array('dp_colonia_descripcion');
+        $filtro = array();
+        $filtro['dp_cp.id'] = $dp_cp_id;
         $keys_selects = $this->key_select(cols:6, con_registros: true,filtro:  $filtro, key: 'dp_colonia_postal_id',
-            keys_selects: $keys_selects, id_selected: -1, label: 'Colonia', columns_ds: $columns_ds);
+            keys_selects: $keys_selects, id_selected: $dp_colonia_postal_id, label: 'Colonia', columns_ds: $columns_ds);
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects,
                 header: $header,ws:  $ws);
         }
 
         $columns_ds = array('dp_calle_descripcion');
+        $filtro = array();
+        $filtro['dp_colonia_postal.id'] = $dp_colonia_postal_id;
         $keys_selects = $this->key_select(cols:6, con_registros: true,filtro:  $filtro, key: 'dp_calle_pertenece_id',
-            keys_selects: $keys_selects, id_selected: -1, label: 'Calle', columns_ds: $columns_ds);
+            keys_selects: $keys_selects, id_selected: $dp_calle_pertenece_id, label: 'Calle', columns_ds: $columns_ds);
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects,
                 header: $header,ws:  $ws);
         }
+
+        $keys_selects['inm_tipo_ubicacion_id'] = new stdClass();
+        $keys_selects['inm_tipo_ubicacion_id']->modelo_preferido = $modelo_preferido;
+
 
         $columns_ds = array('inm_tipo_ubicacion_descripcion');
         $keys_selects = $this->key_select(cols:12, con_registros: true,filtro:  array(), key: 'inm_tipo_ubicacion_id',
@@ -128,6 +172,7 @@ class controlador_inm_ubicacion extends _ctl_base {
         }
 
         $this->row_upd->costo_directo = 0;
+
 
 
         $inputs = $this->inputs(keys_selects: $keys_selects);
@@ -327,7 +372,8 @@ class controlador_inm_ubicacion extends _ctl_base {
 
         $this->inputs->referencia = $referencia;
 
-        $fecha = (new inm_concepto_html(html: $this->html_base))->input_fecha(cols: 12,row_upd: new stdClass(),value_vacio: false);
+        $fecha = (new inm_concepto_html(html: $this->html_base))->input_fecha(cols: 12,row_upd: new stdClass(),
+            value_vacio: false, value: date('Y-m-d'));
 
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al integrar fecha',data:  $fecha, header: $header,ws:  $ws);

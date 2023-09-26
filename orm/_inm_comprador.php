@@ -458,15 +458,38 @@ class _inm_comprador{
      */
     private function row_upd_ids(controlador_inm_comprador $controler): stdClass
     {
-        $controler->row_upd->inm_producto_infonavit_id = 1;
-        $controler->row_upd->inm_attr_tipo_credito_id = 6;
-        $controler->row_upd->inm_destino_credito_id = 1;
-        $bn_cuenta_id = (new bn_cuenta(link: $controler->link))->bn_cuenta_id_default();
+        $modelo_preferido = $controler->modelo;
+        $inm_producto_infonavit_id = $modelo_preferido->id_preferido_detalle(
+            entidad_preferida:  'inm_producto_infonavit');
         if(errores::$error){
-            return $this->error->error(mensaje: 'Error al obtener bn_cuenta_id',data:  $bn_cuenta_id);
+            return $this->error->error(mensaje: 'Error al obtener inm_producto_infonavit_id',
+                data:  $inm_producto_infonavit_id);
+        }
+        $inm_attr_tipo_credito_id = $modelo_preferido->id_preferido_detalle(
+            entidad_preferida:  'inm_attr_tipo_credito');
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al obtener inm_attr_tipo_credito_id',
+                data:  $inm_attr_tipo_credito_id);
+        }
+        $inm_destino_credito_id = $modelo_preferido->id_preferido_detalle(
+            entidad_preferida:  'inm_destino_credito');
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al obtener inm_destino_credito_id',
+                data:  $inm_attr_tipo_credito_id);
+        }
+        $bn_cuenta_id = $modelo_preferido->id_preferido_detalle(
+            entidad_preferida:  'bn_cuenta');
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al obtener bn_cuenta_id',
+                data:  $bn_cuenta_id);
         }
 
+        $controler->row_upd->inm_producto_infonavit_id = $inm_producto_infonavit_id;
+        $controler->row_upd->inm_attr_tipo_credito_id = $inm_attr_tipo_credito_id;
+        $controler->row_upd->inm_destino_credito_id = $inm_destino_credito_id;
         $controler->row_upd->bn_cuenta_id = $bn_cuenta_id;
+
+
         return $controler->row_upd;
     }
 

@@ -96,6 +96,56 @@ class _relaciones_compradorTest extends test {
 
     }
 
+    public function test_data_relacion(): void
+    {
+        errores::$error = false;
+
+        $_GET['seccion'] = 'inm_producto_infonavit';
+        $_GET['accion'] = 'lista';
+        $_SESSION['grupo_id'] = 1;
+        $_SESSION['usuario_id'] = 2;
+        $_GET['session_id'] = '1';
+
+
+        $inm = new _relaciones_comprador();
+        $inm = new liberator($inm);
+
+
+        $co_acreditados = array();
+        $co_acreditados[] = '';
+
+        $resultado = $inm->data_relacion(indice: 1, relaciones: $co_acreditados);
+        $this->assertIsObject($resultado);
+        $this->assertNotTrue(errores::$error);
+        $this->assertTrue($resultado->existe_relacion);
+        errores::$error = false;
+    }
+
+    public function test_get_data_relacion(): void
+    {
+        errores::$error = false;
+
+        $_GET['seccion'] = 'inm_producto_infonavit';
+        $_GET['accion'] = 'lista';
+        $_SESSION['grupo_id'] = 1;
+        $_SESSION['usuario_id'] = 2;
+        $_GET['session_id'] = '1';
+
+
+        $inm = new _relaciones_comprador();
+       // $inm = new liberator($inm);
+
+
+        $inm_comprador_id = 1;
+        $modelo_inm_comprador = new inm_comprador(link: $this->link);
+
+        $resultado = $inm->get_data_relacion('co_acreditado', 1, $inm_comprador_id, $modelo_inm_comprador);
+        $this->assertIsObject($resultado);
+        $this->assertNotTrue(errores::$error);
+
+        errores::$error = false;
+    }
+
     public function test_inm_ins(): void
     {
         errores::$error = false;

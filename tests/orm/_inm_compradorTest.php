@@ -338,7 +338,7 @@ class _inm_compradorTest extends test {
         $this->assertEquals(0,$resultado->descuento_pension_alimenticia_fc);
         $this->assertEquals(0,$resultado->monto_ahorro_voluntario);
         $this->assertEquals(1,$resultado->inm_producto_infonavit_id);
-        $this->assertEquals(6,$resultado->inm_attr_tipo_credito_id);
+        $this->assertEquals(1,$resultado->inm_attr_tipo_credito_id);
         $this->assertEquals(1,$resultado->inm_destino_credito_id);
         errores::$error = false;
     }
@@ -362,7 +362,7 @@ class _inm_compradorTest extends test {
         $this->assertIsObject($resultado);
         $this->assertNotTrue(errores::$error);
         $this->assertEquals(1,$resultado->inm_producto_infonavit_id);
-        $this->assertEquals(6,$resultado->inm_attr_tipo_credito_id);
+        $this->assertEquals(1,$resultado->inm_attr_tipo_credito_id);
         $this->assertEquals(1,$resultado->inm_destino_credito_id);
         errores::$error = false;
     }
