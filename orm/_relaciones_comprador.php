@@ -102,7 +102,7 @@ class _relaciones_comprador{
      * @return array|stdClass
      * @version 2.71.0
      */
-    final public function get_data_relacion(string $name_relacion, int $indice,int $inm_comprador_id,
+     private function get_data_relacion(string $name_relacion, int $indice,int $inm_comprador_id,
                                        inm_comprador $modelo_inm_comprador): array|stdClass
     {
         if($inm_comprador_id <= 0){
@@ -186,7 +186,7 @@ class _relaciones_comprador{
      * @return array|stdClass
      * @version 2.73.0
      */
-    final public function inserta_data_co_acreditado(array $inm_co_acreditado_ins, int $inm_comprador_id,
+    private function inserta_data_co_acreditado(array $inm_co_acreditado_ins, int $inm_comprador_id,
                                                 PDO $link): array|stdClass
     {
         $valida = (new inm_co_acreditado(link: $link))->valida_data_alta(inm_co_acreditado: $inm_co_acreditado_ins);
@@ -224,7 +224,7 @@ class _relaciones_comprador{
         return $data;
     }
 
-    final public function inserta_data_referencia(array $inm_referencia_ins, PDO $link){
+    private function inserta_data_referencia(array $inm_referencia_ins, PDO $link){
         $alta_inm_referencia = (new inm_referencia(link: $link))->alta_registro(registro: $inm_referencia_ins);
         if (errores::$error) {
             return $this->error->error(mensaje: 'Error al insertar alta_inm_referencia', data: $alta_inm_referencia);
@@ -296,6 +296,95 @@ class _relaciones_comprador{
             }
         }
         return $inm_ins;
+    }
+
+    /**
+     * Genera las transacciones de un co acreditado, ya sea a insercion o modificacion
+     * @param array $inm_co_acreditado_ins Co acreditados
+     * @param int $inm_comprador_id Comprador id
+     * @param inm_comprador $modelo_inm_comprador Modelo de comprador
+     * @return array|stdClass
+     * @version 2.74.0
+     */
+    final public function transacciones_co_acreditado(array $inm_co_acreditado_ins, int $inm_comprador_id,
+                                                 inm_comprador $modelo_inm_comprador): array|stdClass
+    {
+
+        if($inm_comprador_id <= 0){
+            return $this->error->error(mensaje: 'Error inm_comprador_id debe ser mayor a 0',data:  $inm_comprador_id);
+        }
+        $valida = (new inm_co_acreditado(link: $modelo_inm_comprador->link))->valida_data_alta(
+            inm_co_acreditado: $inm_co_acreditado_ins);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al validar inm_co_acreditado',data:  $valida);
+        }
+        $valida = (new inm_co_acreditado(link: $modelo_inm_comprador->link))->valida_alta(
+            inm_co_acreditado: $inm_co_acreditado_ins);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al validar registro',data:  $valida);
+        }
+
+        $data_result = new stdClass();
+
+        $data_co_acreditado = $this->get_data_relacion(name_relacion: 'inm_con_acreditado',
+            indice: 1, inm_comprador_id: $inm_comprador_id, modelo_inm_comprador: $modelo_inm_comprador);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al obtener data_co_acreditado',data:  $data_co_acreditado);
+        }
+        $data_result->data_co_acreditado = $data_co_acreditado;
+
+        if(!$data_co_acreditado->existe_relacion) {
+            $data_ins = $this->inserta_data_co_acreditado(
+                inm_co_acreditado_ins: $inm_co_acreditado_ins, inm_comprador_id:  $inm_comprador_id,
+                link:  $modelo_inm_comprador->link);
+            if (errores::$error) {
+                return $this->error->error(mensaje: 'Error al insertar datos de co acreditado', data: $data_ins);
+            }
+            $data_result->data_ins = $data_ins;
+        }
+        else{
+            $modifica_co_acreditado = (new inm_co_acreditado(link: $modelo_inm_comprador->link))->modifica_bd(
+                registro: $inm_co_acreditado_ins,id:  $data_co_acreditado->inm_relacion->inm_co_acreditado_id);
+            if (errores::$error) {
+                return $this->error->error(mensaje: 'Error al modificar co acreditado', data: $modifica_co_acreditado);
+            }
+            $data_result->modifica_co_acreditado = $modifica_co_acreditado;
+        }
+        return $data_result;
+
+    }
+
+    final public function transacciones_referencia(int $indice,array $inm_referencia_ins, int $inm_comprador_id,
+                                              inm_comprador $modelo_inm_comprador){
+
+        $data_result = new stdClass();
+
+        $data_referencia = $this->get_data_relacion(name_relacion: 'inm_referencia',
+            indice: $indice, inm_comprador_id: $inm_comprador_id, modelo_inm_comprador: $modelo_inm_comprador);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al obtener data_referencia',data:  $data_referencia);
+        }
+
+        $data_result->data_referencia = $data_referencia;
+
+        if(!$data_referencia->existe_relacion) {
+            $data_ins = $this->inserta_data_referencia(inm_referencia_ins: $inm_referencia_ins,
+                link:  $modelo_inm_comprador->link);
+            if (errores::$error) {
+                return $this->error->error(mensaje: 'Error al insertar datos de referencia', data: $data_ins);
+            }
+            $data_result->data_ins = $data_ins;
+        }
+        else{
+            $modifica_referencia = (new inm_referencia(link: $modelo_inm_comprador->link))->modifica_bd(
+                registro: $inm_referencia_ins,id:  $data_referencia->inm_relacion->inm_referencia_id);
+            if (errores::$error) {
+                return $this->error->error(mensaje: 'Error al modificar modifica_referencia', data: $modifica_referencia);
+            }
+            $data_result->modifica_referencia = $modifica_referencia;
+        }
+        return $data_result;
+
     }
 
     /**

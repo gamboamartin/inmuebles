@@ -65,46 +65,7 @@ class _co_acreditadoTest extends test {
         errores::$error = false;
     }
 
-    public function test_transacciones_co_acreditado(): void
-    {
-        errores::$error = false;
 
-        $_GET['seccion'] = 'inm_producto_infonavit';
-        $_GET['accion'] = 'lista';
-        $_SESSION['grupo_id'] = 1;
-        $_SESSION['usuario_id'] = 2;
-        $_GET['session_id'] = '1';
-
-
-        $inm = new _co_acreditado();
-        $inm = new liberator($inm);
-
-
-        $inm_co_acreditado_ins = array();
-        $inm_co_acreditado_ins['nombre'] = 'A';
-        $inm_co_acreditado_ins['apellido_paterno'] = 'A';
-        $inm_co_acreditado_ins['nss'] = '12345678909';
-        $inm_co_acreditado_ins['curp'] = 'XEXX010101HNEXXXA4';
-        $inm_co_acreditado_ins['rfc'] = 'CVA121201HJ7';
-        $inm_co_acreditado_ins['apellido_materno'] = 'A';
-        $inm_co_acreditado_ins['lada'] = '11';
-        $inm_co_acreditado_ins['numero'] = '12345678';
-        $inm_co_acreditado_ins['celular'] = '1234445556';
-        $inm_co_acreditado_ins['genero'] = 'A';
-        $inm_co_acreditado_ins['correo'] = 'a@b.com.mx';
-        $inm_co_acreditado_ins['nombre_empresa_patron'] = 'A';
-        $inm_co_acreditado_ins['nrp'] = 'A';
-        $inm_co_acreditado_ins['lada_nep'] = 'A';
-        $inm_co_acreditado_ins['numero_nep'] = 'A';
-        $inm_comprador_id = 1;
-        $modelo_inm_comprador = new inm_comprador(link: $this->link);
-
-        $resultado = $inm->transacciones_co_acreditado($inm_co_acreditado_ins, $inm_comprador_id, $modelo_inm_comprador);
-        $this->assertIsObject($resultado);
-        $this->assertNotTrue(errores::$error);
-
-        errores::$error = false;
-    }
 
 
 
