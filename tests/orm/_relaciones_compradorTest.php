@@ -389,6 +389,57 @@ class _relaciones_compradorTest extends test {
         errores::$error = false;
     }
 
+    public function test_transacciones_referencia(): void
+    {
+        errores::$error = false;
+
+        $_GET['seccion'] = 'inm_producto_infonavit';
+        $_GET['accion'] = 'lista';
+        $_SESSION['grupo_id'] = 1;
+        $_SESSION['usuario_id'] = 2;
+        $_GET['session_id'] = '1';
+
+
+        $inm = new _relaciones_comprador();
+        //$inm = new liberator($inm);
+
+
+        $inm_referencia_ins = array();
+        $inm_referencia_ins['nombre'] = 'Z';
+        $inm_referencia_ins['apellido_paterno'] = 'Y';
+        $inm_referencia_ins['inm_comprador_id'] = 1;
+        $inm_referencia_ins['dp_calle_pertenece_id'] = 1;
+        $inm_referencia_ins['lada'] = 123;
+        $inm_referencia_ins['numero'] = 12345678;
+        $inm_referencia_ins['celular'] = 1234567890;
+        $inm_referencia_ins['numero_dom'] = 1;
+        $indice = 1;
+        $inm_comprador_id = 1;
+        $modelo_inm_comprador = new inm_comprador(link: $this->link);
+
+        $del = (new base_test())->del_inm_referencia(link: $this->link);
+        if(errores::$error){
+            $error = (new errores())->error(mensaje:'Error al del', data: $del);
+            print_r($error);exit;
+        }
+
+        $resultado = $inm->transacciones_referencia($indice, $inm_referencia_ins, $inm_comprador_id, $modelo_inm_comprador);
+        $this->assertIsObject($resultado);
+        $this->assertNotTrue(errores::$error);
+        $this->assertNotTrue($resultado->data_referencia->existe_relacion);
+
+        errores::$error = false;
+
+
+        $resultado = $inm->transacciones_referencia($indice, $inm_referencia_ins, $inm_comprador_id, $modelo_inm_comprador);
+        $this->assertIsObject($resultado);
+        $this->assertNotTrue(errores::$error);
+        $this->assertTrue($resultado->data_referencia->existe_relacion);
+
+        errores::$error = false;
+
+    }
+
 
 
     public function test_valida_data(): void

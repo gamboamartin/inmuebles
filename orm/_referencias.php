@@ -13,8 +13,17 @@ class _referencias{
         $this->error = new errores();
     }
 
+    /**
+     * Ejecuta las operaciones de una referencia o la inserta o la modifica
+     * @param int $indice Indice de referencia
+     * @param int $inm_comprador_id Identificador de comprador
+     * @param array $inm_comprador_upd Datos de comprador
+     * @param inm_comprador $modelo_inm_comprador Modelo de comprador
+     * @return array|stdClass
+     */
     final public function operaciones_referencia(int $indice, int $inm_comprador_id, array $inm_comprador_upd,
-                                                 inm_comprador $modelo_inm_comprador){
+                                                 inm_comprador $modelo_inm_comprador): array|stdClass
+    {
 
         $result = new stdClass();
 
