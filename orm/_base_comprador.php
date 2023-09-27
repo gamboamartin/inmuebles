@@ -199,6 +199,20 @@ class _base_comprador{
                                                       inm_comprador $modelo_inm_comprador,
                                                       stdClass $r_modifica): array|stdClass
     {
+
+        $valida = $this->valida_r_modifica(r_modifica: $r_modifica);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al validar r_modifica', data: $valida);
+        }
+        if($inm_comprador_id<=0){
+            return $this->error->error(mensaje: 'Error inm_comprador_id debe ser mayor a 0',data:  $inm_comprador_id);
+        }
+        $valida = (new _com_cliente())->valida_data_cliente(inm_comprador: $r_modifica->registro_actualizado);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al al validar r_modifica->inm_comprador',data:  $valida);
+        }
+
+
         $result = new stdClass();
         $data_upd = $modelo_inm_comprador->upd_post(id: $inm_comprador_id,r_modifica:  $r_modifica);
         if(errores::$error){

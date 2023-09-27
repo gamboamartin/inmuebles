@@ -11,6 +11,7 @@ use gamboamartin\inmuebles\controllers\controlador_inm_producto_infonavit;
 use gamboamartin\inmuebles\models\_base_comprador;
 use gamboamartin\inmuebles\models\_inm_comprador;
 use gamboamartin\inmuebles\models\_inm_ubicaciones;
+use gamboamartin\inmuebles\models\inm_comprador;
 use gamboamartin\inmuebles\models\inm_ubicacion;
 use gamboamartin\inmuebles\tests\base_test;
 use gamboamartin\test\liberator;
@@ -200,6 +201,17 @@ class _base_compradorTest extends test {
         $inm = new _base_comprador();
         //$inm = new liberator($inm);
 
+        $del = (new base_test())->del_inm_rel_comprador_com_cliente(link: $this->link);
+        if(errores::$error){
+            $error = (new errores())->error(mensaje:'Error al del', data: $del);
+            print_r($error);exit;
+        }
+
+        $alta = (new base_test())->alta_inm_rel_comprador_com_cliente(link: $this->link);
+        if(errores::$error){
+            $error = (new errores())->error(mensaje:'Error al insertar', data: $alta);
+            print_r($error);exit;
+        }
 
         $inm_comprador_id = 1;
         $link = $this->link;;
@@ -220,6 +232,48 @@ class _base_compradorTest extends test {
         $registro_entrada['apellido_paterno'] = '1';
 
         $resultado = $inm->integra_relacion_com_cliente($inm_comprador_id, $link, $registro_entrada);
+        $this->assertIsObject($resultado);
+        $this->assertNotTrue(errores::$error);
+        errores::$error = false;
+    }
+
+    public function test_transacciones_posterior_upd(): void
+    {
+        errores::$error = false;
+
+        $_GET['seccion'] = 'inm_producto_infonavit';
+        $_GET['accion'] = 'lista';
+        $_SESSION['grupo_id'] = 1;
+        $_SESSION['usuario_id'] = 2;
+        $_GET['session_id'] = '1';
+
+        $inm = new _base_comprador();
+        //$inm = new liberator($inm);
+
+        $del = (new base_test())->del_inm_rel_comprador_com_cliente(link: $this->link);
+        if(errores::$error){
+            $error = (new errores())->error(mensaje:'Error al del', data: $del);
+            print_r($error);exit;
+        }
+        $alta = (new base_test())->alta_inm_rel_comprador_com_cliente(link: $this->link);
+        if(errores::$error){
+            $error = (new errores())->error(mensaje:'Error al insertar', data: $alta);
+            print_r($error);exit;
+        }
+        $inm_comprador_upd = array();
+        $inm_comprador_id = 1;
+        $modelo_inm_comprador = new inm_comprador(link: $this->link);
+
+        $r_modifica = new stdClass();
+        $r_modifica->registro_actualizado = new stdClass();
+        $r_modifica->registro_actualizado->inm_comprador_es_segundo_credito = '';
+        $r_modifica->registro_actualizado->inm_comprador_con_discapacidad = '';
+        $r_modifica->registro_actualizado->inm_comprador_nombre = 'A';
+        $r_modifica->registro_actualizado->inm_comprador_apellido_paterno = 'B';
+        $r_modifica->registro_actualizado->inm_comprador_id = 1;
+
+        $resultado = $inm->transacciones_posterior_upd($inm_comprador_upd, $inm_comprador_id, $modelo_inm_comprador,
+            $r_modifica);
         $this->assertIsObject($resultado);
         $this->assertNotTrue(errores::$error);
         errores::$error = false;

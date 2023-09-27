@@ -457,17 +457,11 @@ class _com_cliente{
      * @param stdClass $inm_comprador Registro de comprador
      * @param PDO $link Conexion de base de datos
      * @return array|stdClass
-     * @version 2.64.0
      */
     final public function modifica_com_cliente(stdClass $inm_comprador, PDO $link): array|stdClass
     {
-        $keys = array('inm_comprador_nombre','inm_comprador_apellido_paterno','inm_comprador_id');
-        $valida = $this->validacion->valida_existencia_keys(keys: $keys,registro:  $inm_comprador);
-        if(errores::$error){
-            return $this->error->error(mensaje: 'Error al al validar inm_comprador',data:  $valida);
-        }
-        $keys = array('inm_comprador_id');
-        $valida = $this->validacion->valida_ids(keys: $keys,registro:  $inm_comprador);
+
+        $valida = $this->valida_data_cliente(inm_comprador: $inm_comprador);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al al validar inm_comprador',data:  $valida);
         }
@@ -778,6 +772,20 @@ class _com_cliente{
         $valida = $this->valida_ids_com(registro_entrada: $registro_entrada);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al validar registro_entrada',data:  $valida);
+        }
+        return true;
+    }
+
+    final public function valida_data_cliente(array|stdClass $inm_comprador){
+        $keys = array('inm_comprador_nombre','inm_comprador_apellido_paterno','inm_comprador_id');
+        $valida = $this->validacion->valida_existencia_keys(keys: $keys,registro:  $inm_comprador);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al al validar inm_comprador',data:  $valida);
+        }
+        $keys = array('inm_comprador_id');
+        $valida = $this->validacion->valida_ids(keys: $keys,registro:  $inm_comprador);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al al validar inm_comprador',data:  $valida);
         }
         return true;
     }
