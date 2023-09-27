@@ -82,6 +82,7 @@ class _inm_ubicaciones extends _modelo_parent{
      * Valida los elementos base de una inicializacion de ubicacion
      * @param array $registro Registro en proceso
      * @return array|true
+     * @version 2.95.0
      */
     final protected function valida_row(array $registro): bool|array
     {

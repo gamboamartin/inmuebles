@@ -96,6 +96,31 @@ class _inm_ubicacionesTest extends test {
         errores::$error = false;
     }
 
+    public function test_valida_row(): void
+    {
+        errores::$error = false;
+
+        $_GET['seccion'] = 'inm_producto_infonavit';
+        $_GET['accion'] = 'lista';
+        $_SESSION['grupo_id'] = 1;
+        $_SESSION['usuario_id'] = 2;
+        $_GET['session_id'] = '1';
+
+
+
+        $_inm = new inm_ubicacion(link: $this->link);
+        $_inm = new liberator($_inm);
+        $registro = array();
+        $registro['dp_calle_pertenece_id'] = 1;
+        $registro['numero_exterior'] = 1;
+
+        $resultado = $_inm->valida_row($registro);
+        $this->assertIsBool($resultado);
+        $this->assertNotTrue(errores::$error);
+        $this->assertTrue($resultado);
+        errores::$error = false;
+    }
+
 
 
 }
