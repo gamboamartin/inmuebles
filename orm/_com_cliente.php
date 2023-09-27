@@ -776,7 +776,14 @@ class _com_cliente{
         return true;
     }
 
-    final public function valida_data_cliente(array|stdClass $inm_comprador){
+    /**
+     * Valida que los datos integrados de un comprador sean validos par ala integracion de un cliente
+     * @param array|stdClass $inm_comprador Registro de tipo comprador
+     * @return array|true
+     * @version 2.91.0
+     */
+    final public function valida_data_cliente(array|stdClass $inm_comprador): bool|array
+    {
         $keys = array('inm_comprador_nombre','inm_comprador_apellido_paterno','inm_comprador_id');
         $valida = $this->validacion->valida_existencia_keys(keys: $keys,registro:  $inm_comprador);
         if(errores::$error){

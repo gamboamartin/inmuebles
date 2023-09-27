@@ -1043,6 +1043,35 @@ class _com_clienteTest extends test {
         errores::$error = false;
     }
 
+    public function test_valida_data_cliente(): void
+    {
+        errores::$error = false;
+
+        $_GET['seccion'] = 'inm_producto_infonavit';
+        $_GET['accion'] = 'lista';
+        $_SESSION['grupo_id'] = 1;
+        $_SESSION['usuario_id'] = 2;
+        $_GET['session_id'] = '1';
+
+
+        $inm = new _com_cliente();
+        //$inm = new liberator($inm);
+
+
+
+        $inm_comprador = new stdClass();
+        $inm_comprador->inm_comprador_nombre = 'A';
+        $inm_comprador->inm_comprador_apellido_paterno = 'A';
+        $inm_comprador->inm_comprador_id = '1';
+
+        $resultado = $inm->valida_data_cliente($inm_comprador);
+        $this->assertIsBool($resultado);
+        $this->assertNotTrue(errores::$error);
+        $this->assertTrue($resultado);
+
+        errores::$error = false;
+    }
+
     public function test_valida_data_result_cliente(): void
     {
         errores::$error = false;
