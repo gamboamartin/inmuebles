@@ -8,15 +8,22 @@ use stdClass;
 
 class _inm_ubicaciones extends _modelo_parent{
 
+    /**
+     * Inserta un registro de tipo ubicaciones
+     * @param array $keys_integra_ds Keys para integracion de descripcion select
+     * @return array|stdClass
+     * @version 2.93.0
+     */
     public function alta_bd(array $keys_integra_ds = array('codigo', 'descripcion')): array|stdClass
     {
-        $registro = $this->registro;
 
+        $registro = $this->registro;
 
         $registro = $this->init_row(registro: $registro);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al integrar descripcion',data:  $registro);
         }
+
 
         $this->registro = $registro;
 
@@ -69,6 +76,21 @@ class _inm_ubicaciones extends _modelo_parent{
 
         return $r_modifica_bd;
 
+    }
+
+    final protected function valida_row(array $registro){
+        $keys = array('dp_calle_pertenece_id');
+        $valida = $this->validacion->valida_ids(keys: $keys,registro:  $registro);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al valida $registro',data:  $valida);
+        }
+
+        $keys = array('numero_exterior');
+        $valida = $this->validacion->valida_existencia_keys(keys: $keys,registro:  $registro);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al valida $registro',data:  $valida);
+        }
+        return true;
     }
 
 }

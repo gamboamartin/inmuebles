@@ -10,6 +10,7 @@ use gamboamartin\inmuebles\controllers\controlador_inm_plazo_credito_sc;
 use gamboamartin\inmuebles\controllers\controlador_inm_producto_infonavit;
 use gamboamartin\inmuebles\models\_inm_ubicaciones;
 use gamboamartin\inmuebles\models\inm_ubicacion;
+use gamboamartin\inmuebles\tests\base_test;
 use gamboamartin\test\liberator;
 use gamboamartin\test\test;
 
@@ -30,6 +31,38 @@ class _inm_ubicacionesTest extends test {
         $this->paths_conf->generales = '/var/www/html/inmuebles/config/generales.php';
         $this->paths_conf->database = '/var/www/html/inmuebles/config/database.php';
         $this->paths_conf->views = '/var/www/html/inmuebles/config/views.php';
+    }
+
+    public function test_alta_bd(): void
+    {
+        errores::$error = false;
+
+        $_GET['seccion'] = 'inm_producto_infonavit';
+        $_GET['accion'] = 'lista';
+        $_SESSION['grupo_id'] = 1;
+        $_SESSION['usuario_id'] = 2;
+        $_GET['session_id'] = '1';
+
+        $del = (new base_test())->del_inm_ubicacion(link: $this->link);
+        if(errores::$error){
+            $error = (new errores())->error(mensaje: 'Error al eliminar',data:  $del);
+            print_r($error);
+            exit;
+        }
+
+
+        $_inm = new inm_ubicacion(link: $this->link);
+        //$_inm = new liberator($_inm);
+        $_inm->registro['dp_calle_pertenece_id'] = 1;
+        $_inm->registro['numero_exterior'] = 1;
+        $_inm->registro['cuenta_predial'] = 1;
+        $_inm->registro['descripcion'] = 1;
+        $_inm->registro['inm_tipo_ubicacion_id'] = 1;
+        $resultado = $_inm->alta_bd();
+        $this->assertIsObject($resultado);
+        $this->assertNotTrue(errores::$error);
+        $this->assertEquals(1,$resultado->registro['inm_tipo_ubicacion_id']);
+        errores::$error = false;
     }
 
 

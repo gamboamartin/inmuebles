@@ -16,6 +16,7 @@ use gamboamartin\inmuebles\models\inm_referencia;
 use gamboamartin\inmuebles\models\inm_rel_co_acred;
 use gamboamartin\inmuebles\models\inm_rel_comprador_com_cliente;
 use gamboamartin\inmuebles\models\inm_rel_ubi_comp;
+use gamboamartin\inmuebles\models\inm_tipo_ubicacion;
 use gamboamartin\inmuebles\models\inm_ubicacion;
 use gamboamartin\organigrama\models\org_empresa;
 use PDO;
@@ -386,6 +387,18 @@ class base_test{
         return $alta;
     }
 
+    public function alta_inm_tipo_ubicacion(PDO $link, string $descripcion = 'TIPO 1', int $id = 1): array|\stdClass
+    {
+
+        $registro['id'] = $id;
+        $registro['descripcion'] = $descripcion;
+        $alta = (new inm_tipo_ubicacion($link))->alta_registro($registro);
+        if(errores::$error){
+            return (new errores())->error(mensaje: 'Error al insertar', data: $alta);
+        }
+        return $alta;
+    }
+
     public function alta_inm_ubicacion(PDO $link, string $cuenta_predial = 'CP', int $dp_calle_pertenece_id = 1,
                                        int $id = 1,int $inm_tipo_ubicacion_id = 1,
                                        string $numero_exterior = 'NUM EXT'): array|\stdClass
@@ -565,9 +578,29 @@ class base_test{
         return $del;
     }
 
+    public function del_inm_costo(PDO $link): array
+    {
+
+        $del = $this->del($link, 'gamboamartin\\inmuebles\\models\\inm_costo');
+        if(errores::$error){
+            return (new errores())->error('Error al eliminar', $del);
+        }
+        return $del;
+    }
+
     public function del_inm_doc_comprador(PDO $link): array
     {
         $del = $this->del($link, 'gamboamartin\\inmuebles\\models\\inm_doc_comprador');
+        if(errores::$error){
+            return (new errores())->error('Error al eliminar', $del);
+        }
+        return $del;
+    }
+
+    public function del_inm_opinion_valor(PDO $link): array
+    {
+
+        $del = $this->del($link, 'gamboamartin\\inmuebles\\models\\inm_opinion_valor');
         if(errores::$error){
             return (new errores())->error('Error al eliminar', $del);
         }
@@ -615,6 +648,45 @@ class base_test{
     public function del_inm_rel_ubi_comp(PDO $link): array
     {
         $del = $this->del($link, 'gamboamartin\\inmuebles\\models\\inm_rel_ubi_comp');
+        if(errores::$error){
+            return (new errores())->error('Error al eliminar', $del);
+        }
+        return $del;
+    }
+
+    public function del_inm_ubicacion(PDO $link): array
+    {
+        $del = $this->del_inm_costo(link: $link);
+        if(errores::$error){
+            return (new errores())->error('Error al eliminar', $del);
+        }
+        $del = $this->del_inm_opinion_valor(link: $link);
+        if(errores::$error){
+            return (new errores())->error('Error al eliminar', $del);
+        }
+        $del = $this->del_inm_precio(link: $link);
+        if(errores::$error){
+            return (new errores())->error('Error al eliminar', $del);
+        }
+        $del = $this->del_inm_rel_ubi_comp(link: $link);
+        if(errores::$error){
+            return (new errores())->error('Error al eliminar', $del);
+        }
+        $del = $this->del_inm_ubicacion_etapa(link: $link);
+        if(errores::$error){
+            return (new errores())->error('Error al eliminar', $del);
+        }
+
+        $del = $this->del($link, 'gamboamartin\\inmuebles\\models\\inm_ubicacion');
+        if(errores::$error){
+            return (new errores())->error('Error al eliminar', $del);
+        }
+        return $del;
+    }
+
+    public function del_inm_ubicacion_etapa(PDO $link): array
+    {
+        $del = $this->del($link, 'gamboamartin\\inmuebles\\models\\inm_ubicacion_etapa');
         if(errores::$error){
             return (new errores())->error('Error al eliminar', $del);
         }
