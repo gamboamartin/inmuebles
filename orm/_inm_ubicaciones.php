@@ -78,7 +78,13 @@ class _inm_ubicaciones extends _modelo_parent{
 
     }
 
-    final protected function valida_row(array $registro){
+    /**
+     * Valida los elementos base de una inicializacion de ubicacion
+     * @param array $registro Registro en proceso
+     * @return array|true
+     */
+    final protected function valida_row(array $registro): bool|array
+    {
         $keys = array('dp_calle_pertenece_id');
         $valida = $this->validacion->valida_ids(keys: $keys,registro:  $registro);
         if(errores::$error){
