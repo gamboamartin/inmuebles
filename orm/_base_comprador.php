@@ -194,6 +194,7 @@ class _base_comprador{
      * @param inm_comprador $modelo_inm_comprador Modelo de comprador
      * @param stdClass $r_modifica Resultado de la modificacion de comprador
      * @return array|stdClass
+     * @version 2.92.0
      */
     final public function transacciones_posterior_upd(array $inm_comprador_upd,int $inm_comprador_id,
                                                       inm_comprador $modelo_inm_comprador,

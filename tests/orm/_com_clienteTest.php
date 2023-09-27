@@ -596,7 +596,7 @@ class _com_clienteTest extends test {
 
 
         $inm = new _com_cliente();
-        $inm = new liberator($inm);
+        //$inm = new liberator($inm);
 
 
         $link = $this->link;

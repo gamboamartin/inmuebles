@@ -457,6 +457,7 @@ class _com_cliente{
      * @param stdClass $inm_comprador Registro de comprador
      * @param PDO $link Conexion de base de datos
      * @return array|stdClass
+     * @version 2.92.0
      */
     final public function modifica_com_cliente(stdClass $inm_comprador, PDO $link): array|stdClass
     {
