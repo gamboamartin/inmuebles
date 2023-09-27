@@ -186,8 +186,19 @@ class _base_comprador{
     }
 
 
+    /**
+     * Ejecuta las transacciones de modificacion de un comprador inserta las referencias y los co acreditados o
+     * los modifica en su caso
+     * @param array $inm_comprador_upd Registro de tipo comprador
+     * @param int $inm_comprador_id Identificador de comprador
+     * @param inm_comprador $modelo_inm_comprador Modelo de comprador
+     * @param stdClass $r_modifica Resultado de la modificacion de comprador
+     * @return array|stdClass
+     */
     final public function transacciones_posterior_upd(array $inm_comprador_upd,int $inm_comprador_id,
-                                                      inm_comprador $modelo_inm_comprador, stdClass $r_modifica){
+                                                      inm_comprador $modelo_inm_comprador,
+                                                      stdClass $r_modifica): array|stdClass
+    {
         $result = new stdClass();
         $data_upd = $modelo_inm_comprador->upd_post(id: $inm_comprador_id,r_modifica:  $r_modifica);
         if(errores::$error){
@@ -210,14 +221,14 @@ class _base_comprador{
         $result->data_co_acreditado = $data_co_acreditado;
 
 
-        $data_referencias = (new _referencias())->operaciones_referencia(indice: 1,
-            inm_comprador_id: $inm_comprador_id, inm_comprador_upd: $inm_comprador_upd, modelo_inm_comprador: $modelo_inm_comprador);
+        $data_referencias = (new _referencias())->operaciones_referencia(indice: 1, inm_comprador_id: $inm_comprador_id,
+            inm_comprador_upd: $inm_comprador_upd, modelo_inm_comprador: $modelo_inm_comprador);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al obtener data_referencias',data:  $data_referencias);
         }
 
-        $data_referencias = (new _referencias())->operaciones_referencia(indice: 2,
-            inm_comprador_id: $inm_comprador_id, inm_comprador_upd: $inm_comprador_upd, modelo_inm_comprador: $modelo_inm_comprador);
+        $data_referencias = (new _referencias())->operaciones_referencia(indice: 2, inm_comprador_id: $inm_comprador_id,
+            inm_comprador_upd: $inm_comprador_upd, modelo_inm_comprador: $modelo_inm_comprador);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al obtener data_referencias',data:  $data_referencias);
         }

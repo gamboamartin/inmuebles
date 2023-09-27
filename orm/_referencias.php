@@ -20,10 +20,21 @@ class _referencias{
      * @param array $inm_comprador_upd Datos de comprador
      * @param inm_comprador $modelo_inm_comprador Modelo de comprador
      * @return array|stdClass
+     * @version 2.89.0
      */
     final public function operaciones_referencia(int $indice, int $inm_comprador_id, array $inm_comprador_upd,
                                                  inm_comprador $modelo_inm_comprador): array|stdClass
     {
+
+        if($inm_comprador_id <= 0){
+            return $this->error->error(mensaje: 'Error inm_comprador_id debe ser mayor a 0',data:  $inm_comprador_id);
+        }
+        if($indice<=0){
+            return $this->error->error(mensaje: 'Error indice es menor a 1',data:  $indice);
+        }
+        if($indice > 2){
+            return $this->error->error(mensaje: 'Error indice es mayor a 2',data:  $indice);
+        }
 
         $result = new stdClass();
 
@@ -36,7 +47,6 @@ class _referencias{
             return $this->error->error(mensaje: 'Error al asignar campo', data: $inm_ins);
         }
 
-
         $result->inm_referencia_ins = $inm_ins;
 
         $aplica_alta = (new _relaciones_comprador())->aplica_alta(inm_ins: $inm_ins);
@@ -47,6 +57,12 @@ class _referencias{
         $result->aplica_alta_referencia = $aplica_alta;
 
         if($aplica_alta) {
+            $valida = (new inm_referencia(link: $modelo_inm_comprador->link))->valida_alta_referencia(
+                registro: $inm_ins);
+            if(errores::$error){
+                return $this->error->error(mensaje: 'Error al validar $registro',data: $valida);
+            }
+
             $data_referencia = (new _relaciones_comprador())->transacciones_referencia(
                 indice: $indice, inm_referencia_ins: $inm_ins, inm_comprador_id: $inm_comprador_id,
                 modelo_inm_comprador: $modelo_inm_comprador);

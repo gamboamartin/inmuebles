@@ -39,7 +39,7 @@ class _relaciones_comprador{
                 }
             }
             if(count($inm_ins) === 2){
-                if(isset($inm_ins['inm_comprador_id'])){
+                if(isset($inm_ins['inm_comprador_id']) && isset($inm_ins['genero'])){
                     $aplica_alta = false;
                 }
             }
