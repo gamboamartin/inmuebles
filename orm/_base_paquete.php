@@ -40,23 +40,29 @@ class _base_paquete{
     }
 
     /**
-     * @param int $id
-     * @param string $key_entidad_base_id
-     * @param string $key_entidad_id
+     * Inicializa la descripcion basada en los keys de relacion
+     * @param int $id Id de entidad
+     * @param string $key_entidad_base_id Entidad de tipo proceso
+     * @param string $key_entidad_id Entidad base de operacion
      * @param _inm_ubicaciones|inm_comprador_etapa|inm_comprador_proceso|_modelo_base_paquete $modelo
      * @return array
+     * @version 2.100.0
      */
     final public function init_data_row(int $id, string $key_entidad_base_id, string $key_entidad_id
         , _inm_ubicaciones|inm_comprador_etapa|inm_comprador_proceso|_modelo_base_paquete $modelo): array
     {
 
+        if($id <=0){
+            return $this->error->error(mensaje: 'Error id debe ser mayor a 0',data:  $id);
+        }
         $registro = $modelo->registro(registro_id: $id, columnas_en_bruto: true);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al obtener registro',data:  $registro);
         }
 
         unset($registro['descripcion']);
-        $registro = $modelo->init_row(key_entidad_base_id: $key_entidad_base_id, key_entidad_id: $key_entidad_id, registro: $registro);
+        $registro = $modelo->init_row(key_entidad_base_id: $key_entidad_base_id, key_entidad_id: $key_entidad_id,
+            registro: $registro);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al integrar descripcion',data:  $registro);
         }
