@@ -38,6 +38,42 @@ class _modelo_base_paqueteTest extends test {
         $this->paths_conf->views = '/var/www/html/inmuebles/config/views.php';
     }
 
+    public function test_modifica_bd(): void
+    {
+        errores::$error = false;
+
+        $_GET['seccion'] = 'inm_producto_infonavit';
+        $_GET['accion'] = 'lista';
+        $_SESSION['grupo_id'] = 1;
+        $_SESSION['usuario_id'] = 2;
+        $_GET['session_id'] = '1';
+
+        $del = (new base_test())->del_inm_ubicacion(link: $this->link);
+        if(errores::$error){
+            $error = (new errores())->error(mensaje:'Error al eliminar', data: $del);
+            print_r($error);exit;
+        }
+
+        $alta = (new base_test())->alta_inm_ubicacion(link: $this->link);
+        if(errores::$error){
+            $error = (new errores())->error(mensaje:'Error al alta', data: $alta);
+            print_r($error);exit;
+        }
+
+        $inm = new inm_ubicacion(link: $this->link);
+        //$inm = new liberator($inm);
+
+
+        $id = 1;
+        $registro = array();
+
+        $resultado = $inm->modifica_bd($registro, $id);
+        $this->assertIsObject($resultado);
+        $this->assertEquals("Mexico Jalisco San Pedro Tlaquepaque Residencial Revolución 45580   NUM EXT",$resultado->registro_actualizado->inm_ubicacion_descripcion);
+        $this->assertNotTrue(errores::$error);
+        errores::$error = false;
+    }
+
     public function test_valida_init(): void
     {
         errores::$error = false;
