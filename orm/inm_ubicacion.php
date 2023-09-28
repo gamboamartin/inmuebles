@@ -292,9 +292,14 @@ class inm_ubicacion extends _inm_ubicaciones {
      * Regenera los datos de opiniones de valor
      * @param int $inm_ubicacion_id Ubicacion id
      * @return array|stdClass
+     * @version 2.102.0
      */
     private function regenera_data_opinion(int $inm_ubicacion_id): array|stdClass
     {
+        if($inm_ubicacion_id <= 0){
+            return $this->error->error(mensaje: 'Error inm_ubicacion_id es menor a 0',data: $inm_ubicacion_id);
+        }
+
         $n_opiniones = $this->n_opiniones_valor(inm_ubicacion_id: $inm_ubicacion_id);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al obtener n_opiniones',data: $n_opiniones);
