@@ -224,7 +224,18 @@ class inm_ubicacion extends _inm_ubicaciones {
         return round($total_montos ,2);
     }
 
-    private function n_opiniones_valor(int $inm_ubicacion_id){
+    /**
+     * Obtiene el numero de opiniones de valor generadas en una ubicacion
+     * @param int $inm_ubicacion_id Ubicacion Id
+     * @return array|int
+     * @version 2.96.0
+     */
+    private function n_opiniones_valor(int $inm_ubicacion_id): int|array
+    {
+        if($inm_ubicacion_id <= 0){
+            return $this->error->error(mensaje: 'Error inm_ubicacion_id es menor a 0',data: $inm_ubicacion_id);
+        }
+
         $filtro['inm_ubicacion.id'] = $inm_ubicacion_id;
         $n_opiniones = (new inm_opinion_valor(link: $this->link))->cuenta(filtro: $filtro);
         if(errores::$error){

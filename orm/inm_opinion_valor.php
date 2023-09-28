@@ -34,6 +34,18 @@ class inm_opinion_valor extends _modelo_parent{
 
     public function alta_bd(array $keys_integra_ds = array('codigo', 'descripcion')): array|stdClass
     {
+        $keys = array('inm_ubicacion_id','inm_valuador_id');
+        $valida = $this->validacion->valida_ids(keys: $keys,registro:  $this->registro);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al validar registro',data:  $valida);
+        }
+
+        $keys = array('monto_resultado');
+        $valida = $this->validacion->valida_double_mayores_0(keys: $keys,registro:  $this->registro);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al validar registro',data:  $valida);
+        }
+
         $inm_ubicacion = (new inm_ubicacion(link: $this->link))->registro(
             registro_id: $this->registro['inm_ubicacion_id'],retorno_obj: true);
         if(errores::$error){
@@ -43,6 +55,13 @@ class inm_opinion_valor extends _modelo_parent{
             registro_id: $this->registro['inm_valuador_id'],retorno_obj: true);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al obtener inm_valuador',data:  $inm_valuador);
+        }
+
+        if(!isset($this->registro['fecha'])){
+            $this->registro['fecha'] = date('Y-m-d');
+        }
+        if(!isset($this->registro['costo'])){
+            $this->registro['costo'] = 0;
         }
 
         if(!isset($this->registro['descripcion'])){

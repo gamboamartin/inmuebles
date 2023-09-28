@@ -11,6 +11,7 @@ use gamboamartin\errores\errores;
 use gamboamartin\inmuebles\models\inm_co_acreditado;
 use gamboamartin\inmuebles\models\inm_comprador;
 use gamboamartin\inmuebles\models\inm_conf_empresa;
+use gamboamartin\inmuebles\models\inm_opinion_valor;
 use gamboamartin\inmuebles\models\inm_precio;
 use gamboamartin\inmuebles\models\inm_referencia;
 use gamboamartin\inmuebles\models\inm_rel_co_acred;
@@ -199,6 +200,21 @@ class base_test{
         $registro['org_empresa_id'] = $org_empresa_id;
 
         $alta = (new inm_conf_empresa($link))->alta_registro($registro);
+        if(errores::$error){
+            return (new errores())->error(mensaje: 'Error al insertar', data: $alta);
+        }
+        return $alta;
+    }
+
+    public function alta_inm_opinion_valor(PDO $link, int $id = 1, int $inm_ubicacion_id = 1, int $inm_valuador_id = 1,
+                                           float $monto_resultado = 100000): array|\stdClass
+    {
+
+        $registro['id'] = $id;
+        $registro['inm_ubicacion_id'] = $inm_ubicacion_id;
+        $registro['inm_valuador_id'] = $inm_valuador_id;
+        $registro['monto_resultado'] = $monto_resultado;
+        $alta = (new inm_opinion_valor($link))->alta_registro($registro);
         if(errores::$error){
             return (new errores())->error(mensaje: 'Error al insertar', data: $alta);
         }
