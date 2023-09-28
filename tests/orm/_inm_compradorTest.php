@@ -201,6 +201,13 @@ class _inm_compradorTest extends test {
             $error = (new errores())->error(mensaje:'Error al eliminar', data: $del);
             print_r($error);exit;
         }
+
+        $del = (new base_test())->del_org_empresa(link: $this->link);
+        if(errores::$error){
+            $error = (new errores())->error(mensaje:'Error al eliminar', data: $del);
+            print_r($error);exit;
+        }
+
         $inm_comprador_id = 1;
         $link = $this->link;
         $resultado = $_inm->inm_ubicaciones($inm_comprador_id, $link);

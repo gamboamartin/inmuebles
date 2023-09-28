@@ -50,17 +50,8 @@ class inm_ubicacion_etapa extends _inm_ubicaciones {
         return $r_alta_bd;
     }
 
-    private function descripcion(array $registro): string
-    {
-        $descripcion = $registro['inm_ubicacion_id'];
-        $descripcion .= ' '.$registro['pr_etapa_proceso_id'];
-        $descripcion .= ' '.$registro['fecha'];
-        $descripcion .= ' '.time();
-        return trim($descripcion);
-    }
 
-
-    protected function init_row(array $registro): array{
+    final public function init_row(string $key_entidad_base_id, string $key_entidad_id, array $registro): array{
 
 
         if(!isset($registro['descripcion'])){
@@ -76,7 +67,8 @@ class inm_ubicacion_etapa extends _inm_ubicaciones {
 
     private function integra_descripcion(array $registro){
 
-        $descripcion = $this->descripcion(registro: $registro);
+        $descripcion = $this->descripcion(key_entidad_base_id: 'inm_ubicacion_id',
+            key_entidad_id: 'pr_etapa_proceso_id', registro: $registro);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al obtener descripcion',data:  $descripcion);
         }

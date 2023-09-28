@@ -78,7 +78,8 @@ class inm_ubicacion extends _inm_ubicaciones {
         return $r_alta_bd;
     }
 
-    private function descripcion(stdClass $dp_calle_pertenece, array $registro): string
+    final protected function descripcion(string $key_entidad_base_id, string $key_entidad_id, array $registro,
+                                         stdClass $dp_calle_pertenece = new stdClass()): string
     {
         $descripcion = $dp_calle_pertenece->dp_pais_descripcion;
         $descripcion .= ' '.$dp_calle_pertenece->dp_estado_descripcion;
@@ -138,7 +139,7 @@ class inm_ubicacion extends _inm_ubicaciones {
     }
 
 
-    protected function init_row(array $registro):array{
+    final public function init_row(string $key_entidad_base_id,string $key_entidad_id, array $registro):array{
 
         $valida = $this->valida_row(registro: $registro);
         if(errores::$error){
@@ -176,7 +177,8 @@ class inm_ubicacion extends _inm_ubicaciones {
             $registro['numero_interior'] = '';
         }
 
-        $descripcion = $this->descripcion(dp_calle_pertenece: $dp_calle_pertenece, registro: $registro);
+        $descripcion = $this->descripcion(key_entidad_base_id: $this->key_id, key_entidad_id: '',
+            registro: $registro, dp_calle_pertenece: $dp_calle_pertenece);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al obtener descripcion',data:  $descripcion);
         }

@@ -66,6 +66,89 @@ class inm_comprador_procesoTest extends test {
         errores::$error = false;
     }
 
+    public function test_descripcion(): void
+    {
+        errores::$error = false;
+
+        $_GET['seccion'] = 'inm_producto_infonavit';
+        $_GET['accion'] = 'lista';
+        $_SESSION['grupo_id'] = 1;
+        $_SESSION['usuario_id'] = 2;
+        $_GET['session_id'] = '1';
+
+
+        $inm = new inm_comprador_proceso(link: $this->link);
+        $inm = new liberator($inm);
+
+        $registro = array();
+        $registro['inm_comprador_id'] = 1;
+        $registro['pr_sub_proceso_id'] = 1;
+        $registro['fecha'] = '2020-01-01';
+
+        $resultado = $inm->descripcion(key_entidad_base_id: 'inm_comprador_id',
+            key_entidad_id: 'pr_sub_proceso_id', registro: $registro);
+
+        $this->assertIsString($resultado);
+        $this->assertNotTrue(errores::$error);
+        $this->assertStringContainsStringIgnoringCase("1 1 2020-01-01",$resultado);
+        errores::$error = false;
+    }
+
+    public function test_init_row(): void
+    {
+        errores::$error = false;
+
+        $_GET['seccion'] = 'inm_producto_infonavit';
+        $_GET['accion'] = 'lista';
+        $_SESSION['grupo_id'] = 1;
+        $_SESSION['usuario_id'] = 2;
+        $_GET['session_id'] = '1';
+
+
+        $inm = new inm_comprador_proceso(link: $this->link);
+        //$inm = new liberator($inm);
+
+        $registro = array();
+        $registro['inm_comprador_id'] = '1';
+        $registro['pr_sub_proceso_id'] = '1';
+        $registro['fecha'] = '2020-01-01';
+
+        $resultado = $inm->init_row(key_entidad_base_id: 'inm_comprador_id', key_entidad_id: 'pr_sub_proceso_id',
+            registro: $registro);
+        $this->assertIsArray($resultado);
+        $this->assertNotTrue(errores::$error);
+        $this->assertStringContainsStringIgnoringCase("1 1 2020-01-01",$resultado['descripcion']);
+        errores::$error = false;
+    }
+
+    public function test_integra_descripcion(): void
+    {
+        errores::$error = false;
+
+        $_GET['seccion'] = 'inm_producto_infonavit';
+        $_GET['accion'] = 'lista';
+        $_SESSION['grupo_id'] = 1;
+        $_SESSION['usuario_id'] = 2;
+        $_GET['session_id'] = '1';
+
+
+        $inm = new inm_comprador_proceso(link: $this->link);
+        $inm = new liberator($inm);
+
+        $registro = array();
+        $registro['inm_comprador_id'] = 1;
+        $registro['pr_sub_proceso_id'] = 1;
+        $registro['fecha'] = '2020-01-01';
+
+
+        $resultado = $inm->integra_descripcion(key_entidad_base_id: 'inm_comprador_id',
+            key_entidad_id: 'pr_sub_proceso_id', registro: $registro);
+        $this->assertIsArray($resultado);
+        $this->assertNotTrue(errores::$error);
+        $this->assertStringContainsStringIgnoringCase("1 1 2020-01-01",$resultado['descripcion']);
+        errores::$error = false;
+    }
+
     public function test_valida_init(): void
     {
         errores::$error = false;
@@ -85,7 +168,8 @@ class inm_comprador_procesoTest extends test {
         $registro['pr_sub_proceso_id'] = 2;
         $registro['fecha'] = '2020-01-01';
 
-        $resultado = $inm->valida_init($registro);
+        $resultado = $inm->valida_init(key_entidad_base_id: 'inm_comprador_id', key_entidad_id: 'pr_sub_proceso_id',
+            registro: $registro);
         $this->assertIsBool($resultado);
         $this->assertNotTrue(errores::$error);
         $this->assertTrue($resultado);

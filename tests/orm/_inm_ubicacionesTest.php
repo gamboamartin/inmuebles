@@ -78,12 +78,13 @@ class _inm_ubicacionesTest extends test {
         $_GET['session_id'] = '1';
 
         $_inm = new inm_ubicacion(link: $this->link);
-        $_inm = new liberator($_inm);
+        //$_inm = new liberator($_inm);
 
         $registro = array();
         $registro['dp_calle_pertenece_id'] = 1;
         $registro['numero_exterior'] = 1;
-        $resultado = $_inm->init_row($registro);
+        $resultado = $_inm->init_row(key_entidad_base_id: '', key_entidad_id: '', registro: $registro);
+        //print_r($resultado);exit;
         $this->assertIsArray($resultado);
         $this->assertNotTrue(errores::$error);
         $this->assertEquals(1,$resultado['dp_calle_pertenece_id']);

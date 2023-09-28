@@ -190,7 +190,8 @@ class _alta_comprador{
         $inm_comprador_proceso_ins['pr_sub_proceso_id'] = $pr_sub_proceso_id;
         $inm_comprador_proceso_ins['fecha'] = date('Y-m-d');
 
-        $valida = (new inm_comprador_proceso(link: $link))->valida_init(registro: $inm_comprador_proceso_ins);
+        $valida = (new inm_comprador_proceso(link: $link))->valida_init(key_entidad_base_id: 'inm_comprador_id',
+            key_entidad_id: 'pr_sub_proceso_id', registro: $inm_comprador_proceso_ins);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al validar $registro', data: $valida);
         }
