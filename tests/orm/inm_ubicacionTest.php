@@ -36,6 +36,44 @@ class inm_ubicacionTest extends test {
         $this->paths_conf->views = '/var/www/html/inmuebles/config/views.php';
     }
 
+    public function test_monto_opinion_promedio(): void
+    {
+        errores::$error = false;
+
+        $_GET['seccion'] = 'inm_producto_infonavit';
+        $_GET['accion'] = 'lista';
+        $_SESSION['grupo_id'] = 1;
+        $_SESSION['usuario_id'] = 2;
+        $_GET['session_id'] = '1';
+
+        $del = (new base_test())->del_inm_opinion_valor(link: $this->link);
+        if(errores::$error){
+            $error = (new errores())->error(mensaje:'Error al del', data: $del);
+            print_r($error);exit;
+        }
+
+        $inm = new inm_ubicacion(link: $this->link);
+        //$inm = new liberator($inm);
+
+        $alta = (new base_test())->alta_inm_opinion_valor(link: $this->link, fecha: '2020-01-02', id: 2, monto_resultado: 200000);
+        if(errores::$error){
+            $error = (new errores())->error(mensaje:'Error al insertar', data: $alta);
+            print_r($error);exit;
+        }
+        $alta = (new base_test())->alta_inm_opinion_valor(link: $this->link, fecha: '2020-01-03', id: 3, monto_resultado: 300000);
+        if(errores::$error){
+            $error = (new errores())->error(mensaje:'Error al insertar', data: $alta);
+            print_r($error);exit;
+        }
+
+        $inm_ubicacion_id = 1;
+        $resultado = $inm->monto_opinion_promedio($inm_ubicacion_id);
+        $this->assertIsFloat($resultado);
+        $this->assertNotTrue(errores::$error);
+        $this->assertEquals(250000.00,$resultado);
+        errores::$error = false;
+    }
+
     public function test_n_opiniones_valor(): void
     {
         errores::$error = false;

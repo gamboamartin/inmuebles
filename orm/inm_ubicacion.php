@@ -200,7 +200,17 @@ class inm_ubicacion extends _inm_ubicaciones {
         return $r_modifica_bd;
     }
 
-    final public function monto_opinion_promedio(int $inm_ubicacion_id){
+    /**
+     * Obtiene el monto de opiniones promedio
+     * @param int $inm_ubicacion_id Ubicacion id
+     * @return array|float
+     * @version 2.97.0
+     */
+    final public function monto_opinion_promedio(int $inm_ubicacion_id): float|array
+    {
+        if($inm_ubicacion_id <= 0){
+            return $this->error->error(mensaje: 'Error inm_ubicacion_id es menor a 0',data: $inm_ubicacion_id);
+        }
 
         $n_opiniones = $this->n_opiniones_valor(inm_ubicacion_id: $inm_ubicacion_id);
         if(errores::$error){
@@ -215,10 +225,9 @@ class inm_ubicacion extends _inm_ubicaciones {
             return $this->error->error(mensaje: 'Error al obtener montos',data: $r_inm_opinion_valor);
         }
 
-
         $total_montos = 0;
         if($n_opiniones > 0){
-            $total_montos = round($r_inm_opinion_valor['total_montos'],2);
+            $total_montos = round($r_inm_opinion_valor['total_montos'],2) / $n_opiniones;
         }
 
         return round($total_montos ,2);

@@ -206,7 +206,8 @@ class base_test{
         return $alta;
     }
 
-    public function alta_inm_opinion_valor(PDO $link, int $id = 1, int $inm_ubicacion_id = 1, int $inm_valuador_id = 1,
+    public function alta_inm_opinion_valor(PDO $link, string $fecha = '2020-01-01', int $id = 1,
+                                           int $inm_ubicacion_id = 1, int $inm_valuador_id = 1,
                                            float $monto_resultado = 100000): array|\stdClass
     {
 
@@ -214,6 +215,7 @@ class base_test{
         $registro['inm_ubicacion_id'] = $inm_ubicacion_id;
         $registro['inm_valuador_id'] = $inm_valuador_id;
         $registro['monto_resultado'] = $monto_resultado;
+        $registro['fecha'] = $fecha;
         $alta = (new inm_opinion_valor($link))->alta_registro($registro);
         if(errores::$error){
             return (new errores())->error(mensaje: 'Error al insertar', data: $alta);
