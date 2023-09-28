@@ -126,6 +126,14 @@ class _modelo_base_paquete extends _modelo_parent{
 
     }
 
+    /**
+     * Valida que los elementos para una integracion de etapa sean validos
+     * @param string $key_entidad_base_id Key de la entidad base comprador, inmueble
+     * @param string $key_entidad_id Key de la entidad de tipo proceso
+     * @param array $registro Registro en proceso
+     * @return bool|array
+     * @version 2.99.0
+     */
     final public function valida_init(string $key_entidad_base_id, string $key_entidad_id,array $registro): bool|array
     {
         $key_entidad_base_id = trim($key_entidad_base_id);

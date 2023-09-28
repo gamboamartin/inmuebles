@@ -56,7 +56,7 @@ class _base_paquete{
         }
 
         unset($registro['descripcion']);
-        $registro = $modelo->init_row(registro: $registro,key_entidad_base_id: $key_entidad_base_id,key_entidad_id: $key_entidad_id);
+        $registro = $modelo->init_row(key_entidad_base_id: $key_entidad_base_id, key_entidad_id: $key_entidad_id, registro: $registro);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al integrar descripcion',data:  $registro);
         }
