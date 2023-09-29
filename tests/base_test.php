@@ -213,6 +213,17 @@ class base_test{
                                    string $referencia = 'REF 1'): array|\stdClass
     {
 
+        $existe = (new inm_ubicacion(link: $link))->existe_by_id(registro_id: $inm_ubicacion_id);
+        if(errores::$error){
+            return (new errores())->error(mensaje: 'Error al validar si existe inm_ubicacion_id', data: $existe);
+        }
+        if(!$existe){
+            $alta = $this->alta_inm_ubicacion(link: $link, id: $inm_ubicacion_id);
+            if(errores::$error){
+                return (new errores())->error(mensaje: 'Error al insertar inm_ubicacion', data: $alta);
+            }
+        }
+
         $registro['id'] = $id;
         $registro['inm_ubicacion_id'] = $inm_ubicacion_id;
         $registro['descripcion'] = $descripcion;

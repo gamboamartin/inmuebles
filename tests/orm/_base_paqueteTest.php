@@ -12,6 +12,7 @@ use gamboamartin\inmuebles\models\_base_paquete;
 use gamboamartin\inmuebles\models\_inm_ubicaciones;
 use gamboamartin\inmuebles\models\_referencias;
 use gamboamartin\inmuebles\models\inm_ubicacion;
+use gamboamartin\inmuebles\tests\base_test;
 use gamboamartin\test\liberator;
 use gamboamartin\test\test;
 
@@ -77,12 +78,24 @@ class _base_paqueteTest extends test {
         $_inm = new _base_paquete();
         //$_inm = new liberator($_inm);
 
+        $del = (new base_test())->del_inm_ubicacion(link: $this->link);
+        if(errores::$error){
+            $error = (new errores())->error(mensaje:'Error al del', data: $del);
+            print_r($error);exit;
+        }
+        $alta = (new base_test())->alta_inm_ubicacion(link: $this->link);
+        if(errores::$error){
+            $error = (new errores())->error(mensaje:'Error al del', data: $del);
+            print_r($error);exit;
+        }
+
         $id = 1;
         $key_entidad_base_id = '';
         $key_entidad_id = '';
         $modelo = new inm_ubicacion(link: $this->link);
 
         $resultado = $_inm->init_data_row($id, $key_entidad_base_id, $key_entidad_id, $modelo);
+        //print_r($resultado);exit;
         $this->assertIsArray($resultado);
         $this->assertNotTrue(errores::$error);
         $this->assertEquals("Mexico Jalisco San Pedro Tlaquepaque Residencial Revolución 45580   NUM EXT",$resultado['descripcion']);

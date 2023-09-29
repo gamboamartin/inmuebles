@@ -44,6 +44,7 @@ class inm_ubicacion extends _inm_ubicaciones {
      * Inserta una ubicacion
      * @param array $keys_integra_ds Keys par ala generacion de la descripcion select
      * @return array|stdClass
+     * @version 2.105.0
      */
     public function alta_bd(array $keys_integra_ds = array('codigo', 'descripcion')): array|stdClass
     {
@@ -82,6 +83,14 @@ class inm_ubicacion extends _inm_ubicaciones {
         return $r_alta_bd;
     }
 
+    /**
+     * Genera la descripcion de una ubicacion
+     * @param string $key_entidad_base_id Key de entidad base = inm_ubicacion_id
+     * @param string $key_entidad_id Key de entidad proceso No aplica aqui
+     * @param array $registro Registro en proceso
+     * @param stdClass $dp_calle_pertenece Datos de calle
+     * @return string
+     */
     final protected function descripcion(string $key_entidad_base_id, string $key_entidad_id, array $registro,
                                          stdClass $dp_calle_pertenece = new stdClass()): string
     {
