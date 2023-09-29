@@ -286,6 +286,72 @@ class inm_ubicacionTest extends test {
 
     }
 
+    public function test_regenera_datas(): void
+    {
+        errores::$error = false;
+
+        $_GET['seccion'] = 'inm_producto_infonavit';
+        $_GET['accion'] = 'lista';
+        $_SESSION['grupo_id'] = 1;
+        $_SESSION['usuario_id'] = 2;
+        $_GET['session_id'] = '1';
+
+
+
+
+        $inm = new inm_ubicacion(link: $this->link);
+        //$inm = new liberator($inm);
+
+        $del = (new base_test())->del_inm_costo(link: $this->link);
+        if(errores::$error){
+            $error = (new errores())->error(mensaje:'Error al eliminar', data: $del);
+            print_r($error);exit;
+        }
+
+        $del = (new base_test())->del_inm_opinion_valor(link: $this->link);
+        if(errores::$error){
+            $error = (new errores())->error(mensaje:'Error al eliminar', data: $del);
+            print_r($error);exit;
+        }
+
+        $inm_ubicacion_id = 1;
+
+        $resultado = $inm->regenera_datas($inm_ubicacion_id);
+
+        $this->assertIsObject($resultado);
+        $this->assertNotTrue(errores::$error);
+        $this->assertEquals(0,$resultado->regenera_op->registro_actualizado->inm_ubicacion_n_opiniones_valor);
+        $this->assertEquals(0,$resultado->regenera_op->registro_actualizado->inm_ubicacion_monto_opinion_promedio);
+
+
+        errores::$error = false;
+
+
+        $inm_ubicacion_id = 1;
+
+        $alta = (new base_test())->alta_inm_costo(link: $this->link);
+        if(errores::$error){
+            $error = (new errores())->error(mensaje:'Error al alta', data: $alta);
+            print_r($error);exit;
+        }
+
+        $resultado = $inm->regenera_datas($inm_ubicacion_id);
+        $this->assertIsObject($resultado);
+        $this->assertNotTrue(errores::$error);
+        $this->assertEquals(0,$resultado->regenera_op->registro_actualizado->inm_ubicacion_n_opiniones_valor);
+        $this->assertEquals(0,$resultado->regenera_op->registro_actualizado->inm_ubicacion_monto_opinion_promedio);
+        $this->assertEquals(1000,$resultado->regenera_op->registro_actualizado->inm_ubicacion_costo);
+        errores::$error = false;
+
+        $del = (new base_test())->del_inm_costo(link: $this->link);
+        if(errores::$error){
+            $error = (new errores())->error(mensaje:'Error al eliminar', data: $del);
+            print_r($error);exit;
+        }
+
+        errores::$error = false;
+    }
+
 
 }
 
