@@ -36,6 +36,60 @@ class inm_ubicacionTest extends test {
         $this->paths_conf->views = '/var/www/html/inmuebles/config/views.php';
     }
 
+
+    public function test_get_costo(): void
+    {
+        errores::$error = false;
+
+        $_GET['seccion'] = 'inm_producto_infonavit';
+        $_GET['accion'] = 'lista';
+        $_SESSION['grupo_id'] = 1;
+        $_SESSION['usuario_id'] = 2;
+        $_GET['session_id'] = '1';
+
+        $del = (new base_test())->del_inm_costo(link: $this->link);
+        if(errores::$error){
+            $error = (new errores())->error(mensaje:'Error al del', data: $del);
+            print_r($error);exit;
+        }
+
+        $inm = new inm_ubicacion(link: $this->link);
+        //$inm = new liberator($inm);
+
+        $inm_ubicacion_id = 1;
+
+        $resultado = $inm->get_costo($inm_ubicacion_id);
+        $this->assertIsFloat($resultado);
+        $this->assertNotTrue(errores::$error);
+        $this->assertEquals(0.00,$resultado);
+        errores::$error = false;
+
+        $alta = (new base_test())->alta_inm_costo(link: $this->link);
+        if(errores::$error){
+            $error = (new errores())->error(mensaje:'Error al alta', data: $alta);
+            print_r($error);exit;
+        }
+        $inm_ubicacion_id = 1;
+        $resultado = $inm->get_costo($inm_ubicacion_id);
+        $this->assertIsFloat($resultado);
+        $this->assertNotTrue(errores::$error);
+        $this->assertEquals(1000.00,$resultado);
+        errores::$error = false;
+
+        $alta = (new base_test())->alta_inm_costo(link: $this->link, codigo: 2, id: 2, monto: 500);
+        if(errores::$error){
+            $error = (new errores())->error(mensaje:'Error al alta', data: $alta);
+            print_r($error);exit;
+        }
+        $inm_ubicacion_id = 1;
+        $resultado = $inm->get_costo($inm_ubicacion_id);
+
+        $this->assertIsFloat($resultado);
+        $this->assertNotTrue(errores::$error);
+        $this->assertEquals(1500.00,$resultado);
+        errores::$error = false;
+    }
+
     public function test_monto_opinion_promedio(): void
     {
         errores::$error = false;
@@ -118,6 +172,49 @@ class inm_ubicacionTest extends test {
         $this->assertNotTrue(errores::$error);
         $this->assertEquals(1,$resultado);
         errores::$error = false;
+    }
+
+    public function test_regenera_costo(): void
+    {
+        errores::$error = false;
+
+        $_GET['seccion'] = 'inm_producto_infonavit';
+        $_GET['accion'] = 'lista';
+        $_SESSION['grupo_id'] = 1;
+        $_SESSION['usuario_id'] = 2;
+        $_GET['session_id'] = '1';
+
+        $del = (new base_test())->del_inm_costo(link: $this->link);
+        if(errores::$error){
+            $error = (new errores())->error(mensaje:'Error al eliminar', data: $del);
+            print_r($error);exit;
+        }
+
+        $inm = new inm_ubicacion(link: $this->link);
+        $inm = new liberator($inm);
+
+
+
+
+        $inm_ubicacion_id = 1;
+        $resultado = $inm->regenera_costo($inm_ubicacion_id);
+        $this->assertIsObject($resultado);
+        $this->assertNotTrue(errores::$error);
+        $this->assertEquals(0,$resultado->registro_actualizado->inm_ubicacion_costo);
+        errores::$error = false;
+
+        $alta = (new base_test())->alta_inm_costo(link: $this->link);
+        if(errores::$error){
+            $error = (new errores())->error(mensaje:'Error al alta', data: $alta);
+            print_r($error);exit;
+        }
+        $inm_ubicacion_id = 1;
+        $resultado = $inm->regenera_costo($inm_ubicacion_id);
+        $this->assertIsObject($resultado);
+        $this->assertNotTrue(errores::$error);
+        $this->assertEquals(1000,$resultado->registro_actualizado->inm_ubicacion_costo);
+        errores::$error = false;
+
     }
 
     public function test_regenera_data_opinion(): void

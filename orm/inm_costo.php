@@ -32,6 +32,24 @@ class inm_costo extends _modelo_parent{
 
     public function alta_bd(array $keys_integra_ds = array('codigo', 'descripcion')): array|stdClass
     {
+        $keys = array('inm_ubicacion_id','inm_concepto_id');
+        $valida = $this->validacion->valida_ids(keys: $keys,registro:  $this->registro);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al validar registro',data:  $valida);
+        }
+
+        $keys = array('monto');
+        $valida = $this->validacion->valida_double_mayores_igual_0(keys: $keys,registro:  $this->registro);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al validar registro',data:  $valida);
+        }
+
+        $keys = array('fecha');
+        $valida = $this->validacion->fechas_in_array(data: $this->registro,keys:  $keys);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al validar registro',data:  $valida);
+        }
+
         $inm_ubicacion = (new inm_ubicacion(link: $this->link))->registro(
             registro_id: $this->registro['inm_ubicacion_id'],retorno_obj: true);
         if(errores::$error){

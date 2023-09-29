@@ -11,6 +11,7 @@ use gamboamartin\errores\errores;
 use gamboamartin\inmuebles\models\inm_co_acreditado;
 use gamboamartin\inmuebles\models\inm_comprador;
 use gamboamartin\inmuebles\models\inm_conf_empresa;
+use gamboamartin\inmuebles\models\inm_costo;
 use gamboamartin\inmuebles\models\inm_opinion_valor;
 use gamboamartin\inmuebles\models\inm_precio;
 use gamboamartin\inmuebles\models\inm_referencia;
@@ -200,6 +201,27 @@ class base_test{
         $registro['org_empresa_id'] = $org_empresa_id;
 
         $alta = (new inm_conf_empresa($link))->alta_registro($registro);
+        if(errores::$error){
+            return (new errores())->error(mensaje: 'Error al insertar', data: $alta);
+        }
+        return $alta;
+    }
+
+    public function alta_inm_costo(PDO $link, string $codigo = '1', string $descripcion = 'Descripcion 1',
+                                   string $fecha = '2020-01-01', int $id = 1, int $inm_concepto_id = 1,
+                                   int $inm_ubicacion_id = 1, float $monto = 1000,
+                                   string $referencia = 'REF 1'): array|\stdClass
+    {
+
+        $registro['id'] = $id;
+        $registro['inm_ubicacion_id'] = $inm_ubicacion_id;
+        $registro['descripcion'] = $descripcion;
+        $registro['inm_concepto_id'] = $inm_concepto_id;
+        $registro['monto'] = $monto;
+        $registro['fecha'] = $fecha;
+        $registro['codigo'] = $codigo;
+        $registro['referencia'] = $referencia;
+        $alta = (new inm_costo($link))->alta_registro($registro);
         if(errores::$error){
             return (new errores())->error(mensaje: 'Error al insertar', data: $alta);
         }

@@ -40,6 +40,11 @@ class inm_ubicacion extends _inm_ubicaciones {
 
     }
 
+    /**
+     * Inserta una ubicacion
+     * @param array $keys_integra_ds Keys par ala generacion de la descripcion select
+     * @return array|stdClass
+     */
     public function alta_bd(array $keys_integra_ds = array('codigo', 'descripcion')): array|stdClass
     {
         $valida = $this->valida_row(registro: $this->registro);
@@ -72,7 +77,6 @@ class inm_ubicacion extends _inm_ubicaciones {
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al regenerar opinion de valor', data: $regenera);
         }
-
 
 
         return $r_alta_bd;
@@ -124,7 +128,17 @@ class inm_ubicacion extends _inm_ubicaciones {
         return $r_elimina_bd;
     }
 
-    final public function get_costo(int $inm_ubicacion_id){
+    /**
+     * Obtiene el costo origen
+     * @param int $inm_ubicacion_id Ubicacion id
+     * @return array|float
+     * @version 2.103.0
+     */
+    final public function get_costo(int $inm_ubicacion_id): float|array
+    {
+        if($inm_ubicacion_id<=0){
+            return $this->error->error(mensaje: 'Error inm_ubicacion_id es menor a 0', data: $inm_ubicacion_id);
+        }
         $filtro['inm_ubicacion.id'] = $inm_ubicacion_id;
 
         $campos['costo'] = 'inm_costo.monto';
@@ -272,7 +286,17 @@ class inm_ubicacion extends _inm_ubicaciones {
         return $r_inm_opinion_valor->registros;
     }
 
-    private function regenera_costo(int $inm_ubicacion_id){
+    /**
+     * Regenera el costo de una ubicacion
+     * @param int $inm_ubicacion_id Ubicacion en proceso
+     * @return array|stdClass
+     * @version 2.103.0
+     */
+    private function regenera_costo(int $inm_ubicacion_id): array|stdClass
+    {
+        if($inm_ubicacion_id<=0){
+            return $this->error->error(mensaje: 'Error inm_ubicacion_id es menor a 0', data: $inm_ubicacion_id);
+        }
 
         $costo = $this->get_costo(inm_ubicacion_id: $inm_ubicacion_id);
         if(errores::$error){
@@ -319,7 +343,13 @@ class inm_ubicacion extends _inm_ubicaciones {
 
     }
 
-    final public function regenera_datas(int $inm_ubicacion_id){
+    /**
+     * Regenera el costo y los valor promedio de opinion
+     * @param int $inm_ubicacion_id Ubicacion en proceso
+     * @return array|stdClass
+     */
+    final public function regenera_datas(int $inm_ubicacion_id): array|stdClass
+    {
         $regenera_op = $this->regenera_data_opinion(inm_ubicacion_id: $inm_ubicacion_id);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al regenerar opinion de valor', data: $regenera_op);
