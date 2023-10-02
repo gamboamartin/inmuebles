@@ -155,12 +155,14 @@ class inm_rel_ubi_comp extends _modelo_parent{
     }
 
     private function datos_row(array $registro){
-        $inm_comprador = (new inm_comprador(link: $this->link))->registro(registro_id: $registro['inm_comprador_id'], retorno_obj: true);
+        $inm_comprador = (new inm_comprador(link: $this->link))->registro(
+            registro_id: $registro['inm_comprador_id'], retorno_obj: true);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al obtener inm_comprador',data:  $inm_comprador);
         }
 
-        $inm_ubicacion = (new inm_ubicacion(link: $this->link))->registro(registro_id: $registro['inm_ubicacion_id'], retorno_obj: true);
+        $inm_ubicacion = (new inm_ubicacion(link: $this->link))->registro(
+            registro_id: $registro['inm_ubicacion_id'], retorno_obj: true);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al obtener inm_ubicacion',data:  $inm_ubicacion);
         }

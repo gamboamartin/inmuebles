@@ -193,10 +193,11 @@ class inm_precio extends _modelo_parent{
     }
 
     /**
-     * @param string $fecha
-     * @param int $inm_institucion_hipotecaria_id
-     * @param int $inm_ubicacion_id
-     * @param bool $valida_existe
+     * Obtiene el resultado de la consulta de un precio
+     * @param string $fecha Fecha de consulta
+     * @param int $inm_institucion_hipotecaria_id  Institucion de consulta
+     * @param int $inm_ubicacion_id Ubicacion de consulta
+     * @param bool $valida_existe Si es tru verifica que exista sino da error
      * @return array
      */
     private function inm_precio_result(string $fecha, int $inm_institucion_hipotecaria_id, int $inm_ubicacion_id,
@@ -221,6 +222,7 @@ class inm_precio extends _modelo_parent{
     }
 
     /**
+     * Obtiene un precio de una ubicacion basada en los parametros integrados
      * @param string $fecha
      * @param int $inm_ubicacion_id
      * @param int $inm_institucion_hipotecaria_id
@@ -260,10 +262,18 @@ class inm_precio extends _modelo_parent{
      * @param int $inm_institucion_hipotecaria_id Institucion de obtencion
      * @param int $inm_ubicacion_id Ubicacion
      * @return array|stdClass
+     * @version 2.116.0
      */
     private function r_inm_precio_by_fecha(string $fecha, int $inm_institucion_hipotecaria_id,
                                            int $inm_ubicacion_id): array|stdClass
     {
+        $valida = $this->valida_get_precio(fecha: $fecha,
+            inm_institucion_hipotecaria_id: $inm_institucion_hipotecaria_id, inm_ubicacion_id: $inm_ubicacion_id);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al validar datos',
+                data:  $valida);
+        }
+
         $filtros = $this->filtros(fecha: $fecha,inm_institucion_hipotecaria_id:  $inm_institucion_hipotecaria_id,
             inm_ubicacion_id:  $inm_ubicacion_id);
         if(errores::$error){

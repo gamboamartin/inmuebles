@@ -158,6 +158,36 @@ class inm_precioTest extends test {
 
     }
 
+    public function test_r_inm_precio_by_fecha(): void
+    {
+        errores::$error = false;
+
+        $_GET['seccion'] = 'inm_producto_infonavit';
+        $_GET['accion'] = 'lista';
+        $_SESSION['grupo_id'] = 1;
+        $_SESSION['usuario_id'] = 2;
+        $_GET['session_id'] = '1';
+
+        $inm = new inm_precio(link: $this->link);
+        $inm = new liberator($inm);
+
+        $del = (new base_test())->del_inm_precio(link: $this->link);
+        if(errores::$error){
+            $error = (new errores())->error(mensaje:'Error al del', data: $del);
+            print_r($error);exit;
+        }
+
+        $fecha = '2020-01-01';
+        $inm_institucion_hipotecaria_id = 1;
+        $inm_ubicacion_id = 1;
+        $resultado = $inm->r_inm_precio_by_fecha($fecha, $inm_institucion_hipotecaria_id, $inm_ubicacion_id);
+        $this->assertIsObject($resultado);
+        $this->assertNotTrue(errores::$error);
+        $this->assertEmpty($resultado->registros);
+
+        errores::$error = false;
+    }
+
     public function test_valida_get_precio(): void
     {
         errores::$error = false;
