@@ -83,17 +83,35 @@ class inm_ubicacion extends _inm_ubicaciones {
         return $r_alta_bd;
     }
 
-    private function asigna_precio_venta(int $indice, stdClass $inm_comprador, array $inm_ubicacion, array $inm_ubicaciones){
-        $inm_precio_precio_venta = $this->inm_precio_venta(inm_comprador: $inm_comprador, inm_ubicacion: $inm_ubicacion);
+    /**
+     * Asigna un precio de venta a un registro de ubicacion
+     * @param int $indice Indice de arreglo de ubicaciones
+     * @param stdClass $inm_comprador Datos de comprador
+     * @param array $inm_ubicacion datos de ubicacion
+     * @param array $inm_ubicaciones Conjunto de ubicaciones
+     * @return array
+     */
+    private function asigna_precio_venta(int $indice, stdClass $inm_comprador, array $inm_ubicacion,
+                                         array $inm_ubicaciones): array
+    {
+        $inm_precio_precio_venta = $this->inm_precio_venta(inm_comprador: $inm_comprador,
+            inm_ubicacion: $inm_ubicacion);
 
         if(errores::$error){
-            return $this->error->error(mensaje: 'Error al obtener inm_precio_precio_venta',data: $inm_precio_precio_venta);
+            return $this->error->error(mensaje: 'Error al obtener inm_precio_precio_venta',
+                data: $inm_precio_precio_venta);
         }
         $inm_ubicaciones[$indice]['inm_ubicacion_precio'] = round($inm_precio_precio_venta,2);
         return $inm_ubicaciones;
     }
 
-    private function asigna_precios(stdClass $inm_comprador,stdClass $r_inm_ubicacion){
+    /**
+     * @param stdClass $inm_comprador
+     * @param stdClass $r_inm_ubicacion
+     * @return array
+     */
+    private function asigna_precios(stdClass $inm_comprador,stdClass $r_inm_ubicacion): array
+    {
         $inm_ubicaciones = $r_inm_ubicacion->registros;
 
         foreach ($inm_ubicaciones as $indice=>$inm_ubicacion){
@@ -108,7 +126,8 @@ class inm_ubicacion extends _inm_ubicaciones {
     }
 
     private function data_ubicaciones(string $etapa, int $inm_comprador_id, bool $todas){
-        $inm_comprador = (new inm_comprador(link: $this->link))->registro(registro_id: $inm_comprador_id,retorno_obj: true);
+        $inm_comprador = (new inm_comprador(link: $this->link))->registro(registro_id: $inm_comprador_id,
+            retorno_obj: true);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al obtener comprador',data: $inm_comprador);
         }
@@ -269,7 +288,27 @@ class inm_ubicacion extends _inm_ubicaciones {
         return $registro;
     }
 
-    private function inm_precio_venta(stdClass $inm_comprador, array $inm_ubicacion){
+    /**
+     * Obtiene el precio de venta de una ubicacion
+     * @param stdClass $inm_comprador Comprador
+     * @param array $inm_ubicacion Ubicacion
+     * @return array|float|int
+     * @version 2.118.0
+     */
+    private function inm_precio_venta(stdClass $inm_comprador, array $inm_ubicacion): float|array|int
+    {
+        $keys = array('inm_ubicacion_id');
+        $valida = $this->validacion->valida_ids(keys: $keys,registro:  $inm_ubicacion);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al al validar ubicacion',data: $valida);
+        }
+
+        $keys = array('inm_institucion_hipotecaria_id');
+        $valida = $this->validacion->valida_ids(keys: $keys,registro:  $inm_comprador);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al al validar inm_comprador',data: $valida);
+        }
+
         $inm_precio = (new inm_precio(link: $this->link))->precio(fecha: date('Y-m-d'),
             inm_ubicacion_id:  $inm_ubicacion['inm_ubicacion_id'],
             inm_institucion_hipotecaria_id:  $inm_comprador->inm_institucion_hipotecaria_id,valida_existe: false);
@@ -278,7 +317,7 @@ class inm_ubicacion extends _inm_ubicaciones {
             return $this->error->error(mensaje: 'Error al obtener inm_precio',data: $inm_precio);
         }
 
-        $inm_precio_precio_venta = 0;
+        $inm_precio_precio_venta = 0.0;
 
         if(isset($inm_precio->inm_precio_precio_venta)){
             $inm_precio_precio_venta = round($inm_precio->inm_precio_precio_venta,2);

@@ -199,10 +199,18 @@ class inm_precio extends _modelo_parent{
      * @param int $inm_ubicacion_id Ubicacion de consulta
      * @param bool $valida_existe Si es tru verifica que exista sino da error
      * @return array
+     * @version 2.118.0
      */
     private function inm_precio_result(string $fecha, int $inm_institucion_hipotecaria_id, int $inm_ubicacion_id,
                                        bool $valida_existe): array
     {
+        $valida = $this->valida_get_precio(fecha: $fecha,
+            inm_institucion_hipotecaria_id: $inm_institucion_hipotecaria_id, inm_ubicacion_id: $inm_ubicacion_id);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al validar datos',
+                data:  $valida);
+        }
+
         $r_inm_precio = $this->r_inm_precio_by_fecha(fecha: $fecha,
             inm_institucion_hipotecaria_id:  $inm_institucion_hipotecaria_id,inm_ubicacion_id:  $inm_ubicacion_id);
         if(errores::$error){
@@ -229,6 +237,7 @@ class inm_precio extends _modelo_parent{
      * @param bool $retorno_obj si true el resultado lo genera como un objeto
      * @param bool $valida_existe Si es verdadero retornara error si el elemento no existe
      * @return array|stdClass
+     * @version 2.118.0
      */
     final public function precio(string $fecha, int $inm_ubicacion_id, int $inm_institucion_hipotecaria_id,
                                  bool $retorno_obj = true, bool $valida_existe = true): array|stdClass
