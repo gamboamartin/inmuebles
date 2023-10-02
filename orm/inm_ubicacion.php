@@ -194,6 +194,7 @@ class inm_ubicacion extends _inm_ubicaciones {
      * @param string $key_entidad_id Entidad de avance
      * @param array $registro Registro en proceso
      * @return array
+     * @version 2.107.0
      */
     final public function init_row(string $key_entidad_base_id,string $key_entidad_id, array $registro):array{
 
