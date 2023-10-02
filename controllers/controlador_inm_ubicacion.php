@@ -36,7 +36,7 @@ class controlador_inm_ubicacion extends _ctl_base {
 
     public array $inm_costos = array();
 
-    public float $costo = 0.0;
+    public string $costo = '0.0';
     public function __construct(PDO      $link, html $html = new \gamboamartin\template_1\html(),
                                 stdClass $paths_conf = new stdClass())
     {

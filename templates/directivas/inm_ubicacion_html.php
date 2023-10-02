@@ -162,14 +162,51 @@ class inm_ubicacion_html extends html_controler {
             return $this->error->error(mensaje: 'Error al obtener r_inm_costos',data:  $r_inm_costos);
         }
 
-        $controler->inm_costos = $r_inm_costos->registros;
+        $registros = $this->format_moneda_mx_arreglo(registros: $r_inm_costos->registros,
+            campo_integrar: 'inm_costo_monto');
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al maquetar montos moneda',data:  $registros);
+        }
+
+        $controler->inm_costos = $registros;
 
         $costo = (new inm_ubicacion(link: $controler->link))->get_costo(inm_ubicacion_id: $controler->registro_id);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al obtener costo',data:  $costo);
         }
+
+        $costo = $this->format_moneda_mx(monto: $costo);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error formatear monto',data:  $costo);
+        }
+
         $controler->costo = $costo;
+
         return $controler;
+    }
+
+    public function format_moneda_mx_arreglo(array $registros, string $campo_integrar){
+        $registros_format = array();
+        foreach ($registros as $campo){
+            $campo[$campo_integrar] = $this->format_moneda_mx(monto: $campo[$campo_integrar]);
+            if(errores::$error){
+                return $this->error->error(mensaje: 'Error formatear monto',data:  $campo);
+            }
+
+            $registros_format[] = $campo;
+        }
+
+        return $registros_format;
+    }
+
+    public function format_moneda_mx(string $monto){
+        if($monto === ''){
+            return $this->error->error(mensaje: 'Error monto no puede ser vacio',data:  $monto);
+        }
+
+        $amount = new \NumberFormatter( 'es_MX', \NumberFormatter::CURRENCY);
+
+        return $amount->format((float)$monto);
     }
 
     private function inputs_base_ubicacion(controlador_inm_ubicacion $controler, string $funcion){
