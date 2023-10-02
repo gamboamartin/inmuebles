@@ -115,16 +115,27 @@ class inm_precio extends _modelo_parent{
      * @param int $inm_institucion_hipotecaria_id Institucion id
      * @param int $inm_ubicacion_id Ubicacion id
      * @return array
+     * @version 2.113.0
      */
     private function filtro_base(int $inm_institucion_hipotecaria_id,int $inm_ubicacion_id): array
     {
+        if($inm_ubicacion_id <= 0){
+            return $this->error->error(mensaje: 'Error inm_ubicacion_id debe ser mayor a 0',data:  $inm_ubicacion_id);
+        }
+
+        if($inm_institucion_hipotecaria_id <= 0){
+            return $this->error->error(mensaje: 'Error inm_institucion_hipotecaria_id debe ser mayor a 0',
+                data:  $inm_institucion_hipotecaria_id);
+        }
+
         $filtro['inm_ubicacion.id'] = $inm_ubicacion_id;
         $filtro['inm_institucion_hipotecaria.id'] = $inm_institucion_hipotecaria_id;
         return $filtro;
     }
 
     /**
-     * @param string $fecha
+     * Genera un filtro de tipo fecha por rangos
+     * @param string $fecha Fecha a integrar
      * @return array
      */
     private function filtro_fecha(string $fecha): array
@@ -137,6 +148,7 @@ class inm_precio extends _modelo_parent{
     }
 
     /**
+     * Maqueta los filtros para la obtencion de un precio
      * @param string $fecha
      * @param int $inm_institucion_hipotecaria_id
      * @param int $inm_ubicacion_id

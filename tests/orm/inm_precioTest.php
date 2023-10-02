@@ -38,6 +38,31 @@ class inm_precioTest extends test {
         $this->paths_conf->views = '/var/www/html/inmuebles/config/views.php';
     }
 
+    public function test_filtro_base(): void
+    {
+        errores::$error = false;
+
+        $_GET['seccion'] = 'inm_producto_infonavit';
+        $_GET['accion'] = 'lista';
+        $_SESSION['grupo_id'] = 1;
+        $_SESSION['usuario_id'] = 2;
+        $_GET['session_id'] = '1';
+
+        $inm = new inm_precio(link: $this->link);
+        $inm = new liberator($inm);
+
+
+        $inm_ubicacion_id = 1;
+        $inm_institucion_hipotecaria_id = 1;
+        $resultado = $inm->filtro_base($inm_institucion_hipotecaria_id, $inm_ubicacion_id);
+        $this->assertIsArray($resultado);
+        $this->assertNotTrue(errores::$error);
+        $this->assertEquals(1,$resultado['inm_ubicacion.id']);
+        $this->assertEquals(1,$resultado['inm_institucion_hipotecaria.id']);
+
+        errores::$error = false;
+    }
+
     public function test_precio(): void
     {
         errores::$error = false;
