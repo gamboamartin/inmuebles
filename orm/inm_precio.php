@@ -110,6 +110,11 @@ class inm_precio extends _modelo_parent{
         return $r_alta_bd;
     }
 
+    /**
+     * @param int $inm_institucion_hipotecaria_id
+     * @param int $inm_ubicacion_id
+     * @return array
+     */
     private function filtro_base(int $inm_institucion_hipotecaria_id,int $inm_ubicacion_id): array
     {
         $filtro['inm_ubicacion.id'] = $inm_ubicacion_id;
@@ -224,7 +229,15 @@ class inm_precio extends _modelo_parent{
         return true;
     }
 
-    private function valida_get_precio(string $fecha, int $inm_institucion_hipotecaria_id, int $inm_ubicacion_id): bool|array
+    /**
+     * Valida que los elementos para calculo de un precio sean validos
+     * @param string $fecha Fecha de obtencion
+     * @param int $inm_institucion_hipotecaria_id Id institucion
+     * @param int $inm_ubicacion_id Id de ubicacion
+     * @return bool|array
+     */
+    private function valida_get_precio(string $fecha, int $inm_institucion_hipotecaria_id,
+                                       int $inm_ubicacion_id): bool|array
     {
         $fecha = trim($fecha);
         if($fecha === ''){
