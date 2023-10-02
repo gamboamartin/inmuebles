@@ -114,6 +114,56 @@ class inm_ubicacionTest extends test {
 
     }
 
+    public function test_asigna_precios(): void
+    {
+        errores::$error = false;
+
+        $_GET['seccion'] = 'inm_producto_infonavit';
+        $_GET['accion'] = 'lista';
+        $_SESSION['grupo_id'] = 1;
+        $_SESSION['usuario_id'] = 2;
+        $_GET['session_id'] = '1';
+
+        $del = (new base_test())->del_inm_precio(link: $this->link);
+        if(errores::$error){
+            $error = (new errores())->error(mensaje:'Error al del', data: $del);
+            print_r($error);exit;
+        }
+        $inm = new inm_ubicacion(link: $this->link);
+        $inm = new liberator($inm);
+
+        $inm_comprador = new stdClass();
+
+
+        $r_inm_ubicacion = new stdClass();
+        $r_inm_ubicacion->registros = array();
+        $r_inm_ubicacion->registros[0]['inm_ubicacion_id'] = 1;
+        $inm_comprador->inm_institucion_hipotecaria_id = 1;
+        $resultado = $inm->asigna_precios($inm_comprador, $r_inm_ubicacion);
+        $this->assertIsArray($resultado);
+        $this->assertNotTrue(errores::$error);
+        $this->assertEquals(0.0,$resultado[0]['inm_ubicacion_precio']);
+        errores::$error = false;
+
+
+        $alta = (new base_test())->alta_inm_precio(link: $this->link,precio_venta: 250000);
+        if(errores::$error){
+            $error = (new errores())->error(mensaje:'Error al alta', data: $alta);
+            print_r($error);exit;
+        }
+
+        $r_inm_ubicacion = new stdClass();
+        $r_inm_ubicacion->registros = array();
+        $r_inm_ubicacion->registros[0]['inm_ubicacion_id'] = 1;
+        $inm_comprador->inm_institucion_hipotecaria_id = 1;
+        $resultado = $inm->asigna_precios($inm_comprador, $r_inm_ubicacion);
+
+        $this->assertIsArray($resultado);
+        $this->assertNotTrue(errores::$error);
+        $this->assertEquals(250000,$resultado[0]['inm_ubicacion_precio']);
+        errores::$error = false;
+    }
+
     public function test_descripcion(): void
     {
         errores::$error = false;

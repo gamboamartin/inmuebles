@@ -90,6 +90,7 @@ class inm_ubicacion extends _inm_ubicaciones {
      * @param array $inm_ubicacion datos de ubicacion
      * @param array $inm_ubicaciones Conjunto de ubicaciones
      * @return array
+     * @version 2.123.0
      */
     private function asigna_precio_venta(int $indice, stdClass $inm_comprador, array $inm_ubicacion,
                                          array $inm_ubicaciones): array
@@ -119,12 +120,35 @@ class inm_ubicacion extends _inm_ubicaciones {
      * @param stdClass $inm_comprador Datos de comprador
      * @param stdClass $r_inm_ubicacion Resultado de ubicaciones
      * @return array
+     * @version 2.123.0
      */
     private function asigna_precios(stdClass $inm_comprador,stdClass $r_inm_ubicacion): array
     {
+        if(!isset($r_inm_ubicacion->registros)){
+            return $this->error->error(mensaje: 'Error al r_inm_ubicacion->registros debe existir',
+                data: $r_inm_ubicacion);
+        }
+        if(!is_array($r_inm_ubicacion->registros)){
+            return $this->error->error(mensaje: 'Error al r_inm_ubicacion->registros debe ser un array',
+                data: $r_inm_ubicacion);
+        }
+
         $inm_ubicaciones = $r_inm_ubicacion->registros;
 
         foreach ($inm_ubicaciones as $indice=>$inm_ubicacion){
+            if(!is_int($indice)){
+                return $this->error->error(mensaje: 'Error indice debe ser un entero',data: $indice);
+            }
+            if(!is_array($inm_ubicacion)){
+                return $this->error->error(mensaje: 'Error inm_ubicacion debe ser un array',data: $inm_ubicacion);
+            }
+            $valida = $this->valida_ids_precio(inm_comprador: $inm_comprador, inm_ubicacion: $inm_ubicacion);
+            if(errores::$error){
+                return $this->error->error(mensaje: 'Error al al validar entrada de datos',data: $valida);
+            }
+            if($indice < 0){
+                return $this->error->error(mensaje: 'Error indice debe ser mayor o igual a 0',data: $indice);
+            }
             $inm_ubicaciones = $this->asigna_precio_venta(indice: $indice,inm_comprador:  $inm_comprador,
                 inm_ubicacion:  $inm_ubicacion,inm_ubicaciones:  $inm_ubicaciones);
 
@@ -463,8 +487,9 @@ class inm_ubicacion extends _inm_ubicaciones {
     }
 
     /**
-     * @param string $etapa
-     * @param bool $todas
+     * Obtiene los datos de las ubicaciones
+     * @param string $etapa Filtra por la etapa
+     * @param bool $todas Integra todas las activas
      * @return array|stdClass
      */
     private function r_inm_ubicacion(string $etapa, bool $todas): array|stdClass
