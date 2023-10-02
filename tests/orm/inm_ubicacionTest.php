@@ -685,6 +685,31 @@ class inm_ubicacionTest extends test {
         errores::$error = false;
     }
 
+    public function test_valida_ids_precio(): void
+    {
+        errores::$error = false;
+
+        $_GET['seccion'] = 'inm_producto_infonavit';
+        $_GET['accion'] = 'lista';
+        $_SESSION['grupo_id'] = 1;
+        $_SESSION['usuario_id'] = 2;
+        $_GET['session_id'] = '1';
+
+
+        $inm = new inm_ubicacion(link: $this->link);
+        $inm = new liberator($inm);
+
+        $inm_comprador = new stdClass();
+        $inm_ubicacion = array();
+        $inm_ubicacion['inm_ubicacion_id'] = 1;
+        $inm_comprador->inm_institucion_hipotecaria_id = 1;
+        $resultado = $inm->valida_ids_precio($inm_comprador, $inm_ubicacion);
+        $this->assertIsBool($resultado);
+        $this->assertNotTrue(errores::$error);
+        $this->assertTrue($resultado);
+        errores::$error = false;
+    }
+
 
 }
 

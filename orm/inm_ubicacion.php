@@ -590,7 +590,15 @@ class inm_ubicacion extends _inm_ubicaciones {
 
     }
 
-    private function valida_ids_precio(array|stdClass $inm_comprador, array|stdClass $inm_ubicacion){
+    /**
+     * Valida que la entrada de consulta de precios sea valida
+     * @param array|stdClass $inm_comprador Datos de comprador
+     * @param array|stdClass $inm_ubicacion Datos de ubicacion
+     * @return array|true
+     * @version 2.120.0
+     */
+    private function valida_ids_precio(array|stdClass $inm_comprador, array|stdClass $inm_ubicacion): bool|array
+    {
         $keys = array('inm_ubicacion_id');
         $valida = $this->validacion->valida_ids(keys: $keys,registro:  $inm_ubicacion);
         if(errores::$error){

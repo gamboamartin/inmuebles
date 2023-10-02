@@ -8,6 +8,7 @@
  */
 namespace gamboamartin\inmuebles\controllers;
 
+use gamboamartin\comercial\models\com_prospecto;
 use gamboamartin\errores\errores;
 use gamboamartin\inmuebles\html\inm_prospecto_html;
 use gamboamartin\inmuebles\models\inm_prospecto;
@@ -44,6 +45,24 @@ class controlador_inm_prospecto extends _ctl_formato {
                 mensaje: 'Error al inicializar alta',data:  $r_alta, header: $header,ws:  $ws);
         }
         $keys_selects = array();
+
+        $keys_selects = $this->key_select(cols:12, con_registros: true,filtro:  array(), key: 'com_agente_id',
+            keys_selects:$keys_selects, id_selected: -1, label: 'Agente');
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects, header: $header,ws:  $ws);
+        }
+
+        $com_tipo_prospecto_id = (new com_prospecto(link: $this->link))->id_preferido_detalle(entidad_preferida: 'com_tipo_prospecto');
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al obtener id',data:  $com_tipo_prospecto_id, header: $header,ws:  $ws);
+        }
+
+        $keys_selects = $this->key_select(cols:12, con_registros: true,filtro:  array(), key: 'com_tipo_prospecto_id',
+            keys_selects:$keys_selects, id_selected: $com_tipo_prospecto_id, label: 'Tipo de prospecto');
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects, header: $header,ws:  $ws);
+        }
+
         $inputs = $this->inputs(keys_selects: $keys_selects);
         if(errores::$error){
             return $this->retorno_error(
