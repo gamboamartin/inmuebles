@@ -83,6 +83,46 @@ class inm_ubicacion extends _inm_ubicaciones {
         return $r_alta_bd;
     }
 
+    private function asigna_precio_venta(int $indice, stdClass $inm_comprador, array $inm_ubicacion, array $inm_ubicaciones){
+        $inm_precio_precio_venta = $this->inm_precio_venta(inm_comprador: $inm_comprador, inm_ubicacion: $inm_ubicacion);
+
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al obtener inm_precio_precio_venta',data: $inm_precio_precio_venta);
+        }
+        $inm_ubicaciones[$indice]['inm_ubicacion_precio'] = round($inm_precio_precio_venta,2);
+        return $inm_ubicaciones;
+    }
+
+    private function asigna_precios(stdClass $inm_comprador,stdClass $r_inm_ubicacion){
+        $inm_ubicaciones = $r_inm_ubicacion->registros;
+
+        foreach ($inm_ubicaciones as $indice=>$inm_ubicacion){
+            $inm_ubicaciones = $this->asigna_precio_venta(indice: $indice,inm_comprador:  $inm_comprador,
+                inm_ubicacion:  $inm_ubicacion,inm_ubicaciones:  $inm_ubicaciones);
+
+            if(errores::$error){
+                return $this->error->error(mensaje: 'Error al asignar precio de venta inm_ubicaciones',data: $inm_ubicaciones);
+            }
+        }
+        return $inm_ubicaciones;
+    }
+
+    private function data_ubicaciones(string $etapa, int $inm_comprador_id, bool $todas){
+        $inm_comprador = (new inm_comprador(link: $this->link))->registro(registro_id: $inm_comprador_id,retorno_obj: true);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al obtener comprador',data: $inm_comprador);
+        }
+
+        $r_inm_ubicacion = $this->r_inm_ubicacion(etapa: $etapa,todas:  $todas);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al obtener ubicaciones', data: $r_inm_ubicacion);
+        }
+        $data = new stdClass();
+        $data->inm_comprador = $inm_comprador;
+        $data->r_inm_ubicacion = $r_inm_ubicacion;
+        return $data;
+    }
+
     /**
      * Genera la descripcion de una ubicacion
      * @param string $key_entidad_base_id Key de entidad base = inm_ubicacion_id
@@ -229,6 +269,23 @@ class inm_ubicacion extends _inm_ubicaciones {
         return $registro;
     }
 
+    private function inm_precio_venta(stdClass $inm_comprador, array $inm_ubicacion){
+        $inm_precio = (new inm_precio(link: $this->link))->precio(fecha: date('Y-m-d'),
+            inm_ubicacion_id:  $inm_ubicacion['inm_ubicacion_id'],
+            inm_institucion_hipotecaria_id:  $inm_comprador->inm_institucion_hipotecaria_id,valida_existe: false);
+
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al obtener inm_precio',data: $inm_precio);
+        }
+
+        $inm_precio_precio_venta = 0;
+
+        if(isset($inm_precio->inm_precio_precio_venta)){
+            $inm_precio_precio_venta = round($inm_precio->inm_precio_precio_venta,2);
+        }
+        return $inm_precio_precio_venta;
+    }
+
     /**
      * Integra una descripcion al dar de alta registro
      * @param stdClass $dp_calle_pertenece Registro de domicilio
@@ -364,6 +421,33 @@ class inm_ubicacion extends _inm_ubicaciones {
     }
 
     /**
+     * @param string $etapa
+     * @param bool $todas
+     * @return array|stdClass
+     */
+    private function r_inm_ubicacion(string $etapa, bool $todas): array|stdClass
+    {
+        $filtro['inm_ubicacion.etapa'] = $etapa;
+
+        if(!$todas) {
+            $r_inm_ubicacion = $this->filtro_and(filtro: $filtro);
+            if (errores::$error) {
+                return $this->error->error(mensaje: 'Error al obtener ubicaciones', data: $r_inm_ubicacion);
+            }
+        }
+        else{
+            $r_inm_ubicacion_data = $this->registros_activos();
+            if (errores::$error) {
+                return $this->error->error(mensaje: 'Error al obtener ubicaciones', data: $r_inm_ubicacion_data);
+            }
+
+            $r_inm_ubicacion = new stdClass();
+            $r_inm_ubicacion->registros = $r_inm_ubicacion_data;
+        }
+        return $r_inm_ubicacion;
+    }
+
+    /**
      * Regenera el costo de una ubicacion
      * @param int $inm_ubicacion_id Ubicacion en proceso
      * @return array|stdClass
@@ -451,54 +535,18 @@ class inm_ubicacion extends _inm_ubicaciones {
 
     final public function ubicaciones_con_precio(string $etapa, int $inm_comprador_id, bool $todas = false){
 
-        $inm_comprador = (new inm_comprador(link: $this->link))->registro(registro_id: $inm_comprador_id,retorno_obj: true);
+        $data = $this->data_ubicaciones(etapa: $etapa,inm_comprador_id:  $inm_comprador_id,todas:  $todas);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al obtener data de ubicaciones', data: $data);
+        }
+        $inm_ubicaciones = $this->asigna_precios(inm_comprador: $data->inm_comprador,r_inm_ubicacion:  $data->r_inm_ubicacion);
         if(errores::$error){
-            return $this->error->error(mensaje: 'Error al obtener comprador',data: $inm_comprador);
+            return $this->error->error(mensaje: 'Error al asignar precio de venta inm_ubicaciones',data: $inm_ubicaciones);
         }
 
-        $filtro['inm_ubicacion.etapa'] = $etapa;
-
-        if(!$todas) {
-            $r_inm_ubicacion = $this->filtro_and(filtro: $filtro);
-            if (errores::$error) {
-                return $this->error->error(mensaje: 'Error al obtener ubicaciones', data: $r_inm_ubicacion);
-            }
-        }
-        else{
-            $r_inm_ubicacion_data = $this->registros_activos();
-            if (errores::$error) {
-                return $this->error->error(mensaje: 'Error al obtener ubicaciones', data: $r_inm_ubicacion_data);
-            }
-
-            $r_inm_ubicacion = new stdClass();
-            $r_inm_ubicacion->registros = $r_inm_ubicacion_data;
-        }
-        $inm_ubicaciones = $r_inm_ubicacion->registros;
-
-        foreach ($inm_ubicaciones as $indice=>$inm_ubicacion){
-            $inm_precio = (new inm_precio(link: $this->link))->precio(fecha: date('Y-m-d'),
-                inm_ubicacion_id:  $inm_ubicacion['inm_ubicacion_id'],
-                inm_institucion_hipotecaria_id:  $inm_comprador->inm_institucion_hipotecaria_id,valida_existe: false);
-
-            if(errores::$error){
-                return $this->error->error(mensaje: 'Error al obtener inm_precio',data: $inm_precio);
-            }
-
-            $inm_precio_precio_venta = 0;
-
-            if(isset($inm_precio->inm_precio_precio_venta)){
-                $inm_precio_precio_venta = round($inm_precio->inm_precio_precio_venta,2);
-            }
-            $inm_ubicaciones[$indice]['inm_ubicacion_precio'] = round($inm_precio_precio_venta,2);
-
-        }
         return $inm_ubicaciones;
 
     }
-
-
-
-
 
 
 }

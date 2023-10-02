@@ -223,11 +223,11 @@ class inm_precio extends _modelo_parent{
 
     /**
      * Obtiene un precio de una ubicacion basada en los parametros integrados
-     * @param string $fecha
-     * @param int $inm_ubicacion_id
-     * @param int $inm_institucion_hipotecaria_id
-     * @param bool $retorno_obj
-     * @param bool $valida_existe
+     * @param string $fecha Fecha para obtencion de precios
+     * @param int $inm_ubicacion_id Ubicacion
+     * @param int $inm_institucion_hipotecaria_id Institucion
+     * @param bool $retorno_obj si true el resultado lo genera como un objeto
+     * @param bool $valida_existe Si es verdadero retornara error si el elemento no existe
      * @return array|stdClass
      */
     final public function precio(string $fecha, int $inm_ubicacion_id, int $inm_institucion_hipotecaria_id,
@@ -292,14 +292,18 @@ class inm_precio extends _modelo_parent{
      * @param stdClass $r_inm_precio Resultado de precio
      * @param bool $valida_existe Si valida da error sino no valida
      * @return bool|array
+     * @version 2.117.0
      */
     private function valida_existe(stdClass $r_inm_precio, bool $valida_existe): bool|array
     {
+        if(!isset($r_inm_precio->n_registros)){
+            return $this->error->error(mensaje: 'Error $r_inm_precio->n_registros debe existir', data: $r_inm_precio);
+        }
         if($valida_existe) {
-            if ($r_inm_precio->n_registros === 0) {
+            if ((int)$r_inm_precio->n_registros === 0) {
                 return $this->error->error(mensaje: 'Error no existe precio configurado', data: $r_inm_precio);
             }
-            if ($r_inm_precio->n_registros > 1) {
+            if ((int)$r_inm_precio->n_registros > 1) {
                 return $this->error->error(mensaje: 'Error existe mas de un precio configurado', data: $r_inm_precio);
             }
         }

@@ -188,6 +188,42 @@ class inm_precioTest extends test {
         errores::$error = false;
     }
 
+    public function test_valida_existe(): void
+    {
+        errores::$error = false;
+
+        $_GET['seccion'] = 'inm_producto_infonavit';
+        $_GET['accion'] = 'lista';
+        $_SESSION['grupo_id'] = 1;
+        $_SESSION['usuario_id'] = 2;
+        $_GET['session_id'] = '1';
+
+        $inm = new inm_precio(link: $this->link);
+        $inm = new liberator($inm);
+
+
+        $r_inm_precio =  new stdClass();
+        $r_inm_precio->n_registros = '0';
+        $valida_existe = true;
+
+        $resultado = $inm->valida_existe($r_inm_precio, $valida_existe);
+        $this->assertIsArray($resultado);
+        $this->assertTrue(errores::$error);
+        $this->assertEquals("Error no existe precio configurado",$resultado['mensaje_limpio']);
+
+        errores::$error = false;
+
+        $r_inm_precio =  new stdClass();
+        $r_inm_precio->n_registros = '1';
+        $valida_existe = true;
+
+        $resultado = $inm->valida_existe($r_inm_precio, $valida_existe);
+        $this->assertIsBool($resultado);
+        $this->assertNotTrue(errores::$error);
+        $this->assertTrue($resultado);
+        errores::$error = false;
+    }
+
     public function test_valida_get_precio(): void
     {
         errores::$error = false;
