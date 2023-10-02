@@ -110,6 +110,59 @@ class inm_precio extends _modelo_parent{
         return $r_alta_bd;
     }
 
+    private function filtro_base(int $inm_institucion_hipotecaria_id,int $inm_ubicacion_id): array
+    {
+        $filtro['inm_ubicacion.id'] = $inm_ubicacion_id;
+        $filtro['inm_institucion_hipotecaria.id'] = $inm_institucion_hipotecaria_id;
+        return $filtro;
+    }
+
+    private function filtro_fecha(string $fecha): array
+    {
+        $filtro_fecha[0]['campo_1'] = 'inm_precio.fecha_inicial';
+        $filtro_fecha[0]['campo_2'] = 'inm_precio.fecha_final';
+        $filtro_fecha[0]['fecha'] = $fecha;
+
+        return $filtro_fecha;
+    }
+
+    private function filtros(string $fecha, int $inm_institucion_hipotecaria_id, int $inm_ubicacion_id){
+        $filtro = $this->filtro_base(inm_institucion_hipotecaria_id: $inm_institucion_hipotecaria_id,
+            inm_ubicacion_id:  $inm_ubicacion_id);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al obtener filtro',data:  $filtro);
+        }
+
+        $filtro_fecha = $this->filtro_fecha(fecha: $fecha);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al obtener filtro de fecha',data:  $filtro_fecha);
+        }
+
+        $data = new stdClass();
+        $data->filtro = $filtro;
+        $data->filtro_fecha = $filtro_fecha;
+        return $data;
+    }
+
+    private function inm_precio_result(string $fecha, int $inm_institucion_hipotecaria_id, int $inm_ubicacion_id, bool $valida_existe){
+        $r_inm_precio = $this->r_inm_precio_by_fecha(fecha: $fecha,
+            inm_institucion_hipotecaria_id:  $inm_institucion_hipotecaria_id,inm_ubicacion_id:  $inm_ubicacion_id);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al obtener precio',data:  $r_inm_precio);
+        }
+
+        $valida_existe_r = $this->valida_existe(r_inm_precio: $r_inm_precio,valida_existe:  $valida_existe);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al validar si existe',data:  $valida_existe_r);
+        }
+
+        if($r_inm_precio->n_registros === 0){
+            $r_inm_precio->registros[0] = array();
+        }
+
+        return $r_inm_precio->registros[0];
+    }
+
     /**
      * @param string $fecha
      * @param int $inm_ubicacion_id
@@ -121,7 +174,59 @@ class inm_precio extends _modelo_parent{
     final public function precio(string $fecha, int $inm_ubicacion_id, int $inm_institucion_hipotecaria_id,
                                  bool $retorno_obj = true, bool $valida_existe = true): array|stdClass
     {
-        $fecha = trim($fecha);;
+
+        $valida = $this->valida_get_precio(fecha: $fecha,
+            inm_institucion_hipotecaria_id: $inm_institucion_hipotecaria_id, inm_ubicacion_id: $inm_ubicacion_id);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al validar datos',
+                data:  $valida);
+        }
+
+        $inm_precio = $this->inm_precio_result(fecha: $fecha,
+            inm_institucion_hipotecaria_id:  $inm_institucion_hipotecaria_id,inm_ubicacion_id:  $inm_ubicacion_id,
+            valida_existe:  $valida_existe);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al obtener precio',data:  $inm_precio);
+        }
+
+        if($retorno_obj){
+            $inm_precio = (object)$inm_precio;
+        }
+
+        return $inm_precio;
+
+    }
+
+    private function r_inm_precio_by_fecha(string $fecha, int $inm_institucion_hipotecaria_id, int $inm_ubicacion_id){
+        $filtros = $this->filtros(fecha: $fecha,inm_institucion_hipotecaria_id:  $inm_institucion_hipotecaria_id,
+            inm_ubicacion_id:  $inm_ubicacion_id);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al obtener filtros',data:  $filtros);
+        }
+
+        $r_inm_precio = $this->filtro_and(filtro: $filtros->filtro,filtro_fecha: $filtros->filtro_fecha);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al obtener precio',data:  $r_inm_precio);
+        }
+        return $r_inm_precio;
+    }
+
+    private function valida_existe(stdClass $r_inm_precio, bool $valida_existe): bool|array
+    {
+        if($valida_existe) {
+            if ($r_inm_precio->n_registros === 0) {
+                return $this->error->error(mensaje: 'Error no existe precio configurado', data: $r_inm_precio);
+            }
+            if ($r_inm_precio->n_registros > 1) {
+                return $this->error->error(mensaje: 'Error existe mas de un precio configurado', data: $r_inm_precio);
+            }
+        }
+        return true;
+    }
+
+    private function valida_get_precio(string $fecha, int $inm_institucion_hipotecaria_id, int $inm_ubicacion_id): bool|array
+    {
+        $fecha = trim($fecha);
         if($fecha === ''){
             return $this->error->error(mensaje: 'Error fecha esta vacio',data:  $fecha);
         }
@@ -135,41 +240,7 @@ class inm_precio extends _modelo_parent{
                 data:  $inm_institucion_hipotecaria_id);
         }
 
-        $filtro['inm_ubicacion.id'] = $inm_ubicacion_id;
-        $filtro['inm_institucion_hipotecaria.id'] = $inm_institucion_hipotecaria_id;
-
-        $filtro_fecha[0]['campo_1'] = 'inm_precio.fecha_inicial';
-        $filtro_fecha[0]['campo_2'] = 'inm_precio.fecha_final';
-        $filtro_fecha[0]['fecha'] = $fecha;
-
-        $r_inm_precio = $this->filtro_and(filtro: $filtro,filtro_fecha: $filtro_fecha);
-        if(errores::$error){
-            return $this->error->error(mensaje: 'Error al obtener precio',data:  $r_inm_precio);
-        }
-
-
-        if($valida_existe) {
-
-            if ($r_inm_precio->n_registros === 0) {
-                return $this->error->error(mensaje: 'Error no existe precio configurado', data: $r_inm_precio);
-            }
-            if ($r_inm_precio->n_registros > 1) {
-                return $this->error->error(mensaje: 'Error existe mas de un precio configurado', data: $r_inm_precio);
-            }
-        }
-        if($r_inm_precio->n_registros === 0){
-            $r_inm_precio->registros[0] = array();
-        }
-
-
-        $inm_precio = $r_inm_precio->registros[0];
-        if($retorno_obj){
-            $inm_precio = (object)$inm_precio;
-        }
-
-        return $inm_precio;
-
-
+        return true;
     }
 
 

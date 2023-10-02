@@ -344,7 +344,17 @@ class inm_ubicacion extends _inm_ubicaciones {
         return $n_opiniones;
     }
 
-    final public function opiniones_valor(int $inm_ubicacion_id){
+    /**
+     * Obtiene las opiniones de valor de una ubicacion
+     * @param int $inm_ubicacion_id Identificador de ubicacion
+     * @return array
+     * @version 2.109.0
+     */
+    final public function opiniones_valor(int $inm_ubicacion_id): array
+    {
+        if($inm_ubicacion_id <= 0){
+            return $this->error->error(mensaje: 'Error inm_ubicacion_id es menor a 0',data: $inm_ubicacion_id);
+        }
         $filtro['inm_ubicacion.id'] = $inm_ubicacion_id;
         $r_inm_opinion_valor = (new inm_opinion_valor(link: $this->link))->filtro_and(filtro: $filtro);
         if(errores::$error){
