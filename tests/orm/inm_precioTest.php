@@ -78,6 +78,41 @@ class inm_precioTest extends test {
 
     }
 
+    public function test_valida_get_precio(): void
+    {
+        errores::$error = false;
+
+        $_GET['seccion'] = 'inm_producto_infonavit';
+        $_GET['accion'] = 'lista';
+        $_SESSION['grupo_id'] = 1;
+        $_SESSION['usuario_id'] = 2;
+        $_GET['session_id'] = '1';
+
+        $inm = new inm_precio(link: $this->link);
+        $inm = new liberator($inm);
+
+
+        $fecha = '';
+        $inm_ubicacion_id = -1;
+        $inm_institucion_hipotecaria_id = -1;
+        $resultado = $inm->valida_get_precio($fecha, $inm_institucion_hipotecaria_id, $inm_ubicacion_id);
+        $this->assertIsArray($resultado);
+        $this->assertTrue(errores::$error);
+        $this->assertEquals("Error fecha esta vacio",$resultado['mensaje_limpio']);
+
+        errores::$error = false;
+
+        $fecha = '2020-01-01';
+        $inm_ubicacion_id = 1;
+        $inm_institucion_hipotecaria_id = 1;
+        $resultado = $inm->valida_get_precio($fecha, $inm_institucion_hipotecaria_id, $inm_ubicacion_id);
+        $this->assertIsBool($resultado);
+        $this->assertNotTrue(errores::$error);
+        $this->assertTrue($resultado);
+
+        errores::$error = false;
+    }
+
 
 }
 

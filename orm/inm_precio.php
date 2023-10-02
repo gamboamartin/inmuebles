@@ -111,8 +111,9 @@ class inm_precio extends _modelo_parent{
     }
 
     /**
-     * @param int $inm_institucion_hipotecaria_id
-     * @param int $inm_ubicacion_id
+     * Genera un filtro base para la obtencion de un precio
+     * @param int $inm_institucion_hipotecaria_id Institucion id
+     * @param int $inm_ubicacion_id Ubicacion id
      * @return array
      */
     private function filtro_base(int $inm_institucion_hipotecaria_id,int $inm_ubicacion_id): array
@@ -122,6 +123,10 @@ class inm_precio extends _modelo_parent{
         return $filtro;
     }
 
+    /**
+     * @param string $fecha
+     * @return array
+     */
     private function filtro_fecha(string $fecha): array
     {
         $filtro_fecha[0]['campo_1'] = 'inm_precio.fecha_inicial';
@@ -131,7 +136,14 @@ class inm_precio extends _modelo_parent{
         return $filtro_fecha;
     }
 
-    private function filtros(string $fecha, int $inm_institucion_hipotecaria_id, int $inm_ubicacion_id){
+    /**
+     * @param string $fecha
+     * @param int $inm_institucion_hipotecaria_id
+     * @param int $inm_ubicacion_id
+     * @return array|stdClass
+     */
+    private function filtros(string $fecha, int $inm_institucion_hipotecaria_id, int $inm_ubicacion_id): array|stdClass
+    {
         $filtro = $this->filtro_base(inm_institucion_hipotecaria_id: $inm_institucion_hipotecaria_id,
             inm_ubicacion_id:  $inm_ubicacion_id);
         if(errores::$error){
@@ -149,7 +161,15 @@ class inm_precio extends _modelo_parent{
         return $data;
     }
 
-    private function inm_precio_result(string $fecha, int $inm_institucion_hipotecaria_id, int $inm_ubicacion_id, bool $valida_existe){
+    /**
+     * @param string $fecha
+     * @param int $inm_institucion_hipotecaria_id
+     * @param int $inm_ubicacion_id
+     * @param bool $valida_existe
+     * @return array
+     */
+    private function inm_precio_result(string $fecha, int $inm_institucion_hipotecaria_id, int $inm_ubicacion_id, bool $valida_existe): array
+    {
         $r_inm_precio = $this->r_inm_precio_by_fecha(fecha: $fecha,
             inm_institucion_hipotecaria_id:  $inm_institucion_hipotecaria_id,inm_ubicacion_id:  $inm_ubicacion_id);
         if(errores::$error){
@@ -202,7 +222,14 @@ class inm_precio extends _modelo_parent{
 
     }
 
-    private function r_inm_precio_by_fecha(string $fecha, int $inm_institucion_hipotecaria_id, int $inm_ubicacion_id){
+    /**
+     * @param string $fecha
+     * @param int $inm_institucion_hipotecaria_id
+     * @param int $inm_ubicacion_id
+     * @return array|stdClass
+     */
+    private function r_inm_precio_by_fecha(string $fecha, int $inm_institucion_hipotecaria_id, int $inm_ubicacion_id): array|stdClass
+    {
         $filtros = $this->filtros(fecha: $fecha,inm_institucion_hipotecaria_id:  $inm_institucion_hipotecaria_id,
             inm_ubicacion_id:  $inm_ubicacion_id);
         if(errores::$error){
@@ -216,6 +243,11 @@ class inm_precio extends _modelo_parent{
         return $r_inm_precio;
     }
 
+    /**
+     * @param stdClass $r_inm_precio
+     * @param bool $valida_existe
+     * @return bool|array
+     */
     private function valida_existe(stdClass $r_inm_precio, bool $valida_existe): bool|array
     {
         if($valida_existe) {
@@ -235,6 +267,7 @@ class inm_precio extends _modelo_parent{
      * @param int $inm_institucion_hipotecaria_id Id institucion
      * @param int $inm_ubicacion_id Id de ubicacion
      * @return bool|array
+     * @version 2.112.0
      */
     private function valida_get_precio(string $fecha, int $inm_institucion_hipotecaria_id,
                                        int $inm_ubicacion_id): bool|array
@@ -242,6 +275,10 @@ class inm_precio extends _modelo_parent{
         $fecha = trim($fecha);
         if($fecha === ''){
             return $this->error->error(mensaje: 'Error fecha esta vacio',data:  $fecha);
+        }
+        $fecha = $this->validacion->valida_fecha(fecha: $fecha);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al validar fecha',data:  $fecha);
         }
 
         if($inm_ubicacion_id <= 0){
