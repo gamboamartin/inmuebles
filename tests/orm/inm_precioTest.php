@@ -89,6 +89,35 @@ class inm_precioTest extends test {
         errores::$error = false;
     }
 
+    public function test_filtros(): void
+    {
+        errores::$error = false;
+
+        $_GET['seccion'] = 'inm_producto_infonavit';
+        $_GET['accion'] = 'lista';
+        $_SESSION['grupo_id'] = 1;
+        $_SESSION['usuario_id'] = 2;
+        $_GET['session_id'] = '1';
+
+        $inm = new inm_precio(link: $this->link);
+        $inm = new liberator($inm);
+
+
+        $fecha = '2020-01-01';
+        $inm_institucion_hipotecaria_id = 1;
+        $inm_ubicacion_id = 1;
+        $resultado = $inm->filtros($fecha, $inm_institucion_hipotecaria_id, $inm_ubicacion_id);
+        $this->assertIsObject($resultado);
+        $this->assertNotTrue(errores::$error);
+        $this->assertEquals(1,$resultado->filtro['inm_ubicacion.id']);
+        $this->assertEquals(1,$resultado->filtro['inm_institucion_hipotecaria.id']);
+        $this->assertEquals("inm_precio.fecha_inicial",$resultado->filtro_fecha[0]['campo_1']);
+        $this->assertEquals("inm_precio.fecha_final",$resultado->filtro_fecha[0]['campo_2']);
+        $this->assertEquals("2020-01-01",$resultado->filtro_fecha[0]['fecha']);
+
+        errores::$error = false;
+    }
+
     public function test_precio(): void
     {
         errores::$error = false;

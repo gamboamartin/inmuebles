@@ -163,9 +163,18 @@ class inm_precio extends _modelo_parent{
      * @param int $inm_institucion_hipotecaria_id Institucion para filtro
      * @param int $inm_ubicacion_id Ubicacion para filtro
      * @return array|stdClass
+     * @version 2.115.0
      */
     private function filtros(string $fecha, int $inm_institucion_hipotecaria_id, int $inm_ubicacion_id): array|stdClass
     {
+
+        $valida = $this->valida_get_precio(fecha: $fecha,
+            inm_institucion_hipotecaria_id: $inm_institucion_hipotecaria_id, inm_ubicacion_id: $inm_ubicacion_id);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al validar datos',
+                data:  $valida);
+        }
+
         $filtro = $this->filtro_base(inm_institucion_hipotecaria_id: $inm_institucion_hipotecaria_id,
             inm_ubicacion_id:  $inm_ubicacion_id);
         if(errores::$error){
@@ -190,7 +199,8 @@ class inm_precio extends _modelo_parent{
      * @param bool $valida_existe
      * @return array
      */
-    private function inm_precio_result(string $fecha, int $inm_institucion_hipotecaria_id, int $inm_ubicacion_id, bool $valida_existe): array
+    private function inm_precio_result(string $fecha, int $inm_institucion_hipotecaria_id, int $inm_ubicacion_id,
+                                       bool $valida_existe): array
     {
         $r_inm_precio = $this->r_inm_precio_by_fecha(fecha: $fecha,
             inm_institucion_hipotecaria_id:  $inm_institucion_hipotecaria_id,inm_ubicacion_id:  $inm_ubicacion_id);
@@ -245,12 +255,14 @@ class inm_precio extends _modelo_parent{
     }
 
     /**
-     * @param string $fecha
-     * @param int $inm_institucion_hipotecaria_id
-     * @param int $inm_ubicacion_id
+     * Ejecuta la busqueda de un precio basado en fecha ubicacion e institucion
+     * @param string $fecha Fecha de obtencion
+     * @param int $inm_institucion_hipotecaria_id Institucion de obtencion
+     * @param int $inm_ubicacion_id Ubicacion
      * @return array|stdClass
      */
-    private function r_inm_precio_by_fecha(string $fecha, int $inm_institucion_hipotecaria_id, int $inm_ubicacion_id): array|stdClass
+    private function r_inm_precio_by_fecha(string $fecha, int $inm_institucion_hipotecaria_id,
+                                           int $inm_ubicacion_id): array|stdClass
     {
         $filtros = $this->filtros(fecha: $fecha,inm_institucion_hipotecaria_id:  $inm_institucion_hipotecaria_id,
             inm_ubicacion_id:  $inm_ubicacion_id);
@@ -266,8 +278,9 @@ class inm_precio extends _modelo_parent{
     }
 
     /**
-     * @param stdClass $r_inm_precio
-     * @param bool $valida_existe
+     * Valida si existe precio o no
+     * @param stdClass $r_inm_precio Resultado de precio
+     * @param bool $valida_existe Si valida da error sino no valida
      * @return bool|array
      */
     private function valida_existe(stdClass $r_inm_precio, bool $valida_existe): bool|array
