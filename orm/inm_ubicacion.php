@@ -260,6 +260,15 @@ class inm_ubicacion extends _inm_ubicaciones {
         return $registro;
     }
 
+    /**
+     * Modifica un registro de tipo ubicacion
+     * @param array $registro Registro en proceso de modificacion
+     * @param int $id Ide de ubicacion
+     * @param bool $reactiva Si reactiva valida elementos de etapa
+     * @param array $keys_integra_ds Keys para integracion de una descripcion select
+     * @return array|stdClass
+     * @version 2.108.0
+     */
     public function modifica_bd(array $registro, int $id, bool $reactiva = false,
                                 array $keys_integra_ds = array('codigo', 'descripcion')): array|stdClass
     {
