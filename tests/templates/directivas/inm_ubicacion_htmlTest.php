@@ -60,6 +60,38 @@ class inm_ubicacion_htmlTest extends test {
         $this->assertStringContainsStringIgnoringCase(" inm_ubicacion_id' data-live-search='true' id='inm_ubicacion_id' name='inm_ubicacion_id' required",$resultado);
         errores::$error = false;
     }
+   public function test_format_moneda_mx(): void
+    {
+        errores::$error = false;
+
+        $_GET['seccion'] = 'inm_producto_infonavit';
+        $_GET['accion'] = 'lista';
+        $_SESSION['grupo_id'] = 1;
+        $_SESSION['usuario_id'] = 2;
+        $_GET['session_id'] = '1';
+
+        $html_ = new \gamboamartin\template_1\html();
+        $html = new inm_ubicacion_html($html_);
+        //$_inm = new liberator($_inm);
+
+        $monto = '';
+        $resultado = $html->format_moneda_mx(monto: $monto);
+
+        $this->assertIsArray($resultado);
+        $this->assertTrue(errores::$error);
+        $this->assertEquals("Error monto no puede ser vacio",$resultado['mensaje_limpio']);
+
+        errores::$error = false;
+
+        $monto = '1.1';
+        $resultado = $html->format_moneda_mx(monto: $monto);
+
+        $this->assertIsString($resultado);
+        $this->assertNotTrue(errores::$error);
+        $this->assertStringContainsStringIgnoringCase("$1.10",$resultado);
+
+        errores::$error = false;
+    }
 
 
 }
