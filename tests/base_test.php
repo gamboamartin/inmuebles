@@ -261,6 +261,17 @@ class base_test{
                                     float $precio_venta = 450000): array|\stdClass
     {
 
+        $existe = (new inm_ubicacion(link: $link))->existe_by_id(registro_id: $inm_ubicacion_id);
+        if(errores::$error){
+            return (new errores())->error(mensaje: 'Error al validar si existe inm_comprador_id', data: $existe);
+        }
+        if(!$existe){
+            $alta = $this->alta_inm_ubicacion(link: $link, id: $inm_ubicacion_id);
+            if(errores::$error){
+                return (new errores())->error(mensaje: 'Error al insertar inm_ubicacion_id', data: $alta);
+            }
+        }
+
         $registro['id'] = $id;
         $registro['inm_ubicacion_id'] = $inm_ubicacion_id;
         $registro['precio_venta'] = $precio_venta;

@@ -69,6 +69,51 @@ class inm_ubicacionTest extends test {
         errores::$error = false;
     }
 
+    public function test_asigna_precio_venta(): void
+    {
+        errores::$error = false;
+
+        $_GET['seccion'] = 'inm_producto_infonavit';
+        $_GET['accion'] = 'lista';
+        $_SESSION['grupo_id'] = 1;
+        $_SESSION['usuario_id'] = 2;
+        $_GET['session_id'] = '1';
+
+        $del = (new base_test())->del_inm_precio(link: $this->link);
+        if(errores::$error){
+            $error = (new errores())->error(mensaje:'Error al del', data: $del);
+            print_r($error);exit;
+        }
+
+        $inm = new inm_ubicacion(link: $this->link);
+        $inm = new liberator($inm);
+
+        $inm_comprador = new stdClass();
+        $inm_ubicacion = array();
+        $inm_ubicacion['inm_ubicacion_id'] = 1;
+        $inm_comprador->inm_institucion_hipotecaria_id = 1;
+        $indice = 0;
+        $inm_ubicaciones = array();
+        $resultado = $inm->asigna_precio_venta($indice, $inm_comprador, $inm_ubicacion, $inm_ubicaciones);
+        $this->assertIsArray($resultado);
+        $this->assertNotTrue(errores::$error);
+        $this->assertEquals(0.0,$resultado[0]['inm_ubicacion_precio']);
+        errores::$error = false;
+
+        $alta = (new base_test())->alta_inm_precio(link: $this->link);
+        if(errores::$error){
+            $error = (new errores())->error(mensaje:'Error al alta', data: $alta);
+            print_r($error);exit;
+        }
+
+        $resultado = $inm->asigna_precio_venta($indice, $inm_comprador, $inm_ubicacion, $inm_ubicaciones);
+        $this->assertIsArray($resultado);
+        $this->assertNotTrue(errores::$error);
+        $this->assertEquals(450000,$resultado[0]['inm_ubicacion_precio']);
+        errores::$error = false;
+
+    }
+
     public function test_descripcion(): void
     {
         errores::$error = false;

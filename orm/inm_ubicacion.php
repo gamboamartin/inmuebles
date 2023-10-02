@@ -94,6 +94,15 @@ class inm_ubicacion extends _inm_ubicaciones {
     private function asigna_precio_venta(int $indice, stdClass $inm_comprador, array $inm_ubicacion,
                                          array $inm_ubicaciones): array
     {
+
+        $valida = $this->valida_ids_precio(inm_comprador: $inm_comprador, inm_ubicacion: $inm_ubicacion);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al al validar entrada de datos',data: $valida);
+        }
+        if($indice < 0){
+            return $this->error->error(mensaje: 'Error indice debe ser mayor o igual a 0',data: $indice);
+        }
+
         $inm_precio_precio_venta = $this->inm_precio_venta(inm_comprador: $inm_comprador,
             inm_ubicacion: $inm_ubicacion);
 
@@ -106,8 +115,9 @@ class inm_ubicacion extends _inm_ubicaciones {
     }
 
     /**
-     * @param stdClass $inm_comprador
-     * @param stdClass $r_inm_ubicacion
+     * Asigna los precios a un conjunto de ubicaciones
+     * @param stdClass $inm_comprador Datos de comprador
+     * @param stdClass $r_inm_ubicacion Resultado de ubicaciones
      * @return array
      */
     private function asigna_precios(stdClass $inm_comprador,stdClass $r_inm_ubicacion): array
@@ -297,14 +307,7 @@ class inm_ubicacion extends _inm_ubicaciones {
      */
     private function inm_precio_venta(stdClass $inm_comprador, array $inm_ubicacion): float|array|int
     {
-        $keys = array('inm_ubicacion_id');
-        $valida = $this->validacion->valida_ids(keys: $keys,registro:  $inm_ubicacion);
-        if(errores::$error){
-            return $this->error->error(mensaje: 'Error al al validar ubicacion',data: $valida);
-        }
-
-        $keys = array('inm_institucion_hipotecaria_id');
-        $valida = $this->validacion->valida_ids(keys: $keys,registro:  $inm_comprador);
+        $valida = $this->valida_ids_precio(inm_comprador: $inm_comprador, inm_ubicacion: $inm_ubicacion);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al al validar inm_comprador',data: $valida);
         }
@@ -585,6 +588,21 @@ class inm_ubicacion extends _inm_ubicaciones {
 
         return $inm_ubicaciones;
 
+    }
+
+    private function valida_ids_precio(array|stdClass $inm_comprador, array|stdClass $inm_ubicacion){
+        $keys = array('inm_ubicacion_id');
+        $valida = $this->validacion->valida_ids(keys: $keys,registro:  $inm_ubicacion);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al al validar ubicacion',data: $valida);
+        }
+
+        $keys = array('inm_institucion_hipotecaria_id');
+        $valida = $this->validacion->valida_ids(keys: $keys,registro:  $inm_comprador);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al al validar inm_comprador',data: $valida);
+        }
+        return true;
     }
 
 

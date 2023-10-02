@@ -60,6 +60,8 @@ class controlador_inm_prospecto extends _ctl_formato {
         $keys->selects = array();
 
         $init_data = array();
+        $init_data['com_agente'] = "gamboamartin\\comercial";
+        $init_data['com_tipo_prospecto'] = "gamboamartin\\comercial";
         $campos_view = $this->campos_view_base(init_data: $init_data,keys:  $keys);
 
         if(errores::$error){
