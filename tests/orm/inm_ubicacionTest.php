@@ -69,6 +69,81 @@ class inm_ubicacionTest extends test {
         errores::$error = false;
     }
 
+    public function test_descripcion(): void
+    {
+        errores::$error = false;
+
+        $_GET['seccion'] = 'inm_producto_infonavit';
+        $_GET['accion'] = 'lista';
+        $_SESSION['grupo_id'] = 1;
+        $_SESSION['usuario_id'] = 2;
+        $_GET['session_id'] = '1';
+
+
+
+        $inm = new inm_ubicacion(link: $this->link);
+        $inm = new liberator($inm);
+
+        $key_entidad_base_id = '';
+        $key_entidad_id = '';
+        $registro = array();
+        $dp_calle_pertenece = new stdClass();
+        $dp_calle_pertenece->dp_pais_descripcion = 'A';
+        $dp_calle_pertenece->dp_estado_descripcion = 'B';
+        $dp_calle_pertenece->dp_municipio_descripcion = 'C';
+        $dp_calle_pertenece->dp_colonia_descripcion = 'D';
+        $dp_calle_pertenece->dp_cp_descripcion = 'E';
+        $registro['manzana'] = 'A';
+        $registro['lote'] = 'A';
+        $resultado = $inm->descripcion($key_entidad_base_id, $key_entidad_id, $registro,$dp_calle_pertenece);
+
+        $this->assertIsString($resultado);
+        $this->assertNotTrue(errores::$error);
+        $this->assertEquals("A B C D E A A",$resultado);
+        errores::$error = false;
+    }
+
+    public function test_elimina_bd(): void
+    {
+        errores::$error = false;
+
+        $_GET['seccion'] = 'inm_producto_infonavit';
+        $_GET['accion'] = 'lista';
+        $_SESSION['grupo_id'] = 1;
+        $_SESSION['usuario_id'] = 2;
+        $_GET['session_id'] = '1';
+
+        $del = (new base_test())->del_inm_ubicacion(link: $this->link);
+        if(errores::$error){
+            $error = (new errores())->error(mensaje:'Error al del', data: $del);
+            print_r($error);exit;
+        }
+
+        $inm = new inm_ubicacion(link: $this->link);
+        //$inm = new liberator($inm);
+
+        $id = 1;
+        $resultado = $inm->elimina_bd($id);
+        $this->assertIsArray($resultado);
+        $this->assertTrue(errores::$error);
+
+        errores::$error = false;
+        $alta = (new base_test())->alta_inm_ubicacion(link: $this->link);
+        if(errores::$error){
+            $error = (new errores())->error(mensaje:'Error al alta', data: $alta);
+            print_r($error);exit;
+        }
+
+        $resultado = $inm->elimina_bd($id);
+
+
+        $this->assertIsObject($resultado);
+        $this->assertNotTrue(errores::$error);
+        $this->assertEquals(1,$resultado->registro['inm_ubicacion_id']);
+        errores::$error = false;
+
+    }
+
 
     public function test_get_costo(): void
     {
@@ -120,6 +195,38 @@ class inm_ubicacionTest extends test {
         $this->assertIsFloat($resultado);
         $this->assertNotTrue(errores::$error);
         $this->assertEquals(1500.00,$resultado);
+        errores::$error = false;
+    }
+
+    public function test_integra_descripcion(): void
+    {
+        errores::$error = false;
+
+        $_GET['seccion'] = 'inm_producto_infonavit';
+        $_GET['accion'] = 'lista';
+        $_SESSION['grupo_id'] = 1;
+        $_SESSION['usuario_id'] = 2;
+        $_GET['session_id'] = '1';
+
+
+
+        $inm = new inm_ubicacion(link: $this->link);
+        $inm = new liberator($inm);
+
+
+        $registro = array();
+        $dp_calle_pertenece = new stdClass();
+        $dp_calle_pertenece->dp_pais_descripcion = 'A';
+        $dp_calle_pertenece->dp_estado_descripcion = 'B';
+        $dp_calle_pertenece->dp_municipio_descripcion = 'C';
+        $dp_calle_pertenece->dp_colonia_descripcion = 'D';
+        $dp_calle_pertenece->dp_cp_descripcion = 'E';
+        $registro['manzana'] = 'A';
+        $registro['lote'] = 'A';
+        $resultado = $inm->integra_descripcion($dp_calle_pertenece, $registro);
+        $this->assertIsArray($resultado);
+        $this->assertNotTrue(errores::$error);
+        $this->assertEquals("A B C D E A A",$resultado['descripcion']);
         errores::$error = false;
     }
 

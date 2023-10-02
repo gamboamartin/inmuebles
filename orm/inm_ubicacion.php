@@ -89,11 +89,26 @@ class inm_ubicacion extends _inm_ubicaciones {
      * @param string $key_entidad_id Key de entidad proceso No aplica aqui
      * @param array $registro Registro en proceso
      * @param stdClass $dp_calle_pertenece Datos de calle
-     * @return string
+     * @return string|array
+     * @version 2.106.0
      */
     final protected function descripcion(string $key_entidad_base_id, string $key_entidad_id, array $registro,
-                                         stdClass $dp_calle_pertenece = new stdClass()): string
+                                         stdClass $dp_calle_pertenece = new stdClass()): string|array
     {
+        $keys = array('dp_pais_descripcion','dp_estado_descripcion','dp_municipio_descripcion',
+            'dp_colonia_descripcion','dp_cp_descripcion');
+        $valida = $this->validacion->valida_existencia_keys(keys: $keys,registro:  $dp_calle_pertenece);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al valida dp_calle_pertenece',data:  $valida);
+        }
+
+        $keys = array('manzana','lote','numero_exterior','numero_interior');
+
+        foreach ($keys as $key){
+            if(!isset($registro[$key])){
+                $registro[$key] = '';
+            }
+        }
         $descripcion = $dp_calle_pertenece->dp_pais_descripcion;
         $descripcion .= ' '.$dp_calle_pertenece->dp_estado_descripcion;
         $descripcion .= ' '.$dp_calle_pertenece->dp_municipio_descripcion;
@@ -104,8 +119,19 @@ class inm_ubicacion extends _inm_ubicaciones {
         return trim($descripcion);
     }
 
+
+    /**
+     * Elimina una ubicacion junto con sus dependencias inm_ubicacion_etapa,inm_costo,inm_opinion_valor,inm_precio,
+     * inm_rel_ubi_comp
+     * @param int $id Id de ubicacion a eliminar
+     * @return array|stdClass
+     * @version 2.106.0
+     */
     public function elimina_bd(int $id): array|stdClass
     {
+        if($id <= 0){
+            return $this->error->error(mensaje: 'Error id es menor a 0',data:  $id);
+        }
         $filtro['inm_ubicacion.id'] = $id;
         $del = (new inm_ubicacion_etapa(link: $this->link))->elimina_con_filtro_and(filtro: $filtro);
         if(errores::$error){
@@ -162,6 +188,13 @@ class inm_ubicacion extends _inm_ubicaciones {
     }
 
 
+    /**
+     * Inicializa un registro para su alta
+     * @param string $key_entidad_base_id Entidad base inm_ubicacion
+     * @param string $key_entidad_id Entidad de avance
+     * @param array $registro Registro en proceso
+     * @return array
+     */
     final public function init_row(string $key_entidad_base_id,string $key_entidad_id, array $registro):array{
 
         $valida = $this->valida_row(registro: $registro);
@@ -195,7 +228,22 @@ class inm_ubicacion extends _inm_ubicaciones {
         return $registro;
     }
 
-    private function integra_descripcion(stdClass $dp_calle_pertenece, array $registro){
+    /**
+     * Integra una descripcion al dar de alta registro
+     * @param stdClass $dp_calle_pertenece Registro de domicilio
+     * @param array $registro registro en proceso
+     * @return array
+     * @version 2.106.0
+     */
+    private function integra_descripcion(stdClass $dp_calle_pertenece, array $registro): array
+    {
+        $keys = array('dp_pais_descripcion','dp_estado_descripcion','dp_municipio_descripcion',
+            'dp_colonia_descripcion','dp_cp_descripcion');
+        $valida = $this->validacion->valida_existencia_keys(keys: $keys,registro:  $dp_calle_pertenece);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al valida dp_calle_pertenece',data:  $valida);
+        }
+
         if(!isset($registro['numero_interior'])){
             $registro['numero_interior'] = '';
         }
