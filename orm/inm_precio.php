@@ -137,9 +137,19 @@ class inm_precio extends _modelo_parent{
      * Genera un filtro de tipo fecha por rangos
      * @param string $fecha Fecha a integrar
      * @return array
+     * @version 2.114.0
      */
     private function filtro_fecha(string $fecha): array
     {
+        $fecha = trim($fecha);
+        if($fecha === ''){
+            return $this->error->error(mensaje: 'Error fecha esta vacio',data:  $fecha);
+        }
+        $valida = $this->validacion->valida_fecha(fecha: $fecha);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al validar fecha',data:  $valida);
+        }
+
         $filtro_fecha[0]['campo_1'] = 'inm_precio.fecha_inicial';
         $filtro_fecha[0]['campo_2'] = 'inm_precio.fecha_final';
         $filtro_fecha[0]['fecha'] = $fecha;
@@ -149,9 +159,9 @@ class inm_precio extends _modelo_parent{
 
     /**
      * Maqueta los filtros para la obtencion de un precio
-     * @param string $fecha
-     * @param int $inm_institucion_hipotecaria_id
-     * @param int $inm_ubicacion_id
+     * @param string $fecha Fecha de integracion en filtro
+     * @param int $inm_institucion_hipotecaria_id Institucion para filtro
+     * @param int $inm_ubicacion_id Ubicacion para filtro
      * @return array|stdClass
      */
     private function filtros(string $fecha, int $inm_institucion_hipotecaria_id, int $inm_ubicacion_id): array|stdClass
@@ -288,9 +298,9 @@ class inm_precio extends _modelo_parent{
         if($fecha === ''){
             return $this->error->error(mensaje: 'Error fecha esta vacio',data:  $fecha);
         }
-        $fecha = $this->validacion->valida_fecha(fecha: $fecha);
+        $valida = $this->validacion->valida_fecha(fecha: $fecha);
         if(errores::$error){
-            return $this->error->error(mensaje: 'Error al validar fecha',data:  $fecha);
+            return $this->error->error(mensaje: 'Error al validar fecha',data:  $valida);
         }
 
         if($inm_ubicacion_id <= 0){
