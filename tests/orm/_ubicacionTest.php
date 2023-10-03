@@ -41,6 +41,33 @@ class _ubicacionTest extends test {
         $this->paths_conf->views = '/var/www/html/inmuebles/config/views.php';
     }
 
+    public function test_entidades_dp(): void
+    {
+        errores::$error = false;
+
+        $_GET['seccion'] = 'inm_producto_infonavit';
+        $_GET['accion'] = 'lista';
+        $_SESSION['grupo_id'] = 1;
+        $_SESSION['usuario_id'] = 2;
+        $_GET['session_id'] = '1';
+
+
+        $inm = new _ubicacion();
+        $inm = new liberator($inm);
+
+
+        $resultado = $inm->entidades_dp();
+        $this->assertIsArray($resultado);
+        $this->assertNotTrue(errores::$error);
+        $this->assertEquals('dp_pais',$resultado[0]);
+        $this->assertEquals('dp_estado',$resultado[1]);
+        $this->assertEquals('dp_municipio',$resultado[2]);
+        $this->assertEquals('dp_cp',$resultado[3]);
+        $this->assertEquals('dp_colonia_postal',$resultado[4]);
+        $this->assertEquals('dp_calle_pertenece',$resultado[5]);
+        errores::$error = false;
+    }
+
     public function test_get_id_preferido(): void
     {
         errores::$error = false;

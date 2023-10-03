@@ -26,7 +26,8 @@ class _ubicacion{
             return $this->error->error(mensaje: 'Error al obtener entidades',data:  $entidades);
         }
 
-        $data = $this->integra_ids_preferidos(data: new stdClass(),entidades:  $entidades,modelo_preferido:  $modelo_preferido);
+        $data = $this->integra_ids_preferidos(data: new stdClass(),entidades:  $entidades,
+            modelo_preferido:  $modelo_preferido);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al obtener id',data:  $data);
         }
@@ -51,6 +52,7 @@ class _ubicacion{
     /**
      * Obtiene las entidades de tipo direccion postal
      * @return string[]
+     * @version 2.130.0
      */
     private function entidades_dp(): array
     {
@@ -101,7 +103,15 @@ class _ubicacion{
         return $keys_selects;
     }
 
-    private function integra_ids_preferidos(stdClass $data, array $entidades, inm_ubicacion $modelo_preferido){
+    /**
+     * @param stdClass $data
+     * @param array $entidades
+     * @param inm_ubicacion $modelo_preferido
+     * @return array|stdClass
+     */
+    private function integra_ids_preferidos(stdClass $data, array $entidades,
+                                            inm_ubicacion $modelo_preferido): array|stdClass
+    {
         foreach ($entidades as $entidad){
             $data = $this->get_id_preferido(data: $data,entidad:  $entidad,modelo_preferido:  $modelo_preferido);
             if(errores::$error){
