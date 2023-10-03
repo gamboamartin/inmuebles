@@ -58,13 +58,13 @@ class controlador_inm_ubicacion extends _ctl_base {
     {
         $r_alta = $this->init_alta();
         if(errores::$error){
-            return $this->retorno_error(
-                mensaje: 'Error al inicializar alta',data:  $r_alta, header: $header,ws:  $ws);
+            return $this->retorno_error(mensaje: 'Error al inicializar alta',data:  $r_alta, header: $header,ws:  $ws);
         }
 
         $keys_selects = (new _ubicacion())->init_alta(controler: $this);
         if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al obtener keys_selects', data:  $keys_selects, header: $header,ws:  $ws);
+            return $this->retorno_error(mensaje: 'Error al obtener keys_selects', data:  $keys_selects,
+                header: $header,ws:  $ws);
         }
 
         $inputs = $this->inputs(keys_selects: $keys_selects);

@@ -57,7 +57,22 @@ class _ubicacion{
         return array('dp_pais','dp_estado','dp_municipio','dp_cp','dp_colonia_postal','dp_calle_pertenece');
     }
 
-    private function get_id_preferido(stdClass $data, string $entidad, inm_ubicacion $modelo_preferido){
+    /**
+     * Integra el id preferido a un data
+     * @param stdClass $data Data previo cargado
+     * @param string $entidad Entidad
+     * @param inm_ubicacion $modelo_preferido modelo de ejecucion
+     * @return array|stdClass
+     * @version 2.127.0
+     */
+    private function get_id_preferido(
+        stdClass $data, string $entidad, inm_ubicacion $modelo_preferido): array|stdClass
+    {
+        $entidad = trim($entidad);
+        if($entidad === ''){
+            return $this->error->error(mensaje: 'Error entidad esta vacia',data:  $entidad);
+        }
+
         $key_id = $entidad.'_id';
         $id = $modelo_preferido->id_preferido_detalle(entidad_preferida: $entidad);
         if(errores::$error){

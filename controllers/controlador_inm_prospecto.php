@@ -89,7 +89,7 @@ class controlador_inm_prospecto extends _ctl_formato {
     protected function campos_view(): array
     {
         $keys = new stdClass();
-        $keys->inputs = array('descripcion');
+        $keys->inputs = array('nombre','apellido_paterno','apellido_materno');
         $keys->selects = array();
 
         $init_data = array();
