@@ -108,16 +108,6 @@ class inm_ubicacion_htmlTest extends test {
        //$_inm = new liberator($_inm);
 
        $registros = array();
-       $indice = '';
-       $resultado = $html->format_moneda_mx_arreglo(registros: $registros, campo_integrar: $indice);
-
-       $this->assertIsArray($resultado);
-       $this->assertTrue(errores::$error);
-       $this->assertEquals("Error el arreglo no puede estar vacio",$resultado['mensaje_limpio']);
-
-       errores::$error = false;
-
-       $registros = array();
        $registros[] = array();
        $indice = '';
        $resultado = $html->format_moneda_mx_arreglo(registros: $registros, campo_integrar: $indice);

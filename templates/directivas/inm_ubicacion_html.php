@@ -168,13 +168,12 @@ class inm_ubicacion_html extends html_controler {
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al maquetar montos moneda',data:  $registros);
         }
-        print_r($controler->acciones);exit;
 
-        $registros_view = (new actions())->registros_view_actions(acciones: $controler->acciones, link: $controler->link,
+        /*$registros_view = (new actions())->registros_view_actions(acciones: $controler->acciones, link: $controler->link,
             obj_link: $controler->obj_link,registros:  $registros, seccion:  $controler->seccion);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al asignar link en '.$controler->tabla, data:  $registros_view);
-        }
+        }*/
         $controler->inm_costos = $registros;
 
         $costo = (new inm_ubicacion(link: $controler->link))->get_costo(inm_ubicacion_id: $controler->registro_id);
