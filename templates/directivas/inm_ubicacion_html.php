@@ -5,6 +5,7 @@ use gamboamartin\inmuebles\controllers\_keys_selects;
 use gamboamartin\inmuebles\controllers\controlador_inm_ubicacion;
 use gamboamartin\inmuebles\models\inm_costo;
 use gamboamartin\inmuebles\models\inm_ubicacion;
+use gamboamartin\system\actions;
 use gamboamartin\system\html_controler;
 use gamboamartin\template\directivas;
 use PDO;
@@ -167,7 +168,13 @@ class inm_ubicacion_html extends html_controler {
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al maquetar montos moneda',data:  $registros);
         }
+        print_r($controler->acciones);exit;
 
+        $registros_view = (new actions())->registros_view_actions(acciones: $controler->acciones, link: $controler->link,
+            obj_link: $controler->obj_link,registros:  $registros, seccion:  $controler->seccion);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al asignar link en '.$controler->tabla, data:  $registros_view);
+        }
         $controler->inm_costos = $registros;
 
         $costo = (new inm_ubicacion(link: $controler->link))->get_costo(inm_ubicacion_id: $controler->registro_id);
@@ -186,8 +193,16 @@ class inm_ubicacion_html extends html_controler {
     }
 
     public function format_moneda_mx_arreglo(array $registros, string $campo_integrar){
+        if(empty($registros)){
+            return $this->error->error(mensaje: 'Error el arreglo no puede estar vacio',data:  $registros);
+        }
+
         $registros_format = array();
         foreach ($registros as $campo){
+            if(!isset($campo[$campo_integrar])){
+                return $this->error->error(mensaje: 'Error no existe indice de arreglo',data:  $campo);
+            }
+
             $campo[$campo_integrar] = $this->format_moneda_mx(monto: $campo[$campo_integrar]);
             if(errores::$error){
                 return $this->error->error(mensaje: 'Error formatear monto',data:  $campo);
