@@ -165,9 +165,13 @@ class inm_ubicacion extends _inm_ubicaciones {
      * @param int $inm_comprador_id Identificador de comprador
      * @param bool $todas si todas obtiene todas las ubicaciones activas
      * @return array|stdClass
+     * @version 2.125.0
      */
     private function data_ubicaciones(string $etapa, int $inm_comprador_id, bool $todas): array|stdClass
     {
+        if($inm_comprador_id<=0){
+            return $this->error->error(mensaje: 'Error inm_comprador_id debe ser mayor a 0',data: $inm_comprador_id);
+        }
         $inm_comprador = (new inm_comprador(link: $this->link))->registro(registro_id: $inm_comprador_id,
             retorno_obj: true);
         if(errores::$error){
