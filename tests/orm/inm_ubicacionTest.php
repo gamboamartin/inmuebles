@@ -784,6 +784,29 @@ class inm_ubicacionTest extends test {
         errores::$error = false;
     }
 
+    public function test_ubicaciones_con_precio(): void
+    {
+        errores::$error = false;
+
+        $_GET['seccion'] = 'inm_producto_infonavit';
+        $_GET['accion'] = 'lista';
+        $_SESSION['grupo_id'] = 1;
+        $_SESSION['usuario_id'] = 2;
+        $_GET['session_id'] = '1';
+
+
+        $inm = new inm_ubicacion(link: $this->link);
+        //$inm = new liberator($inm);
+
+        $etapa = 'a';
+        $inm_comprador_id = 1;
+
+        $resultado = $inm->ubicaciones_con_precio($etapa, $inm_comprador_id);
+        $this->assertIsArray($resultado);
+        $this->assertNotTrue(errores::$error);
+        errores::$error = false;
+    }
+
     public function test_valida_ids_precio(): void
     {
         errores::$error = false;

@@ -8,6 +8,7 @@
  */
 namespace gamboamartin\inmuebles\controllers;
 
+use gamboamartin\comercial\models\com_agente;
 use gamboamartin\comercial\models\com_prospecto;
 use gamboamartin\errores\errores;
 use gamboamartin\inmuebles\html\inm_prospecto_html;
@@ -47,9 +48,20 @@ class controlador_inm_prospecto extends _ctl_formato {
         $keys_selects = array();
 
 
+        $com_agentes = (new com_agente(link: $this->link))->com_agentes_session();
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al obtener agentes',data:  $com_agentes, header: $header,
+                ws:  $ws);
+        }
+
+        $id_selected = -1;
+        if(count($com_agentes) > 0){
+            $id_selected = $com_agentes[0]['com_agente_id'];
+        }
+
 
         $keys_selects = $this->key_select(cols:12, con_registros: true,filtro:  array(), key: 'com_agente_id',
-            keys_selects:$keys_selects, id_selected: -1, label: 'Agente');
+            keys_selects:$keys_selects, id_selected: $id_selected, label: 'Agente');
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects, header: $header,ws:  $ws);
         }

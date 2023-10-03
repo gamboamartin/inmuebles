@@ -619,13 +619,18 @@ class inm_ubicacion extends _inm_ubicaciones {
     }
 
     /**
-     * @param string $etapa
-     * @param int $inm_comprador_id
-     * @param bool $todas
+     * Obtiene las ubicaciones con precio
+     * @param string $etapa Etapa de filtro
+     * @param int $inm_comprador_id Comprador para obtener precio
+     * @param bool $todas Si todas obtiene todas las ubicaciones
      * @return array
+     * @version 2.126.0
      */
     final public function ubicaciones_con_precio(string $etapa, int $inm_comprador_id, bool $todas = false): array
     {
+        if($inm_comprador_id<=0){
+            return $this->error->error(mensaje: 'Error inm_comprador_id debe ser mayor a 0',data: $inm_comprador_id);
+        }
 
         $data = $this->data_ubicaciones(etapa: $etapa,inm_comprador_id:  $inm_comprador_id,todas:  $todas);
         if (errores::$error) {

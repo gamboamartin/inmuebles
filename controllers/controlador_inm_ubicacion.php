@@ -14,7 +14,6 @@ use gamboamartin\inmuebles\html\inm_comprador_html;
 use gamboamartin\inmuebles\html\inm_concepto_html;
 use gamboamartin\inmuebles\html\inm_ubicacion_html;
 use gamboamartin\inmuebles\html\inm_valuador_html;
-use gamboamartin\inmuebles\models\inm_costo;
 use gamboamartin\inmuebles\models\inm_rel_ubi_comp;
 use gamboamartin\inmuebles\models\inm_ubicacion;
 use gamboamartin\system\_ctl_base;
@@ -63,117 +62,10 @@ class controlador_inm_ubicacion extends _ctl_base {
                 mensaje: 'Error al inicializar alta',data:  $r_alta, header: $header,ws:  $ws);
         }
 
-        $modelo_preferido = new inm_ubicacion(link: $this->link);
-
-        $dp_pais_id = $modelo_preferido->id_preferido_detalle(entidad_preferida: 'dp_pais');
+        $keys_selects = (new _ubicacion())->init_alta(controler: $this);
         if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al obtener pais',data:  $dp_pais_id,
-                header: $header,ws:  $ws);
+            return $this->retorno_error(mensaje: 'Error al obtener keys_selects', data:  $keys_selects, header: $header,ws:  $ws);
         }
-        $dp_estado_id = $modelo_preferido->id_preferido_detalle(entidad_preferida: 'dp_estado');
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al obtener dp_estado_id',data:  $dp_estado_id,
-                header: $header,ws:  $ws);
-        }
-        $dp_municipio_id = $modelo_preferido->id_preferido_detalle(entidad_preferida: 'dp_municipio');
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al obtener dp_municipio_id',data:  $dp_municipio_id,
-                header: $header,ws:  $ws);
-        }
-        $dp_cp_id = $modelo_preferido->id_preferido_detalle(entidad_preferida: 'dp_cp');
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al obtener dp_cp_id',data:  $dp_cp_id,
-                header: $header,ws:  $ws);
-        }
-        $dp_colonia_postal_id = $modelo_preferido->id_preferido_detalle(entidad_preferida: 'dp_colonia_postal');
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al obtener dp_colonia_postal_id',data:  $dp_colonia_postal_id,
-                header: $header,ws:  $ws);
-        }
-        $dp_calle_pertenece_id = $modelo_preferido->id_preferido_detalle(entidad_preferida: 'dp_calle_pertenece');
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al obtener dp_calle_pertenece_id',
-                data:  $dp_calle_pertenece_id, header: $header,ws:  $ws);
-        }
-
-
-        $columns_ds = array('dp_pais_descripcion');
-        $keys_selects = $this->key_select(cols:6, con_registros: true,filtro:  array(), key: 'dp_pais_id',
-            keys_selects: array(), id_selected: $dp_pais_id, label: 'Pais', columns_ds : $columns_ds);
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects,
-                header: $header,ws:  $ws);
-        }
-        $filtro = array();
-        $filtro['dp_pais.id'] = $dp_pais_id;
-
-        $columns_ds = array('dp_estado_descripcion');
-
-        $keys_selects = $this->key_select(cols:6, con_registros: true,filtro:  $filtro, key: 'dp_estado_id',
-            keys_selects: $keys_selects, id_selected: $dp_estado_id, label: 'Estado', columns_ds: $columns_ds);
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects,
-                header: $header,ws:  $ws);
-        }
-
-        $filtro = array();
-        $filtro['dp_estado.id'] = $dp_estado_id;
-
-        $columns_ds = array('dp_municipio_descripcion');
-
-        $keys_selects = $this->key_select(cols:6, con_registros: true,filtro:  $filtro, key: 'dp_municipio_id',
-            keys_selects: $keys_selects, id_selected: $dp_municipio_id, label: 'Municipio', columns_ds: $columns_ds);
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects,
-                header: $header,ws:  $ws);
-        }
-
-        $columns_ds = array('dp_cp_descripcion');
-        $filtro = array();
-        $filtro['dp_municipio.id'] = $dp_municipio_id;
-
-        $keys_selects = $this->key_select(cols:6, con_registros: true,filtro:  $filtro, key: 'dp_cp_id',
-            keys_selects: $keys_selects, id_selected:$dp_cp_id, label: 'CP', columns_ds: $columns_ds);
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects,
-                header: $header,ws:  $ws);
-        }
-
-        $columns_ds = array('dp_colonia_descripcion');
-        $filtro = array();
-        $filtro['dp_cp.id'] = $dp_cp_id;
-        $keys_selects = $this->key_select(cols:6, con_registros: true,filtro:  $filtro, key: 'dp_colonia_postal_id',
-            keys_selects: $keys_selects, id_selected: $dp_colonia_postal_id, label: 'Colonia', columns_ds: $columns_ds);
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects,
-                header: $header,ws:  $ws);
-        }
-
-        $columns_ds = array('dp_calle_descripcion');
-        $filtro = array();
-        $filtro['dp_colonia_postal.id'] = $dp_colonia_postal_id;
-        $keys_selects = $this->key_select(cols:6, con_registros: true,filtro:  $filtro, key: 'dp_calle_pertenece_id',
-            keys_selects: $keys_selects, id_selected: $dp_calle_pertenece_id, label: 'Calle', columns_ds: $columns_ds);
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects,
-                header: $header,ws:  $ws);
-        }
-
-        $keys_selects['inm_tipo_ubicacion_id'] = new stdClass();
-        $keys_selects['inm_tipo_ubicacion_id']->modelo_preferido = $modelo_preferido;
-
-
-        $columns_ds = array('inm_tipo_ubicacion_descripcion');
-        $keys_selects = $this->key_select(cols:12, con_registros: true,filtro:  array(), key: 'inm_tipo_ubicacion_id',
-            keys_selects: $keys_selects, id_selected: -1, label: 'Tipo de Ubicacion', columns_ds: $columns_ds);
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects,
-                header: $header,ws:  $ws);
-        }
-
-        $this->row_upd->costo_directo = 0;
-
-
 
         $inputs = $this->inputs(keys_selects: $keys_selects);
         if(errores::$error){
@@ -452,6 +344,7 @@ class controlador_inm_ubicacion extends _ctl_base {
     /**
      * Inicializa los elementos mostrables para datatables
      * @return stdClass
+     * @version 2.126.0
      */
     private function init_datatable(): stdClass
     {
@@ -492,83 +385,18 @@ class controlador_inm_ubicacion extends _ctl_base {
                 mensaje: 'Error al generar salida de template',data:  $r_modifica,header: $header,ws: $ws);
         }
 
-        $registro = $this->modelo->registro(registro_id: $this->registro_id,retorno_obj: true);
+        $data_row = $this->modelo->registro(registro_id: $this->registro_id,retorno_obj: true);
         if(errores::$error){
             return $this->retorno_error(
-                mensaje: 'Error al obtener registro',data:  $registro,header: $header,ws: $ws);
+                mensaje: 'Error al obtener registro',data:  $data_row,header: $header,ws: $ws);
         }
 
 
-        $columns_ds = array('dp_pais_descripcion');
-        $keys_selects = $this->key_select(cols:6, con_registros: true,filtro:  array(), key: 'dp_pais_id',
-            keys_selects: array(), id_selected: $registro->dp_pais_id, label: 'Pais', columns_ds : $columns_ds);
+        $keys_selects = (new _ubicacion())->keys_selects_base(controler: $this,data_row:  $data_row);
         if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects,
-                header: $header,ws:  $ws);
-        }
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects, header: $header,ws:  $ws);
+            return $this->retorno_error(mensaje: 'Error al obtener keys_selects', data:  $keys_selects, header: $header,ws:  $ws);
         }
 
-        $filtro = array();
-        $filtro['dp_pais.id'] = $registro->dp_pais_id;
-
-        $columns_ds = array('dp_estado_descripcion');
-
-        $keys_selects = $this->key_select(cols:6, con_registros: true,filtro:  $filtro, key: 'dp_estado_id',
-            keys_selects: $keys_selects, id_selected: $registro->dp_estado_id, label: 'Estado', columns_ds: $columns_ds);
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects,
-                header: $header,ws:  $ws);
-        }
-
-
-        $filtro = array();
-        $filtro['dp_estado.id'] = $registro->dp_estado_id;
-
-        $columns_ds = array('dp_municipio_descripcion');
-
-        $keys_selects = $this->key_select(cols:6, con_registros: true,filtro:  $filtro, key: 'dp_municipio_id',
-            keys_selects: $keys_selects, id_selected: $registro->dp_municipio_id, label: 'Municipio', columns_ds: $columns_ds);
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects,
-                header: $header,ws:  $ws);
-        }
-
-        $columns_ds = array('dp_cp_descripcion');
-
-        $keys_selects = $this->key_select(cols:6, con_registros: true,filtro:  $filtro, key: 'dp_cp_id',
-            keys_selects: $keys_selects, id_selected: $registro->dp_cp_id, label: 'CP', columns_ds: $columns_ds);
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects,
-                header: $header,ws:  $ws);
-        }
-
-        $columns_ds = array('dp_colonia_descripcion');
-        $keys_selects = $this->key_select(cols:6, con_registros: true,filtro:  $filtro, key: 'dp_colonia_postal_id',
-            keys_selects: $keys_selects, id_selected: $registro->dp_colonia_postal_id, label: 'Colonia', columns_ds: $columns_ds);
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects,
-                header: $header,ws:  $ws);
-        }
-
-        $columns_ds = array('dp_calle_descripcion');
-        $keys_selects = $this->key_select(cols:6, con_registros: true,filtro:  $filtro, key: 'dp_calle_pertenece_id',
-            keys_selects: $keys_selects, id_selected: $registro->dp_calle_pertenece_id, label: 'Calle',
-            columns_ds: $columns_ds);
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects,
-                header: $header,ws:  $ws);
-        }
-
-        $columns_ds = array('inm_tipo_ubicacion_descripcion');
-        $keys_selects = $this->key_select(cols:12, con_registros: true,filtro:  array(), key: 'inm_tipo_ubicacion_id',
-            keys_selects: $keys_selects, id_selected: $registro->inm_tipo_ubicacion_id, label: 'Tipo de Ubicacion',
-            columns_ds: $columns_ds);
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects,
-                header: $header,ws:  $ws);
-        }
 
         $base = $this->base_upd(keys_selects: $keys_selects, params: array(),params_ajustados: array());
         if(errores::$error){
