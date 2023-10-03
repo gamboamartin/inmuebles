@@ -93,6 +93,53 @@ class inm_ubicacion_htmlTest extends test {
         errores::$error = false;
     }
 
+   public function test_format_moneda_mx_arreglo(): void
+   {
+       errores::$error = false;
+
+       $_GET['seccion'] = 'inm_producto_infonavit';
+       $_GET['accion'] = 'lista';
+       $_SESSION['grupo_id'] = 1;
+       $_SESSION['usuario_id'] = 2;
+       $_GET['session_id'] = '1';
+
+       $html_ = new \gamboamartin\template_1\html();
+       $html = new inm_ubicacion_html($html_);
+       //$_inm = new liberator($_inm);
+
+       $registros = array();
+       $indice = '';
+       $resultado = $html->format_moneda_mx_arreglo(registros: $registros, campo_integrar: $indice);
+
+       $this->assertIsArray($resultado);
+       $this->assertTrue(errores::$error);
+       $this->assertEquals("Error el arreglo no puede estar vacio",$resultado['mensaje_limpio']);
+
+       errores::$error = false;
+
+       $registros = array();
+       $registros[] = array();
+       $indice = '';
+       $resultado = $html->format_moneda_mx_arreglo(registros: $registros, campo_integrar: $indice);
+
+       $this->assertIsArray($resultado);
+       $this->assertTrue(errores::$error);
+       $this->assertEquals("Error no existe indice de arreglo",$resultado['mensaje_limpio']);
+
+       errores::$error = false;
+
+       $registros = array();
+       $registros[] = array('x'=>'1');
+       $indice = 'x';
+       $resultado = $html->format_moneda_mx_arreglo(registros: $registros, campo_integrar: $indice);
+
+       $this->assertIsArray($resultado);
+       $this->assertNotTrue(errores::$error);
+       $this->assertStringContainsStringIgnoringCase("$1.00",$resultado[0]['x']);
+
+       errores::$error = false;
+    }
+
 
 }
 
