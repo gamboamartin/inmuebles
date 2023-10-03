@@ -193,10 +193,6 @@ class inm_ubicacion_html extends html_controler {
     }
 
     public function format_moneda_mx_arreglo(array $registros, string $campo_integrar){
-        if(empty($registros)){
-            return $this->error->error(mensaje: 'Error el arreglo no puede estar vacio',data:  $registros);
-        }
-
         $registros_format = array();
         foreach ($registros as $campo){
             if(!isset($campo[$campo_integrar])){
