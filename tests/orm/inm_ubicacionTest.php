@@ -468,6 +468,52 @@ class inm_ubicacionTest extends test {
         errores::$error = false;
     }
 
+    public function test_n_opiniones_valor(): void
+    {
+        errores::$error = false;
+
+        $_GET['seccion'] = 'inm_producto_infonavit';
+        $_GET['accion'] = 'lista';
+        $_SESSION['grupo_id'] = 1;
+        $_SESSION['usuario_id'] = 2;
+        $_GET['session_id'] = '1';
+
+        $inm = new inm_ubicacion(link: $this->link);
+        $inm = new liberator($inm);
+
+
+        $del = (new base_test())->del_inm_opinion_valor(link: $this->link);
+        if(errores::$error){
+            $error = (new errores())->error(mensaje:'Error al del', data: $del);
+            print_r($error);exit;
+        }
+
+        $inm_ubicacion_id = 1;
+        $resultado = $inm->n_opiniones_valor($inm_ubicacion_id);
+        // print_r($resultado);exit;
+
+        $this->assertIsInt($resultado);
+        $this->assertNotTrue(errores::$error);
+        $this->assertEquals(0,$resultado);
+
+        errores::$error = false;
+
+        $alta = (new base_test())->alta_inm_opinion_valor(link: $this->link);
+        if(errores::$error){
+            $error = (new errores())->error(mensaje:'Error al insertar', data: $alta);
+            print_r($error);exit;
+        }
+
+
+
+        $resultado = $inm->n_opiniones_valor($inm_ubicacion_id);
+
+        $this->assertIsInt($resultado);
+        $this->assertNotTrue(errores::$error);
+        $this->assertEquals(1,$resultado);
+        errores::$error = false;
+    }
+
     public function test_opiniones_valor(): void
     {
         errores::$error = false;
@@ -511,7 +557,7 @@ class inm_ubicacionTest extends test {
 
     }
 
-    public function test_n_opiniones_valor(): void
+    public function test_r_inm_ubicacion(): void
     {
         errores::$error = false;
 
@@ -521,39 +567,17 @@ class inm_ubicacionTest extends test {
         $_SESSION['usuario_id'] = 2;
         $_GET['session_id'] = '1';
 
+
         $inm = new inm_ubicacion(link: $this->link);
         $inm = new liberator($inm);
 
+        $etapa = 'a';
+        $todas = false;
 
-        $del = (new base_test())->del_inm_opinion_valor(link: $this->link);
-        if(errores::$error){
-            $error = (new errores())->error(mensaje:'Error al del', data: $del);
-            print_r($error);exit;
-        }
-
-        $inm_ubicacion_id = 1;
-        $resultado = $inm->n_opiniones_valor($inm_ubicacion_id);
-       // print_r($resultado);exit;
-
-        $this->assertIsInt($resultado);
+        $resultado = $inm->r_inm_ubicacion($etapa, $todas);
+        $this->assertIsObject($resultado);
         $this->assertNotTrue(errores::$error);
-        $this->assertEquals(0,$resultado);
-
-        errores::$error = false;
-
-        $alta = (new base_test())->alta_inm_opinion_valor(link: $this->link);
-        if(errores::$error){
-            $error = (new errores())->error(mensaje:'Error al insertar', data: $alta);
-            print_r($error);exit;
-        }
-
-
-
-        $resultado = $inm->n_opiniones_valor($inm_ubicacion_id);
-
-        $this->assertIsInt($resultado);
-        $this->assertNotTrue(errores::$error);
-        $this->assertEquals(1,$resultado);
+        $this->assertEquals(0,$resultado->n_registros);
         errores::$error = false;
     }
 

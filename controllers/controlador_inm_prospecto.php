@@ -46,6 +46,8 @@ class controlador_inm_prospecto extends _ctl_formato {
         }
         $keys_selects = array();
 
+
+
         $keys_selects = $this->key_select(cols:12, con_registros: true,filtro:  array(), key: 'com_agente_id',
             keys_selects:$keys_selects, id_selected: -1, label: 'Agente');
         if(errores::$error){

@@ -159,7 +159,15 @@ class inm_ubicacion extends _inm_ubicaciones {
         return $inm_ubicaciones;
     }
 
-    private function data_ubicaciones(string $etapa, int $inm_comprador_id, bool $todas){
+    /**
+     * Obtiene los datos necesarios para la integracion de precios
+     * @param string $etapa Etapa a obtener
+     * @param int $inm_comprador_id Identificador de comprador
+     * @param bool $todas si todas obtiene todas las ubicaciones activas
+     * @return array|stdClass
+     */
+    private function data_ubicaciones(string $etapa, int $inm_comprador_id, bool $todas): array|stdClass
+    {
         $inm_comprador = (new inm_comprador(link: $this->link))->registro(registro_id: $inm_comprador_id,
             retorno_obj: true);
         if(errores::$error){
@@ -491,12 +499,18 @@ class inm_ubicacion extends _inm_ubicaciones {
      * @param string $etapa Filtra por la etapa
      * @param bool $todas Integra todas las activas
      * @return array|stdClass
+     * @version 2.124.0
      */
     private function r_inm_ubicacion(string $etapa, bool $todas): array|stdClass
     {
-        $filtro['inm_ubicacion.etapa'] = $etapa;
+
 
         if(!$todas) {
+            $etapa = trim($etapa);
+            if($etapa === ''){
+                return $this->error->error(mensaje: 'Error etapa esta vacia', data: $etapa);
+            }
+            $filtro['inm_ubicacion.etapa'] = $etapa;
             $r_inm_ubicacion = $this->filtro_and(filtro: $filtro);
             if (errores::$error) {
                 return $this->error->error(mensaje: 'Error al obtener ubicaciones', data: $r_inm_ubicacion);
@@ -600,13 +614,21 @@ class inm_ubicacion extends _inm_ubicaciones {
 
     }
 
-    final public function ubicaciones_con_precio(string $etapa, int $inm_comprador_id, bool $todas = false){
+    /**
+     * @param string $etapa
+     * @param int $inm_comprador_id
+     * @param bool $todas
+     * @return array
+     */
+    final public function ubicaciones_con_precio(string $etapa, int $inm_comprador_id, bool $todas = false): array
+    {
 
         $data = $this->data_ubicaciones(etapa: $etapa,inm_comprador_id:  $inm_comprador_id,todas:  $todas);
         if (errores::$error) {
             return $this->error->error(mensaje: 'Error al obtener data de ubicaciones', data: $data);
         }
-        $inm_ubicaciones = $this->asigna_precios(inm_comprador: $data->inm_comprador,r_inm_ubicacion:  $data->r_inm_ubicacion);
+        $inm_ubicaciones = $this->asigna_precios(inm_comprador: $data->inm_comprador,
+            r_inm_ubicacion:  $data->r_inm_ubicacion);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al asignar precio de venta inm_ubicaciones',data: $inm_ubicaciones);
         }
