@@ -13,14 +13,29 @@ let cel_com_ct = $("#cel_com_ct");
 let correo_com_ct = $("#correo_com");
 let razon_social_ct = $("#razon_social");
 
+let nombre = '';
+let apellido_paterno = '';
+let apellido_materno = '';
+let razon_social = '';
+
 nombre_ct.change(function() {
     limpia_txt($(this));
+    nombre = $(this).val().trim();
+    razon_social = nombre+' '+apellido_paterno+' '+apellido_materno;
+    razon_social_ct.val(razon_social.trim());
+
 });
 apellido_paterno_ct.change(function() {
     limpia_txt($(this));
+    apellido_paterno = $(this).val().trim();
+    razon_social = nombre+' '+apellido_paterno+' '+apellido_materno;
+    razon_social_ct.val(razon_social.trim());
 });
 apellido_materno_ct.change(function() {
     limpia_txt($(this));
+    apellido_materno = $(this).val().trim();
+    razon_social = nombre+' '+apellido_paterno+' '+apellido_materno;
+    razon_social_ct.val(razon_social.trim());
 });
 lada_com_ct.change(function() {
     limpia_txt($(this));

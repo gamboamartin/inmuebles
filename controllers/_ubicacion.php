@@ -139,9 +139,10 @@ class _ubicacion{
     }
 
     /**
-     * @param controlador_inm_ubicacion $controler
-     * @param int $inm_tipo_ubicacion_id
-     * @param array $keys_selects
+     * Integra el key select de tipo de ubicacion
+     * @param controlador_inm_ubicacion $controler Controlador en ejecucion
+     * @param int $inm_tipo_ubicacion_id Tipo de ubicacion
+     * @param array $keys_selects Keys previos cargados
      * @return array
      */
     private function key_select_inm_tipo_ubicacion(controlador_inm_ubicacion $controler, int $inm_tipo_ubicacion_id,

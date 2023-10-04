@@ -164,8 +164,6 @@ class controlador_inm_prospecto extends _ctl_formato {
     protected function key_selects_txt(array $keys_selects, int $cols_descripcion = 12): array
     {
 
-
-
         $keys_selects = (new init())->key_select_txt(cols: 12,key: 'nombre',
             keys_selects:$keys_selects, place_holder: 'Nombre');
         if(errores::$error){
