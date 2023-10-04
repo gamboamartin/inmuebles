@@ -144,6 +144,7 @@ class _ubicacion{
      * @param int $inm_tipo_ubicacion_id Tipo de ubicacion
      * @param array $keys_selects Keys previos cargados
      * @return array
+     * @version 2.138.1
      */
     private function key_select_inm_tipo_ubicacion(controlador_inm_ubicacion $controler, int $inm_tipo_ubicacion_id,
                                                    array $keys_selects): array
@@ -246,7 +247,14 @@ class _ubicacion{
         return $keys_selects;
     }
 
-    final public function keys_selects_base(controlador_inm_ubicacion $controler, stdClass $data_row){
+    /**
+     * Obtiene los parametros de selectores
+     * @param controlador_inm_ubicacion $controler Controlador en ejecucion
+     * @param stdClass $data_row Datos previos cargados
+     * @return array
+     */
+    final public function keys_selects_base(controlador_inm_ubicacion $controler, stdClass $data_row): array
+    {
         $keys_selects = $this->keys_selects(controler: $controler,data_row:  $data_row);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al obtener keys_selects', data:  $keys_selects);

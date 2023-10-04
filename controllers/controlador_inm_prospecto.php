@@ -108,7 +108,6 @@ class controlador_inm_prospecto extends _ctl_formato {
     }
 
 
-
     public function modifica(bool $header, bool $ws = false): array|stdClass
     {
 

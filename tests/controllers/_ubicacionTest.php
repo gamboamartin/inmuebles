@@ -153,6 +153,33 @@ class _ubicacionTest extends test {
         errores::$error = false;
     }
 
+    public function test_key_select_inm_tipo_ubicacion(): void
+    {
+        errores::$error = false;
+
+        $_GET['seccion'] = 'inm_producto_infonavit';
+        $_GET['accion'] = 'lista';
+        $_SESSION['grupo_id'] = 1;
+        $_SESSION['usuario_id'] = 2;
+        $_GET['session_id'] = '1';
+
+
+        $inm = new _ubicacion();
+        $inm = new liberator($inm);
+
+
+        $controler = new controlador_inm_ubicacion(link: $this->link,paths_conf: $this->paths_conf);
+        $inm_tipo_ubicacion_id = -1;
+        $keys_selects = array();
+
+
+        $resultado = $inm->key_select_inm_tipo_ubicacion($controler, $inm_tipo_ubicacion_id, $keys_selects);
+        $this->assertIsArray($resultado);
+        $this->assertNotTrue(errores::$error);
+        $this->assertEquals(-1,$resultado['inm_tipo_ubicacion_id']->id_selected);
+        errores::$error = false;
+    }
+
     public function test_keys_selects(): void
     {
         errores::$error = false;
