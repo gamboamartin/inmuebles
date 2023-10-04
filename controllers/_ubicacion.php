@@ -18,6 +18,7 @@ class _ubicacion{
      * Obtiene los identificadores preferidos de una ubicacion
      * @param inm_ubicacion $modelo_preferido Modelo de tipo ubicacion
      * @return array|stdClass
+     *
      */
     private function ids_pref_dp(inm_ubicacion $modelo_preferido): array|stdClass
     {
@@ -110,11 +111,17 @@ class _ubicacion{
      * @param array $entidades Entidades preferidas a integrar
      * @param inm_ubicacion|inm_prospecto $modelo_preferido Modelo de ejecucion
      * @return array|stdClass
+     * @version 2.133.1
      */
     final public function integra_ids_preferidos(stdClass $data, array $entidades,
                                             inm_ubicacion|inm_prospecto $modelo_preferido): array|stdClass
     {
         foreach ($entidades as $entidad){
+            $entidad = trim($entidad);
+            if($entidad === ''){
+                return $this->error->error(mensaje: 'Error entidad esta vacia',data:  $entidad);
+            }
+
             $data = $this->get_id_preferido(data: $data,entidad:  $entidad,modelo_preferido:  $modelo_preferido);
             if(errores::$error){
                 return $this->error->error(mensaje: 'Error al obtener id',data:  $data);
