@@ -54,6 +54,11 @@ class controlador_inm_ubicacion extends _ctl_base {
             paths_conf: $paths_conf);
     }
 
+    /**
+     * @param bool $header
+     * @param bool $ws
+     * @return array|string
+     */
     public function alta(bool $header, bool $ws = false): array|string
     {
         $r_alta = $this->init_alta();

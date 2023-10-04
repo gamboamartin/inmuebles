@@ -94,7 +94,13 @@ class _ubicacion{
         return $data;
     }
 
-    final public function init_alta(controlador_inm_ubicacion $controler){
+    /**
+     * Inicializa los elementos para un alta
+     * @param controlador_inm_ubicacion $controler Controlador en ejecucion
+     * @return array
+     */
+    final public function init_alta(controlador_inm_ubicacion $controler): array
+    {
         $modelo_preferido = new inm_ubicacion(link: $controler->link);
 
 
@@ -252,12 +258,16 @@ class _ubicacion{
      * @param controlador_inm_ubicacion $controler Controlador en ejecucion
      * @param stdClass $data_row Datos previos cargados
      * @return array
+     * @version 2.139.1
      */
     final public function keys_selects_base(controlador_inm_ubicacion $controler, stdClass $data_row): array
     {
         $keys_selects = $this->keys_selects(controler: $controler,data_row:  $data_row);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al obtener keys_selects', data:  $keys_selects);
+        }
+        if(!isset($data_row->inm_tipo_ubicacion_id)){
+            $data_row->inm_tipo_ubicacion_id = -1;
         }
 
         $keys_selects = $this->key_select_inm_tipo_ubicacion(controler: $controler,

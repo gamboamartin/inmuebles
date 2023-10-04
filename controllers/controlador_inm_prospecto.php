@@ -97,6 +97,12 @@ class controlador_inm_prospecto extends _ctl_formato {
         $init_data = array();
         $init_data['com_agente'] = "gamboamartin\\comercial";
         $init_data['com_tipo_prospecto'] = "gamboamartin\\comercial";
+
+        $init_data['inm_institucion_hipotecaria'] = "gamboamartin\\inmuebles";
+        $init_data['inm_producto_infonavit'] = "gamboamartin\\inmuebles";
+        $init_data['inm_attr_tipo_credito'] = "gamboamartin\\inmuebles";
+        $init_data['inm_destino_credito'] = "gamboamartin\\inmuebles";
+        $init_data['inm_plazo_credito_sc'] = "gamboamartin\\inmuebles";
         $campos_view = $this->campos_view_base(init_data: $init_data,keys:  $keys);
 
         if(errores::$error){
