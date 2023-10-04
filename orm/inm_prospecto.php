@@ -61,6 +61,15 @@ class inm_prospecto extends _modelo_parent{
             }
         }
 
+        if($this->registro['nss'] === ''){
+            $this->registro['nss'] = '99999999999';
+        }
+        if($this->registro['curp'] === ''){
+            $this->registro['curp'] = 'XEXX010101HNEXXXA4';
+        }
+        if($this->registro['rfc'] === ''){
+            $this->registro['rfc'] = 'XAXX010101000';
+        }
 
         if(!isset($this->registro['descripcion'])){
             $descripcion = (new _base_paquete())->descripcion(registro: $this->registro);

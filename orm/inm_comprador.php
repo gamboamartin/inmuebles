@@ -225,7 +225,7 @@ class inm_comprador extends _modelo_parent{
     /**
      * Elimina todas las relaciones de comprador y con ella a si misma
      * @relaciones inm_rel_comprador_com_cliente, inm_comprador_etapa, inm_referencia, inm_rel_co_acred,
-     *  inm_rel_ubi_comp, inm_comprador_proceso
+     *  inm_rel_ubi_comp, inm_comprador_proceso, inm_rel_prospecto_cliente
      * @param int $id Id de registro
      * @return array|stdClass
      * @version 2.51.0
@@ -265,6 +265,11 @@ class inm_comprador extends _modelo_parent{
         $del = (new inm_comprador_proceso(link: $this->link))->elimina_con_filtro_and(filtro:$filtro);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al eliminar inm_comprador_proceso',
+                data:  $del);
+        }
+        $del = (new inm_rel_prospecto_cliente(link: $this->link))->elimina_con_filtro_and(filtro:$filtro);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al eliminar inm_rel_prospecto_cliente',
                 data:  $del);
         }
 

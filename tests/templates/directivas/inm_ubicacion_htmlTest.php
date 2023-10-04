@@ -35,32 +35,7 @@ class inm_ubicacion_htmlTest extends test {
         $this->paths_conf->views = '/var/www/html/inmuebles/config/views.php';
     }
 
-    public function test_select_inm_ubicacion_id(): void
-    {
-        errores::$error = false;
-
-        $_GET['seccion'] = 'inm_producto_infonavit';
-        $_GET['accion'] = 'lista';
-        $_SESSION['grupo_id'] = 1;
-        $_SESSION['usuario_id'] = 2;
-        $_GET['session_id'] = '1';
-
-        $html_ = new \gamboamartin\template_1\html();
-        $html = new inm_ubicacion_html($html_);
-        //$_inm = new liberator($_inm);
-
-        $cols = 2;
-        $con_registros = true;
-        $id_selected = -1;
-        $link = $this->link;
-        $resultado = $html->select_inm_ubicacion_id($cols, $con_registros, $id_selected, $link);
-
-        $this->assertIsString($resultado);
-        $this->assertNotTrue(errores::$error);
-        $this->assertStringContainsStringIgnoringCase(" inm_ubicacion_id' data-live-search='true' id='inm_ubicacion_id' name='inm_ubicacion_id' required",$resultado);
-        errores::$error = false;
-    }
-   public function test_format_moneda_mx(): void
+    public function test_format_moneda_mx(): void
     {
         errores::$error = false;
 
@@ -92,43 +67,93 @@ class inm_ubicacion_htmlTest extends test {
 
         errores::$error = false;
     }
+    public function test_format_moneda_mx_arreglo(): void
+    {
+        errores::$error = false;
 
-   public function test_format_moneda_mx_arreglo(): void
-   {
-       errores::$error = false;
+        $_GET['seccion'] = 'inm_producto_infonavit';
+        $_GET['accion'] = 'lista';
+        $_SESSION['grupo_id'] = 1;
+        $_SESSION['usuario_id'] = 2;
+        $_GET['session_id'] = '1';
 
-       $_GET['seccion'] = 'inm_producto_infonavit';
-       $_GET['accion'] = 'lista';
-       $_SESSION['grupo_id'] = 1;
-       $_SESSION['usuario_id'] = 2;
-       $_GET['session_id'] = '1';
+        $html_ = new \gamboamartin\template_1\html();
+        $html = new inm_ubicacion_html($html_);
+        //$_inm = new liberator($_inm);
 
-       $html_ = new \gamboamartin\template_1\html();
-       $html = new inm_ubicacion_html($html_);
-       //$_inm = new liberator($_inm);
+        $registros = array();
+        $registros[] = array();
+        $indice = '';
+        $resultado = $html->format_moneda_mx_arreglo(registros: $registros, campo_integrar: $indice);
 
-       $registros = array();
-       $registros[] = array();
-       $indice = '';
-       $resultado = $html->format_moneda_mx_arreglo(registros: $registros, campo_integrar: $indice);
+        $this->assertIsArray($resultado);
+        $this->assertTrue(errores::$error);
+        $this->assertEquals("Error no existe indice de arreglo",$resultado['mensaje_limpio']);
 
-       $this->assertIsArray($resultado);
-       $this->assertTrue(errores::$error);
-       $this->assertEquals("Error no existe indice de arreglo",$resultado['mensaje_limpio']);
+        errores::$error = false;
 
-       errores::$error = false;
+        $registros = array();
+        $registros[] = array('x'=>'1');
+        $indice = 'x';
+        $resultado = $html->format_moneda_mx_arreglo(registros: $registros, campo_integrar: $indice);
 
-       $registros = array();
-       $registros[] = array('x'=>'1');
-       $indice = 'x';
-       $resultado = $html->format_moneda_mx_arreglo(registros: $registros, campo_integrar: $indice);
+        $this->assertIsArray($resultado);
+        $this->assertNotTrue(errores::$error);
+        $this->assertStringContainsStringIgnoringCase("$1.00",$resultado[0]['x']);
 
-       $this->assertIsArray($resultado);
-       $this->assertNotTrue(errores::$error);
-       $this->assertStringContainsStringIgnoringCase("$1.00",$resultado[0]['x']);
-
-       errores::$error = false;
+        errores::$error = false;
     }
+
+    public function test_keys_select_dom(): void
+    {
+        errores::$error = false;
+
+        $_GET['seccion'] = 'inm_producto_infonavit';
+        $_GET['accion'] = 'lista';
+        $_SESSION['grupo_id'] = 1;
+        $_SESSION['usuario_id'] = 2;
+        $_GET['session_id'] = '1';
+
+        $html_ = new \gamboamartin\template_1\html();
+        $html = new inm_ubicacion_html($html_);
+        //$_inm = new liberator($_inm);
+
+        $keys_selects = array();
+        $resultado = $html->keys_select_dom($keys_selects);
+        $this->assertIsArray($resultado);
+        $this->assertNotTrue(errores::$error);
+        errores::$error = false;
+    }
+
+
+    public function test_select_inm_ubicacion_id(): void
+    {
+        errores::$error = false;
+
+        $_GET['seccion'] = 'inm_producto_infonavit';
+        $_GET['accion'] = 'lista';
+        $_SESSION['grupo_id'] = 1;
+        $_SESSION['usuario_id'] = 2;
+        $_GET['session_id'] = '1';
+
+        $html_ = new \gamboamartin\template_1\html();
+        $html = new inm_ubicacion_html($html_);
+        //$_inm = new liberator($_inm);
+
+        $cols = 2;
+        $con_registros = true;
+        $id_selected = -1;
+        $link = $this->link;
+        $resultado = $html->select_inm_ubicacion_id($cols, $con_registros, $id_selected, $link);
+
+        $this->assertIsString($resultado);
+        $this->assertNotTrue(errores::$error);
+        $this->assertStringContainsStringIgnoringCase(" inm_ubicacion_id' data-live-search='true' id='inm_ubicacion_id' name='inm_ubicacion_id' required",$resultado);
+        errores::$error = false;
+    }
+
+
+
 
 
 }

@@ -10,14 +10,19 @@ namespace gamboamartin\inmuebles\controllers;
 
 use base\controller\init;
 use gamboamartin\comercial\models\com_agente;
+use gamboamartin\comercial\models\com_cliente;
 use gamboamartin\comercial\models\com_prospecto;
 use gamboamartin\errores\errores;
 use gamboamartin\inmuebles\html\inm_prospecto_html;
+use gamboamartin\inmuebles\models\inm_comprador;
 use gamboamartin\inmuebles\models\inm_prospecto;
+use gamboamartin\inmuebles\models\inm_rel_prospecto_cliente;
+use gamboamartin\system\actions;
 use gamboamartin\system\links_menu;
 use gamboamartin\template\html;
 use PDO;
 use stdClass;
+use Throwable;
 
 class controlador_inm_prospecto extends _ctl_formato {
 
@@ -113,7 +118,189 @@ class controlador_inm_prospecto extends _ctl_formato {
         return $campos_view;
     }
 
+    public function convierte_cliente(bool $header, bool $ws = false): array|string
+    {
+        $this->link->beginTransaction();
 
+        $id_retorno = -1;
+        if(isset($_POST['id_retorno'])){
+            $id_retorno = $_POST['id_retorno'];
+            unset($_POST['id_retorno']);
+        }
+
+        $siguiente_view = (new actions())->init_alta_bd();
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al obtener siguiente view', data: $siguiente_view,
+                header:  $header, ws: $ws);
+        }
+
+        $inm_prospecto = (new inm_prospecto(link: $this->link))->registro(registro_id: $this->registro_id,
+            columnas_en_bruto: true, retorno_obj: true);
+        if(errores::$error){
+            $this->link->rollBack();
+            return $this->retorno_error(mensaje: 'Error al obtener prospecto', data: $inm_prospecto, header: false, ws: false);
+        }
+
+        $inm_prospecto_completo = (new inm_prospecto(link: $this->link))->registro(registro_id: $this->registro_id,
+            retorno_obj: true);
+        if(errores::$error){
+            $this->link->rollBack();
+            return $this->retorno_error(mensaje: 'Error al obtener prospecto', data: $inm_prospecto, header: false, ws: false);
+        }
+
+        $keys = array('inm_producto_infonavit_id','inm_attr_tipo_credito_id','inm_destino_credito_id',
+            'es_segundo_credito','inm_plazo_credito_sc_id','descuento_pension_alimenticia_dh',
+            'descuento_pension_alimenticia_fc','monto_credito_solicitado_dh','monto_ahorro_voluntario','nss','curp',
+            'nombre','apellido_paterno','apellido_materno','con_discapacidad','nombre_empresa_patron','nrp_nep',
+            'lada_nep','numero_nep','extension_nep','lada_com','numero_com','cel_com','genero','correo_com',
+            'inm_tipo_discapacidad_id','inm_persona_discapacidad_id','inm_estado_civil_id',
+            'inm_institucion_hipotecaria_id');
+
+        foreach ($keys as $key){
+            $inm_comprador_ins[$key] = $inm_prospecto->$key;
+        }
+
+        if($inm_comprador_ins['nss'] === ''){
+            $inm_comprador_ins['nss'] = '99999999999';
+        }
+        if($inm_comprador_ins['curp'] === ''){
+            $inm_comprador_ins['curp'] = 'XEXX010101MNEXXXA8';
+        }
+        if($inm_comprador_ins['lada_nep'] === ''){
+            $inm_comprador_ins['lada_nep'] = '33';
+        }
+        if($inm_comprador_ins['numero_nep'] === ''){
+            $inm_comprador_ins['numero_nep'] = '33333333';
+        }
+        if($inm_comprador_ins['nombre_empresa_patron'] === ''){
+            $inm_comprador_ins['nombre_empresa_patron'] = 'POR DEFINIR';
+        }
+        if($inm_comprador_ins['nrp_nep'] === ''){
+            $inm_comprador_ins['nrp_nep'] = 'POR DEFINIR';
+        }
+
+        $bn_cuenta_id = (new inm_comprador(link: $this->link))->id_preferido_detalle(entidad_preferida: 'bn_cuenta');
+        if(errores::$error){
+            $this->link->rollBack();
+            return $this->retorno_error(mensaje: 'Error al obtener bn_cuenta_id', data: $bn_cuenta_id, header: true, ws: false);
+        }
+
+        $inm_comprador_ins['bn_cuenta_id'] = $bn_cuenta_id;
+
+
+        $dp_calle_pertenece_id = (new com_cliente(link: $this->link))->id_preferido_detalle(entidad_preferida: 'dp_calle_pertenece');
+        if(errores::$error){
+            $this->link->rollBack();
+            return $this->retorno_error(mensaje: 'Error al obtener dp_calle_pertenece_id', data: $dp_calle_pertenece_id, header: true, ws: false);
+        }
+
+        $inm_comprador_ins['dp_calle_pertenece_id'] = $dp_calle_pertenece_id;
+
+        $cat_sat_regimen_fiscal_id = (new com_cliente(link: $this->link))->id_preferido_detalle(entidad_preferida: 'cat_sat_regimen_fiscal');
+        if(errores::$error){
+            $this->link->rollBack();
+            return $this->retorno_error(mensaje: 'Error al obtener cat_sat_regimen_fiscal_id', data: $cat_sat_regimen_fiscal_id, header: true, ws: false);
+        }
+
+        $inm_comprador_ins['cat_sat_regimen_fiscal_id'] = $cat_sat_regimen_fiscal_id;
+
+        $cat_sat_moneda_id = (new com_cliente(link: $this->link))->id_preferido_detalle(entidad_preferida: 'cat_sat_moneda');
+        if(errores::$error){
+            $this->link->rollBack();
+            return $this->retorno_error(mensaje: 'Error al obtener cat_sat_moneda_id', data: $cat_sat_moneda_id, header: true, ws: false);
+        }
+
+        $inm_comprador_ins['cat_sat_moneda_id'] = $cat_sat_moneda_id;
+
+        $cat_sat_forma_pago_id = (new com_cliente(link: $this->link))->id_preferido_detalle(entidad_preferida: 'cat_sat_forma_pago');
+        if(errores::$error){
+            $this->link->rollBack();
+            return $this->retorno_error(mensaje: 'Error al obtener cat_sat_forma_pago_id', data: $cat_sat_forma_pago_id, header: true, ws: false);
+        }
+
+        $inm_comprador_ins['cat_sat_forma_pago_id'] = $cat_sat_forma_pago_id;
+
+        $cat_sat_metodo_pago_id = (new com_cliente(link: $this->link))->id_preferido_detalle(entidad_preferida: 'cat_sat_metodo_pago');
+        if(errores::$error){
+            $this->link->rollBack();
+            return $this->retorno_error(mensaje: 'Error al obtener cat_sat_metodo_pago_id', data: $cat_sat_metodo_pago_id, header: true, ws: false);
+        }
+
+        $inm_comprador_ins['cat_sat_metodo_pago_id'] = $cat_sat_metodo_pago_id;
+
+        $cat_sat_uso_cfdi_id = (new com_cliente(link: $this->link))->id_preferido_detalle(entidad_preferida: 'cat_sat_uso_cfdi');
+        if(errores::$error){
+            $this->link->rollBack();
+            return $this->retorno_error(mensaje: 'Error al obtener cat_sat_uso_cfdi_id', data: $cat_sat_uso_cfdi_id, header: true, ws: false);
+        }
+
+        $inm_comprador_ins['cat_sat_uso_cfdi_id'] = $cat_sat_uso_cfdi_id;
+
+        $com_tipo_cliente_id = (new com_cliente(link: $this->link))->id_preferido_detalle(entidad_preferida: 'com_tipo_cliente');
+        if(errores::$error){
+            $this->link->rollBack();
+            return $this->retorno_error(mensaje: 'Error al obtener com_tipo_cliente_id', data: $com_tipo_cliente_id, header: true, ws: false);
+        }
+
+        $inm_comprador_ins['com_tipo_cliente_id'] = $com_tipo_cliente_id;
+
+        $cat_sat_tipo_persona_id = (new com_cliente(link: $this->link))->id_preferido_detalle(entidad_preferida: 'cat_sat_tipo_persona');
+        if(errores::$error){
+            $this->link->rollBack();
+            return $this->retorno_error(mensaje: 'Error al obtener cat_sat_tipo_persona_id', data: $cat_sat_tipo_persona_id, header: true, ws: false);
+        }
+
+        $inm_comprador_ins['cat_sat_tipo_persona_id'] = $cat_sat_tipo_persona_id;
+
+        $inm_comprador_ins['rfc'] = $inm_prospecto_completo->com_prospecto_rfc;
+        $inm_comprador_ins['numero_exterior'] = 'POR ASIGNAR';
+
+        $r_alta_comprador = (new inm_comprador(link: $this->link))->alta_registro(registro: $inm_comprador_ins);
+
+        if(errores::$error){
+            $this->link->rollBack();
+            return $this->retorno_error(mensaje: 'Error al insertar cliente', data: $r_alta_comprador, header: true, ws: false);
+        }
+
+
+        $inm_rel_prospecto_cliente_ins['inm_prospecto_id'] = $this->registro_id;
+        $inm_rel_prospecto_cliente_ins['inm_comprador_id'] = $r_alta_comprador->registro_id;
+
+        $r_alta_rel = (new inm_rel_prospecto_cliente(link: $this->link))->alta_registro(registro: $inm_rel_prospecto_cliente_ins);
+
+        if(errores::$error){
+            $this->link->rollBack();
+            return $this->retorno_error(mensaje: 'Error al insertar inm_rel_prospecto_cliente_ins', data: $r_alta_rel, header: true, ws: false);
+        }
+
+
+        $this->link->commit();
+
+        if($header){
+            if($id_retorno === -1) {
+                $id_retorno = $this->registro_id;
+            }
+            $this->retorno_base(registro_id:$id_retorno, result: $r_alta_rel, siguiente_view: $siguiente_view,
+                ws:  $ws,seccion_retorno: $this->seccion, valida_permiso: true);
+        }
+        if($ws){
+            header('Content-Type: application/json');
+            try {
+                echo json_encode($r_alta_rel, JSON_THROW_ON_ERROR);
+            }
+            catch (Throwable $e){
+                $error = (new errores())->error(mensaje: 'Error al maquetar JSON' , data: $e);
+                print_r($error);
+            }
+            exit;
+        }
+        $r_alta_rel->siguiente_view = $siguiente_view;
+
+
+        return $r_alta_rel;
+
+
+    }
 
 
     /**

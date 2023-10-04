@@ -270,6 +270,7 @@ class inm_ubicacion_html extends html_controler {
      * Asigna disableds a keys ubicacion
      * @param array $keys_selects Keys a integrar disableds
      * @return array
+     * @version 2.143.0
      */
     final public function keys_select_dom(array $keys_selects): array
     {
