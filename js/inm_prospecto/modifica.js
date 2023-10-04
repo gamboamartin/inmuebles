@@ -2,6 +2,7 @@ let url = getAbsolutePath();
 let registro_id = getParameterByName('registro_id');
 let session_id = getParameterByName('session_id');
 
+let sl_inm_plazo_credito_sc_id = $("#inm_plazo_credito_sc_id");
 
 
 let nombre_ct = $("#nombre");
@@ -12,6 +13,8 @@ let numero_com_ct = $("#numero_com");
 let cel_com_ct = $("#cel_com_ct");
 let correo_com_ct = $("#correo_com");
 let razon_social_ct = $("#razon_social");
+
+let chk_es_segundo_credito = $(".es_segundo_credito");
 
 let nombre = '';
 let apellido_paterno = '';
@@ -59,6 +62,19 @@ correo_com_ct.change(function() {
 });
 razon_social_ct.change(function() {
     limpia_txt($(this));
+});
+
+chk_es_segundo_credito.change(function(){
+    let es_segundo_credito = $(this).val();
+
+    if(es_segundo_credito === 'SI'){
+        sl_inm_plazo_credito_sc_id.prop('disabled',false);
+    }
+    else{
+        sl_inm_plazo_credito_sc_id.val(7);
+        sl_inm_plazo_credito_sc_id.prop('disabled',true);
+    }
+    sl_inm_plazo_credito_sc_id.selectpicker('refresh');
 });
 
 function limpia_txt(container){

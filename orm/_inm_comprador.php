@@ -6,6 +6,7 @@ use gamboamartin\errores\errores;
 use gamboamartin\inmuebles\controllers\_doctos;
 use gamboamartin\inmuebles\controllers\_keys_selects;
 use gamboamartin\inmuebles\controllers\controlador_inm_comprador;
+use gamboamartin\inmuebles\controllers\controlador_inm_prospecto;
 use gamboamartin\inmuebles\html\inm_co_acreditado_html;
 use gamboamartin\inmuebles\html\inm_ubicacion_html;
 use gamboamartin\validacion\validacion;
@@ -101,11 +102,11 @@ class _inm_comprador{
 
     /**
      * Integra los checkeds default para upd
-     * @param controlador_inm_comprador $controler Controlador en ejecucion
+     * @param controlador_inm_comprador|controlador_inm_prospecto $controler Controlador en ejecucion
      * @return stdClass|array
      * @version 1.107.1
      */
-    private function checkeds_default(controlador_inm_comprador $controler): stdClass|array
+    private function checkeds_default(controlador_inm_comprador|controlador_inm_prospecto $controler): stdClass|array
     {
         $keys = array('es_segundo_credito','con_discapacidad');
         $valida = (new validacion())->valida_existencia_keys(keys: $keys,registro:  $controler->row_upd);
@@ -360,12 +361,12 @@ class _inm_comprador{
      * Genera los inputs de tipo radio para frontend
      * @param int $checked_default_cd Elemento default con discapacidad
      * @param int $checked_default_esc Elemento default es segundo credito
-     * @param controlador_inm_comprador $controler Controlador en ejecucion
+     * @param controlador_inm_comprador|controlador_inm_prospecto $controler Controlador en ejecucion
      * @return array|stdClass
      * @version 1.102.1
      */
     final public function radios(int $checked_default_cd, int $checked_default_esc,
-                                 controlador_inm_comprador $controler): array|stdClass
+                                 controlador_inm_comprador|controlador_inm_prospecto $controler): array|stdClass
     {
         if($checked_default_esc <=0){
             return $this->error->error(mensaje: 'Error checked_default debe ser mayor a 0',
@@ -402,11 +403,11 @@ class _inm_comprador{
 
     /**
      * Integra los inputs de tipo radio para upd
-     * @param controlador_inm_comprador $controler Controlador en ejecucion
+     * @param controlador_inm_comprador|controlador_inm_prospecto $controler Controlador en ejecucion
      * @return array|stdClass
      * @version 1.108.1
      */
-    final public function radios_chk(controlador_inm_comprador $controler): array|stdClass
+    final public function radios_chk(controlador_inm_comprador|controlador_inm_prospecto $controler): array|stdClass
     {
         $keys = array('es_segundo_credito','con_discapacidad');
         $valida = (new validacion())->valida_existencia_keys(keys: $keys,registro:  $controler->row_upd);

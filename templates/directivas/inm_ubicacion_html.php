@@ -266,7 +266,12 @@ class inm_ubicacion_html extends html_controler {
         return $inputs;
     }
 
-    private function keys_select_dom(array $keys_selects): array
+    /**
+     * Asigna disableds a keys ubicacion
+     * @param array $keys_selects Keys a integrar disableds
+     * @return array
+     */
+    final public function keys_select_dom(array $keys_selects): array
     {
         $keys_selects['numero_exterior'] = new stdClass();
         $keys_selects['numero_exterior']->disabled = true;

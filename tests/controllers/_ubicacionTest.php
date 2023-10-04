@@ -192,7 +192,7 @@ class _ubicacionTest extends test {
 
 
         $inm = new _ubicacion();
-        //$inm = new liberator($inm);
+        $inm = new liberator($inm);
 
 
         $controler = new controlador_inm_ubicacion(link: $this->link,paths_conf: $this->paths_conf);
