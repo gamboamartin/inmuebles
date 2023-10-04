@@ -18,6 +18,7 @@ class _ubicacion{
      * Obtiene los identificadores preferidos de una ubicacion
      * @param inm_ubicacion $modelo_preferido Modelo de tipo ubicacion
      * @return array|stdClass
+     * @version 2.134.1
      *
      */
     private function ids_pref_dp(inm_ubicacion $modelo_preferido): array|stdClass
@@ -37,7 +38,14 @@ class _ubicacion{
         return $data;
     }
 
-    private function data_row_alta(inm_ubicacion $modelo_preferido){
+    /**
+     * Obtiene los datos para maquetacion de selects
+     * @param inm_ubicacion $modelo_preferido Modelo para obtener defaults
+     * @return array|stdClass
+     * @version 2.134.0
+     */
+    PUBLIC function data_row_alta(inm_ubicacion $modelo_preferido): array|stdClass
+    {
         $data_row = $this->ids_pref_dp(modelo_preferido: $modelo_preferido);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al obtener ids', data:  $data_row);
@@ -141,7 +149,14 @@ class _ubicacion{
         return $keys_selects;
     }
 
-    private function keys_selects(controlador_inm_ubicacion $controler, stdClass $data_row){
+    /**
+     * Integra los selectores con elementos precargados de ids
+     * @param controlador_inm_ubicacion $controler Controlador en ejecucion
+     * @param stdClass $data_row Datos previos cargados de registro en proceso
+     * @return array
+     */
+    private function keys_selects(controlador_inm_ubicacion $controler, stdClass $data_row): array
+    {
         $columns_ds = array('dp_pais_descripcion');
         $keys_selects = $controler->key_select(cols:6, con_registros: true,filtro:  array(), key: 'dp_pais_id',
             keys_selects: array(), id_selected: $data_row->dp_pais_id, label: 'Pais', columns_ds : $columns_ds);
@@ -155,7 +170,8 @@ class _ubicacion{
         $columns_ds = array('dp_estado_descripcion');
 
         $keys_selects = $controler->key_select(cols:6, con_registros: true,filtro:  $filtro, key: 'dp_estado_id',
-            keys_selects: $keys_selects, id_selected: $data_row->dp_estado_id, label: 'Estado', columns_ds: $columns_ds);
+            keys_selects: $keys_selects, id_selected: $data_row->dp_estado_id, label: 'Estado',
+            columns_ds: $columns_ds);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
@@ -166,7 +182,8 @@ class _ubicacion{
         $columns_ds = array('dp_municipio_descripcion');
 
         $keys_selects = $controler->key_select(cols:6, con_registros: true,filtro:  $filtro, key: 'dp_municipio_id',
-            keys_selects: $keys_selects, id_selected: $data_row->dp_municipio_id, label: 'Municipio', columns_ds: $columns_ds);
+            keys_selects: $keys_selects, id_selected: $data_row->dp_municipio_id, label: 'Municipio',
+            columns_ds: $columns_ds);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
@@ -184,8 +201,9 @@ class _ubicacion{
         $columns_ds = array('dp_colonia_descripcion');
         $filtro = array();
         $filtro['dp_cp.id'] = $data_row->dp_cp_id;
-        $keys_selects = $controler->key_select(cols:6, con_registros: true,filtro:  $filtro, key: 'dp_colonia_postal_id',
-            keys_selects: $keys_selects, id_selected: $data_row->dp_colonia_postal_id, label: 'Colonia', columns_ds: $columns_ds);
+        $keys_selects = $controler->key_select(cols:6, con_registros: true,filtro:  $filtro,
+            key: 'dp_colonia_postal_id', keys_selects: $keys_selects, id_selected: $data_row->dp_colonia_postal_id,
+            label: 'Colonia', columns_ds: $columns_ds);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
@@ -193,8 +211,9 @@ class _ubicacion{
         $columns_ds = array('dp_calle_descripcion');
         $filtro = array();
         $filtro['dp_colonia_postal.id'] = $data_row->dp_colonia_postal_id;
-        $keys_selects = $controler->key_select(cols:6, con_registros: true,filtro:  $filtro, key: 'dp_calle_pertenece_id',
-            keys_selects: $keys_selects, id_selected: $data_row->dp_calle_pertenece_id, label: 'Calle', columns_ds: $columns_ds);
+        $keys_selects = $controler->key_select(cols:6, con_registros: true,filtro:  $filtro,
+            key: 'dp_calle_pertenece_id', keys_selects: $keys_selects, id_selected: $data_row->dp_calle_pertenece_id,
+            label: 'Calle', columns_ds: $columns_ds);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }

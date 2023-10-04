@@ -93,6 +93,36 @@ class _ubicacionTest extends test {
         errores::$error = false;
     }
 
+    public function test_ids_pref_dp(): void
+    {
+        errores::$error = false;
+
+        $_GET['seccion'] = 'inm_producto_infonavit';
+        $_GET['accion'] = 'lista';
+        $_SESSION['grupo_id'] = 1;
+        $_SESSION['usuario_id'] = 2;
+        $_GET['session_id'] = '1';
+
+
+        $inm = new _ubicacion();
+        $inm = new liberator($inm);
+
+
+        $modelo_preferido = new inm_ubicacion(link: $this->link);
+
+
+        $resultado = $inm->ids_pref_dp($modelo_preferido);
+        $this->assertIsObject($resultado);
+        $this->assertNotTrue(errores::$error);
+        $this->assertEquals(151,$resultado->dp_pais_id);
+        $this->assertEquals(14,$resultado->dp_estado_id);
+        $this->assertEquals(1649,$resultado->dp_municipio_id);
+        $this->assertEquals(2,$resultado->dp_cp_id);
+        $this->assertEquals(23,$resultado->dp_colonia_postal_id);
+        $this->assertEquals(1,$resultado->dp_calle_pertenece_id);
+        errores::$error = false;
+    }
+
     public function test_integra_ids_preferidos(): void
     {
         errores::$error = false;
