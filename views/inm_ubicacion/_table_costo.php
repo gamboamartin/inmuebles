@@ -10,6 +10,7 @@
             <th>Fecha</th>
             <th>Ref</th>
             <th>Descripcion</th>
+            <th>Acciones</th>
         <tr>
         </thead>
         <tbody>
@@ -22,6 +23,11 @@
             <td><?php echo $inm_costo['inm_costo_fecha'] ?></td>
             <td><?php echo $inm_costo['inm_costo_referencia'] ?></td>
             <td><?php echo $inm_costo['inm_costo_descripcion'] ?></td>
+            <td>
+                <?php foreach ($inm_costo['acciones'] as $accion){ ?>
+                <?php echo $accion ?>
+                <?php } ?>
+            </td>
         <tr>
             <?php }  ?>
         </tbody>

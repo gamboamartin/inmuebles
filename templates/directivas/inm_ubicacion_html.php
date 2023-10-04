@@ -6,6 +6,7 @@ use gamboamartin\inmuebles\controllers\controlador_inm_ubicacion;
 use gamboamartin\inmuebles\models\inm_costo;
 use gamboamartin\inmuebles\models\inm_ubicacion;
 use gamboamartin\system\actions;
+use gamboamartin\system\datatables;
 use gamboamartin\system\html_controler;
 use gamboamartin\template\directivas;
 use PDO;
@@ -163,17 +164,40 @@ class inm_ubicacion_html extends html_controler {
             return $this->error->error(mensaje: 'Error al obtener r_inm_costos',data:  $r_inm_costos);
         }
 
-        $registros = $this->format_moneda_mx_arreglo(registros: $r_inm_costos->registros,
+        $acciones_grupo = (new datatables())->acciones_permitidas(link: $controler->link,seccion: 'inm_costo',
+            not_actions: array('modifica','status'));
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al obtener acciones', data: $acciones_grupo);
+        }
+
+        $registros = $r_inm_costos->registros;
+        $arreglo_costos = (array)$r_inm_costos;
+        foreach ($arreglo_costos['registros'] as $key => $row){
+
+            $links = array();
+            foreach ($acciones_grupo as $indice=>$adm_accion_grupo){
+                $registro_id = $row['inm_costo_id'];
+
+                $data_link = (new datatables())->data_link(adm_accion_grupo: $adm_accion_grupo,
+                    data_result: $arreglo_costos, html_base: $this->html_base, key: $key,registro_id:  $registro_id);
+
+                if(errores::$error){
+                    return $this->error->error(mensaje: 'Error al obtener data para link', data: $data_link);
+                }
+
+                $links[$data_link->accion] = $data_link->link_con_id;
+            }
+
+            $botones['acciones'] = $links;
+            $registros[$key] = array_merge($row,$botones);
+        }
+
+        $registros = $this->format_moneda_mx_arreglo(registros: $registros,
             campo_integrar: 'inm_costo_monto');
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al maquetar montos moneda',data:  $registros);
         }
 
-        /*$registros_view = (new actions())->registros_view_actions(acciones: $controler->acciones, link: $controler->link,
-            obj_link: $controler->obj_link,registros:  $registros, seccion:  $controler->seccion);
-        if(errores::$error){
-            return $this->error->error(mensaje: 'Error al asignar link en '.$controler->tabla, data:  $registros_view);
-        }*/
         $controler->inm_costos = $registros;
 
         $costo = (new inm_ubicacion(link: $controler->link))->get_costo(inm_ubicacion_id: $controler->registro_id);
