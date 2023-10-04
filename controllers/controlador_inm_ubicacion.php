@@ -59,6 +59,7 @@ class controlador_inm_ubicacion extends _ctl_base {
      * @param bool $header If header muestra result en web
      * @param bool $ws If ws muestra result json
      * @return array|string
+     * @version 2.141.1
      */
     public function alta(bool $header, bool $ws = false): array|string
     {

@@ -140,7 +140,6 @@ class controlador_inm_compradorTest extends test {
         unlink("inm_comprador.asigna_co_acreditado");
     }
 
-
     public function test_asigna_ubicacion(): void
     {
         errores::$error = false;

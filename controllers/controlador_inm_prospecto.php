@@ -145,7 +145,7 @@ class controlador_inm_prospecto extends _ctl_formato {
         }
 
         $keys_selects = $this->key_select(cols:12, con_registros: true,filtro:  array(), key: 'inm_producto_infonavit_id',
-            keys_selects:$keys_selects, id_selected: $this->registro['inm_institucion_hipotecaria_id'], label: 'Producto Infonavit');
+            keys_selects:$keys_selects, id_selected: $this->registro['inm_producto_infonavit_id'], label: 'Producto Infonavit');
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects, header: $header,ws:  $ws);
         }
