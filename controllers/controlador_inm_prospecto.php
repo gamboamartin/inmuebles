@@ -138,6 +138,34 @@ class controlador_inm_prospecto extends _ctl_formato {
             return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects, header: $header,ws:  $ws);
         }
 
+        $keys_selects = $this->key_select(cols:12, con_registros: true,filtro:  array(), key: 'inm_institucion_hipotecaria_id',
+            keys_selects:$keys_selects, id_selected: $this->registro['inm_institucion_hipotecaria_id'], label: 'Institucion Hipotecaria');
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects, header: $header,ws:  $ws);
+        }
+
+        $keys_selects = $this->key_select(cols:12, con_registros: true,filtro:  array(), key: 'inm_producto_infonavit_id',
+            keys_selects:$keys_selects, id_selected: $this->registro['inm_institucion_hipotecaria_id'], label: 'Producto Infonavit');
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects, header: $header,ws:  $ws);
+        }
+
+        $keys_selects = $this->key_select(cols:12, con_registros: true,filtro:  array(), key: 'inm_attr_tipo_credito_id',
+            keys_selects:$keys_selects, id_selected: $this->registro['inm_attr_tipo_credito_id'], label: 'Tipo de Credito');
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects, header: $header,ws:  $ws);
+        }
+        $keys_selects = $this->key_select(cols:12, con_registros: true,filtro:  array(), key: 'inm_destino_credito_id',
+            keys_selects:$keys_selects, id_selected: $this->registro['inm_destino_credito_id'], label: 'Destino de Credito');
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects, header: $header,ws:  $ws);
+        }
+        $keys_selects = $this->key_select(cols:12, con_registros: true,filtro:  array(), key: 'inm_plazo_credito_sc_id',
+            keys_selects:$keys_selects, id_selected: $this->registro['inm_plazo_credito_sc_id'], label: 'Plazo de Segundo Credito');
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects, header: $header,ws:  $ws);
+        }
+
         $base = $this->base_upd(keys_selects: $keys_selects, params: array(),params_ajustados: array());
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al integrar base',data:  $base, header: $header,ws:  $ws);

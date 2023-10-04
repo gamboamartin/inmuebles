@@ -240,5 +240,36 @@ class _ubicacionTest extends test {
         errores::$error = false;
     }
 
+    public function test_init_alta(): void
+    {
+        errores::$error = false;
+
+        $_GET['seccion'] = 'inm_producto_infonavit';
+        $_GET['accion'] = 'lista';
+        $_SESSION['grupo_id'] = 1;
+        $_SESSION['usuario_id'] = 2;
+        $_GET['session_id'] = '1';
+
+
+        $inm = new _ubicacion();
+        //$inm = new liberator($inm);
+
+
+        $controler = new controlador_inm_ubicacion(link: $this->link,paths_conf: $this->paths_conf);
+        $controler->row_upd = new stdClass();
+
+        $resultado = $inm->init_alta($controler);
+        $this->assertIsArray($resultado);
+        $this->assertNotTrue(errores::$error);
+        $this->assertEquals(151,$resultado['dp_pais_id']->id_selected);
+        $this->assertEquals(14,$resultado['dp_estado_id']->id_selected);
+        $this->assertEquals(1649,$resultado['dp_municipio_id']->id_selected);
+        $this->assertEquals(2,$resultado['dp_cp_id']->id_selected);
+        $this->assertEquals(23,$resultado['dp_colonia_postal_id']->id_selected);
+        $this->assertEquals(1,$resultado['dp_calle_pertenece_id']->id_selected);
+        $this->assertEquals(1,$resultado['inm_tipo_ubicacion_id']->id_selected);
+        errores::$error = false;
+    }
+
 }
 

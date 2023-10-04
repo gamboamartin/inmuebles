@@ -98,9 +98,11 @@ class _ubicacion{
      * Inicializa los elementos para un alta
      * @param controlador_inm_ubicacion $controler Controlador en ejecucion
      * @return array
+     * @version 2.140.0
      */
     final public function init_alta(controlador_inm_ubicacion $controler): array
     {
+
         $modelo_preferido = new inm_ubicacion(link: $controler->link);
 
 

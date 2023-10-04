@@ -4,6 +4,7 @@ namespace gamboamartin\inmuebles\models;
 use base\orm\_modelo_parent;
 use gamboamartin\errores\errores;
 use gamboamartin\validacion\validacion;
+use stdClass;
 
 class _base_paquete{
 
@@ -15,12 +16,15 @@ class _base_paquete{
 
     /**
      * Integra una descripcion basada en nombres y generales
-     * @param array $registro Registro en proceso
+     * @param array|stdClass $registro Registro en proceso
      * @return string|array
      * @version 1.175.1
      */
-    final public function descripcion(array $registro): string|array
+    final public function descripcion(array|stdClass $registro): string|array
     {
+        if(is_object($registro)){
+            $registro = (array)$registro;
+        }
         $keys = array('nombre','apellido_paterno','nss','curp','rfc');
         $valida = (new validacion())->valida_existencia_keys(keys: $keys,registro:  $registro);
         if(errores::$error){

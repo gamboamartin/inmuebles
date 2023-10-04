@@ -55,8 +55,9 @@ class controlador_inm_ubicacion extends _ctl_base {
     }
 
     /**
-     * @param bool $header
-     * @param bool $ws
+     * Genera un formulario de alta de una ubicacion
+     * @param bool $header If header muestra result en web
+     * @param bool $ws If ws muestra result json
      * @return array|string
      */
     public function alta(bool $header, bool $ws = false): array|string
