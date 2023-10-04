@@ -33,7 +33,7 @@
         </tbody>
         <thead>
         <tr>
-            <th colspan="7">Total: <?php echo $controlador->costo; ?></th>
+            <th colspan="8">Total: <?php echo $controlador->costo; ?></th>
         </tr>
         </thead>
     </table>
