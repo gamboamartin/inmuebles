@@ -9,6 +9,7 @@ use gamboamartin\inmuebles\controllers\controlador_inm_attr_tipo_credito;
 use gamboamartin\inmuebles\controllers\controlador_inm_comprador;
 use gamboamartin\inmuebles\controllers\controlador_inm_plazo_credito_sc;
 use gamboamartin\inmuebles\controllers\controlador_inm_producto_infonavit;
+use gamboamartin\inmuebles\controllers\controlador_inm_ubicacion;
 use gamboamartin\inmuebles\models\_alta_comprador;
 use gamboamartin\inmuebles\models\_base_comprador;
 use gamboamartin\inmuebles\models\_co_acreditado;
@@ -152,6 +153,32 @@ class _ubicacionTest extends test {
         errores::$error = false;
     }
 
+    public function test_keys_selects(): void
+    {
+        errores::$error = false;
+
+        $_GET['seccion'] = 'inm_producto_infonavit';
+        $_GET['accion'] = 'lista';
+        $_SESSION['grupo_id'] = 1;
+        $_SESSION['usuario_id'] = 2;
+        $_GET['session_id'] = '1';
+
+
+        $inm = new _ubicacion();
+        //$inm = new liberator($inm);
+
+
+        $controler = new controlador_inm_ubicacion(link: $this->link,paths_conf: $this->paths_conf);
+        $data_row = new stdClass();
+
+
+        $resultado = $inm->keys_selects($controler, $data_row);
+        $this->assertIsArray($resultado);
+        $this->assertNotTrue(errores::$error);
+        $this->assertEquals(6,$resultado['dp_pais_id']->cols);
+
+        errores::$error = false;
+    }
 
 }
 

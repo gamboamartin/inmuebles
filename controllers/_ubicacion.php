@@ -154,9 +154,24 @@ class _ubicacion{
      * @param controlador_inm_ubicacion $controler Controlador en ejecucion
      * @param stdClass $data_row Datos previos cargados de registro en proceso
      * @return array
+     * @version 2.135.0
      */
-    private function keys_selects(controlador_inm_ubicacion $controler, stdClass $data_row): array
+    PUBLIC function keys_selects(controlador_inm_ubicacion $controler, stdClass $data_row): array
     {
+
+
+        $entidades_dp = $this->entidades_dp();
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al obtener entidades_dp',data:  $entidades_dp);
+        }
+
+        foreach ($entidades_dp as $entidad){
+            $key_id = $entidad.'_id';
+            if(!isset($data_row->$key_id)){
+                $data_row->$key_id = -1;
+            }
+        }
+
         $columns_ds = array('dp_pais_descripcion');
         $keys_selects = $controler->key_select(cols:6, con_registros: true,filtro:  array(), key: 'dp_pais_id',
             keys_selects: array(), id_selected: $data_row->dp_pais_id, label: 'Pais', columns_ds : $columns_ds);
