@@ -138,11 +138,20 @@ class _ubicacion{
         return $data;
     }
 
-    private function key_select_inm_tipo_ubicacion(controlador_inm_ubicacion $controler, int $inm_tipo_ubicacion_id, array $keys_selects){
+    /**
+     * @param controlador_inm_ubicacion $controler
+     * @param int $inm_tipo_ubicacion_id
+     * @param array $keys_selects
+     * @return array
+     */
+    private function key_select_inm_tipo_ubicacion(controlador_inm_ubicacion $controler, int $inm_tipo_ubicacion_id,
+                                                   array $keys_selects): array
+    {
 
         $columns_ds = array('inm_tipo_ubicacion_descripcion');
-        $keys_selects = $controler->key_select(cols:12, con_registros: true,filtro:  array(), key: 'inm_tipo_ubicacion_id',
-            keys_selects: $keys_selects, id_selected: $inm_tipo_ubicacion_id, label: 'Tipo de Ubicacion', columns_ds: $columns_ds);
+        $keys_selects = $controler->key_select(cols:12, con_registros: true,filtro:  array(),
+            key: 'inm_tipo_ubicacion_id', keys_selects: $keys_selects, id_selected: $inm_tipo_ubicacion_id,
+            label: 'Tipo de Ubicacion', columns_ds: $columns_ds);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
