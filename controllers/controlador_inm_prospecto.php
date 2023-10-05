@@ -96,7 +96,9 @@ class controlador_inm_prospecto extends _ctl_formato {
     {
         $keys = new stdClass();
         $keys->inputs = array('nombre','apellido_paterno','apellido_materno','telefono','correo_com','razon_social',
-            'lada_com','numero_com','cel_com');
+            'lada_com','numero_com','cel_com','descuento_pension_alimenticia_dh','descuento_pension_alimenticia_fc',
+            'monto_credito_solicitado_dh','monto_ahorro_voluntario','nombre_empresa_patron','nrp_nep','lada_nep',
+            'numero_nep','extension_nep','nss','curp','rfc','numero_exterior','numero_interior');
         $keys->selects = array();
 
         $init_data = array();
@@ -108,6 +110,15 @@ class controlador_inm_prospecto extends _ctl_formato {
         $init_data['inm_attr_tipo_credito'] = "gamboamartin\\inmuebles";
         $init_data['inm_destino_credito'] = "gamboamartin\\inmuebles";
         $init_data['inm_plazo_credito_sc'] = "gamboamartin\\inmuebles";
+        $init_data['inm_tipo_discapacidad'] = "gamboamartin\\inmuebles";
+        $init_data['inm_persona_discapacidad'] = "gamboamartin\\inmuebles";
+
+        $init_data['dp_pais'] = "gamboamartin\\direccion_postal";
+        $init_data['dp_estado'] = "gamboamartin\\direccion_postal";
+        $init_data['dp_municipio'] = "gamboamartin\\direccion_postal";
+        $init_data['dp_cp'] = "gamboamartin\\direccion_postal";
+        $init_data['dp_colonia_postal'] = "gamboamartin\\direccion_postal";
+        $init_data['dp_calle_pertenece'] = "gamboamartin\\direccion_postal";
         $campos_view = $this->campos_view_base(init_data: $init_data,keys:  $keys);
 
         if(errores::$error){

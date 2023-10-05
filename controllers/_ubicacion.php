@@ -19,9 +19,14 @@ class _ubicacion{
      * Obtiene los datos de una vista para acciones de ubicacion
      * @param controlador_inm_ubicacion $controler Controlador en ejecucion
      * @return array|stdClass
+     * @version 2.145.0
      */
     private function base_view_accion(controlador_inm_ubicacion $controler): array|stdClass
     {
+        if($controler->registro_id<=0){
+            return $this->error->error(mensaje: 'Error registro_id debe ser mayor a 0', data: $controler->registro_id);
+        }
+
         $r_modifica = $controler->init_modifica();
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al generar salida de template',data:  $r_modifica);
