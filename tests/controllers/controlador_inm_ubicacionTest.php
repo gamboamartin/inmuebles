@@ -32,7 +32,7 @@ class controlador_inm_ubicacionTest extends test {
         $file = "inm_ubicacion.alta";
 
 
-        $ch = curl_init("http://localhost/inmuebles/index.php?seccion=inm_ubicacion&accion=alta&adm_menu_id=64&session_id=4075502287&adm_menu_id=64");
+        $ch = curl_init("http://localhost/inmuebles/index.php?seccion=inm_ubicacion&accion=alta&adm_menu_id=64&session_id=2833161769&adm_menu_id=64");
         $fp = fopen($file, "w");
 
         curl_setopt($ch, CURLOPT_FILE, $fp);
@@ -45,17 +45,16 @@ class controlador_inm_ubicacionTest extends test {
         $data = file_get_contents($file);
 
         $this->assertStringContainsStringIgnoringCase('<form method="post" action="./index.php?seccion=inm_ubicacion&accion=alta_bd&adm_menu_id=64&se', $data);
-        $this->assertStringContainsStringIgnoringCase('session_id=4075502287&adm_menu_id=64" class="form-additional"', $data);
+        $this->assertStringContainsStringIgnoringCase('session_id=2833161769&adm_menu_id=64" class="form-additional"', $data);
         $this->assertStringContainsStringIgnoringCase('enctype="multipart/form-data">', $data);
         $this->assertStringContainsStringIgnoringCase("<div class='control-group col-sm-12'><label class='control-label' for='inm_tipo_ubicacion_id'>", $data);
         $this->assertStringContainsStringIgnoringCase("Tipo de Ubicacion</label><div class='controls'><select class='form-control selectpicker color-secondary", $data);
         $this->assertStringContainsStringIgnoringCase("  inm_tipo_ubicacion_id' data-live-search='true' id='inm_tipo_ubicacion_id'", $data);
         $this->assertStringContainsStringIgnoringCase("name='inm_tipo_ubicacion_id' required ><option value=''  >", $data);
-        $this->assertStringContainsStringIgnoringCase("Selecciona una opcion</option><option value='1' selected >PREDETERMINADO</option></select></div></div><div class='control-group col-sm-6'>", $data);
-        $this->assertStringContainsStringIgnoringCase("<label class='control-label' for='dp_pais_id'>Pais</label>", $data);
-        $this->assertStringContainsStringIgnoringCase("id='dp_pais_id' name='dp_pais_id' required ><option value=''", $data);
         $this->assertStringContainsStringIgnoringCase("dp_estado_id' data-live-search='true' id='dp_estado_id'", $data);
         $this->assertStringContainsStringIgnoringCase("s='controls'><input type='text' name='lote' value='' class='form-control' id='lote' placeholder='Lote' tit", $data);
+        $this->assertStringContainsStringIgnoringCase("id='lote'", $data);
+        $this->assertStringContainsStringIgnoringCase("id='cuenta_predial'", $data);
 
 
 

@@ -248,7 +248,6 @@ class inm_compradorTest extends test {
         $_GET['session_id'] = '1';
 
 
-
         $inm = new inm_comprador(link: $this->link);
         //$inm = new liberator($inm);
 
@@ -261,6 +260,7 @@ class inm_compradorTest extends test {
         }
 
         $resultado = $inm->elimina_bd(id: $id);
+
         $this->assertIsArray($resultado);
         $this->assertTrue(errores::$error);
         $this->assertEquals("Error al eliminar registro de comprador",$resultado['mensaje_limpio']);

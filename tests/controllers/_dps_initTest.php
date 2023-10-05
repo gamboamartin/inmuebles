@@ -3,12 +3,14 @@ namespace gamboamartin\inmuebles\tests\controllers;
 
 
 use gamboamartin\comercial\models\com_cliente;
+use gamboamartin\direccion_postal\models\dp_municipio;
 use gamboamartin\errores\errores;
 use gamboamartin\inmuebles\controllers\_dps_init;
 use gamboamartin\inmuebles\controllers\controlador_inm_attr_tipo_credito;
 use gamboamartin\inmuebles\controllers\controlador_inm_comprador;
 use gamboamartin\inmuebles\controllers\controlador_inm_plazo_credito_sc;
 use gamboamartin\inmuebles\controllers\controlador_inm_producto_infonavit;
+use gamboamartin\inmuebles\models\inm_comprador;
 use gamboamartin\test\liberator;
 use gamboamartin\test\test;
 
@@ -45,6 +47,32 @@ class _dps_initTest extends test {
         $dps = new _dps_init();
         $dps = new liberator($dps);
 
+        $dp_municipio_id = (new com_cliente(link: $this->link))->id_preferido_detalle(entidad_preferida: 'dp_municipio');
+        if(errores::$error){
+            $error = (new errores())->error(mensaje: 'Error al obtener municipio', data: $dp_municipio_id);
+            print_r($error);
+            exit;
+        }
+
+        $dp_cp_id = (new com_cliente(link: $this->link))->id_preferido_detalle(entidad_preferida: 'dp_cp');
+        if(errores::$error){
+            $error = (new errores())->error(mensaje: 'Error al obtener dp_cp_id', data: $dp_cp_id);
+            print_r($error);
+            exit;
+        }
+        $dp_colonia_postal_id = (new com_cliente(link: $this->link))->id_preferido_detalle(entidad_preferida: 'dp_colonia_postal');
+        if(errores::$error){
+            $error = (new errores())->error(mensaje: 'Error al obtener dp_colonia_postal_id', data: $dp_colonia_postal_id);
+            print_r($error);
+            exit;
+        }
+        $dp_calle_pertenece_id = (new com_cliente(link: $this->link))->id_preferido_detalle(entidad_preferida: 'dp_calle_pertenece');
+        if(errores::$error){
+            $error = (new errores())->error(mensaje: 'Error al obtener dp_calle_pertenece_id', data: $dp_calle_pertenece_id);
+            print_r($error);
+            exit;
+        }
+
         $row_upd = new stdClass();
         $modelo = new com_cliente(link: $this->link);
         $resultado = $dps->dps_init_ids($modelo, $row_upd);
@@ -53,10 +81,10 @@ class _dps_initTest extends test {
         $this->assertNotTrue(errores::$error);
         $this->assertEquals(151,$resultado->dp_pais_id);
         $this->assertEquals(14,$resultado->dp_estado_id);
-        $this->assertEquals(1649,$resultado->dp_municipio_id);
-        $this->assertEquals(2,$resultado->dp_cp_id);
-        $this->assertEquals(23,$resultado->dp_colonia_postal_id);
-        $this->assertEquals(1,$resultado->dp_calle_pertenece_id);
+        $this->assertEquals($dp_municipio_id,$resultado->dp_municipio_id);
+        $this->assertEquals($dp_cp_id,$resultado->dp_cp_id);
+        $this->assertEquals($dp_colonia_postal_id,$resultado->dp_colonia_postal_id);
+        $this->assertEquals($dp_calle_pertenece_id,$resultado->dp_calle_pertenece_id);
         errores::$error = false;
 
 
@@ -112,6 +140,13 @@ class _dps_initTest extends test {
         $_SESSION['usuario_id'] = 2;
         $_GET['session_id'] = '1';
 
+        $dp_calle_pertenece_id = (new com_cliente(link: $this->link))->id_preferido_detalle(entidad_preferida: 'dp_calle_pertenece');
+        if(errores::$error){
+            $error = (new errores())->error(mensaje: 'Error al obtener dp_calle_pertenece_id', data: $dp_calle_pertenece_id);
+            print_r($error);
+            exit;
+        }
+
 
         $controler = new controlador_inm_comprador(link: $this->link, paths_conf: $this->paths_conf);
         $keys_selects = array();
@@ -124,7 +159,7 @@ class _dps_initTest extends test {
         $this->assertEquals('Municipio',$resultado['dp_municipio_id']->label);
         $this->assertTrue($resultado['dp_cp_id']->con_registros);
         $this->assertEquals(6,$resultado['dp_colonia_postal_id']->cols);
-        $this->assertEquals(1,$resultado['dp_calle_pertenece_id']->id_selected);
+        $this->assertEquals($dp_calle_pertenece_id,$resultado['dp_calle_pertenece_id']->id_selected);
         errores::$error = false;
     }
 

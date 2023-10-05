@@ -10,6 +10,7 @@ use gamboamartin\errores\errores;
 
 use gamboamartin\inmuebles\models\inm_co_acreditado;
 use gamboamartin\inmuebles\models\inm_comprador;
+use gamboamartin\inmuebles\models\inm_concepto;
 use gamboamartin\inmuebles\models\inm_conf_empresa;
 use gamboamartin\inmuebles\models\inm_costo;
 use gamboamartin\inmuebles\models\inm_opinion_valor;
@@ -18,8 +19,10 @@ use gamboamartin\inmuebles\models\inm_referencia;
 use gamboamartin\inmuebles\models\inm_rel_co_acred;
 use gamboamartin\inmuebles\models\inm_rel_comprador_com_cliente;
 use gamboamartin\inmuebles\models\inm_rel_ubi_comp;
+use gamboamartin\inmuebles\models\inm_tipo_concepto;
 use gamboamartin\inmuebles\models\inm_tipo_ubicacion;
 use gamboamartin\inmuebles\models\inm_ubicacion;
+use gamboamartin\inmuebles\models\inm_valuador;
 use gamboamartin\organigrama\models\org_empresa;
 use PDO;
 use stdClass;
@@ -180,6 +183,32 @@ class base_test{
         return $alta;
     }
 
+    public function alta_inm_concepto(PDO $link, string $descripcion = 'CONCEPTO 1', int $id = 1,
+                                      int $inm_tipo_concepto_id = 1): array|\stdClass
+    {
+
+        $existe = (new inm_tipo_concepto(link: $link))->existe_by_id(registro_id: $inm_tipo_concepto_id);
+        if(errores::$error){
+            return (new errores())->error(mensaje: 'Error al validar si existe inm_tipo_concepto_id', data: $existe);
+        }
+        if(!$existe){
+            $alta = $this->alta_inm_tipo_concepto(link: $link, id: $inm_tipo_concepto_id);
+            if(errores::$error){
+                return (new errores())->error(mensaje: 'Error al insertar inm_tipo_concepto_id', data: $alta);
+            }
+        }
+
+        $registro['id'] = $id;
+        $registro['descripcion'] = $descripcion;
+        $registro['inm_tipo_concepto_id'] = $inm_tipo_concepto_id;
+
+        $alta = (new inm_concepto($link))->alta_registro($registro);
+        if(errores::$error){
+            return (new errores())->error(mensaje: 'Error al insertar', data: $alta);
+        }
+        return $alta;
+    }
+
     public function alta_inm_conf_empresa(PDO $link, int $id = 1, int $inm_tipo_inmobiliaria_id = 1,
                                           int $org_empresa_id = 1): array|\stdClass
     {
@@ -224,6 +253,17 @@ class base_test{
             }
         }
 
+        $existe = (new inm_concepto(link: $link))->existe_by_id(registro_id: $inm_concepto_id);
+        if(errores::$error){
+            return (new errores())->error(mensaje: 'Error al validar si existe inm_concepto_id', data: $existe);
+        }
+        if(!$existe){
+            $alta = $this->alta_inm_concepto(link: $link, id: $inm_concepto_id);
+            if(errores::$error){
+                return (new errores())->error(mensaje: 'Error al insertar inm_concepto_id', data: $alta);
+            }
+        }
+
         $registro['id'] = $id;
         $registro['inm_ubicacion_id'] = $inm_ubicacion_id;
         $registro['descripcion'] = $descripcion;
@@ -243,6 +283,17 @@ class base_test{
                                            int $inm_ubicacion_id = 1, int $inm_valuador_id = 1,
                                            float $monto_resultado = 100000): array|\stdClass
     {
+
+        $existe = (new inm_valuador(link: $link))->existe_by_id(registro_id: $inm_valuador_id);
+        if(errores::$error){
+            return (new errores())->error(mensaje: 'Error al validar si existe inm_valuador_id', data: $existe);
+        }
+        if(!$existe){
+            $alta = $this->alta_inm_valuador(link: $link, id: $inm_valuador_id);
+            if(errores::$error){
+                return (new errores())->error(mensaje: 'Error al insertar inm_valuador_id', data: $alta);
+            }
+        }
 
         $registro['id'] = $id;
         $registro['inm_ubicacion_id'] = $inm_ubicacion_id;
@@ -449,6 +500,19 @@ class base_test{
         return $alta;
     }
 
+    public function alta_inm_tipo_concepto(PDO $link, string $descripcion = 'TIPO CONCEPTO 1', int $id = 1): array|\stdClass
+    {
+
+        $registro['id'] = $id;
+        $registro['descripcion'] = $descripcion;
+
+        $alta = (new inm_tipo_concepto($link))->alta_registro($registro);
+        if(errores::$error){
+            return (new errores())->error(mensaje: 'Error al insertar', data: $alta);
+        }
+        return $alta;
+    }
+
     public function alta_inm_tipo_ubicacion(PDO $link, string $descripcion = 'TIPO 1', int $id = 1): array|\stdClass
     {
 
@@ -473,6 +537,19 @@ class base_test{
         $registro['inm_tipo_ubicacion_id'] = $inm_tipo_ubicacion_id;
 
         $alta = (new inm_ubicacion($link))->alta_registro($registro);
+        if(errores::$error){
+            return (new errores())->error(mensaje: 'Error al insertar', data: $alta);
+        }
+        return $alta;
+    }
+
+    public function alta_inm_valuador(PDO $link, string $descripcion = 'VALUADOR 1', int $id = 1): array|\stdClass
+    {
+
+
+        $registro['id'] = $id;
+        $registro['descripcion'] = $descripcion;
+        $alta = (new inm_valuador($link))->alta_registro($registro);
         if(errores::$error){
             return (new errores())->error(mensaje: 'Error al insertar', data: $alta);
         }

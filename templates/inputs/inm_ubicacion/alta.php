@@ -1,7 +1,6 @@
 <?php /** @var  gamboamartin\facturacion\controllers\controlador_fc_docto_relacionado $controlador  controlador en ejecucion */ ?>
 <?php use config\views; ?>
 <?php echo $controlador->inputs->inm_tipo_ubicacion_id; ?>
-<?php echo $controlador->inputs->dp_pais_id; ?>
 <?php echo $controlador->inputs->dp_estado_id; ?>
 <?php echo $controlador->inputs->dp_municipio_id; ?>
 <?php echo $controlador->inputs->dp_cp_id; ?>
