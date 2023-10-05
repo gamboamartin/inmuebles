@@ -68,6 +68,34 @@ class _ubicacionTest extends test {
         errores::$error = false;
     }
 
+    public function test_base_view_accion_data(): void
+    {
+        errores::$error = false;
+
+        $_GET['seccion'] = 'inm_producto_infonavit';
+        $_GET['accion'] = 'lista';
+        $_SESSION['grupo_id'] = 1;
+        $_SESSION['usuario_id'] = 2;
+        $_GET['session_id'] = '1';
+
+
+        $inm = new _ubicacion();
+        //$inm = new liberator($inm);
+
+
+        $controler = new controlador_inm_ubicacion(link: $this->link,paths_conf: $this->paths_conf);
+        $controler->registro_id = 1;
+        $funcion = 'z';
+        $controler->inputs = new stdClass();
+
+        $resultado = $inm->base_view_accion_data($controler, $funcion);
+        $this->assertIsObject($resultado);
+        $this->assertNotTrue(errores::$error);
+        $this->assertEquals(1,$resultado->base_html->r_modifica->registro['inm_ubicacion_id']);
+
+        errores::$error = false;
+    }
+
     public function test_entidades_dp(): void
     {
         errores::$error = false;

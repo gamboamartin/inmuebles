@@ -50,12 +50,26 @@ class _ubicacion{
     }
 
     /**
-     * @param controlador_inm_ubicacion $controler
-     * @param string $funcion
+     * Genera los datos necesarios para una vista de ubicacion
+     * @param controlador_inm_ubicacion $controler Controlador en proceso
+     * @param string $funcion Funcion de retorno
      * @return array|stdClass
+     * @version 2.147.0
      */
     final public function base_view_accion_data(controlador_inm_ubicacion $controler, string $funcion): array|stdClass
     {
+        if($controler->registro_id<=0){
+            return $this->error->error(mensaje: 'Error registro_id debe ser mayor a 0', data: $controler->registro_id);
+        }
+        $funcion = trim($funcion);
+        if($funcion === ''){
+            return $this->error->error(mensaje: 'Error funcion esta vacio',data:  $funcion);
+        }
+        if(is_array($controler->inputs)){
+            return $this->error->error(mensaje: 'Error $controler->inputs no esta inicializado',
+                data: $controler->inputs);
+        }
+
         $base_html = $this->base_view_accion(controler: $controler);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al obtener base_html', data:  $base_html);

@@ -508,11 +508,70 @@ class controlador_inm_prospecto extends _ctl_formato {
             return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects, header: $header,ws:  $ws);
         }
 
+
+        $keys_selects = $this->key_select(cols:6, con_registros: true,filtro:  array(), key: 'dp_pais_id',
+            keys_selects:$keys_selects, id_selected: $this->registro['dp_pais_id'], label: 'Pais');
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects, header: $header,ws:  $ws);
+        }
+
+        $filtro = array();
+        $filtro['dp_pais.id'] = $this->registro['dp_pais_id'];
+
+        $keys_selects = $this->key_select(cols:6, con_registros: true,filtro: $filtro, key: 'dp_estado_id',
+            keys_selects:$keys_selects, id_selected: $this->registro['dp_estado_id'], label: 'Estado');
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects, header: $header,ws:  $ws);
+        }
+
+        $filtro = array();
+        $filtro['dp_estado.id'] = $this->registro['dp_estado_id'];
+
+        $keys_selects = $this->key_select(cols:6, con_registros: true,filtro:  $filtro, key: 'dp_municipio_id',
+            keys_selects:$keys_selects, id_selected: $this->registro['dp_municipio_id'], label: 'Municipio');
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects, header: $header,ws:  $ws);
+        }
+
+        $filtro = array();
+        $filtro['dp_municipio.id'] = $this->registro['dp_municipio_id'];
+        $keys_selects = $this->key_select(cols:6, con_registros: true,filtro:  $filtro, key: 'dp_cp_id',
+            keys_selects:$keys_selects, id_selected: $this->registro['dp_cp_id'], label: 'CP');
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects, header: $header,ws:  $ws);
+        }
+
+        $filtro = array();
+        $filtro['dp_cp.id'] = $this->registro['dp_cp_id'];
+        $keys_selects = $this->key_select(cols:6, con_registros: true,filtro:  $filtro, key: 'dp_colonia_postal_id',
+            keys_selects:$keys_selects, id_selected: $this->registro['dp_colonia_postal_id'], label: 'Colonia');
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects, header: $header,ws:  $ws);
+        }
+
+        $filtro = array();
+        $filtro['dp_colonia_postal.id'] = $this->registro['dp_colonia_postal_id'];
+        $keys_selects = $this->key_select(cols:6, con_registros: true,filtro:  $filtro, key: 'dp_calle_pertenece_id',
+            keys_selects:$keys_selects, id_selected: $this->registro['dp_calle_pertenece_id'], label: 'Calle');
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects, header: $header,ws:  $ws);
+        }
+
+
+        if($this->registro['inm_prospecto_nss'] === ''){
+            $this->row_upd->nss = '99999999999';
+        }
+        if($this->registro['inm_prospecto_curp'] === ''){
+            $this->row_upd->curp = 'XEXX010101HNEXXXA4';
+        }
+        if($this->registro['inm_prospecto_rfc'] === ''){
+            $this->row_upd->rfc = 'XAXX010101000';
+        }
+
         $radios = (new \gamboamartin\inmuebles\models\_inm_comprador())->radios_chk(controler: $this);
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al integrar radios',data:  $radios, header: $header,ws:  $ws);
         }
-
 
 
         $base = $this->base_upd(keys_selects: $keys_selects, params: array(),params_ajustados: array());

@@ -1,24 +1,22 @@
 <?php
 namespace gamboamartin\inmuebles\html;
 use gamboamartin\errores\errores;
-use gamboamartin\inmuebles\models\inm_attr_tipo_credito;
 use gamboamartin\inmuebles\models\inm_comprador;
-use gamboamartin\inmuebles\models\inm_producto_infonavit;
 use gamboamartin\system\html_controler;
 use PDO;
-use stdClass;
 
 class inm_comprador_html extends html_controler {
 
 
     /**
-     * @param int $cols
-     * @param bool $con_registros
-     * @param int $id_selected
-     * @param PDO $link
-     * @param array $columns_ds
-     * @param bool $disabled
-     * @param array $filtro
+     * Genera un select de tipo comprador
+     * @param int $cols Columnas css
+     * @param bool $con_registros Si con registros anexa options
+     * @param int $id_selected Option selected id
+     * @param PDO $link Conexion a la base de datos
+     * @param array $columns_ds Columnas a mostrar en el option
+     * @param bool $disabled Si disabled deja vacio disabled el select
+     * @param array $filtro Filtro de datos para options
      * @return array|string
      */
     final public function select_inm_comprador_id(int $cols, bool $con_registros, int $id_selected, PDO $link,
@@ -28,8 +26,8 @@ class inm_comprador_html extends html_controler {
         $modelo = new inm_comprador(link: $link);
 
         $select = $this->select_catalogo(cols: $cols, con_registros: $con_registros, id_selected: $id_selected,
-            modelo: $modelo, columns_ds: $columns_ds, disabled: $disabled, filtro: $filtro, label: 'Comprador de vivienda',
-            required: true);
+            modelo: $modelo, columns_ds: $columns_ds, disabled: $disabled, filtro: $filtro,
+            label: 'Comprador de vivienda', required: true);
         if (errores::$error) {
             return $this->error->error(mensaje: 'Error al generar select', data: $select);
         }
