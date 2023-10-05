@@ -21,8 +21,20 @@ class inm_comprador_html extends html_controler {
                     <hr><h4>$tag_header $btn </h4><hr>
                     </div>";
     }
-    final public function select_inm_comprador_id(int $cols, bool $con_registros, int $id_selected, PDO $link, array $columns_ds=array(),
-                                      bool $disabled = false, array $filtro = array()): array|string
+
+    /**
+     * @param int $cols
+     * @param bool $con_registros
+     * @param int $id_selected
+     * @param PDO $link
+     * @param array $columns_ds
+     * @param bool $disabled
+     * @param array $filtro
+     * @return array|string
+     */
+    final public function select_inm_comprador_id(int $cols, bool $con_registros, int $id_selected, PDO $link,
+                                                  array $columns_ds=array(), bool $disabled = false,
+                                                  array $filtro = array()): array|string
     {
         $modelo = new inm_comprador(link: $link);
 

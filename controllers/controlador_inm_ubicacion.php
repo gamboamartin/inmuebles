@@ -83,7 +83,13 @@ class controlador_inm_ubicacion extends _ctl_base {
         return $r_alta;
     }
 
-    public function asigna_comprador(bool $header, bool $ws = false): array|stdClass
+
+    /**
+     * @param bool $header
+     * @param bool $ws
+     * @return array|stdClass
+     */
+    final public function asigna_comprador(bool $header, bool $ws = false): array|stdClass
     {
 
 
@@ -91,7 +97,7 @@ class controlador_inm_ubicacion extends _ctl_base {
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al obtener base_data',data:  $base_data, header: $header,ws:  $ws);
         }
-        
+
         $columns_ds = array('inm_comprador_curp','inm_comprador_nombre','inm_comprador_apellido_paterno',
             'inm_comprador_apellido_materno','inm_comprador_nss');
         $inm_comprador_id = (new inm_comprador_html(html: $this->html_base))->select_inm_comprador_id(
@@ -162,7 +168,8 @@ class controlador_inm_ubicacion extends _ctl_base {
         $this->inputs->fecha = $fecha;
 
 
-        $monto = (new inm_concepto_html(html: $this->html_base))->input_monto(cols: 12,row_upd: new stdClass(),value_vacio: false);
+        $monto = (new inm_concepto_html(html: $this->html_base))->input_monto(cols: 12,row_upd: new stdClass(),
+            value_vacio: false);
 
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al integrar monto',data:  $monto, header: $header,ws:  $ws);
