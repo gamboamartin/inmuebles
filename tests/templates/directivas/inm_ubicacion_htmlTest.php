@@ -36,6 +36,28 @@ class inm_ubicacion_htmlTest extends test {
         $this->paths_conf->views = '/var/www/html/inmuebles/config/views.php';
     }
 
+    public function test_base_inm_ubicacion_upd(): void
+    {
+        errores::$error = false;
+
+        $_GET['seccion'] = 'inm_producto_infonavit';
+        $_GET['accion'] = 'lista';
+        $_SESSION['grupo_id'] = 1;
+        $_SESSION['usuario_id'] = 2;
+        $_GET['session_id'] = '1';
+
+        $html_ = new \gamboamartin\template_1\html();
+        $html = new inm_ubicacion_html($html_);
+        $html = new liberator($html);
+
+        $controler = new controlador_inm_ubicacion(link: $this->link, paths_conf: $this->paths_conf);
+        $controler->registro_id = 1;
+        $resultado = $html->base_inm_ubicacion_upd($controler);
+        $this->assertIsObject($resultado);
+        $this->assertNotTrue(errores::$error);
+        errores::$error = false;
+    }
+
     public function test_columnas_dp(): void
     {
         errores::$error = false;

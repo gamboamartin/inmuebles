@@ -15,15 +15,7 @@ class _ubicacion{
         $this->error = new errores();
     }
 
-    /**
-     * Obtiene los datos de una vista para acciones de ubicacion
-     * @param controlador_inm_ubicacion $controler Controlador en ejecucion
-     * @param array $disableds Agrega el attr disabled al campo seleccionado
-     * @return array|stdClass
-     * @version 2.145.0
-     */
-    private function base_view_accion(controlador_inm_ubicacion $controler, array $disableds): array|stdClass
-    {
+    final public function base_upd(controlador_inm_ubicacion $controler){
         if($controler->registro_id<=0){
             return $this->error->error(mensaje: 'Error registro_id debe ser mayor a 0', data: $controler->registro_id);
         }
@@ -38,14 +30,39 @@ class _ubicacion{
             return $this->error->error(mensaje: 'Error al obtener registro',data:  $data_row);
         }
 
-        $keys_selects = $this->keys_selects_view(controler: $controler,data_row:  $data_row, disableds: $disableds);
+        $data = new stdClass();
+        $data->r_modifica = $r_modifica;
+        $data->data_row = $data_row;
+        return $data;
+    }
+
+    /**
+     * Obtiene los datos de una vista para acciones de ubicacion
+     * @param controlador_inm_ubicacion $controler Controlador en ejecucion
+     * @param array $disableds Agrega el attr disabled al campo seleccionado
+     * @return array|stdClass
+     * @version 2.145.0
+     */
+    private function base_view_accion(controlador_inm_ubicacion $controler, array $disableds): array|stdClass
+    {
+        if($controler->registro_id<=0){
+            return $this->error->error(mensaje: 'Error registro_id debe ser mayor a 0', data: $controler->registro_id);
+        }
+
+        $data_front = $this->base_upd(controler: $controler);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al obtener datos',data:  $data_front);
+        }
+
+        $keys_selects = $this->keys_selects_view(controler: $controler,data_row:  $data_front->data_row,
+            disableds: $disableds);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al obtener keys_selects', data:  $keys_selects);
         }
 
         $datas = new stdClass();
-        $datas->r_modifica = $r_modifica;
-        $datas->data_row = $data_row;
+        $datas->r_modifica = $data_front->r_modifica;
+        $datas->data_row = $data_front->data_row;
         $datas->keys_selects = $keys_selects;
         return $datas;
     }
