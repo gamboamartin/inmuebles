@@ -95,40 +95,15 @@ class controlador_inm_ubicacion extends _ctl_base {
 
         $base_data = (new _ubicacion())->base_view_accion_data(controler: $this,funcion: __FUNCTION__);
         if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al obtener base_data',data:  $base_data, header: $header,ws:  $ws);
-        }
-
-        $columns_ds = array('inm_comprador_curp','inm_comprador_nombre','inm_comprador_apellido_paterno',
-            'inm_comprador_apellido_materno','inm_comprador_nss');
-        $inm_comprador_id = (new inm_comprador_html(html: $this->html_base))->select_inm_comprador_id(
-            cols: 12, con_registros: true,id_selected: -1,link:  $this->link, columns_ds: $columns_ds);
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al inm_comprador_id',data:  $inm_comprador_id,
+            return $this->retorno_error(mensaje: 'Error al obtener base_data',data:  $base_data,
                 header: $header,ws:  $ws);
         }
 
-        $this->inputs->inm_comprador_id = $inm_comprador_id;
-
-        $link_rel_ubi_comp_alta_bd = $this->obj_link->link_alta_bd(link: $this->link,seccion: 'inm_rel_ubi_comp');
+        $data_compra = (new inm_ubicacion_html(html: $this->html_base))->data_comprador(controler: $this);
         if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al generar link',data:  $link_rel_ubi_comp_alta_bd,
+            return $this->retorno_error(mensaje: 'Error al obtener data_compra',data:  $data_compra,
                 header: $header,ws:  $ws);
         }
-
-        $this->link_rel_ubi_comp_alta_bd = $link_rel_ubi_comp_alta_bd;
-
-
-        $filtro = array();
-        $filtro['inm_ubicacion.id'] = $this->registro_id;
-        $r_inm_rel_ubi_comp = (new inm_rel_ubi_comp(link: $this->link))->filtro_and(filtro: $filtro);
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al obtener compradores',data:  $r_inm_rel_ubi_comp,
-                header: $header,ws:  $ws);
-        }
-
-        $this->imp_compradores = $r_inm_rel_ubi_comp->registros;
-
-
 
         return $base_data->base_html->r_modifica;
     }

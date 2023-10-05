@@ -21,15 +21,18 @@ class inm_prospecto extends _modelo_parent{
             'dp_calle'=>'dp_calle_pertenece','dp_colonia'=>'dp_colonia_postal','dp_cp'=>'dp_colonia_postal',
             'dp_municipio'=>'dp_cp','dp_estado'=>'dp_municipio','dp_pais'=>'dp_estado');
 
-        $campos_obligatorios = array('com_prospecto_id','razon_social','dp_calle_pertenece_id');
+        $campos_obligatorios = array('com_prospecto_id','razon_social','dp_calle_pertenece_id','rfc',
+            'numero_exterior','numero_interior');
 
         $columnas_extra= array();
 
-        $columnas_extra['usuario_permitido_id'] = "(SELECT IF(adm_usuario.id = $_SESSION[usuario_id], $_SESSION[usuario_id], -1))";
+        $columnas_extra['usuario_permitido_id'] = "(SELECT IF(adm_usuario.id = $_SESSION[usuario_id], 
+        $_SESSION[usuario_id], -1))";
 
         $renombres = array();
 
-        $atributos_criticos = array('com_prospecto_id','razon_social','dp_calle_pertenece_id');
+        $atributos_criticos = array('com_prospecto_id','razon_social','dp_calle_pertenece_id','rfc',
+            'numero_exterior','numero_interior');
 
 
         $tipo_campos= array();
@@ -81,6 +84,25 @@ class inm_prospecto extends _modelo_parent{
             $this->registro['descripcion'] = $descripcion;
         }
 
+        if(!isset($this->registro['dp_calle_pertenece_id'])){
+            $dp_calle_pertenece_id = $this->id_preferido_detalle(entidad_preferida: 'dp_calle_pertenece');
+            if(errores::$error){
+                return $this->error->error(mensaje: 'Error al obtener dp_calle_pertenece_id',data:  $dp_calle_pertenece_id);
+            }
+            if($dp_calle_pertenece_id === -1){
+                $dp_calle_pertenece_id = 100;
+            }
+            $this->registro['dp_calle_pertenece_id'] = $dp_calle_pertenece_id;
+        }
+
+        if(!isset($this->registro['numero_exterior'])){
+            $this->registro['numero_exterior'] = 'SN';
+        }
+        if(!isset($this->registro['numero_interior'])){
+            $this->registro['numero_interior'] = 'SN';
+        }
+
+
         $com_prospecto_ins['nombre'] = $this->registro['nombre'];
         $com_prospecto_ins['apellido_paterno'] = $this->registro['apellido_paterno'];
         $com_prospecto_ins['apellido_materno'] = $this->registro['apellido_materno'];
@@ -114,6 +136,7 @@ class inm_prospecto extends _modelo_parent{
                 $this->registro[$key_id] = $data->$key_id;
             }
         }
+
 
         if((int)$this->registro['inm_producto_infonavit_id'] === -1){
             $this->registro['inm_producto_infonavit_id'] = 6;

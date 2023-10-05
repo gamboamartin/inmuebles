@@ -173,6 +173,7 @@ class _ubicacion{
             return $this->error->error(mensaje: 'Error al obtener id',data:  $id);
         }
         $data->$key_id = $id;
+
         return $data;
     }
 

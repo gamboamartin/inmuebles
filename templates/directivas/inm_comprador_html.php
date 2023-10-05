@@ -18,6 +18,8 @@ class inm_comprador_html extends html_controler {
      * @param bool $disabled Si disabled deja vacio disabled el select
      * @param array $filtro Filtro de datos para options
      * @return array|string
+     * @version 2.148.0
+     *
      */
     final public function select_inm_comprador_id(int $cols, bool $con_registros, int $id_selected, PDO $link,
                                                   array $columns_ds=array(), bool $disabled = false,
