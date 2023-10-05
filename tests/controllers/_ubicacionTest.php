@@ -42,6 +42,32 @@ class _ubicacionTest extends test {
         $this->paths_conf->views = '/var/www/html/inmuebles/config/views.php';
     }
 
+    public function test_base_upd(): void
+    {
+        errores::$error = false;
+
+        $_GET['seccion'] = 'inm_producto_infonavit';
+        $_GET['accion'] = 'lista';
+        $_SESSION['grupo_id'] = 1;
+        $_SESSION['usuario_id'] = 2;
+        $_GET['session_id'] = '1';
+
+
+        $inm = new _ubicacion();
+        //$inm = new liberator($inm);
+
+
+        $controler = new controlador_inm_ubicacion(link: $this->link,paths_conf: $this->paths_conf);
+        $controler->registro_id = 1;
+
+        $resultado = $inm->base_upd($controler);
+        $this->assertIsObject($resultado);
+        $this->assertNotTrue(errores::$error);
+        $this->assertEquals("Mexico Jalisco San Pedro Tlaquepaque Residencial Revolución 45580   NUM EXT",$resultado->r_modifica->registro['inm_ubicacion_descripcion']);
+
+        errores::$error = false;
+    }
+
     public function test_base_view_accion(): void
     {
         errores::$error = false;

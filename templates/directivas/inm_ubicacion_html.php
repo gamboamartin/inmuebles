@@ -41,6 +41,7 @@ class inm_ubicacion_html extends html_controler {
      * Integra los parametros e inputs de una ubicacion
      * @param controlador_inm_ubicacion $controler Controlador en proceso
      * @return array|stdClass
+     * @version 2.155.1
      */
     private function base_inm_ubicacion_upd(controlador_inm_ubicacion $controler): array|stdClass
     {
@@ -223,15 +224,20 @@ class inm_ubicacion_html extends html_controler {
     /**
      * Integra los inputs en un string de tipo html
      * @param controlador_inm_ubicacion $controlador Controlador en ejecucion
-     * @return string
+     * @return string|array
+     * @version 2.155.0
      */
-    private function form_ubicacion(controlador_inm_ubicacion $controlador): string
+    private function form_ubicacion(controlador_inm_ubicacion $controlador): string|array
     {
         $keys = array('dp_estado_id','dp_municipio_id','dp_cp_id','dp_colonia_postal_id','dp_calle_pertenece_id',
             'numero_exterior','numero_interior','manzana','lote','inm_ubicacion_id','seccion_retorno',
             'btn_action_next','id_retorno');
 
-
+        $valida = $this->validacion->valida_existencia_keys(keys: $keys, registro: $controlador->inputs,
+            valida_vacio: false);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al validar inputs', data: $valida);
+        }
         $inputs = '';
         foreach ($keys as $input){
             $inputs .= $controlador->inputs->$input;

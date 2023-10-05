@@ -15,7 +15,14 @@ class _ubicacion{
         $this->error = new errores();
     }
 
-    final public function base_upd(controlador_inm_ubicacion $controler){
+    /**
+     * Ejecuta los elementos base de una actualizacion view front
+     * @param controlador_inm_ubicacion $controler Controlador en ejecucion
+     * @return array|stdClass
+     * @version 2.155.1
+     */
+    final public function base_upd(controlador_inm_ubicacion $controler): array|stdClass
+    {
         if($controler->registro_id<=0){
             return $this->error->error(mensaje: 'Error registro_id debe ser mayor a 0', data: $controler->registro_id);
         }

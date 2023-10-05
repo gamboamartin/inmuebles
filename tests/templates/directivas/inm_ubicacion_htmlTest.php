@@ -111,6 +111,43 @@ class inm_ubicacion_htmlTest extends test {
         errores::$error = false;
     }
 
+    public function test_form_ubicacion(): void
+    {
+        errores::$error = false;
+
+        $_GET['seccion'] = 'inm_producto_infonavit';
+        $_GET['accion'] = 'lista';
+        $_SESSION['grupo_id'] = 1;
+        $_SESSION['usuario_id'] = 2;
+        $_GET['session_id'] = '1';
+
+        $html_ = new \gamboamartin\template_1\html();
+        $html = new inm_ubicacion_html($html_);
+        $html = new liberator($html);
+
+        $controler = new controlador_inm_ubicacion(link: $this->link, paths_conf: $this->paths_conf);
+        $controler->inputs = new stdClass();
+        $controler->inputs->dp_estado_id = 'a';
+        $controler->inputs->dp_municipio_id = 'b';
+        $controler->inputs->dp_cp_id = 'c';
+        $controler->inputs->dp_colonia_postal_id = 'd';
+        $controler->inputs->dp_calle_pertenece_id = 'e';
+        $controler->inputs->numero_exterior = 'f';
+        $controler->inputs->numero_interior = 'g';
+        $controler->inputs->manzana = 'h';
+        $controler->inputs->lote = 'i';
+        $controler->inputs->inm_ubicacion_id = 'j';
+        $controler->inputs->seccion_retorno = 'k';
+        $controler->inputs->btn_action_next = 'l';
+        $controler->inputs->id_retorno = 'm';
+        $resultado = $html->form_ubicacion(controlador: $controler);
+        $this->assertIsString($resultado);
+        $this->assertNotTrue(errores::$error);
+        $this->assertStringContainsStringIgnoringCase("abcdefghijklm",$resultado);
+
+        errores::$error = false;
+    }
+
     public function test_format_moneda_mx(): void
     {
         errores::$error = false;
