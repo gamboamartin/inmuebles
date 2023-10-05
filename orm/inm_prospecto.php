@@ -3,6 +3,7 @@
 namespace gamboamartin\inmuebles\models;
 
 use base\orm\_modelo_parent;
+use gamboamartin\administrador\models\adm_usuario;
 use gamboamartin\comercial\models\com_prospecto;
 use gamboamartin\errores\errores;
 use gamboamartin\inmuebles\controllers\_ubicacion;
@@ -26,8 +27,19 @@ class inm_prospecto extends _modelo_parent{
 
         $columnas_extra= array();
 
-        $columnas_extra['usuario_permitido_id'] = "(SELECT IF(adm_usuario.id = $_SESSION[usuario_id], 
-        $_SESSION[usuario_id], -1))";
+
+        $adm_usuario = (new adm_usuario(link: $link))->registro(registro_id: $_SESSION['usuario_id'],columnas: array('adm_grupo_root'));
+        if(errores::$error){
+            $error = (new errores())->error(mensaje: 'Error al obtener adm_usuario ',data:  $adm_usuario);
+            print_r($error);
+            exit;
+        }
+
+        $sql = "(SELECT IF(adm_usuario.id = $_SESSION[usuario_id], $_SESSION[usuario_id], -1))";
+        if($adm_usuario['adm_grupo_root'] === 'activo'){
+            $sql = $_SESSION['usuario_id'];
+        }
+        $columnas_extra['usuario_permitido_id'] = $sql;
 
         $renombres = array();
 

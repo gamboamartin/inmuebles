@@ -64,6 +64,31 @@ class controlador_inm_ubicacionTest extends test {
 
 
     }
+
+    public function test_asigna_comprador(): void
+    {
+        errores::$error = false;
+
+        $file = "inm_ubicacion.asigna_comprador";
+
+
+        $ch = curl_init("http://localhost/inmuebles/index.php?seccion=inm_ubicacion&accion=asigna_comprador&adm_menu_id=64&session_id=4075502287&adm_menu_id=64&registro_id=1");
+        $fp = fopen($file, "w");
+
+        curl_setopt($ch, CURLOPT_FILE, $fp);
+        curl_setopt($ch, CURLOPT_HEADER, 0);
+
+        curl_exec($ch);
+        curl_close($ch);
+        fclose($fp);
+
+        $data = file_get_contents($file);
+        $this->assertStringContainsStringIgnoringCase('<form method="post" action="./index.php?seccion=inm_rel_ubi_comp&accion=alta_bd&adm_menu_id=64&session_id=4075502287&adm_menu_id=64"', $data);
+        $this->assertStringContainsStringIgnoringCase("Comprador de vivienda</label><div class='controls'><selec", $data);
+        $this->assertStringContainsStringIgnoringCase(">Chihuahua</option><option value='7'  >Coahuila</option><option value='8' ", $data);
+
+        unlink($file);
+    }
     
 
     public function test_init_datatable(): void

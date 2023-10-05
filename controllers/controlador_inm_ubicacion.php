@@ -87,6 +87,7 @@ class controlador_inm_ubicacion extends _ctl_base {
      * @param bool $header Retorna datos via WEB
      * @param bool $ws Retorna datos vis JSON
      * @return array|stdClass
+     * @version 2.150.0
      */
     final public function asigna_comprador(bool $header, bool $ws = false): array|stdClass
     {

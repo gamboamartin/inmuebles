@@ -148,6 +148,7 @@ class controlador_inm_prospecto extends _ctl_formato {
             unset($_POST['id_retorno']);
         }
 
+
         $siguiente_view = (new actions())->init_alta_bd();
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al obtener siguiente view', data: $siguiente_view,
@@ -158,7 +159,7 @@ class controlador_inm_prospecto extends _ctl_formato {
             columnas_en_bruto: true, retorno_obj: true);
         if(errores::$error){
             $this->link->rollBack();
-            return $this->retorno_error(mensaje: 'Error al obtener prospecto', data: $inm_prospecto, header: false, ws: false);
+            return $this->retorno_error(mensaje: 'Error al obtener prospecto', data: $inm_prospecto, header: $header, ws: $ws);
         }
 
         $inm_prospecto_completo = (new inm_prospecto(link: $this->link))->registro(registro_id: $this->registro_id,
