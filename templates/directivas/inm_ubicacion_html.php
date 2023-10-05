@@ -38,7 +38,8 @@ class inm_ubicacion_html extends html_controler {
     }
 
     /**
-     * @param controlador_inm_ubicacion $controler
+     * Integra los parametros e inputs de una ubicacion
+     * @param controlador_inm_ubicacion $controler Controlador en proceso
      * @return array|stdClass
      */
     private function base_inm_ubicacion_upd(controlador_inm_ubicacion $controler): array|stdClass
@@ -76,9 +77,20 @@ class inm_ubicacion_html extends html_controler {
      * @param array $keys_selects Keys previos cargados
      * @param stdClass $registro Registro en proceso
      * @return array
+     * @version 2.153.0
      */
     private function columnas_dp(controlador_inm_ubicacion $controler, array $keys_selects, stdClass $registro): array
     {
+
+        $keys = array('dp_pais_id','dp_estado_id','dp_municipio_id','dp_cp_id','dp_colonia_postal_id',
+            'dp_calle_pertenece_id');
+
+        $valida = $this->validacion->valida_ids(keys: $keys,registro:  $registro);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al validar registro',data:  $valida);
+        }
+
+
         $columns_ds = array('dp_pais_descripcion');
         $keys_selects = $controler->key_select(cols:6, con_registros: true,filtro:  array(), key: 'dp_pais_id',
             keys_selects: $keys_selects, id_selected: $registro->dp_pais_id, label: 'Pais', columns_ds : $columns_ds);
@@ -182,8 +194,9 @@ class inm_ubicacion_html extends html_controler {
     }
 
     /**
-     * @param controlador_inm_ubicacion $controler
-     * @param string $funcion
+     * Genera el formulario de una ubicacion
+     * @param controlador_inm_ubicacion $controler Controlador en proceso
+     * @param string $funcion Funcion de retorno
      * @return array|stdClass
      */
     private function data_form(controlador_inm_ubicacion $controler, string $funcion): array|stdClass
@@ -208,7 +221,8 @@ class inm_ubicacion_html extends html_controler {
     }
 
     /**
-     * @param controlador_inm_ubicacion $controlador
+     * Integra los inputs en un string de tipo html
+     * @param controlador_inm_ubicacion $controlador Controlador en ejecucion
      * @return string
      */
     private function form_ubicacion(controlador_inm_ubicacion $controlador): string
@@ -377,8 +391,9 @@ class inm_ubicacion_html extends html_controler {
     }
 
     /**
-     * @param controlador_inm_ubicacion $controler
-     * @param stdClass $registro
+     * Obtiene los keys selects base de una ubicacion
+     * @param controlador_inm_ubicacion $controler Controlador el ejecucion
+     * @param stdClass $registro Registro en proceso
      * @return array
      */
     private function key_select_ubicacion(controlador_inm_ubicacion $controler, stdClass $registro): array
