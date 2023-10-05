@@ -158,6 +158,37 @@ class inm_ubicacion_htmlTest extends test {
         errores::$error = false;
     }
 
+    public function test_key_select_ubicacion(): void
+    {
+        errores::$error = false;
+
+        $_GET['seccion'] = 'inm_producto_infonavit';
+        $_GET['accion'] = 'lista';
+        $_SESSION['grupo_id'] = 1;
+        $_SESSION['usuario_id'] = 2;
+        $_GET['session_id'] = '1';
+
+        $html_ = new \gamboamartin\template_1\html();
+        $html = new inm_ubicacion_html($html_);
+        $html = new liberator($html);
+
+        $controler = new controlador_inm_ubicacion(link: $this->link, paths_conf: $this->paths_conf);
+        $registro = new stdClass();
+        $registro->dp_pais_id = 1;
+        $registro->dp_estado_id = 1;
+        $registro->dp_municipio_id = 1;
+        $registro->dp_cp_id = 1;
+        $registro->dp_colonia_postal_id = 1;
+        $registro->dp_calle_pertenece_id = 1;
+
+        $resultado = $html->key_select_ubicacion($controler, $registro);
+        $this->assertIsArray($resultado);
+        $this->assertNotTrue(errores::$error);
+        $this->assertTrue($resultado['lote']->disabled);
+
+        errores::$error = false;
+    }
+
     public function test_keys_select_dom(): void
     {
         errores::$error = false;

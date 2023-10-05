@@ -6,7 +6,6 @@ use gamboamartin\inmuebles\controllers\controlador_inm_ubicacion;
 use gamboamartin\inmuebles\models\inm_costo;
 use gamboamartin\inmuebles\models\inm_rel_ubi_comp;
 use gamboamartin\inmuebles\models\inm_ubicacion;
-use gamboamartin\system\actions;
 use gamboamartin\system\datatables;
 use gamboamartin\system\html_controler;
 use gamboamartin\template\directivas;
@@ -395,9 +394,18 @@ class inm_ubicacion_html extends html_controler {
      * @param controlador_inm_ubicacion $controler Controlador el ejecucion
      * @param stdClass $registro Registro en proceso
      * @return array
+     * @version 2.153.0
      */
     private function key_select_ubicacion(controlador_inm_ubicacion $controler, stdClass $registro): array
     {
+        $keys = array('dp_pais_id','dp_estado_id','dp_municipio_id','dp_cp_id','dp_colonia_postal_id',
+            'dp_calle_pertenece_id');
+
+        $valida = $this->validacion->valida_ids(keys: $keys,registro:  $registro);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al validar registro',data:  $valida);
+        }
+
         $keys_selects = $this->columnas_dp(controler: $controler,keys_selects:  array(),registro:  $registro);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
