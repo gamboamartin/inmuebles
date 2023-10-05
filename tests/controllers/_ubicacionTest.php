@@ -60,7 +60,7 @@ class _ubicacionTest extends test {
         $controler = new controlador_inm_ubicacion(link: $this->link,paths_conf: $this->paths_conf);
         $controler->registro_id = 1;
 
-        $resultado = $inm->base_view_accion($controler);
+        $resultado = $inm->base_view_accion($controler, array());
         $this->assertIsObject($resultado);
         $this->assertNotTrue(errores::$error);
         $this->assertEquals(1,$resultado->r_modifica->registro['inm_ubicacion_id']);
@@ -88,7 +88,7 @@ class _ubicacionTest extends test {
         $funcion = 'z';
         $controler->inputs = new stdClass();
 
-        $resultado = $inm->base_view_accion_data($controler, $funcion);
+        $resultado = $inm->base_view_accion_data($controler, array(), $funcion);
         $this->assertIsObject($resultado);
         $this->assertNotTrue(errores::$error);
         $this->assertEquals(1,$resultado->base_html->r_modifica->registro['inm_ubicacion_id']);
@@ -253,7 +253,7 @@ class _ubicacionTest extends test {
         $data_row = new stdClass();
 
 
-        $resultado = $inm->keys_selects($controler, $data_row);
+        $resultado = $inm->keys_selects($controler, $data_row, array());
         $this->assertIsArray($resultado);
         $this->assertNotTrue(errores::$error);
         $this->assertEquals(6,$resultado['dp_pais_id']->cols);
@@ -280,7 +280,7 @@ class _ubicacionTest extends test {
 
         $data_row = new stdClass();
 
-        $resultado = $inm->keys_selects_base($controler, $data_row);
+        $resultado = $inm->keys_selects_base($controler, $data_row, array());
         $this->assertIsArray($resultado);
         $this->assertNotTrue(errores::$error);
         $this->assertEquals(-1,$resultado['dp_pais_id']->id_selected);
@@ -313,7 +313,7 @@ class _ubicacionTest extends test {
         $data_row = new stdClass();
 
 
-        $resultado = $inm->keys_selects_view($controler, $data_row);
+        $resultado = $inm->keys_selects_view($controler, $data_row, array());
         $this->assertIsArray($resultado);
         $this->assertNotTrue(errores::$error);
         $this->assertEquals(-1,$resultado['dp_pais_id']->id_selected);
@@ -344,7 +344,7 @@ class _ubicacionTest extends test {
         $controler = new controlador_inm_ubicacion(link: $this->link,paths_conf: $this->paths_conf);
         $controler->row_upd = new stdClass();
 
-        $resultado = $inm->init_alta($controler);
+        $resultado = $inm->init_alta($controler, array());
         $this->assertIsArray($resultado);
         $this->assertNotTrue(errores::$error);
         $this->assertEquals(151,$resultado['dp_pais_id']->id_selected);

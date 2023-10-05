@@ -107,17 +107,17 @@ class inm_ubicacion_html extends html_controler {
         }
 
         $columns_ds = array('dp_colonia_descripcion');
-        $keys_selects = $controler->key_select(cols:6, con_registros: true,filtro:  $filtro, key: 'dp_colonia_postal_id',
-            keys_selects: $keys_selects, id_selected: $registro->dp_colonia_postal_id, label: 'Colonia',
-            columns_ds: $columns_ds, disabled: true);
+        $keys_selects = $controler->key_select(cols:6, con_registros: true,filtro:  $filtro,
+            key: 'dp_colonia_postal_id', keys_selects: $keys_selects, id_selected: $registro->dp_colonia_postal_id,
+            label: 'Colonia', columns_ds: $columns_ds, disabled: true);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
 
         $columns_ds = array('dp_calle_descripcion');
-        $keys_selects = $controler->key_select(cols:12, con_registros: true,filtro:  $filtro, key: 'dp_calle_pertenece_id',
-            keys_selects: $keys_selects, id_selected: $registro->dp_calle_pertenece_id, label: 'Calle',
-            columns_ds: $columns_ds, disabled: true);
+        $keys_selects = $controler->key_select(cols:12, con_registros: true,filtro:  $filtro,
+            key: 'dp_calle_pertenece_id', keys_selects: $keys_selects, id_selected: $registro->dp_calle_pertenece_id,
+            label: 'Calle', columns_ds: $columns_ds, disabled: true);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }

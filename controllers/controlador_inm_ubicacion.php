@@ -10,11 +10,9 @@ namespace gamboamartin\inmuebles\controllers;
 
 use base\controller\init;
 use gamboamartin\errores\errores;
-use gamboamartin\inmuebles\html\inm_comprador_html;
 use gamboamartin\inmuebles\html\inm_concepto_html;
 use gamboamartin\inmuebles\html\inm_ubicacion_html;
 use gamboamartin\inmuebles\html\inm_valuador_html;
-use gamboamartin\inmuebles\models\inm_rel_ubi_comp;
 use gamboamartin\inmuebles\models\inm_ubicacion;
 use gamboamartin\system\_ctl_base;
 use gamboamartin\system\links_menu;
@@ -68,7 +66,7 @@ class controlador_inm_ubicacion extends _ctl_base {
             return $this->retorno_error(mensaje: 'Error al inicializar alta',data:  $r_alta, header: $header,ws:  $ws);
         }
 
-        $keys_selects = (new _ubicacion())->init_alta(controler: $this);
+        $keys_selects = (new _ubicacion())->init_alta(controler: $this,disableds: array());
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al obtener keys_selects', data:  $keys_selects,
                 header: $header,ws:  $ws);
@@ -85,15 +83,18 @@ class controlador_inm_ubicacion extends _ctl_base {
 
 
     /**
-     * @param bool $header
-     * @param bool $ws
+     * Integra una vista para la asignacion de un comprador a una vivienda
+     * @param bool $header Retorna datos via WEB
+     * @param bool $ws Retorna datos vis JSON
      * @return array|stdClass
      */
     final public function asigna_comprador(bool $header, bool $ws = false): array|stdClass
     {
-
-
-        $base_data = (new _ubicacion())->base_view_accion_data(controler: $this,funcion: __FUNCTION__);
+        $this->inputs = new stdClass();
+        $disableds = array('dp_pais_id','dp_estado_id','dp_municipio_id','dp_cp_id','dp_colonia_postal_id',
+            'dp_calle_pertenece_id');
+        $base_data = (new _ubicacion())->base_view_accion_data(controler: $this, disableds: $disableds,
+            funcion: __FUNCTION__);
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al obtener base_data',data:  $base_data,
                 header: $header,ws:  $ws);
@@ -262,7 +263,7 @@ class controlador_inm_ubicacion extends _ctl_base {
         }
 
 
-        $keys_selects = (new _ubicacion())->keys_selects_base(controler: $this,data_row:  $data_row);
+        $keys_selects = (new _ubicacion())->keys_selects_base(controler: $this,data_row:  $data_row, disableds: array());
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al obtener keys_selects', data:  $keys_selects, header: $header,ws:  $ws);
         }
@@ -324,7 +325,8 @@ class controlador_inm_ubicacion extends _ctl_base {
     {
 
 
-        $base_data = (new _ubicacion())->base_view_accion_data(controler: $this,funcion: __FUNCTION__);
+        $base_data = (new _ubicacion())->base_view_accion_data(controler: $this, disableds: array(),
+            funcion: __FUNCTION__);
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al obtener base_data',data:  $base_data, header: $header,ws:  $ws);
         }

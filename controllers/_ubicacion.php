@@ -18,10 +18,11 @@ class _ubicacion{
     /**
      * Obtiene los datos de una vista para acciones de ubicacion
      * @param controlador_inm_ubicacion $controler Controlador en ejecucion
+     * @param array $disableds Agrega el attr disabled al campo seleccionado
      * @return array|stdClass
      * @version 2.145.0
      */
-    private function base_view_accion(controlador_inm_ubicacion $controler): array|stdClass
+    private function base_view_accion(controlador_inm_ubicacion $controler, array $disableds): array|stdClass
     {
         if($controler->registro_id<=0){
             return $this->error->error(mensaje: 'Error registro_id debe ser mayor a 0', data: $controler->registro_id);
@@ -37,7 +38,7 @@ class _ubicacion{
             return $this->error->error(mensaje: 'Error al obtener registro',data:  $data_row);
         }
 
-        $keys_selects = $this->keys_selects_view(controler: $controler,data_row:  $data_row);
+        $keys_selects = $this->keys_selects_view(controler: $controler,data_row:  $data_row, disableds: $disableds);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al obtener keys_selects', data:  $keys_selects);
         }
@@ -52,11 +53,13 @@ class _ubicacion{
     /**
      * Genera los datos necesarios para una vista de ubicacion
      * @param controlador_inm_ubicacion $controler Controlador en proceso
+     * @param array $disableds Anexa attr disabled
      * @param string $funcion Funcion de retorno
      * @return array|stdClass
      * @version 2.147.0
      */
-    final public function base_view_accion_data(controlador_inm_ubicacion $controler, string $funcion): array|stdClass
+    final public function base_view_accion_data(controlador_inm_ubicacion $controler, array $disableds,
+                                                string $funcion): array|stdClass
     {
         if($controler->registro_id<=0){
             return $this->error->error(mensaje: 'Error registro_id debe ser mayor a 0', data: $controler->registro_id);
@@ -70,7 +73,7 @@ class _ubicacion{
                 data: $controler->inputs);
         }
 
-        $base_html = $this->base_view_accion(controler: $controler);
+        $base_html = $this->base_view_accion(controler: $controler,disableds: $disableds);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al obtener base_html', data:  $base_html);
         }
@@ -180,10 +183,11 @@ class _ubicacion{
     /**
      * Inicializa los elementos para un alta
      * @param controlador_inm_ubicacion $controler Controlador en ejecucion
+     * @param array $disableds Atributo disabled
      * @return array
      * @version 2.140.0
      */
-    final public function init_alta(controlador_inm_ubicacion $controler): array
+    final public function init_alta(controlador_inm_ubicacion $controler, array $disableds): array
     {
 
         $modelo_preferido = new inm_ubicacion(link: $controler->link);
@@ -194,7 +198,7 @@ class _ubicacion{
             return $this->error->error(mensaje: 'Error al obtener ids', data:  $data_row);
         }
 
-        $keys_selects = $this->keys_selects_base(controler: $controler,data_row:  $data_row);
+        $keys_selects = $this->keys_selects_base(controler: $controler,data_row:  $data_row, disableds: $disableds);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al obtener keys_selects', data:  $keys_selects);
         }
@@ -255,10 +259,11 @@ class _ubicacion{
      * Integra los selectores con elementos precargados de ids
      * @param controlador_inm_ubicacion $controler Controlador en ejecucion
      * @param stdClass $data_row Datos previos cargados de registro en proceso
+     * @param array $disableds Entidades disabled
      * @return array
      * @version 2.135.0
      */
-    private function keys_selects(controlador_inm_ubicacion $controler, stdClass $data_row): array
+    private function keys_selects(controlador_inm_ubicacion $controler, stdClass $data_row, array $disableds): array
     {
 
 
@@ -328,11 +333,15 @@ class _ubicacion{
         $columns_ds = array('dp_calle_descripcion');
         $filtro = array();
         $filtro['dp_colonia_postal.id'] = $data_row->dp_colonia_postal_id;
-        $keys_selects = $controler->key_select(cols:6, con_registros: true,filtro:  $filtro,
+        $keys_selects = $controler->key_select(cols:12, con_registros: true,filtro:  $filtro,
             key: 'dp_calle_pertenece_id', keys_selects: $keys_selects, id_selected: $data_row->dp_calle_pertenece_id,
             label: 'Calle', columns_ds: $columns_ds);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        }
+
+        foreach ($disableds as $campo_id){
+            $keys_selects[$campo_id]->disabled = true;
         }
 
         return $keys_selects;
@@ -342,12 +351,14 @@ class _ubicacion{
      * Obtiene los parametros de selectores
      * @param controlador_inm_ubicacion $controler Controlador en ejecucion
      * @param stdClass $data_row Datos previos cargados
+     * @param array $disableds Selectores para integrar disabled
      * @return array
      * @version 2.139.1
      */
-    final public function keys_selects_base(controlador_inm_ubicacion $controler, stdClass $data_row): array
+    final public function keys_selects_base(controlador_inm_ubicacion $controler, stdClass $data_row,
+                                            array $disableds): array
     {
-        $keys_selects = $this->keys_selects(controler: $controler,data_row:  $data_row);
+        $keys_selects = $this->keys_selects(controler: $controler,data_row:  $data_row, disableds: $disableds);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al obtener keys_selects', data:  $keys_selects);
         }
@@ -367,12 +378,14 @@ class _ubicacion{
      * Integra los parametros para la generacion de selectores de una ubicacion
      * @param controlador_inm_ubicacion $controler Controlador en ejecucion
      * @param stdClass $data_row Datos de ubicacion
+     * @param array $disableds
      * @return array
      * @version 2.144.0
      */
-    private function keys_selects_view(controlador_inm_ubicacion $controler, stdClass $data_row): array
+    private function keys_selects_view(controlador_inm_ubicacion $controler, stdClass $data_row,
+                                       array $disableds): array
     {
-        $keys_selects = $this->keys_selects_base(controler: $controler,data_row:  $data_row);
+        $keys_selects = $this->keys_selects_base(controler: $controler,data_row:  $data_row, disableds: $disableds);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al obtener keys_selects', data:  $keys_selects);
         }

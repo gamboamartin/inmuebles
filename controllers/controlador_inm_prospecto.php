@@ -447,6 +447,42 @@ class controlador_inm_prospecto extends _ctl_formato {
             return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
 
+        $keys_selects = (new init())->key_select_txt(cols: 6,key: 'nss',
+            keys_selects:$keys_selects, place_holder: 'NSS', required: false);
+        if(errores::$error){
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        }
+
+        $keys_selects = (new init())->key_select_txt(cols: 6,key: 'curp',
+            keys_selects:$keys_selects, place_holder: 'CURP', required: false);
+        if(errores::$error){
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        }
+
+        $keys_selects = (new init())->key_select_txt(cols: 12,key: 'descuento_pension_alimenticia_dh',
+            keys_selects:$keys_selects, place_holder: 'Desc Pension Alimenticia Derecho Habiente', required: false);
+        if(errores::$error){
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        }
+
+        $keys_selects = (new init())->key_select_txt(cols: 12,key: 'descuento_pension_alimenticia_fc',
+            keys_selects:$keys_selects, place_holder: 'Desc Pension Alimenticia Co Acreditado', required: false);
+        if(errores::$error){
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        }
+
+        $keys_selects = (new init())->key_select_txt(cols: 12,key: 'monto_credito_solicitado_dh',
+            keys_selects:$keys_selects, place_holder: 'Monto Precalificacion ', required: false);
+        if(errores::$error){
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        }
+
+        $keys_selects = (new init())->key_select_txt(cols: 12,key: 'monto_ahorro_voluntario',
+            keys_selects:$keys_selects, place_holder: 'Monto Ahorro Voluntario ', required: false);
+        if(errores::$error){
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        }
+
         return $keys_selects;
     }
 
