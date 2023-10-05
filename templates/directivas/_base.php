@@ -3,6 +3,7 @@ namespace gamboamartin\inmuebles\html;
 
 use gamboamartin\errores\errores;
 use gamboamartin\inmuebles\controllers\controlador_inm_comprador;
+use gamboamartin\inmuebles\controllers\controlador_inm_prospecto;
 use gamboamartin\inmuebles\models\_inm_comprador;
 use gamboamartin\system\html_controler;
 use html\dp_calle_pertenece_html;
@@ -282,7 +283,26 @@ class _base extends html_controler{
         return $dp_pais_id;
     }
 
-    private function header_frontend(controlador_inm_comprador $controler,int $n_apartado, string $tag_header){
+    final public function genera_headers(controlador_inm_comprador|controlador_inm_prospecto $controler,
+                                         array $headers){
+        $data = array();
+        foreach ($headers as $n_apartado=>$tag_header){
+
+
+            $header = $this->header_frontend(controler: $controler,n_apartado:  $n_apartado,tag_header:  $tag_header);
+
+            if(errores::$error){
+                return $this->error->error(mensaje: 'Error al generar header',data:  $header);
+            }
+
+            $data[] = $header;
+
+        }
+        return $data;
+    }
+
+    private function header_frontend(controlador_inm_comprador|controlador_inm_prospecto $controler,
+                                     int $n_apartado, string $tag_header){
         $id_css_button = "collapse_a$n_apartado";
         $key_header = "apartado_$n_apartado";
 
@@ -315,19 +335,12 @@ class _base extends html_controler{
             return $this->error->error(mensaje: 'Error al generar headers base',data:  $headers);
         }
 
-        $data = array();
-        foreach ($headers as $n_apartado=>$tag_header){
-
-
-            $header = $this->header_frontend(controler: $controler,n_apartado:  $n_apartado,tag_header:  $tag_header);
-
-            if(errores::$error){
-                return $this->error->error(mensaje: 'Error al generar header',data:  $header);
-            }
-
-            $data[] = $header;
-
+        $data = $this->genera_headers(controler: $controler,headers:  $headers);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al generar headers',data:  $data);
         }
+
+
         return $data;
     }
 

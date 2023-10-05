@@ -248,10 +248,20 @@ class inm_ubicacion_html extends html_controler {
      * @param controlador_inm_ubicacion $controler Controlador en proceso
      * @param string $funcion Funcion de parametros de retorno para GET
      * @return array|stdClass
+     * @version 2.146.1
      */
     final public function inputs_base_ubicacion(controlador_inm_ubicacion $controler,
                                                 string $funcion): array|stdClass
     {
+        $funcion = trim($funcion);
+        if($funcion === ''){
+            return $this->error->error(mensaje: 'Error funcion esta vacio',data:  $funcion);
+        }
+        if(is_array($controler->inputs)){
+            return $this->error->error(mensaje: 'Error $controler->inputs no esta inicializado',
+                data: $controler->inputs);
+        }
+
         $inm_ubicacion_id = $this->hidden(name:'inm_ubicacion_id',value: $controler->registro_id);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al in_registro_id',data:  $inm_ubicacion_id);

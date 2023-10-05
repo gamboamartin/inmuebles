@@ -13,6 +13,7 @@ use gamboamartin\comercial\models\com_agente;
 use gamboamartin\comercial\models\com_cliente;
 use gamboamartin\comercial\models\com_prospecto;
 use gamboamartin\errores\errores;
+use gamboamartin\inmuebles\html\_base;
 use gamboamartin\inmuebles\html\inm_prospecto_html;
 use gamboamartin\inmuebles\models\inm_comprador;
 use gamboamartin\inmuebles\models\inm_prospecto;
@@ -26,6 +27,8 @@ use Throwable;
 
 class controlador_inm_prospecto extends _ctl_formato {
 
+    public stdClass $header_frontend;
+    public inm_prospecto_html $html_entidad;
     public function __construct(PDO      $link, html $html = new \gamboamartin\template_1\html(),
                                 stdClass $paths_conf = new stdClass())
     {
@@ -42,6 +45,12 @@ class controlador_inm_prospecto extends _ctl_formato {
 
         parent::__construct(html:$html_, link: $link,modelo:  $modelo, obj_link: $obj_link, datatables: $datatables,
             paths_conf: $paths_conf);
+
+        $this->html_entidad = $html_;
+
+        $this->header_frontend = new stdClass();
+
+
     }
 
     public function alta(bool $header, bool $ws = false): array|string
@@ -390,6 +399,42 @@ class controlador_inm_prospecto extends _ctl_formato {
             return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
 
+        $keys_selects = (new init())->key_select_txt(cols: 12,key: 'nombre_empresa_patron',
+            keys_selects:$keys_selects, place_holder: 'Nombre Empresa Patron', required: false);
+        if(errores::$error){
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        }
+
+        $keys_selects = (new init())->key_select_txt(cols: 12,key: 'nrp_nep',
+            keys_selects:$keys_selects, place_holder: 'Numero de Registro Patronal', required: false);
+        if(errores::$error){
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        }
+
+        $keys_selects = (new init())->key_select_txt(cols: 12,key: 'lada_nep',
+            keys_selects:$keys_selects, place_holder: 'Lada Tel Empresa', required: false);
+        if(errores::$error){
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        }
+
+        $keys_selects = (new init())->key_select_txt(cols: 12,key: 'numero_nep',
+            keys_selects:$keys_selects, place_holder: 'Numero Tel Empresa', required: false);
+        if(errores::$error){
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        }
+
+        $keys_selects = (new init())->key_select_txt(cols: 12,key: 'extension_nep',
+            keys_selects:$keys_selects, place_holder: 'Extension Empresa', required: false);
+        if(errores::$error){
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        }
+
+        $keys_selects = (new init())->key_select_txt(cols: 12,key: 'rfc',
+            keys_selects:$keys_selects, place_holder: 'RFC', required: false);
+        if(errores::$error){
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        }
+
         return $keys_selects;
     }
 
@@ -451,6 +496,18 @@ class controlador_inm_prospecto extends _ctl_formato {
             return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects, header: $header,ws:  $ws);
         }
 
+        $keys_selects = $this->key_select(cols:6, con_registros: true,filtro:  array(), key: 'inm_tipo_discapacidad_id',
+            keys_selects:$keys_selects, id_selected: $this->registro['inm_tipo_discapacidad_id'], label: 'Tipo de Discapacidad');
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects, header: $header,ws:  $ws);
+        }
+
+        $keys_selects = $this->key_select(cols:6, con_registros: true,filtro:  array(), key: 'inm_persona_discapacidad_id',
+            keys_selects:$keys_selects, id_selected: $this->registro['inm_persona_discapacidad_id'], label: 'Persona de Discapacidad');
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects, header: $header,ws:  $ws);
+        }
+
         $radios = (new \gamboamartin\inmuebles\models\_inm_comprador())->radios_chk(controler: $this);
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al integrar radios',data:  $radios, header: $header,ws:  $ws);
@@ -462,6 +519,21 @@ class controlador_inm_prospecto extends _ctl_formato {
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al integrar base',data:  $base, header: $header,ws:  $ws);
         }
+
+        $headers = array();
+        $headers['1'] = '1. DATOS PERSONALES';
+        $headers['2'] = '2. DATOS DE CONTACTO';
+        $headers['3'] = '3. DOMICILIO';
+        $headers['4'] = '4. CREDITO';
+        $headers['5'] = '5. MONTO CREDITO';
+        $headers['6'] = '6. DISCAPACIDAD';
+        $headers['7'] = '7. DATOS EMPRESA TRABAJADOR';
+
+        $headers = (new _base(html: $this->html_base))->genera_headers(controler: $this,headers:  $headers);
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al generar headers',data:  $headers, header: $header,ws:  $ws);
+        }
+
 
         return $r_modifica;
     }

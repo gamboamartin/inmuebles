@@ -8,6 +8,7 @@ use gamboamartin\inmuebles\controllers\controlador_inm_attr_tipo_credito;
 use gamboamartin\inmuebles\controllers\controlador_inm_comprador;
 use gamboamartin\inmuebles\controllers\controlador_inm_plazo_credito_sc;
 use gamboamartin\inmuebles\controllers\controlador_inm_producto_infonavit;
+use gamboamartin\inmuebles\controllers\controlador_inm_ubicacion;
 use gamboamartin\inmuebles\html\inm_ubicacion_html;
 use gamboamartin\inmuebles\models\_inm_comprador;
 use gamboamartin\inmuebles\models\_inm_ubicaciones;
@@ -122,6 +123,30 @@ class inm_ubicacion_htmlTest extends test {
         $resultado = $html->keys_select_dom($keys_selects);
         $this->assertIsArray($resultado);
         $this->assertNotTrue(errores::$error);
+        errores::$error = false;
+    }
+
+    public function test_inputs_base_ubicacion(): void
+    {
+        errores::$error = false;
+
+        $_GET['seccion'] = 'inm_producto_infonavit';
+        $_GET['accion'] = 'lista';
+        $_SESSION['grupo_id'] = 1;
+        $_SESSION['usuario_id'] = 2;
+        $_GET['session_id'] = '1';
+
+        $html_ = new \gamboamartin\template_1\html();
+        $html = new inm_ubicacion_html($html_);
+        //$_inm = new liberator($_inm);
+
+        $controler = new controlador_inm_ubicacion(link: $this->link, paths_conf: $this->paths_conf);
+        $funcion = 'a';
+        $controler->inputs = new stdClass();
+        $resultado = $html->inputs_base_ubicacion($controler, $funcion);
+        $this->assertIsObject($resultado);
+        $this->assertNotTrue(errores::$error);
+        $this->assertStringContainsStringIgnoringCase("<input type='hidden' name='id_retorno' value='-1'>",$resultado->id_retorno);
         errores::$error = false;
     }
 
