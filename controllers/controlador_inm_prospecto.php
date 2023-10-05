@@ -9,6 +9,7 @@
 namespace gamboamartin\inmuebles\controllers;
 
 use base\controller\init;
+use gamboamartin\administrador\models\adm_usuario;
 use gamboamartin\comercial\models\com_agente;
 use gamboamartin\comercial\models\com_cliente;
 use gamboamartin\comercial\models\com_prospecto;
@@ -496,10 +497,24 @@ class controlador_inm_prospecto extends _ctl_formato {
                 mensaje: 'Error al generar salida de template',data:  $r_modifica,header: $header,ws: $ws);
         }
 
+        $adm_usuario = (new adm_usuario(link: $this->link))->registro(registro_id: $_SESSION['usuario_id'],
+            columnas: array('adm_grupo_root'));
+        if(errores::$error){
+            $error = (new errores())->error(mensaje: 'Error al obtener adm_usuario ',data:  $adm_usuario);
+            print_r($error);
+            exit;
+        }
+
+
+        $filtro = array();
+        if($adm_usuario['adm_grupo_root'] === 'inactivo'){
+            $filtro['adm_usuario.id'] = $_SESSION['usuario_id'];
+        }
+
 
         $keys_selects = array();
 
-        $keys_selects = $this->key_select(cols:12, con_registros: true,filtro:  array(), key: 'com_agente_id',
+        $keys_selects = $this->key_select(cols:12, con_registros: true,filtro:  $filtro, key: 'com_agente_id',
             keys_selects:$keys_selects, id_selected: $this->registro['com_agente_id'], label: 'Agente');
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects, header: $header,ws:  $ws);
@@ -616,6 +631,7 @@ class controlador_inm_prospecto extends _ctl_formato {
         if($this->registro['inm_prospecto_rfc'] === ''){
             $this->row_upd->rfc = 'XAXX010101000';
         }
+
 
         $radios = (new \gamboamartin\inmuebles\models\_inm_comprador())->radios_chk(controler: $this);
         if(errores::$error){

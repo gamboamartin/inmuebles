@@ -28,7 +28,8 @@ class inm_prospecto extends _modelo_parent{
         $columnas_extra= array();
 
 
-        $adm_usuario = (new adm_usuario(link: $link))->registro(registro_id: $_SESSION['usuario_id'],columnas: array('adm_grupo_root'));
+        $adm_usuario = (new adm_usuario(link: $link))->registro(registro_id: $_SESSION['usuario_id'],
+            columnas: array('adm_grupo_root'));
         if(errores::$error){
             $error = (new errores())->error(mensaje: 'Error al obtener adm_usuario ',data:  $adm_usuario);
             print_r($error);
