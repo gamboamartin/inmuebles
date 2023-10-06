@@ -344,16 +344,32 @@ class inm_ubicacion_html extends html_controler {
     }
 
     /**
-     * @param string $monto
+     * Da formato de moneda mexicana a un flotante
+     * @param string|float|int $monto Monto a ajustar
+     * @param string $locale Formato de moneda dependiendo pais var GLOBAL php LOCALES O LOCATIONS
      * @return bool|array|string
+     * @version 2.159.1
      */
-    private function format_moneda_mx(string $monto): bool|array|string
+    private function format_moneda_mx(string|float|int $monto, string $locale = 'es_MX'): bool|array|string
     {
+        $monto = trim($monto);
         if($monto === ''){
             return $this->error->error(mensaje: 'Error monto no puede ser vacio',data:  $monto);
         }
 
-        $amount = new NumberFormatter( 'es_MX', NumberFormatter::CURRENCY);
+        $monto = str_replace(',', '', $monto);
+        $monto = str_replace("'", '', $monto);
+        $monto = str_replace("$", '', $monto);
+
+        if($monto === ''){
+            return $this->error->error(mensaje: 'Error monto no puede ser vacio',data:  $monto);
+        }
+
+        if(!is_numeric($monto)){
+            return $this->error->error(mensaje: 'Error monto debe ser un numero',data:  $monto);
+        }
+
+        $amount = new NumberFormatter( $locale, NumberFormatter::CURRENCY);
 
         return $amount->format((float)$monto);
     }
