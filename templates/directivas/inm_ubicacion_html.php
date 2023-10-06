@@ -17,6 +17,16 @@ use stdClass;
 class inm_ubicacion_html extends html_controler {
 
 
+    private function ajusta_registros(array $acciones_grupo, array $arreglo_costos, string $key, array $registros, array $row){
+        $links = $this->links(acciones_grupo: $acciones_grupo,arreglo_costos:  $arreglo_costos,key:  $key,row:  $row);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al integrar link', data: $links);
+        }
+
+        $botones['acciones'] = $links;
+        $registros[$key] = array_merge($row,$botones);
+        return $registros;
+    }
     final public function base_costos(controlador_inm_ubicacion $controler, string $funcion){
         $base = $this->base_inm_ubicacion_upd(controler: $controler);
         if(errores::$error){
@@ -280,30 +290,7 @@ class inm_ubicacion_html extends html_controler {
             return $this->error->error(mensaje: 'Error al obtener acciones', data: $acciones_grupo);
         }
 
-        $registros = $r_inm_costos->registros;
-        $arreglo_costos = (array)$r_inm_costos;
-        foreach ($arreglo_costos['registros'] as $key => $row){
-
-            $links = array();
-            foreach ($acciones_grupo as $indice=>$adm_accion_grupo){
-                $registro_id = $row['inm_costo_id'];
-
-                $data_link = (new datatables())->data_link(adm_accion_grupo: $adm_accion_grupo,
-                    data_result: $arreglo_costos, html_base: $this->html_base, key: $key,registro_id:  $registro_id);
-
-                if(errores::$error){
-                    return $this->error->error(mensaje: 'Error al obtener data para link', data: $data_link);
-                }
-
-                $links[$data_link->accion] = $data_link->link_con_id;
-            }
-
-            $botones['acciones'] = $links;
-            $registros[$key] = array_merge($row,$botones);
-        }
-
-        $registros = $this->format_moneda_mx_arreglo(registros: $registros,
-            campo_integrar: 'inm_costo_monto');
+        $registros = $this->registros(acciones_grupo: $acciones_grupo,r_inm_costos:  $r_inm_costos);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al maquetar montos moneda',data:  $registros);
         }
@@ -325,17 +312,20 @@ class inm_ubicacion_html extends html_controler {
         return $controler;
     }
 
-    public function format_moneda_mx_arreglo(array $registros, string $campo_integrar){
+    private function format_moneda_mx_arreglo(array $registros, string $campo_integrar){
         $registros_format = array();
         foreach ($registros as $campo){
             if(!isset($campo[$campo_integrar])){
                 return $this->error->error(mensaje: 'Error no existe indice de arreglo',data:  $campo);
             }
 
-            $campo[$campo_integrar] = $this->format_moneda_mx(monto: $campo[$campo_integrar]);
+            $monto = trim($campo[$campo_integrar]);
+
+            $valor_moneda = $this->format_moneda_mx(monto: $monto);
             if(errores::$error){
-                return $this->error->error(mensaje: 'Error formatear monto',data:  $campo);
+                return $this->error->error(mensaje: 'Error formatear monto',data:  $valor_moneda);
             }
+            $campo[$campo_integrar] = $valor_moneda;
 
             $registros_format[] = $campo;
         }
@@ -347,10 +337,10 @@ class inm_ubicacion_html extends html_controler {
      * Da formato de moneda mexicana a un flotante
      * @param string|float|int $monto Monto a ajustar
      * @param string $locale Formato de moneda dependiendo pais var GLOBAL php LOCALES O LOCATIONS
-     * @return bool|array|string
+     * @return array|string
      * @version 2.159.1
      */
-    private function format_moneda_mx(string|float|int $monto, string $locale = 'es_MX'): bool|array|string
+    private function format_moneda_mx(string|float|int $monto, string $locale = 'es_MX'): array|string
     {
         $monto = trim($monto);
         if($monto === ''){
@@ -371,7 +361,12 @@ class inm_ubicacion_html extends html_controler {
 
         $amount = new NumberFormatter( $locale, NumberFormatter::CURRENCY);
 
-        return $amount->format((float)$monto);
+        $monto_ajustado = $amount->format((float)$monto);
+        if(is_bool($monto_ajustado) && !$monto_ajustado){
+            return $this->error->error(mensaje: 'Error al dar formato de moneda',data:  $monto);
+        }
+
+        return $monto_ajustado;
     }
 
     /**
@@ -413,6 +408,32 @@ class inm_ubicacion_html extends html_controler {
         }
 
         return $inputs;
+    }
+
+    /**
+     * Integra un link con la accion de usuario
+     * @param array $adm_accion_grupo permiso
+     * @param array $arreglo_costos Datos de costos
+     * @param string $key Key a integrar
+     * @param array $links Links previos
+     * @param array $row Registro en proceso
+     * @return array
+     */
+    private function integra_link(array $adm_accion_grupo, array $arreglo_costos, string $key, array $links,
+                                  array $row): array
+    {
+        $registro_id = $row['inm_costo_id'];
+
+        $data_link = (new datatables())->data_link(adm_accion_grupo: $adm_accion_grupo,
+            data_result: $arreglo_costos, html_base: $this->html_base, key: $key,registro_id:  $registro_id);
+
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al obtener data para link', data: $data_link);
+        }
+
+        $links[$data_link->accion] = $data_link->link_con_id;
+
+        return $links;
     }
 
     /**
@@ -464,6 +485,45 @@ class inm_ubicacion_html extends html_controler {
             return $this->error->error(mensaje: 'Error al integrar keys_selects',data:  $keys_selects);
         }
         return $keys_selects;
+    }
+
+    private function links(array $acciones_grupo, array $arreglo_costos, string $key, array $row){
+        $links = array();
+        foreach ($acciones_grupo as $indice=>$adm_accion_grupo){
+            $links = $this->integra_link(adm_accion_grupo: $adm_accion_grupo,arreglo_costos:  $arreglo_costos,
+                key:  $key,links:  $links,row:  $row);
+            if(errores::$error){
+                return $this->error->error(mensaje: 'Error al integrar link', data: $links);
+            }
+        }
+        return $links;
+    }
+
+    private function registros(array $acciones_grupo, stdClass $r_inm_costos){
+        $registros = $this->registros_con_link(acciones_grupo: $acciones_grupo,r_inm_costos:  $r_inm_costos);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al ajustar registros link', data: $registros);
+        }
+
+        $registros = $this->format_moneda_mx_arreglo(registros: $registros, campo_integrar: 'inm_costo_monto');
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al maquetar montos moneda',data:  $registros);
+        }
+
+        return $registros;
+    }
+
+    private function registros_con_link(array $acciones_grupo, stdClass $r_inm_costos){
+        $registros = $r_inm_costos->registros;
+        $arreglo_costos = (array)$r_inm_costos;
+        foreach ($arreglo_costos['registros'] as $key => $row){
+            $registros = $this->ajusta_registros(acciones_grupo: $acciones_grupo,arreglo_costos:  $arreglo_costos,
+                key:  $key,registros:  $registros,row:  $row);
+            if(errores::$error){
+                return $this->error->error(mensaje: 'Error al ajustar registros link', data: $registros);
+            }
+        }
+        return $registros;
     }
 
     /**

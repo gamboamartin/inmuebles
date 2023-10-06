@@ -226,7 +226,7 @@ class inm_ubicacion_htmlTest extends test {
 
         $html_ = new \gamboamartin\template_1\html();
         $html = new inm_ubicacion_html($html_);
-        //$_inm = new liberator($_inm);
+        $html = new liberator($html);
 
         $registros = array();
         $registros[] = array();

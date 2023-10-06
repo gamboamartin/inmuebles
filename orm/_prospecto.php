@@ -107,6 +107,10 @@ class _prospecto{
         return $registro;
     }
 
+    /**
+     * @param array $registro
+     * @return array
+     */
     private function init_data_fiscal(array $registro): array
     {
         if($registro['nss'] === ''){
@@ -210,13 +214,24 @@ class _prospecto{
     }
 
     /**
-     * @param array $keys
-     * @param array $registro
+     * Inicializa los keys de un registro de prospecto
+     * @param array $keys Keys inicializar
+     * @param array $registro Registro en proceso
      * @return array
+     * @version 2.162.0
      */
     private function init_keys(array $keys, array $registro): array
     {
         foreach ($keys as $key){
+            $key = trim($key);
+            if($key === ''){
+                return $this->error->error(mensaje: 'Error key esta vacio',data:  $registro);
+            }
+            $valida = (new validacion())->valida_texto_pep_8(txt: $key);
+            if(errores::$error){
+                return $this->error->error(mensaje: 'Error al validar key',data:  $valida);
+            }
+
             $registro = $this->init_key(key:  $key,registro:  $registro);
             if(errores::$error){
                 return $this->error->error(mensaje: 'Error al inicializar key registro',data:  $registro);
@@ -227,7 +242,8 @@ class _prospecto{
 
 
     /**
-     * @param array $registro
+     * Inicializa los keys como vacios
+     * @param array $registro Registro en proceso
      * @return array
      */
     private function init_keys_sin_data(array $registro): array

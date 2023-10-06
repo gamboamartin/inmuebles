@@ -64,6 +64,32 @@ class _prospectoTest extends test {
 
     }
 
+    public function test_init_keys(): void
+    {
+        errores::$error = false;
+
+        $_GET['seccion'] = 'inm_producto_infonavit';
+        $_GET['accion'] = 'lista';
+        $_SESSION['grupo_id'] = 1;
+        $_SESSION['usuario_id'] = 2;
+        $_GET['session_id'] = '1';
+
+
+        $_pr = new _prospecto();
+        $_pr = new liberator($_pr);
+
+        $keys = array();
+        $registro = array();
+        $keys[] = 'a';
+        $resultado = $_pr->init_keys(keys: $keys,registro:  $registro);
+        $this->assertIsArray($resultado);
+        $this->assertNotTrue(errores::$error);
+        $this->assertEquals('',$resultado['a']);
+
+
+        errores::$error = false;
+    }
+
 
 
 
