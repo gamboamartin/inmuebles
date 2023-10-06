@@ -6,7 +6,6 @@ use base\orm\_modelo_parent;
 use gamboamartin\administrador\models\adm_usuario;
 use gamboamartin\comercial\models\com_prospecto;
 use gamboamartin\errores\errores;
-use gamboamartin\inmuebles\controllers\_ubicacion;
 use PDO;
 use stdClass;
 
@@ -20,10 +19,10 @@ class inm_prospecto extends _modelo_parent{
             'inm_institucion_hipotecaria'=>$tabla,'com_agente'=>'com_prospecto','com_tipo_prospecto'=>'com_prospecto',
             'adm_usuario'=>'com_agente','dp_calle_pertenece'=>$tabla,'dp_colonia_postal'=>'dp_calle_pertenece',
             'dp_calle'=>'dp_calle_pertenece','dp_colonia'=>'dp_colonia_postal','dp_cp'=>'dp_colonia_postal',
-            'dp_municipio'=>'dp_cp','dp_estado'=>'dp_municipio','dp_pais'=>'dp_estado');
+            'dp_municipio'=>'dp_cp','dp_estado'=>'dp_municipio','dp_pais'=>'dp_estado','inm_sindicato'=>$tabla);
 
         $campos_obligatorios = array('com_prospecto_id','razon_social','dp_calle_pertenece_id','rfc',
-            'numero_exterior','numero_interior');
+            'numero_exterior','numero_interior','inm_sindicato_id');
 
         $columnas_extra= array();
 
@@ -45,7 +44,7 @@ class inm_prospecto extends _modelo_parent{
         $renombres = array();
 
         $atributos_criticos = array('com_prospecto_id','razon_social','dp_calle_pertenece_id','rfc',
-            'numero_exterior','numero_interior');
+            'numero_exterior','numero_interior','inm_sindicato_id');
 
 
         $tipo_campos= array();
@@ -70,112 +69,11 @@ class inm_prospecto extends _modelo_parent{
             return $this->error->error(mensaje: 'Error al validar registro',data:  $valida);
         }
 
-
-        $keys = array('apellido_materno','nss','curp','rfc');
-
-        foreach ($keys as $key){
-            if(!isset($this->registro[$key])){
-                $this->registro[$key] = '';
-            }
-        }
-
-        if($this->registro['nss'] === ''){
-            $this->registro['nss'] = '99999999999';
-        }
-        if($this->registro['curp'] === ''){
-            $this->registro['curp'] = 'XEXX010101HNEXXXA4';
-        }
-        if($this->registro['rfc'] === ''){
-            $this->registro['rfc'] = 'XAXX010101000';
-        }
-
-        if(!isset($this->registro['descripcion'])){
-            $descripcion = (new _base_paquete())->descripcion(registro: $this->registro);
-            if(errores::$error){
-                return $this->error->error(mensaje: 'Error al obtener descripcion',data:  $descripcion);
-            }
-            $this->registro['descripcion'] = $descripcion;
-        }
-
-        if(!isset($this->registro['dp_calle_pertenece_id'])){
-            $dp_calle_pertenece_id = $this->id_preferido_detalle(entidad_preferida: 'dp_calle_pertenece');
-            if(errores::$error){
-                return $this->error->error(mensaje: 'Error al obtener dp_calle_pertenece_id',data:  $dp_calle_pertenece_id);
-            }
-            if($dp_calle_pertenece_id === -1){
-                $dp_calle_pertenece_id = 100;
-            }
-            $this->registro['dp_calle_pertenece_id'] = $dp_calle_pertenece_id;
-        }
-
-        if(!isset($this->registro['numero_exterior'])){
-            $this->registro['numero_exterior'] = 'SN';
-        }
-        if(!isset($this->registro['numero_interior'])){
-            $this->registro['numero_interior'] = 'SN';
-        }
-
-
-        $com_prospecto_ins['nombre'] = $this->registro['nombre'];
-        $com_prospecto_ins['apellido_paterno'] = $this->registro['apellido_paterno'];
-        $com_prospecto_ins['apellido_materno'] = $this->registro['apellido_materno'];
-        $com_prospecto_ins['telefono'] = $this->registro['lada_com'].$this->registro['numero_com'];
-        $com_prospecto_ins['correo'] = $this->registro['correo_com'];
-        $com_prospecto_ins['razon_social'] = $this->registro['razon_social'];
-        $com_prospecto_ins['com_agente_id'] = $this->registro['com_agente_id'];
-        $com_prospecto_ins['com_tipo_prospecto_id'] = $this->registro['com_tipo_prospecto_id'];
-
-        $r_com_prospecto = (new com_prospecto(link: $this->link))->alta_registro(registro: $com_prospecto_ins);
+        $registro = (new _prospecto())->previo_alta(modelo: $this, registro: $this->registro);
         if(errores::$error){
-            return $this->error->error(mensaje: 'Error al insertar com_prospecto',data:  $r_com_prospecto);
+            return $this->error->error(mensaje: 'Error al maquetar row',data:  $registro);
         }
-
-        $this->registro['com_prospecto_id'] = $r_com_prospecto->registro_id;
-
-        $entidades = array('inm_producto_infonavit','inm_attr_tipo_credito','inm_destino_credito',
-            'inm_plazo_credito_sc','inm_tipo_discapacidad','inm_persona_discapacidad','inm_estado_civil',
-            'inm_institucion_hipotecaria');
-        $modelo_preferido = (new inm_prospecto(link: $this->link));
-
-        $data = (new _ubicacion())->integra_ids_preferidos(data: new stdClass(),entidades:  $entidades,
-            modelo_preferido:  $modelo_preferido);
-        if(errores::$error){
-            return $this->error->error(mensaje: 'Error al obtener datos data',data:  $data);
-        }
-
-        foreach ($entidades as $entidad){
-            $key_id = $entidad.'_id';
-            if(!isset($this->registro[$key_id])){
-                $this->registro[$key_id] = $data->$key_id;
-            }
-        }
-
-
-        if((int)$this->registro['inm_producto_infonavit_id'] === -1){
-            $this->registro['inm_producto_infonavit_id'] = 6;
-        }
-        if((int)$this->registro['inm_attr_tipo_credito_id'] === -1){
-            $this->registro['inm_attr_tipo_credito_id'] = 8;
-        }
-        if((int)$this->registro['inm_destino_credito_id'] === -1){
-            $this->registro['inm_destino_credito_id'] = 8;
-        }
-        if((int)$this->registro['inm_plazo_credito_sc_id'] === -1){
-            $this->registro['inm_plazo_credito_sc_id'] = 7;
-        }
-        if((int)$this->registro['inm_tipo_discapacidad_id'] === -1){
-            $this->registro['inm_tipo_discapacidad_id'] = 5;
-        }
-        if((int)$this->registro['inm_persona_discapacidad_id'] === -1){
-            $this->registro['inm_persona_discapacidad_id'] = 6;
-        }
-        if((int)$this->registro['inm_estado_civil_id'] === -1){
-            $this->registro['inm_estado_civil_id'] = 5;
-        }
-        if((int)$this->registro['inm_institucion_hipotecaria_id'] === -1){
-            $this->registro['inm_institucion_hipotecaria_id'] = 2;
-        }
-
+        $this->registro = $registro;
 
 
         $r_alta_bd = parent::alta_bd(keys_integra_ds: $keys_integra_ds); // TODO: Change the autogenerated stub
