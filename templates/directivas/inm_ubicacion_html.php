@@ -199,13 +199,33 @@ class inm_ubicacion_html extends html_controler {
      * @param controlador_inm_ubicacion $controler Controlador en proceso
      * @param string $funcion Funcion de retorno
      * @return array|stdClass
+     * @version 2.156.1
      */
     private function data_form(controlador_inm_ubicacion $controler, string $funcion): array|stdClass
     {
+        $funcion = trim($funcion);
+        if($funcion === ''){
+            return $this->error->error(mensaje: 'Error funcion esta vacio',data:  $funcion);
+        }
+        if(is_array($controler->inputs)){
+            return $this->error->error(mensaje: 'Error $controler->inputs no esta inicializado',
+                data: $controler->inputs);
+        }
+
         $inputs = $this->inputs_base_ubicacion(controler: $controler,funcion: $funcion);
 
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al obtener inputs_hidden',data:  $inputs);
+        }
+
+        $keys = array('dp_estado_id','dp_municipio_id','dp_cp_id','dp_colonia_postal_id','dp_calle_pertenece_id',
+            'numero_exterior','numero_interior','manzana','lote','inm_ubicacion_id','seccion_retorno',
+            'btn_action_next','id_retorno');
+
+        $valida = $this->validacion->valida_existencia_keys(keys: $keys, registro: $controler->inputs,
+            valida_vacio: false);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al validar inputs', data: $valida);
         }
 
         $form_ubicacion = $this->form_ubicacion(controlador: $controler);
