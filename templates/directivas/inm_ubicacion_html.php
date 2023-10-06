@@ -10,6 +10,7 @@ use gamboamartin\inmuebles\models\inm_ubicacion;
 use gamboamartin\system\datatables;
 use gamboamartin\system\html_controler;
 use gamboamartin\template\directivas;
+use NumberFormatter;
 use PDO;
 use stdClass;
 
@@ -342,13 +343,17 @@ class inm_ubicacion_html extends html_controler {
         return $registros_format;
     }
 
-    public function format_moneda_mx(string $monto): bool|array|string
+    /**
+     * @param string $monto
+     * @return bool|array|string
+     */
+    private function format_moneda_mx(string $monto): bool|array|string
     {
         if($monto === ''){
             return $this->error->error(mensaje: 'Error monto no puede ser vacio',data:  $monto);
         }
 
-        $amount = new \NumberFormatter( 'es_MX', \NumberFormatter::CURRENCY);
+        $amount = new NumberFormatter( 'es_MX', NumberFormatter::CURRENCY);
 
         return $amount->format((float)$monto);
     }

@@ -121,7 +121,8 @@ class controlador_inm_ubicacion extends _ctl_base {
         $inm_concepto_id = (new inm_concepto_html(html: $this->html_base))->select_inm_concepto_id(
             cols: 12,con_registros: true, id_selected: -1,link:  $this->link);
         if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al integrar inm_concepto_id',data:  $inm_concepto_id, header: $header,ws:  $ws);
+            return $this->retorno_error(mensaje: 'Error al integrar inm_concepto_id',data:  $inm_concepto_id,
+                header: $header,ws:  $ws);
         }
 
         $this->inputs->inm_concepto_id = $inm_concepto_id;
