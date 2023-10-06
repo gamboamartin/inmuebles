@@ -137,7 +137,6 @@ class _ubicacion{
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al obtener entidades',data:  $entidades);
         }
-
         $data = $this->integra_ids_preferidos(data: new stdClass(),entidades:  $entidades,
             modelo_preferido:  $modelo_preferido);
         if(errores::$error){

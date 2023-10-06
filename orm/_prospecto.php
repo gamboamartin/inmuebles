@@ -5,6 +5,7 @@ use base\orm\modelo;
 use gamboamartin\comercial\models\com_prospecto;
 use gamboamartin\errores\errores;
 use gamboamartin\inmuebles\controllers\_ubicacion;
+use gamboamartin\validacion\validacion;
 use PDO;
 use stdClass;
 
@@ -140,9 +141,19 @@ class _prospecto{
      * @param string $key Key a inicializar
      * @param array $registro Registro
      * @return array
+     * @version 2.261.0
      */
     private function init_key(string $key, array $registro): array
     {
+        $key = trim($key);
+        if($key === ''){
+            return $this->error->error(mensaje: 'Error key esta vacio',data:  $registro);
+        }
+        $valida = (new validacion())->valida_texto_pep_8(txt: $key);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al validar key',data:  $valida);
+        }
+
         if(!isset($registro[$key])){
             $registro[$key] = '';
         }
@@ -184,6 +195,9 @@ class _prospecto{
         }
         if((int)$registro['inm_institucion_hipotecaria_id'] === -1){
             $registro['inm_institucion_hipotecaria_id'] = 2;
+        }
+        if((int)$registro['inm_sindicato_id'] === -1){
+            $registro['inm_sindicato_id'] = 1;
         }
         return $registro;
     }
@@ -253,7 +267,7 @@ class _prospecto{
     private function integra_entidades_mayor_uso(PDO $link, array $registro){
         $entidades = array('inm_producto_infonavit','inm_attr_tipo_credito','inm_destino_credito',
             'inm_plazo_credito_sc','inm_tipo_discapacidad','inm_persona_discapacidad','inm_estado_civil',
-            'inm_institucion_hipotecaria');
+            'inm_institucion_hipotecaria','inm_sindicato');
         $modelo_preferido = (new inm_prospecto(link: $link));
 
         $data = (new _ubicacion())->integra_ids_preferidos(data: new stdClass(),entidades:  $entidades,
@@ -276,6 +290,7 @@ class _prospecto{
             return $this->error->error(mensaje: 'Error al inicializar registro',data:  $registro);
         }
 
+
         $r_com_prospecto = $this->inserta_com_prospecto(link: $modelo->link,registro:  $registro);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al insertar com_prospecto',data:  $r_com_prospecto);
@@ -288,6 +303,7 @@ class _prospecto{
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al maquetar row',data:  $registro);
         }
+
         return $registro;
     }
 }
