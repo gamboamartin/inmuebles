@@ -3,14 +3,12 @@ namespace controllers;
 
 
 use gamboamartin\errores\errores;
-use gamboamartin\inmuebles\controllers\controlador_inm_producto_infonavit;
 use gamboamartin\inmuebles\controllers\controlador_inm_ubicacion;
 use gamboamartin\test\liberator;
 use gamboamartin\test\test;
 
 
 use stdClass;
-use function PHPUnit\Framework\assertStringContainsStringIgnoringCase;
 
 
 class controlador_inm_ubicacionTest extends test {
@@ -69,9 +67,10 @@ class controlador_inm_ubicacionTest extends test {
         errores::$error = false;
 
         $file = "inm_ubicacion.asigna_comprador";
+        $session_id = '5983857742';
 
 
-        $ch = curl_init("http://localhost/inmuebles/index.php?seccion=inm_ubicacion&accion=asigna_comprador&adm_menu_id=64&session_id=8091905532&adm_menu_id=64&registro_id=1");
+        $ch = curl_init("http://localhost/inmuebles/index.php?seccion=inm_ubicacion&accion=asigna_comprador&adm_menu_id=64&session_id=$session_id&adm_menu_id=64&registro_id=1");
         $fp = fopen($file, "w");
 
         curl_setopt($ch, CURLOPT_FILE, $fp);
@@ -82,7 +81,7 @@ class controlador_inm_ubicacionTest extends test {
         fclose($fp);
 
         $data = file_get_contents($file);
-        $this->assertStringContainsStringIgnoringCase('<form method="post" action="./index.php?seccion=inm_rel_ubi_comp&accion=alta_bd&adm_menu_id=64&session_id=8091905532&adm_menu_id=64"', $data);
+        $this->assertStringContainsStringIgnoringCase('<form method="post" action="./index.php?seccion=inm_rel_ubi_comp&accion=alta_bd&adm_menu_id=64&session_id='.$session_id.'&adm_menu_id=64"', $data);
         $this->assertStringContainsStringIgnoringCase("Comprador de vivienda</label><div class='controls'><selec", $data);
         $this->assertStringContainsStringIgnoringCase(">Chihuahua</option><option value='7'  >Coahuila</option><option value='8' ", $data);
 

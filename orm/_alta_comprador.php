@@ -108,6 +108,10 @@ class _alta_comprador{
 
         }
 
+        if(!isset($registro['dp_municipio_nacimiento_id'])){
+            $registro['dp_municipio_nacimiento_id'] = 2469;
+        }
+
         $valida = $this->valida_base_comprador(registro: $registro);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error validar registro',data:  $valida);

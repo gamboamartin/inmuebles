@@ -24,7 +24,7 @@ class inm_comprador extends _modelo_parent{
             'inm_attr_tipo_credito_id', 'inm_destino_credito_id','inm_estado_civil_id','inm_persona_discapacidad_id',
             'inm_producto_infonavit_id', 'inm_plazo_credito_sc_id', 'inm_tipo_discapacidad_id','lada_com','lada_nep',
             'monto_ahorro_voluntario', 'monto_credito_solicitado_dh','nombre','nombre_empresa_patron', 'nrp_nep',
-            'numero_com','numero_nep','inm_institucion_hipotecaria_id','inm_sindicato_id');
+            'numero_com','numero_nep','inm_institucion_hipotecaria_id','inm_sindicato_id','dp_municipio_nacimiento_id');
 
         $columnas_extra= array();
         $renombres['dp_calle_pertenece_empresa']['nombre_original']= 'dp_calle_pertenece';
@@ -52,13 +52,23 @@ class inm_comprador extends _modelo_parent{
         $renombres['dp_estado_empresa']['key']= 'id';
         $renombres['dp_estado_empresa']['key_enlace']= 'dp_estado_id';
 
+        $renombres['dp_municipio_nacimiento']['nombre_original']= 'dp_municipio';
+        $renombres['dp_municipio_nacimiento']['enlace']= 'inm_comprador';
+        $renombres['dp_municipio_nacimiento']['key']= 'id';
+        $renombres['dp_municipio_nacimiento']['key_enlace']= 'dp_municipio_nacimiento_id';
+
+        $renombres['dp_estado_nacimiento']['nombre_original']= 'dp_estado';
+        $renombres['dp_estado_nacimiento']['enlace']= 'dp_municipio_nacimiento';
+        $renombres['dp_estado_nacimiento']['key']= 'id';
+        $renombres['dp_estado_nacimiento']['key_enlace']= 'dp_estado_id';
+
         $atributos_criticos = array('apellido_materno','apellido_paterno','bn_cuenta_id','cel_com','curp','correo_com',
             'descuento_pension_alimenticia_dh', 'descuento_pension_alimenticia_fc','es_segundo_credito',
             'extension_nep','genero', 'inm_attr_tipo_credito_id', 'inm_destino_credito_id','inm_estado_civil_id',
             'inm_persona_discapacidad_id', 'inm_plazo_credito_sc_id', 'inm_producto_infonavit_id',
             'inm_tipo_discapacidad_id','lada_com','lada_nep', 'monto_ahorro_voluntario', 'monto_credito_solicitado_dh',
             'nombre', 'nombre_empresa_patron', 'nrp_nep','numero_com','numero_nep','inm_institucion_hipotecaria_id',
-            'inm_sindicato_id');
+            'inm_sindicato_id','dp_municipio_nacimiento_id');
 
 
         $tipo_campos['lada_com'] = 'lada';
