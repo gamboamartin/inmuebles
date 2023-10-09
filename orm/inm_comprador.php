@@ -90,7 +90,7 @@ class inm_comprador extends _modelo_parent{
         $registro_entrada = $this->registro;
 
 
-        $registro = (new _alta_comprador())->init_row_alta(registro: $this->registro, modelo: $this);
+        $registro = (new _alta_comprador())->init_row_alta(modelo: $this, registro: $this->registro);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al inicializar registro',data:  $registro);
         }

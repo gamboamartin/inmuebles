@@ -118,6 +118,7 @@ class _alta_compradorTest extends test {
         $inm = new _alta_comprador();
         //$inm = new liberator($inm);
 
+        $modelo = new inm_comprador(link: $this->link);
 
         $registro = array();
         $registro['nombre'] = 'A';
@@ -130,7 +131,7 @@ class _alta_compradorTest extends test {
         $registro['lada_com'] = '43';
         $registro['numero_com'] = '43554433';
 
-        $resultado = $inm->init_row_alta($registro);
+        $resultado = $inm->init_row_alta($modelo, $registro);
         $this->assertIsArray($resultado);
         $this->assertNotTrue(errores::$error);
         $this->assertEquals('A',$resultado['nombre']);

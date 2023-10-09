@@ -36,6 +36,35 @@ class inm_ubicacion_htmlTest extends test {
         $this->paths_conf->views = '/var/www/html/inmuebles/config/views.php';
     }
 
+    public function test_ajusta_registros(): void
+    {
+        errores::$error = false;
+
+        $_GET['seccion'] = 'inm_producto_infonavit';
+        $_GET['accion'] = 'lista';
+        $_SESSION['grupo_id'] = 1;
+        $_SESSION['usuario_id'] = 2;
+        $_GET['session_id'] = '1';
+
+        $html_ = new \gamboamartin\template_1\html();
+        $html = new inm_ubicacion_html($html_);
+        $html = new liberator($html);
+
+
+        $registros = array();
+        $acciones_grupo = array();
+        $arreglo_costos = array();
+        $row = array();
+        $row['inm_costo_id'] = 1;
+        $arreglo_costos['registros']['d'][] = array();
+        $key = 'd';
+
+        $resultado = $html->ajusta_registros($acciones_grupo, $arreglo_costos, $key, $registros, $row);
+        $this->assertIsArray($resultado);
+        $this->assertNotTrue(errores::$error);
+        errores::$error = false;
+    }
+
     public function test_base_inm_ubicacion_upd(): void
     {
         errores::$error = false;

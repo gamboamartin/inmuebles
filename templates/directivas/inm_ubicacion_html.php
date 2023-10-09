@@ -25,10 +25,17 @@ class inm_ubicacion_html extends html_controler {
      * @param array $registros Registros de ubicacion
      * @param array $row Registro en proceso
      * @return array
+     * @version 2.166.1
      */
     private function ajusta_registros(array $acciones_grupo, array $arreglo_costos, string $key, array $registros,
                                       array $row): array
     {
+
+        $valida = $this->valida_data_link(arreglo_costos: $arreglo_costos,key:  $key,row:  $row);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al validar datos', data: $valida);
+        }
+
         $links = $this->links(acciones_grupo: $acciones_grupo,arreglo_costos:  $arreglo_costos,key:  $key,row:  $row);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al integrar link', data: $links);
@@ -578,8 +585,9 @@ class inm_ubicacion_html extends html_controler {
     }
 
     /**
-     * @param array $acciones_grupo
-     * @param stdClass $r_inm_costos
+     * Integra los links a un registro de tipo costo
+     * @param array $acciones_grupo Permisos
+     * @param stdClass $r_inm_costos Resultado de sql de costos
      * @return array
      */
     private function registros_con_link(array $acciones_grupo, stdClass $r_inm_costos): array

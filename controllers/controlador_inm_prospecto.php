@@ -169,49 +169,30 @@ class controlador_inm_prospecto extends _ctl_formato {
                 header:  $header, ws: $ws);
         }
 
-        $inm_prospecto = (new inm_prospecto(link: $this->link))->registro(registro_id: $this->registro_id,
-            columnas_en_bruto: true, retorno_obj: true);
+
+        $data = (new inm_prospecto(link: $this->link))->data_prospecto(inm_prospecto_id: $this->registro_id);
         if(errores::$error){
             $this->link->rollBack();
-            return $this->retorno_error(mensaje: 'Error al obtener prospecto', data: $inm_prospecto, header: $header, ws: $ws);
+            return $this->retorno_error(mensaje: 'Error al obtener prospecto', data: $data, header: false, ws: false);
         }
 
-        $inm_prospecto_completo = (new inm_prospecto(link: $this->link))->registro(registro_id: $this->registro_id,
-            retorno_obj: true);
+
+        $keys = (new inm_prospecto(link: $this->link))->keys_data_prospecto();
         if(errores::$error){
             $this->link->rollBack();
-            return $this->retorno_error(mensaje: 'Error al obtener prospecto', data: $inm_prospecto, header: false, ws: false);
+            return $this->retorno_error(mensaje: 'Error al obtener keys', data: $keys, header: false, ws: false);
         }
 
-        $keys = array('inm_producto_infonavit_id','inm_attr_tipo_credito_id','inm_destino_credito_id',
-            'es_segundo_credito','inm_plazo_credito_sc_id','descuento_pension_alimenticia_dh',
-            'descuento_pension_alimenticia_fc','monto_credito_solicitado_dh','monto_ahorro_voluntario','nss','curp',
-            'nombre','apellido_paterno','apellido_materno','con_discapacidad','nombre_empresa_patron','nrp_nep',
-            'lada_nep','numero_nep','extension_nep','lada_com','numero_com','cel_com','genero','correo_com',
-            'inm_tipo_discapacidad_id','inm_persona_discapacidad_id','inm_estado_civil_id',
-            'inm_institucion_hipotecaria_id');
+        $inm_comprador_ins = array();
 
         foreach ($keys as $key){
-            $inm_comprador_ins[$key] = $inm_prospecto->$key;
+            $inm_comprador_ins[$key] = $data->inm_prospecto->$key;
         }
 
-        if($inm_comprador_ins['nss'] === ''){
-            $inm_comprador_ins['nss'] = '99999999999';
-        }
-        if($inm_comprador_ins['curp'] === ''){
-            $inm_comprador_ins['curp'] = 'XEXX010101MNEXXXA8';
-        }
-        if($inm_comprador_ins['lada_nep'] === ''){
-            $inm_comprador_ins['lada_nep'] = '33';
-        }
-        if($inm_comprador_ins['numero_nep'] === ''){
-            $inm_comprador_ins['numero_nep'] = '33333333';
-        }
-        if($inm_comprador_ins['nombre_empresa_patron'] === ''){
-            $inm_comprador_ins['nombre_empresa_patron'] = 'POR DEFINIR';
-        }
-        if($inm_comprador_ins['nrp_nep'] === ''){
-            $inm_comprador_ins['nrp_nep'] = 'POR DEFINIR';
+        $inm_comprador_ins = (new inm_prospecto(link: $this->link))->defaults_alta_comprador(inm_comprador_ins: $inm_comprador_ins);
+        if(errores::$error){
+            $this->link->rollBack();
+            return $this->retorno_error(mensaje: 'Error al obtener defaults', data: $inm_comprador_ins, header: true, ws: false);
         }
 
         $bn_cuenta_id = (new inm_comprador(link: $this->link))->id_preferido_detalle(entidad_preferida: 'bn_cuenta');
@@ -287,7 +268,7 @@ class controlador_inm_prospecto extends _ctl_formato {
 
         $inm_comprador_ins['cat_sat_tipo_persona_id'] = $cat_sat_tipo_persona_id;
 
-        $inm_comprador_ins['rfc'] = $inm_prospecto_completo->com_prospecto_rfc;
+        $inm_comprador_ins['rfc'] = $data->inm_prospecto_completo->com_prospecto_rfc;
         $inm_comprador_ins['numero_exterior'] = 'POR ASIGNAR';
 
         $r_alta_comprador = (new inm_comprador(link: $this->link))->alta_registro(registro: $inm_comprador_ins);

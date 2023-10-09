@@ -85,6 +85,57 @@ class inm_prospecto extends _modelo_parent{
         return $r_alta_bd;
     }
 
+    final public function data_prospecto(int $inm_prospecto_id){
+        $inm_prospecto = $this->registro(registro_id: $inm_prospecto_id, columnas_en_bruto: true, retorno_obj: true);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al obtener prospecto', data: $inm_prospecto);
+        }
+
+        $inm_prospecto_completo = $this->registro(registro_id: $inm_prospecto_id, retorno_obj: true);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al obtener prospecto', data: $inm_prospecto);
+        }
+        $data = new stdClass();
+        $data->inm_prospecto = $inm_prospecto;
+        $data->inm_prospecto_completo = $inm_prospecto_completo;
+
+        return $data;
+    }
+
+    final public function defaults_alta_comprador(array $inm_comprador_ins): array
+    {
+        if($inm_comprador_ins['nss'] === ''){
+            $inm_comprador_ins['nss'] = '99999999999';
+        }
+        if($inm_comprador_ins['curp'] === ''){
+            $inm_comprador_ins['curp'] = 'XEXX010101MNEXXXA8';
+        }
+        if($inm_comprador_ins['lada_nep'] === ''){
+            $inm_comprador_ins['lada_nep'] = '33';
+        }
+        if($inm_comprador_ins['numero_nep'] === ''){
+            $inm_comprador_ins['numero_nep'] = '33333333';
+        }
+        if($inm_comprador_ins['nombre_empresa_patron'] === ''){
+            $inm_comprador_ins['nombre_empresa_patron'] = 'POR DEFINIR';
+        }
+        if($inm_comprador_ins['nrp_nep'] === ''){
+            $inm_comprador_ins['nrp_nep'] = 'POR DEFINIR';
+        }
+        return $inm_comprador_ins;
+    }
+
+    final public function keys_data_prospecto(): array
+    {
+        return array('inm_producto_infonavit_id','inm_attr_tipo_credito_id','inm_destino_credito_id',
+            'es_segundo_credito','inm_plazo_credito_sc_id','descuento_pension_alimenticia_dh',
+            'descuento_pension_alimenticia_fc','monto_credito_solicitado_dh','monto_ahorro_voluntario','nss','curp',
+            'nombre','apellido_paterno','apellido_materno','con_discapacidad','nombre_empresa_patron','nrp_nep',
+            'lada_nep','numero_nep','extension_nep','lada_com','numero_com','cel_com','genero','correo_com',
+            'inm_tipo_discapacidad_id','inm_persona_discapacidad_id','inm_estado_civil_id',
+            'inm_institucion_hipotecaria_id','inm_sindicato_id');
+    }
+
 
 
     public function modifica_bd(array $registro, int $id, bool $reactiva = false,
