@@ -51,7 +51,19 @@ class _ubicacionTest extends test {
         $_SESSION['grupo_id'] = 1;
         $_SESSION['usuario_id'] = 2;
         $_GET['session_id'] = '1';
+        $del = (new base_test())->del_inm_ubicacion(link: $this->link);
+        if(errores::$error){
+            $error = (new errores())->error(mensaje: 'Error al eliminar',data:  $del);
+            print_r($error);
+            exit;
+        }
 
+        $alta = (new base_test())->alta_inm_ubicacion(link: $this->link);
+        if(errores::$error){
+            $error = (new errores())->error(mensaje: 'Error al alta',data:  $alta);
+            print_r($error);
+            exit;
+        }
 
         $inm = new _ubicacion();
         //$inm = new liberator($inm);

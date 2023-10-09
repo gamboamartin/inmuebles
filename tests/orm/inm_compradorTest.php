@@ -261,6 +261,7 @@ class inm_compradorTest extends test {
 
         $resultado = $inm->elimina_bd(id: $id);
 
+
         $this->assertIsArray($resultado);
         $this->assertTrue(errores::$error);
         $this->assertEquals("Error al eliminar registro de comprador",$resultado['mensaje_limpio']);

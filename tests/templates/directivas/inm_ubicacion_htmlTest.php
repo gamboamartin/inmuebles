@@ -327,6 +327,44 @@ class inm_ubicacion_htmlTest extends test {
         errores::$error = false;
     }
 
+    public function test_links(): void
+    {
+        errores::$error = false;
+
+        $_GET['seccion'] = 'inm_producto_infonavit';
+        $_GET['accion'] = 'lista';
+        $_SESSION['grupo_id'] = 1;
+        $_SESSION['usuario_id'] = 2;
+        $_GET['session_id'] = '1';
+
+        $html_ = new \gamboamartin\template_1\html();
+        $html = new inm_ubicacion_html($html_);
+        $html = new liberator($html);
+
+        $acciones_grupo = array();
+        $arreglo_costos = array();
+        $key = 'a';
+        $row = array();
+
+        $acciones_grupo[] = array();
+        $row['inm_costo_id'] = 1;
+        $arreglo_costos['registros']['a'][] = '';
+
+        $acciones_grupo[0]['adm_accion_css'] = 'light';
+        $acciones_grupo[0]['adm_accion_es_status'] = 'inactivo';
+        $acciones_grupo[0]['adm_accion_descripcion'] = 'a';
+        $acciones_grupo[0]['adm_seccion_descripcion'] = 'a';
+        $acciones_grupo[0]['adm_accion_muestra_icono_btn'] = 'inactivo';
+        $acciones_grupo[0]['adm_accion_muestra_titulo_btn'] = 'activo';
+        $acciones_grupo[0]['adm_accion_titulo'] = 'activo';
+
+        $resultado = $html->links($acciones_grupo, $arreglo_costos, $key, $row);
+        $this->assertIsArray($resultado);
+        $this->assertNotTrue(errores::$error);
+        $this->assertStringContainsStringIgnoringCase("<a role='button' title='activo' href='index.php?seccion=a&accion=a&registro_id=1&session_id=1&adm_menu_id=-1' class='btn btn-light ' style='margin-left: 2px; margin-bottom: 2px; '>activo</a>",$resultado['a']);
+        errores::$error = false;
+    }
+
 
     public function test_select_inm_ubicacion_id(): void
     {

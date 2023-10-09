@@ -422,6 +422,12 @@ class inm_ubicacion_html extends html_controler {
     private function integra_link(array $adm_accion_grupo, array $arreglo_costos, string $key, array $links,
                                   array $row): array
     {
+
+        $valida = $this->valida_data_link(arreglo_costos: $arreglo_costos,key:  $key,row:  $row);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al validar datos', data: $valida);
+        }
+
         $registro_id = $row['inm_costo_id'];
 
         $data_link = (new datatables())->data_link(adm_accion_grupo: $adm_accion_grupo,
@@ -487,9 +493,30 @@ class inm_ubicacion_html extends html_controler {
         return $keys_selects;
     }
 
-    private function links(array $acciones_grupo, array $arreglo_costos, string $key, array $row){
+    /**
+     * Integra los links de un registro para ser ejecutado en una lista
+     * @param array $acciones_grupo Acciones o permisos de un grupo de usuarios
+     * @param array $arreglo_costos Registros con los costos de ubicacion
+     * @param string $key Key de costo
+     * @param array $row Registro en ejecucion
+     * @return array
+     */
+    private function links(array $acciones_grupo, array $arreglo_costos, string $key, array $row): array
+    {
+        $valida = $this->valida_data_link(arreglo_costos: $arreglo_costos,key:  $key,row:  $row);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al validar datos', data: $valida);
+        }
+
         $links = array();
-        foreach ($acciones_grupo as $indice=>$adm_accion_grupo){
+        foreach ($acciones_grupo as $adm_accion_grupo){
+
+            if(!is_array($adm_accion_grupo)){
+                return $this->error->error(mensaje: 'Error adm_accion_grupo debe ser una array',
+                    data: $adm_accion_grupo);
+            }
+
+
             $links = $this->integra_link(adm_accion_grupo: $adm_accion_grupo,arreglo_costos:  $arreglo_costos,
                 key:  $key,links:  $links,row:  $row);
             if(errores::$error){
@@ -560,6 +587,48 @@ class inm_ubicacion_html extends html_controler {
             return $this->error->error(mensaje: 'Error al generar select', data: $select);
         }
         return $select;
+    }
+
+    /**
+     * Valida las entradas de datos para integracion de links
+     * @param array $arreglo_costos Arreglo de resultado de costos
+     * @param string $key Key a integrar valor
+     * @param array $row Registro en proceso
+     * @return array|true
+     */
+    private function valida_data_link(array $arreglo_costos, string $key, array $row): bool|array
+    {
+        $keys = array('inm_costo_id');
+
+        $valida = $this->validacion->valida_ids(keys: $keys,registro:  $row);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al validar $row', data: $valida);
+        }
+        if(!isset($arreglo_costos['registros'])){
+            return $this->error->error(mensaje: 'Error arreglo_costos[registros] no existe',data:  $arreglo_costos);
+        }
+        if(!is_array($arreglo_costos['registros'])){
+            return $this->error->error(mensaje: 'Error arreglo_costos[registros] debe ser una array',
+                data:  $arreglo_costos);
+        }
+        $key = trim($key);
+        if($key === ''){
+            return $this->error->error(mensaje: 'Error key esta vacio',data:  $key);
+        }
+
+        if(!isset($arreglo_costos['registros'][$key])){
+            return $this->error->error(mensaje: 'Error arreglo_costos[registros][key] no existe',
+                data:  $arreglo_costos);
+        }
+        if(!is_array($arreglo_costos['registros'][$key])){
+            return $this->error->error(mensaje: 'Error arreglo_costos[registros][key] debe ser un array',
+                data:  $arreglo_costos);
+        }
+        if(count($arreglo_costos['registros'][$key]) === 0){
+            return $this->error->error(mensaje: 'Error arreglo_costos[registros][key] esta vacio',
+                data:  $arreglo_costos);
+        }
+        return true;
     }
 
 
