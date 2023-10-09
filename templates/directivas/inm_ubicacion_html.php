@@ -51,9 +51,18 @@ class inm_ubicacion_html extends html_controler {
      * @param controlador_inm_ubicacion $controler Controlador en ejecucion
      * @param string $funcion Funcion de ejecucion
      * @return array|stdClass
+     * @version 2.170.0
      */
     final public function base_costos(controlador_inm_ubicacion $controler, string $funcion): array|stdClass
     {
+        if($controler->registro_id<=0){
+            return $this->error->error(mensaje: 'Error registro_id debe ser mayor a 0', data: $controler->registro_id);
+        }
+        $funcion = trim($funcion);
+        if($funcion === ''){
+            return $this->error->error(mensaje: 'Error funcion esta vacio',data:  $funcion);
+        }
+
         $base = $this->base_inm_ubicacion_upd(controler: $controler);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al integrar base',data:  $base);
@@ -85,8 +94,6 @@ class inm_ubicacion_html extends html_controler {
         if($controler->registro_id<=0){
             return $this->error->error(mensaje: 'Error registro_id debe ser mayor a 0', data: $controler->registro_id);
         }
-
-
         $data_front = (new _ubicacion())->base_upd(controler: $controler);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al obtener datos',data:  $data_front);

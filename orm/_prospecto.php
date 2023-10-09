@@ -245,6 +245,7 @@ class _prospecto{
      * Inicializa los keys como vacios
      * @param array $registro Registro en proceso
      * @return array
+     * @version 2.170.1
      */
     private function init_keys_sin_data(array $registro): array
     {

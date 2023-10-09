@@ -41,16 +41,12 @@ class inm_prospecto extends _modelo_parent{
         }
         $columnas_extra['usuario_permitido_id'] = $sql;
 
-
-
         $atributos_criticos = array('com_prospecto_id','razon_social','dp_calle_pertenece_id','rfc',
             'numero_exterior','numero_interior','inm_sindicato_id','dp_municipio_nacimiento_id');
 
 
         $tipo_campos= array();
-
         $aplica_seguridad = true;
-
 
         $renombres = array();
         $renombres['dp_municipio_nacimiento']['nombre_original']= 'dp_municipio';

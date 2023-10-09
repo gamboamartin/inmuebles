@@ -8,12 +8,13 @@ use PDO;
 class inm_concepto_html extends html_controler {
 
     /**
-     * @param int $cols
-     * @param bool $con_registros
-     * @param int $id_selected
-     * @param PDO $link
-     * @param bool $disabled
-     * @param array $filtro
+     * Obtiene un selector de concepto
+     * @param int $cols Cols css
+     * @param bool $con_registros Determina si va o no con options
+     * @param int $id_selected Identificador default
+     * @param PDO $link Conexion a base de datos
+     * @param bool $disabled Attr disabled
+     * @param array $filtro Filtro para options
      * @return array|string
      */
     public function select_inm_concepto_id(int $cols, bool $con_registros, int $id_selected, PDO $link,

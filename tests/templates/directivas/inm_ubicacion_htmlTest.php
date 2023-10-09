@@ -65,6 +65,29 @@ class inm_ubicacion_htmlTest extends test {
         errores::$error = false;
     }
 
+    public function test_base_costos(): void
+    {
+        errores::$error = false;
+
+        $_GET['seccion'] = 'inm_producto_infonavit';
+        $_GET['accion'] = 'lista';
+        $_SESSION['grupo_id'] = 1;
+        $_SESSION['usuario_id'] = 2;
+        $_GET['session_id'] = '1';
+
+        $html_ = new \gamboamartin\template_1\html();
+        $html = new inm_ubicacion_html($html_);
+        //$html = new liberator($html);
+
+        $controler = new controlador_inm_ubicacion(link: $this->link, paths_conf: $this->paths_conf);
+        $controler->registro_id = 1;
+        $funcion = 'a';
+        $resultado = $html->base_costos($controler, $funcion);
+        $this->assertIsObject($resultado);
+        $this->assertNotTrue(errores::$error);
+        errores::$error = false;
+    }
+
     public function test_base_inm_ubicacion_upd(): void
     {
         errores::$error = false;
