@@ -16,6 +16,7 @@ class inm_concepto_html extends html_controler {
      * @param bool $disabled Attr disabled
      * @param array $filtro Filtro para options
      * @return array|string
+     * @version 2.171.0
      */
     public function select_inm_concepto_id(int $cols, bool $con_registros, int $id_selected, PDO $link,
                                       bool $disabled = false, array $filtro = array()): array|string

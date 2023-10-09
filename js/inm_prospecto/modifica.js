@@ -23,6 +23,8 @@ let sl_dp_municipio_id = $("#dp_municipio_id");
 let sl_dp_cp_id = $("#dp_cp_id");
 let sl_dp_colonia_postal_id = $("#dp_colonia_postal_id");
 let sl_dp_calle_pertenece_id = $("#dp_calle_pertenece_id");
+let sl_dp_estado_nacimiento_id = $("#dp_estado_nacimiento_id");
+let sl_dp_municipio_nacimiento_id = $("#dp_municipio_nacimiento_id");
 
 let nombre = '';
 let apellido_paterno = '';
@@ -144,9 +146,9 @@ function dp_asigna_estados(dp_pais_id = '',dp_estado_id = ''){
 
 }
 
-function dp_asigna_municipios(dp_estado_id = '',dp_municipio_id = ''){
+function dp_asigna_municipios(dp_estado_id = '',dp_municipio_id = '', selector = "#dp_municipio_id"){
 
-    let sl_dp_municipio_id = $("#dp_municipio_id");
+    let sl_dp_municipio_id = $(selector);
 
     let url = "index.php?seccion=dp_municipio&ws=1&accion=get_municipio&dp_estado_id="+dp_estado_id+"&session_id="+session_id;
 
@@ -157,10 +159,10 @@ function dp_asigna_municipios(dp_estado_id = '',dp_municipio_id = ''){
         console.log(data);
         sl_dp_municipio_id.empty();
 
-        integra_new_option("#dp_municipio_id",'Seleccione un municipio','-1');
+        integra_new_option(selector,'Seleccione un municipio','-1');
 
         $.each(data.registros, function( index, dp_municipio ) {
-            integra_new_option("#dp_municipio_id",dp_municipio.dp_municipio_descripcion,dp_municipio.dp_municipio_id);
+            integra_new_option(selector,dp_municipio.dp_municipio_descripcion,dp_municipio.dp_municipio_id);
         });
         sl_dp_municipio_id.val(dp_municipio_id);
         sl_dp_municipio_id.selectpicker('refresh');
@@ -260,6 +262,11 @@ sl_dp_cp_id.change(function(){
 sl_dp_colonia_postal_id.change(function(){
     dp_colonia_postal_id = sl_dp_colonia_postal_id.val();
     dp_asigna_calles_pertenece(dp_colonia_postal_id);
+});
+
+sl_dp_estado_nacimiento_id.change(function(){
+    let dp_municipio_nacimiento_id = sl_dp_estado_nacimiento_id.val();
+    dp_asigna_municipios(dp_municipio_nacimiento_id,'','#dp_municipio_nacimiento_id');
 });
 
 

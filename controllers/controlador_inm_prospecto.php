@@ -23,6 +23,8 @@ use gamboamartin\inmuebles\models\inm_sindicato;
 use gamboamartin\system\actions;
 use gamboamartin\system\links_menu;
 use gamboamartin\template\html;
+use html\dp_estado_html;
+use html\dp_municipio_html;
 use PDO;
 use stdClass;
 use Throwable;
@@ -94,9 +96,9 @@ class controlador_inm_prospecto extends _ctl_formato {
             return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects, header: $header,ws:  $ws);
         }
 
-        $inm_sindicato_id = (new inm_sindicato(link: $this->link))->id_preferido_detalle(entidad_preferida: 'inm_sindicato_id');
+        $inm_sindicato_id = (new inm_sindicato(link: $this->link))->id_preferido_detalle(entidad_preferida: 'inm_sindicato');
         if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al obtener id',data:  $com_tipo_prospecto_id, header: $header,ws:  $ws);
+            return $this->retorno_error(mensaje: 'Error al obtener id',data:  $inm_sindicato_id, header: $header,ws:  $ws);
         }
 
         $keys_selects = $this->key_select(cols:6, con_registros: true,filtro:  array(), key: 'inm_sindicato_id',
@@ -623,6 +625,7 @@ class controlador_inm_prospecto extends _ctl_formato {
         }
 
 
+
         if($this->registro['inm_prospecto_nss'] === ''){
             $this->row_upd->nss = '99999999999';
         }
@@ -658,6 +661,31 @@ class controlador_inm_prospecto extends _ctl_formato {
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al generar headers',data:  $headers, header: $header,ws:  $ws);
         }
+
+
+        $dp_estado_nacimiento_id = (new dp_estado_html(html: $this->html_base))->select_dp_estado_id(cols: 6,
+            con_registros: true, id_selected: $this->registro['dp_estado_nacimiento_id'], link: $this->link,
+            label: 'Edo Nac', name: 'dp_estado_nacimiento_id');
+
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al obtener input',data:  $dp_estado_nacimiento_id,
+                header: $header,ws:  $ws);
+        }
+
+        $this->inputs->dp_estado_nacimiento_id = $dp_estado_nacimiento_id;
+
+        $filtro = array('dp_estado.id'=>$this->registro['dp_estado_nacimiento_id']);
+        $dp_municipio_nacimiento_id = (new dp_municipio_html(html: $this->html_base))->select_dp_municipio_id(cols: 6,
+            con_registros: true, id_selected: $this->registro['dp_municipio_nacimiento_id'], link: $this->link,
+            filtro: $filtro, label: 'Mun Nac', name: 'dp_municipio_nacimiento_id');
+
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al obtener input',data:  $dp_municipio_nacimiento_id,
+                header: $header,ws:  $ws);
+        }
+
+        $this->inputs->dp_municipio_nacimiento_id = $dp_municipio_nacimiento_id;
+
 
 
         return $r_modifica;

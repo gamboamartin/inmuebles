@@ -307,11 +307,11 @@ class _prospecto{
             return $this->error->error(mensaje: 'Error al inicializar registro',data:  $registro);
         }
 
-
         $r_com_prospecto = $this->inserta_com_prospecto(link: $modelo->link,registro:  $registro);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al insertar com_prospecto',data:  $r_com_prospecto);
         }
+
 
         $registro['com_prospecto_id'] = $r_com_prospecto->registro_id;
 
@@ -319,6 +319,11 @@ class _prospecto{
         $registro = $this->integra_entidades_mayor_uso(link: $modelo->link,registro:  $registro);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al maquetar row',data:  $registro);
+        }
+
+        if(!isset($registro['dp_municipio_nacimiento_id'])){
+            $registro['dp_municipio_nacimiento_id'] = 2469;
+
         }
 
         return $registro;
