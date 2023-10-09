@@ -22,7 +22,7 @@ class inm_prospecto extends _modelo_parent{
             'dp_municipio'=>'dp_cp','dp_estado'=>'dp_municipio','dp_pais'=>'dp_estado','inm_sindicato'=>$tabla);
 
         $campos_obligatorios = array('com_prospecto_id','razon_social','dp_calle_pertenece_id','rfc',
-            'numero_exterior','numero_interior','inm_sindicato_id');
+            'numero_exterior','numero_interior','inm_sindicato_id','dp_municipio_nacimiento_id');
 
         $columnas_extra= array();
 
@@ -41,15 +41,22 @@ class inm_prospecto extends _modelo_parent{
         }
         $columnas_extra['usuario_permitido_id'] = $sql;
 
-        $renombres = array();
+
 
         $atributos_criticos = array('com_prospecto_id','razon_social','dp_calle_pertenece_id','rfc',
-            'numero_exterior','numero_interior','inm_sindicato_id');
+            'numero_exterior','numero_interior','inm_sindicato_id','dp_municipio_nacimiento_id');
 
 
         $tipo_campos= array();
 
         $aplica_seguridad = true;
+
+
+        $renombres = array();
+        $renombres['dp_municipio_nacimiento']['nombre_original']= 'dp_municipio';
+        $renombres['dp_municipio_nacimiento']['enlace']= 'inm_prospecto';
+        $renombres['dp_municipio_nacimiento']['key']= 'id';
+        $renombres['dp_municipio_nacimiento']['key_enlace']= 'dp_municipio_nacimiento_id';
 
 
         parent::__construct(link: $link, tabla: $tabla, aplica_seguridad: $aplica_seguridad,

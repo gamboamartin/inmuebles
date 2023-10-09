@@ -307,9 +307,13 @@ class inm_ubicacion_html extends html_controler {
      * Inicializa los registros de tipo costo
      * @param controlador_inm_ubicacion $controler Controlador en proceso
      * @return array|controlador_inm_ubicacion
+     * @version 2.169.0
      */
     private function init_costos(controlador_inm_ubicacion $controler): controlador_inm_ubicacion|array
     {
+        if($controler->registro_id <= 0){
+            return $this->error->error(mensaje: 'Error $controler->registro_id debe ser mayor a 0',data:  $controler);
+        }
         $r_inm_costos = (new inm_costo(link: $controler->link))->filtro_and(
             filtro: array('inm_ubicacion.id'=>$controler->registro_id));
         if(errores::$error){
