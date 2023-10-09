@@ -47,8 +47,9 @@ class inm_ubicacion_html extends html_controler {
     }
 
     /**
-     * @param controlador_inm_ubicacion $controler
-     * @param string $funcion
+     * Integra una vista base de costos con registros de costeo
+     * @param controlador_inm_ubicacion $controler Controlador en ejecucion
+     * @param string $funcion Funcion de ejecucion
      * @return array|stdClass
      */
     final public function base_costos(controlador_inm_ubicacion $controler, string $funcion): array|stdClass
@@ -303,7 +304,8 @@ class inm_ubicacion_html extends html_controler {
     }
 
     /**
-     * @param controlador_inm_ubicacion $controler
+     * Inicializa los registros de tipo costo
+     * @param controlador_inm_ubicacion $controler Controlador en proceso
      * @return array|controlador_inm_ubicacion
      */
     private function init_costos(controlador_inm_ubicacion $controler): controlador_inm_ubicacion|array
@@ -347,6 +349,7 @@ class inm_ubicacion_html extends html_controler {
      * @param array $registros Registros a integrar
      * @param string $campo_integrar Campo a integrar por row
      * @return array
+     * @version 2.168.0
      */
     private function format_moneda_mx_arreglo(array $registros, string $campo_integrar): array
     {
@@ -570,9 +573,18 @@ class inm_ubicacion_html extends html_controler {
      * @param array $acciones_grupo Permisos
      * @param stdClass $r_inm_costos Resultado de costos
      * @return array
+     * @version 2.168.1
      */
     private function registros(array $acciones_grupo, stdClass $r_inm_costos): array
     {
+        if(!isset($r_inm_costos->registros)){
+            return $this->error->error(mensaje: 'Error r_inm_costos->registros no existe',data:  $r_inm_costos);
+        }
+        if(!is_array($r_inm_costos->registros)){
+            return $this->error->error(mensaje: 'Error arreglo_costos[registros] debe ser una array',
+                data:  $r_inm_costos);
+        }
+
         $registros = $this->registros_con_link(acciones_grupo: $acciones_grupo,r_inm_costos:  $r_inm_costos);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al ajustar registros link', data: $registros);
