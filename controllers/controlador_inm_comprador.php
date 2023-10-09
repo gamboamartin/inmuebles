@@ -11,7 +11,6 @@ namespace gamboamartin\inmuebles\controllers;
 use base\controller\init;
 use gamboamartin\errores\errores;
 use gamboamartin\inmuebles\html\_base;
-use gamboamartin\inmuebles\html\inm_co_acreditado_html;
 use gamboamartin\inmuebles\html\inm_comprador_html;
 use gamboamartin\inmuebles\html\inm_referencia_html;
 use gamboamartin\inmuebles\models\_inm_comprador;
@@ -337,6 +336,7 @@ class controlador_inm_comprador extends _ctl_base {
         $init_data['inm_persona_discapacidad'] = "gamboamartin\\inmuebles";
         $init_data['inm_estado_civil'] = "gamboamartin\\inmuebles";
         $init_data['inm_institucion_hipotecaria'] = "gamboamartin\\inmuebles";
+        $init_data['inm_sindicato'] = "gamboamartin\\inmuebles";
 
         $init_data['dp_pais'] = "gamboamartin\\direccion_postal";
         $init_data['dp_estado'] = "gamboamartin\\direccion_postal";

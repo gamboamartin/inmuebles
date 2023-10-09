@@ -343,8 +343,9 @@ class inm_ubicacion_html extends html_controler {
     }
 
     /**
-     * @param array $registros
-     * @param string $campo_integrar
+     * Integra un valor de formato moneda a un campo de un registro
+     * @param array $registros Registros a integrar
+     * @param string $campo_integrar Campo a integrar por row
      * @return array
      */
     private function format_moneda_mx_arreglo(array $registros, string $campo_integrar): array
@@ -565,8 +566,9 @@ class inm_ubicacion_html extends html_controler {
     }
 
     /**
-     * @param array $acciones_grupo
-     * @param stdClass $r_inm_costos
+     * Inicializa los registros para ser mostrados en front
+     * @param array $acciones_grupo Permisos
+     * @param stdClass $r_inm_costos Resultado de costos
      * @return array
      */
     private function registros(array $acciones_grupo, stdClass $r_inm_costos): array
@@ -589,11 +591,21 @@ class inm_ubicacion_html extends html_controler {
      * @param array $acciones_grupo Permisos
      * @param stdClass $r_inm_costos Resultado de sql de costos
      * @return array
+     * @version 2.167.1
      */
     private function registros_con_link(array $acciones_grupo, stdClass $r_inm_costos): array
     {
+        if(!isset($r_inm_costos->registros)){
+            return $this->error->error(mensaje: 'Error r_inm_costos->registros no existe',data:  $r_inm_costos);
+        }
+        if(!is_array($r_inm_costos->registros)){
+            return $this->error->error(mensaje: 'Error arreglo_costos[registros] debe ser una array',
+                data:  $r_inm_costos);
+        }
+
         $registros = $r_inm_costos->registros;
         $arreglo_costos = (array)$r_inm_costos;
+
         foreach ($arreglo_costos['registros'] as $key => $row){
             $registros = $this->ajusta_registros(acciones_grupo: $acciones_grupo,arreglo_costos:  $arreglo_costos,
                 key:  $key,registros:  $registros,row:  $row);

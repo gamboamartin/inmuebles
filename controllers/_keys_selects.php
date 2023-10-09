@@ -75,6 +75,7 @@ class _keys_selects{
 
         $entidades_pref = array();
         $entidades_pref[] = 'inm_estado_civil';
+        $entidades_pref[] = 'inm_sindicato';
 
         foreach ($entidades_pref as $entidad){
             $entidad_id = $controler->modelo->id_preferido_detalle(entidad_preferida: $entidad);
@@ -103,6 +104,15 @@ class _keys_selects{
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
+
+        $columns_ds = array('inm_sindicato_descripcion');
+        $keys_selects = $controler->key_select(cols:12, con_registros: true,filtro:  array(),
+            key: 'inm_sindicato_id', keys_selects: $keys_selects, id_selected: $row_upd->inm_sindicato_id,
+            label: 'Sindicato', columns_ds: $columns_ds);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        }
+
         return $keys_selects;
     }
 
