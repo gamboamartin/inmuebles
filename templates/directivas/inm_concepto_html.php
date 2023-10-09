@@ -7,6 +7,15 @@ use PDO;
 
 class inm_concepto_html extends html_controler {
 
+    /**
+     * @param int $cols
+     * @param bool $con_registros
+     * @param int $id_selected
+     * @param PDO $link
+     * @param bool $disabled
+     * @param array $filtro
+     * @return array|string
+     */
     public function select_inm_concepto_id(int $cols, bool $con_registros, int $id_selected, PDO $link,
                                       bool $disabled = false, array $filtro = array()): array|string
     {

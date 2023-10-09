@@ -17,7 +17,18 @@ use stdClass;
 class inm_ubicacion_html extends html_controler {
 
 
-    private function ajusta_registros(array $acciones_grupo, array $arreglo_costos, string $key, array $registros, array $row){
+    /**
+     * Ajusta los registros con permisos
+     * @param array $acciones_grupo permisos de ejecucion
+     * @param array $arreglo_costos Resultado de costos
+     * @param string $key Key a integrar
+     * @param array $registros Registros de ubicacion
+     * @param array $row Registro en proceso
+     * @return array
+     */
+    private function ajusta_registros(array $acciones_grupo, array $arreglo_costos, string $key, array $registros,
+                                      array $row): array
+    {
         $links = $this->links(acciones_grupo: $acciones_grupo,arreglo_costos:  $arreglo_costos,key:  $key,row:  $row);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al integrar link', data: $links);
@@ -27,7 +38,14 @@ class inm_ubicacion_html extends html_controler {
         $registros[$key] = array_merge($row,$botones);
         return $registros;
     }
-    final public function base_costos(controlador_inm_ubicacion $controler, string $funcion){
+
+    /**
+     * @param controlador_inm_ubicacion $controler
+     * @param string $funcion
+     * @return array|stdClass
+     */
+    final public function base_costos(controlador_inm_ubicacion $controler, string $funcion): array|stdClass
+    {
         $base = $this->base_inm_ubicacion_upd(controler: $controler);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al integrar base',data:  $base);
@@ -277,7 +295,12 @@ class inm_ubicacion_html extends html_controler {
         return $inputs;
     }
 
-    private function init_costos(controlador_inm_ubicacion $controler){
+    /**
+     * @param controlador_inm_ubicacion $controler
+     * @return array|controlador_inm_ubicacion
+     */
+    private function init_costos(controlador_inm_ubicacion $controler): controlador_inm_ubicacion|array
+    {
         $r_inm_costos = (new inm_costo(link: $controler->link))->filtro_and(
             filtro: array('inm_ubicacion.id'=>$controler->registro_id));
         if(errores::$error){
@@ -312,7 +335,13 @@ class inm_ubicacion_html extends html_controler {
         return $controler;
     }
 
-    private function format_moneda_mx_arreglo(array $registros, string $campo_integrar){
+    /**
+     * @param array $registros
+     * @param string $campo_integrar
+     * @return array
+     */
+    private function format_moneda_mx_arreglo(array $registros, string $campo_integrar): array
+    {
         $registros_format = array();
         foreach ($registros as $campo){
             if(!isset($campo[$campo_integrar])){
@@ -501,6 +530,7 @@ class inm_ubicacion_html extends html_controler {
      * @param string $key Key de costo
      * @param array $row Registro en ejecucion
      * @return array
+     * @version 2.165.1
      */
     private function links(array $acciones_grupo, array $arreglo_costos, string $key, array $row): array
     {
@@ -527,7 +557,13 @@ class inm_ubicacion_html extends html_controler {
         return $links;
     }
 
-    private function registros(array $acciones_grupo, stdClass $r_inm_costos){
+    /**
+     * @param array $acciones_grupo
+     * @param stdClass $r_inm_costos
+     * @return array
+     */
+    private function registros(array $acciones_grupo, stdClass $r_inm_costos): array
+    {
         $registros = $this->registros_con_link(acciones_grupo: $acciones_grupo,r_inm_costos:  $r_inm_costos);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al ajustar registros link', data: $registros);
@@ -541,7 +577,13 @@ class inm_ubicacion_html extends html_controler {
         return $registros;
     }
 
-    private function registros_con_link(array $acciones_grupo, stdClass $r_inm_costos){
+    /**
+     * @param array $acciones_grupo
+     * @param stdClass $r_inm_costos
+     * @return array
+     */
+    private function registros_con_link(array $acciones_grupo, stdClass $r_inm_costos): array
+    {
         $registros = $r_inm_costos->registros;
         $arreglo_costos = (array)$r_inm_costos;
         foreach ($arreglo_costos['registros'] as $key => $row){

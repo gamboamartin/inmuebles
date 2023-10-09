@@ -71,11 +71,12 @@ class _alta_comprador{
 
     /**
      * Inicializa un registro para su alta
+     * @param inm_comprador $modelo Modelo de comprador
      * @param array $registro Registro en proceso
      * @return array
      * @version 2.9.0
      */
-    final public function init_row_alta(array $registro): array
+    final public function init_row_alta(inm_comprador $modelo, array $registro): array
     {
         $keys = array('nombre','apellido_paterno','nss','curp','rfc');
         $valida = $this->validacion->valida_existencia_keys(keys: $keys,registro:  $registro);
@@ -91,6 +92,20 @@ class _alta_comprador{
         $registro = $this->default_infonavit(registro: $registro);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error integrar data default',data:  $registro);
+        }
+
+        if(!isset($registro['inm_sindicato_id'])){
+            $inm_sindicato_id = $modelo->id_preferido_detalle(entidad_preferida: 'inm_sindicato');
+            if(errores::$error){
+                return $this->error->error(mensaje: 'Error integrar inm_sindicato_id default',
+                    data:  $inm_sindicato_id);
+            }
+            if($inm_sindicato_id === -1){
+                $inm_sindicato_id = 1;
+            }
+
+            $registro['inm_sindicato_id'] = $inm_sindicato_id;
+
         }
 
         $valida = $this->valida_base_comprador(registro: $registro);

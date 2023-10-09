@@ -17,14 +17,14 @@ class inm_comprador extends _modelo_parent{
             'inm_tipo_credito'=>'inm_attr_tipo_credito','inm_destino_credito'=>$tabla,'inm_plazo_credito_sc'=>$tabla,
             'inm_tipo_discapacidad'=>$tabla,'inm_persona_discapacidad'=>$tabla,'inm_estado_civil'=>$tabla,
             'bn_cuenta'=>$tabla,'org_sucursal'=>'bn_cuenta','org_empresa'=>'org_sucursal',
-            'inm_institucion_hipotecaria'=>$tabla);
+            'inm_institucion_hipotecaria'=>$tabla,'inm_sindicato'=>$tabla);
 
         $campos_obligatorios = array('apellido_paterno','bn_cuenta_id','cel_com','correo_com','curp',
             'descuento_pension_alimenticia_dh', 'descuento_pension_alimenticia_fc', 'es_segundo_credito',
             'inm_attr_tipo_credito_id', 'inm_destino_credito_id','inm_estado_civil_id','inm_persona_discapacidad_id',
             'inm_producto_infonavit_id', 'inm_plazo_credito_sc_id', 'inm_tipo_discapacidad_id','lada_com','lada_nep',
             'monto_ahorro_voluntario', 'monto_credito_solicitado_dh','nombre','nombre_empresa_patron', 'nrp_nep',
-            'numero_com','numero_nep','inm_institucion_hipotecaria_id');
+            'numero_com','numero_nep','inm_institucion_hipotecaria_id','inm_sindicato_id');
 
         $columnas_extra= array();
         $renombres['dp_calle_pertenece_empresa']['nombre_original']= 'dp_calle_pertenece';
@@ -57,7 +57,8 @@ class inm_comprador extends _modelo_parent{
             'extension_nep','genero', 'inm_attr_tipo_credito_id', 'inm_destino_credito_id','inm_estado_civil_id',
             'inm_persona_discapacidad_id', 'inm_plazo_credito_sc_id', 'inm_producto_infonavit_id',
             'inm_tipo_discapacidad_id','lada_com','lada_nep', 'monto_ahorro_voluntario', 'monto_credito_solicitado_dh',
-            'nombre', 'nombre_empresa_patron', 'nrp_nep','numero_com','numero_nep','inm_institucion_hipotecaria_id');
+            'nombre', 'nombre_empresa_patron', 'nrp_nep','numero_com','numero_nep','inm_institucion_hipotecaria_id',
+            'inm_sindicato_id');
 
 
         $tipo_campos['lada_com'] = 'lada';
@@ -89,7 +90,7 @@ class inm_comprador extends _modelo_parent{
         $registro_entrada = $this->registro;
 
 
-        $registro = (new _alta_comprador())->init_row_alta(registro: $this->registro);
+        $registro = (new _alta_comprador())->init_row_alta(registro: $this->registro, modelo: $this);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al inicializar registro',data:  $registro);
         }
