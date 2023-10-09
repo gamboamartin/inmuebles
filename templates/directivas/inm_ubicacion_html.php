@@ -418,6 +418,7 @@ class inm_ubicacion_html extends html_controler {
      * @param array $links Links previos
      * @param array $row Registro en proceso
      * @return array
+     * @version 2.164.1
      */
     private function integra_link(array $adm_accion_grupo, array $arreglo_costos, string $key, array $links,
                                   array $row): array
@@ -595,6 +596,7 @@ class inm_ubicacion_html extends html_controler {
      * @param string $key Key a integrar valor
      * @param array $row Registro en proceso
      * @return array|true
+     * @version 2.164.1
      */
     private function valida_data_link(array $arreglo_costos, string $key, array $row): bool|array
     {

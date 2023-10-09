@@ -327,6 +327,44 @@ class inm_ubicacion_htmlTest extends test {
         errores::$error = false;
     }
 
+    public function test_integra_link(): void
+    {
+        errores::$error = false;
+
+        $_GET['seccion'] = 'inm_producto_infonavit';
+        $_GET['accion'] = 'lista';
+        $_SESSION['grupo_id'] = 1;
+        $_SESSION['usuario_id'] = 2;
+        $_GET['session_id'] = '1';
+
+        $html_ = new \gamboamartin\template_1\html();
+        $html = new inm_ubicacion_html($html_);
+        $html = new liberator($html);
+
+        $arreglo_costos = array();
+        $row = array();
+        $row['inm_costo_id'] = 1;
+        $arreglo_costos['registros'] = array();
+        $key = 'a';
+        $adm_accion_grupo = array();
+        $links = array();
+        $arreglo_costos['registros']['a'][] = array();
+
+        $adm_accion_grupo['adm_accion_css'] = 'danger';
+        $adm_accion_grupo['adm_accion_es_status'] = 'inactivo';
+        $adm_accion_grupo['adm_accion_descripcion'] = 'inactivo';
+        $adm_accion_grupo['adm_seccion_descripcion'] = 'inactivo';
+        $adm_accion_grupo['adm_accion_muestra_icono_btn'] = 'inactivo';
+        $adm_accion_grupo['adm_accion_muestra_titulo_btn'] = 'activo';
+        $adm_accion_grupo['adm_accion_titulo'] = 'activo';
+
+        $resultado = $html->integra_link($adm_accion_grupo, $arreglo_costos, $key, $links, $row);
+        $this->assertIsArray($resultado);
+        $this->assertNotTrue(errores::$error);
+        $this->assertEquals("<a role='button' title='activo' href='index.php?seccion=inactivo&accion=inactivo&registro_id=1&session_id=1&adm_menu_id=-1' class='btn btn-danger ' style='margin-left: 2px; margin-bottom: 2px; '>activo</a>",$resultado['inactivo']);
+        errores::$error = false;
+    }
+
     public function test_links(): void
     {
         errores::$error = false;
@@ -389,6 +427,37 @@ class inm_ubicacion_htmlTest extends test {
         $this->assertIsString($resultado);
         $this->assertNotTrue(errores::$error);
         $this->assertStringContainsStringIgnoringCase(" inm_ubicacion_id' data-live-search='true' id='inm_ubicacion_id' name='inm_ubicacion_id' required",$resultado);
+        errores::$error = false;
+    }
+
+    public function test_valida_data_link(): void
+    {
+        errores::$error = false;
+
+        $_GET['seccion'] = 'inm_producto_infonavit';
+        $_GET['accion'] = 'lista';
+        $_SESSION['grupo_id'] = 1;
+        $_SESSION['usuario_id'] = 2;
+        $_GET['session_id'] = '1';
+
+        $html_ = new \gamboamartin\template_1\html();
+        $html = new inm_ubicacion_html($html_);
+        $html = new liberator($html);
+
+        $arreglo_costos = array();
+        $key = '';
+        $row = array();
+        $row['inm_costo_id'] = 1;
+        $arreglo_costos['registros'] = array();
+        $arreglo_costos['registros']['z'][] = array();
+        $key = 'z';
+
+
+
+        $resultado = $html->valida_data_link($arreglo_costos, $key, $row);
+        $this->assertIsBool($resultado);
+        $this->assertNotTrue(errores::$error);
+
         errores::$error = false;
     }
 
