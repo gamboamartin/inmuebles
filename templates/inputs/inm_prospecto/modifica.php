@@ -13,6 +13,7 @@
 <?php echo $controlador->inputs->rfc; ?>
 <?php echo $controlador->inputs->dp_estado_nacimiento_id; ?>
 <?php echo $controlador->inputs->dp_municipio_nacimiento_id; ?>
+<?php echo $controlador->inputs->observaciones; ?>
     </div>
 
 <?php echo $controlador->header_frontend->apartado_2; ?>

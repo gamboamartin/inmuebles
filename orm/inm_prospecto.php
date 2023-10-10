@@ -4,6 +4,7 @@ namespace gamboamartin\inmuebles\models;
 
 use base\orm\_modelo_parent;
 use gamboamartin\administrador\models\adm_usuario;
+use gamboamartin\comercial\models\com_cliente;
 use gamboamartin\comercial\models\com_prospecto;
 use gamboamartin\errores\errores;
 use PDO;
@@ -42,7 +43,7 @@ class inm_prospecto extends _modelo_parent{
         $columnas_extra['usuario_permitido_id'] = $sql;
 
         $atributos_criticos = array('com_prospecto_id','razon_social','dp_calle_pertenece_id','rfc',
-            'numero_exterior','numero_interior','inm_sindicato_id','dp_municipio_nacimiento_id');
+            'numero_exterior','numero_interior','inm_sindicato_id','dp_municipio_nacimiento_id','observaciones');
 
 
         $tipo_campos= array();
@@ -71,7 +72,7 @@ class inm_prospecto extends _modelo_parent{
     public function alta_bd(array $keys_integra_ds = array('codigo', 'descripcion')): array|stdClass
     {
 
-        $keys = array('nombre','apellido_paterno','numero_com','lada_com','correo_com');
+        $keys = array('nombre','apellido_paterno','numero_com','lada_com');
         $valida = $this->validacion->valida_existencia_keys(keys: $keys,registro:  $this->registro);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al validar registro',data:  $valida);
@@ -132,6 +133,17 @@ class inm_prospecto extends _modelo_parent{
         return $inm_comprador_ins;
     }
 
+    final public function integra_id_pref(string $entidad, array $inm_comprador_ins, inm_comprador|com_cliente $modelo){
+        $key_id = $entidad.'_id';
+        $id_pref = $modelo->id_preferido_detalle(entidad_preferida: $entidad);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al obtener id_pref', data: $id_pref);
+        }
+        $inm_comprador_ins[$key_id] = $id_pref;
+        return $inm_comprador_ins;
+    }
+
+
     final public function keys_data_prospecto(): array
     {
         return array('inm_producto_infonavit_id','inm_attr_tipo_credito_id','inm_destino_credito_id',
@@ -140,7 +152,7 @@ class inm_prospecto extends _modelo_parent{
             'nombre','apellido_paterno','apellido_materno','con_discapacidad','nombre_empresa_patron','nrp_nep',
             'lada_nep','numero_nep','extension_nep','lada_com','numero_com','cel_com','genero','correo_com',
             'inm_tipo_discapacidad_id','inm_persona_discapacidad_id','inm_estado_civil_id',
-            'inm_institucion_hipotecaria_id','inm_sindicato_id');
+            'inm_institucion_hipotecaria_id','inm_sindicato_id','dp_municipio_nacimiento_id');
     }
 
 

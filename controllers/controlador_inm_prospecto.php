@@ -122,7 +122,7 @@ class controlador_inm_prospecto extends _ctl_formato {
         $keys->inputs = array('nombre','apellido_paterno','apellido_materno','telefono','correo_com','razon_social',
             'lada_com','numero_com','cel_com','descuento_pension_alimenticia_dh','descuento_pension_alimenticia_fc',
             'monto_credito_solicitado_dh','monto_ahorro_voluntario','nombre_empresa_patron','nrp_nep','lada_nep',
-            'numero_nep','extension_nep','nss','curp','rfc','numero_exterior','numero_interior');
+            'numero_nep','extension_nep','nss','curp','rfc','numero_exterior','numero_interior','observaciones');
         $keys->selects = array();
 
         $init_data = array();
@@ -194,81 +194,35 @@ class controlador_inm_prospecto extends _ctl_formato {
         $inm_comprador_ins = (new inm_prospecto(link: $this->link))->defaults_alta_comprador(inm_comprador_ins: $inm_comprador_ins);
         if(errores::$error){
             $this->link->rollBack();
-            return $this->retorno_error(mensaje: 'Error al obtener defaults', data: $inm_comprador_ins, header: true, ws: false);
+            return $this->retorno_error(mensaje: 'Error al obtener inm_comprador_ins', data: $inm_comprador_ins, header: true, ws: false);
         }
 
-        $bn_cuenta_id = (new inm_comprador(link: $this->link))->id_preferido_detalle(entidad_preferida: 'bn_cuenta');
-        if(errores::$error){
-            $this->link->rollBack();
-            return $this->retorno_error(mensaje: 'Error al obtener bn_cuenta_id', data: $bn_cuenta_id, header: true, ws: false);
+        $entidades_pref = array('bn_cuenta');
+
+        $modelo_inm_comprador = new inm_comprador(link: $this->link);
+
+        foreach ($entidades_pref as $entidad){
+            $inm_comprador_ins = (new inm_prospecto(link: $this->link))->integra_id_pref(entidad: $entidad,
+                inm_comprador_ins:  $inm_comprador_ins, modelo: $modelo_inm_comprador);
+            if(errores::$error){
+                $this->link->rollBack();
+                return $this->retorno_error(mensaje: 'Error al obtener id_pref', data: $inm_comprador_ins, header: true, ws: false);
+            }
         }
 
-        $inm_comprador_ins['bn_cuenta_id'] = $bn_cuenta_id;
+        $entidades_pref = array('dp_calle_pertenece','cat_sat_regimen_fiscal','cat_sat_moneda',
+            'cat_sat_forma_pago','cat_sat_metodo_pago','cat_sat_uso_cfdi','com_tipo_cliente','cat_sat_tipo_persona');
 
-
-        $dp_calle_pertenece_id = (new com_cliente(link: $this->link))->id_preferido_detalle(entidad_preferida: 'dp_calle_pertenece');
-        if(errores::$error){
-            $this->link->rollBack();
-            return $this->retorno_error(mensaje: 'Error al obtener dp_calle_pertenece_id', data: $dp_calle_pertenece_id, header: true, ws: false);
+        $modelo_com_cliente = new com_cliente(link: $this->link);
+        foreach ($entidades_pref as $entidad){
+            $inm_comprador_ins = (new inm_prospecto(link: $this->link))->integra_id_pref(entidad: $entidad,
+                inm_comprador_ins:  $inm_comprador_ins, modelo: $modelo_com_cliente);
+            if(errores::$error){
+                $this->link->rollBack();
+                return $this->retorno_error(mensaje: 'Error al obtener id_pref', data: $inm_comprador_ins, header: true, ws: false);
+            }
         }
 
-        $inm_comprador_ins['dp_calle_pertenece_id'] = $dp_calle_pertenece_id;
-
-        $cat_sat_regimen_fiscal_id = (new com_cliente(link: $this->link))->id_preferido_detalle(entidad_preferida: 'cat_sat_regimen_fiscal');
-        if(errores::$error){
-            $this->link->rollBack();
-            return $this->retorno_error(mensaje: 'Error al obtener cat_sat_regimen_fiscal_id', data: $cat_sat_regimen_fiscal_id, header: true, ws: false);
-        }
-
-        $inm_comprador_ins['cat_sat_regimen_fiscal_id'] = $cat_sat_regimen_fiscal_id;
-
-        $cat_sat_moneda_id = (new com_cliente(link: $this->link))->id_preferido_detalle(entidad_preferida: 'cat_sat_moneda');
-        if(errores::$error){
-            $this->link->rollBack();
-            return $this->retorno_error(mensaje: 'Error al obtener cat_sat_moneda_id', data: $cat_sat_moneda_id, header: true, ws: false);
-        }
-
-        $inm_comprador_ins['cat_sat_moneda_id'] = $cat_sat_moneda_id;
-
-        $cat_sat_forma_pago_id = (new com_cliente(link: $this->link))->id_preferido_detalle(entidad_preferida: 'cat_sat_forma_pago');
-        if(errores::$error){
-            $this->link->rollBack();
-            return $this->retorno_error(mensaje: 'Error al obtener cat_sat_forma_pago_id', data: $cat_sat_forma_pago_id, header: true, ws: false);
-        }
-
-        $inm_comprador_ins['cat_sat_forma_pago_id'] = $cat_sat_forma_pago_id;
-
-        $cat_sat_metodo_pago_id = (new com_cliente(link: $this->link))->id_preferido_detalle(entidad_preferida: 'cat_sat_metodo_pago');
-        if(errores::$error){
-            $this->link->rollBack();
-            return $this->retorno_error(mensaje: 'Error al obtener cat_sat_metodo_pago_id', data: $cat_sat_metodo_pago_id, header: true, ws: false);
-        }
-
-        $inm_comprador_ins['cat_sat_metodo_pago_id'] = $cat_sat_metodo_pago_id;
-
-        $cat_sat_uso_cfdi_id = (new com_cliente(link: $this->link))->id_preferido_detalle(entidad_preferida: 'cat_sat_uso_cfdi');
-        if(errores::$error){
-            $this->link->rollBack();
-            return $this->retorno_error(mensaje: 'Error al obtener cat_sat_uso_cfdi_id', data: $cat_sat_uso_cfdi_id, header: true, ws: false);
-        }
-
-        $inm_comprador_ins['cat_sat_uso_cfdi_id'] = $cat_sat_uso_cfdi_id;
-
-        $com_tipo_cliente_id = (new com_cliente(link: $this->link))->id_preferido_detalle(entidad_preferida: 'com_tipo_cliente');
-        if(errores::$error){
-            $this->link->rollBack();
-            return $this->retorno_error(mensaje: 'Error al obtener com_tipo_cliente_id', data: $com_tipo_cliente_id, header: true, ws: false);
-        }
-
-        $inm_comprador_ins['com_tipo_cliente_id'] = $com_tipo_cliente_id;
-
-        $cat_sat_tipo_persona_id = (new com_cliente(link: $this->link))->id_preferido_detalle(entidad_preferida: 'cat_sat_tipo_persona');
-        if(errores::$error){
-            $this->link->rollBack();
-            return $this->retorno_error(mensaje: 'Error al obtener cat_sat_tipo_persona_id', data: $cat_sat_tipo_persona_id, header: true, ws: false);
-        }
-
-        $inm_comprador_ins['cat_sat_tipo_persona_id'] = $cat_sat_tipo_persona_id;
 
         $inm_comprador_ins['rfc'] = $data->inm_prospecto_completo->com_prospecto_rfc;
         $inm_comprador_ins['numero_exterior'] = 'POR ASIGNAR';
@@ -384,7 +338,7 @@ class controlador_inm_prospecto extends _ctl_formato {
         $keys_selects['cel_com']->regex = $this->validacion->patterns['telefono_mx_html'];
 
         $keys_selects = (new init())->key_select_txt(cols: 6,key: 'correo_com',
-            keys_selects:$keys_selects, place_holder: 'Correo');
+            keys_selects:$keys_selects, place_holder: 'Correo', required: false);
         if(errores::$error){
             return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
@@ -477,6 +431,12 @@ class controlador_inm_prospecto extends _ctl_formato {
 
         $keys_selects = (new init())->key_select_txt(cols: 12,key: 'monto_ahorro_voluntario',
             keys_selects:$keys_selects, place_holder: 'Monto Ahorro Voluntario ', required: false);
+        if(errores::$error){
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        }
+
+        $keys_selects = (new init())->key_select_txt(cols: 12,key: 'observaciones',
+            keys_selects:$keys_selects, place_holder: 'Observaciones', required: false);
         if(errores::$error){
             return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }

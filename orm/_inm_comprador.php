@@ -477,6 +477,8 @@ class _inm_comprador{
 
         }
 
+        //if(!isset($))
+
         return $controler->row_upd;
     }
 

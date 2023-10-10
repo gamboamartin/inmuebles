@@ -10,5 +10,6 @@
 <?php echo $controlador->inputs->cel_com; ?>
 <?php echo $controlador->inputs->correo_com; ?>
 <?php echo $controlador->inputs->razon_social; ?>
+<?php echo $controlador->inputs->observaciones; ?>
 
 <?php include (new views())->ruta_templates.'botons/submit/alta_bd.php';?>

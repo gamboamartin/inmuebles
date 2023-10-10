@@ -64,6 +64,9 @@ class _prospecto{
 
     private function com_prospecto_ins(array $registro): array
     {
+        if(!isset($registro['correo_com'])){
+            $registro['correo_com'] = 'pendiente@correo.com';
+        }
         $com_prospecto_ins['nombre'] = $registro['nombre'];
         $com_prospecto_ins['apellido_paterno'] = $registro['apellido_paterno'];
         $com_prospecto_ins['apellido_materno'] = $registro['apellido_materno'];
