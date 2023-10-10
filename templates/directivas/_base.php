@@ -405,6 +405,29 @@ class _base extends html_controler{
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al integrar radios',data:  $radios);
         }
+
+
+        $sl_dp_estado_nacimiento_id = (new dp_estado_html(html: $controler->html_base))->select_dp_estado_id(
+            cols: 6,con_registros:  true,id_selected:  101,link:  $controler->link, label: 'Estado Nac',
+            name: 'dp_estado_nacimiento_id');
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al integrar sl_dp_estado_nacimiento_id',
+                data:  $sl_dp_estado_nacimiento_id);
+        }
+        
+        $filtro = array('dp_estado.id'=>101);
+        $inputs->dp_estado_nacimiento_id = $sl_dp_estado_nacimiento_id;
+
+        $sl_dp_municipio_nacimiento_id = (new dp_municipio_html(html: $controler->html_base))->select_dp_municipio_id(
+            cols: 6, con_registros: true, id_selected: 2469, link: $controler->link, filtro: $filtro,
+            label: 'Municipio Nac', name: 'dp_municipio_nacimiento_id');
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al integrar sl_dp_municipio_nacimiento_id',
+                data:  $sl_dp_municipio_nacimiento_id);
+        }
+
+        $inputs->dp_municipio_nacimiento_id = $sl_dp_municipio_nacimiento_id;
+
         $data = new stdClass();
         $data->keys_selects = $keys_selects;
         $data->inputs = $inputs;

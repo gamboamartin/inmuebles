@@ -117,54 +117,10 @@ class controlador_inm_ubicacion extends _ctl_base {
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al integrar base',data:  $base, header: $header,ws:  $ws);
         }
-
-        $inm_concepto_id = (new inm_concepto_html(html: $this->html_base))->select_inm_concepto_id(
-            cols: 12,con_registros: true, id_selected: -1,link:  $this->link);
+        $inputs = (new _ubicacion())->inputs_costo(controler: $this);
         if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al integrar inm_concepto_id',data:  $inm_concepto_id,
-                header: $header,ws:  $ws);
+            return $this->retorno_error(mensaje: 'Error al integrar inputs',data:  $inputs, header: $header,ws:  $ws);
         }
-
-        $this->inputs->inm_concepto_id = $inm_concepto_id;
-
-        $referencia = (new inm_concepto_html(html: $this->html_base))->input_text_required(cols: 12,disabled: false,
-            name: 'referencia',place_holder: 'Referencia',row_upd: new stdClass(),value_vacio: false);
-
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al integrar referencia',data:  $referencia, header: $header,ws:  $ws);
-        }
-
-        $this->inputs->referencia = $referencia;
-
-        $fecha = (new inm_concepto_html(html: $this->html_base))->input_fecha(cols: 12,row_upd: new stdClass(),
-            value_vacio: false, value: date('Y-m-d'));
-
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al integrar fecha',data:  $fecha, header: $header,ws:  $ws);
-        }
-
-        $this->inputs->fecha = $fecha;
-
-
-        $monto = (new inm_concepto_html(html: $this->html_base))->input_monto(cols: 12,row_upd: new stdClass(),
-            value_vacio: false);
-
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al integrar monto',data:  $monto, header: $header,ws:  $ws);
-        }
-
-        $this->inputs->monto = $monto;
-
-
-        $inm_costo_descripcion = (new inm_concepto_html(html: $this->html_base))->input_descripcion(
-            cols: 12,row_upd: new stdClass(),value_vacio: false);
-
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al integrar inm_costo_descripcion',
-                data:  $inm_costo_descripcion, header: $header,ws:  $ws);
-        }
-
-        $this->inputs->inm_costo_descripcion = $inm_costo_descripcion;
 
         $link_costo_alta_bd = $this->obj_link->link_alta_bd(link: $this->link,seccion: 'inm_costo');
         if(errores::$error){

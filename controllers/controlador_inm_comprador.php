@@ -22,6 +22,8 @@ use gamboamartin\system\actions;
 use gamboamartin\system\links_menu;
 use gamboamartin\template\html;
 use html\doc_tipo_documento_html;
+use html\dp_estado_html;
+use html\dp_municipio_html;
 use PDO;
 use setasign\Fpdi\Fpdi;
 use stdClass;
@@ -535,6 +537,8 @@ class controlador_inm_comprador extends _ctl_base {
             return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects,
                 header: $header,ws:  $ws);
         }
+
+
         $base = $this->base_upd(keys_selects: $keys_selects, params: array(),params_ajustados: array());
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al integrar base',data:  $base, header: $header,ws:  $ws);
@@ -544,6 +548,27 @@ class controlador_inm_comprador extends _ctl_base {
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al integrar radios',data:  $radios, header: $header,ws:  $ws);
         }
+
+        $sl_dp_estado_nacimiento_id = (new dp_estado_html(html: $this->html_base))->select_dp_estado_id(
+            cols: 6,con_registros:  true,id_selected:  $this->registro['dp_estado_nacimiento_id'],link:  $this->link, label: 'Estado Nac',
+            name: 'dp_estado_nacimiento_id');
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al integrar sl_dp_estado_nacimiento_id',
+                data:  $sl_dp_estado_nacimiento_id,header: $header,ws: $ws);
+        }
+
+        $filtro = array('dp_estado.id'=>$this->registro['dp_estado_nacimiento_id']);
+        $this->inputs->dp_estado_nacimiento_id = $sl_dp_estado_nacimiento_id;
+
+        $sl_dp_municipio_nacimiento_id = (new dp_municipio_html(html: $this->html_base))->select_dp_municipio_id(
+            cols: 6, con_registros: true, id_selected: $this->registro['dp_municipio_nacimiento_id'], link: $this->link, filtro: $filtro,
+            label: 'Municipio Nac', name: 'dp_municipio_nacimiento_id');
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al integrar sl_dp_municipio_nacimiento_id',
+                data:  $sl_dp_municipio_nacimiento_id, header: $header,ws: $ws);
+        }
+
+        $this->inputs->dp_municipio_nacimiento_id = $sl_dp_municipio_nacimiento_id;
 
         $btn_collapse_all = $this->html->button_para_java(id_css: 'collapse_all',style:  'primary',tag:  'Ver/Ocultar Todo');
         if(errores::$error){

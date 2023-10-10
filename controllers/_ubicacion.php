@@ -2,6 +2,7 @@
 namespace gamboamartin\inmuebles\controllers;
 
 use gamboamartin\errores\errores;
+use gamboamartin\inmuebles\html\inm_concepto_html;
 use gamboamartin\inmuebles\html\inm_ubicacion_html;
 use gamboamartin\inmuebles\models\inm_prospecto;
 use gamboamartin\inmuebles\models\inm_ubicacion;
@@ -229,6 +230,57 @@ class _ubicacion{
 
         $controler->row_upd->costo_directo = 0;
         return $keys_selects;
+    }
+    
+    final public function inputs_costo(controlador_inm_ubicacion $controler){
+        $inm_concepto_id = (new inm_concepto_html(html: $controler->html_base))->select_inm_concepto_id(
+            cols: 12,con_registros: true, id_selected: -1,link:  $controler->link);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al integrar inm_concepto_id',data:  $inm_concepto_id);
+        }
+
+        $controler->inputs->inm_concepto_id = $inm_concepto_id;
+
+        $referencia = (new inm_concepto_html(html: $controler->html_base))->input_text_required(cols: 12,disabled: false,
+            name: 'referencia',place_holder: 'Referencia',row_upd: new stdClass(),value_vacio: false);
+
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al integrar referencia',data:  $referencia);
+        }
+
+        $controler->inputs->referencia = $referencia;
+
+        $fecha = (new inm_concepto_html(html: $controler->html_base))->input_fecha(cols: 12,row_upd: new stdClass(),
+            value_vacio: false, value: date('Y-m-d'));
+
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al integrar fecha',data:  $fecha);
+        }
+
+        $controler->inputs->fecha = $fecha;
+
+
+        $monto = (new inm_concepto_html(html: $controler->html_base))->input_monto(cols: 12,row_upd: new stdClass(),
+            value_vacio: false);
+
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al integrar monto',data:  $monto);
+        }
+
+        $controler->inputs->monto = $monto;
+
+
+        $inm_costo_descripcion = (new inm_concepto_html(html: $controler->html_base))->input_descripcion(
+            cols: 12,row_upd: new stdClass(),value_vacio: false);
+
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al integrar inm_costo_descripcion',
+                data:  $inm_costo_descripcion);
+        }
+
+        $controler->inputs->inm_costo_descripcion = $inm_costo_descripcion;
+
+        return $controler->inputs;
     }
 
     /**
