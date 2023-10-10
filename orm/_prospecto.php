@@ -106,6 +106,9 @@ class _prospecto{
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al inicializar key fiscal',data:  $registro);
         }
+        if(!isset($registro['fecha_nacimiento'])){
+            $registro['fecha_nacimiento'] = '1900-01-01';
+        }
 
         return $registro;
     }

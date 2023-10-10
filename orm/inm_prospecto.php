@@ -23,7 +23,7 @@ class inm_prospecto extends _modelo_parent{
             'dp_municipio'=>'dp_cp','dp_estado'=>'dp_municipio','dp_pais'=>'dp_estado','inm_sindicato'=>$tabla);
 
         $campos_obligatorios = array('com_prospecto_id','razon_social','dp_calle_pertenece_id','rfc',
-            'numero_exterior','numero_interior','inm_sindicato_id','dp_municipio_nacimiento_id');
+            'numero_exterior','numero_interior','inm_sindicato_id','dp_municipio_nacimiento_id','fecha_nacimiento');
 
         $columnas_extra= array();
 
@@ -43,7 +43,8 @@ class inm_prospecto extends _modelo_parent{
         $columnas_extra['usuario_permitido_id'] = $sql;
 
         $atributos_criticos = array('com_prospecto_id','razon_social','dp_calle_pertenece_id','rfc',
-            'numero_exterior','numero_interior','inm_sindicato_id','dp_municipio_nacimiento_id','observaciones');
+            'numero_exterior','numero_interior','inm_sindicato_id','dp_municipio_nacimiento_id','observaciones',
+            'fecha_nacimiento');
 
 
         $tipo_campos= array();
