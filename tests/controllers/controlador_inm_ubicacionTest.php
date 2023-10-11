@@ -4,6 +4,7 @@ namespace controllers;
 
 use gamboamartin\errores\errores;
 use gamboamartin\inmuebles\controllers\controlador_inm_ubicacion;
+use gamboamartin\inmuebles\tests\base_test;
 use gamboamartin\test\liberator;
 use gamboamartin\test\test;
 
@@ -111,6 +112,69 @@ class controlador_inm_ubicacionTest extends test {
         $this->assertStringContainsStringIgnoringCase("<div class='control-group col-sm-12'><label class='control-label' for='inm_concepto_id'>Concepto</label><div class='controls'><select class='form-control selectpicker color-secondary  inm_concepto_id' data-live-search='true' id='inm_concepto_id'", $data);
         $this->assertStringContainsStringIgnoringCase("<th>Tipo Concepto</th>", $data);
         $this->assertStringContainsStringIgnoringCase("<th>Fecha</th>", $data);
+
+        unlink($file);
+    }
+
+    public function test_detalle_costo(): void
+    {
+        $_SESSION['usuario_id'] = 2;
+        errores::$error = false;
+
+        $del = (new base_test())->del_inm_costo(link: $this->link);
+        if(errores::$error){
+            $error = (new errores())->error(mensaje: 'Error al del',data:  $del);
+            print_r($error);exit;
+        }
+
+        $file = "inm_ubicacion.detalle_costo";
+        $session_id = '5495808042';
+
+
+        $ch = curl_init("http://localhost/inmuebles/index.php?seccion=inm_ubicacion&accion=detalle_costo&adm_menu_id=64&session_id=$session_id&adm_menu_id=64&registro_id=1");
+        $fp = fopen($file, "w");
+
+        curl_setopt($ch, CURLOPT_FILE, $fp);
+        curl_setopt($ch, CURLOPT_HEADER, 0);
+
+        curl_exec($ch);
+        curl_close($ch);
+        fclose($fp);
+
+        $data = file_get_contents($file);
+        unlink($file);
+        //print_r($data);exit;
+        $this->assertStringContainsStringIgnoringCase("<tbody>
+                </tbody>", $data);
+
+        $alta = (new base_test())->alta_inm_costo(link: $this->link);
+        if(errores::$error){
+            $error = (new errores())->error(mensaje: 'Error al insertar',data:  $alta);
+            print_r($error);exit;
+        }
+
+
+        $ch = curl_init("http://localhost/inmuebles/index.php?seccion=inm_ubicacion&accion=detalle_costo&adm_menu_id=64&session_id=$session_id&adm_menu_id=64&registro_id=1");
+        $fp = fopen($file, "w");
+
+        curl_setopt($ch, CURLOPT_FILE, $fp);
+        curl_setopt($ch, CURLOPT_HEADER, 0);
+
+        curl_exec($ch);
+        curl_close($ch);
+        fclose($fp);
+
+        $data = file_get_contents($file);
+
+        $this->assertStringContainsStringIgnoringCase("<td>1</td>
+            <td>TIPO CONCEPTO 1</td>
+            <td>CONCEPTO 1</td>
+            <td>$1,000.00</td>
+            <td>2020-01-01</td>
+            <td>REF 1</td>
+            <td>Descripcion 1</td>
+            <td>", $data);
+
 
         unlink($file);
     }

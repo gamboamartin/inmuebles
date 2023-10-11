@@ -175,7 +175,8 @@ class controlador_inm_ubicacion extends _ctl_base {
      * @param bool $ws Retorna datos en ws
      * @param string $funcion Funcion para retorno de links
      * @return array|stdClass
-     * 
+     * @version 2.181.0
+     *
      */
     public function detalle_costo(bool $header, bool $ws = false, string $funcion='detalle_costo'): array|stdClass
     {
