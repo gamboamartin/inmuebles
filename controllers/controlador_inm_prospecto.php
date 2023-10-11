@@ -198,30 +198,10 @@ class controlador_inm_prospecto extends _ctl_formato {
             return $this->retorno_error(mensaje: 'Error al obtener inm_comprador_ins', data: $inm_comprador_ins, header: true, ws: false);
         }
 
-        $entidades_pref = array('bn_cuenta');
-
-        $modelo_inm_comprador = new inm_comprador(link: $this->link);
-
-        foreach ($entidades_pref as $entidad){
-            $inm_comprador_ins = (new inm_prospecto(link: $this->link))->integra_id_pref(entidad: $entidad,
-                inm_comprador_ins:  $inm_comprador_ins, modelo: $modelo_inm_comprador);
-            if(errores::$error){
-                $this->link->rollBack();
-                return $this->retorno_error(mensaje: 'Error al obtener id_pref', data: $inm_comprador_ins, header: true, ws: false);
-            }
-        }
-
-        $entidades_pref = array('dp_calle_pertenece','cat_sat_regimen_fiscal','cat_sat_moneda',
-            'cat_sat_forma_pago','cat_sat_metodo_pago','cat_sat_uso_cfdi','com_tipo_cliente','cat_sat_tipo_persona');
-
-        $modelo_com_cliente = new com_cliente(link: $this->link);
-        foreach ($entidades_pref as $entidad){
-            $inm_comprador_ins = (new inm_prospecto(link: $this->link))->integra_id_pref(entidad: $entidad,
-                inm_comprador_ins:  $inm_comprador_ins, modelo: $modelo_com_cliente);
-            if(errores::$error){
-                $this->link->rollBack();
-                return $this->retorno_error(mensaje: 'Error al obtener id_pref', data: $inm_comprador_ins, header: true, ws: false);
-            }
+        $inm_comprador_ins = (new inm_prospecto(link: $this->link))->integra_ids_prefs(inm_comprador_ins: $inm_comprador_ins);
+        if(errores::$error){
+            $this->link->rollBack();
+            return $this->retorno_error(mensaje: 'Error al obtener id_pref', data: $inm_comprador_ins, header: true, ws: false);
         }
 
 

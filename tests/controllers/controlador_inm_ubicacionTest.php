@@ -93,7 +93,7 @@ class controlador_inm_ubicacionTest extends test {
         errores::$error = false;
 
         $file = "inm_ubicacion.asigna_costo";
-        $session_id = '5983857742';
+        $session_id = '5495808042';
 
 
         $ch = curl_init("http://localhost/inmuebles/index.php?seccion=inm_ubicacion&accion=asigna_costo&adm_menu_id=64&session_id=$session_id&adm_menu_id=64&registro_id=1");

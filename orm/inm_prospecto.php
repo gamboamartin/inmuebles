@@ -134,13 +134,40 @@ class inm_prospecto extends _modelo_parent{
         return $inm_comprador_ins;
     }
 
-    final public function integra_id_pref(string $entidad, array $inm_comprador_ins, inm_comprador|com_cliente $modelo){
+    private function integra_id_pref(string $entidad, array $inm_comprador_ins, inm_comprador|com_cliente $modelo){
         $key_id = $entidad.'_id';
         $id_pref = $modelo->id_preferido_detalle(entidad_preferida: $entidad);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al obtener id_pref', data: $id_pref);
         }
         $inm_comprador_ins[$key_id] = $id_pref;
+        return $inm_comprador_ins;
+    }
+
+    final public function integra_ids_prefs(array $inm_comprador_ins){
+        $entidades_pref = array('bn_cuenta');
+
+        $modelo_inm_comprador = new inm_comprador(link: $this->link);
+
+        foreach ($entidades_pref as $entidad){
+            $inm_comprador_ins = $this->integra_id_pref(entidad: $entidad, inm_comprador_ins:  $inm_comprador_ins,
+                modelo: $modelo_inm_comprador);
+            if(errores::$error){
+                return $this->error->error(mensaje: 'Error al obtener id_pref', data: $inm_comprador_ins);
+            }
+        }
+
+        $entidades_pref = array('dp_calle_pertenece','cat_sat_regimen_fiscal','cat_sat_moneda',
+            'cat_sat_forma_pago','cat_sat_metodo_pago','cat_sat_uso_cfdi','com_tipo_cliente','cat_sat_tipo_persona');
+
+        $modelo_com_cliente = new com_cliente(link: $this->link);
+        foreach ($entidades_pref as $entidad){
+            $inm_comprador_ins = $this->integra_id_pref(entidad: $entidad, inm_comprador_ins:  $inm_comprador_ins,
+                modelo: $modelo_com_cliente);
+            if(errores::$error){
+                return $this->error->error(mensaje: 'Error al obtener id_pref', data: $inm_comprador_ins);
+            }
+        }
         return $inm_comprador_ins;
     }
 
@@ -153,7 +180,7 @@ class inm_prospecto extends _modelo_parent{
             'nombre','apellido_paterno','apellido_materno','con_discapacidad','nombre_empresa_patron','nrp_nep',
             'lada_nep','numero_nep','extension_nep','lada_com','numero_com','cel_com','genero','correo_com',
             'inm_tipo_discapacidad_id','inm_persona_discapacidad_id','inm_estado_civil_id',
-            'inm_institucion_hipotecaria_id','inm_sindicato_id','dp_municipio_nacimiento_id');
+            'inm_institucion_hipotecaria_id','inm_sindicato_id','dp_municipio_nacimiento_id','fecha_nacimiento');
     }
 
 
