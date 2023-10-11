@@ -104,6 +104,7 @@ if($controlador->row_upd->genero === 'F'){
 <?php echo $controlador->inputs->inm_estado_civil_id; ?>
         <?php echo $controlador->inputs->dp_estado_nacimiento_id; ?>
         <?php echo $controlador->inputs->dp_municipio_nacimiento_id; ?>
+        <?php echo $controlador->inputs->fecha_nacimiento; ?>
 
     </div>
 

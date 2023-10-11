@@ -325,7 +325,7 @@ class controlador_inm_comprador extends _ctl_base {
             'descuento_pension_alimenticia_fc','monto_credito_solicitado_dh','monto_ahorro_voluntario','nss','curp',
             'rfc','apellido_paterno','apellido_materno','nombre','numero_exterior','numero_interior','telefono',
             'nombre_empresa_patron','nrp_nep','lada_nep','numero_nep','extension_nep','lada_com','numero_com',
-            'cel_com','genero','correo_com');
+            'cel_com','genero','correo_com','fecha_nacimiento');
         $keys->selects = array();
 
 
@@ -569,6 +569,16 @@ class controlador_inm_comprador extends _ctl_base {
         }
 
         $this->inputs->dp_municipio_nacimiento_id = $sl_dp_municipio_nacimiento_id;
+
+        $fecha_nacimiento = $this->html->input_fecha(cols: 12,row_upd: $this->row_upd,value_vacio:  false,
+            value: $this->row_upd->fecha_nacimiento);
+
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al integrar fecha_nacimiento',
+                data:  $fecha_nacimiento, header: $header,ws: $ws);
+        }
+
+        $this->inputs->fecha_nacimiento = $fecha_nacimiento;
 
         $btn_collapse_all = $this->html->button_para_java(id_css: 'collapse_all',style:  'primary',tag:  'Ver/Ocultar Todo');
         if(errores::$error){

@@ -428,6 +428,17 @@ class _base extends html_controler{
 
         $inputs->dp_municipio_nacimiento_id = $sl_dp_municipio_nacimiento_id;
 
+        $fecha_nacimiento = $controler->html->input_fecha(cols: 12, row_upd: new stdClass(), value_vacio: false,
+            name: 'fecha_nacimiento', place_holder: 'Fecha Nac', value: false);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al fecha_nacimiento input genera',
+                data:  $fecha_nacimiento);
+        }
+
+        $inputs->fecha_nacimiento = $fecha_nacimiento;
+
+
+
         $data = new stdClass();
         $data->keys_selects = $keys_selects;
         $data->inputs = $inputs;

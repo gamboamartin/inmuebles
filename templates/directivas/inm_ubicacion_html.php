@@ -564,7 +564,8 @@ class inm_ubicacion_html extends html_controler {
      * @return array
      * @version 2.165.1
      */
-    private function links(array $acciones_grupo, array $arreglo_costos, string $key, array $params_get, array $row): array
+    private function links(array $acciones_grupo, array $arreglo_costos, string $key, array $params_get,
+                           array $row): array
     {
         $valida = $this->valida_data_link(arreglo_costos: $arreglo_costos,key:  $key,row:  $row);
         if(errores::$error){
@@ -587,6 +588,14 @@ class inm_ubicacion_html extends html_controler {
             }
         }
         return $links;
+    }
+
+    final public function params_get(string $accion_retorno, int $id_retorno, string $seccion_retorno): array
+    {
+        $params_get['seccion_retorno'] = $seccion_retorno;
+        $params_get['accion_retorno'] = $accion_retorno;
+        $params_get['id_retorno'] = $id_retorno;
+        return $params_get;
     }
 
     /**
