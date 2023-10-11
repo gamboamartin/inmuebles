@@ -229,6 +229,29 @@ class _ubicacionTest extends test {
         errores::$error = false;
     }
 
+    public function test_inputs_costo(): void
+    {
+        errores::$error = false;
+
+        $_GET['seccion'] = 'inm_producto_infonavit';
+        $_GET['accion'] = 'lista';
+        $_SESSION['grupo_id'] = 1;
+        $_SESSION['usuario_id'] = 2;
+        $_GET['session_id'] = '1';
+
+
+        $inm = new _ubicacion();
+        //$inm = new liberator($inm);
+
+        $controler = new controlador_inm_ubicacion(link: $this->link,paths_conf: $this->paths_conf);
+        $controler->inputs = new stdClass();
+        $resultado = $inm->inputs_costo($controler);
+        $this->assertIsObject($resultado);
+        $this->assertNotTrue(errores::$error);
+        $this->assertStringContainsString("<div class='control-group col-sm-12'><label class='control-label' for='fecha'>Fecha",$resultado->fecha);
+        errores::$error = false;
+    }
+
     public function test_integra_ids_preferidos(): void
     {
         errores::$error = false;

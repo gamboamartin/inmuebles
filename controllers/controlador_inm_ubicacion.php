@@ -110,6 +110,12 @@ class controlador_inm_ubicacion extends _ctl_base {
         return $base_data->base_html->r_modifica;
     }
 
+    /**
+     * Vista para asignacion de costo
+     * @param bool $header Retorna datos via WEB
+     * @param bool $ws Retorna datos vis JSON
+     * @return array|stdClass
+     */
     public function asigna_costo(bool $header, bool $ws = false): array|stdClass
     {
 

@@ -231,8 +231,19 @@ class _ubicacion{
         $controler->row_upd->costo_directo = 0;
         return $keys_selects;
     }
-    
-    final public function inputs_costo(controlador_inm_ubicacion $controler){
+
+    /**
+     * Integra los inputs de costeo
+     * @param controlador_inm_ubicacion $controler Controlador en ejecucion
+     * @return array|stdClass
+     * @version 2.176.1
+     */
+    final public function inputs_costo(controlador_inm_ubicacion $controler): array|stdClass
+    {
+        if(is_array($controler->inputs)){
+            return $this->error->error(mensaje: 'Error $controler->inputs no esta inicializado',
+                data:  $controler->inputs);
+        }
         $inm_concepto_id = (new inm_concepto_html(html: $controler->html_base))->select_inm_concepto_id(
             cols: 12,con_registros: true, id_selected: -1,link:  $controler->link);
         if(errores::$error){
