@@ -118,8 +118,12 @@ class controlador_inm_ubicacion extends _ctl_base {
      */
     public function asigna_costo(bool $header, bool $ws = false): array|stdClass
     {
+        $params_get['seccion_retorno'] = $this->tabla;
+        $params_get['accion_retorno'] = __FUNCTION__;
+        $params_get['id_retorno'] = $this->registro_id;
 
-        $base = (new inm_ubicacion_html(html: $this->html_base))->base_costos(controler: $this,funcion: __FUNCTION__);
+        $base = (new inm_ubicacion_html(html: $this->html_base))->base_costos(controler: $this,funcion: __FUNCTION__,
+            params_get: $params_get);
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al integrar base',data:  $base, header: $header,ws:  $ws);
         }
@@ -169,7 +173,12 @@ class controlador_inm_ubicacion extends _ctl_base {
     public function detalle_costo(bool $header, bool $ws = false): array|stdClass
     {
 
-        $base = (new inm_ubicacion_html(html: $this->html_base))->base_costos(controler: $this,funcion: __FUNCTION__);
+        $params_get['seccion_retorno'] = $this->tabla;
+        $params_get['accion_retorno'] = __FUNCTION__;
+        $params_get['id_retorno'] = $this->registro_id;
+
+        $base = (new inm_ubicacion_html(html: $this->html_base))->base_costos(controler: $this,funcion: __FUNCTION__,
+            params_get: $params_get);
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al integrar base',data:  $base, header: $header,ws:  $ws);
         }

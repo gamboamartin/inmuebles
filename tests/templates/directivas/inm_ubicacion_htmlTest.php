@@ -3,24 +3,13 @@ namespace gamboamartin\inmuebles\tests\controllers;
 
 
 use gamboamartin\errores\errores;
-use gamboamartin\inmuebles\controllers\_keys_selects;
-use gamboamartin\inmuebles\controllers\controlador_inm_attr_tipo_credito;
-use gamboamartin\inmuebles\controllers\controlador_inm_comprador;
-use gamboamartin\inmuebles\controllers\controlador_inm_plazo_credito_sc;
-use gamboamartin\inmuebles\controllers\controlador_inm_producto_infonavit;
 use gamboamartin\inmuebles\controllers\controlador_inm_ubicacion;
 use gamboamartin\inmuebles\html\inm_ubicacion_html;
-use gamboamartin\inmuebles\models\_inm_comprador;
-use gamboamartin\inmuebles\models\_inm_ubicaciones;
-use gamboamartin\inmuebles\models\inm_ubicacion;
-use gamboamartin\template\html;
 use gamboamartin\test\liberator;
 use gamboamartin\test\test;
 
 
 use stdClass;
-use function PHPUnit\Framework\assertEquals;
-use function PHPUnit\Framework\assertStringContainsStringIgnoringCase;
 
 
 class inm_ubicacion_htmlTest extends test {
@@ -59,7 +48,7 @@ class inm_ubicacion_htmlTest extends test {
         $arreglo_costos['registros']['d'][] = array();
         $key = 'd';
 
-        $resultado = $html->ajusta_registros($acciones_grupo, $arreglo_costos, $key, $registros, $row);
+        $resultado = $html->ajusta_registros($acciones_grupo, $arreglo_costos, $key, array(), $registros, $row);
         $this->assertIsArray($resultado);
         $this->assertNotTrue(errores::$error);
         errores::$error = false;
@@ -82,7 +71,7 @@ class inm_ubicacion_htmlTest extends test {
         $controler = new controlador_inm_ubicacion(link: $this->link, paths_conf: $this->paths_conf);
         $controler->registro_id = 1;
         $funcion = 'a';
-        $resultado = $html->base_costos($controler, $funcion);
+        $resultado = $html->base_costos($controler, $funcion, array());
         $this->assertIsObject($resultado);
         $this->assertNotTrue(errores::$error);
         errores::$error = false;
@@ -371,9 +360,11 @@ class inm_ubicacion_htmlTest extends test {
 
         $controler = new controlador_inm_ubicacion(link: $this->link, paths_conf: $this->paths_conf);
         $controler->registro_id = 1;
-        $resultado = $html->init_costos($controler);
+        $resultado = $html->init_costos($controler, array());
         $this->assertIsObject($resultado);
         $this->assertNotTrue(errores::$error);
+
+        errores::$error = false;
 
     }
 
@@ -432,7 +423,7 @@ class inm_ubicacion_htmlTest extends test {
         $adm_accion_grupo['adm_accion_muestra_titulo_btn'] = 'activo';
         $adm_accion_grupo['adm_accion_titulo'] = 'activo';
 
-        $resultado = $html->integra_link($adm_accion_grupo, $arreglo_costos, $key, $links, $row);
+        $resultado = $html->integra_link($adm_accion_grupo, $arreglo_costos, $key, $links, array(), $row);
         $this->assertIsArray($resultado);
         $this->assertNotTrue(errores::$error);
         $this->assertEquals("<a role='button' title='activo' href='index.php?seccion=inactivo&accion=inactivo&registro_id=1&session_id=1&adm_menu_id=-1' class='btn btn-danger ' style='margin-left: 2px; margin-bottom: 2px; '>activo</a>",$resultado['inactivo']);
@@ -470,7 +461,7 @@ class inm_ubicacion_htmlTest extends test {
         $acciones_grupo[0]['adm_accion_muestra_titulo_btn'] = 'activo';
         $acciones_grupo[0]['adm_accion_titulo'] = 'activo';
 
-        $resultado = $html->links($acciones_grupo, $arreglo_costos, $key, $row);
+        $resultado = $html->links($acciones_grupo, $arreglo_costos, $key, array(), $row);
         $this->assertIsArray($resultado);
         $this->assertNotTrue(errores::$error);
         $this->assertStringContainsStringIgnoringCase("<a role='button' title='activo' href='index.php?seccion=a&accion=a&registro_id=1&session_id=1&adm_menu_id=-1' class='btn btn-light ' style='margin-left: 2px; margin-bottom: 2px; '>activo</a>",$resultado['a']);
@@ -495,7 +486,7 @@ class inm_ubicacion_htmlTest extends test {
         $r_inm_costos = new stdClass();
         $r_inm_costos->registros = array();
 
-        $resultado = $html->registros($acciones_grupo, $r_inm_costos);
+        $resultado = $html->registros($acciones_grupo, array(), $r_inm_costos);
         $this->assertIsArray($resultado);
         $this->assertNotTrue(errores::$error);
         errores::$error = false;
@@ -519,7 +510,7 @@ class inm_ubicacion_htmlTest extends test {
         $acciones_grupo = array();
         $r_inm_costos = new stdClass();
         $r_inm_costos->registros = array();
-        $resultado = $html->registros_con_link($acciones_grupo, $r_inm_costos);
+        $resultado = $html->registros_con_link($acciones_grupo, array(), $r_inm_costos);
         $this->assertIsArray($resultado);
         $this->assertNotTrue(errores::$error);
         errores::$error = false;

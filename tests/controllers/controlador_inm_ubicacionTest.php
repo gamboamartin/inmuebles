@@ -87,6 +87,33 @@ class controlador_inm_ubicacionTest extends test {
 
         unlink($file);
     }
+
+    public function test_asigna_costo(): void
+    {
+        errores::$error = false;
+
+        $file = "inm_ubicacion.asigna_costo";
+        $session_id = '5983857742';
+
+
+        $ch = curl_init("http://localhost/inmuebles/index.php?seccion=inm_ubicacion&accion=asigna_costo&adm_menu_id=64&session_id=$session_id&adm_menu_id=64&registro_id=1");
+        $fp = fopen($file, "w");
+
+        curl_setopt($ch, CURLOPT_FILE, $fp);
+        curl_setopt($ch, CURLOPT_HEADER, 0);
+
+        curl_exec($ch);
+        curl_close($ch);
+        fclose($fp);
+
+        $data = file_get_contents($file);
+        //print_r($data);exit;
+        $this->assertStringContainsStringIgnoringCase("<div class='control-group col-sm-12'><label class='control-label' for='inm_concepto_id'>Concepto</label><div class='controls'><select class='form-control selectpicker color-secondary  inm_concepto_id' data-live-search='true' id='inm_concepto_id'", $data);
+        $this->assertStringContainsStringIgnoringCase("<th>Tipo Concepto</th>", $data);
+        $this->assertStringContainsStringIgnoringCase("<th>Fecha</th>", $data);
+
+        unlink($file);
+    }
     
 
     public function test_init_datatable(): void

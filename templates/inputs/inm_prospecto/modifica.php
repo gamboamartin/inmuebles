@@ -11,6 +11,7 @@
 <?php echo $controlador->inputs->nss; ?>
 <?php echo $controlador->inputs->curp; ?>
 <?php echo $controlador->inputs->rfc; ?>
+<?php echo $controlador->inputs->fecha_nacimiento; ?>
 <?php echo $controlador->inputs->dp_estado_nacimiento_id; ?>
 <?php echo $controlador->inputs->dp_municipio_nacimiento_id; ?>
 <?php echo $controlador->inputs->observaciones; ?>

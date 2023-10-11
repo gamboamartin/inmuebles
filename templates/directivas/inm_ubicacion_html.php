@@ -22,13 +22,14 @@ class inm_ubicacion_html extends html_controler {
      * @param array $acciones_grupo permisos de ejecucion
      * @param array $arreglo_costos Resultado de costos
      * @param string $key Key a integrar
+     * @param array $params_get Parametros adicionales para link de accion
      * @param array $registros Registros de ubicacion
      * @param array $row Registro en proceso
      * @return array
      * @version 2.166.1
      */
-    private function ajusta_registros(array $acciones_grupo, array $arreglo_costos, string $key, array $registros,
-                                      array $row): array
+    private function ajusta_registros(array $acciones_grupo, array $arreglo_costos, string $key, array $params_get,
+                                      array $registros, array $row): array
     {
 
         $valida = $this->valida_data_link(arreglo_costos: $arreglo_costos,key:  $key,row:  $row);
@@ -36,7 +37,8 @@ class inm_ubicacion_html extends html_controler {
             return $this->error->error(mensaje: 'Error al validar datos', data: $valida);
         }
 
-        $links = $this->links(acciones_grupo: $acciones_grupo,arreglo_costos:  $arreglo_costos,key:  $key,row:  $row);
+        $links = $this->links(acciones_grupo: $acciones_grupo, arreglo_costos: $arreglo_costos, key: $key,
+            params_get: $params_get, row: $row);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al integrar link', data: $links);
         }
@@ -50,10 +52,12 @@ class inm_ubicacion_html extends html_controler {
      * Integra una vista base de costos con registros de costeo
      * @param controlador_inm_ubicacion $controler Controlador en ejecucion
      * @param string $funcion Funcion de ejecucion
+     * @param array $params_get Parametros adicionales para links
      * @return array|stdClass
      * @version 2.170.0
      */
-    final public function base_costos(controlador_inm_ubicacion $controler, string $funcion): array|stdClass
+    final public function base_costos(controlador_inm_ubicacion $controler, string $funcion,
+                                      array $params_get): array|stdClass
     {
         if($controler->registro_id<=0){
             return $this->error->error(mensaje: 'Error registro_id debe ser mayor a 0', data: $controler->registro_id);
@@ -73,7 +77,7 @@ class inm_ubicacion_html extends html_controler {
             return $this->error->error(mensaje: 'Error al obtener formulario',data:  $data);
         }
 
-        $costos = $this->init_costos(controler: $controler);
+        $costos = $this->init_costos(controler: $controler, params_get: $params_get);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al obtener costos',data:  $costos);
         }
@@ -313,10 +317,12 @@ class inm_ubicacion_html extends html_controler {
     /**
      * Inicializa los registros de tipo costo
      * @param controlador_inm_ubicacion $controler Controlador en proceso
+     * @param array $params_get Parametros adicionales para integrar en link como var get
      * @return array|controlador_inm_ubicacion
      * @version 2.169.0
      */
-    private function init_costos(controlador_inm_ubicacion $controler): controlador_inm_ubicacion|array
+    private function init_costos(controlador_inm_ubicacion $controler,
+                                 array $params_get): controlador_inm_ubicacion|array
     {
         if($controler->registro_id <= 0){
             return $this->error->error(mensaje: 'Error $controler->registro_id debe ser mayor a 0',data:  $controler);
@@ -333,7 +339,8 @@ class inm_ubicacion_html extends html_controler {
             return $this->error->error(mensaje: 'Error al obtener acciones', data: $acciones_grupo);
         }
 
-        $registros = $this->registros(acciones_grupo: $acciones_grupo,r_inm_costos:  $r_inm_costos);
+        $registros = $this->registros(acciones_grupo: $acciones_grupo, params_get: $params_get,
+            r_inm_costos: $r_inm_costos);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al maquetar montos moneda',data:  $registros);
         }
@@ -467,12 +474,13 @@ class inm_ubicacion_html extends html_controler {
      * @param array $arreglo_costos Datos de costos
      * @param string $key Key a integrar
      * @param array $links Links previos
+     * @param array $params_get Parametros de link de row
      * @param array $row Registro en proceso
      * @return array
      * @version 2.164.1
      */
     private function integra_link(array $adm_accion_grupo, array $arreglo_costos, string $key, array $links,
-                                  array $row): array
+                                  array $params_get, array $row): array
     {
 
         $valida = $this->valida_data_link(arreglo_costos: $arreglo_costos,key:  $key,row:  $row);
@@ -482,8 +490,9 @@ class inm_ubicacion_html extends html_controler {
 
         $registro_id = $row['inm_costo_id'];
 
-        $data_link = (new datatables())->data_link(adm_accion_grupo: $adm_accion_grupo,
-            data_result: $arreglo_costos, html_base: $this->html_base, key: $key,registro_id:  $registro_id);
+
+        $data_link = (new datatables())->data_link(adm_accion_grupo: $adm_accion_grupo, data_result: $arreglo_costos,
+            html_base: $this->html_base, key: $key,registro_id:  $registro_id, params_get: $params_get);
 
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al obtener data para link', data: $data_link);
@@ -550,11 +559,12 @@ class inm_ubicacion_html extends html_controler {
      * @param array $acciones_grupo Acciones o permisos de un grupo de usuarios
      * @param array $arreglo_costos Registros con los costos de ubicacion
      * @param string $key Key de costo
+     * @param array $params_get Parametros de link de acciones
      * @param array $row Registro en ejecucion
      * @return array
      * @version 2.165.1
      */
-    private function links(array $acciones_grupo, array $arreglo_costos, string $key, array $row): array
+    private function links(array $acciones_grupo, array $arreglo_costos, string $key, array $params_get, array $row): array
     {
         $valida = $this->valida_data_link(arreglo_costos: $arreglo_costos,key:  $key,row:  $row);
         if(errores::$error){
@@ -570,8 +580,8 @@ class inm_ubicacion_html extends html_controler {
             }
 
 
-            $links = $this->integra_link(adm_accion_grupo: $adm_accion_grupo,arreglo_costos:  $arreglo_costos,
-                key:  $key,links:  $links,row:  $row);
+            $links = $this->integra_link(adm_accion_grupo: $adm_accion_grupo, arreglo_costos: $arreglo_costos,
+                key: $key, links: $links, params_get: $params_get, row: $row);
             if(errores::$error){
                 return $this->error->error(mensaje: 'Error al integrar link', data: $links);
             }
@@ -582,11 +592,12 @@ class inm_ubicacion_html extends html_controler {
     /**
      * Inicializa los registros para ser mostrados en front
      * @param array $acciones_grupo Permisos
+     * @param array $params_get Parametros adicionales para links
      * @param stdClass $r_inm_costos Resultado de costos
      * @return array
      * @version 2.168.1
      */
-    private function registros(array $acciones_grupo, stdClass $r_inm_costos): array
+    private function registros(array $acciones_grupo, array $params_get, stdClass $r_inm_costos): array
     {
         if(!isset($r_inm_costos->registros)){
             return $this->error->error(mensaje: 'Error r_inm_costos->registros no existe',data:  $r_inm_costos);
@@ -596,7 +607,8 @@ class inm_ubicacion_html extends html_controler {
                 data:  $r_inm_costos);
         }
 
-        $registros = $this->registros_con_link(acciones_grupo: $acciones_grupo,r_inm_costos:  $r_inm_costos);
+        $registros = $this->registros_con_link(acciones_grupo: $acciones_grupo, params_get: $params_get,
+            r_inm_costos: $r_inm_costos);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al ajustar registros link', data: $registros);
         }
@@ -612,11 +624,12 @@ class inm_ubicacion_html extends html_controler {
     /**
      * Integra los links a un registro de tipo costo
      * @param array $acciones_grupo Permisos
+     * @param array $params_get Parametros adicionales para links de acciones
      * @param stdClass $r_inm_costos Resultado de sql de costos
      * @return array
      * @version 2.167.1
      */
-    private function registros_con_link(array $acciones_grupo, stdClass $r_inm_costos): array
+    private function registros_con_link(array $acciones_grupo, array $params_get, stdClass $r_inm_costos): array
     {
         if(!isset($r_inm_costos->registros)){
             return $this->error->error(mensaje: 'Error r_inm_costos->registros no existe',data:  $r_inm_costos);
@@ -630,8 +643,8 @@ class inm_ubicacion_html extends html_controler {
         $arreglo_costos = (array)$r_inm_costos;
 
         foreach ($arreglo_costos['registros'] as $key => $row){
-            $registros = $this->ajusta_registros(acciones_grupo: $acciones_grupo,arreglo_costos:  $arreglo_costos,
-                key:  $key,registros:  $registros,row:  $row);
+            $registros = $this->ajusta_registros(acciones_grupo: $acciones_grupo, arreglo_costos: $arreglo_costos,
+                key: $key, params_get: $params_get, registros: $registros, row: $row);
             if(errores::$error){
                 return $this->error->error(mensaje: 'Error al ajustar registros link', data: $registros);
             }
