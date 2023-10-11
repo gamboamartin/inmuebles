@@ -172,7 +172,7 @@ class controlador_inm_ubicacion extends _ctl_base {
     public function detalle_costo(bool $header, bool $ws = false, string $funcion='detalle_costo'): array|stdClass
     {
 
-        $params_get = (new inm_ubicacion_html(html: $this->html_base))->params_get(accion_retorno: $funcion,
+        $params_get = (new inm_ubicacion_html(html: $this->html_base))->params_get_data(accion_retorno: $funcion,
             id_retorno: $this->registro_id,seccion_retorno: $this->tabla);
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al integrar params_get',data:  $params_get,

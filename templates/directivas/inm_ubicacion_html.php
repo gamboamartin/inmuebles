@@ -590,8 +590,26 @@ class inm_ubicacion_html extends html_controler {
         return $links;
     }
 
-    final public function params_get(string $accion_retorno, int $id_retorno, string $seccion_retorno): array
+    /**
+     * Integra los parametros para links
+     * @param string $accion_retorno Accion de retorno
+     * @param int $id_retorno Id de retorno
+     * @param string $seccion_retorno Seccion de retorno
+     * @return array
+     */
+    final public function params_get_data(string $accion_retorno, int $id_retorno, string $seccion_retorno): array
     {
+        $accion_retorno = trim($accion_retorno);
+        if($accion_retorno === ''){
+            return $this->error->error(mensaje: 'Error accion_retorno esta vacia',data:  $accion_retorno);
+        }
+        if($id_retorno <= 0 ){
+            return $this->error->error(mensaje: 'Error id_retorno es menor a 0',data:  $id_retorno);
+        }
+        $seccion_retorno = trim($seccion_retorno);
+        if($seccion_retorno === ''){
+            return $this->error->error(mensaje: 'Error seccion_retorno esta vacia',data:  $seccion_retorno);
+        }
         $params_get['seccion_retorno'] = $seccion_retorno;
         $params_get['accion_retorno'] = $accion_retorno;
         $params_get['id_retorno'] = $id_retorno;
