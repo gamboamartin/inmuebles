@@ -468,6 +468,34 @@ class inm_ubicacion_htmlTest extends test {
         errores::$error = false;
     }
 
+    public function test_params_get_data(): void
+    {
+        errores::$error = false;
+
+        $_GET['seccion'] = 'inm_producto_infonavit';
+        $_GET['accion'] = 'lista';
+        $_SESSION['grupo_id'] = 1;
+        $_SESSION['usuario_id'] = 2;
+        $_GET['session_id'] = '1';
+
+        $html_ = new \gamboamartin\template_1\html();
+        $html = new inm_ubicacion_html($html_);
+        //$html = new liberator($html);
+
+
+        $accion_retorno = 'a';
+        $id_retorno = 1;
+        $seccion_retorno = 'c';
+
+        $resultado = $html->params_get_data($accion_retorno, $id_retorno, $seccion_retorno);
+        $this->assertIsArray($resultado);
+        $this->assertNotTrue(errores::$error);
+        $this->assertEquals('c',$resultado['seccion_retorno']);
+        $this->assertEquals('a',$resultado['accion_retorno']);
+        $this->assertEquals('1',$resultado['id_retorno']);
+        errores::$error = false;
+    }
+
     public function test_registros(): void
     {
         errores::$error = false;

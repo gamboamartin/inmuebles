@@ -596,6 +596,7 @@ class inm_ubicacion_html extends html_controler {
      * @param int $id_retorno Id de retorno
      * @param string $seccion_retorno Seccion de retorno
      * @return array
+     * @version 2.180.1
      */
     final public function params_get_data(string $accion_retorno, int $id_retorno, string $seccion_retorno): array
     {

@@ -169,6 +169,12 @@ class controlador_inm_ubicacion extends _ctl_base {
         return $campos_view;
     }
 
+    /**
+     * @param bool $header
+     * @param bool $ws
+     * @param string $funcion
+     * @return array|stdClass
+     */
     public function detalle_costo(bool $header, bool $ws = false, string $funcion='detalle_costo'): array|stdClass
     {
 
