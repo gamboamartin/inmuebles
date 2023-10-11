@@ -114,7 +114,8 @@ class _prospecto{
     }
 
     /**
-     * @param array $registro
+     * Inicializa los datos fiscales base
+     * @param array $registro Registro en proceso
      * @return array
      */
     private function init_data_fiscal(array $registro): array

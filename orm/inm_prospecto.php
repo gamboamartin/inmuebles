@@ -51,16 +51,13 @@ class inm_prospecto extends _modelo_parent{
         $aplica_seguridad = true;
 
         $renombres = array();
-        $renombres['dp_municipio_nacimiento']['nombre_original']= 'dp_municipio';
-        $renombres['dp_municipio_nacimiento']['enlace']= 'inm_prospecto';
-        $renombres['dp_municipio_nacimiento']['key']= 'id';
-        $renombres['dp_municipio_nacimiento']['key_enlace']= 'dp_municipio_nacimiento_id';
 
-        $renombres['dp_estado_nacimiento']['nombre_original']= 'dp_estado';
-        $renombres['dp_estado_nacimiento']['enlace']= 'dp_municipio_nacimiento';
-        $renombres['dp_estado_nacimiento']['key']= 'id';
-        $renombres['dp_estado_nacimiento']['key_enlace']= 'dp_estado_id';
-
+        $renombres = (new _base_paquete())->rename_data_nac(enlace: $tabla, renombres: $renombres);
+        if(errores::$error){
+            $error = (new errores())->error(mensaje: 'Error al integrar rename', data: $renombres);
+            print_r($error);
+            exit;
+        }
 
         parent::__construct(link: $link, tabla: $tabla, aplica_seguridad: $aplica_seguridad,
             campos_obligatorios: $campos_obligatorios, columnas: $columnas, columnas_extra: $columnas_extra,
@@ -241,6 +238,8 @@ class inm_prospecto extends _modelo_parent{
 
         return $r_modifica;
     }
+
+
 
 
 }

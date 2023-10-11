@@ -60,7 +60,7 @@ class _base_paqueteTest extends test {
         $resultado = $_inm->descripcion($registro);
         $this->assertIsString($resultado);
         $this->assertNotTrue(errores::$error);
-        $this->assertEquals("A A  A A A",$resultado);
+        $this->assertStringContainsStringIgnoringCase("A A  A A A 2023-10-",$resultado);
 
         errores::$error = false;
     }

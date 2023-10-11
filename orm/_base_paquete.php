@@ -40,6 +40,7 @@ class _base_paquete{
         $descripcion .= ' '.$registro['nss'];
         $descripcion .= ' '.$registro['curp'];
         $descripcion .= ' '.$registro['rfc'];
+        $descripcion .= ' '.date('Y-m-d-H-i-s');
         return $descripcion;
     }
 
@@ -71,6 +72,28 @@ class _base_paquete{
             return $this->error->error(mensaje: 'Error al integrar descripcion',data:  $registro);
         }
         return $registro;
+    }
+
+    final public function rename_data_nac(string $enlace, array $renombres){
+        $renombres['dp_municipio_nacimiento']['nombre_original']= 'dp_municipio';
+        $renombres['dp_municipio_nacimiento']['enlace']= $enlace;
+        $renombres['dp_municipio_nacimiento']['key']= 'id';
+        $renombres['dp_municipio_nacimiento']['key_enlace']= 'dp_municipio_nacimiento_id';
+
+        $renombres = $this->rename_estado(renombres: $renombres);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al integrar rename', data: $renombres);
+        }
+        return $renombres;
+    }
+
+    private function rename_estado(array $renombres): array
+    {
+        $renombres['dp_estado_nacimiento']['nombre_original']= 'dp_estado';
+        $renombres['dp_estado_nacimiento']['enlace']= 'dp_municipio_nacimiento';
+        $renombres['dp_estado_nacimiento']['key']= 'id';
+        $renombres['dp_estado_nacimiento']['key_enlace']= 'dp_estado_id';
+        return $renombres;
     }
 
 

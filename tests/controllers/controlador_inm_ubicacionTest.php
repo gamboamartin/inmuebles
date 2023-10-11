@@ -121,7 +121,7 @@ class controlador_inm_ubicacionTest extends test {
         $_SESSION['usuario_id'] = 2;
         errores::$error = false;
 
-        $del = (new base_test())->del_inm_costo(link: $this->link);
+        $del = (new base_test())->del_inm_tipo_concepto(link: $this->link);
         if(errores::$error){
             $error = (new errores())->error(mensaje: 'Error al del',data:  $del);
             print_r($error);exit;

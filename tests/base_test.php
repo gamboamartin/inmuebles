@@ -713,6 +713,21 @@ class base_test{
         return $del;
     }
 
+    public function del_inm_concepto(PDO $link): array
+    {
+
+        $del = $this->del_inm_costo(link: $link);
+        if(errores::$error){
+            return (new errores())->error('Error al eliminar', $del);
+        }
+
+        $del = $this->del($link, 'gamboamartin\\inmuebles\\models\\inm_concepto');
+        if(errores::$error){
+            return (new errores())->error('Error al eliminar', $del);
+        }
+        return $del;
+    }
+
 
     public function del_inm_conf_empresa(PDO $link): array
     {
@@ -802,6 +817,21 @@ class base_test{
     public function del_inm_rel_ubi_comp(PDO $link): array
     {
         $del = $this->del($link, 'gamboamartin\\inmuebles\\models\\inm_rel_ubi_comp');
+        if(errores::$error){
+            return (new errores())->error('Error al eliminar', $del);
+        }
+        return $del;
+    }
+
+    public function del_inm_tipo_concepto(PDO $link): array
+    {
+
+        $del = $this->del_inm_concepto(link: $link);
+        if(errores::$error){
+            return (new errores())->error('Error al eliminar', $del);
+        }
+
+        $del = $this->del($link, 'gamboamartin\\inmuebles\\models\\inm_tipo_concepto');
         if(errores::$error){
             return (new errores())->error('Error al eliminar', $del);
         }

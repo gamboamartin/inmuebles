@@ -68,7 +68,7 @@ class inm_doc_prospecto extends _modelo_parent{
         $descripcion .= ' '.$registro['doc_tipo_documento_id'];
         $descripcion .= ' '.$r_alta_doc->registro_obj->doc_tipo_documento_descripcion;
         $descripcion .= ' '.$r_alta_doc->registro_obj->doc_extension_descripcion;
-        $descripcion .= ' '.$registro['inm_comprador_id'];
+        $descripcion .= ' '.$registro['inm_prospecto_id'];
         $descripcion .= ' '.$r_alta_doc->registro_obj->doc_documento_nombre;
         return $descripcion;
     }

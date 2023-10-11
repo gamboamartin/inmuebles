@@ -55,7 +55,7 @@ class controlador_inm_doc_prospecto extends _ctl_formato {
         $keys_selects = array();
 
         $columns_ds = array('inm_prospecto_id','inm_prospecto_nss','inm_prospecto_curp','inm_prospecto_nombre',
-            'inm_prospecto_apellido_paterno','inm_prospecto_apellido_materno');
+            'inm_prospecto_apellido_paterno');
         $keys_selects = $this->key_select(cols:12, con_registros: true,filtro:  array(), key: 'inm_prospecto_id',
             keys_selects: $keys_selects, id_selected: -1, label: 'Prospecto', columns_ds : $columns_ds);
         if(errores::$error){

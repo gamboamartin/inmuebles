@@ -11,7 +11,6 @@ namespace gamboamartin\inmuebles\controllers;
 use base\controller\init;
 use gamboamartin\administrador\models\adm_usuario;
 use gamboamartin\comercial\models\com_agente;
-use gamboamartin\comercial\models\com_cliente;
 use gamboamartin\comercial\models\com_prospecto;
 use gamboamartin\errores\errores;
 use gamboamartin\inmuebles\html\_base;
@@ -264,10 +263,14 @@ class controlador_inm_prospecto extends _ctl_formato {
     private function init_datatable(): stdClass
     {
         $columns["inm_prospecto_id"]["titulo"] = "Id";
-        $columns["inm_prospecto_descripcion"]["titulo"] = "Descripcion";
+        $columns["inm_prospecto_razon_social"]["titulo"] = "Nombre";
+        $columns["inm_prospecto_nss"]["titulo"] = "NSS";
+        $columns["inm_prospecto_rfc"]["titulo"] = "RFC";
+        $columns["inm_prospecto_curp"]["titulo"] = "CURP";
 
 
-        $filtro = array("inm_prospecto.id","inm_prospecto.descripcion");
+        $filtro = array("inm_prospecto.id","inm_prospecto.razon_social",'inm_prospecto.nss','inm_prospecto.rfc',
+            'inm_prospecto.curp');
 
         $datatables = new stdClass();
         $datatables->columns = $columns;
@@ -638,6 +641,64 @@ class controlador_inm_prospecto extends _ctl_formato {
         $this->inputs->fecha_nacimiento = $fecha_nacimiento;
 
         return $r_modifica;
+    }
+
+    public function regenera_curp(bool $header, bool $ws = false): array|string{
+        $columnas[]  ='inm_prospecto_id';
+        $columnas[]  ='inm_prospecto_curp';
+        $registros = (new inm_prospecto(link: $this->link))->registros(columnas: $columnas);
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al obtener prospectos',data:  $registros,
+                header: $header,ws:  $ws);
+        }
+
+        foreach ($registros as $inm_prospecto){
+            $this->link->beginTransaction();
+            $nss = trim($inm_prospecto['inm_prospecto_curp']);
+            if($nss === ''){
+                $inm_prospecto_upd['curp'] = 'XEXX010101HNEXXXA4';
+                $upd = (new inm_prospecto(link: $this->link))->modifica_bd(registro: $inm_prospecto_upd,
+                    id:  $inm_prospecto['inm_prospecto_id']);
+                if(errores::$error){
+                    $this->link->rollBack();
+                    return $this->retorno_error(mensaje: 'Error al upd prospecto',data:  $upd,
+                        header: $header,ws:  $ws);
+                }
+                print_r($upd);
+
+            }
+            $this->link->commit();
+        }
+        exit;
+    }
+
+    public function regenera_nss(bool $header, bool $ws = false): array|string{
+        $columnas[]  ='inm_prospecto_id';
+        $columnas[]  ='inm_prospecto_nss';
+        $registros = (new inm_prospecto(link: $this->link))->registros(columnas: $columnas);
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al obtener prospectos',data:  $registros,
+                header: $header,ws:  $ws);
+        }
+
+        foreach ($registros as $inm_prospecto){
+            $this->link->beginTransaction();
+            $nss = trim($inm_prospecto['inm_prospecto_nss']);
+            if($nss === ''){
+                $inm_prospecto_upd['nss'] = '99999999999';
+                $upd = (new inm_prospecto(link: $this->link))->modifica_bd(registro: $inm_prospecto_upd,
+                    id:  $inm_prospecto['inm_prospecto_id']);
+                if(errores::$error){
+                    $this->link->rollBack();
+                    return $this->retorno_error(mensaje: 'Error al upd prospecto',data:  $upd,
+                        header: $header,ws:  $ws);
+                }
+                print_r($upd);
+
+            }
+            $this->link->commit();
+        }
+        exit;
     }
 
 

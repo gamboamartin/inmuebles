@@ -53,15 +53,12 @@ class inm_comprador extends _modelo_parent{
         $renombres['dp_estado_empresa']['key']= 'id';
         $renombres['dp_estado_empresa']['key_enlace']= 'dp_estado_id';
 
-        $renombres['dp_municipio_nacimiento']['nombre_original']= 'dp_municipio';
-        $renombres['dp_municipio_nacimiento']['enlace']= 'inm_comprador';
-        $renombres['dp_municipio_nacimiento']['key']= 'id';
-        $renombres['dp_municipio_nacimiento']['key_enlace']= 'dp_municipio_nacimiento_id';
-
-        $renombres['dp_estado_nacimiento']['nombre_original']= 'dp_estado';
-        $renombres['dp_estado_nacimiento']['enlace']= 'dp_municipio_nacimiento';
-        $renombres['dp_estado_nacimiento']['key']= 'id';
-        $renombres['dp_estado_nacimiento']['key_enlace']= 'dp_estado_id';
+        $renombres = (new _base_paquete())->rename_data_nac(enlace: $tabla, renombres: $renombres);
+        if(errores::$error){
+            $error = (new errores())->error(mensaje: 'Error al integrar rename', data: $renombres);
+            print_r($error);
+            exit;
+        }
 
         $atributos_criticos = array('apellido_materno','apellido_paterno','bn_cuenta_id','cel_com','curp','correo_com',
             'descuento_pension_alimenticia_dh', 'descuento_pension_alimenticia_fc','es_segundo_credito',
