@@ -87,6 +87,11 @@ class _base_paquete{
         return $renombres;
     }
 
+    /**
+     * Integra tablas de renombre
+     * @param array $renombres Renombres de tablas
+     * @return array
+     */
     private function rename_estado(array $renombres): array
     {
         $renombres['dp_estado_nacimiento']['nombre_original']= 'dp_estado';

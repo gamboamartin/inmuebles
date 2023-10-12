@@ -31,7 +31,7 @@ class controlador_inm_ubicacionTest extends test {
         $file = "inm_ubicacion.alta";
 
 
-        $ch = curl_init("http://localhost/inmuebles/index.php?seccion=inm_ubicacion&accion=alta&adm_menu_id=64&session_id=2833161769&adm_menu_id=64");
+        $ch = curl_init("http://localhost/inmuebles/index.php?seccion=inm_ubicacion&accion=alta&adm_menu_id=64&session_id=4075502287&adm_menu_id=64");
         $fp = fopen($file, "w");
 
         curl_setopt($ch, CURLOPT_FILE, $fp);
@@ -44,7 +44,7 @@ class controlador_inm_ubicacionTest extends test {
         $data = file_get_contents($file);
 
         $this->assertStringContainsStringIgnoringCase('<form method="post" action="./index.php?seccion=inm_ubicacion&accion=alta_bd&adm_menu_id=64&se', $data);
-        $this->assertStringContainsStringIgnoringCase('session_id=2833161769&adm_menu_id=64" class="form-additional"', $data);
+        $this->assertStringContainsStringIgnoringCase('session_id=4075502287&adm_menu_id=64" class="form-additional"', $data);
         $this->assertStringContainsStringIgnoringCase('enctype="multipart/form-data">', $data);
         $this->assertStringContainsStringIgnoringCase("<div class='control-group col-sm-12'><label class='control-label' for='inm_tipo_ubicacion_id'>", $data);
         $this->assertStringContainsStringIgnoringCase("Tipo de Ubicacion</label><div class='controls'><select class='form-control selectpicker color-secondary", $data);
@@ -67,8 +67,9 @@ class controlador_inm_ubicacionTest extends test {
     {
         errores::$error = false;
 
+
         $file = "inm_ubicacion.asigna_comprador";
-        $session_id = '5983857742';
+        $session_id = '4242668692';
 
 
         $ch = curl_init("http://localhost/inmuebles/index.php?seccion=inm_ubicacion&accion=asigna_comprador&adm_menu_id=64&session_id=$session_id&adm_menu_id=64&registro_id=1");
@@ -94,7 +95,7 @@ class controlador_inm_ubicacionTest extends test {
         errores::$error = false;
 
         $file = "inm_ubicacion.asigna_costo";
-        $session_id = '5495808042';
+        $session_id = '4242668692';
 
 
         $ch = curl_init("http://localhost/inmuebles/index.php?seccion=inm_ubicacion&accion=asigna_costo&adm_menu_id=64&session_id=$session_id&adm_menu_id=64&registro_id=1");
@@ -128,7 +129,7 @@ class controlador_inm_ubicacionTest extends test {
         }
 
         $file = "inm_ubicacion.detalle_costo";
-        $session_id = '5495808042';
+        $session_id = '4242668692';
 
 
         $ch = curl_init("http://localhost/inmuebles/index.php?seccion=inm_ubicacion&accion=detalle_costo&adm_menu_id=64&session_id=$session_id&adm_menu_id=64&registro_id=1");
