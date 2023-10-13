@@ -233,6 +233,29 @@ class _prospectoTest extends test {
         errores::$error = false;
     }
 
+    public function test_init_numbers_dom(): void
+    {
+        errores::$error = false;
+
+        $_GET['seccion'] = 'inm_producto_infonavit';
+        $_GET['accion'] = 'lista';
+        $_SESSION['grupo_id'] = 1;
+        $_SESSION['usuario_id'] = 2;
+        $_GET['session_id'] = '1';
+
+
+        $_pr = new _prospecto();
+        $_pr = new liberator($_pr);
+
+        $registro = array();
+        $resultado = $_pr->init_numbers_dom($registro);
+        $this->assertIsArray($resultado);
+        $this->assertNotTrue(errores::$error);
+        $this->assertEquals('SN',$resultado['numero_exterior']);
+        $this->assertEquals('SN',$resultado['numero_interior']);
+        errores::$error = false;
+    }
+
 
 
 

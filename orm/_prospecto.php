@@ -18,8 +18,9 @@ class _prospecto{
     }
 
     /**
-     * @param inm_prospecto $modelo
-     * @param array $registro
+     * Asigna los datos de alta para un prospecto
+     * @param inm_prospecto $modelo Modelo en ejecucion
+     * @param array $registro Registro en proceso
      * @return array
      */
     private function asigna_datos_alta(inm_prospecto $modelo, array $registro): array
@@ -317,8 +318,10 @@ class _prospecto{
     }
 
     /**
-     * @param array $registro
+     * Se inicializan datos numbers de domicilios
+     * @param array $registro Registro en proceso
      * @return array
+     * @version 2.189.1
      */
     private function init_numbers_dom(array $registro): array
     {
@@ -330,8 +333,14 @@ class _prospecto{
         }
         return $registro;
     }
-    
-    private function inserta_com_prospecto(PDO $link, array $registro){
+
+    /**
+     * @param PDO $link
+     * @param array $registro
+     * @return array|stdClass
+     */
+    private function inserta_com_prospecto(PDO $link, array $registro): array|stdClass
+    {
         $com_prospecto_ins = $this->com_prospecto_ins(registro: $registro);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al maquetar com_prospecto',data:  $com_prospecto_ins);
