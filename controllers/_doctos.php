@@ -6,8 +6,10 @@ use gamboamartin\errores\errores;
 use gamboamartin\inmuebles\models\inm_comprador;
 use gamboamartin\inmuebles\models\inm_comprador_proceso;
 use gamboamartin\inmuebles\models\inm_conf_docs_comprador;
+use gamboamartin\inmuebles\models\inm_conf_docs_prospecto;
 use gamboamartin\inmuebles\models\inm_prospecto;
 use gamboamartin\inmuebles\models\inm_prospecto_proceso;
+use gamboamartin\proceso\models\pr_sub_proceso;
 use PDO;
 
 class _doctos{
@@ -92,7 +94,36 @@ class _doctos{
         }
 
         if($r_inm_prospecto_proceso->n_registros === 0){
-            return $this->error->error(mensaje: 'Error no existe proceso para el prospecto',data:  $r_inm_prospecto_proceso);
+
+            $filtro = array();
+            $filtro['pr_sub_proceso.descripcion'] = 'ALTA PROSPECTO';
+            $filtro['adm_seccion.descripcion'] = 'inm_prospecto';
+
+            $r_pr_sub_proceso = (new pr_sub_proceso(link: $link))->filtro_and(filtro: $filtro);
+            if(errores::$error){
+                return $this->error->error(mensaje: 'Error obtener r_pr_sub_proceso',data:  $r_pr_sub_proceso);
+            }
+
+            if($r_pr_sub_proceso->n_registros === 0){
+                return $this->error->error(mensaje: 'Error no existe sub proceso definido',data:  $filtro);
+            }
+
+            if($r_pr_sub_proceso->n_registros > 1){
+                return $this->error->error(mensaje: 'Error de integridad',data:  $r_pr_sub_proceso);
+            }
+
+            $pr_sub_proceso = $r_pr_sub_proceso->registros[0];
+
+            $inm_prospecto_proceso_ins['pr_sub_proceso_id'] = $pr_sub_proceso['pr_sub_proceso_id'];
+            $inm_prospecto_proceso_ins['fecha'] = date('Y-m-d');
+            $inm_prospecto_proceso_ins['inm_prospecto_id'] = $inm_prospecto->inm_prospecto_id;
+
+            $alta_inm_prospecto_proceso = (new inm_prospecto_proceso(link: $link))->alta_registro(registro: $inm_prospecto_proceso_ins);
+            if(errores::$error){
+                return $this->error->error(mensaje: 'Error insertar alta_inm_prospecto_proceso',data:  $alta_inm_prospecto_proceso);
+            }
+            $r_inm_prospecto_proceso->registros[0] = $alta_inm_prospecto_proceso->registro;
+
         }
         if($r_inm_prospecto_proceso->n_registros > 1){
             return $this->error->error(mensaje: 'Error de integridad',data:  $r_inm_prospecto_proceso);
@@ -100,14 +131,14 @@ class _doctos{
         $inm_prospecto_proceso = $r_inm_prospecto_proceso->registros[0];
 
         $filtro = array();
-        $filtro['inm_attr_tipo_credito.id'] = $inm_prospecto->inm_attr_tipo_credito_id;
-        $filtro['inm_destino_credito.id'] = $inm_prospecto->inm_destino_credito_id;
-        $filtro['inm_producto_infonavit.id'] = $inm_prospecto->inm_producto_infonavit_id;
+        //$filtro['inm_attr_tipo_credito.id'] = $inm_prospecto->inm_attr_tipo_credito_id;
+        //$filtro['inm_destino_credito.id'] = $inm_prospecto->inm_destino_credito_id;
+        //$filtro['inm_producto_infonavit.id'] = $inm_prospecto->inm_producto_infonavit_id;
         if(!$todos) {
-            $filtro['pr_sub_proceso.id'] = $inm_prospecto_proceso['pr_sub_proceso_id'];
+            //$filtro['pr_sub_proceso.id'] = $inm_prospecto_proceso['pr_sub_proceso_id'];
         }
 
-        $r_inm_conf_docs_prospecto = (new inm_conf_docs_comprador(link: $link))->filtro_and(filtro: $filtro);
+        $r_inm_conf_docs_prospecto = (new inm_conf_docs_prospecto(link: $link))->filtro_and(filtro: $filtro);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al Obtener configuraciones',data:  $r_inm_conf_docs_prospecto);
         }

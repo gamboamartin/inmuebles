@@ -7,6 +7,7 @@ use gamboamartin\administrador\models\adm_usuario;
 use gamboamartin\comercial\models\com_cliente;
 use gamboamartin\comercial\models\com_prospecto;
 use gamboamartin\errores\errores;
+use gamboamartin\proceso\models\pr_sub_proceso;
 use PDO;
 use stdClass;
 
@@ -88,6 +89,36 @@ class inm_prospecto extends _modelo_parent{
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al insertar prospecto',data:  $r_alta_bd);
         }
+
+        $filtro = array();
+        $filtro['pr_sub_proceso.descripcion'] = 'ALTA PROSPECTO';
+        $filtro['adm_seccion.descripcion'] = $this->tabla;
+
+        $r_pr_sub_proceso = (new pr_sub_proceso(link: $this->link))->filtro_and(filtro: $filtro);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error obtener r_pr_sub_proceso',data:  $r_pr_sub_proceso);
+        }
+
+        if($r_pr_sub_proceso->n_registros === 0){
+            return $this->error->error(mensaje: 'Error no existe sub proceso definido',data:  $filtro);
+        }
+
+        if($r_pr_sub_proceso->n_registros > 1){
+            return $this->error->error(mensaje: 'Error de integridad',data:  $r_pr_sub_proceso);
+        }
+
+        $pr_sub_proceso = $r_pr_sub_proceso->registros[0];
+
+        $inm_prospecto_proceso_ins['pr_sub_proceso_id'] = $pr_sub_proceso['pr_sub_proceso_id'];
+        $inm_prospecto_proceso_ins['fecha'] = date('Y-m-d');
+        $inm_prospecto_proceso_ins['inm_prospecto_id'] = $r_alta_bd->registro_id;
+
+        $alta_inm_prospecto_proceso = (new inm_prospecto_proceso(link: $this->link))->alta_registro(registro: $inm_prospecto_proceso_ins);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error insertar alta_inm_prospecto_proceso',data:  $alta_inm_prospecto_proceso);
+        }
+
+
         return $r_alta_bd;
     }
 
