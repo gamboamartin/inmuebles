@@ -12,6 +12,7 @@ use gamboamartin\inmuebles\models\_inm_ubicaciones;
 use gamboamartin\inmuebles\models\_prospecto;
 use gamboamartin\inmuebles\models\_referencias;
 use gamboamartin\inmuebles\models\inm_comprador;
+use gamboamartin\inmuebles\models\inm_prospecto;
 use gamboamartin\inmuebles\models\inm_ubicacion;
 use gamboamartin\inmuebles\tests\base_test;
 use gamboamartin\test\liberator;
@@ -61,6 +62,27 @@ class _prospectoTest extends test {
         $this->assertIsArray($resultado);
         $this->assertNotTrue(errores::$error);
         $this->assertStringContainsStringIgnoringCase('a a  a a a 2023-10-',$resultado['descripcion']);
+        errores::$error = false;
+    }
+
+    public function test_dp_calle_pertenece_id(): void
+    {
+        errores::$error = false;
+
+        $_GET['seccion'] = 'inm_producto_infonavit';
+        $_GET['accion'] = 'lista';
+        $_SESSION['grupo_id'] = 1;
+        $_SESSION['usuario_id'] = 2;
+        $_GET['session_id'] = '1';
+
+
+        $_pr = new _prospecto();
+        $_pr = new liberator($_pr);
+
+        $modelo = new inm_prospecto(link: $this->link);
+        $resultado = $_pr->dp_calle_pertenece_id($modelo);
+        $this->assertNotTrue(errores::$error);
+        $this->assertEquals(100,$resultado);
         errores::$error = false;
     }
 
