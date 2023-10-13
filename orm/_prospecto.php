@@ -40,7 +40,12 @@ class _prospecto{
         return $registro;
     }
 
-    private function asigna_descripcion(array $registro){
+    /**
+     * @param array $registro
+     * @return array
+     */
+    private function asigna_descripcion(array $registro): array
+    {
         if(!isset($registro['descripcion'])){
             $descripcion = (new _base_paquete())->descripcion(registro: $registro);
             if(errores::$error){
@@ -92,7 +97,8 @@ class _prospecto{
 
 
     /**
-     * @param array $registro
+     * Inicializa los datos default de un registro de tipo prospecto
+     * @param array $registro Registro en proceso
      * @return array
      */
     private function init_data_default(array $registro): array
@@ -117,9 +123,20 @@ class _prospecto{
      * Inicializa los datos fiscales base
      * @param array $registro Registro en proceso
      * @return array
+     * @version 2.185.1
      */
     private function init_data_fiscal(array $registro): array
     {
+        if(!isset($registro['nss'])){
+            $registro['nss'] = '99999999999';
+        }
+        if(!isset($registro['curp'])){
+            $registro['curp'] = 'XEXX010101HNEXXXA4';
+        }
+        if(!isset($registro['rfc'])){
+            $registro['rfc'] = 'XAXX010101000';
+        }
+
         if($registro['nss'] === ''){
             $registro['nss'] = '99999999999';
         }

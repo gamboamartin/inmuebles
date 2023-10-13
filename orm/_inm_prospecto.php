@@ -224,7 +224,7 @@ class _inm_prospecto{
 
         $button = $controler->html->button_href(accion: 'subir_documento',etiqueta:
             'Subir Documento',registro_id:  $controler->registro_id,
-            seccion:  'inm_comprador',style:  'warning', params: $params);
+            seccion:  'inm_prospecto',style:  'warning', params: $params);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al integrar button',data:  $button);
         }
@@ -239,16 +239,17 @@ class _inm_prospecto{
     }
 
     final public function integra_inm_documentos(controlador_inm_prospecto $controler){
-        $inm_docs_prospecto = (new inm_doc_prospecto(link: $controler->link))->inm_docs_prospecto(inm_prospecto_id: $controler->registro_id);
+        $inm_docs_prospecto = (new inm_doc_prospecto(link: $controler->link))->inm_docs_prospecto(
+            inm_prospecto_id: $controler->registro_id);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al obtener inm_docs_prospecto',data:  $inm_docs_prospecto);
         }
-        $inm_conf_docs_comprador = $this->inm_conf_docs_prospecto(controler: $controler,inm_docs_prospecto:  $inm_docs_prospecto);
+        $inm_docs_prospecto = $this->inm_conf_docs_prospecto(controler: $controler,inm_docs_prospecto:  $inm_docs_prospecto);
 
         if(errores::$error){
-            return $this->error->error(mensaje: 'Error al integrar buttons',data:  $inm_conf_docs_comprador);
+            return $this->error->error(mensaje: 'Error al integrar buttons',data:  $inm_docs_prospecto);
         }
-        return $inm_conf_docs_comprador;
+        return $inm_docs_prospecto;
     }
 
 

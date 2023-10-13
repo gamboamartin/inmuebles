@@ -79,6 +79,7 @@ class _base_paquete{
      * @param string $enlace Enlace base
      * @param array $renombres Tablas previas
      * @return array
+     * @version 2.185.1
      */
     final public function rename_data_nac(string $enlace, array $renombres): array
     {
@@ -100,7 +101,7 @@ class _base_paquete{
      * @return array
      * @version 2.184.1
      */
-    PUBLIC function rename_estado(array $renombres): array
+    private function rename_estado(array $renombres): array
     {
         $renombres['dp_estado_nacimiento']['nombre_original']= 'dp_estado';
         $renombres['dp_estado_nacimiento']['enlace']= 'dp_municipio_nacimiento';

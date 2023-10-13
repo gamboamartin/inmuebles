@@ -103,5 +103,54 @@ class _base_paqueteTest extends test {
         errores::$error = false;
     }
 
+    public function test_rename_data_nac(): void
+    {
+        errores::$error = false;
+
+        $_GET['seccion'] = 'inm_producto_infonavit';
+        $_GET['accion'] = 'lista';
+        $_SESSION['grupo_id'] = 1;
+        $_SESSION['usuario_id'] = 2;
+        $_GET['session_id'] = '1';
+
+        $_inm = new _base_paquete();
+        //$_inm = new liberator($_inm);
+
+        $renombres = array();
+        $enlace = '';
+        $resultado = $_inm->rename_data_nac($enlace, $renombres);
+        $this->assertEquals("dp_estado",$resultado['dp_estado_nacimiento']['nombre_original']);
+        $this->assertEquals("dp_municipio_nacimiento",$resultado['dp_estado_nacimiento']['enlace']);
+        $this->assertEquals("id",$resultado['dp_estado_nacimiento']['key']);
+        $this->assertEquals("dp_estado_id",$resultado['dp_estado_nacimiento']['key_enlace']);
+        $this->assertEquals("dp_municipio_nacimiento_id",$resultado['dp_municipio_nacimiento']['key_enlace']);
+        errores::$error = false;
+    }
+
+    public function test_rename_estado(): void
+    {
+        errores::$error = false;
+
+        $_GET['seccion'] = 'inm_producto_infonavit';
+        $_GET['accion'] = 'lista';
+        $_SESSION['grupo_id'] = 1;
+        $_SESSION['usuario_id'] = 2;
+        $_GET['session_id'] = '1';
+
+        $_inm = new _base_paquete();
+        $_inm = new liberator($_inm);
+
+        $renombres = array();
+
+        $resultado = $_inm->rename_estado($renombres);
+        $this->assertIsArray($resultado);
+        $this->assertNotTrue(errores::$error);
+        $this->assertEquals("dp_estado",$resultado['dp_estado_nacimiento']['nombre_original']);
+        $this->assertEquals("dp_municipio_nacimiento",$resultado['dp_estado_nacimiento']['enlace']);
+        $this->assertEquals("id",$resultado['dp_estado_nacimiento']['key']);
+        $this->assertEquals("dp_estado_id",$resultado['dp_estado_nacimiento']['key_enlace']);
+        errores::$error = false;
+    }
+
 }
 
