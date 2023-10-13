@@ -74,7 +74,14 @@ class _base_paquete{
         return $registro;
     }
 
-    final public function rename_data_nac(string $enlace, array $renombres){
+    /**
+     * Integra las relaciones entre entidades de nacimiento
+     * @param string $enlace Enlace base
+     * @param array $renombres Tablas previas
+     * @return array
+     */
+    final public function rename_data_nac(string $enlace, array $renombres): array
+    {
         $renombres['dp_municipio_nacimiento']['nombre_original']= 'dp_municipio';
         $renombres['dp_municipio_nacimiento']['enlace']= $enlace;
         $renombres['dp_municipio_nacimiento']['key']= 'id';
@@ -91,8 +98,9 @@ class _base_paquete{
      * Integra tablas de renombre
      * @param array $renombres Renombres de tablas
      * @return array
+     * @version 2.184.1
      */
-    private function rename_estado(array $renombres): array
+    PUBLIC function rename_estado(array $renombres): array
     {
         $renombres['dp_estado_nacimiento']['nombre_original']= 'dp_estado';
         $renombres['dp_estado_nacimiento']['enlace']= 'dp_municipio_nacimiento';

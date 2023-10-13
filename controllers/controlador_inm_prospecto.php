@@ -15,6 +15,7 @@ use gamboamartin\comercial\models\com_prospecto;
 use gamboamartin\errores\errores;
 use gamboamartin\inmuebles\html\_base;
 use gamboamartin\inmuebles\html\inm_prospecto_html;
+use gamboamartin\inmuebles\models\_inm_prospecto;
 use gamboamartin\inmuebles\models\inm_comprador;
 use gamboamartin\inmuebles\models\inm_prospecto;
 use gamboamartin\inmuebles\models\inm_rel_prospecto_cliente;
@@ -32,6 +33,10 @@ class controlador_inm_prospecto extends _ctl_formato {
 
     public stdClass $header_frontend;
     public inm_prospecto_html $html_entidad;
+
+    public array $inm_conf_docs_prospecto = array();
+
+
     public function __construct(PDO      $link, html $html = new \gamboamartin\template_1\html(),
                                 stdClass $paths_conf = new stdClass())
     {
@@ -251,6 +256,27 @@ class controlador_inm_prospecto extends _ctl_formato {
 
         return $r_alta_rel;
 
+
+    }
+
+    final public function documentos(bool $header, bool $ws = false): array
+    {
+
+        $template = $this->modifica(header: false);
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al integrar base',data:  $template, header: $header,ws:  $ws);
+        }
+
+        $inm_conf_docs_prospecto = (new _inm_prospecto())->integra_inm_documentos(controler: $this);
+
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al integrar buttons',data:  $inm_conf_docs_prospecto, header: $header,ws:  $ws);
+        }
+
+        $this->inm_conf_docs_prospecto = $inm_conf_docs_prospecto;
+
+
+        return $inm_conf_docs_prospecto;
 
     }
 
