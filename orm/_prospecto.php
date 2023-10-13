@@ -41,11 +41,19 @@ class _prospecto{
     }
 
     /**
-     * @param array $registro
+     * Asigna la descripcion a un registro
+     * @param array $registro Registro en proceso
      * @return array
+     * @version 2.187.1
      */
     private function asigna_descripcion(array $registro): array
     {
+        $keys = array('nombre','apellido_paterno','nss','curp','rfc');
+        $valida = (new validacion())->valida_existencia_keys(keys: $keys,registro:  $registro);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al validar registro',data:  $valida);
+        }
+
         if(!isset($registro['descripcion'])){
             $descripcion = (new _base_paquete())->descripcion(registro: $registro);
             if(errores::$error){

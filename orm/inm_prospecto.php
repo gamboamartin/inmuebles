@@ -131,6 +131,25 @@ class inm_prospecto extends _modelo_parent{
         return $inm_comprador_ins;
     }
 
+    /**
+     * Obtiene los datos del cliente de fc basados en el comprador
+     * @param int $inm_prospecto_id
+     * @param bool $retorno_obj Retorna un objeto en caso de ser true
+     * @return array|object
+     */
+    final public function get_com_prospecto(int $inm_prospecto_id, bool $retorno_obj = false): object|array
+    {
+        if($inm_prospecto_id<=0){
+            return $this->error->error(mensaje: 'Error inm_prospecto_id es menor a 0',data:  $inm_prospecto_id);
+        }
+
+        $com_prospecto = (new com_prospecto(link: $this->link))->registro(registro_id: $inm_prospecto_id, retorno_obj: $retorno_obj);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al obtener com_prospecto',data:  $com_prospecto);
+        }
+        return $com_prospecto;
+    }
+
     private function integra_id_pref(string $entidad, array $inm_comprador_ins, inm_comprador|com_cliente $modelo){
         $key_id = $entidad.'_id';
         $id_pref = $modelo->id_preferido_detalle(entidad_preferida: $entidad);

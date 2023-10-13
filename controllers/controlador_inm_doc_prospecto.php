@@ -254,7 +254,7 @@ class controlador_inm_doc_prospecto extends _ctl_formato {
         }
 
         $com_prospecto = (new inm_prospecto(link: $this->link))->get_com_prospecto(
-            inm_comprador_id: $registro->inm_comprador_id, retorno_obj: true);
+            inm_prospecto_id: $registro->inm_prospecto_id, retorno_obj: true);
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al obtener prospecto',data:  $com_prospecto,header:  $header,
                 ws:  $ws);
@@ -272,9 +272,9 @@ class controlador_inm_doc_prospecto extends _ctl_formato {
         }
 
         $row_upd = new stdClass();
-        $row_upd->nss = $registro->inm_comprador_nss;
+        $row_upd->nss = $registro->inm_prospecto_nss;
         $row_upd->com_tipo_cliente_descripcion = $com_prospecto->com_tipo_prospecto_descripcion;
-        $row_upd->curp = $registro->inm_comprador_curp;
+        $row_upd->curp = $registro->inm_prospecto_curp;
         $row_upd->rfc = $com_prospecto->com_prospecto_rfc;
         $row_upd->apellido_paterno = $registro->inm_prospecto_apellido_paterno;
         $row_upd->apellido_materno = $registro->inm_prospecto_apellido_materno;

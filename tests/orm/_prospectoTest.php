@@ -36,6 +36,34 @@ class _prospectoTest extends test {
         $this->paths_conf->views = '/var/www/html/inmuebles/config/views.php';
     }
 
+    public function test_asigna_descripcion(): void
+    {
+        errores::$error = false;
+
+        $_GET['seccion'] = 'inm_producto_infonavit';
+        $_GET['accion'] = 'lista';
+        $_SESSION['grupo_id'] = 1;
+        $_SESSION['usuario_id'] = 2;
+        $_GET['session_id'] = '1';
+
+
+        $_pr = new _prospecto();
+        $_pr = new liberator($_pr);
+
+        $registro = array();
+        $registro['nombre'] = 'a';
+        $registro['apellido_paterno'] = 'a';
+        $registro['nss'] = 'a';
+        $registro['curp'] = 'a';
+        $registro['rfc'] = 'a';
+        $resultado = $_pr->asigna_descripcion($registro);
+
+        $this->assertIsArray($resultado);
+        $this->assertNotTrue(errores::$error);
+        $this->assertStringContainsStringIgnoringCase('a a  a a a 2023-10-',$resultado['descripcion']);
+        errores::$error = false;
+    }
+
     public function test_init_data_default(): void
     {
         errores::$error = false;
