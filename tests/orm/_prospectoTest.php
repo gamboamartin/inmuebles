@@ -65,6 +65,27 @@ class _prospectoTest extends test {
         errores::$error = false;
     }
 
+    public function test_asigna_dp_calle_pertenece_id(): void
+    {
+        errores::$error = false;
+
+        $_GET['seccion'] = 'inm_producto_infonavit';
+        $_GET['accion'] = 'lista';
+        $_SESSION['grupo_id'] = 1;
+        $_SESSION['usuario_id'] = 2;
+        $_GET['session_id'] = '1';
+
+
+        $_pr = new _prospecto();
+        $_pr = new liberator($_pr);
+        $registro = array();
+        $modelo = new inm_prospecto(link: $this->link);
+        $resultado = $_pr->asigna_dp_calle_pertenece_id($modelo, $registro);
+        $this->assertNotTrue(errores::$error);
+        $this->assertEquals(100,$resultado['dp_calle_pertenece_id']);
+        errores::$error = false;
+    }
+
     public function test_dp_calle_pertenece_id(): void
     {
         errores::$error = false;

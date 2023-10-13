@@ -17,7 +17,13 @@ class _prospecto{
         $this->error = new errores();
     }
 
-    private function asigna_datos_alta(inm_prospecto $modelo, array $registro){
+    /**
+     * @param inm_prospecto $modelo
+     * @param array $registro
+     * @return array
+     */
+    private function asigna_datos_alta(inm_prospecto $modelo, array $registro): array
+    {
         $registro = $this->init_data_default(registro: $registro);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al inicializar key fiscal',data:  $registro);
@@ -65,9 +71,11 @@ class _prospecto{
     }
 
     /**
-     * @param inm_prospecto $modelo
-     * @param array $registro
+     * Asigna la calle por default
+     * @param inm_prospecto $modelo Modelo en ejecucion
+     * @param array $registro Registro en proceso
      * @return array
+     * @version 2.189.1
      */
     private function asigna_dp_calle_pertenece_id(inm_prospecto $modelo, array $registro): array
     {
@@ -82,6 +90,7 @@ class _prospecto{
     }
 
     /**
+     * Integra los campos de par ala insersion de un prospecto
      * @param array $registro
      * @return array
      */
@@ -307,6 +316,10 @@ class _prospecto{
         return $registro;
     }
 
+    /**
+     * @param array $registro
+     * @return array
+     */
     private function init_numbers_dom(array $registro): array
     {
         if(!isset($registro['numero_exterior'])){
