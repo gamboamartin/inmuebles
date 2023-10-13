@@ -14,6 +14,7 @@ use gamboamartin\comercial\models\com_agente;
 use gamboamartin\comercial\models\com_prospecto;
 use gamboamartin\errores\errores;
 use gamboamartin\inmuebles\html\_base;
+use gamboamartin\inmuebles\html\inm_comprador_html;
 use gamboamartin\inmuebles\html\inm_prospecto_html;
 use gamboamartin\inmuebles\models\_inm_prospecto;
 use gamboamartin\inmuebles\models\inm_comprador;
@@ -23,6 +24,7 @@ use gamboamartin\inmuebles\models\inm_sindicato;
 use gamboamartin\system\actions;
 use gamboamartin\system\links_menu;
 use gamboamartin\template\html;
+use html\doc_tipo_documento_html;
 use html\dp_estado_html;
 use html\dp_municipio_html;
 use PDO;
@@ -33,6 +35,8 @@ class controlador_inm_prospecto extends _ctl_formato {
 
     public stdClass $header_frontend;
     public inm_prospecto_html $html_entidad;
+
+    public string $link_inm_doc_prospecto_alta_bd = '';
 
     public array $inm_conf_docs_prospecto = array();
 
@@ -725,6 +729,81 @@ class controlador_inm_prospecto extends _ctl_formato {
             $this->link->commit();
         }
         exit;
+    }
+
+    final public function subir_documento(bool $header, bool $ws = false){
+
+        $this->inputs = new stdClass();
+
+        $filtro['inm_prospecto.id'] = $this->registro_id;
+        $inm_prospecto_id = (new inm_prospecto_html(html: $this->html_base))->select_inm_prospecto_id(
+            cols: 12,con_registros:  true,id_selected:  $this->registro_id,link:  $this->link,filtro: $filtro);
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al generar input', data: $inm_prospecto_id, header: $header, ws: $ws);
+        }
+        $this->inputs->inm_prospecto_id = $inm_prospecto_id;
+
+        $doc_tipos_documentos = (new _doctos())->documentos_de_prospecto(inm_prospecto_id: $this->registro_id,
+            link: $this->link, todos: false);
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al obtener tipos de documento', data: $doc_tipos_documentos,
+                header: $header, ws: $ws);
+        }
+
+        $_doc_tipo_documento_id = -1;
+        $filtro = array();
+        if(isset($_GET['doc_tipo_documento_id'])){
+            $_doc_tipo_documento_id = $_GET['doc_tipo_documento_id'];
+            $filtro['doc_tipo_documento.id'] = $_GET['doc_tipo_documento_id'];
+        }
+
+        $doc_tipo_documento_id = (new doc_tipo_documento_html(html: $this->html_base))->select_doc_tipo_documento_id(
+            cols: 12, con_registros: true, id_selected: $_doc_tipo_documento_id, link: $this->link, filtro: $filtro,
+            registros: $doc_tipos_documentos);
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al generar input', data: $inm_prospecto_id, header: $header, ws: $ws);
+        }
+        $this->inputs->doc_tipo_documento_id = $doc_tipo_documento_id;
+
+        $documento = $this->html->input_file(cols: 12,name:  'documento',row_upd:  new stdClass(),value_vacio:  false);
+        if(errores::$error){
+            return $this->retorno_error(
+                mensaje: 'Error al obtener inputs',data:  $documento, header: $header,ws:  $ws);
+        }
+
+        $this->inputs->documento = $documento;
+
+        $link_alta_doc = $this->obj_link->link_alta_bd(link:  $this->link,seccion:  'inm_doc_prospecto');
+        if(errores::$error){
+            return $this->retorno_error(
+                mensaje: 'Error al generar link',data:  $link_alta_doc, header: $header,ws:  $ws);
+        }
+
+        $this->link_inm_doc_prospecto_alta_bd = $link_alta_doc;
+
+        $btn_action_next = $this->html->hidden('btn_action_next',value: 'documentos');
+        if(errores::$error){
+            return $this->retorno_error(
+                mensaje: 'Error al generar btn_action_next',data:  $btn_action_next, header: $header,ws:  $ws);
+        }
+
+        $id_retorno = $this->html->hidden('id_retorno',value: $this->registro_id);
+        if(errores::$error){
+            return $this->retorno_error(
+                mensaje: 'Error al generar btn_action_next',data:  $btn_action_next, header: $header,ws:  $ws);
+        }
+
+        $seccion_retorno = $this->html->hidden('seccion_retorno',value: $this->seccion);
+        if(errores::$error){
+            return $this->retorno_error(
+                mensaje: 'Error al generar btn_action_next',data:  $btn_action_next, header: $header,ws:  $ws);
+        }
+
+        $this->inputs->btn_action_next = $btn_action_next;
+        $this->inputs->id_retorno = $id_retorno;
+        $this->inputs->seccion_retorno = $seccion_retorno;
+
+
     }
 
 
