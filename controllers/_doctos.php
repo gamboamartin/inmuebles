@@ -134,6 +134,7 @@ class _doctos{
         //$filtro['inm_attr_tipo_credito.id'] = $inm_prospecto->inm_attr_tipo_credito_id;
         //$filtro['inm_destino_credito.id'] = $inm_prospecto->inm_destino_credito_id;
         //$filtro['inm_producto_infonavit.id'] = $inm_prospecto->inm_producto_infonavit_id;
+        $filtro['inm_conf_docs_prospecto.status'] = 'activo';
         if(!$todos) {
             //$filtro['pr_sub_proceso.id'] = $inm_prospecto_proceso['pr_sub_proceso_id'];
         }
