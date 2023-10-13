@@ -22,12 +22,20 @@ class _prospecto{
      * @param inm_prospecto $modelo Modelo en ejecucion
      * @param array $registro Registro en proceso
      * @return array
+     * @version 2.190.1
      */
     private function asigna_datos_alta(inm_prospecto $modelo, array $registro): array
     {
+
         $registro = $this->init_data_default(registro: $registro);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al inicializar key fiscal',data:  $registro);
+        }
+
+        $keys = array('nombre','apellido_paterno','nss','curp','rfc');
+        $valida = (new validacion())->valida_existencia_keys(keys: $keys,registro:  $registro);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al validar registro',data:  $valida);
         }
 
         $registro = $this->asigna_descripcion(registro: $registro);
@@ -335,8 +343,9 @@ class _prospecto{
     }
 
     /**
-     * @param PDO $link
-     * @param array $registro
+     * Inserta un com prospecto
+     * @param PDO $link Conexion a la base de datos
+     * @param array $registro Registro en proceso
      * @return array|stdClass
      */
     private function inserta_com_prospecto(PDO $link, array $registro): array|stdClass
