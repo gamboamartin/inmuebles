@@ -531,7 +531,13 @@ class _prospecto{
         return $registro;
     }
 
-    private function valida_alta_prospecto(array $registro){
+    /**
+     * Verifica que los elementos de un alta sean correctos
+     * @param array $registro Registro en proceso
+     * @return array|true
+     */
+    private function valida_alta_prospecto(array $registro): bool|array
+    {
         $keys = array('nombre','apellido_paterno','lada_com','numero_com','razon_social','com_agente_id',
             'com_tipo_prospecto_id');
         $valida = (new validacion())->valida_existencia_keys(keys: $keys,registro:  $registro);
