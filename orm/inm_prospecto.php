@@ -127,7 +127,28 @@ class inm_prospecto extends _modelo_parent{
         return $r_alta_bd;
     }
 
-    final public function data_prospecto(int $inm_prospecto_id){
+    final public function convierte_cliente(int $inm_prospecto_id){
+        $r_alta_comprador = $this->inserta_inm_comprador(inm_prospecto_id: $inm_prospecto_id);
+
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al insertar cliente', data: $r_alta_comprador);
+        }
+
+
+        $r_alta_rel = $this->inserta_rel_prospecto_cliente(
+            inm_comprador_id: $r_alta_comprador->registro_id,inm_prospecto_id:  $inm_prospecto_id);
+
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al insertar inm_rel_prospecto_cliente_ins', data: $r_alta_rel);
+        }
+        $data = new stdClass();
+        $data->r_alta_comprador = $r_alta_comprador;
+        $data->r_alta_rel = $r_alta_rel;
+
+        return $data;
+    }
+
+    private function data_prospecto(int $inm_prospecto_id){
         $inm_prospecto = $this->registro(registro_id: $inm_prospecto_id, columnas_en_bruto: true, retorno_obj: true);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al obtener prospecto', data: $inm_prospecto);
@@ -210,7 +231,7 @@ class inm_prospecto extends _modelo_parent{
         return $com_prospecto;
     }
 
-    final public function inm_comprador_ins(stdClass $data){
+    private function inm_comprador_ins(stdClass $data){
         $keys = $this->keys_data_prospecto();
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al obtener keys', data: $keys);
@@ -297,6 +318,50 @@ class inm_prospecto extends _modelo_parent{
             'inm_tipo_discapacidad_id','inm_persona_discapacidad_id','inm_estado_civil_id',
             'inm_institucion_hipotecaria_id','inm_sindicato_id','dp_municipio_nacimiento_id','fecha_nacimiento',
             'sub_cuenta','monto_final','descuento','puntos');
+    }
+
+    private function inm_rel_prospecto_cliente_ins(int $inm_comprador_id, int $inm_prospecto_id): array
+    {
+        $inm_rel_prospecto_cliente_ins['inm_prospecto_id'] = $inm_prospecto_id;
+        $inm_rel_prospecto_cliente_ins['inm_comprador_id'] = $inm_comprador_id;
+
+        return $inm_rel_prospecto_cliente_ins;
+    }
+
+    private function inserta_inm_comprador(int $inm_prospecto_id){
+        $data = $this->data_prospecto(inm_prospecto_id: $inm_prospecto_id);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al obtener prospecto', data: $data);
+        }
+
+
+        $inm_comprador_ins = $this->inm_comprador_ins(data: $data);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al obtener id_pref', data: $inm_comprador_ins);
+        }
+
+        $r_alta_comprador = (new inm_comprador(link: $this->link))->alta_registro(registro: $inm_comprador_ins);
+
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al insertar cliente', data: $r_alta_comprador);
+        }
+        return $r_alta_comprador;
+    }
+
+    private function inserta_rel_prospecto_cliente(int $inm_comprador_id, int $inm_prospecto_id){
+        $inm_rel_prospecto_cliente_ins = $this->inm_rel_prospecto_cliente_ins(
+            inm_comprador_id: $inm_comprador_id,inm_prospecto_id:  $inm_prospecto_id);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al insertar relacion', data: $inm_rel_prospecto_cliente_ins);
+        }
+
+
+        $r_alta_rel = (new inm_rel_prospecto_cliente(link: $this->link))->alta_registro(registro: $inm_rel_prospecto_cliente_ins);
+
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al insertar inm_rel_prospecto_cliente_ins', data: $r_alta_rel);
+        }
+        return $r_alta_rel;
     }
 
 

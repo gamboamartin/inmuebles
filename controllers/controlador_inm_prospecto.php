@@ -181,35 +181,12 @@ class controlador_inm_prospecto extends _ctl_formato {
         }
 
 
-        $data = (new inm_prospecto(link: $this->link))->data_prospecto(inm_prospecto_id: $this->registro_id);
-        if(errores::$error){
-            $this->link->rollBack();
-            return $this->retorno_error(mensaje: 'Error al obtener prospecto', data: $data, header: false, ws: false);
-        }
 
-
-        $inm_comprador_ins = (new inm_prospecto(link: $this->link))->inm_comprador_ins(data: $data);
-        if(errores::$error){
-            $this->link->rollBack();
-            return $this->retorno_error(mensaje: 'Error al obtener id_pref', data: $inm_comprador_ins, header: true, ws: false);
-        }
-
-        $r_alta_comprador = (new inm_comprador(link: $this->link))->alta_registro(registro: $inm_comprador_ins);
+        $conversion = (new inm_prospecto(link: $this->link))->convierte_cliente(inm_prospecto_id:  $this->registro_id);
 
         if(errores::$error){
             $this->link->rollBack();
-            return $this->retorno_error(mensaje: 'Error al insertar cliente', data: $r_alta_comprador, header: true, ws: false);
-        }
-
-
-        $inm_rel_prospecto_cliente_ins['inm_prospecto_id'] = $this->registro_id;
-        $inm_rel_prospecto_cliente_ins['inm_comprador_id'] = $r_alta_comprador->registro_id;
-
-        $r_alta_rel = (new inm_rel_prospecto_cliente(link: $this->link))->alta_registro(registro: $inm_rel_prospecto_cliente_ins);
-
-        if(errores::$error){
-            $this->link->rollBack();
-            return $this->retorno_error(mensaje: 'Error al insertar inm_rel_prospecto_cliente_ins', data: $r_alta_rel, header: true, ws: false);
+            return $this->retorno_error(mensaje: 'Error al convertir en cliente', data: $conversion, header: true, ws: false);
         }
 
 
@@ -219,13 +196,13 @@ class controlador_inm_prospecto extends _ctl_formato {
             if($id_retorno === -1) {
                 $id_retorno = $this->registro_id;
             }
-            $this->retorno_base(registro_id:$id_retorno, result: $r_alta_rel, siguiente_view: $siguiente_view,
+            $this->retorno_base(registro_id:$id_retorno, result: $conversion, siguiente_view: $siguiente_view,
                 ws:  $ws,seccion_retorno: $this->seccion, valida_permiso: true);
         }
         if($ws){
             header('Content-Type: application/json');
             try {
-                echo json_encode($r_alta_rel, JSON_THROW_ON_ERROR);
+                echo json_encode($conversion, JSON_THROW_ON_ERROR);
             }
             catch (Throwable $e){
                 $error = (new errores())->error(mensaje: 'Error al maquetar JSON' , data: $e);
@@ -233,10 +210,10 @@ class controlador_inm_prospecto extends _ctl_formato {
             }
             exit;
         }
-        $r_alta_rel->siguiente_view = $siguiente_view;
+        $conversion->r_alta_rel->siguiente_view = $siguiente_view;
 
 
-        return $r_alta_rel;
+        return $conversion->r_alta_rel;
 
 
     }

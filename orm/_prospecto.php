@@ -212,9 +212,10 @@ class _prospecto{
     }
 
     /**
-     * @param stdClass $data
-     * @param array $entidades
-     * @param array $registro
+     * Inicializa elementos para dar de alta un registro
+     * @param stdClass $data Datos previos
+     * @param array $entidades Entidades de inicializacion
+     * @param array $registro Registro en proceso
      * @return array
      */
     private function init_entidades_default(stdClass $data, array $entidades, array $registro): array
@@ -258,9 +259,10 @@ class _prospecto{
     }
 
     /**
-     * @param stdClass $data
-     * @param string $entidad
-     * @param array $registro
+     * Inicializa los keys id para prospecto
+     * @param stdClass $data datos previos
+     * @param string $entidad Entidad de integracion
+     * @param array $registro Registro en proceso
      * @return array
      */
     private function init_key_entidad_id(stdClass $data, string $entidad, array $registro): array
@@ -275,7 +277,8 @@ class _prospecto{
     }
 
     /**
-     * @param array $registro
+     * Inicializa elementos de infonavit
+     * @param array $registro Registro en proceso
      * @return array
      */
     private function init_key_entidad_hardcodeo(array $registro): array
@@ -316,9 +319,20 @@ class _prospecto{
      * @param string $key_id Key a integrar
      * @param array $registro Registro en proceso
      * @return array
+     * @version 2.197.1
      */
     private function init_key_id(stdClass $data, string $key_id, array $registro): array
     {
+        $key_id = trim($key_id);
+        if($key_id === ''){
+            return $this->error->error(mensaje: 'Error key_id esta vacio',data:  $key_id);
+        }
+        if(is_numeric($key_id)){
+            return $this->error->error(mensaje: 'Error key_id debe ser un texto',data:  $key_id);
+        }
+        if(!isset($data->$key_id)){
+            $data->$key_id = '';
+        }
         if(!isset($registro[$key_id])){
             $registro[$key_id] = $data->$key_id;
         }
