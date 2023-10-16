@@ -188,33 +188,11 @@ class controlador_inm_prospecto extends _ctl_formato {
         }
 
 
-        $keys = (new inm_prospecto(link: $this->link))->keys_data_prospecto();
-        if(errores::$error){
-            $this->link->rollBack();
-            return $this->retorno_error(mensaje: 'Error al obtener keys', data: $keys, header: false, ws: false);
-        }
-
-        $inm_comprador_ins = array();
-
-        foreach ($keys as $key){
-            $inm_comprador_ins[$key] = $data->inm_prospecto->$key;
-        }
-
-        $inm_comprador_ins = (new inm_prospecto(link: $this->link))->defaults_alta_comprador(inm_comprador_ins: $inm_comprador_ins);
-        if(errores::$error){
-            $this->link->rollBack();
-            return $this->retorno_error(mensaje: 'Error al obtener inm_comprador_ins', data: $inm_comprador_ins, header: true, ws: false);
-        }
-
-        $inm_comprador_ins = (new inm_prospecto(link: $this->link))->integra_ids_prefs(inm_comprador_ins: $inm_comprador_ins);
+        $inm_comprador_ins = (new inm_prospecto(link: $this->link))->inm_comprador_ins(data: $data);
         if(errores::$error){
             $this->link->rollBack();
             return $this->retorno_error(mensaje: 'Error al obtener id_pref', data: $inm_comprador_ins, header: true, ws: false);
         }
-
-
-        $inm_comprador_ins['rfc'] = $data->inm_prospecto_completo->com_prospecto_rfc;
-        $inm_comprador_ins['numero_exterior'] = 'POR ASIGNAR';
 
         $r_alta_comprador = (new inm_comprador(link: $this->link))->alta_registro(registro: $inm_comprador_ins);
 

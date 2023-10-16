@@ -184,7 +184,11 @@ class _prospectoTest extends test {
         $this->assertEquals('XEXX010101HNEXXXA4',$resultado['curp']);
         $this->assertEquals('XAXX010101000',$resultado['rfc']);
         $this->assertEquals('1900-01-01',$resultado['fecha_nacimiento']);
+        $this->assertEquals(0,$resultado['sub_cuenta']);
         errores::$error = false;
+
+
+
     }
 
     public function test_init_data_fiscal(): void

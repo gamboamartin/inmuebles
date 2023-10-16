@@ -140,7 +140,7 @@ class inm_prospecto extends _modelo_parent{
         return $data;
     }
 
-    final public function defaults_alta_comprador(array $inm_comprador_ins): array
+    private function defaults_alta_comprador(array $inm_comprador_ins): array
     {
         if($inm_comprador_ins['nss'] === ''){
             $inm_comprador_ins['nss'] = '99999999999';
@@ -206,6 +206,45 @@ class inm_prospecto extends _modelo_parent{
         return $com_prospecto;
     }
 
+    final public function inm_comprador_ins(stdClass $data){
+        $keys = $this->keys_data_prospecto();
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al obtener keys', data: $keys);
+        }
+
+        $inm_comprador_ins = $this->inm_comprador_ins_init(data: $data,keys:  $keys);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al inicializar inm_comprador', data: $inm_comprador_ins);
+        }
+
+
+        $inm_comprador_ins = $this->defaults_alta_comprador(inm_comprador_ins: $inm_comprador_ins);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al obtener inm_comprador_ins', data: $inm_comprador_ins);
+        }
+
+        $inm_comprador_ins = $this->integra_ids_prefs(inm_comprador_ins: $inm_comprador_ins);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al obtener id_pref', data: $inm_comprador_ins);
+        }
+
+
+        $inm_comprador_ins['rfc'] = $data->inm_prospecto_completo->com_prospecto_rfc;
+        $inm_comprador_ins['numero_exterior'] = 'POR ASIGNAR';
+
+        return $inm_comprador_ins;
+    }
+
+    private function inm_comprador_ins_init(stdClass $data, array $keys): array
+    {
+        $inm_comprador_ins = array();
+
+        foreach ($keys as $key){
+            $inm_comprador_ins[$key] = $data->inm_prospecto->$key;
+        }
+        return $inm_comprador_ins;
+    }
+
     private function integra_id_pref(string $entidad, array $inm_comprador_ins, inm_comprador|com_cliente $modelo){
         $key_id = $entidad.'_id';
         $id_pref = $modelo->id_preferido_detalle(entidad_preferida: $entidad);
@@ -216,7 +255,7 @@ class inm_prospecto extends _modelo_parent{
         return $inm_comprador_ins;
     }
 
-    final public function integra_ids_prefs(array $inm_comprador_ins){
+    private function integra_ids_prefs(array $inm_comprador_ins){
         $entidades_pref = array('bn_cuenta');
 
         $modelo_inm_comprador = new inm_comprador(link: $this->link);
@@ -244,7 +283,7 @@ class inm_prospecto extends _modelo_parent{
     }
 
 
-    final public function keys_data_prospecto(): array
+    private function keys_data_prospecto(): array
     {
         return array('inm_producto_infonavit_id','inm_attr_tipo_credito_id','inm_destino_credito_id',
             'es_segundo_credito','inm_plazo_credito_sc_id','descuento_pension_alimenticia_dh',
@@ -252,7 +291,8 @@ class inm_prospecto extends _modelo_parent{
             'nombre','apellido_paterno','apellido_materno','con_discapacidad','nombre_empresa_patron','nrp_nep',
             'lada_nep','numero_nep','extension_nep','lada_com','numero_com','cel_com','genero','correo_com',
             'inm_tipo_discapacidad_id','inm_persona_discapacidad_id','inm_estado_civil_id',
-            'inm_institucion_hipotecaria_id','inm_sindicato_id','dp_municipio_nacimiento_id','fecha_nacimiento');
+            'inm_institucion_hipotecaria_id','inm_sindicato_id','dp_municipio_nacimiento_id','fecha_nacimiento',
+            'sub_cuenta','monto_final','descuento','puntos');
     }
 
 

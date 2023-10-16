@@ -154,6 +154,7 @@ class _prospecto{
      * Inicializa los datos default de un registro de tipo prospecto
      * @param array $registro Registro en proceso
      * @return array
+     * @version 2.195.1
      */
     private function init_data_default(array $registro): array
     {
