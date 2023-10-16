@@ -62,12 +62,22 @@ class inm_prospecto_procesoTest extends test {
             print_r($error);exit;
         }
 
+        $filtro['pr_sub_proceso.descripcion'] = 'ALTA PROSPECTO';
+        $r_pr_sub_proceso = (new pr_sub_proceso(link: $this->link))->filtro_and(filtro: $filtro);
+        if(errores::$error){
+            $error = (new errores())->error(mensaje:  'Error al obtener sub proceso',data: $r_pr_sub_proceso);
+            print_r($error);
+            exit;
+        }
+
+        $pr_sub_proceso_id = $r_pr_sub_proceso->registros[0]['pr_sub_proceso_id'];
+
         $modelo = new inm_prospecto_proceso(link: $this->link);
         //$modelo = new liberator($modelo);
 
         $registro = array();
         $registro['inm_prospecto_id'] = 1;
-        $registro['pr_sub_proceso_id'] = 7;
+        $registro['pr_sub_proceso_id'] = $pr_sub_proceso_id;
         $registro['fecha'] = '2020-01-01';
         $resultado = $modelo->alta_registro($registro);
 
