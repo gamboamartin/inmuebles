@@ -102,18 +102,30 @@ class _prospecto{
      * Integra los campos de par ala insersion de un prospecto
      * @param array $registro
      * @return array
+     * @version 2.191.1
      */
     private function com_prospecto_ins(array $registro): array
     {
+        $keys = array('nombre','apellido_paterno','lada_com','numero_com','razon_social','com_agente_id',
+            'com_tipo_prospecto_id');
+
+        $valida = (new validacion())->valida_existencia_keys(keys: $keys,registro:  $registro);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al validar registro',data: $valida);
+        }
+
         if(!isset($registro['correo_com'])){
             $registro['correo_com'] = 'pendiente@correo.com';
         }
-        $com_prospecto_ins['nombre'] = $registro['nombre'];
-        $com_prospecto_ins['apellido_paterno'] = $registro['apellido_paterno'];
-        $com_prospecto_ins['apellido_materno'] = $registro['apellido_materno'];
-        $com_prospecto_ins['telefono'] = $registro['lada_com'].$registro['numero_com'];
-        $com_prospecto_ins['correo'] = $registro['correo_com'];
-        $com_prospecto_ins['razon_social'] = $registro['razon_social'];
+        if(!isset($registro['apellido_materno'])){
+            $registro['apellido_materno'] = '';
+        }
+        $com_prospecto_ins['nombre'] = trim($registro['nombre']);
+        $com_prospecto_ins['apellido_paterno'] = trim($registro['apellido_paterno']);
+        $com_prospecto_ins['apellido_materno'] = trim($registro['apellido_materno']);
+        $com_prospecto_ins['telefono'] = trim($registro['lada_com'].$registro['numero_com']);
+        $com_prospecto_ins['correo'] = trim($registro['correo_com']);
+        $com_prospecto_ins['razon_social'] = trim($registro['razon_social']);
         $com_prospecto_ins['com_agente_id'] = $registro['com_agente_id'];
         $com_prospecto_ins['com_tipo_prospecto_id'] = $registro['com_tipo_prospecto_id'];
 
@@ -273,6 +285,13 @@ class _prospecto{
         }
         return $registro;
     }
+
+    /**
+     * @param stdClass $data
+     * @param string $key_id
+     * @param array $registro
+     * @return array
+     */
     private function init_key_id(stdClass $data, string $key_id, array $registro): array
     {
         if(!isset($registro[$key_id])){

@@ -112,6 +112,36 @@ class _prospectoTest extends test {
         errores::$error = false;
     }
 
+    public function test_com_prospecto_ins(): void
+    {
+        errores::$error = false;
+
+        $_GET['seccion'] = 'inm_producto_infonavit';
+        $_GET['accion'] = 'lista';
+        $_SESSION['grupo_id'] = 1;
+        $_SESSION['usuario_id'] = 2;
+        $_GET['session_id'] = '1';
+
+
+        $_pr = new _prospecto();
+        $_pr = new liberator($_pr);
+
+        //$modelo = new inm_prospecto(link: $this->link);
+
+        $registro = array();
+        $registro['nombre'] = 'z';
+        $registro['apellido_paterno'] = 'z';
+        $registro['lada_com'] = 'z';
+        $registro['numero_com'] = 'z';
+        $registro['razon_social'] = 'z';
+        $registro['com_agente_id'] = 'z';
+        $registro['com_tipo_prospecto_id'] = 'z';
+        $resultado = $_pr->com_prospecto_ins($registro);
+        $this->assertNotTrue(errores::$error);
+        $this->assertEquals('z',$resultado['razon_social']);
+        errores::$error = false;
+    }
+
     public function test_dp_calle_pertenece_id(): void
     {
         errores::$error = false;
