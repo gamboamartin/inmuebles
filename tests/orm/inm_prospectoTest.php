@@ -39,6 +39,35 @@ class inm_prospectoTest extends test {
         $this->paths_conf->views = '/var/www/html/inmuebles/config/views.php';
     }
 
+    public function test_alta_bd(): void
+    {
+        errores::$error = false;
+
+        $_GET['seccion'] = 'inm_producto_infonavit';
+        $_GET['accion'] = 'lista';
+        $_SESSION['grupo_id'] = 1;
+        $_SESSION['usuario_id'] = 2;
+        $_GET['session_id'] = '1';
+
+
+        $modelo = new inm_prospecto(link: $this->link);
+        //$modelo = new liberator($modelo);
+
+        $modelo->registro['nombre'] = 'A';
+        $modelo->registro['apellido_paterno'] = 'B';
+        $modelo->registro['numero_com'] = 'C';
+        $modelo->registro['lada_com'] = 'D';
+        $modelo->registro['razon_social'] = 'E';
+        $modelo->registro['com_agente_id'] = '1';
+        $modelo->registro['com_tipo_prospecto_id'] = '1';
+
+        $resultado = $modelo->alta_bd();
+        $this->assertIsObject($resultado);
+        $this->assertNotTrue(errores::$error);
+        errores::$error = false;
+
+    }
+
     public function test_inm_prospecto_proceso_ins(): void
     {
         errores::$error = false;

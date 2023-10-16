@@ -74,6 +74,7 @@ class inm_prospecto extends _modelo_parent{
      * Inserta un prospecto
      * @param array $keys_integra_ds Identificadores para descripciones de tipo select
      * @return array|stdClass
+     * @version 2.208.1
      */
     public function alta_bd(array $keys_integra_ds = array('codigo', 'descripcion')): array|stdClass
     {
@@ -115,7 +116,6 @@ class inm_prospecto extends _modelo_parent{
             return $this->error->error(mensaje: 'Error al insertar cliente', data: $r_alta_comprador);
         }
 
-
         $r_alta_rel = $this->inserta_rel_prospecto_cliente(
             inm_comprador_id: $r_alta_comprador->registro_id,inm_prospecto_id:  $inm_prospecto_id);
 
@@ -129,7 +129,13 @@ class inm_prospecto extends _modelo_parent{
         return $data;
     }
 
-    private function data_prospecto(int $inm_prospecto_id){
+    /**
+     * Obtiene los datos de un prospecto
+     * @param int $inm_prospecto_id Identificador de prospecto
+     * @return array|stdClass
+     */
+    private function data_prospecto(int $inm_prospecto_id): array|stdClass
+    {
         $inm_prospecto = $this->registro(registro_id: $inm_prospecto_id, columnas_en_bruto: true, retorno_obj: true);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al obtener prospecto', data: $inm_prospecto);
@@ -353,7 +359,7 @@ class inm_prospecto extends _modelo_parent{
             'lada_nep','numero_nep','extension_nep','lada_com','numero_com','cel_com','genero','correo_com',
             'inm_tipo_discapacidad_id','inm_persona_discapacidad_id','inm_estado_civil_id',
             'inm_institucion_hipotecaria_id','inm_sindicato_id','dp_municipio_nacimiento_id','fecha_nacimiento',
-            'sub_cuenta','monto_final','descuento','puntos');
+            'sub_cuenta','monto_final','descuento','puntos','inm_nacionalidad_id');
     }
 
     private function inm_rel_prospecto_cliente_ins(int $inm_comprador_id, int $inm_prospecto_id): array
