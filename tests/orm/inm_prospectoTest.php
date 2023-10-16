@@ -64,6 +64,45 @@ class inm_prospectoTest extends test {
         errores::$error = false;
     }
 
+    public function test_inserta_sub_proceso(): void
+    {
+        errores::$error = false;
+
+        $_GET['seccion'] = 'inm_producto_infonavit';
+        $_GET['accion'] = 'lista';
+        $_SESSION['grupo_id'] = 1;
+        $_SESSION['usuario_id'] = 2;
+        $_GET['session_id'] = '1';
+
+        $del = (new base_test())->del_inm_prospecto(link: $this->link);
+        if(errores::$error){
+            $error = (new errores())->error(mensaje:'Error al del', data: $del);
+            print_r($error);exit;
+        }
+
+
+        $alta = (new base_test())->alta_inm_prospecto(link: $this->link);
+        if(errores::$error){
+            $error = (new errores())->error(mensaje:'Error al alta', data: $alta);
+            print_r($error);exit;
+        }
+
+        $del = (new base_test())->del_inm_prospecto_proceso(link: $this->link);
+        if(errores::$error){
+            $error = (new errores())->error(mensaje:'Error al del', data: $del);
+            print_r($error);exit;
+        }
+
+        $modelo = new inm_prospecto(link: $this->link);
+        $modelo = new liberator($modelo);
+
+        $inm_prospecto_id = 1;
+        $resultado = $modelo->inserta_sub_proceso($inm_prospecto_id);
+        $this->assertIsObject($resultado);
+        $this->assertNotTrue(errores::$error);
+        errores::$error = false;
+    }
+
     public function test_pr_sub_proceso(): void
     {
         errores::$error = false;

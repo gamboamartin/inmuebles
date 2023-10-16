@@ -71,7 +71,8 @@ class inm_prospecto extends _modelo_parent{
     }
 
     /**
-     * @param array $keys_integra_ds
+     * Inserta un prospecto
+     * @param array $keys_integra_ds Identificadores para descripciones de tipo select
      * @return array|stdClass
      */
     public function alta_bd(array $keys_integra_ds = array('codigo', 'descripcion')): array|stdClass
@@ -99,7 +100,8 @@ class inm_prospecto extends _modelo_parent{
 
         $alta_inm_prospecto_proceso = $this->inserta_sub_proceso(inm_prospecto_id: $r_alta_bd->registro_id);
         if(errores::$error){
-            return $this->error->error(mensaje: 'Error insertar alta_inm_prospecto_proceso',data:  $alta_inm_prospecto_proceso);
+            return $this->error->error(mensaje: 'Error insertar alta_inm_prospecto_proceso',
+                data:  $alta_inm_prospecto_proceso);
         }
 
 
@@ -271,7 +273,18 @@ class inm_prospecto extends _modelo_parent{
         return $inm_prospecto_proceso_ins;
     }
 
-    private function inserta_sub_proceso(int $inm_prospecto_id){
+    /**
+     * Inserta un sub proceso de etapa en prospecto
+     * @param int $inm_prospecto_id Identificador de prospecto
+     * @return array|stdClass
+     * @version 2.207.1
+     */
+    private function inserta_sub_proceso(int $inm_prospecto_id): array|stdClass
+    {
+        if($inm_prospecto_id<=0){
+            return $this->error->error(mensaje: 'Error inm_prospecto_id es menor a 1', data: $inm_prospecto_id);
+        }
+
         $pr_sub_proceso = $this->pr_sub_proceso();
         if(errores::$error){
             return $this->error->error(mensaje: 'Error obtener pr_sub_proceso',data:  $pr_sub_proceso);
