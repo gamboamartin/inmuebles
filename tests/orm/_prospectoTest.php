@@ -312,11 +312,59 @@ class _prospectoTest extends test {
         errores::$error = false;
     }
 
+    public function test_inserta_com_prospecto(): void
+    {
+        errores::$error = false;
 
+        $_GET['seccion'] = 'inm_producto_infonavit';
+        $_GET['accion'] = 'lista';
+        $_SESSION['grupo_id'] = 1;
+        $_SESSION['usuario_id'] = 2;
+        $_GET['session_id'] = '1';
 
+        $del = (new base_test())->del_com_agente(link: $this->link);
+        if(errores::$error){
+            $error = (new errores())->error(mensaje:'Error al del', data: $del);
+            print_r($error);exit;
+        }
+        $del = (new base_test())->del_com_tipo_prospecto(link: $this->link);
+        if(errores::$error){
+            $error = (new errores())->error(mensaje:'Error al del', data: $del);
+            print_r($error);exit;
+        }
 
+        $alta = (new base_test())->alta_com_agente(link: $this->link);
+        if(errores::$error){
+            $error = (new errores())->error(mensaje:'Error al alta', data: $alta);
+            print_r($error);exit;
+        }
 
+        $alta = (new base_test())->alta_com_tipo_prospecto(link: $this->link);
+        if(errores::$error){
+            $error = (new errores())->error(mensaje:'Error al alta', data: $alta);
+            print_r($error);exit;
+        }
 
+        $_pr = new _prospecto();
+        $_pr = new liberator($_pr);
+
+        //$modelo = new inm_prospecto(link: $this->link);
+
+        $registro = array();
+        $registro['nombre'] = 'A';
+        $registro['apellido_paterno'] = 'A';
+        $registro['lada_com'] = 'A';
+        $registro['numero_com'] = 'A';
+        $registro['razon_social'] = 'A';
+        $registro['com_agente_id'] = '1';
+        $registro['com_tipo_prospecto_id'] = '1';
+        $link = $this->link;
+        $resultado = $_pr->inserta_com_prospecto($link, $registro);
+        $this->assertIsObject($resultado);
+        $this->assertNotTrue(errores::$error);
+        errores::$error = false;
+
+    }
 
 }
 

@@ -366,9 +366,25 @@ class _prospecto{
      * @param PDO $link Conexion a la base de datos
      * @param array $registro Registro en proceso
      * @return array|stdClass
+     * @version 2.192.1
      */
     private function inserta_com_prospecto(PDO $link, array $registro): array|stdClass
     {
+        $keys = array('nombre','apellido_paterno','lada_com','numero_com','razon_social','com_agente_id',
+            'com_tipo_prospecto_id');
+
+        $valida = (new validacion())->valida_existencia_keys(keys: $keys,registro:  $registro);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al validar registro',data: $valida);
+        }
+
+        $keys = array('com_agente_id', 'com_tipo_prospecto_id');
+
+        $valida = (new validacion())->valida_ids(keys: $keys,registro:  $registro);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al validar registro',data: $valida);
+        }
+
         $com_prospecto_ins = $this->com_prospecto_ins(registro: $registro);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al maquetar com_prospecto',data:  $com_prospecto_ins);

@@ -43,6 +43,16 @@ class base_test{
         return $alta;
     }
 
+    public function alta_com_agente(PDO $link, int $id = 1): array|\stdClass
+    {
+
+        $alta = (new \gamboamartin\comercial\test\base_test())->alta_com_agente(link: $link, id: $id);
+        if(errores::$error){
+            return (new errores())->error(mensaje: 'Error al insertar', data: $alta);
+        }
+        return $alta;
+    }
+
     public function alta_com_cliente(PDO $link, int $cat_sat_regimen_fiscal_id = 601, int $cat_sat_tipo_persona_id = 4,
                                      string $codigo = '1',string $descripcion = 'YADIRA MAGALY MONTAÑEZ FELIX',
                                      int $id = 1): array|\stdClass
@@ -61,6 +71,16 @@ class base_test{
     {
 
         $alta = (new \gamboamartin\comercial\test\base_test())->alta_com_tipo_cliente(link: $link, id: $id);
+        if(errores::$error){
+            return (new errores())->error(mensaje: 'Error al insertar', data: $alta);
+        }
+        return $alta;
+    }
+
+    public function alta_com_tipo_prospecto(PDO $link, $id = 1): array|\stdClass
+    {
+
+        $alta = (new \gamboamartin\comercial\test\base_test())->alta_com_tipo_prospecto(link: $link, id: $id);
         if(errores::$error){
             return (new errores())->error(mensaje: 'Error al insertar', data: $alta);
         }
@@ -595,6 +615,20 @@ class base_test{
         return $del;
     }
 
+    public function del_com_agente(PDO $link): array
+    {
+
+        $del = $this->del_inm_prospecto(link: $link);
+        if(errores::$error){
+            return (new errores())->error('Error al eliminar', $del);
+        }
+        $del = (new \gamboamartin\comercial\test\base_test())->del_com_agente(link: $link);
+        if(errores::$error){
+            return (new errores())->error('Error al eliminar', $del);
+        }
+        return $del;
+    }
+
     public function del_com_cliente(PDO $link): array
     {
 
@@ -608,6 +642,17 @@ class base_test{
         }
 
         $del = (new \gamboamartin\comercial\test\base_test())->del_com_cliente(link: $link);
+        if(errores::$error){
+            return (new errores())->error('Error al eliminar', $del);
+        }
+        return $del;
+    }
+
+    public function del_com_tipo_prospecto(PDO $link): array
+    {
+
+
+        $del = (new \gamboamartin\comercial\test\base_test())->del_com_tipo_prospecto(link: $link);
         if(errores::$error){
             return (new errores())->error('Error al eliminar', $del);
         }
@@ -757,6 +802,16 @@ class base_test{
         return $del;
     }
 
+    public function del_inm_doc_prospecto(PDO $link): array
+    {
+
+        $del = $this->del($link, 'gamboamartin\\inmuebles\\models\\inm_doc_prospecto');
+        if(errores::$error){
+            return (new errores())->error('Error al eliminar', $del);
+        }
+        return $del;
+    }
+
     public function del_inm_opinion_valor(PDO $link): array
     {
 
@@ -771,6 +826,35 @@ class base_test{
     {
 
         $del = $this->del($link, 'gamboamartin\\inmuebles\\models\\inm_precio');
+        if(errores::$error){
+            return (new errores())->error('Error al eliminar', $del);
+        }
+        return $del;
+    }
+
+    public function del_inm_prospecto(PDO $link): array
+    {
+
+        $del = $this->del_inm_doc_prospecto(link: $link);
+        if(errores::$error){
+            return (new errores())->error('Error al eliminar', $del);
+        }
+        $del = $this->del_inm_prospecto_proceso(link: $link);
+        if(errores::$error){
+            return (new errores())->error('Error al eliminar', $del);
+        }
+
+        $del = $this->del($link, 'gamboamartin\\inmuebles\\models\\inm_prospecto');
+        if(errores::$error){
+            return (new errores())->error('Error al eliminar', $del);
+        }
+        return $del;
+    }
+
+    public function del_inm_prospecto_proceso(PDO $link): array
+    {
+
+        $del = $this->del($link, 'gamboamartin\\inmuebles\\models\\inm_prospecto_proceso');
         if(errores::$error){
             return (new errores())->error('Error al eliminar', $del);
         }

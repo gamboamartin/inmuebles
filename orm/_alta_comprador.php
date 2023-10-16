@@ -35,6 +35,18 @@ class _alta_comprador{
         if(!isset($registro['inm_persona_discapacidad_id'])){
             $registro['inm_persona_discapacidad_id'] = 6;
         }
+        if(!isset($registro['monto_final'])){
+            $registro['monto_final'] = 0;
+        }
+        if(!isset($registro['sub_cuenta'])){
+            $registro['sub_cuenta'] = 0;
+        }
+        if(!isset($registro['descuento'])){
+            $registro['descuento'] = 0;
+        }
+        if(!isset($registro['puntos'])){
+            $registro['puntos'] = 0;
+        }
         return $registro;
     }
 
