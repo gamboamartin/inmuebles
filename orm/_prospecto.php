@@ -264,9 +264,14 @@ class _prospecto{
      * @param string $entidad Entidad de integracion
      * @param array $registro Registro en proceso
      * @return array
+     * @version 2.198.1
      */
     private function init_key_entidad_id(stdClass $data, string $entidad, array $registro): array
     {
+        $entidad = trim($entidad);
+        if($entidad === ''){
+            return $this->error->error(mensaje: 'Error entidad esta vacia',data:  $entidad);
+        }
         $key_id = $entidad.'_id';
         $registro = $this->init_key_id(data: $data,key_id:  $key_id,registro:  $registro);
         if(errores::$error){
