@@ -61,7 +61,6 @@ class inm_prospecto_proceso extends _modelo_base_paquete {
             return $this->error->error(mensaje: 'Error al actualizar etapa', data: $upd);
         }
 
-
         return $r_alta_bd;
     }
 
@@ -69,6 +68,7 @@ class inm_prospecto_proceso extends _modelo_base_paquete {
      * Inserta un elementos de prospecto proceso
      * @param array $registro registro a insertar
      * @return array|stdClass
+     * @version 2.206.1
      */
     public function alta_registro(array $registro): array|stdClass
     {

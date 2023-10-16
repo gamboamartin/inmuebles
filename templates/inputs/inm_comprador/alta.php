@@ -71,6 +71,7 @@
 <?php echo $controlador->inputs->numero_com; ?>
 <?php echo $controlador->inputs->cel_com; ?>
 
+
     <div class="control-group col-sm-6">
         <label class="control-label" for="inm_attr_tipo_credito_id">Genero</label>
         <label class="form-check-label chk">
@@ -91,6 +92,7 @@
         <?php echo $controlador->inputs->dp_estado_nacimiento_id; ?>
         <?php echo $controlador->inputs->dp_municipio_nacimiento_id; ?>
         <?php echo $controlador->inputs->fecha_nacimiento; ?>
+        <?php echo $controlador->inputs->inm_nacionalidad_id; ?>
 
     </div>
 

@@ -15,6 +15,7 @@ use gamboamartin\inmuebles\models\inm_conf_empresa;
 use gamboamartin\inmuebles\models\inm_costo;
 use gamboamartin\inmuebles\models\inm_opinion_valor;
 use gamboamartin\inmuebles\models\inm_precio;
+use gamboamartin\inmuebles\models\inm_prospecto;
 use gamboamartin\inmuebles\models\inm_referencia;
 use gamboamartin\inmuebles\models\inm_rel_co_acred;
 use gamboamartin\inmuebles\models\inm_rel_comprador_com_cliente;
@@ -352,6 +353,29 @@ class base_test{
         $registro['fecha_final'] = $fecha_final;
         $registro['inm_institucion_hipotecaria_id'] = $inm_institucion_hipotecaria_id;
         $alta = (new inm_precio($link))->alta_registro($registro);
+        if(errores::$error){
+            return (new errores())->error(mensaje: 'Error al insertar', data: $alta);
+        }
+        return $alta;
+    }
+
+    public function alta_inm_prospecto(PDO $link, string $apellido_paterno = 'AP1', int $com_agente_id = 1,
+                                       int $com_tipo_prospecto_id = 1,int $id = 1, int $lada_com = 12,
+                                       string $nombre = 'NOMBRE 1', int $numero_com = 12345678,
+                                       string $razon_social ='RS1'): array|\stdClass
+    {
+
+
+        $registro['id'] = $id;
+        $registro['nombre'] = $nombre;
+        $registro['apellido_paterno'] = $apellido_paterno;
+        $registro['numero_com'] = $numero_com;
+        $registro['lada_com'] = $lada_com;
+        $registro['razon_social'] = $razon_social;
+        $registro['com_agente_id'] = $com_agente_id;
+        $registro['com_tipo_prospecto_id'] = $com_tipo_prospecto_id;
+
+        $alta = (new inm_prospecto($link))->alta_registro($registro);
         if(errores::$error){
             return (new errores())->error(mensaje: 'Error al insertar', data: $alta);
         }
