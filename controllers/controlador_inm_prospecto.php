@@ -131,7 +131,7 @@ class controlador_inm_prospecto extends _ctl_formato {
             'lada_com','numero_com','cel_com','descuento_pension_alimenticia_dh','descuento_pension_alimenticia_fc',
             'monto_credito_solicitado_dh','monto_ahorro_voluntario','nombre_empresa_patron','nrp_nep','lada_nep',
             'numero_nep','extension_nep','nss','curp','rfc','numero_exterior','numero_interior','observaciones',
-            'fecha_nacimiento');
+            'fecha_nacimiento','sub_cuenta','monto_final','descuento','puntos');
         $keys->selects = array();
 
         $init_data = array();
@@ -451,6 +451,28 @@ class controlador_inm_prospecto extends _ctl_formato {
 
         $keys_selects = (new init())->key_select_txt(cols: 12,key: 'observaciones',
             keys_selects:$keys_selects, place_holder: 'Observaciones', required: false);
+        if(errores::$error){
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        }
+
+        $keys_selects = (new init())->key_select_txt(cols: 6,key: 'sub_cuenta',
+            keys_selects:$keys_selects, place_holder: 'Sub Cuenta', required: false);
+        if(errores::$error){
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        }
+
+        $keys_selects = (new init())->key_select_txt(cols: 6,key: 'monto_final',
+            keys_selects:$keys_selects, place_holder: 'Monto Final', required: false);
+        if(errores::$error){
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        }
+        $keys_selects = (new init())->key_select_txt(cols: 6,key: 'descuento',
+            keys_selects:$keys_selects, place_holder: 'Descuento', required: false);
+        if(errores::$error){
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        }
+        $keys_selects = (new init())->key_select_txt(cols: 6,key: 'puntos',
+            keys_selects:$keys_selects, place_holder: 'Puntos', required: false);
         if(errores::$error){
             return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }

@@ -13,6 +13,10 @@ let numero_com_ct = $("#numero_com");
 let cel_com_ct = $("#cel_com_ct");
 let correo_com_ct = $("#correo_com");
 let razon_social_ct = $("#razon_social");
+let sub_cuenta_ct = $("#sub_cuenta");
+let monto_final_ct = $("#monto_final");
+let descuento_ct = $("#descuento");
+let puntos_ct = $("#puntos");
 
 let chk_es_segundo_credito = $(".es_segundo_credito");
 
@@ -74,6 +78,23 @@ razon_social_ct.change(function() {
     limpia_txt($(this));
 });
 
+sub_cuenta_ct.change(function() {
+    limpia_txt($(this));
+    limpia_number($(this));
+});
+monto_final_ct.change(function() {
+    limpia_txt($(this));
+    limpia_number($(this));
+});
+descuento_ct.change(function() {
+    limpia_txt($(this));
+    limpia_number($(this));
+});
+puntos_ct.change(function() {
+    limpia_txt($(this));
+    limpia_number($(this));
+});
+
 chk_es_segundo_credito.change(function(){
     let es_segundo_credito = $(this).val();
 
@@ -105,6 +126,28 @@ function limpia_number(container){
     value = value.replace(' ','');
     value = value.replace(' ','');
     value = value.replace(' ','');
+
+
+    value = value.replace('$','');
+    value = value.replace('$','');
+    value = value.replace('$','');
+    value = value.replace('$','');
+    value = value.replace('$','');
+    value = value.replace('$','');
+    value = value.replace('$','');
+
+
+    value = value.replace(',','');
+    value = value.replace(',','');
+    value = value.replace(',','');
+    value = value.replace(',','');
+    value = value.replace(',','');
+    value = value.replace(',','');
+    value = value.replace(',','');
+
+
+
+
     container.val(value);
 }
 

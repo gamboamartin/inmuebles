@@ -103,6 +103,31 @@ class _base_paqueteTest extends test {
         errores::$error = false;
     }
 
+    public function test_montos_0(): void
+    {
+        errores::$error = false;
+
+        $_GET['seccion'] = 'inm_producto_infonavit';
+        $_GET['accion'] = 'lista';
+        $_SESSION['grupo_id'] = 1;
+        $_SESSION['usuario_id'] = 2;
+        $_GET['session_id'] = '1';
+
+        $_inm = new _base_paquete();
+        //$_inm = new liberator($_inm);
+
+        $registro = array();
+        $resultado = $_inm->montos_0($registro);
+        $this->assertIsArray($resultado);
+        $this->assertNotTrue(errores::$error);
+        $this->assertEquals(0,$resultado['monto_final']);
+        $this->assertEquals(0,$resultado['sub_cuenta']);
+        $this->assertEquals(0,$resultado['descuento']);
+        $this->assertEquals(0,$resultado['puntos']);
+
+        errores::$error = false;
+    }
+
     public function test_rename_data_nac(): void
     {
         errores::$error = false;

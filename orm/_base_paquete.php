@@ -78,6 +78,7 @@ class _base_paquete{
      * Inicializa los montos de un registro
      * @param array $registro Registro en proceso
      * @return array
+     * @version 2.194.1
      */
     final public function montos_0(array $registro): array
     {
