@@ -285,9 +285,38 @@ class _prospecto{
      * Inicializa elementos de infonavit
      * @param array $registro Registro en proceso
      * @return array
+     * @version 2.199.1
      */
     private function init_key_entidad_hardcodeo(array $registro): array
     {
+        if(!isset($registro['inm_producto_infonavit_id'])){
+            $registro['inm_producto_infonavit_id'] = -1;
+        }
+        if(!isset($registro['inm_attr_tipo_credito_id'])){
+            $registro['inm_attr_tipo_credito_id'] = -1;
+        }
+        if(!isset($registro['inm_plazo_credito_sc_id'])){
+            $registro['inm_plazo_credito_sc_id'] = -1;
+        }
+        if(!isset($registro['inm_tipo_discapacidad_id'])){
+            $registro['inm_tipo_discapacidad_id'] = -1;
+        }
+        if(!isset($registro['inm_persona_discapacidad_id'])){
+            $registro['inm_persona_discapacidad_id'] = -1;
+        }
+        if(!isset($registro['inm_estado_civil_id'])){
+            $registro['inm_estado_civil_id'] = -1;
+        }
+        if(!isset($registro['inm_institucion_hipotecaria_id'])){
+            $registro['inm_institucion_hipotecaria_id'] = -1;
+        }
+        if(!isset($registro['inm_sindicato_id'])){
+            $registro['inm_sindicato_id'] = -1;
+        }
+        if(!isset($registro['inm_destino_credito_id'])){
+            $registro['inm_destino_credito_id'] = -1;
+        }
+
         if((int)$registro['inm_producto_infonavit_id'] === -1){
             $registro['inm_producto_infonavit_id'] = 6;
         }

@@ -245,6 +245,28 @@ class _prospectoTest extends test {
 
     }
 
+    public function test_init_key_entidad_hardcodeo(): void
+    {
+        errores::$error = false;
+
+        $_GET['seccion'] = 'inm_producto_infonavit';
+        $_GET['accion'] = 'lista';
+        $_SESSION['grupo_id'] = 1;
+        $_SESSION['usuario_id'] = 2;
+        $_GET['session_id'] = '1';
+
+
+        $_pr = new _prospecto();
+        $_pr = new liberator($_pr);
+
+        $registro = array();
+        $resultado = $_pr->init_key_entidad_hardcodeo($registro);
+        $this->assertIsArray($resultado);
+        $this->assertNotTrue(errores::$error);
+        $this->assertEquals('5',$resultado['inm_tipo_discapacidad_id']);
+        errores::$error = false;
+    }
+
     public function test_init_key_entidad_id(): void
     {
         errores::$error = false;

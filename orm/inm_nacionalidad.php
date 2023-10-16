@@ -1,0 +1,29 @@
+<?php
+
+namespace gamboamartin\inmuebles\models;
+
+use base\orm\_modelo_parent;
+use PDO;
+
+
+class inm_nacionalidad extends _modelo_parent{
+    public function __construct(PDO $link)
+    {
+        $tabla = 'inm_nacionalidad';
+        $columnas = array($tabla=>false);
+        $campos_obligatorios = array();
+        $atributos_criticos = array();
+        $columnas_extra= array();
+        $renombres= array();
+
+
+        parent::__construct(link: $link, tabla: $tabla, campos_obligatorios: $campos_obligatorios,
+            columnas: $columnas, columnas_extra: $columnas_extra, renombres: $renombres,
+            atributos_criticos: $atributos_criticos);
+
+        $this->NAMESPACE = __NAMESPACE__;
+        $this->etiqueta = 'Nacionalidad';
+    }
+
+
+}
