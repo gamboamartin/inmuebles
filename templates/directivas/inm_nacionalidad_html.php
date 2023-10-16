@@ -5,7 +5,7 @@ use gamboamartin\inmuebles\models\inm_nacionalidad;
 use gamboamartin\system\html_controler;
 use PDO;
 
-class inm_nacionalidad_ubicacion_html extends html_controler {
+class inm_nacionalidad_html extends html_controler {
 
     public function select_nacionalidad_id(int $cols, bool $con_registros, int $id_selected, PDO $link,
                                       bool $disabled = false, array $filtro = array()): array|string

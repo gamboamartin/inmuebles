@@ -96,19 +96,7 @@ class inm_prospecto extends _modelo_parent{
         }
 
 
-        $pr_sub_proceso = $this->pr_sub_proceso();
-        if(errores::$error){
-            return $this->error->error(mensaje: 'Error obtener pr_sub_proceso',data:  $pr_sub_proceso);
-        }
-
-        $inm_prospecto_proceso_ins = $this->inm_prospecto_proceso_ins(inm_prospecto_id: $r_alta_bd->registro_id,
-            pr_sub_proceso_id: $pr_sub_proceso['pr_sub_proceso_id']);
-
-        if(errores::$error){
-            return $this->error->error(mensaje: 'Error integrar pr_sub_proceso',data:  $inm_prospecto_proceso_ins);
-        }
-
-        $alta_inm_prospecto_proceso = (new inm_prospecto_proceso(link: $this->link))->alta_registro(registro: $inm_prospecto_proceso_ins);
+        $alta_inm_prospecto_proceso = $this->inserta_sub_proceso(inm_prospecto_id: $r_alta_bd->registro_id);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error insertar alta_inm_prospecto_proceso',data:  $alta_inm_prospecto_proceso);
         }
@@ -267,6 +255,26 @@ class inm_prospecto extends _modelo_parent{
         $inm_prospecto_proceso_ins['inm_prospecto_id'] = $inm_prospecto_id;
 
         return $inm_prospecto_proceso_ins;
+    }
+
+    private function inserta_sub_proceso(int $inm_prospecto_id){
+        $pr_sub_proceso = $this->pr_sub_proceso();
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error obtener pr_sub_proceso',data:  $pr_sub_proceso);
+        }
+
+        $inm_prospecto_proceso_ins = $this->inm_prospecto_proceso_ins(inm_prospecto_id: $inm_prospecto_id,
+            pr_sub_proceso_id: $pr_sub_proceso['pr_sub_proceso_id']);
+
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error integrar pr_sub_proceso',data:  $inm_prospecto_proceso_ins);
+        }
+
+        $alta_inm_prospecto_proceso = (new inm_prospecto_proceso(link: $this->link))->alta_registro(registro: $inm_prospecto_proceso_ins);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error insertar alta_inm_prospecto_proceso',data:  $alta_inm_prospecto_proceso);
+        }
+        return $alta_inm_prospecto_proceso;
     }
 
     private function integra_id_pref(string $entidad, array $inm_comprador_ins, inm_comprador|com_cliente $modelo){

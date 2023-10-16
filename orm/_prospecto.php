@@ -440,24 +440,14 @@ class _prospecto{
      * @param PDO $link Conexion a la base de datos
      * @param array $registro Registro en proceso
      * @return array|stdClass
-     * @version 2.192.1
      */
     private function inserta_com_prospecto(PDO $link, array $registro): array|stdClass
     {
-        $keys = array('nombre','apellido_paterno','lada_com','numero_com','razon_social','com_agente_id',
-            'com_tipo_prospecto_id');
-
-        $valida = (new validacion())->valida_existencia_keys(keys: $keys,registro:  $registro);
+        $valida = $this->valida_alta_prospecto(registro: $registro);
         if(errores::$error){
-            return $this->error->error(mensaje: 'Error al validar registro',data: $valida);
+            return $this->error->error(mensaje: 'Error al validar registro',data:  $valida);
         }
 
-        $keys = array('com_agente_id', 'com_tipo_prospecto_id');
-
-        $valida = (new validacion())->valida_ids(keys: $keys,registro:  $registro);
-        if(errores::$error){
-            return $this->error->error(mensaje: 'Error al validar registro',data: $valida);
-        }
 
         $com_prospecto_ins = $this->com_prospecto_ins(registro: $registro);
         if(errores::$error){
@@ -507,6 +497,13 @@ class _prospecto{
      */
     final public function previo_alta(inm_prospecto $modelo, array $registro): array
     {
+
+
+        $valida = $this->valida_alta_prospecto(registro: $registro);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al validar registro',data:  $valida);
+        }
+
         $registro = $this->asigna_datos_alta(modelo: $modelo,registro:  $registro);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al inicializar registro',data:  $registro);
@@ -532,5 +529,21 @@ class _prospecto{
         }
 
         return $registro;
+    }
+
+    private function valida_alta_prospecto(array $registro){
+        $keys = array('nombre','apellido_paterno','lada_com','numero_com','razon_social','com_agente_id',
+            'com_tipo_prospecto_id');
+        $valida = (new validacion())->valida_existencia_keys(keys: $keys,registro:  $registro);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al validar registro',data:  $valida);
+        }
+
+        $keys = array('com_agente_id', 'com_tipo_prospecto_id');
+        $valida = (new validacion())->valida_ids(keys: $keys,registro:  $registro);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al validar registro',data:  $valida);
+        }
+        return true;
     }
 }
