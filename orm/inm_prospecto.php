@@ -95,28 +95,18 @@ class inm_prospecto extends _modelo_parent{
             return $this->error->error(mensaje: 'Error al insertar prospecto',data:  $r_alta_bd);
         }
 
-        $filtro = array();
-        $filtro['pr_sub_proceso.descripcion'] = 'ALTA PROSPECTO';
-        $filtro['adm_seccion.descripcion'] = $this->tabla;
 
-        $r_pr_sub_proceso = (new pr_sub_proceso(link: $this->link))->filtro_and(filtro: $filtro);
+        $pr_sub_proceso = $this->pr_sub_proceso();
         if(errores::$error){
-            return $this->error->error(mensaje: 'Error obtener r_pr_sub_proceso',data:  $r_pr_sub_proceso);
+            return $this->error->error(mensaje: 'Error obtener pr_sub_proceso',data:  $pr_sub_proceso);
         }
 
-        if($r_pr_sub_proceso->n_registros === 0){
-            return $this->error->error(mensaje: 'Error no existe sub proceso definido',data:  $filtro);
+        $inm_prospecto_proceso_ins = $this->inm_prospecto_proceso_ins(inm_prospecto_id: $r_alta_bd->registro_id,
+            pr_sub_proceso_id: $pr_sub_proceso['pr_sub_proceso_id']);
+
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error integrar pr_sub_proceso',data:  $inm_prospecto_proceso_ins);
         }
-
-        if($r_pr_sub_proceso->n_registros > 1){
-            return $this->error->error(mensaje: 'Error de integridad',data:  $r_pr_sub_proceso);
-        }
-
-        $pr_sub_proceso = $r_pr_sub_proceso->registros[0];
-
-        $inm_prospecto_proceso_ins['pr_sub_proceso_id'] = $pr_sub_proceso['pr_sub_proceso_id'];
-        $inm_prospecto_proceso_ins['fecha'] = date('Y-m-d');
-        $inm_prospecto_proceso_ins['inm_prospecto_id'] = $r_alta_bd->registro_id;
 
         $alta_inm_prospecto_proceso = (new inm_prospecto_proceso(link: $this->link))->alta_registro(registro: $inm_prospecto_proceso_ins);
         if(errores::$error){
@@ -270,6 +260,15 @@ class inm_prospecto extends _modelo_parent{
         return $inm_comprador_ins;
     }
 
+    private function inm_prospecto_proceso_ins(int $inm_prospecto_id, int $pr_sub_proceso_id): array
+    {
+        $inm_prospecto_proceso_ins['pr_sub_proceso_id'] = $pr_sub_proceso_id;
+        $inm_prospecto_proceso_ins['fecha'] = date('Y-m-d');
+        $inm_prospecto_proceso_ins['inm_prospecto_id'] = $inm_prospecto_id;
+
+        return $inm_prospecto_proceso_ins;
+    }
+
     private function integra_id_pref(string $entidad, array $inm_comprador_ins, inm_comprador|com_cliente $modelo){
         $key_id = $entidad.'_id';
         $id_pref = $modelo->id_preferido_detalle(entidad_preferida: $entidad);
@@ -421,6 +420,27 @@ class inm_prospecto extends _modelo_parent{
 
 
         return $r_modifica;
+    }
+
+    private function pr_sub_proceso(){
+        $filtro = array();
+        $filtro['pr_sub_proceso.descripcion'] = 'ALTA PROSPECTO';
+        $filtro['adm_seccion.descripcion'] = $this->tabla;
+
+        $r_pr_sub_proceso = (new pr_sub_proceso(link: $this->link))->filtro_and(filtro: $filtro);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error obtener r_pr_sub_proceso',data:  $r_pr_sub_proceso);
+        }
+
+        if($r_pr_sub_proceso->n_registros === 0){
+            return $this->error->error(mensaje: 'Error no existe sub proceso definido',data:  $filtro);
+        }
+
+        if($r_pr_sub_proceso->n_registros > 1){
+            return $this->error->error(mensaje: 'Error de integridad',data:  $r_pr_sub_proceso);
+        }
+
+        return $r_pr_sub_proceso->registros[0];
     }
 
 

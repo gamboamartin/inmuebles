@@ -217,6 +217,7 @@ class _prospecto{
      * @param array $entidades Entidades de inicializacion
      * @param array $registro Registro en proceso
      * @return array
+     * @version 2.200.1
      */
     private function init_entidades_default(stdClass $data, array $entidades, array $registro): array
     {
@@ -471,9 +472,11 @@ class _prospecto{
     }
 
     /**
-     * @param PDO $link
-     * @param array $registro
+     * Inicializa los key con elementos de mayor uso
+     * @param PDO $link Conexion a la base de datos
+     * @param array $registro registro en proceso
      * @return array
+     * @version 2.200.1
      */
     private function integra_entidades_mayor_uso(PDO $link, array $registro): array
     {
@@ -497,8 +500,9 @@ class _prospecto{
     }
 
     /**
-     * @param inm_prospecto $modelo
-     * @param array $registro
+     * Ajusta los elementos necesarios previo a un alta de registro
+     * @param inm_prospecto $modelo Modelo de prospecto
+     * @param array $registro registro previo de insersion
      * @return array
      */
     final public function previo_alta(inm_prospecto $modelo, array $registro): array

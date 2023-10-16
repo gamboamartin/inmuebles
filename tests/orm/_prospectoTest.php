@@ -217,6 +217,33 @@ class _prospectoTest extends test {
         errores::$error = false;
     }
 
+    public function test_init_entidades_default(): void
+    {
+        errores::$error = false;
+
+        $_GET['seccion'] = 'inm_producto_infonavit';
+        $_GET['accion'] = 'lista';
+        $_SESSION['grupo_id'] = 1;
+        $_SESSION['usuario_id'] = 2;
+        $_GET['session_id'] = '1';
+
+
+        $_pr = new _prospecto();
+        $_pr = new liberator($_pr);
+
+        $registro = array();
+        $data = new stdClass();
+        $entidades = array('a');
+        $resultado = $_pr->init_entidades_default($data, $entidades, $registro);
+        $this->assertIsArray($resultado);
+        $this->assertNotTrue(errores::$error);
+        $this->assertEquals('',$resultado['a_id']);
+        $this->assertEquals('8',$resultado['inm_attr_tipo_credito_id']);
+
+
+        errores::$error = false;
+    }
+
     public function test_init_key(): void
     {
         errores::$error = false;
@@ -438,6 +465,31 @@ class _prospectoTest extends test {
         $this->assertNotTrue(errores::$error);
         errores::$error = false;
 
+    }
+
+    public function test_integra_entidades_mayor_uso(): void
+    {
+        errores::$error = false;
+
+        $_GET['seccion'] = 'inm_producto_infonavit';
+        $_GET['accion'] = 'lista';
+        $_SESSION['grupo_id'] = 1;
+        $_SESSION['usuario_id'] = 2;
+        $_GET['session_id'] = '1';
+
+
+        $_pr = new _prospecto();
+        $_pr = new liberator($_pr);
+
+        $registro = array();
+        $link = $this->link;
+        $resultado = $_pr->integra_entidades_mayor_uso($link, $registro);
+        $this->assertIsArray($resultado);
+        $this->assertNotTrue(errores::$error);
+        $this->assertEquals(1,$resultado['inm_sindicato_id']);
+        $this->assertEquals(6,$resultado['inm_persona_discapacidad_id']);
+        $this->assertEquals(6,$resultado['inm_producto_infonavit_id']);
+        errores::$error = false;
     }
 
 }
