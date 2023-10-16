@@ -69,6 +69,10 @@ class inm_prospecto extends _modelo_parent{
         $this->etiqueta = 'Prospecto de Vivienda';
     }
 
+    /**
+     * @param array $keys_integra_ds
+     * @return array|stdClass
+     */
     public function alta_bd(array $keys_integra_ds = array('codigo', 'descripcion')): array|stdClass
     {
 

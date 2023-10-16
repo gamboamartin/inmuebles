@@ -201,7 +201,6 @@ class _base extends html_controler{
             return $this->error->error(mensaje: 'Error al obtener inputs',data:  $inputs);
         }
 
-
         $btn_collapse_all = $controler->html->button_para_java(id_css: 'collapse_all',style:  'primary',
             tag:  'Ver/Ocultar Todo');
         if(errores::$error){

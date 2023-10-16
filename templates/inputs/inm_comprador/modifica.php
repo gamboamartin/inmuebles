@@ -38,6 +38,10 @@ if($controlador->row_upd->genero === 'F'){
 <?php echo $controlador->inputs->descuento_pension_alimenticia_fc; ?>
 <?php echo $controlador->inputs->monto_credito_solicitado_dh; ?>
 <?php echo $controlador->inputs->monto_ahorro_voluntario; ?>
+<?php echo $controlador->inputs->sub_cuenta; ?>
+<?php echo $controlador->inputs->monto_final; ?>
+<?php echo $controlador->inputs->descuento; ?>
+<?php echo $controlador->inputs->puntos; ?>
     </div>
 
 

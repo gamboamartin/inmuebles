@@ -22,6 +22,7 @@ class _prospecto{
      * @param inm_prospecto $modelo Modelo en ejecucion
      * @param array $registro Registro en proceso
      * @return array
+     * @version 2.196.1
      */
     private function asigna_datos_alta(inm_prospecto $modelo, array $registro): array
     {
@@ -210,7 +211,14 @@ class _prospecto{
         return $registro;
     }
 
-    private function init_entidades_default(stdClass $data, array $entidades, array $registro){
+    /**
+     * @param stdClass $data
+     * @param array $entidades
+     * @param array $registro
+     * @return array
+     */
+    private function init_entidades_default(stdClass $data, array $entidades, array $registro): array
+    {
         foreach ($entidades as $entidad){
             $registro = $this->init_key_entidad_id(data: $data,entidad:  $entidad,registro:  $registro);
             if(errores::$error){
@@ -249,7 +257,14 @@ class _prospecto{
         return $registro;
     }
 
-    private function init_key_entidad_id(stdClass $data, string $entidad, array $registro){
+    /**
+     * @param stdClass $data
+     * @param string $entidad
+     * @param array $registro
+     * @return array
+     */
+    private function init_key_entidad_id(stdClass $data, string $entidad, array $registro): array
+    {
         $key_id = $entidad.'_id';
         $registro = $this->init_key_id(data: $data,key_id:  $key_id,registro:  $registro);
         if(errores::$error){
@@ -259,6 +274,10 @@ class _prospecto{
         return $registro;
     }
 
+    /**
+     * @param array $registro
+     * @return array
+     */
     private function init_key_entidad_hardcodeo(array $registro): array
     {
         if((int)$registro['inm_producto_infonavit_id'] === -1){
@@ -292,9 +311,10 @@ class _prospecto{
     }
 
     /**
-     * @param stdClass $data
-     * @param string $key_id
-     * @param array $registro
+     * Inicializa un key id para integrarlo al objeto
+     * @param stdClass $data Datos
+     * @param string $key_id Key a integrar
+     * @param array $registro Registro en proceso
      * @return array
      */
     private function init_key_id(stdClass $data, string $key_id, array $registro): array
@@ -401,8 +421,14 @@ class _prospecto{
         }
         return $r_com_prospecto;
     }
-    
-    private function integra_entidades_mayor_uso(PDO $link, array $registro){
+
+    /**
+     * @param PDO $link
+     * @param array $registro
+     * @return array
+     */
+    private function integra_entidades_mayor_uso(PDO $link, array $registro): array
+    {
         $entidades = array('inm_producto_infonavit','inm_attr_tipo_credito','inm_destino_credito',
             'inm_plazo_credito_sc','inm_tipo_discapacidad','inm_persona_discapacidad','inm_estado_civil',
             'inm_institucion_hipotecaria','inm_sindicato');
@@ -422,7 +448,13 @@ class _prospecto{
         return $registro;
     }
 
-    final public function previo_alta(inm_prospecto $modelo, array $registro){
+    /**
+     * @param inm_prospecto $modelo
+     * @param array $registro
+     * @return array
+     */
+    final public function previo_alta(inm_prospecto $modelo, array $registro): array
+    {
         $registro = $this->asigna_datos_alta(modelo: $modelo,registro:  $registro);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al inicializar registro',data:  $registro);

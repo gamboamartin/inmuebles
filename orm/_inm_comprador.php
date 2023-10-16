@@ -496,6 +496,10 @@ class _inm_comprador{
         $controler->row_upd->monto_credito_solicitado_dh = 0;
         $controler->row_upd->descuento_pension_alimenticia_fc = 0;
         $controler->row_upd->monto_ahorro_voluntario = 0;
+        $controler->row_upd->sub_cuenta = 0;
+        $controler->row_upd->monto_final = 0;
+        $controler->row_upd->descuento = 0;
+        $controler->row_upd->puntos = 0;
         return $controler->row_upd;
     }
 
