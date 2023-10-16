@@ -16,11 +16,16 @@ class _conversion{
     /**
      * Obtiene los datos de un prospecto
      * @param int $inm_prospecto_id Identificador de prospecto
-     * @param inm_prospecto $modelo
+     * @param inm_prospecto $modelo Modelo en ejecucion
      * @return array|stdClass
+     * @version 2.211.1
      */
     private function data_prospecto(int $inm_prospecto_id, inm_prospecto $modelo): array|stdClass
     {
+        if($inm_prospecto_id<=0){
+            return $this->error->error(mensaje: 'Error inm_prospecto_id es menor a 0', data: $inm_prospecto_id);
+        }
+        
         $inm_prospecto = $modelo->registro(registro_id: $inm_prospecto_id, columnas_en_bruto: true, retorno_obj: true);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al obtener prospecto', data: $inm_prospecto);
