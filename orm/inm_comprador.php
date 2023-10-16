@@ -92,7 +92,6 @@ class inm_comprador extends _modelo_parent{
      * Inserta un comprador, un cliente, una relacion entre comprador y cliente proceso comprador y etapa comprador
      * @param array $keys_integra_ds Keys para descripcion select
      * @return array|stdClass
-     * @version 2.48.0
      */
     public function alta_bd(array $keys_integra_ds = array('codigo', 'descripcion')): array|stdClass
     {

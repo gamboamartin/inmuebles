@@ -75,6 +75,28 @@ class _base_paquete{
     }
 
     /**
+     * Inicializa los montos de un registro
+     * @param array $registro Registro en proceso
+     * @return array
+     */
+    final public function montos_0(array $registro): array
+    {
+        if(!isset($registro['monto_final'])){
+            $registro['monto_final'] = 0;
+        }
+        if(!isset($registro['sub_cuenta'])){
+            $registro['sub_cuenta'] = 0;
+        }
+        if(!isset($registro['descuento'])){
+            $registro['descuento'] = 0;
+        }
+        if(!isset($registro['puntos'])){
+            $registro['puntos'] = 0;
+        }
+        return $registro;
+    }
+
+    /**
      * Integra las relaciones entre entidades de nacimiento
      * @param string $enlace Enlace base
      * @param array $renombres Tablas previas

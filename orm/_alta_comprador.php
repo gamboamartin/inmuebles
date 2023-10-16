@@ -22,7 +22,6 @@ class _alta_comprador{
      * Integra los elementos de alta default
      * @param array $registro Registro en proceso
      * @return array
-     * @version 1.179.1
      */
     private function default_infonavit(array $registro): array
     {
@@ -35,17 +34,9 @@ class _alta_comprador{
         if(!isset($registro['inm_persona_discapacidad_id'])){
             $registro['inm_persona_discapacidad_id'] = 6;
         }
-        if(!isset($registro['monto_final'])){
-            $registro['monto_final'] = 0;
-        }
-        if(!isset($registro['sub_cuenta'])){
-            $registro['sub_cuenta'] = 0;
-        }
-        if(!isset($registro['descuento'])){
-            $registro['descuento'] = 0;
-        }
-        if(!isset($registro['puntos'])){
-            $registro['puntos'] = 0;
+        $registro = (new _base_paquete())->montos_0(registro: $registro);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al inicializar montos',data:  $registro);
         }
         return $registro;
     }
@@ -86,7 +77,6 @@ class _alta_comprador{
      * @param inm_comprador $modelo Modelo de comprador
      * @param array $registro Registro en proceso
      * @return array
-     * @version 2.9.0
      */
     final public function init_row_alta(inm_comprador $modelo, array $registro): array
     {

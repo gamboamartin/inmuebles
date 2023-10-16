@@ -22,7 +22,6 @@ class _prospecto{
      * @param inm_prospecto $modelo Modelo en ejecucion
      * @param array $registro Registro en proceso
      * @return array
-     * @version 2.190.1
      */
     private function asigna_datos_alta(inm_prospecto $modelo, array $registro): array
     {
@@ -155,7 +154,6 @@ class _prospecto{
      * Inicializa los datos default de un registro de tipo prospecto
      * @param array $registro Registro en proceso
      * @return array
-     * @version 2.186.1
      */
     private function init_data_default(array $registro): array
     {
@@ -171,6 +169,12 @@ class _prospecto{
         if(!isset($registro['fecha_nacimiento'])){
             $registro['fecha_nacimiento'] = '1900-01-01';
         }
+
+        $registro = (new _base_paquete())->montos_0(registro: $registro);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al inicializar montos',data:  $registro);
+        }
+
 
         return $registro;
     }
