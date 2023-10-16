@@ -25,7 +25,7 @@ class _conversion{
         if($inm_prospecto_id<=0){
             return $this->error->error(mensaje: 'Error inm_prospecto_id es menor a 0', data: $inm_prospecto_id);
         }
-        
+
         $inm_prospecto = $modelo->registro(registro_id: $inm_prospecto_id, columnas_en_bruto: true, retorno_obj: true);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al obtener prospecto', data: $inm_prospecto);
@@ -42,7 +42,8 @@ class _conversion{
         return $data;
     }
     /**
-     * @param array $inm_comprador_ins
+     * Campos de inicializacion
+     * @param array $inm_comprador_ins comprador registro
      * @return array
      */
     private function defaults_alta_comprador(array $inm_comprador_ins): array
@@ -105,8 +106,9 @@ class _conversion{
 
 
     /**
-     * @param stdClass $data
-     * @param array $keys
+     * Inicializa inm_comprador en vacio
+     * @param stdClass $data datos para asignacion
+     * @param array $keys Keys para inicializar
      * @return array
      */
     private function inm_comprador_ins_init(stdClass $data, array $keys): array
@@ -214,7 +216,9 @@ class _conversion{
     }
 
     /**
+     * Obtiene los keys de un prospecto para integrarlos con un cliente
      * @return string[]
+     * @version 2.212.1
      */
     private function keys_data_prospecto(): array
     {
