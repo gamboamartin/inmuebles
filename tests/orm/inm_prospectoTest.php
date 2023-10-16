@@ -39,6 +39,31 @@ class inm_prospectoTest extends test {
         $this->paths_conf->views = '/var/www/html/inmuebles/config/views.php';
     }
 
+    public function test_inm_prospecto_proceso_ins(): void
+    {
+        errores::$error = false;
+
+        $_GET['seccion'] = 'inm_producto_infonavit';
+        $_GET['accion'] = 'lista';
+        $_SESSION['grupo_id'] = 1;
+        $_SESSION['usuario_id'] = 2;
+        $_GET['session_id'] = '1';
+
+        $modelo = new inm_prospecto(link: $this->link);
+        $modelo = new liberator($modelo);
+
+        $inm_prospecto_id = 1;
+        $pr_sub_proceso_id = 1;
+        $resultado = $modelo->inm_prospecto_proceso_ins($inm_prospecto_id, $pr_sub_proceso_id);
+        $this->assertIsArray($resultado);
+        $this->assertNotTrue(errores::$error);
+        $this->assertEquals(1,$resultado['pr_sub_proceso_id']);
+        $this->assertEquals(1,$resultado['inm_prospecto_id']);
+        $this->assertEquals(date('Y-m-d'),$resultado['fecha']);
+
+        errores::$error = false;
+    }
+
     public function test_pr_sub_proceso(): void
     {
         errores::$error = false;

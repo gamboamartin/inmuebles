@@ -254,9 +254,16 @@ class inm_prospecto extends _modelo_parent{
      * @param int $inm_prospecto_id Identificador de prospecto
      * @param int $pr_sub_proceso_id Identificador de proceso
      * @return array
+     * @version 2.205.1
      */
     private function inm_prospecto_proceso_ins(int $inm_prospecto_id, int $pr_sub_proceso_id): array
     {
+        if($inm_prospecto_id<=0){
+            return $this->error->error(mensaje: 'Error inm_prospecto_id es menor a 1', data: $inm_prospecto_id);
+        }
+        if($pr_sub_proceso_id<=0){
+            return $this->error->error(mensaje: 'Error pr_sub_proceso_id es menor a 1', data: $pr_sub_proceso_id);
+        }
         $inm_prospecto_proceso_ins['pr_sub_proceso_id'] = $pr_sub_proceso_id;
         $inm_prospecto_proceso_ins['fecha'] = date('Y-m-d');
         $inm_prospecto_proceso_ins['inm_prospecto_id'] = $inm_prospecto_id;

@@ -14,6 +14,7 @@
 <?php echo $controlador->inputs->fecha_nacimiento; ?>
 <?php echo $controlador->inputs->dp_estado_nacimiento_id; ?>
 <?php echo $controlador->inputs->dp_municipio_nacimiento_id; ?>
+<?php echo $controlador->inputs->inm_nacionalidad_id; ?>
 <?php echo $controlador->inputs->observaciones; ?>
     </div>
 

@@ -18,6 +18,7 @@ use gamboamartin\inmuebles\html\inm_comprador_html;
 use gamboamartin\inmuebles\html\inm_prospecto_html;
 use gamboamartin\inmuebles\models\_inm_prospecto;
 use gamboamartin\inmuebles\models\inm_comprador;
+use gamboamartin\inmuebles\models\inm_nacionalidad;
 use gamboamartin\inmuebles\models\inm_prospecto;
 use gamboamartin\inmuebles\models\inm_rel_prospecto_cliente;
 use gamboamartin\inmuebles\models\inm_sindicato;
@@ -115,6 +116,17 @@ class controlador_inm_prospecto extends _ctl_formato {
             return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects, header: $header,ws:  $ws);
         }
 
+        $inm_nacionalidad_id = (new inm_nacionalidad(link: $this->link))->id_preferido_detalle(entidad_preferida: 'inm_nacionalidad');
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al obtener id',data:  $inm_nacionalidad_id, header: $header,ws:  $ws);
+        }
+
+        $keys_selects = $this->key_select(cols:6, con_registros: true,filtro:  array(), key: 'inm_nacionalidad_id',
+            keys_selects:$keys_selects, id_selected: $inm_nacionalidad_id, label: 'Nacionalidad');
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects, header: $header,ws:  $ws);
+        }
+
         $inputs = $this->inputs(keys_selects: $keys_selects);
         if(errores::$error){
             return $this->retorno_error(
@@ -153,6 +165,7 @@ class controlador_inm_prospecto extends _ctl_formato {
         $init_data['dp_cp'] = "gamboamartin\\direccion_postal";
         $init_data['dp_colonia_postal'] = "gamboamartin\\direccion_postal";
         $init_data['dp_calle_pertenece'] = "gamboamartin\\direccion_postal";
+        $init_data['inm_nacionalidad'] = "gamboamartin\\inmuebles";
         $campos_view = $this->campos_view_base(init_data: $init_data,keys:  $keys);
 
         if(errores::$error){
@@ -571,6 +584,12 @@ class controlador_inm_prospecto extends _ctl_formato {
 
         $keys_selects = $this->key_select(cols:12, con_registros: true,filtro:  array(), key: 'inm_sindicato_id',
             keys_selects:$keys_selects, id_selected: $this->registro['inm_sindicato_id'], label: 'Sindicato');
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects, header: $header,ws:  $ws);
+        }
+
+        $keys_selects = $this->key_select(cols:12, con_registros: true,filtro:  array(), key: 'inm_nacionalidad_id',
+            keys_selects:$keys_selects, id_selected: $this->registro['inm_nacionalidad_id'], label: 'Nacionalidad');
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects, header: $header,ws:  $ws);
         }
