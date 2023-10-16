@@ -17,7 +17,7 @@ class inm_comprador extends _modelo_parent{
             'inm_tipo_credito'=>'inm_attr_tipo_credito','inm_destino_credito'=>$tabla,'inm_plazo_credito_sc'=>$tabla,
             'inm_tipo_discapacidad'=>$tabla,'inm_persona_discapacidad'=>$tabla,'inm_estado_civil'=>$tabla,
             'bn_cuenta'=>$tabla,'org_sucursal'=>'bn_cuenta','org_empresa'=>'org_sucursal',
-            'inm_institucion_hipotecaria'=>$tabla,'inm_sindicato'=>$tabla);
+            'inm_institucion_hipotecaria'=>$tabla,'inm_sindicato'=>$tabla,'inm_nacionalidad'=>$tabla);
 
         $campos_obligatorios = array('apellido_paterno','bn_cuenta_id','cel_com','correo_com','curp',
             'descuento_pension_alimenticia_dh', 'descuento_pension_alimenticia_fc', 'es_segundo_credito',
@@ -25,7 +25,7 @@ class inm_comprador extends _modelo_parent{
             'inm_producto_infonavit_id', 'inm_plazo_credito_sc_id', 'inm_tipo_discapacidad_id','lada_com','lada_nep',
             'monto_ahorro_voluntario', 'monto_credito_solicitado_dh','nombre','nombre_empresa_patron', 'nrp_nep',
             'numero_com','numero_nep','inm_institucion_hipotecaria_id','inm_sindicato_id','dp_municipio_nacimiento_id',
-            'fecha_nacimiento','monto_final','sub_cuenta','descuento','puntos');
+            'fecha_nacimiento','monto_final','sub_cuenta','descuento','puntos','inm_nacionalidad_id');
 
         $columnas_extra= array();
         $renombres['dp_calle_pertenece_empresa']['nombre_original']= 'dp_calle_pertenece';
@@ -67,7 +67,7 @@ class inm_comprador extends _modelo_parent{
             'inm_tipo_discapacidad_id','lada_com','lada_nep', 'monto_ahorro_voluntario', 'monto_credito_solicitado_dh',
             'nombre', 'nombre_empresa_patron', 'nrp_nep','numero_com','numero_nep','inm_institucion_hipotecaria_id',
             'inm_sindicato_id','dp_municipio_nacimiento_id','fecha_nacimiento','monto_final','sub_cuenta','descuento',
-            'puntos');
+            'puntos','inm_nacionalidad_id');
 
 
         $tipo_campos['lada_com'] = 'lada';

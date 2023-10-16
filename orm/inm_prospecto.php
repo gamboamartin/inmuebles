@@ -249,6 +249,12 @@ class inm_prospecto extends _modelo_parent{
         return $inm_comprador_ins;
     }
 
+    /**
+     * Genera un registro para insercion de prospecto proceso
+     * @param int $inm_prospecto_id Identificador de prospecto
+     * @param int $pr_sub_proceso_id Identificador de proceso
+     * @return array
+     */
     private function inm_prospecto_proceso_ins(int $inm_prospecto_id, int $pr_sub_proceso_id): array
     {
         $inm_prospecto_proceso_ins['pr_sub_proceso_id'] = $pr_sub_proceso_id;
@@ -271,9 +277,11 @@ class inm_prospecto extends _modelo_parent{
             return $this->error->error(mensaje: 'Error integrar pr_sub_proceso',data:  $inm_prospecto_proceso_ins);
         }
 
-        $alta_inm_prospecto_proceso = (new inm_prospecto_proceso(link: $this->link))->alta_registro(registro: $inm_prospecto_proceso_ins);
+        $alta_inm_prospecto_proceso = (new inm_prospecto_proceso(link: $this->link))->alta_registro(
+            registro: $inm_prospecto_proceso_ins);
         if(errores::$error){
-            return $this->error->error(mensaje: 'Error insertar alta_inm_prospecto_proceso',data:  $alta_inm_prospecto_proceso);
+            return $this->error->error(mensaje: 'Error insertar alta_inm_prospecto_proceso',
+                data:  $alta_inm_prospecto_proceso);
         }
         return $alta_inm_prospecto_proceso;
     }
@@ -431,7 +439,13 @@ class inm_prospecto extends _modelo_parent{
         return $r_modifica;
     }
 
-    private function pr_sub_proceso(){
+    /**
+     * Obtiene el sub proceso de alta de un prospecto
+     * @return array
+     * @version 2.204.1
+     */
+    private function pr_sub_proceso(): array
+    {
         $filtro = array();
         $filtro['pr_sub_proceso.descripcion'] = 'ALTA PROSPECTO';
         $filtro['adm_seccion.descripcion'] = $this->tabla;

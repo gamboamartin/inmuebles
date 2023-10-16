@@ -290,32 +290,14 @@ class _prospecto{
      */
     private function init_key_entidad_hardcodeo(array $registro): array
     {
-        if(!isset($registro['inm_producto_infonavit_id'])){
-            $registro['inm_producto_infonavit_id'] = -1;
-        }
-        if(!isset($registro['inm_attr_tipo_credito_id'])){
-            $registro['inm_attr_tipo_credito_id'] = -1;
-        }
-        if(!isset($registro['inm_plazo_credito_sc_id'])){
-            $registro['inm_plazo_credito_sc_id'] = -1;
-        }
-        if(!isset($registro['inm_tipo_discapacidad_id'])){
-            $registro['inm_tipo_discapacidad_id'] = -1;
-        }
-        if(!isset($registro['inm_persona_discapacidad_id'])){
-            $registro['inm_persona_discapacidad_id'] = -1;
-        }
-        if(!isset($registro['inm_estado_civil_id'])){
-            $registro['inm_estado_civil_id'] = -1;
-        }
-        if(!isset($registro['inm_institucion_hipotecaria_id'])){
-            $registro['inm_institucion_hipotecaria_id'] = -1;
-        }
-        if(!isset($registro['inm_sindicato_id'])){
-            $registro['inm_sindicato_id'] = -1;
-        }
-        if(!isset($registro['inm_destino_credito_id'])){
-            $registro['inm_destino_credito_id'] = -1;
+        $keys = array('inm_producto_infonavit_id','inm_attr_tipo_credito_id','inm_plazo_credito_sc_id',
+            'inm_tipo_discapacidad_id','inm_persona_discapacidad_id','inm_estado_civil_id',
+            'inm_institucion_hipotecaria_id','inm_sindicato_id','inm_destino_credito_id','inm_nacionalidad_id');
+
+        foreach ($keys as $key){
+            if(!isset($registro[$key])){
+                $registro[$key] = -1;
+            }
         }
 
         if((int)$registro['inm_producto_infonavit_id'] === -1){
@@ -344,6 +326,9 @@ class _prospecto{
         }
         if((int)$registro['inm_sindicato_id'] === -1){
             $registro['inm_sindicato_id'] = 1;
+        }
+        if((int)$registro['inm_nacionalidad_id'] === -1){
+            $registro['inm_nacionalidad_id'] = 1;
         }
         return $registro;
     }
@@ -440,6 +425,7 @@ class _prospecto{
      * @param PDO $link Conexion a la base de datos
      * @param array $registro Registro en proceso
      * @return array|stdClass
+     * @version 2.204.1
      */
     private function inserta_com_prospecto(PDO $link, array $registro): array|stdClass
     {
@@ -472,7 +458,7 @@ class _prospecto{
     {
         $entidades = array('inm_producto_infonavit','inm_attr_tipo_credito','inm_destino_credito',
             'inm_plazo_credito_sc','inm_tipo_discapacidad','inm_persona_discapacidad','inm_estado_civil',
-            'inm_institucion_hipotecaria','inm_sindicato');
+            'inm_institucion_hipotecaria','inm_sindicato','inm_nacionalidad');
         $modelo_preferido = (new inm_prospecto(link: $link));
 
         $data = (new _ubicacion())->integra_ids_preferidos(data: new stdClass(),entidades:  $entidades,
@@ -494,6 +480,7 @@ class _prospecto{
      * @param inm_prospecto $modelo Modelo de prospecto
      * @param array $registro registro previo de insersion
      * @return array
+     * @version 2.204.1
      */
     final public function previo_alta(inm_prospecto $modelo, array $registro): array
     {

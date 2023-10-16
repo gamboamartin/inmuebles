@@ -34,6 +34,9 @@ class _alta_comprador{
         if(!isset($registro['inm_persona_discapacidad_id'])){
             $registro['inm_persona_discapacidad_id'] = 6;
         }
+        if(!isset($registro['inm_nacionalidad_id'])){
+            $registro['inm_nacionalidad_id'] = 1;
+        }
         $registro = (new _base_paquete())->montos_0(registro: $registro);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al inicializar montos',data:  $registro);
