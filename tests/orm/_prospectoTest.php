@@ -524,5 +524,35 @@ class _prospectoTest extends test {
         errores::$error = false;
     }
 
+    public function test_valida_alta_prospecto(): void
+    {
+        errores::$error = false;
+
+        $_GET['seccion'] = 'inm_producto_infonavit';
+        $_GET['accion'] = 'lista';
+        $_SESSION['grupo_id'] = 1;
+        $_SESSION['usuario_id'] = 2;
+        $_GET['session_id'] = '1';
+
+
+        $_pr = new _prospecto();
+        $_pr = new liberator($_pr);
+
+        $registro = array();
+        $registro['nombre'] = 'S';
+        $registro['apellido_paterno'] = 'S';
+        $registro['lada_com'] = 'S';
+        $registro['numero_com'] = 'S';
+        $registro['razon_social'] = 'S';
+        $registro['com_agente_id'] = '1';
+        $registro['com_tipo_prospecto_id'] = '1';
+
+        $resultado = $_pr->valida_alta_prospecto($registro);
+        $this->assertIsBool($resultado);
+        $this->assertNotTrue(errores::$error);
+
+        errores::$error = false;
+    }
+
 }
 

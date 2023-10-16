@@ -535,6 +535,7 @@ class _prospecto{
      * Verifica que los elementos de un alta sean correctos
      * @param array $registro Registro en proceso
      * @return array|true
+     * @version 2.203.1
      */
     private function valida_alta_prospecto(array $registro): bool|array
     {
