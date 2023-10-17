@@ -48,7 +48,19 @@ class _conversionTest extends test {
         $_SESSION['usuario_id'] = 2;
         $_GET['session_id'] = '1';
 
+        $del = (new base_test())->del_inm_prospecto(link: $this->link);
+        if(errores::$error){
+            $error = (new errores())->error(mensaje: 'Error al eliminar',data:  $del);
+            print_r($error);
+            exit;
+        }
 
+        $alta = (new base_test())->alta_inm_prospecto(link: $this->link);
+        if(errores::$error){
+            $error = (new errores())->error(mensaje: 'Error al alta',data:  $alta);
+            print_r($error);
+            exit;
+        }
 
         $conversion = new _conversion();
         $conversion = new liberator($conversion);
@@ -59,6 +71,29 @@ class _conversionTest extends test {
         $this->assertIsObject($resultado);
         $this->assertNotTrue(errores::$error);
         $this->assertEquals(6,$resultado->inm_prospecto->inm_producto_infonavit_id);
+
+        errores::$error = false;
+    }
+    public function test_defaults_alta_comprador(): void
+    {
+        errores::$error = false;
+
+        $_GET['seccion'] = 'inm_producto_infonavit';
+        $_GET['accion'] = 'lista';
+        $_SESSION['grupo_id'] = 1;
+        $_SESSION['usuario_id'] = 2;
+        $_GET['session_id'] = '1';
+
+
+
+        $conversion = new _conversion();
+        $conversion = new liberator($conversion);
+
+        $inm_comprador_ins = array();
+        $resultado = $conversion->defaults_alta_comprador($inm_comprador_ins);
+        $this->assertIsArray($resultado);
+        $this->assertNotTrue(errores::$error);
+        $this->assertEquals('XEXX010101MNEXXXA8',$resultado['curp']);
 
         errores::$error = false;
     }

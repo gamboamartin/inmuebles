@@ -69,7 +69,7 @@ class controlador_inm_ubicacionTest extends test {
 
 
         $file = "inm_ubicacion.asigna_comprador";
-        $session_id = '6468955787';
+        $session_id = '2072417944';
 
 
         $ch = curl_init("http://localhost/inmuebles/index.php?seccion=inm_ubicacion&accion=asigna_comprador&adm_menu_id=64&session_id=$session_id&adm_menu_id=64&registro_id=1");

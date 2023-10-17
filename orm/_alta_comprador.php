@@ -113,6 +113,20 @@ class _alta_comprador{
 
         }
 
+        if(!isset($registro['inm_ocupacion_id'])){
+            $inm_ocupacion_id = $modelo->id_preferido_detalle(entidad_preferida: 'inm_ocupacion');
+            if(errores::$error){
+                return $this->error->error(mensaje: 'Error integrar inm_ocupacion_id default',
+                    data:  $inm_ocupacion_id);
+            }
+            if($inm_ocupacion_id === -1){
+                $inm_ocupacion_id = 1;
+            }
+
+            $registro['inm_ocupacion_id'] = $inm_ocupacion_id;
+
+        }
+
         if(!isset($registro['dp_municipio_nacimiento_id'])){
             $registro['dp_municipio_nacimiento_id'] = 2469;
         }

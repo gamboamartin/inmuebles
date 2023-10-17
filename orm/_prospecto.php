@@ -292,7 +292,8 @@ class _prospecto{
     {
         $keys = array('inm_producto_infonavit_id','inm_attr_tipo_credito_id','inm_plazo_credito_sc_id',
             'inm_tipo_discapacidad_id','inm_persona_discapacidad_id','inm_estado_civil_id',
-            'inm_institucion_hipotecaria_id','inm_sindicato_id','inm_destino_credito_id','inm_nacionalidad_id');
+            'inm_institucion_hipotecaria_id','inm_sindicato_id','inm_destino_credito_id','inm_nacionalidad_id',
+            'inm_ocupacion_id');
 
         foreach ($keys as $key){
             if(!isset($registro[$key])){
@@ -329,6 +330,9 @@ class _prospecto{
         }
         if((int)$registro['inm_nacionalidad_id'] === -1){
             $registro['inm_nacionalidad_id'] = 1;
+        }
+        if((int)$registro['inm_ocupacion_id'] === -1){
+            $registro['inm_ocupacion_id'] = 1;
         }
         return $registro;
     }
@@ -458,7 +462,7 @@ class _prospecto{
     {
         $entidades = array('inm_producto_infonavit','inm_attr_tipo_credito','inm_destino_credito',
             'inm_plazo_credito_sc','inm_tipo_discapacidad','inm_persona_discapacidad','inm_estado_civil',
-            'inm_institucion_hipotecaria','inm_sindicato','inm_nacionalidad');
+            'inm_institucion_hipotecaria','inm_sindicato','inm_nacionalidad','inm_ocupacion');
         $modelo_preferido = (new inm_prospecto(link: $link));
 
         $data = (new _ubicacion())->integra_ids_preferidos(data: new stdClass(),entidades:  $entidades,

@@ -45,9 +45,29 @@ class _conversion{
      * Campos de inicializacion
      * @param array $inm_comprador_ins comprador registro
      * @return array
+     * @version 2.214.1
      */
     private function defaults_alta_comprador(array $inm_comprador_ins): array
     {
+        if(!isset($inm_comprador_ins['nss'])){
+            $inm_comprador_ins['nss'] = '99999999999';
+        }
+        if(!isset($inm_comprador_ins['curp'] )){
+            $inm_comprador_ins['curp'] = 'XEXX010101MNEXXXA8';
+        }
+        if(!isset($inm_comprador_ins['lada_nep'] )){
+            $inm_comprador_ins['lada_nep'] = '33';
+        }
+        if(!isset($inm_comprador_ins['numero_nep'] )){
+            $inm_comprador_ins['numero_nep'] = '33333333';
+        }
+        if(!isset($inm_comprador_ins['nombre_empresa_patron'] )){
+            $inm_comprador_ins['nombre_empresa_patron'] = 'POR DEFINIR';
+        }
+        if(!isset($inm_comprador_ins['nrp_nep'] )){
+            $inm_comprador_ins['nrp_nep'] = 'POR DEFINIR';
+        }
+
         if($inm_comprador_ins['nss'] === ''){
             $inm_comprador_ins['nss'] = '99999999999';
         }
@@ -184,12 +204,14 @@ class _conversion{
     }
 
     /**
-     * @param string $entidad
-     * @param array $inm_comprador_ins
-     * @param inm_comprador|com_cliente $modelo
+     * Integra un identificador de uso comun
+     * @param string $entidad Entidad para obtener identificador
+     * @param array $inm_comprador_ins Registro de comprador
+     * @param inm_comprador|com_cliente $modelo Modelo de integracion
      * @return array
      */
-    private function integra_id_pref(string $entidad, array $inm_comprador_ins, inm_comprador|com_cliente $modelo): array
+    private function integra_id_pref(string $entidad, array $inm_comprador_ins,
+                                     inm_comprador|com_cliente $modelo): array
     {
         $key_id = $entidad.'_id';
         $id_pref = $modelo->id_preferido_detalle(entidad_preferida: $entidad);

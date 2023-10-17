@@ -4,7 +4,6 @@ namespace gamboamartin\inmuebles\models;
 
 use base\orm\_modelo_parent;
 use gamboamartin\administrador\models\adm_usuario;
-use gamboamartin\comercial\models\com_cliente;
 use gamboamartin\comercial\models\com_prospecto;
 use gamboamartin\errores\errores;
 use gamboamartin\proceso\models\pr_sub_proceso;
@@ -22,11 +21,11 @@ class inm_prospecto extends _modelo_parent{
             'adm_usuario'=>'com_agente','dp_calle_pertenece'=>$tabla,'dp_colonia_postal'=>'dp_calle_pertenece',
             'dp_calle'=>'dp_calle_pertenece','dp_colonia'=>'dp_colonia_postal','dp_cp'=>'dp_colonia_postal',
             'dp_municipio'=>'dp_cp','dp_estado'=>'dp_municipio','dp_pais'=>'dp_estado','inm_sindicato'=>$tabla,
-            'inm_nacionalidad'=>$tabla);
+            'inm_nacionalidad'=>$tabla,'inm_ocupacion'=>$tabla);
 
         $campos_obligatorios = array('com_prospecto_id','razon_social','dp_calle_pertenece_id','rfc',
             'numero_exterior','numero_interior','inm_sindicato_id','dp_municipio_nacimiento_id','fecha_nacimiento',
-            'monto_final','sub_cuenta','descuento','puntos','inm_nacionalidad_id');
+            'monto_final','sub_cuenta','descuento','puntos','inm_nacionalidad_id','inm_ocupacion_id');
 
         $columnas_extra= array();
 
@@ -47,7 +46,7 @@ class inm_prospecto extends _modelo_parent{
 
         $atributos_criticos = array('com_prospecto_id','razon_social','dp_calle_pertenece_id','rfc',
             'numero_exterior','numero_interior','inm_sindicato_id','dp_municipio_nacimiento_id','observaciones',
-            'fecha_nacimiento','monto_final','sub_cuenta','descuento','puntos','inm_nacionalidad_id');
+            'fecha_nacimiento','monto_final','sub_cuenta','descuento','puntos','inm_nacionalidad_id','inm_ocupacion_id');
 
 
         $tipo_campos= array();
