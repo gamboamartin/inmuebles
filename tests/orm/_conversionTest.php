@@ -194,6 +194,32 @@ class _conversionTest extends test {
         errores::$error = false;
     }
 
+    public function test_inm_rel_prospecto_cliente_ins(): void
+    {
+        errores::$error = false;
+
+        $_GET['seccion'] = 'inm_producto_infonavit';
+        $_GET['accion'] = 'lista';
+        $_SESSION['grupo_id'] = 1;
+        $_SESSION['usuario_id'] = 2;
+        $_GET['session_id'] = '1';
+
+
+
+        $conversion = new _conversion();
+        $conversion = new liberator($conversion);
+
+        $inm_comprador_id = 1;
+        $inm_prospecto_id = 1;
+        $resultado = $conversion->inm_rel_prospecto_cliente_ins($inm_comprador_id, $inm_prospecto_id);
+        $this->assertIsArray($resultado);
+        $this->assertNotTrue(errores::$error);
+        $this->assertEquals('1',$resultado['inm_prospecto_id']);
+        $this->assertEquals('1',$resultado['inm_comprador_id']);
+
+        errores::$error = false;
+    }
+
     public function test_inserta_inm_comprador(): void
     {
         errores::$error = false;

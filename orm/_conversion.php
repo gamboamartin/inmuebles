@@ -184,9 +184,16 @@ class _conversion{
      * @param int $inm_comprador_id Comprador id
      * @param int $inm_prospecto_id Prospecto id
      * @return array
+     * @version 2.219.1
      */
     private function inm_rel_prospecto_cliente_ins(int $inm_comprador_id, int $inm_prospecto_id): array
     {
+        if($inm_prospecto_id <= 0){
+            return $this->error->error(mensaje: 'Error inm_prospecto_id debe ser mayor a 0', data: $inm_prospecto_id);
+        }
+        if($inm_comprador_id <= 0){
+            return $this->error->error(mensaje: 'Error inm_comprador_id debe ser mayor a 0', data: $inm_comprador_id);
+        }
         $inm_rel_prospecto_cliente_ins['inm_prospecto_id'] = $inm_prospecto_id;
         $inm_rel_prospecto_cliente_ins['inm_comprador_id'] = $inm_comprador_id;
 
