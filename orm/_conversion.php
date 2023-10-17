@@ -110,12 +110,30 @@ class _conversion{
      * @param stdClass $data datos para asignacion
      * @param array $keys Keys para inicializar
      * @return array
+     * @version 2.213.1
      */
     private function inm_comprador_ins_init(stdClass $data, array $keys): array
     {
+        if(!isset($data->inm_prospecto)){
+            return $this->error->error(mensaje: 'Error $data->inm_prospecto no existe', data: $data);
+        }
+        if(!is_object($data->inm_prospecto)){
+            return $this->error->error(mensaje: 'Error $data->inm_prospecto debe ser un objeto', data: $data);
+        }
         $inm_comprador_ins = array();
 
         foreach ($keys as $key){
+            $key = trim($key);
+            if($key === ''){
+                return $this->error->error(mensaje: 'Error key esta vacio', data: $key);
+            }
+            if(is_numeric($key)){
+                return $this->error->error(mensaje: 'Error key debe ser un texto', data: $key);
+            }
+            if(!isset($data->inm_prospecto->$key)){
+                return $this->error->error(mensaje: 'Error no existe atributo', data: $key);
+            }
+
             $inm_comprador_ins[$key] = $data->inm_prospecto->$key;
         }
         return $inm_comprador_ins;

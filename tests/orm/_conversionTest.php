@@ -63,6 +63,34 @@ class _conversionTest extends test {
         errores::$error = false;
     }
 
+    public function test_inm_comprador_ins_init(): void
+    {
+        errores::$error = false;
+
+        $_GET['seccion'] = 'inm_producto_infonavit';
+        $_GET['accion'] = 'lista';
+        $_SESSION['grupo_id'] = 1;
+        $_SESSION['usuario_id'] = 2;
+        $_GET['session_id'] = '1';
+
+
+
+        $conversion = new _conversion();
+        $conversion = new liberator($conversion);
+
+        $data = new stdClass();
+        $keys = array();
+        $keys[] = 'a';
+        $data->inm_prospecto = new stdClass();
+        $data->inm_prospecto->a = 'x';
+        $resultado = $conversion->inm_comprador_ins_init($data, $keys);
+        $this->assertIsArray($resultado);
+        $this->assertNotTrue(errores::$error);
+        $this->assertEquals('x',$resultado['a']);
+
+        errores::$error = false;
+    }
+
     public function test_keys_data_prospecto(): void
     {
         errores::$error = false;
