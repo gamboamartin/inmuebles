@@ -209,10 +209,15 @@ class _conversion{
      * @param array $inm_comprador_ins Registro de comprador
      * @param inm_comprador|com_cliente $modelo Modelo de integracion
      * @return array
+     * @version 2.215.1
      */
     private function integra_id_pref(string $entidad, array $inm_comprador_ins,
                                      inm_comprador|com_cliente $modelo): array
     {
+        $entidad = trim($entidad);
+        if($entidad === ''){
+            return $this->error->error(mensaje: 'Error entidad esta vacia', data: $entidad);
+        }
         $key_id = $entidad.'_id';
         $id_pref = $modelo->id_preferido_detalle(entidad_preferida: $entidad);
         if(errores::$error){
@@ -223,8 +228,9 @@ class _conversion{
     }
 
     /**
-     * @param array $inm_comprador_ins
-     * @param PDO $link
+     * Integra los identificadores mas usados
+     * @param array $inm_comprador_ins Registro de comprador
+     * @param PDO $link Conexion a la base de datos
      * @return array
      */
     private function integra_ids_prefs(array $inm_comprador_ins, PDO $link): array
@@ -269,6 +275,6 @@ class _conversion{
             'lada_nep','numero_nep','extension_nep','lada_com','numero_com','cel_com','genero','correo_com',
             'inm_tipo_discapacidad_id','inm_persona_discapacidad_id','inm_estado_civil_id',
             'inm_institucion_hipotecaria_id','inm_sindicato_id','dp_municipio_nacimiento_id','fecha_nacimiento',
-            'sub_cuenta','monto_final','descuento','puntos','inm_nacionalidad_id');
+            'sub_cuenta','monto_final','descuento','puntos','inm_nacionalidad_id','inm_ocupacion_id');
     }
 }

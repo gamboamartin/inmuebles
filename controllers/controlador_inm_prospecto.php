@@ -19,6 +19,7 @@ use gamboamartin\inmuebles\html\inm_prospecto_html;
 use gamboamartin\inmuebles\models\_inm_prospecto;
 use gamboamartin\inmuebles\models\inm_comprador;
 use gamboamartin\inmuebles\models\inm_nacionalidad;
+use gamboamartin\inmuebles\models\inm_ocupacion;
 use gamboamartin\inmuebles\models\inm_prospecto;
 use gamboamartin\inmuebles\models\inm_rel_prospecto_cliente;
 use gamboamartin\inmuebles\models\inm_sindicato;
@@ -127,6 +128,17 @@ class controlador_inm_prospecto extends _ctl_formato {
             return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects, header: $header,ws:  $ws);
         }
 
+        $inm_ocupacion_id = (new inm_ocupacion(link: $this->link))->id_preferido_detalle(entidad_preferida: 'inm_ocupacion_id');
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al obtener id',data:  $inm_ocupacion_id, header: $header,ws:  $ws);
+        }
+
+        $keys_selects = $this->key_select(cols:12, con_registros: true,filtro:  array(), key: 'inm_ocupacion_id',
+            keys_selects:$keys_selects, id_selected: $inm_ocupacion_id, label: 'Ocupacion');
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects, header: $header,ws:  $ws);
+        }
+
         $inputs = $this->inputs(keys_selects: $keys_selects);
         if(errores::$error){
             return $this->retorno_error(
@@ -158,6 +170,7 @@ class controlador_inm_prospecto extends _ctl_formato {
         $init_data['inm_tipo_discapacidad'] = "gamboamartin\\inmuebles";
         $init_data['inm_persona_discapacidad'] = "gamboamartin\\inmuebles";
         $init_data['inm_sindicato'] = "gamboamartin\\inmuebles";
+        $init_data['inm_ocupacion'] = "gamboamartin\\inmuebles";
 
         $init_data['dp_pais'] = "gamboamartin\\direccion_postal";
         $init_data['dp_estado'] = "gamboamartin\\direccion_postal";
@@ -192,7 +205,6 @@ class controlador_inm_prospecto extends _ctl_formato {
             return $this->retorno_error(mensaje: 'Error al obtener siguiente view', data: $siguiente_view,
                 header:  $header, ws: $ws);
         }
-
 
 
         $conversion = (new inm_prospecto(link: $this->link))->convierte_cliente(inm_prospecto_id:  $this->registro_id);
@@ -588,8 +600,14 @@ class controlador_inm_prospecto extends _ctl_formato {
             return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects, header: $header,ws:  $ws);
         }
 
-        $keys_selects = $this->key_select(cols:12, con_registros: true,filtro:  array(), key: 'inm_nacionalidad_id',
+        $keys_selects = $this->key_select(cols:6, con_registros: true,filtro:  array(), key: 'inm_nacionalidad_id',
             keys_selects:$keys_selects, id_selected: $this->registro['inm_nacionalidad_id'], label: 'Nacionalidad');
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects, header: $header,ws:  $ws);
+        }
+
+        $keys_selects = $this->key_select(cols:6, con_registros: true,filtro:  array(), key: 'inm_ocupacion_id',
+            keys_selects:$keys_selects, id_selected: $this->registro['inm_ocupacion_id'], label: 'Ocupacion');
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects, header: $header,ws:  $ws);
         }

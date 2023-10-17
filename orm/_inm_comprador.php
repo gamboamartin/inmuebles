@@ -465,6 +465,7 @@ class _inm_comprador{
         $entidades_pref[] = 'inm_destino_credito';
         $entidades_pref[] = 'bn_cuenta';
         $entidades_pref[] = 'inm_sindicato';
+        $entidades_pref[] = 'inm_ocupacion';
 
 
         foreach ($entidades_pref as $entidad){

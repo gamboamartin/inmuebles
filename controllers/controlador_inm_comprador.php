@@ -340,6 +340,7 @@ class controlador_inm_comprador extends _ctl_base {
         $init_data['inm_institucion_hipotecaria'] = "gamboamartin\\inmuebles";
         $init_data['inm_sindicato'] = "gamboamartin\\inmuebles";
         $init_data['inm_nacionalidad'] = "gamboamartin\\inmuebles";
+        $init_data['inm_ocupacion'] = "gamboamartin\\inmuebles";
 
         $init_data['dp_pais'] = "gamboamartin\\direccion_postal";
         $init_data['dp_estado'] = "gamboamartin\\direccion_postal";

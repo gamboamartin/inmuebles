@@ -77,6 +77,7 @@ class _keys_selects{
         $entidades_pref[] = 'inm_estado_civil';
         $entidades_pref[] = 'inm_sindicato';
         $entidades_pref[] = 'inm_nacionalidad';
+        $entidades_pref[] = 'inm_ocupacion';
 
         foreach ($entidades_pref as $entidad){
             $entidad_id = $controler->modelo->id_preferido_detalle(entidad_preferida: $entidad);
@@ -115,9 +116,17 @@ class _keys_selects{
         }
 
         $columns_ds = array('inm_nacionalidad_descripcion');
-        $keys_selects = $controler->key_select(cols:12, con_registros: true,filtro:  array(),
+        $keys_selects = $controler->key_select(cols:6, con_registros: true,filtro:  array(),
             key: 'inm_nacionalidad_id', keys_selects: $keys_selects, id_selected: $row_upd->inm_nacionalidad_id,
             label: 'Nacionalidad', columns_ds: $columns_ds);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        }
+
+        $columns_ds = array('inm_ocupacion_descripcion');
+        $keys_selects = $controler->key_select(cols:6, con_registros: true,filtro:  array(),
+            key: 'inm_ocupacion_id', keys_selects: $keys_selects, id_selected: $row_upd->inm_ocupacion_id,
+            label: 'Ocupacion', columns_ds: $columns_ds);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
