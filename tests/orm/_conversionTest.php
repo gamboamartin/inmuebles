@@ -151,6 +151,51 @@ class _conversionTest extends test {
         errores::$error = false;
     }
 
+    public function test_integra_ids_prefs(): void
+    {
+        errores::$error = false;
+
+        $_GET['seccion'] = 'inm_producto_infonavit';
+        $_GET['accion'] = 'lista';
+        $_SESSION['grupo_id'] = 1;
+        $_SESSION['usuario_id'] = 2;
+        $_GET['session_id'] = '1';
+
+        $del = (new base_test())->del_com_cliente(link: $this->link);
+        if(errores::$error){
+            $error = (new errores())->error(mensaje: 'Error al del',data:  $del);
+            print_r($error);
+            exit;
+        }
+
+        $del = (new base_test())->del_inm_comprador(link: $this->link);
+        if(errores::$error){
+            $error = (new errores())->error(mensaje: 'Error al del',data:  $del);
+            print_r($error);
+            exit;
+        }
+
+
+        $alta = (new base_test())->alta_inm_comprador(link: $this->link, id: 3);
+        if(errores::$error){
+            $error = (new errores())->error(mensaje: 'Error al alta',data:  $alta);
+            print_r($error);
+            exit;
+        }
+
+        $conversion = new _conversion();
+        $conversion = new liberator($conversion);
+
+        $inm_comprador_ins = array();
+        $link = $this->link;
+        $resultado = $conversion->integra_ids_prefs($inm_comprador_ins, $link);
+        $this->assertIsArray($resultado);
+        $this->assertNotTrue(errores::$error);
+        $this->assertEquals(99,$resultado['cat_sat_forma_pago_id']);
+
+        errores::$error = false;
+    }
+
     public function test_keys_data_prospecto(): void
     {
         errores::$error = false;

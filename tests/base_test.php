@@ -4,8 +4,10 @@ use base\orm\modelo_base;
 
 
 use gamboamartin\banco\models\bn_cuenta;
+use gamboamartin\comercial\models\com_agente;
 use gamboamartin\comercial\models\com_cliente;
 use gamboamartin\comercial\models\com_tipo_cliente;
+use gamboamartin\comercial\models\com_tipo_prospecto;
 use gamboamartin\errores\errores;
 
 use gamboamartin\inmuebles\models\inm_co_acreditado;
@@ -364,6 +366,28 @@ class base_test{
                                        string $nombre = 'NOMBRE 1', int $numero_com = 12345678,
                                        string $razon_social ='RS1'): array|\stdClass
     {
+
+        $existe = (new com_agente(link: $link))->existe_by_id(registro_id: $com_agente_id);
+        if(errores::$error){
+            return (new errores())->error(mensaje: 'Error al validar si existe com_agente_id', data: $existe);
+        }
+        if(!$existe){
+            $alta = $this->alta_com_agente(link: $link, id: $com_agente_id);
+            if(errores::$error){
+                return (new errores())->error(mensaje: 'Error al insertar com_agente_id', data: $alta);
+            }
+        }
+
+        $existe = (new com_tipo_prospecto(link: $link))->existe_by_id(registro_id: $com_tipo_prospecto_id);
+        if(errores::$error){
+            return (new errores())->error(mensaje: 'Error al validar si existe com_tipo_prospecto_id', data: $existe);
+        }
+        if(!$existe){
+            $alta = $this->alta_com_tipo_prospecto(link: $link, id: $com_tipo_prospecto_id);
+            if(errores::$error){
+                return (new errores())->error(mensaje: 'Error al insertar com_tipo_prospecto_id', data: $alta);
+            }
+        }
 
 
         $registro['id'] = $id;

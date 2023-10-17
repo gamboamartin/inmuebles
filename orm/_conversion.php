@@ -232,6 +232,7 @@ class _conversion{
      * @param array $inm_comprador_ins Registro de comprador
      * @param PDO $link Conexion a la base de datos
      * @return array
+     * @version 2.216.1
      */
     private function integra_ids_prefs(array $inm_comprador_ins, PDO $link): array
     {
