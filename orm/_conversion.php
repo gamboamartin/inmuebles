@@ -2,6 +2,7 @@
 namespace gamboamartin\inmuebles\models;
 use gamboamartin\comercial\models\com_cliente;
 use gamboamartin\errores\errores;
+use gamboamartin\validacion\validacion;
 use PDO;
 use stdClass;
 
@@ -197,9 +198,14 @@ class _conversion{
      * @param int $inm_prospecto_id Identificador de prospecto
      * @param inm_prospecto $modelo Modelo inm_prospecto
      * @return array|stdClass
+     * @version 2.218.1
      */
     final public function inserta_inm_comprador(int $inm_prospecto_id, inm_prospecto $modelo): array|stdClass
     {
+        if($inm_prospecto_id<=0){
+            return $this->error->error(mensaje: 'Error inm_prospecto_id es menor a 0', data: $inm_prospecto_id);
+        }
+
         $data = $this->data_prospecto(inm_prospecto_id: $inm_prospecto_id,modelo: $modelo);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al obtener prospecto', data: $data);
@@ -210,6 +216,7 @@ class _conversion{
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al obtener id_pref', data: $inm_comprador_ins);
         }
+
 
         $r_alta_comprador = (new inm_comprador(link: $modelo->link))->alta_registro(registro: $inm_comprador_ins);
 
@@ -315,6 +322,6 @@ class _conversion{
             'lada_nep','numero_nep','extension_nep','lada_com','numero_com','cel_com','genero','correo_com',
             'inm_tipo_discapacidad_id','inm_persona_discapacidad_id','inm_estado_civil_id',
             'inm_institucion_hipotecaria_id','inm_sindicato_id','dp_municipio_nacimiento_id','fecha_nacimiento',
-            'sub_cuenta','monto_final','descuento','puntos','inm_nacionalidad_id','inm_ocupacion_id');
+            'sub_cuenta','monto_final','descuento','puntos','inm_nacionalidad_id','inm_ocupacion_id','telefono_casa');
     }
 }

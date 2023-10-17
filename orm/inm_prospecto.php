@@ -25,7 +25,7 @@ class inm_prospecto extends _modelo_parent{
 
         $campos_obligatorios = array('com_prospecto_id','razon_social','dp_calle_pertenece_id','rfc',
             'numero_exterior','numero_interior','inm_sindicato_id','dp_municipio_nacimiento_id','fecha_nacimiento',
-            'monto_final','sub_cuenta','descuento','puntos','inm_nacionalidad_id','inm_ocupacion_id');
+            'monto_final','sub_cuenta','descuento','puntos','inm_nacionalidad_id','inm_ocupacion_id','telefono_casa');
 
         $columnas_extra= array();
 
@@ -46,7 +46,8 @@ class inm_prospecto extends _modelo_parent{
 
         $atributos_criticos = array('com_prospecto_id','razon_social','dp_calle_pertenece_id','rfc',
             'numero_exterior','numero_interior','inm_sindicato_id','dp_municipio_nacimiento_id','observaciones',
-            'fecha_nacimiento','monto_final','sub_cuenta','descuento','puntos','inm_nacionalidad_id','inm_ocupacion_id');
+            'fecha_nacimiento','monto_final','sub_cuenta','descuento','puntos','inm_nacionalidad_id',
+            'inm_ocupacion_id','telefono_casa');
 
 
         $tipo_campos= array();

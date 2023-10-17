@@ -153,12 +153,15 @@ class _conversionTest extends test {
         $data->inm_prospecto->puntos = 1;
         $data->inm_prospecto->inm_nacionalidad_id = 1;
         $data->inm_prospecto->inm_ocupacion_id = 1;
+        $data->inm_prospecto->telefono_casa = 1;
         $data->inm_prospecto_completo = new stdClass();
         $data->inm_prospecto_completo->com_prospecto_rfc = '';
         $resultado = $conversion->inm_comprador_ins($data, $link);
+        //print_r($resultado);exit;
         $this->assertIsArray($resultado);
         $this->assertNotTrue(errores::$error);
         $this->assertEquals('1',$resultado['inm_tipo_discapacidad_id']);
+        $this->assertEquals('1',$resultado['telefono_casa']);
 
         errores::$error = false;
     }
@@ -187,6 +190,57 @@ class _conversionTest extends test {
         $this->assertIsArray($resultado);
         $this->assertNotTrue(errores::$error);
         $this->assertEquals('x',$resultado['a']);
+
+        errores::$error = false;
+    }
+
+    public function test_inserta_inm_comprador(): void
+    {
+        errores::$error = false;
+
+        $_GET['seccion'] = 'inm_producto_infonavit';
+        $_GET['accion'] = 'lista';
+        $_SESSION['grupo_id'] = 1;
+        $_SESSION['usuario_id'] = 2;
+        $_GET['session_id'] = '1';
+
+
+
+        $conversion = new _conversion();
+        //$conversion = new liberator($conversion);
+
+        $del = (new base_test())->del_inm_prospecto(link: $this->link);
+        if(errores::$error){
+            $error = (new errores())->error(mensaje: 'Error al del',data:  $del);
+            print_r($error);
+            exit;
+        }
+
+        $alta = (new base_test())->alta_inm_prospecto(link: $this->link);
+        if(errores::$error){
+            $error = (new errores())->error(mensaje: 'Error al alta',data:  $alta);
+            print_r($error);
+            exit;
+        }
+
+        $inm_prospecto_upd['cel_com'] = '1234567890';
+        $inm_prospecto_upd['correo_com'] = 'a@com.com';
+        $inm_prospecto_upd['telefono_casa'] = '1234567890';
+
+        $modifica = (new inm_prospecto(link: $this->link))->modifica_bd(registro: $inm_prospecto_upd,id: 1);
+        if(errores::$error){
+            $error = (new errores())->error(mensaje: 'Error al modificar prospecto',data:  $modifica);
+            print_r($error);
+            exit;
+        }
+
+        $inm_prospecto_id = 1;
+        $modelo = new inm_prospecto(link: $this->link);
+        $resultado = $conversion->inserta_inm_comprador($inm_prospecto_id, $modelo);
+        //print_r($resultado);exit;
+        $this->assertIsObject($resultado);
+        $this->assertNotTrue(errores::$error);
+        $this->assertEquals(0,$resultado->registro['inm_comprador_descuento_pension_alimenticia_dh']);
 
         errores::$error = false;
     }
