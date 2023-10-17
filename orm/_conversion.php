@@ -90,12 +90,31 @@ class _conversion{
     }
 
     /**
-     * @param stdClass $data
-     * @param PDO $link
+     * Integra los campos de un comprador para la insersion
+     * @param stdClass $data Datos de prospecto
+     * @param PDO $link Conexion a la base de datos
      * @return array
+     * @version 2.217.1
      */
     private function inm_comprador_ins(stdClass $data, PDO $link): array
     {
+        if(!isset($data->inm_prospecto)){
+            return $this->error->error(mensaje: 'Error $data->inm_prospecto no existe', data: $data);
+        }
+        if(!is_object($data->inm_prospecto)){
+            return $this->error->error(mensaje: 'Error $data->inm_prospecto debe ser un objeto', data: $data);
+        }
+        if(!isset($data->inm_prospecto_completo)){
+            return $this->error->error(mensaje: 'Error $data->inm_prospecto_completo no existe', data: $data);
+        }
+        if(!is_object($data->inm_prospecto_completo)){
+            return $this->error->error(mensaje: 'Error $data->inm_prospecto_completo debe ser un objeto', data: $data);
+        }
+        if(!isset($data->inm_prospecto_completo->com_prospecto_rfc)){
+            return $this->error->error(mensaje: 'Error $data->inm_prospecto_completo->com_prospecto_rfc no existe',
+                data: $data);
+        }
+
         $keys = $this->keys_data_prospecto();
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al obtener keys', data: $keys);
@@ -159,6 +178,12 @@ class _conversion{
         return $inm_comprador_ins;
     }
 
+    /**
+     * Genera un registro de relacion de prospecto
+     * @param int $inm_comprador_id Comprador id
+     * @param int $inm_prospecto_id Prospecto id
+     * @return array
+     */
     private function inm_rel_prospecto_cliente_ins(int $inm_comprador_id, int $inm_prospecto_id): array
     {
         $inm_rel_prospecto_cliente_ins['inm_prospecto_id'] = $inm_prospecto_id;
@@ -167,7 +192,14 @@ class _conversion{
         return $inm_rel_prospecto_cliente_ins;
     }
 
-    final public function inserta_inm_comprador(int $inm_prospecto_id, inm_prospecto $modelo){
+    /**
+     * Inserta un comprador
+     * @param int $inm_prospecto_id Identificador de prospecto
+     * @param inm_prospecto $modelo Modelo inm_prospecto
+     * @return array|stdClass
+     */
+    final public function inserta_inm_comprador(int $inm_prospecto_id, inm_prospecto $modelo): array|stdClass
+    {
         $data = $this->data_prospecto(inm_prospecto_id: $inm_prospecto_id,modelo: $modelo);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al obtener prospecto', data: $data);
@@ -187,7 +219,14 @@ class _conversion{
         return $r_alta_comprador;
     }
 
-    final public function inserta_rel_prospecto_cliente(int $inm_comprador_id, int $inm_prospecto_id, PDO $link){
+    /**
+     * @param int $inm_comprador_id
+     * @param int $inm_prospecto_id
+     * @param PDO $link
+     * @return array|stdClass
+     */
+    final public function inserta_rel_prospecto_cliente(int $inm_comprador_id, int $inm_prospecto_id, PDO $link): array|stdClass
+    {
         $inm_rel_prospecto_cliente_ins = $this->inm_rel_prospecto_cliente_ins(
             inm_comprador_id: $inm_comprador_id,inm_prospecto_id:  $inm_prospecto_id);
         if(errores::$error){

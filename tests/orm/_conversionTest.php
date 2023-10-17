@@ -98,6 +98,71 @@ class _conversionTest extends test {
         errores::$error = false;
     }
 
+    public function test_inm_comprador_ins(): void
+    {
+        errores::$error = false;
+
+        $_GET['seccion'] = 'inm_producto_infonavit';
+        $_GET['accion'] = 'lista';
+        $_SESSION['grupo_id'] = 1;
+        $_SESSION['usuario_id'] = 2;
+        $_GET['session_id'] = '1';
+
+
+        $conversion = new _conversion();
+        $conversion = new liberator($conversion);
+
+        $data = new stdClass();
+        $link = $this->link;
+        $data->inm_prospecto = new stdClass();
+        $data->inm_prospecto->inm_producto_infonavit_id = 1;
+        $data->inm_prospecto->inm_attr_tipo_credito_id = 1;
+        $data->inm_prospecto->inm_destino_credito_id = 1;
+        $data->inm_prospecto->es_segundo_credito = 1;
+        $data->inm_prospecto->inm_plazo_credito_sc_id = 1;
+        $data->inm_prospecto->descuento_pension_alimenticia_dh = 1;
+        $data->inm_prospecto->descuento_pension_alimenticia_fc = 1;
+        $data->inm_prospecto->monto_credito_solicitado_dh = 1;
+        $data->inm_prospecto->monto_ahorro_voluntario = 1;
+        $data->inm_prospecto->curp = 1;
+        $data->inm_prospecto->nss = 1;
+        $data->inm_prospecto->nombre = 1;
+        $data->inm_prospecto->apellido_paterno = 1;
+        $data->inm_prospecto->apellido_materno = 1;
+        $data->inm_prospecto->con_discapacidad = 1;
+        $data->inm_prospecto->nombre_empresa_patron = 1;
+        $data->inm_prospecto->nrp_nep = 1;
+        $data->inm_prospecto->lada_nep = 1;
+        $data->inm_prospecto->numero_nep = 1;
+        $data->inm_prospecto->extension_nep = 1;
+        $data->inm_prospecto->lada_com = 1;
+        $data->inm_prospecto->numero_com = 1;
+        $data->inm_prospecto->cel_com = 1;
+        $data->inm_prospecto->genero = 1;
+        $data->inm_prospecto->correo_com = 1;
+        $data->inm_prospecto->inm_tipo_discapacidad_id = 1;
+        $data->inm_prospecto->inm_persona_discapacidad_id = 1;
+        $data->inm_prospecto->inm_estado_civil_id = 1;
+        $data->inm_prospecto->inm_institucion_hipotecaria_id = 1;
+        $data->inm_prospecto->inm_sindicato_id = 1;
+        $data->inm_prospecto->dp_municipio_nacimiento_id = 1;
+        $data->inm_prospecto->fecha_nacimiento = 1;
+        $data->inm_prospecto->sub_cuenta = 1;
+        $data->inm_prospecto->monto_final = 1;
+        $data->inm_prospecto->descuento = 1;
+        $data->inm_prospecto->puntos = 1;
+        $data->inm_prospecto->inm_nacionalidad_id = 1;
+        $data->inm_prospecto->inm_ocupacion_id = 1;
+        $data->inm_prospecto_completo = new stdClass();
+        $data->inm_prospecto_completo->com_prospecto_rfc = '';
+        $resultado = $conversion->inm_comprador_ins($data, $link);
+        $this->assertIsArray($resultado);
+        $this->assertNotTrue(errores::$error);
+        $this->assertEquals('1',$resultado['inm_tipo_discapacidad_id']);
+
+        errores::$error = false;
+    }
+
     public function test_inm_comprador_ins_init(): void
     {
         errores::$error = false;

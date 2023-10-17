@@ -108,7 +108,12 @@ class inm_prospecto extends _modelo_parent{
         return $r_alta_bd;
     }
 
-    final public function convierte_cliente(int $inm_prospecto_id){
+    /**
+     * @param int $inm_prospecto_id
+     * @return array|stdClass
+     */
+    final public function convierte_cliente(int $inm_prospecto_id): array|stdClass
+    {
         $r_alta_comprador = (new _conversion())->inserta_inm_comprador(inm_prospecto_id: $inm_prospecto_id,modelo: $this);
 
         if(errores::$error){
@@ -128,6 +133,10 @@ class inm_prospecto extends _modelo_parent{
         return $data;
     }
 
+    /**
+     * @param int $id
+     * @return array|stdClass
+     */
     public function elimina_bd(int $id): array|stdClass
     {
 
@@ -164,7 +173,8 @@ class inm_prospecto extends _modelo_parent{
             return $this->error->error(mensaje: 'Error inm_prospecto_id es menor a 0',data:  $inm_prospecto_id);
         }
 
-        $com_prospecto = (new com_prospecto(link: $this->link))->registro(registro_id: $inm_prospecto_id, retorno_obj: $retorno_obj);
+        $com_prospecto = (new com_prospecto(link: $this->link))->registro(registro_id: $inm_prospecto_id,
+            retorno_obj: $retorno_obj);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al obtener com_prospecto',data:  $com_prospecto);
         }
@@ -227,6 +237,13 @@ class inm_prospecto extends _modelo_parent{
         return $alta_inm_prospecto_proceso;
     }
 
+    /**
+     * @param array $registro
+     * @param int $id
+     * @param bool $reactiva
+     * @param array $keys_integra_ds
+     * @return array|stdClass
+     */
     public function modifica_bd(array $registro, int $id, bool $reactiva = false,
                                 array $keys_integra_ds = array('codigo', 'descripcion')): array|stdClass
     {
