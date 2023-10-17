@@ -111,6 +111,7 @@ if($controlador->row_upd->genero === 'F'){
         <?php echo $controlador->inputs->fecha_nacimiento; ?>
         <?php echo $controlador->inputs->inm_nacionalidad_id; ?>
         <?php echo $controlador->inputs->inm_ocupacion_id; ?>
+        <?php echo $controlador->inputs->telefono_casa; ?>
 
     </div>
 

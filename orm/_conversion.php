@@ -234,13 +234,23 @@ class _conversion{
     }
 
     /**
-     * @param int $inm_comprador_id
-     * @param int $inm_prospecto_id
-     * @param PDO $link
+     * Inserta una relacion entre prospecto y cliente
+     * @param int $inm_comprador_id Identificador de comprador
+     * @param int $inm_prospecto_id Identificador de prospecto
+     * @param PDO $link Conexion a la base de datos
      * @return array|stdClass
+     * @version 2.220.1
      */
-    final public function inserta_rel_prospecto_cliente(int $inm_comprador_id, int $inm_prospecto_id, PDO $link): array|stdClass
+    final public function inserta_rel_prospecto_cliente(
+        int $inm_comprador_id, int $inm_prospecto_id, PDO $link): array|stdClass
     {
+        if($inm_prospecto_id <= 0){
+            return $this->error->error(mensaje: 'Error inm_prospecto_id debe ser mayor a 0', data: $inm_prospecto_id);
+        }
+        if($inm_comprador_id <= 0){
+            return $this->error->error(mensaje: 'Error inm_comprador_id debe ser mayor a 0', data: $inm_comprador_id);
+        }
+
         $inm_rel_prospecto_cliente_ins = $this->inm_rel_prospecto_cliente_ins(
             inm_comprador_id: $inm_comprador_id,inm_prospecto_id:  $inm_prospecto_id);
         if(errores::$error){
@@ -248,7 +258,8 @@ class _conversion{
         }
 
 
-        $r_alta_rel = (new inm_rel_prospecto_cliente(link: $link))->alta_registro(registro: $inm_rel_prospecto_cliente_ins);
+        $r_alta_rel = (new inm_rel_prospecto_cliente(link: $link))->alta_registro(
+            registro: $inm_rel_prospecto_cliente_ins);
 
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al insertar inm_rel_prospecto_cliente_ins', data: $r_alta_rel);

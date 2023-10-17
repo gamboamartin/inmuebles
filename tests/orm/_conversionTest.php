@@ -271,6 +271,36 @@ class _conversionTest extends test {
         errores::$error = false;
     }
 
+    public function test_inserta_rel_prospecto_cliente(): void
+    {
+        errores::$error = false;
+
+        $_GET['seccion'] = 'inm_producto_infonavit';
+        $_GET['accion'] = 'lista';
+        $_SESSION['grupo_id'] = 1;
+        $_SESSION['usuario_id'] = 2;
+        $_GET['session_id'] = '1';
+
+        $del = (new base_test())->del_inm_rel_prospecto_cliente(link: $this->link);
+        if(errores::$error){
+            $error = (new errores())->error(mensaje: 'Error al del',data:  $del);
+            print_r($error);
+            exit;
+        }
+
+        $conversion = new _conversion();
+        //$conversion = new liberator($conversion);
+
+        $inm_comprador_id = 1;
+        $inm_prospecto_id = 1;
+        $resultado = $conversion->inserta_rel_prospecto_cliente($inm_comprador_id, $inm_prospecto_id, $this->link);
+        $this->assertIsObject($resultado);
+        $this->assertNotTrue(errores::$error);
+        $this->assertEquals('NO',$resultado->registro['inm_prospecto_es_segundo_credito']);
+
+        errores::$error = false;
+    }
+
     public function test_integra_id_pref(): void
     {
         errores::$error = false;

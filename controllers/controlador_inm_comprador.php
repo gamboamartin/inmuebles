@@ -325,7 +325,8 @@ class controlador_inm_comprador extends _ctl_base {
             'descuento_pension_alimenticia_fc','monto_credito_solicitado_dh','monto_ahorro_voluntario','nss','curp',
             'rfc','apellido_paterno','apellido_materno','nombre','numero_exterior','numero_interior','telefono',
             'nombre_empresa_patron','nrp_nep','lada_nep','numero_nep','extension_nep','lada_com','numero_com',
-            'cel_com','genero','correo_com','fecha_nacimiento','sub_cuenta','monto_final','descuento','puntos');
+            'cel_com','genero','correo_com','fecha_nacimiento','sub_cuenta','monto_final','descuento','puntos',
+            'telefono_casa');
         $keys->selects = array();
 
 
@@ -539,6 +540,13 @@ class controlador_inm_comprador extends _ctl_base {
         if(errores::$error){
             return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
+
+        $keys_selects = (new init())->key_select_txt(cols: 12,key: 'telefono_casa',
+            keys_selects:$keys_selects, place_holder: 'Telefono de Casa');
+        if(errores::$error){
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        }
+        $keys_selects['telefono_casa']->regex = $this->validacion->patterns['telefono_mx_html'];
 
 
 

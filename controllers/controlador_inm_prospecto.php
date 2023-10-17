@@ -155,7 +155,7 @@ class controlador_inm_prospecto extends _ctl_formato {
             'lada_com','numero_com','cel_com','descuento_pension_alimenticia_dh','descuento_pension_alimenticia_fc',
             'monto_credito_solicitado_dh','monto_ahorro_voluntario','nombre_empresa_patron','nrp_nep','lada_nep',
             'numero_nep','extension_nep','nss','curp','rfc','numero_exterior','numero_interior','observaciones',
-            'fecha_nacimiento','sub_cuenta','monto_final','descuento','puntos');
+            'fecha_nacimiento','sub_cuenta','monto_final','descuento','puntos','telefono_casa');
         $keys->selects = array();
 
         $init_data = array();
@@ -456,6 +456,13 @@ class controlador_inm_prospecto extends _ctl_formato {
         if(errores::$error){
             return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
+
+        $keys_selects = (new init())->key_select_txt(cols: 12,key: 'telefono_casa',
+            keys_selects:$keys_selects, place_holder: 'Telefono de Casa', required: false);
+        if(errores::$error){
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        }
+        $keys_selects['telefono_casa']->regex = $this->validacion->patterns['telefono_mx_html'];
 
         return $keys_selects;
     }

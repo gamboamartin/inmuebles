@@ -110,7 +110,8 @@ class inm_prospecto extends _modelo_parent{
     }
 
     /**
-     * @param int $inm_prospecto_id
+     * Convierte un prospecto en cliente generado una relacion con inm_rel_prospecto_cliente y inm_comprador
+     * @param int $inm_prospecto_id Identificador de prospecto
      * @return array|stdClass
      */
     final public function convierte_cliente(int $inm_prospecto_id): array|stdClass
@@ -135,7 +136,8 @@ class inm_prospecto extends _modelo_parent{
     }
 
     /**
-     * @param int $id
+     * Elimina un prospecto junto con inm_doc_prospecto y inm_prospecto_proceso
+     * @param int $id Identificador de prospecto
      * @return array|stdClass
      */
     public function elimina_bd(int $id): array|stdClass
