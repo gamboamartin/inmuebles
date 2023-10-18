@@ -184,14 +184,19 @@ class inm_prospecto extends _modelo_parent{
      * @param int $inm_prospecto_id
      * @param bool $retorno_obj Retorna un objeto en caso de ser true
      * @return array|object
+     * @version 2.224.3
      */
     final public function get_com_prospecto(int $inm_prospecto_id, bool $retorno_obj = false): object|array
     {
         if($inm_prospecto_id<=0){
             return $this->error->error(mensaje: 'Error inm_prospecto_id es menor a 0',data:  $inm_prospecto_id);
         }
+        $inm_prospecto = $this->registro(registro_id: $inm_prospecto_id,columnas_en_bruto: true,retorno_obj: true);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al obtener inm_prospecto',data:  $inm_prospecto);
+        }
 
-        $com_prospecto = (new com_prospecto(link: $this->link))->registro(registro_id: $inm_prospecto_id,
+        $com_prospecto = (new com_prospecto(link: $this->link))->registro(registro_id: $inm_prospecto->com_prospecto_id,
             retorno_obj: $retorno_obj);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al obtener com_prospecto',data:  $com_prospecto);

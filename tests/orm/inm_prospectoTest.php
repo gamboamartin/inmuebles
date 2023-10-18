@@ -167,6 +167,46 @@ class inm_prospectoTest extends test {
         errores::$error = false;
     }
 
+    public function test_get_com_prospecto(): void
+    {
+        errores::$error = false;
+
+        $_GET['seccion'] = 'inm_producto_infonavit';
+        $_GET['accion'] = 'lista';
+        $_SESSION['grupo_id'] = 1;
+        $_SESSION['usuario_id'] = 2;
+        $_GET['session_id'] = '1';
+
+
+        $modelo = new inm_prospecto(link: $this->link);
+        //$modelo = new liberator($modelo);
+
+        $del = (new base_test())->del_inm_prospecto(link: $this->link);
+        if(errores::$error){
+            $error = (new errores())->error(mensaje:'Error al del', data: $del);
+            print_r($error);exit;
+        }
+
+        $inm_prospecto_id = 1;
+        $resultado = $modelo->get_com_prospecto($inm_prospecto_id);
+        $this->assertIsArray($resultado);
+        $this->assertTrue(errores::$error);
+        $this->assertEquals("Error al obtener inm_prospecto",$resultado['mensaje_limpio']);
+
+        errores::$error = false;
+        $alta = (new base_test())->alta_inm_prospecto(link: $this->link);
+        if(errores::$error){
+            $error = (new errores())->error(mensaje:'Error al alta', data: $alta);
+            print_r($error);exit;
+        }
+        $resultado = $modelo->get_com_prospecto($inm_prospecto_id);
+
+        $this->assertIsArray($resultado);
+        $this->assertNotTrue(errores::$error);
+        $this->assertEquals(1,$resultado['com_tipo_agente_id']);
+        errores::$error = false;
+    }
+
     public function test_inm_prospecto_proceso_ins(): void
     {
         errores::$error = false;
