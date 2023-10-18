@@ -128,7 +128,7 @@ class controlador_inm_prospecto extends _ctl_formato {
             return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects, header: $header,ws:  $ws);
         }
 
-        $inm_ocupacion_id = (new inm_ocupacion(link: $this->link))->id_preferido_detalle(entidad_preferida: 'inm_ocupacion_id');
+        $inm_ocupacion_id = (new inm_ocupacion(link: $this->link))->id_preferido_detalle(entidad_preferida: 'inm_ocupacion');
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al obtener id',data:  $inm_ocupacion_id, header: $header,ws:  $ws);
         }
