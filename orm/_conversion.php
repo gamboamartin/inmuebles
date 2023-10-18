@@ -340,6 +340,7 @@ class _conversion{
             'lada_nep','numero_nep','extension_nep','lada_com','numero_com','cel_com','genero','correo_com',
             'inm_tipo_discapacidad_id','inm_persona_discapacidad_id','inm_estado_civil_id',
             'inm_institucion_hipotecaria_id','inm_sindicato_id','dp_municipio_nacimiento_id','fecha_nacimiento',
-            'sub_cuenta','monto_final','descuento','puntos','inm_nacionalidad_id','inm_ocupacion_id','telefono_casa');
+            'sub_cuenta','monto_final','descuento','puntos','inm_nacionalidad_id','inm_ocupacion_id','telefono_casa',
+            'correo_empresa');
     }
 }

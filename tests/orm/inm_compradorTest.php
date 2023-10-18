@@ -95,6 +95,7 @@ class inm_compradorTest extends test {
         $inm->registro['inm_institucion_hipotecaria_id'] = '1';
         $inm->registro['fecha_nacimiento'] = '1981-01-01';
         $inm->registro['telefono_casa'] = '1234567890';
+        $inm->registro['correo_empresa'] = 'a@test.com';
         $resultado = $inm->alta_bd();
         $this->assertIsObject($resultado);
         $this->assertNotTrue(errores::$error);

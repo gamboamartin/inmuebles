@@ -25,7 +25,8 @@ class inm_prospecto extends _modelo_parent{
 
         $campos_obligatorios = array('com_prospecto_id','razon_social','dp_calle_pertenece_id','rfc',
             'numero_exterior','numero_interior','inm_sindicato_id','dp_municipio_nacimiento_id','fecha_nacimiento',
-            'monto_final','sub_cuenta','descuento','puntos','inm_nacionalidad_id','inm_ocupacion_id','telefono_casa');
+            'monto_final','sub_cuenta','descuento','puntos','inm_nacionalidad_id','inm_ocupacion_id','telefono_casa',
+            'correo_empresa');
 
         $columnas_extra= array();
 
@@ -47,7 +48,7 @@ class inm_prospecto extends _modelo_parent{
         $atributos_criticos = array('com_prospecto_id','razon_social','dp_calle_pertenece_id','rfc',
             'numero_exterior','numero_interior','inm_sindicato_id','dp_municipio_nacimiento_id','observaciones',
             'fecha_nacimiento','monto_final','sub_cuenta','descuento','puntos','inm_nacionalidad_id',
-            'inm_ocupacion_id','telefono_casa');
+            'inm_ocupacion_id','telefono_casa','correo_empresa');
 
 
         $tipo_campos= array();
@@ -144,9 +145,13 @@ class inm_prospecto extends _modelo_parent{
      * Elimina un prospecto junto con inm_doc_prospecto y inm_prospecto_proceso inm_rel_prospecto_cliente
      * @param int $id Identificador de prospecto
      * @return array|stdClass
+     * @version 2.223.2
      */
     public function elimina_bd(int $id): array|stdClass
     {
+        if($id <= 0){
+            return  $this->error->error(mensaje: 'El id no puede ser menor a 0 en '.$this->tabla, data: $id);
+        }
 
         $filtro['inm_prospecto.id'] = $id;
 

@@ -172,7 +172,10 @@ class _prospecto{
             $registro['fecha_nacimiento'] = '1900-01-01';
         }
         if(!isset($registro['telefono_casa'])){
-            $registro['telefono_casa'] = '0000000000';
+            $registro['telefono_casa'] = '3333333333';
+        }
+        if(!isset($registro['correo_empresa'])){
+            $registro['correo_empresa'] = 'sincorreo@correo.com';
         }
 
         $registro = (new _base_paquete())->montos_0(registro: $registro);

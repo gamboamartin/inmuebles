@@ -129,16 +129,17 @@ class base_test{
         int $bn_cuenta_id = 1, int $cat_sat_forma_pago_id = 99, int $cat_sat_metodo_pago_id = 2,
         int $cat_sat_moneda_id = 161, int $cat_sat_regimen_fiscal_id = 605, int $cat_sat_tipo_persona_id = 5,
         int $cat_sat_uso_cfdi_id = 22, string $cel_com = '3344556655', int $com_tipo_cliente_id = 1,
-        string $correo_com = 'a@a.com', string $curp = 'XEXX010101MNEXXXA8',
-        float $descuento_pension_alimenticia_dh = 0, float $descuento_pension_alimenticia_fc = 0,
-        int $dp_calle_pertenece_id = 1, string $es_segundo_credito = 'NO', string $fecha_nacimiento = '1983-01-01',
-        $id = 1, int $inm_attr_tipo_credito_id = 1, int $inm_destino_credito_id = 1, int $inm_estado_civil_id= 1,
-        int $inm_institucion_hipotecaria_id = 1, int $inm_producto_infonavit_id = 1, int $inm_tipo_discapacidad_id= 1,
-        string $lada_com = '123', string $lada_nep = '33', float $monto_ahorro_voluntario = 0,
-        float $monto_credito_solicitado_dh = 0, string $nombre='Nombre',
-        string $nombre_empresa_patron = 'NOMBRE EMPRESA PATRON', string $nrp_nep = 'NRP', string $nss = '12345678914',
-        string $numero_com = '1234564', string $numero_exterior = '1', string $numero_nep = '99999999',
-        string $rfc = 'AAA010101AAA', string $telefono_casa = '1234567890'): array|stdClass
+        string $correo_com = 'a@a.com', string $correo_empresa  ='sincorreo@correo.com',
+        string $curp = 'XEXX010101MNEXXXA8', float $descuento_pension_alimenticia_dh = 0,
+        float $descuento_pension_alimenticia_fc = 0, int $dp_calle_pertenece_id = 1, string $es_segundo_credito = 'NO',
+        string $fecha_nacimiento = '1983-01-01', $id = 1, int $inm_attr_tipo_credito_id = 1,
+        int $inm_destino_credito_id = 1, int $inm_estado_civil_id= 1, int $inm_institucion_hipotecaria_id = 1,
+        int $inm_producto_infonavit_id = 1, int $inm_tipo_discapacidad_id= 1, string $lada_com = '123',
+        string $lada_nep = '33', float $monto_ahorro_voluntario = 0, float $monto_credito_solicitado_dh = 0,
+        string $nombre='Nombre', string $nombre_empresa_patron = 'NOMBRE EMPRESA PATRON', string $nrp_nep = 'NRP',
+        string $nss = '12345678914', string $numero_com = '1234564', string $numero_exterior = '1',
+        string $numero_nep = '99999999', string $rfc = 'AAA010101AAA',
+        string $telefono_casa = '1234567890'): array|stdClass
     {
 
         $existe = (new bn_cuenta(link: $link))->existe_by_id(registro_id: $bn_cuenta_id);
@@ -201,6 +202,7 @@ class base_test{
         $registro['inm_institucion_hipotecaria_id'] = $inm_institucion_hipotecaria_id;
         $registro['fecha_nacimiento'] = $fecha_nacimiento;
         $registro['telefono_casa'] = $telefono_casa;
+        $registro['correo_empresa'] = $correo_empresa;
 
         $alta = (new inm_comprador($link))->alta_registro($registro);
         if(errores::$error){

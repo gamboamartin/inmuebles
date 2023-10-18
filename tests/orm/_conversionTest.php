@@ -154,6 +154,7 @@ class _conversionTest extends test {
         $data->inm_prospecto->inm_nacionalidad_id = 1;
         $data->inm_prospecto->inm_ocupacion_id = 1;
         $data->inm_prospecto->telefono_casa = 1;
+        $data->inm_prospecto->correo_empresa = 1;
         $data->inm_prospecto_completo = new stdClass();
         $data->inm_prospecto_completo->com_prospecto_rfc = '';
         $resultado = $conversion->inm_comprador_ins($data, $link);
@@ -252,6 +253,7 @@ class _conversionTest extends test {
         $inm_prospecto_upd['cel_com'] = '1234567890';
         $inm_prospecto_upd['correo_com'] = 'a@com.com';
         $inm_prospecto_upd['telefono_casa'] = '1234567890';
+        $inm_prospecto_upd['correo_empresa'] = 'a@com.com';
 
         $modifica = (new inm_prospecto(link: $this->link))->modifica_bd(registro: $inm_prospecto_upd,id: 1);
         if(errores::$error){

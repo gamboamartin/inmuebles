@@ -27,7 +27,7 @@ class inm_comprador extends _modelo_parent{
             'monto_ahorro_voluntario', 'monto_credito_solicitado_dh','nombre','nombre_empresa_patron', 'nrp_nep',
             'numero_com','numero_nep','inm_institucion_hipotecaria_id','inm_sindicato_id','dp_municipio_nacimiento_id',
             'fecha_nacimiento','monto_final','sub_cuenta','descuento','puntos','inm_nacionalidad_id',
-            'inm_ocupacion_id','telefono_casa');
+            'inm_ocupacion_id','telefono_casa','correo_empresa');
 
         $columnas_extra= array();
         $renombres['dp_calle_pertenece_empresa']['nombre_original']= 'dp_calle_pertenece';
@@ -69,7 +69,7 @@ class inm_comprador extends _modelo_parent{
             'inm_tipo_discapacidad_id','lada_com','lada_nep', 'monto_ahorro_voluntario', 'monto_credito_solicitado_dh',
             'nombre', 'nombre_empresa_patron', 'nrp_nep','numero_com','numero_nep','inm_institucion_hipotecaria_id',
             'inm_sindicato_id','dp_municipio_nacimiento_id','fecha_nacimiento','monto_final','sub_cuenta','descuento',
-            'puntos','inm_nacionalidad_id','inm_ocupacion_id','telefono_casa');
+            'puntos','inm_nacionalidad_id','inm_ocupacion_id','telefono_casa','correo_empresa');
 
 
         $tipo_campos['lada_com'] = 'lada';
@@ -81,6 +81,7 @@ class inm_comprador extends _modelo_parent{
         $tipo_campos['cel_com'] = 'telefono_mx';
         $tipo_campos['telefono_casa'] = 'telefono_mx';
         $tipo_campos['correo_com'] = 'correo';
+        $tipo_campos['correo_empresa'] = 'correo';
 
 
         parent::__construct(link: $link, tabla: $tabla, campos_obligatorios: $campos_obligatorios,
