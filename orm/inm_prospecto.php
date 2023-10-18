@@ -217,11 +217,22 @@ class inm_prospecto extends _modelo_parent{
     }
 
     /**
-     * @param stdClass $registro
+     * Integra los datos de un prospecto para su modificacion en comercial
+     * @param stdClass $registro Registro en proceso
      * @return array
+     * @version 2.228.2
      */
     private function data_com_prospecto(stdClass $registro): array
     {
+        $keys = array('nombre','apellido_paterno','lada_com','numero_com','correo_com','razon_social',
+            'apellido_materno');
+
+        foreach ($keys as $key){
+            if(!isset($registro->$key)){
+                $registro->$key = '';
+            }
+        }
+
         $data_com_prospecto['nombre'] = $registro->nombre;
         $data_com_prospecto['apellido_paterno'] = $registro->apellido_paterno;
         $data_com_prospecto['apellido_materno'] = $registro->apellido_materno;
@@ -378,7 +389,12 @@ class inm_prospecto extends _modelo_parent{
         return $r_modifica;
     }
 
-    private function modifica_com_prospecto(stdClass $registro){
+    /**
+     * @param stdClass $registro
+     * @return array|stdClass
+     */
+    private function modifica_com_prospecto(stdClass $registro): array|stdClass
+    {
         $data_com_prospecto = $this->data_com_prospecto(registro: $registro);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al maquetar data_com_prospecto',data:  $data_com_prospecto);
@@ -392,7 +408,15 @@ class inm_prospecto extends _modelo_parent{
         return $upd;
     }
 
-    private function post_upd(int $id, array $keys_integra_ds, stdClass $r_modifica, bool $reactiva){
+    /**
+     * @param int $id
+     * @param array $keys_integra_ds
+     * @param stdClass $r_modifica
+     * @param bool $reactiva
+     * @return array|stdClass
+     */
+    private function post_upd(int $id, array $keys_integra_ds, stdClass $r_modifica, bool $reactiva): array|stdClass
+    {
         if(!isset($r_modifica->registro_actualizado->com_prospecto_rfc)){
             return $this->error->error(mensaje: 'Error al modificar prospecto no existe rfc en com_prospecto',
                 data:  $r_modifica);
@@ -444,7 +468,16 @@ class inm_prospecto extends _modelo_parent{
         return $r_pr_sub_proceso->registros[0];
     }
 
-    private function transacciones_externas(int $id, array $keys_integra_ds, bool $reactiva, stdClass $registro){
+    /**
+     * @param int $id
+     * @param array $keys_integra_ds
+     * @param bool $reactiva
+     * @param stdClass $registro
+     * @return array|stdClass
+     */
+    private function transacciones_externas(int $id, array $keys_integra_ds, bool $reactiva,
+                                            stdClass $registro): array|stdClass
+    {
         $r_modifica_descripcion =  $this->actualiza_descripcion(id: $id, keys_integra_ds: $keys_integra_ds,
             reactiva: $reactiva, registro: $registro);
 

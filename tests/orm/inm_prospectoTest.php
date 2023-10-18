@@ -276,6 +276,29 @@ class inm_prospectoTest extends test {
         errores::$error = false;
     }
 
+    public function test_data_com_prospecto(): void
+    {
+        errores::$error = false;
+
+        $_GET['seccion'] = 'inm_producto_infonavit';
+        $_GET['accion'] = 'lista';
+        $_SESSION['grupo_id'] = 1;
+        $_SESSION['usuario_id'] = 2;
+        $_GET['session_id'] = '1';
+
+
+        $modelo = new inm_prospecto(link: $this->link);
+        $modelo = new liberator($modelo);
+
+
+        $registro = new stdClass();
+
+        $resultado = $modelo->data_com_prospecto($registro);
+        $this->assertIsArray($resultado);
+        $this->assertNotTrue(errores::$error);
+        errores::$error = false;
+    }
+
     public function test_inm_prospecto_proceso_ins(): void
     {
         errores::$error = false;
