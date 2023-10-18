@@ -72,14 +72,27 @@ class inm_prospecto extends _modelo_parent{
     }
 
     /**
-     * @param int $id
-     * @param array $keys_integra_ds
-     * @param bool $reactiva
-     * @param stdClass $registro
+     * Actualiza la descripcion basado en campos de upd
+     * @param int $id Identificador de prospecto
+     * @param array $keys_integra_ds Keys para descripcion select
+     * @param bool $reactiva Valida si es correcta una reactivacion
+     * @param stdClass $registro Registro en proceso
      * @return array|stdClass
+     * @version 2.226.2
      */
     private function actualiza_descripcion(int $id, array $keys_integra_ds, bool $reactiva, stdClass $registro): array|stdClass
     {
+
+        if($id <= 0){
+            return $this->error->error(mensaje: 'Error id es menor a 0',data:  $id);
+        }
+
+        $keys = array('nombre','apellido_paterno','nss','curp','rfc');
+        $valida = $this->validacion->valida_existencia_keys(keys: $keys,registro:  $registro);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al validar registro',data:  $valida);
+        }
+        
         $descripcion = (new _base_paquete())->descripcion(registro: $registro);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al obtener descripcion',data:  $descripcion);
@@ -95,6 +108,12 @@ class inm_prospecto extends _modelo_parent{
         return $r_modifica_descripcion;
     }
 
+    /**
+     * Ajusta un registro de datos
+     * @param stdClass $r_modifica Resultado de modificacion base
+     * @param stdClass $registro Registro base
+     * @return stdClass
+     */
     private function ajusta_registro(stdClass $r_modifica, stdClass $registro): stdClass
     {
         $registro->rfc = $r_modifica->registro_actualizado->com_prospecto_rfc;
