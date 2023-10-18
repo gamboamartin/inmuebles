@@ -113,10 +113,15 @@ class inm_prospecto extends _modelo_parent{
      * Convierte un prospecto en cliente generado una relacion con inm_rel_prospecto_cliente y inm_comprador
      * @param int $inm_prospecto_id Identificador de prospecto
      * @return array|stdClass
+     * @version 2.221.2
      */
     final public function convierte_cliente(int $inm_prospecto_id): array|stdClass
     {
-        $r_alta_comprador = (new _conversion())->inserta_inm_comprador(inm_prospecto_id: $inm_prospecto_id,modelo: $this);
+        if($inm_prospecto_id<=0){
+            return $this->error->error(mensaje: 'Error inm_prospecto_id es menor a 0', data: $inm_prospecto_id);
+        }
+        $r_alta_comprador = (new _conversion())->inserta_inm_comprador(inm_prospecto_id: $inm_prospecto_id,
+            modelo: $this);
 
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al insertar cliente', data: $r_alta_comprador);
@@ -136,7 +141,7 @@ class inm_prospecto extends _modelo_parent{
     }
 
     /**
-     * Elimina un prospecto junto con inm_doc_prospecto y inm_prospecto_proceso
+     * Elimina un prospecto junto con inm_doc_prospecto y inm_prospecto_proceso inm_rel_prospecto_cliente
      * @param int $id Identificador de prospecto
      * @return array|stdClass
      */
@@ -154,6 +159,11 @@ class inm_prospecto extends _modelo_parent{
         $del = (new inm_prospecto_proceso(link: $this->link))->elimina_con_filtro_and(filtro:$filtro);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al eliminar inm_comprador_etapa',
+                data:  $del);
+        }
+        $del = (new inm_rel_prospecto_cliente(link: $this->link))->elimina_con_filtro_and(filtro:$filtro);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al eliminar inm_rel_prospecto_cliente',
                 data:  $del);
         }
 

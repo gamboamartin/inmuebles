@@ -2,6 +2,7 @@
 
 namespace gamboamartin\inmuebles\models;
 
+use gamboamartin\banco\models\bn_cuenta;
 use gamboamartin\errores\errores;
 use gamboamartin\proceso\models\pr_etapa_proceso;
 use gamboamartin\proceso\models\pr_sub_proceso;
@@ -129,6 +130,22 @@ class _alta_comprador{
 
         if(!isset($registro['dp_municipio_nacimiento_id'])){
             $registro['dp_municipio_nacimiento_id'] = 2469;
+        }
+
+        if(!isset($registro['bn_cuenta_id'])){
+            $registro['bn_cuenta_id'] = 1;
+        }
+        if((int)$registro['bn_cuenta_id'] === -1){
+
+            $bn_cuentas = (new bn_cuenta(link: $modelo->link))->registros_activos();
+            if(errores::$error){
+                return $this->error->error(mensaje: 'Error obtener cuentas', data:  $bn_cuentas);
+            }
+            if(count($bn_cuentas) === 0){
+                return $this->error->error(mensaje: 'Error no existen cuentas cargadas', data:  $bn_cuentas);
+            }
+            $registro['bn_cuenta_id'] = $bn_cuentas[0]['bn_cuenta_id'];
+
         }
 
         $valida = $this->valida_base_comprador(registro: $registro);

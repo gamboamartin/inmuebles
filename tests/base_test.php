@@ -892,6 +892,10 @@ class base_test{
         if(errores::$error){
             return (new errores())->error('Error al eliminar', $del);
         }
+        $del = $this->del_inm_rel_prospecto_cliente(link: $link);
+        if(errores::$error){
+            return (new errores())->error('Error al eliminar', $del);
+        }
 
         $del = $this->del($link, 'gamboamartin\\inmuebles\\models\\inm_prospecto');
         if(errores::$error){
