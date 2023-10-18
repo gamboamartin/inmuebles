@@ -83,7 +83,23 @@ class inm_prospectoTest extends test {
             $error = (new errores())->error(mensaje:'Error al del', data: $del);
             print_r($error);exit;
         }
+        $del = (new base_test())->del_bn_cuenta(link: $this->link);
+        if(errores::$error){
+            $error = (new errores())->error(mensaje:'Error al del', data: $del);
+            print_r($error);exit;
+        }
+        $del = (new base_test())->del_org_empresa(link: $this->link);
+        if(errores::$error){
+            $error = (new errores())->error(mensaje:'Error al del', data: $del);
+            print_r($error);exit;
+        }
         $alta = (new base_test())->alta_inm_prospecto(link: $this->link);
+        if(errores::$error){
+            $error = (new errores())->error(mensaje:'Error al alta', data: $alta);
+            print_r($error);exit;
+        }
+
+        $alta = (new base_test())->alta_bn_cuenta(link: $this->link);
         if(errores::$error){
             $error = (new errores())->error(mensaje:'Error al alta', data: $alta);
             print_r($error);exit;

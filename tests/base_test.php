@@ -649,6 +649,20 @@ class base_test{
         return $del;
     }
 
+    public function del_bn_cuenta(PDO $link): array
+    {
+
+        $del = $this->del_inm_comprador(link: $link);
+        if(errores::$error){
+            return (new errores())->error('Error al eliminar', $del);
+        }
+
+        $del = (new \gamboamartin\banco\tests\base_test())->del_bn_cuenta(link: $link);
+        if(errores::$error){
+            return (new errores())->error('Error al eliminar', $del);
+        }
+        return $del;
+    }
     public function del_bn_empleado(PDO $link): array
     {
 
