@@ -63,6 +63,7 @@ if($controlador->row_upd->genero === 'F'){
 <?php echo $controlador->inputs->numero_nep; ?>
 <?php echo $controlador->inputs->extension_nep; ?>
 <?php echo $controlador->inputs->inm_sindicato_id; ?>
+<?php echo $controlador->inputs->correo_empresa; ?>
     </div>
 
 
