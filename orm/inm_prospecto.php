@@ -112,10 +112,29 @@ class inm_prospecto extends _modelo_parent{
      * Ajusta un registro de datos
      * @param stdClass $r_modifica Resultado de modificacion base
      * @param stdClass $registro Registro base
-     * @return stdClass
+     * @return stdClass|array
+     * @version 2.227.1
      */
-    private function ajusta_registro(stdClass $r_modifica, stdClass $registro): stdClass
+    private function ajusta_registro(stdClass $r_modifica, stdClass $registro): stdClass|array
     {
+        if(!isset($r_modifica->registro_actualizado)){
+            return $this->error->error(mensaje: 'Error $r_modifica->registro_actualizado no existe',
+                data:  $r_modifica);
+        }
+        if(!is_object($r_modifica->registro_actualizado)){
+            return $this->error->error(mensaje: 'Error $r_modifica->registro_actualizado debe ser un objeto',
+                data:  $r_modifica);
+        }
+        if(!isset($r_modifica->registro_actualizado->com_prospecto_rfc)){
+            return $this->error->error(mensaje: 'Error $r_modifica->registro_actualizado->rfc no existe',
+                data:  $r_modifica);
+        }
+        if(!isset($registro->nss)){
+            return $this->error->error(mensaje: 'Error registro->nss no existe', data:  $registro);
+        }
+        if(!isset($registro->curp)){
+            return $this->error->error(mensaje: 'Error registro->curp no existe', data:  $registro);
+        }
         $registro->rfc = $r_modifica->registro_actualizado->com_prospecto_rfc;
 
         if($registro->nss === ''){
@@ -197,6 +216,10 @@ class inm_prospecto extends _modelo_parent{
         return $data;
     }
 
+    /**
+     * @param stdClass $registro
+     * @return array
+     */
     private function data_com_prospecto(stdClass $registro): array
     {
         $data_com_prospecto['nombre'] = $registro->nombre;

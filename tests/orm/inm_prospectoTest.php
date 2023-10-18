@@ -246,6 +246,36 @@ class inm_prospectoTest extends test {
         errores::$error = false;
     }
 
+    public function test_ajusta_registro(): void
+    {
+        errores::$error = false;
+
+        $_GET['seccion'] = 'inm_producto_infonavit';
+        $_GET['accion'] = 'lista';
+        $_SESSION['grupo_id'] = 1;
+        $_SESSION['usuario_id'] = 2;
+        $_GET['session_id'] = '1';
+
+
+        $modelo = new inm_prospecto(link: $this->link);
+        $modelo = new liberator($modelo);
+
+
+        $registro = new stdClass();
+        $r_modifica = new stdClass();
+        $r_modifica->registro_actualizado = new stdClass();
+        $r_modifica->registro_actualizado->com_prospecto_rfc = '';
+        $registro->nss = '';
+        $registro->curp = '';
+        $resultado = $modelo->ajusta_registro($r_modifica, $registro);
+        $this->assertIsObject($resultado);
+        $this->assertNotTrue(errores::$error);
+        $this->assertEquals('99999999999',$resultado->nss);
+        $this->assertEquals('XEXX010101HNEXXXA4',$resultado->curp);
+        $this->assertEquals('',$resultado->rfc);
+        errores::$error = false;
+    }
+
     public function test_inm_prospecto_proceso_ins(): void
     {
         errores::$error = false;
