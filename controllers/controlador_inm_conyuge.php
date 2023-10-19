@@ -11,9 +11,7 @@ namespace gamboamartin\inmuebles\controllers;
 use base\controller\init;
 use gamboamartin\errores\errores;
 use gamboamartin\inmuebles\html\inm_conyuge_html;
-use gamboamartin\inmuebles\html\inm_sindicato_html;
 use gamboamartin\inmuebles\models\inm_conyuge;
-use gamboamartin\inmuebles\models\inm_sindicato;
 use gamboamartin\system\_ctl_base;
 use gamboamartin\system\links_menu;
 use gamboamartin\template\html;
@@ -60,7 +58,8 @@ class controlador_inm_conyuge extends _ctl_base {
     protected function campos_view(): array
     {
         $keys = new stdClass();
-        $keys->inputs = array('descripcion');
+        $keys->inputs = array('nombre','apellido_paterno','apellido_materno','fecha_nacimiento','curp','rfc',
+            'telefono_casa','telefono_celular');
         $keys->selects = array();
 
         $init_data = array();

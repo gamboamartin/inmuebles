@@ -405,6 +405,63 @@ class inm_prospectoTest extends test {
         errores::$error = false;
     }
 
+    public function test_post_upd(): void
+    {
+        errores::$error = false;
+
+        $_GET['seccion'] = 'inm_producto_infonavit';
+        $_GET['accion'] = 'lista';
+        $_SESSION['grupo_id'] = 1;
+        $_SESSION['usuario_id'] = 2;
+        $_GET['session_id'] = '1';
+
+
+        $modelo = new inm_prospecto(link: $this->link);
+        $modelo = new liberator($modelo);
+
+        $del = (new base_test())->del_inm_prospecto(link: $this->link);
+        if(errores::$error){
+            $error = (new errores())->error(mensaje:'Error al del', data: $del);
+            print_r($error);exit;
+        }
+
+
+        $alta = (new base_test())->alta_inm_prospecto(link: $this->link);
+        if(errores::$error){
+            $error = (new errores())->error(mensaje:'Error al alta', data: $alta);
+            print_r($error);exit;
+        }
+
+        $registro = (new inm_prospecto(link: $this->link))->registro(registro_id: 1, columnas_en_bruto: true,
+            retorno_obj: true);
+        if(errores::$error){
+            $error = (new errores())->error(mensaje:'Error al registro', data: $registro);
+            print_r($error);exit;
+        }
+
+        $registro_actualizado = (new inm_prospecto(link: $this->link))->registro(registro_id: 1,
+            retorno_obj: true);
+        if(errores::$error){
+            $error = (new errores())->error(mensaje:'Error al registro', data: $registro);
+            print_r($error);exit;
+        }
+
+        $id = 1;
+        $keys_integra_ds = array();
+        $reactiva = true;
+
+        $r_modifica = new stdClass();
+        $r_modifica->registro_actualizado = $registro_actualizado;
+        $r_modifica->registro_puro = $registro;
+
+        $resultado = $modelo->post_upd($id, $keys_integra_ds, $r_modifica, $reactiva);
+
+        $this->assertIsObject($resultado);
+        $this->assertNotTrue(errores::$error);
+        $this->assertEquals('NOMBRE 1AP1',$resultado->upd_com_prospecto->registro_actualizado->com_prospecto_codigo);
+        errores::$error = false;
+    }
+
     public function test_pr_sub_proceso(): void
     {
         errores::$error = false;

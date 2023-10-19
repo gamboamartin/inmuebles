@@ -52,7 +52,7 @@ class inm_prospecto extends _modelo_parent{
 
 
         $tipo_campos= array();
-        
+
 
         $renombres = array();
 
@@ -424,12 +424,19 @@ class inm_prospecto extends _modelo_parent{
      * @param stdClass $r_modifica Resultado de modificacion
      * @param bool $reactiva valida la reactivacion
      * @return array|stdClass
+     * @version 2.232.1
      */
     private function post_upd(int $id, array $keys_integra_ds, stdClass $r_modifica, bool $reactiva): array|stdClass
     {
+        if($id <= 0){
+            return $this->error->error(mensaje: 'Error id es menor a 0',data:  $id);
+        }
         if(!isset($r_modifica->registro_actualizado->com_prospecto_rfc)){
-            return $this->error->error(mensaje: 'Error al modificar prospecto no existe rfc en com_prospecto',
+            return $this->error->error(mensaje: 'Error no existe $r_modifica->registro_actualizado->com_prospecto_rfc',
                 data:  $r_modifica);
+        }
+        if(!isset($r_modifica->registro_puro)){
+            return $this->error->error(mensaje: 'Error $r_modifica->registro_puro no existe', data:  $r_modifica);
         }
 
         $registro = $r_modifica->registro_puro;
