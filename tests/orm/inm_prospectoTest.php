@@ -2,6 +2,7 @@
 namespace gamboamartin\inmuebles\tests\controllers;
 
 
+use gamboamartin\comercial\models\com_prospecto;
 use gamboamartin\errores\errores;
 use gamboamartin\inmuebles\controllers\_keys_selects;
 use gamboamartin\inmuebles\controllers\controlador_inm_attr_tipo_credito;
@@ -360,6 +361,47 @@ class inm_prospectoTest extends test {
         $resultado = $modelo->inserta_sub_proceso($inm_prospecto_id);
         $this->assertIsObject($resultado);
         $this->assertNotTrue(errores::$error);
+        errores::$error = false;
+    }
+
+    public function test_modifica_com_prospecto(): void
+    {
+        errores::$error = false;
+
+        $_GET['seccion'] = 'inm_producto_infonavit';
+        $_GET['accion'] = 'lista';
+        $_SESSION['grupo_id'] = 1;
+        $_SESSION['usuario_id'] = 2;
+        $_GET['session_id'] = '1';
+
+
+        $modelo = new inm_prospecto(link: $this->link);
+        $modelo = new liberator($modelo);
+
+        $del = (new base_test())->del_inm_prospecto(link: $this->link);
+        if(errores::$error){
+            $error = (new errores())->error(mensaje:'Error al del', data: $del);
+            print_r($error);exit;
+        }
+
+
+        $alta = (new base_test())->alta_inm_prospecto(link: $this->link);
+        if(errores::$error){
+            $error = (new errores())->error(mensaje:'Error al alta', data: $alta);
+            print_r($error);exit;
+        }
+
+        $registro = (new inm_prospecto(link: $this->link))->registro(registro_id: 1, columnas_en_bruto: true,
+            retorno_obj: true);
+        if(errores::$error){
+            $error = (new errores())->error(mensaje:'Error al registro', data: $registro);
+            print_r($error);exit;
+        }
+
+        $resultado = $modelo->modifica_com_prospecto($registro);
+        $this->assertIsObject($resultado);
+        $this->assertNotTrue(errores::$error);
+        $this->assertEquals('NOMBRE 1AP1',$resultado->registro_actualizado->com_prospecto_codigo);
         errores::$error = false;
     }
 

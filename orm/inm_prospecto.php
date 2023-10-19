@@ -390,11 +390,19 @@ class inm_prospecto extends _modelo_parent{
     }
 
     /**
-     * @param stdClass $registro
+     * Modifica un com_prospecto cuando se modifica inm_prospecto
+     * @param stdClass $registro Registro en proceso
      * @return array|stdClass
+     * @version 2.229.2
      */
     private function modifica_com_prospecto(stdClass $registro): array|stdClass
     {
+        $keys = array('com_prospecto_id');
+        $valida = $this->validacion->valida_ids(keys: $keys,registro:  $registro);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al validar registro',data:  $valida);
+        }
+
         $data_com_prospecto = $this->data_com_prospecto(registro: $registro);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al maquetar data_com_prospecto',data:  $data_com_prospecto);
@@ -469,10 +477,11 @@ class inm_prospecto extends _modelo_parent{
     }
 
     /**
-     * @param int $id
-     * @param array $keys_integra_ds
-     * @param bool $reactiva
-     * @param stdClass $registro
+     * Ejecuta las transacciones de modificacion de com prospecto y descripcion en this
+     * @param int $id Id de prospecto
+     * @param array $keys_integra_ds campos de descripcion select
+     * @param bool $reactiva valida la reactivacion de un registro
+     * @param stdClass $registro Registro modificado
      * @return array|stdClass
      */
     private function transacciones_externas(int $id, array $keys_integra_ds, bool $reactiva,
