@@ -89,7 +89,29 @@ class controlador_inm_conyuge extends _ctl_base {
                 mensaje: 'Error al generar salida de template',data:  $r_modifica,header: $header,ws: $ws);
         }
 
+        //print_r($this->registro);exit;
+
         $keys_selects = array();
+        $keys_selects = $this->key_select(cols:6, con_registros: true,filtro:  array(), key: 'dp_estado_id',
+            keys_selects: $keys_selects, id_selected: $this->registro['dp_estado_id'], label: 'Estado Nac');
+        if(errores::$error){
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        }
+        $keys_selects = $this->key_select(cols:6, con_registros: true,filtro:  array(), key: 'dp_municipio_id',
+            keys_selects: $keys_selects, id_selected: $this->registro['dp_municipio_id'], label: 'Mun Nac');
+        if(errores::$error){
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        }
+        $keys_selects = $this->key_select(cols:6, con_registros: true,filtro:  array(), key: 'inm_nacionalidad_id',
+            keys_selects: $keys_selects, id_selected: $this->registro['inm_nacionalidad_id'], label: 'Nacionalidad');
+        if(errores::$error){
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        }
+        $keys_selects = $this->key_select(cols:6, con_registros: true,filtro:  array(), key: 'inm_ocupacion_id',
+            keys_selects: $keys_selects, id_selected: $this->registro['inm_ocupacion_id'], label: 'Ocupacion');
+        if(errores::$error){
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        }
         $base = $this->base_upd(keys_selects: $keys_selects, params: array(),params_ajustados: array());
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al integrar base',data:  $base, header: $header,ws:  $ws);
