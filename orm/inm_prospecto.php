@@ -52,7 +52,7 @@ class inm_prospecto extends _modelo_parent{
 
 
         $tipo_campos= array();
-        $aplica_seguridad = true;
+        
 
         $renombres = array();
 
@@ -63,7 +63,7 @@ class inm_prospecto extends _modelo_parent{
             exit;
         }
 
-        parent::__construct(link: $link, tabla: $tabla, aplica_seguridad: $aplica_seguridad,
+        parent::__construct(link: $link, tabla: $tabla, aplica_seguridad: true,
             campos_obligatorios: $campos_obligatorios, columnas: $columnas, columnas_extra: $columnas_extra,
             renombres: $renombres, tipo_campos: $tipo_campos, atributos_criticos: $atributos_criticos);
 
@@ -362,10 +362,11 @@ class inm_prospecto extends _modelo_parent{
     }
 
     /**
-     * @param array $registro
-     * @param int $id
-     * @param bool $reactiva
-     * @param array $keys_integra_ds
+     * Modifica un prospecto, y su relacion con com_prospecto
+     * @param array $registro Registro en proceso
+     * @param int $id Id de prospecto
+     * @param bool $reactiva valida la reactivacion del registro
+     * @param array $keys_integra_ds columnas para descripcion select
      * @return array|stdClass
      */
     public function modifica_bd(array $registro, int $id, bool $reactiva = false,
@@ -417,10 +418,11 @@ class inm_prospecto extends _modelo_parent{
     }
 
     /**
-     * @param int $id
-     * @param array $keys_integra_ds
-     * @param stdClass $r_modifica
-     * @param bool $reactiva
+     * Ejecta las modificaciones en prospecto comercial y descripcion misma
+     * @param int $id Id de prospecto
+     * @param array $keys_integra_ds Columnas de descripcion select
+     * @param stdClass $r_modifica Resultado de modificacion
+     * @param bool $reactiva valida la reactivacion
      * @return array|stdClass
      */
     private function post_upd(int $id, array $keys_integra_ds, stdClass $r_modifica, bool $reactiva): array|stdClass
