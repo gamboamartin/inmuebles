@@ -429,6 +429,50 @@ class inm_prospectoTest extends test {
         errores::$error = false;
     }
 
+    public function test_transacciones_externas(): void
+    {
+        errores::$error = false;
+
+        $_GET['seccion'] = 'inm_producto_infonavit';
+        $_GET['accion'] = 'lista';
+        $_SESSION['grupo_id'] = 1;
+        $_SESSION['usuario_id'] = 2;
+        $_GET['session_id'] = '1';
+
+
+        $modelo = new inm_prospecto(link: $this->link);
+        $modelo = new liberator($modelo);
+
+        $del = (new base_test())->del_inm_prospecto(link: $this->link);
+        if(errores::$error){
+            $error = (new errores())->error(mensaje:'Error al del', data: $del);
+            print_r($error);exit;
+        }
+
+
+        $alta = (new base_test())->alta_inm_prospecto(link: $this->link);
+        if(errores::$error){
+            $error = (new errores())->error(mensaje:'Error al alta', data: $alta);
+            print_r($error);exit;
+        }
+
+        $registro = (new inm_prospecto(link: $this->link))->registro(registro_id: 1, columnas_en_bruto: true,
+            retorno_obj: true);
+        if(errores::$error){
+            $error = (new errores())->error(mensaje:'Error al registro', data: $registro);
+            print_r($error);exit;
+        }
+
+        $id = 1;
+        $keys_integra_ds = array();
+        $reactiva = true;
+
+        $resultado = $modelo->transacciones_externas($id, $keys_integra_ds, $reactiva, $registro);
+        $this->assertIsObject($resultado);
+        $this->assertNotTrue(errores::$error);
+        errores::$error = false;
+    }
+
 
 
 

@@ -483,10 +483,25 @@ class inm_prospecto extends _modelo_parent{
      * @param bool $reactiva valida la reactivacion de un registro
      * @param stdClass $registro Registro modificado
      * @return array|stdClass
+     * @version 2.230.2
      */
     private function transacciones_externas(int $id, array $keys_integra_ds, bool $reactiva,
                                             stdClass $registro): array|stdClass
     {
+        if($id <= 0){
+            return $this->error->error(mensaje: 'Error id es menor a 0',data:  $id);
+        }
+        $keys = array('nombre','apellido_paterno','nss','curp','rfc');
+        $valida = $this->validacion->valida_existencia_keys(keys: $keys,registro:  $registro);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al validar registro',data:  $valida);
+        }
+        $keys = array('com_prospecto_id');
+        $valida = $this->validacion->valida_ids(keys: $keys,registro:  $registro);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al validar registro',data:  $valida);
+        }
+
         $r_modifica_descripcion =  $this->actualiza_descripcion(id: $id, keys_integra_ds: $keys_integra_ds,
             reactiva: $reactiva, registro: $registro);
 
