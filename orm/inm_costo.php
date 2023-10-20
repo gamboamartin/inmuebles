@@ -56,17 +56,10 @@ class inm_costo extends _modelo_parent{
             return $this->error->error(mensaje: 'Error al obtener ubicacion',data:  $inm_ubicacion);
         }
 
-        /**
-         * INTEGRAR EN UPD
-         */
-        if(!isset($this->registro['codigo'])){
-            $codigo = $this->registro['descripcion'];
-            $codigo .= $this->registro['inm_ubicacion_id'];
-            $codigo .= $this->registro['inm_concepto_id'];
-            $codigo .= $this->registro['referencia'];
-            $codigo .= $this->registro['fecha'];
-            $codigo .= $this->registro['monto'];
-            $this->registro['codigo'] = $codigo;
+
+        $registro = $this->integra_codigo(registro: $this->registro);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al integrar codigo',data:  $registro);
         }
 
 
@@ -83,6 +76,60 @@ class inm_costo extends _modelo_parent{
 
 
         return $r_alta_bd;
+    }
+
+    /**
+     * Genera un codigo basado en datos
+     * @param array $registro registro en proceso
+     * @return string|array
+     */
+    private function codigo(array $registro): string|array
+    {
+        $keys = array('referencia','fecha','inm_ubicacion_id','monto','inm_concepto_id');
+        $valida = $this->validacion->valida_existencia_keys(keys: $keys,registro:  $registro);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al valida registro', data: $valida);
+        }
+
+        $keys = array('fecha');
+        $valida = $this->validacion->fechas_in_array(data: $registro, keys: $keys);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al valida registro', data: $valida);
+        }
+
+        $keys = array('inm_ubicacion_id','inm_concepto_id');
+        $valida = $this->validacion->valida_ids(keys: $keys, registro: $registro);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al valida registro', data: $valida);
+        }
+
+        $monto = $registro['monto'];
+        $monto = str_replace('$','', $monto);
+        $monto = str_replace(' ','', $monto);
+        $monto = str_replace(' ','', $monto);
+        $monto = str_replace(' ','', $monto);
+        $monto = str_replace(' ','', $monto);
+        $monto = str_replace(' ','', $monto);
+        $monto = str_replace(',','', $monto);
+        $monto = str_replace("'",'', $monto);
+
+        $monto = trim($monto);
+        if(!is_numeric($monto)){
+            return $this->error->error(mensaje: 'Error monto no es un numero valido', data: $monto);
+        }
+
+        $registro['monto'] = $monto;
+
+        if(!isset($registro['descripcion'])){
+            $registro['descripcion'] = $registro['referencia'].' '.$registro['fecha'];
+        }
+        $codigo = $registro['descripcion'];
+        $codigo .= $registro['inm_ubicacion_id'];
+        $codigo .= $registro['inm_concepto_id'];
+        $codigo .= $registro['referencia'];
+        $codigo .= $registro['fecha'];
+        $codigo .= $registro['monto'];
+        return $codigo;
     }
 
     public function elimina_bd(int $id): array|stdClass
@@ -102,6 +149,17 @@ class inm_costo extends _modelo_parent{
         return $r_elimina_bd;
     }
 
+    private function integra_codigo(array $registro){
+        if(!isset($registro['codigo'])){
+            $codigo = $this->codigo(registro: $registro);
+            if(errores::$error){
+                return $this->error->error(mensaje: 'Error al generar codigo',data:  $codigo);
+            }
+            $registro['codigo'] = $codigo;
+        }
+        return $registro;
+    }
+
     public function modifica_bd(array $registro, int $id, bool $reactiva = false,
                                 array $keys_integra_ds = array('codigo', 'descripcion')): array|stdClass
     {
@@ -116,6 +174,16 @@ class inm_costo extends _modelo_parent{
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al regenerar opinion de valor', data: $regenera);
         }
+
+        $registro_upd = $this->integra_codigo(registro: $r_modifica_bd->registro_puro);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al integrar codigo',data:  $registro);
+        }
+        $upd_code = parent::modifica_bd(registro: $registro_upd,id:  $id);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al actualizar codigo',data:  $upd_code);
+        }
+
 
         return $r_modifica_bd;
     }
