@@ -86,7 +86,7 @@
 <?php echo $controlador->inputs->inm_sindicato_id; ?>
 <?php echo $controlador->inputs->correo_empresa; ?>
     </div>
-
+<?php /*
 <?php echo $controlador->header_frontend->apartado_8; ?>
     <div  id="apartado_8">
         <?php echo $controlador->inputs->conyuge->nombre; ?>
@@ -100,8 +100,11 @@
         <?php echo $controlador->inputs->conyuge->rfc; ?>
         <?php echo $controlador->inputs->conyuge->inm_ocupacion_id; ?>
         <?php echo $controlador->inputs->conyuge->telefono_casa; ?>
-        <?php echo $controlador->inputs->conyuge->telefono_celular; ?>
+        <?php echo $controlador->inputs->conyuge->telefono_celular;  ?>
     </div>
+
+ */ ?>
+
 
 
 

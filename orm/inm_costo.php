@@ -56,6 +56,9 @@ class inm_costo extends _modelo_parent{
             return $this->error->error(mensaje: 'Error al obtener ubicacion',data:  $inm_ubicacion);
         }
 
+        /**
+         * INTEGRAR EN UPD
+         */
         if(!isset($this->registro['codigo'])){
             $codigo = $this->registro['descripcion'];
             $codigo .= $this->registro['inm_ubicacion_id'];
