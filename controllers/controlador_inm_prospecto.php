@@ -10,8 +10,6 @@ namespace gamboamartin\inmuebles\controllers;
 
 use base\controller\init;
 use gamboamartin\administrador\models\adm_usuario;
-use gamboamartin\comercial\models\com_agente;
-use gamboamartin\comercial\models\com_prospecto;
 use gamboamartin\direccion_postal\models\dp_estado;
 use gamboamartin\direccion_postal\models\dp_municipio;
 use gamboamartin\errores\errores;
@@ -21,7 +19,6 @@ use gamboamartin\inmuebles\models\_inm_prospecto;
 use gamboamartin\inmuebles\models\inm_nacionalidad;
 use gamboamartin\inmuebles\models\inm_ocupacion;
 use gamboamartin\inmuebles\models\inm_prospecto;
-use gamboamartin\inmuebles\models\inm_sindicato;
 use gamboamartin\system\actions;
 use gamboamartin\system\links_menu;
 use gamboamartin\template\html;
@@ -73,70 +70,14 @@ class controlador_inm_prospecto extends _ctl_formato {
             return $this->retorno_error(
                 mensaje: 'Error al inicializar alta',data:  $r_alta, header: $header,ws:  $ws);
         }
+
         $keys_selects = array();
-
-
-        $com_agentes = (new com_agente(link: $this->link))->com_agentes_session();
+        $keys_selects = (new _keys_selects())->keys_selects_prospecto(controler: $this,keys_selects:  $keys_selects);
         if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al obtener agentes',data:  $com_agentes, header: $header,
-                ws:  $ws);
+            return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects,
+                header: $header,ws:  $ws);
         }
 
-        $id_selected = -1;
-        if(count($com_agentes) > 0){
-            $id_selected = $com_agentes[0]['com_agente_id'];
-        }
-
-
-        $keys_selects = $this->key_select(cols:6, con_registros: true,filtro:  array(), key: 'com_agente_id',
-            keys_selects:$keys_selects, id_selected: $id_selected, label: 'Agente');
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects, header: $header,ws:  $ws);
-        }
-
-        $com_tipo_prospecto_id = (new com_prospecto(link: $this->link))->id_preferido_detalle(entidad_preferida: 'com_tipo_prospecto');
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al obtener id',data:  $com_tipo_prospecto_id, header: $header,ws:  $ws);
-        }
-
-        $keys_selects = $this->key_select(cols:6, con_registros: true,filtro:  array(), key: 'com_tipo_prospecto_id',
-            keys_selects:$keys_selects, id_selected: $com_tipo_prospecto_id, label: 'Tipo de prospecto');
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects, header: $header,ws:  $ws);
-        }
-
-        $inm_sindicato_id = (new inm_sindicato(link: $this->link))->id_preferido_detalle(entidad_preferida: 'inm_sindicato');
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al obtener id',data:  $inm_sindicato_id, header: $header,ws:  $ws);
-        }
-
-        $keys_selects = $this->key_select(cols:6, con_registros: true,filtro:  array(), key: 'inm_sindicato_id',
-            keys_selects:$keys_selects, id_selected: $inm_sindicato_id, label: 'Sindicato');
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects, header: $header,ws:  $ws);
-        }
-
-        $inm_nacionalidad_id = (new inm_nacionalidad(link: $this->link))->id_preferido_detalle(entidad_preferida: 'inm_nacionalidad');
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al obtener id',data:  $inm_nacionalidad_id, header: $header,ws:  $ws);
-        }
-
-        $keys_selects = $this->key_select(cols:6, con_registros: true,filtro:  array(), key: 'inm_nacionalidad_id',
-            keys_selects:$keys_selects, id_selected: $inm_nacionalidad_id, label: 'Nacionalidad');
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects, header: $header,ws:  $ws);
-        }
-
-        $inm_ocupacion_id = (new inm_ocupacion(link: $this->link))->id_preferido_detalle(entidad_preferida: 'inm_ocupacion');
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al obtener id',data:  $inm_ocupacion_id, header: $header,ws:  $ws);
-        }
-
-        $keys_selects = $this->key_select(cols:12, con_registros: true,filtro:  array(), key: 'inm_ocupacion_id',
-            keys_selects:$keys_selects, id_selected: $inm_ocupacion_id, label: 'Ocupacion');
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects, header: $header,ws:  $ws);
-        }
 
         $inputs = $this->inputs(keys_selects: $keys_selects);
         if(errores::$error){

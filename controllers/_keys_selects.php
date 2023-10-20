@@ -4,14 +4,20 @@ namespace gamboamartin\inmuebles\controllers;
 
 use base\controller\init;
 use base\orm\modelo;
+use gamboamartin\comercial\models\com_agente;
 use gamboamartin\comercial\models\com_cliente;
+use gamboamartin\comercial\models\com_prospecto;
 use gamboamartin\errores\errores;
 use gamboamartin\inmuebles\html\inm_co_acreditado_html;
 use gamboamartin\inmuebles\models\_inm_comprador;
 use gamboamartin\inmuebles\models\inm_comprador;
+use gamboamartin\inmuebles\models\inm_nacionalidad;
+use gamboamartin\inmuebles\models\inm_ocupacion;
+use gamboamartin\inmuebles\models\inm_sindicato;
 use gamboamartin\inmuebles\models\inm_ubicacion;
 use gamboamartin\js_base\valida;
 use gamboamartin\validacion\validacion;
+use PDO;
 use stdClass;
 
 class _keys_selects{
@@ -293,6 +299,24 @@ class _keys_selects{
     }
 
     /**
+     * Obtiene el identificador de agente
+     * @param PDO $link Conexion a la base de datos
+     * @return array|int
+     */
+    private function id_selected_agente(PDO $link): int|array
+    {
+        $com_agentes = (new com_agente(link: $link))->com_agentes_session();
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al obtener agentes',data:  $com_agentes);
+        }
+        $id_selected = -1;
+        if(count($com_agentes) > 0){
+            $id_selected = (int)$com_agentes[0]['com_agente_id'];
+        }
+        return $id_selected;
+    }
+
+    /**
      * Inicializa los parametros de los selectores para frontend
      * @param controlador_inm_comprador $controler Controlador en ejecucion
      * @param stdClass $row_upd Registro en proceso
@@ -538,8 +562,6 @@ class _keys_selects{
         return $controler->inputs;
     }
 
-
-
     /**
      * Integra el atributo disabled como true
      * @param string $key key a inicializar e integrar
@@ -591,6 +613,76 @@ class _keys_selects{
         return $keys_selects;
     }
 
+    private function key_select_agente(controlador_inm_prospecto $controler, array $keys_selects){
+        $id_selected = $this->id_selected_agente(link: $controler->link);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al obtener id_selected',data:  $id_selected);
+        }
+
+        $keys_selects = $controler->key_select(cols:6, con_registros: true,filtro:  array(), key: 'com_agente_id',
+            keys_selects:$keys_selects, id_selected: $id_selected, label: 'Agente');
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        }
+        return $keys_selects;
+    }
+    
+    private function key_select_nacionalidad(controlador_inm_prospecto $controler, array $keys_selects){
+        $inm_nacionalidad_id = (new inm_nacionalidad(link: $controler->link))->id_preferido_detalle(entidad_preferida: 'inm_nacionalidad');
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al obtener id',data:  $inm_nacionalidad_id);
+        }
+
+        $keys_selects = $controler->key_select(cols:6, con_registros: true,filtro:  array(), key: 'inm_nacionalidad_id',
+            keys_selects:$keys_selects, id_selected: $inm_nacionalidad_id, label: 'Nacionalidad');
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        }
+        return $keys_selects;
+    }
+    
+    private function key_select_ocupacion(controlador_inm_prospecto $controler, array $keys_selects){
+        $inm_ocupacion_id = (new inm_ocupacion(link: $controler->link))->id_preferido_detalle(entidad_preferida: 'inm_ocupacion');
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al obtener id',data:  $inm_ocupacion_id);
+        }
+
+        $keys_selects = $controler->key_select(cols:12, con_registros: true,filtro:  array(), key: 'inm_ocupacion_id',
+            keys_selects:$keys_selects, id_selected: $inm_ocupacion_id, label: 'Ocupacion');
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        }
+        return $keys_selects;
+    }
+    
+    private function key_select_sindicato(controlador_inm_prospecto $controler, array $keys_selects){
+        $inm_sindicato_id = (new inm_sindicato(link: $controler->link))->id_preferido_detalle(entidad_preferida: 'inm_sindicato');
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al obtener id',data:  $inm_sindicato_id);
+        }
+
+        $keys_selects = $controler->key_select(cols:6, con_registros: true,filtro:  array(), key: 'inm_sindicato_id',
+            keys_selects:$keys_selects, id_selected: $inm_sindicato_id, label: 'Sindicato');
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        }
+        return $keys_selects;
+    }
+    
+    private function key_select_tipo_agente(controlador_inm_prospecto $controler, array $keys_selects){
+        $com_tipo_prospecto_id = (new com_prospecto(link: $controler->link))->id_preferido_detalle(entidad_preferida: 'com_tipo_prospecto');
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al obtener id',data:  $com_tipo_prospecto_id);
+        }
+
+        $keys_selects = $controler->key_select(cols:6, con_registros: true,filtro:  array(), key: 'com_tipo_prospecto_id',
+            keys_selects:$keys_selects, id_selected: $com_tipo_prospecto_id, label: 'Tipo de prospecto');
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        }
+        return $keys_selects;
+    }
+
     /**
      * Obtiene los keys para view asigna ubicacion
      * @param controlador_inm_comprador $controler Controlador en ejecucion
@@ -635,6 +727,30 @@ class _keys_selects{
         }
 
         $keys_selects = $this->init(controler: $controler,row_upd: $controler->row_upd);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        }
+        return $keys_selects;
+    }
+
+    final public function keys_selects_prospecto(controlador_inm_prospecto $controler, array $keys_selects){
+        $keys_selects = $this->key_select_agente(controler: $controler,keys_selects:  $keys_selects);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        }
+        $keys_selects = $this->key_select_tipo_agente(controler: $controler,keys_selects:  $keys_selects);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        }
+        $keys_selects = $this->key_select_sindicato(controler: $controler,keys_selects:  $keys_selects);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        }
+        $keys_selects = $this->key_select_nacionalidad(controler: $controler,keys_selects:  $keys_selects);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        }
+        $keys_selects = $this->key_select_ocupacion(controler: $controler,keys_selects:  $keys_selects);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
