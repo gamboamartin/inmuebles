@@ -87,6 +87,10 @@
 <?php echo $controlador->inputs->correo_empresa; ?>
     </div>
 
+<?php echo $controlador->header_frontend->apartado_8; ?>
+    <div  id="apartado_8">
+    </div>
+
 
 
 

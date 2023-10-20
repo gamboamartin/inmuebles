@@ -656,6 +656,7 @@ class controlador_inm_prospecto extends _ctl_formato {
         $headers['5'] = '5. MONTO CREDITO';
         $headers['6'] = '6. DISCAPACIDAD';
         $headers['7'] = '7. DATOS EMPRESA TRABAJADOR';
+        $headers['8'] = '8. DATOS DE CONYUGE';
 
         $headers = (new _base(html: $this->html_base))->genera_headers(controler: $this,headers:  $headers);
         if(errores::$error){
