@@ -642,112 +642,134 @@ class controlador_inm_prospecto extends _ctl_formato {
 
         $this->inputs->conyuge = new stdClass();
 
-        $nombre = $this->html->input_text(cols: 12,disabled: true,name: 'conyuge.nombre',place_holder: 'Nombre',
-            row_upd: new stdClass(),value_vacio: false);
+        $conyuge_nombre = $this->html->input_text(cols: 12,disabled: false,name: 'conyuge[nombre]',place_holder: 'Nombre',
+            row_upd: new stdClass(),value_vacio: false, required: false);
         if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al obtener input',data:  $nombre,
+            return $this->retorno_error(mensaje: 'Error al obtener input',data:  $conyuge_nombre,
                 header: $header,ws:  $ws);
         }
 
-        $this->inputs->conyuge->nombre = $nombre;
+        $this->inputs->conyuge->nombre = $conyuge_nombre;
 
-        $apellido_paterno = $this->html->input_text(cols: 12,disabled: true,name: 'conyuge.apellido_paterno',
-            place_holder: 'Apellido Pat', row_upd: new stdClass(),value_vacio: false);
+        $conyuge_apellido_paterno = $this->html->input_text(cols: 6,disabled: true,name: 'conyuge[apellido_paterno]',
+            place_holder: 'Apellido Pat', row_upd: new stdClass(),value_vacio: false, required: false);
         if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al obtener input',data:  $apellido_paterno,
+            return $this->retorno_error(mensaje: 'Error al obtener input',data:  $conyuge_apellido_paterno,
                 header: $header,ws:  $ws);
         }
 
-        $this->inputs->conyuge->apellido_paterno = $apellido_paterno;
+        $this->inputs->conyuge->apellido_paterno = $conyuge_apellido_paterno;
 
-        $apellido_materno = $this->html->input_text(cols: 12,disabled: true,name: 'conyuge.apellido_materno',
-            place_holder: 'Apellido Mat', row_upd: new stdClass(),value_vacio: false);
+        $conyuge_apellido_materno = $this->html->input_text(cols: 6,disabled: true,name: 'conyuge[apellido_materno]',
+            place_holder: 'Apellido Mat', row_upd: new stdClass(),value_vacio: false, required: false);
         if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al obtener input',data:  $apellido_materno,
+            return $this->retorno_error(mensaje: 'Error al obtener input',data:  $conyuge_apellido_materno,
                 header: $header,ws:  $ws);
         }
 
-        $this->inputs->conyuge->apellido_materno = $apellido_materno;
+        $this->inputs->conyuge->apellido_materno = $conyuge_apellido_materno;
 
-        $curp = $this->html->input_text(cols: 12,disabled: true,name: 'conyuge.curp',place_holder: 'CURP',
-            row_upd: new stdClass(),value_vacio: false);
+        $conyuge_curp = $this->html->input_text(cols: 6,disabled: true,name: 'conyuge[curp]',place_holder: 'CURP',
+            row_upd: new stdClass(),value_vacio: false, required: false);
         if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al obtener input',data:  $curp,
+            return $this->retorno_error(mensaje: 'Error al obtener input',data:  $conyuge_curp,
                 header: $header,ws:  $ws);
         }
 
-        $this->inputs->conyuge->curp = $curp;
+        $this->inputs->conyuge->curp = $conyuge_curp;
 
-        $rfc = $this->html->input_text(cols: 12,disabled: true,name: 'conyuge.rfc',place_holder: 'RFC',
-            row_upd: new stdClass(),value_vacio: false);
+        $conyuge_rfc = $this->html->input_text(cols: 6,disabled: true,name: 'conyuge[rfc]',place_holder: 'RFC',
+            row_upd: new stdClass(),value_vacio: false, required: false);
         if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al obtener input',data:  $rfc,
+            return $this->retorno_error(mensaje: 'Error al obtener input',data:  $conyuge_rfc,
                 header: $header,ws:  $ws);
         }
 
-        $this->inputs->conyuge->rfc = $rfc;
+        $this->inputs->conyuge->rfc = $conyuge_rfc;
 
-        $telefono_casa = $this->html->input_text(cols: 12,disabled: true,name: 'conyuge.telefono_casa',
-            place_holder: 'Tel Casa', row_upd: new stdClass(),value_vacio: false);
+        $conyuge_telefono_casa = $this->html->input_text(cols: 6,disabled: true,name: 'conyuge[telefono_casa]',
+            place_holder: 'Tel Casa', row_upd: new stdClass(),value_vacio: false, required: false);
         if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al obtener input',data:  $telefono_casa,
+            return $this->retorno_error(mensaje: 'Error al obtener input',data:  $conyuge_telefono_casa,
                 header: $header,ws:  $ws);
         }
 
-        $this->inputs->conyuge->telefono_casa = $telefono_casa;
+        $this->inputs->conyuge->telefono_casa = $conyuge_telefono_casa;
 
-        $telefono_celular = $this->html->input_text(cols: 12,disabled: true,name: 'conyuge.telefono_celular',
-            place_holder: 'Cel', row_upd: new stdClass(),value_vacio: false);
+        $conyuge_telefono_celular = $this->html->input_text(cols: 6,disabled: true,name: 'conyuge[telefono_celular]',
+            place_holder: 'Cel', row_upd: new stdClass(),value_vacio: false, required: false);
         if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al obtener input',data:  $telefono_celular,
+            return $this->retorno_error(mensaje: 'Error al obtener input',data:  $conyuge_telefono_celular,
                 header: $header,ws:  $ws);
         }
 
-        $this->inputs->conyuge->telefono_celular = $telefono_celular;
+        $this->inputs->conyuge->telefono_celular = $conyuge_telefono_celular;
 
         $modelo = new dp_estado(link: $this->link);
-        $dp_estado_id = $this->html->select_catalogo(cols: 12,con_registros:  true,id_selected:  -1,modelo:  $modelo);
+        $conyuge_dp_estado_id = $this->html->select_catalogo(cols: 6,con_registros:  true,id_selected:  -1,
+            modelo:  $modelo, name: 'conyuge[dp_estado_id]');
         if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al obtener input',data:  $dp_estado_id,
+            return $this->retorno_error(mensaje: 'Error al obtener input',data:  $conyuge_dp_estado_id,
                 header: $header,ws:  $ws);
         }
 
-        $this->inputs->conyuge->dp_estado_id = $dp_estado_id;
+        $this->inputs->conyuge->dp_estado_id = $conyuge_dp_estado_id;
 
         $modelo = new dp_municipio(link: $this->link);
-        $dp_municipio_id = $this->html->select_catalogo(cols: 12,con_registros:  true,id_selected:  -1,modelo:  $modelo);
+        $conyuge_dp_municipio_id = $this->html->select_catalogo(cols: 6,con_registros:  true,id_selected:  -1,
+            modelo:  $modelo, name: 'conyuge[dp_municipio_id]');
         if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al obtener input',data:  $dp_municipio_id,
+            return $this->retorno_error(mensaje: 'Error al obtener input',data:  $conyuge_dp_municipio_id,
                 header: $header,ws:  $ws);
         }
 
-        $this->inputs->conyuge->dp_municipio_id = $dp_municipio_id;
+        $this->inputs->conyuge->dp_municipio_id = $conyuge_dp_municipio_id;
 
         $modelo = new inm_nacionalidad(link: $this->link);
-        $inm_nacionalidad_id = $this->html->select_catalogo(cols: 12,con_registros:  true,id_selected:  -1,modelo:  $modelo);
+        $conyuge_inm_nacionalidad_id = $this->html->select_catalogo(cols: 6,con_registros:  true,id_selected:  -1,
+            modelo:  $modelo, name: 'conyuge[inm_nacionalidad_id]');
         if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al obtener input',data:  $inm_nacionalidad_id,
+            return $this->retorno_error(mensaje: 'Error al obtener input',data:  $conyuge_inm_nacionalidad_id,
                 header: $header,ws:  $ws);
         }
 
-        $this->inputs->conyuge->inm_nacionalidad_id = $inm_nacionalidad_id;
+        $this->inputs->conyuge->inm_nacionalidad_id = $conyuge_inm_nacionalidad_id;
 
         $modelo = new inm_ocupacion(link: $this->link);
-        $inm_ocupacion_id = $this->html->select_catalogo(cols: 12,con_registros:  true,id_selected:  -1,modelo:  $modelo);
+        $conyuge_inm_ocupacion_id = $this->html->select_catalogo(cols: 12,con_registros:  true,id_selected:  -1,
+            modelo:  $modelo, name: 'conyuge[inm_ocupacion_id]');
         if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al obtener input',data:  $inm_ocupacion_id,
+            return $this->retorno_error(mensaje: 'Error al obtener input',data:  $conyuge_inm_ocupacion_id,
                 header: $header,ws:  $ws);
         }
 
-        $this->inputs->conyuge->inm_ocupacion_id = $inm_ocupacion_id;
+        $this->inputs->conyuge->inm_ocupacion_id = $conyuge_inm_ocupacion_id;
 
-        $fecha_nacimiento = $this->html->input_fecha(cols: 12,row_upd:  new stdClass(),value_vacio:  false);
+        $conyuge_fecha_nacimiento = $this->html->input_fecha(cols: 6,row_upd:  new stdClass(),
+            value_vacio:  false, name: 'conyuge[fecha_nacimiento]');
         if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al obtener fecha_nacimiento',data:  $fecha_nacimiento,
+            return $this->retorno_error(mensaje: 'Error al obtener fecha_nacimiento',data:  $conyuge_fecha_nacimiento,
                 header: $header,ws:  $ws);
         }
 
-        $this->inputs->conyuge->fecha_nacimiento = $fecha_nacimiento;
+        $this->inputs->conyuge->fecha_nacimiento = $conyuge_fecha_nacimiento;
+
+
+        return $r_modifica;
+    }
+
+    public function modifica_bd(bool $header, bool $ws): array|stdClass
+    {
+        $conyuge = array();
+        if(isset($_POST['conyuge'])){
+            $conyuge = $_POST['conyuge'];
+            unset($_POST['conyuge']);
+        }
+        $r_modifica = parent::modifica_bd($header, $ws); // TODO: Change the autogenerated stub
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al modificar inm_prospecto',data:  $r_modifica,
+                header: $header,ws:  $ws);
+        }
 
 
         return $r_modifica;

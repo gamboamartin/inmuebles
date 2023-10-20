@@ -302,6 +302,7 @@ class _keys_selects{
      * Obtiene el identificador de agente
      * @param PDO $link Conexion a la base de datos
      * @return array|int
+     * @version 2.239.2
      */
     private function id_selected_agente(PDO $link): int|array
     {
@@ -613,7 +614,13 @@ class _keys_selects{
         return $keys_selects;
     }
 
-    private function key_select_agente(controlador_inm_prospecto $controler, array $keys_selects){
+    /**
+     * @param controlador_inm_prospecto $controler
+     * @param array $keys_selects
+     * @return array
+     */
+    private function key_select_agente(controlador_inm_prospecto $controler, array $keys_selects): array
+    {
         $id_selected = $this->id_selected_agente(link: $controler->link);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al obtener id_selected',data:  $id_selected);

@@ -191,6 +191,27 @@ class _keys_selectsTest extends test {
         errores::$error = false;
     }
 
+    public function test_id_selected_agente(): void
+    {
+        errores::$error = false;
+
+        $_GET['seccion'] = 'inm_producto_infonavit';
+        $_GET['accion'] = 'lista';
+        $_SESSION['grupo_id'] = 1;
+        $_SESSION['usuario_id'] = 2;
+        $_GET['session_id'] = '1';
+
+        $ks = new _keys_selects();
+        $ks = new liberator($ks);
+
+        $resultado = $ks->id_selected_agente($this->link);
+        $this->assertIsInt($resultado);
+        $this->assertNotTrue(errores::$error);
+        $this->assertEquals(-1,$resultado);
+
+        errores::$error = false;
+    }
+
     public function test_init(): void
     {
         errores::$error = false;
@@ -214,7 +235,6 @@ class _keys_selectsTest extends test {
         $this->assertEquals("inm_attr_tipo_credito_descripcion",$resultado['inm_attr_tipo_credito_id']->columns_ds[1]);
         errores::$error = false;
     }
-
     public function test_init_row_upd_fiscales(): void
     {
         errores::$error = false;
@@ -255,8 +275,6 @@ class _keys_selectsTest extends test {
         $this->assertEquals(1,$resultado->bn_cuenta_id);
         errores::$error = false;
     }
-
-
     public function test_init_row_upd_infonavit(): void
     {
         errores::$error = false;
