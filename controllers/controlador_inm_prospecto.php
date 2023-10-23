@@ -668,19 +668,26 @@ class controlador_inm_prospecto extends _ctl_formato {
 
         if($tiene_dato_conyuge){
 
-            $alta_conyuge = (new inm_conyuge(link: $this->link))->alta_registro(
-                registro: $conyuge);
+            $alta_conyuge = (new inm_conyuge(link: $this->link))->alta_registro(registro: $conyuge);
             if(errores::$error){
                 $this->link->rollBack();
                 return $this->retorno_error(mensaje: 'Error al insertar conyuge',data:  $alta_conyuge,
                     header: $header,ws:  $ws);
             }
 
+            $inm_rel_conyuge_prospecto_ins['inm_prospecto_id'] = $this->registro_id;
+            $inm_rel_conyuge_prospecto_ins['inm_conyuge_id'] = $alta_conyuge->registro_id;
 
+            $r_inm_rel_conyuge_prospecto_bd =  (new inm_rel_conyuge_prospecto(link: $this->link))->alta_registro(
+                registro: $inm_rel_conyuge_prospecto_ins);
+            if(errores::$error){
+                $this->link->rollBack();
+                return $this->retorno_error(mensaje: 'Error al insertar conyuge',data:  $r_inm_rel_conyuge_prospecto_bd,
+                    header: $header,ws:  $ws);
+            }
 
         }
         else{
-
 
         }
 
@@ -832,6 +839,5 @@ class controlador_inm_prospecto extends _ctl_formato {
 
 
     }
-
 
 }

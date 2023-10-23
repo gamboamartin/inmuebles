@@ -58,6 +58,25 @@ class _baseTest extends test {
 
     }
 
+    public function test_init_retorno(): void
+    {
+        $_SESSION['grupo_id'] = 1;
+        $_SESSION['usuario_id'] = 2;
+        $_GET['session_id'] = '1';
+        $_GET['seccion'] = 'inm_producto_infonavit';
+        $_GET['accion'] = 'lista';
+        errores::$error = false;
+
+        $base = new _base();
+        //$base = new liberator($base);
+
+        $resultado = $base->init_retorno();
+        $this->assertIsObject($resultado);
+        $this->assertNotTrue(errores::$error);
+
+        errores::$error = false;
+    }
+
 
 }
 
