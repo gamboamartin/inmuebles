@@ -8,6 +8,7 @@ use gamboamartin\inmuebles\controllers\controlador_inm_attr_tipo_credito;
 use gamboamartin\inmuebles\controllers\controlador_inm_comprador;
 use gamboamartin\inmuebles\controllers\controlador_inm_plazo_credito_sc;
 use gamboamartin\inmuebles\controllers\controlador_inm_producto_infonavit;
+use gamboamartin\inmuebles\controllers\controlador_inm_prospecto;
 use gamboamartin\inmuebles\models\inm_comprador;
 use gamboamartin\inmuebles\tests\base_test;
 use gamboamartin\js_base\eventos\adm_seccion;
@@ -439,6 +440,28 @@ class _keys_selectsTest extends test {
         $this->assertIsArray($resultado);
         $this->assertNotTrue(errores::$error);
         $this->assertTrue($resultado['z']->disabled);
+        errores::$error = false;
+    }
+
+    public function test_key_select_agente(): void
+    {
+        errores::$error = false;
+
+        $_GET['seccion'] = 'inm_producto_infonavit';
+        $_GET['accion'] = 'lista';
+        $_SESSION['grupo_id'] = 1;
+        $_SESSION['usuario_id'] = 2;
+        $_GET['session_id'] = '1';
+
+        $ks = new _keys_selects();
+        $ks = new liberator($ks);
+
+        $controler = new controlador_inm_prospecto(link: $this->link,paths_conf: $this->paths_conf);
+        $keys_selects = array();
+        $resultado = $ks->key_select_agente($controler, $keys_selects);
+        $this->assertIsArray($resultado);
+        $this->assertNotTrue(errores::$error);
+        $this->assertEquals(-1,$resultado['com_agente_id']->id_selected);
         errores::$error = false;
     }
 

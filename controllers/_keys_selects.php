@@ -618,6 +618,7 @@ class _keys_selects{
      * @param controlador_inm_prospecto $controler
      * @param array $keys_selects
      * @return array
+     * @version 2.240.3
      */
     private function key_select_agente(controlador_inm_prospecto $controler, array $keys_selects): array
     {
@@ -661,9 +662,16 @@ class _keys_selects{
         }
         return $keys_selects;
     }
-    
-    private function key_select_sindicato(controlador_inm_prospecto $controler, array $keys_selects){
-        $inm_sindicato_id = (new inm_sindicato(link: $controler->link))->id_preferido_detalle(entidad_preferida: 'inm_sindicato');
+
+    /**
+     * @param controlador_inm_prospecto $controler
+     * @param array $keys_selects
+     * @return array
+     */
+    private function key_select_sindicato(controlador_inm_prospecto $controler, array $keys_selects): array
+    {
+        $inm_sindicato_id = (new inm_sindicato(link: $controler->link))->id_preferido_detalle(
+            entidad_preferida: 'inm_sindicato');
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al obtener id',data:  $inm_sindicato_id);
         }
@@ -675,15 +683,22 @@ class _keys_selects{
         }
         return $keys_selects;
     }
-    
+
+    /**
+     * @param controlador_inm_prospecto $controler
+     * @param array $keys_selects
+     * @return array
+     */
     private function key_select_tipo_agente(controlador_inm_prospecto $controler, array $keys_selects){
-        $com_tipo_prospecto_id = (new com_prospecto(link: $controler->link))->id_preferido_detalle(entidad_preferida: 'com_tipo_prospecto');
+        $com_tipo_prospecto_id = (new com_prospecto(link: $controler->link))->id_preferido_detalle(
+            entidad_preferida: 'com_tipo_prospecto');
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al obtener id',data:  $com_tipo_prospecto_id);
         }
 
-        $keys_selects = $controler->key_select(cols:6, con_registros: true,filtro:  array(), key: 'com_tipo_prospecto_id',
-            keys_selects:$keys_selects, id_selected: $com_tipo_prospecto_id, label: 'Tipo de prospecto');
+        $keys_selects = $controler->key_select(cols:6, con_registros: true,filtro:  array(),
+            key: 'com_tipo_prospecto_id', keys_selects:$keys_selects, id_selected: $com_tipo_prospecto_id,
+            label: 'Tipo de prospecto');
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
