@@ -640,6 +640,7 @@ class _keys_selects{
      * @param controlador_inm_prospecto $controler controlador en ejecucion
      * @param array $keys_selects Params previos cargados
      * @return array
+     * @version 2.245.2
      */
     private function key_select_nacionalidad(controlador_inm_prospecto $controler, array $keys_selects): array
     {
@@ -662,6 +663,7 @@ class _keys_selects{
      * @param controlador_inm_prospecto $controler Controlador en ejecucion
      * @param array $keys_selects Parametros previos cargados
      * @return array
+     * @version 2.245.2
      */
     private function key_select_ocupacion(controlador_inm_prospecto $controler, array $keys_selects): array
     {
@@ -777,8 +779,9 @@ class _keys_selects{
     }
 
     /**
-     * @param controlador_inm_prospecto $controler
-     * @param array $keys_selects
+     * Genera los selectores base de un prospecto a nivel parametros
+     * @param controlador_inm_prospecto $controler Controlador en ejecucion
+     * @param array $keys_selects Parametros previos cargados
      * @return array
      */
     final public function keys_selects_prospecto(controlador_inm_prospecto $controler, array $keys_selects): array

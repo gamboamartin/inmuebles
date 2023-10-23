@@ -64,8 +64,9 @@ class controlador_inm_prospecto extends _ctl_formato {
     }
 
     /**
-     * @param bool $header
-     * @param bool $ws
+     * Genera un formulario de alta
+     * @param bool $header Muestra resultado en web
+     * @param bool $ws Muestra resultado a nivel ws
      * @return array|string
      */
     public function alta(bool $header, bool $ws = false): array|string
@@ -82,7 +83,6 @@ class controlador_inm_prospecto extends _ctl_formato {
             return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects,
                 header: $header,ws:  $ws);
         }
-
 
         $inputs = $this->inputs(keys_selects: $keys_selects);
         if(errores::$error){
