@@ -685,11 +685,13 @@ class _keys_selects{
     }
 
     /**
-     * @param controlador_inm_prospecto $controler
-     * @param array $keys_selects
+     * Genera un select de tipo agente
+     * @param controlador_inm_prospecto $controler Controlador en ejecucion
+     * @param array $keys_selects parametros precargados
      * @return array
      */
-    private function key_select_tipo_agente(controlador_inm_prospecto $controler, array $keys_selects){
+    private function key_select_tipo_agente(controlador_inm_prospecto $controler, array $keys_selects): array
+    {
         $com_tipo_prospecto_id = (new com_prospecto(link: $controler->link))->id_preferido_detalle(
             entidad_preferida: 'com_tipo_prospecto');
         if(errores::$error){

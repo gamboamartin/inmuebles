@@ -111,7 +111,7 @@ class _conyuge{
         $conyuge->inm_ocupacion_id = $inm_ocupacion_id;
 
         $fecha_nacimiento = $controler->html->input_fecha(cols: 6,row_upd:  new stdClass(),
-            value_vacio:  false, name: 'conyuge[fecha_nacimiento]');
+            value_vacio:  false, name: 'conyuge[fecha_nacimiento]', required: false);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al obtener fecha_nacimiento',data:  $fecha_nacimiento);
         }
