@@ -851,6 +851,20 @@ class base_test{
         return $del;
     }
 
+    public function del_inm_conyuge(PDO $link): array
+    {
+        $del = $this->del_inm_rel_conyuge_prospecto(link: $link);
+        if(errores::$error){
+            return (new errores())->error('Error al eliminar', $del);
+        }
+
+        $del = $this->del($link, 'gamboamartin\\inmuebles\\models\\inm_conyuge');
+        if(errores::$error){
+            return (new errores())->error('Error al eliminar', $del);
+        }
+        return $del;
+    }
+
     public function del_inm_costo(PDO $link): array
     {
 

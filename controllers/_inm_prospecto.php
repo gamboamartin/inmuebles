@@ -50,6 +50,57 @@ class _inm_prospecto{
         return $headers;
     }
 
+    final public function keys_selects_dp(controlador_inm_prospecto $controlador, array $keys_selects){
+        $keys_selects = $controlador->key_select(cols:6, con_registros: true,filtro:  array(), key: 'dp_pais_id',
+            keys_selects:$keys_selects, id_selected: $controlador->registro['dp_pais_id'], label: 'Pais');
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        }
+
+        $filtro = array();
+        $filtro['dp_pais.id'] = $controlador->registro['dp_pais_id'];
+
+        $keys_selects = $controlador->key_select(cols:6, con_registros: true,filtro: $filtro, key: 'dp_estado_id',
+            keys_selects:$keys_selects, id_selected: $controlador->registro['dp_estado_id'], label: 'Estado');
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        }
+
+        $filtro = array();
+        $filtro['dp_estado.id'] = $controlador->registro['dp_estado_id'];
+
+        $keys_selects = $controlador->key_select(cols:6, con_registros: true,filtro:  $filtro, key: 'dp_municipio_id',
+            keys_selects:$keys_selects, id_selected: $controlador->registro['dp_municipio_id'], label: 'Municipio');
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        }
+
+        $filtro = array();
+        $filtro['dp_municipio.id'] = $controlador->registro['dp_municipio_id'];
+        $keys_selects = $controlador->key_select(cols:6, con_registros: true,filtro:  $filtro, key: 'dp_cp_id',
+            keys_selects:$keys_selects, id_selected: $controlador->registro['dp_cp_id'], label: 'CP');
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        }
+
+        $filtro = array();
+        $filtro['dp_cp.id'] = $controlador->registro['dp_cp_id'];
+        $keys_selects = $controlador->key_select(cols:6, con_registros: true,filtro:  $filtro, key: 'dp_colonia_postal_id',
+            keys_selects:$keys_selects, id_selected: $controlador->registro['dp_colonia_postal_id'], label: 'Colonia');
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        }
+
+        $filtro = array();
+        $filtro['dp_colonia_postal.id'] = $controlador->registro['dp_colonia_postal_id'];
+        $keys_selects = $controlador->key_select(cols:6, con_registros: true,filtro:  $filtro, key: 'dp_calle_pertenece_id',
+            keys_selects:$keys_selects, id_selected: $controlador->registro['dp_calle_pertenece_id'], label: 'Calle');
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        }
+        return $keys_selects;
+    }
+
     final public function keys_selects_infonavit(controlador_inm_prospecto $controlador, array $keys_selects){
 
         $adm_usuario = (new adm_usuario(link: $controlador->link))->registro(registro_id: $_SESSION['usuario_id'],

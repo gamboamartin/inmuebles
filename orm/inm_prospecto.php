@@ -290,9 +290,13 @@ class inm_prospecto extends _modelo_parent{
      * Valida si existe o no un conyuge ligado al prospecto
      * @param int $inm_prospecto_id Identificador de prospecto
      * @return array|bool
+     * @version 2.257.2
      */
     final public function existe_conyuge(int $inm_prospecto_id): bool|array
     {
+        if($inm_prospecto_id <=0){
+            return $this->error->error(mensaje: 'Error inm_prospecto_id es menor a 0',data:  $inm_prospecto_id);
+        }
         $filtro = array();
         $filtro['inm_prospecto.id'] = $inm_prospecto_id;
 
