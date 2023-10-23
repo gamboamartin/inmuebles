@@ -68,6 +68,7 @@ class controlador_inm_prospecto extends _ctl_formato {
      * @param bool $header Muestra resultado en web
      * @param bool $ws Muestra resultado a nivel ws
      * @return array|string
+     * @version 2.247.2
      */
     public function alta(bool $header, bool $ws = false): array|string
     {

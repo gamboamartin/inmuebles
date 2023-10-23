@@ -243,7 +243,8 @@ class inm_prospecto extends _modelo_parent{
     }
 
     /**
-     * Elimina un prospecto junto con inm_doc_prospecto y inm_prospecto_proceso inm_rel_prospecto_cliente
+     * Elimina un prospecto junto con inm_doc_prospecto y inm_prospecto_proceso inm_rel_prospecto_cliente,
+     * inm_rel_conyuge_prospecto
      * @param int $id Identificador de prospecto
      * @return array|stdClass
      * @version 2.223.2
@@ -270,6 +271,11 @@ class inm_prospecto extends _modelo_parent{
         $del = (new inm_rel_prospecto_cliente(link: $this->link))->elimina_con_filtro_and(filtro:$filtro);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al eliminar inm_rel_prospecto_cliente',
+                data:  $del);
+        }
+        $del = (new inm_rel_conyuge_prospecto(link: $this->link))->elimina_con_filtro_and(filtro:$filtro);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al eliminar inm_rel_conyuge_prospecto',
                 data:  $del);
         }
 
