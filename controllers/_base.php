@@ -13,6 +13,9 @@ class _base{
         $this->error = new errores();
     }
 
+    /**
+     * @return int
+     */
     private function id_retorno(): int
     {
         $id_retorno = -1;

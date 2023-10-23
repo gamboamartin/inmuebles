@@ -10,18 +10,13 @@ namespace gamboamartin\inmuebles\controllers;
 
 use base\controller\init;
 use gamboamartin\administrador\models\adm_usuario;
-use gamboamartin\direccion_postal\models\dp_estado;
-use gamboamartin\direccion_postal\models\dp_municipio;
 use gamboamartin\errores\errores;
 use gamboamartin\inmuebles\html\_base;
 use gamboamartin\inmuebles\html\inm_prospecto_html;
 use gamboamartin\inmuebles\models\_base_paquete;
 use gamboamartin\inmuebles\models\_inm_prospecto;
-use gamboamartin\inmuebles\models\inm_nacionalidad;
-use gamboamartin\inmuebles\models\inm_ocupacion;
 use gamboamartin\inmuebles\models\inm_prospecto;
 use gamboamartin\inmuebles\models\inm_rel_conyuge_prospecto;
-use gamboamartin\system\actions;
 use gamboamartin\system\links_menu;
 use gamboamartin\template\html;
 use html\doc_tipo_documento_html;
@@ -99,6 +94,7 @@ class controlador_inm_prospecto extends _ctl_formato {
     /**
      * Inicializa los campos view para frontend
      * @return array
+     * @version 2.250.2
      */
     protected function campos_view(): array
     {

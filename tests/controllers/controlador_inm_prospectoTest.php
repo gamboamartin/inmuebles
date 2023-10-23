@@ -6,6 +6,7 @@ use gamboamartin\errores\errores;
 use gamboamartin\inmuebles\controllers\controlador_inm_attr_tipo_credito;
 use gamboamartin\inmuebles\controllers\controlador_inm_comprador;
 use gamboamartin\inmuebles\controllers\controlador_inm_producto_infonavit;
+use gamboamartin\inmuebles\controllers\controlador_inm_prospecto;
 use gamboamartin\inmuebles\tests\base_test;
 use gamboamartin\test\liberator;
 use gamboamartin\test\test;
@@ -65,6 +66,25 @@ class controlador_inm_prospectoTest extends test {
         unlink($file);
         errores::$error = false;
 
+    }
+    public function test_campos_view(): void
+    {
+        errores::$error = false;
+
+        $_GET['seccion'] = 'inm_producto_infonavit';
+        $_GET['accion'] = 'lista';
+        $_SESSION['grupo_id'] = 1;
+        $_SESSION['usuario_id'] = 2;
+        $_GET['session_id'] = '1';
+
+
+        $ctl = new controlador_inm_prospecto(link: $this->link, paths_conf: $this->paths_conf);
+        $ctl = new liberator($ctl);
+
+        $resultado = $ctl->campos_view();
+        $this->assertIsArray($resultado);
+        $this->assertNotTrue(errores::$error);
+        errores::$error = false;
     }
 
 
