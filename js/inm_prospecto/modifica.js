@@ -18,6 +18,13 @@ let monto_final_ct = $("#monto_final");
 let descuento_ct = $("#descuento");
 let puntos_ct = $("#puntos");
 
+let conyuge_nombre_ct = $(".conyuge_nombre");
+let conyuge_apellido_materno_ct = $(".conyuge_apellido_materno");
+let conyuge_apellido_paterno_ct = $(".conyuge_apellido_paterno");
+let conyuge_curp_ct = $(".conyuge_curp");
+let conyuge_rfc_ct = $(".conyuge_rfc");
+
+
 let chk_es_segundo_credito = $(".es_segundo_credito");
 
 
@@ -38,6 +45,24 @@ let razon_social = '';
 nombre = nombre_ct.val();
 apellido_paterno = apellido_paterno_ct.val();
 apellido_materno = apellido_materno_ct.val();
+
+conyuge_nombre_ct.change(function() {
+    limpia_txt($(this));
+});
+conyuge_apellido_paterno_ct.change(function() {
+    limpia_txt($(this));
+});
+
+conyuge_curp_ct.change(function() {
+    limpia_txt($(this));
+});
+conyuge_rfc_ct.change(function() {
+    limpia_txt($(this));
+});
+conyuge_apellido_materno_ct.change(function() {
+    limpia_txt($(this));
+});
+
 
 nombre_ct.change(function() {
     limpia_txt($(this));

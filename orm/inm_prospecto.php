@@ -287,7 +287,8 @@ class inm_prospecto extends _modelo_parent{
     }
 
     /**
-     * @param int $inm_prospecto_id
+     * Valida si existe o no un conyuge ligado al prospecto
+     * @param int $inm_prospecto_id Identificador de prospecto
      * @return array|bool
      */
     final public function existe_conyuge(int $inm_prospecto_id): bool|array

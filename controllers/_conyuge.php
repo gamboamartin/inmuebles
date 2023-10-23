@@ -54,58 +54,58 @@ class _conyuge{
 
         }
 
-        $nombre = $controler->html->input_text(cols: 12,disabled: false,name: 'conyuge[nombre]',place_holder: 'Nombre',
-            row_upd: $row_upd,value_vacio: false, required: false, value: $row_upd->nombre);
+        $nombre = $controler->html->input_text(cols: 12, disabled: false, name: 'conyuge[nombre]', place_holder: 'Nombre',
+            row_upd: $row_upd, value_vacio: false, class_css: array('conyuge_nombre'), required: false, value: $row_upd->nombre);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al obtener input',data:  $nombre);
         }
 
         $conyuge->nombre = $nombre;
 
-        $apellido_paterno = $controler->html->input_text(cols: 6,disabled: false,name: 'conyuge[apellido_paterno]',
-            place_holder: 'Apellido Pat', row_upd: $row_upd,value_vacio: false, required: false,
-            value:  $row_upd->apellido_paterno);
+        $apellido_paterno = $controler->html->input_text(cols: 6, disabled: false, name: 'conyuge[apellido_paterno]',
+            place_holder: 'Apellido Pat', row_upd: $row_upd, value_vacio: false, class_css: array('conyuge_apellido_paterno'),
+            required: false, value: $row_upd->apellido_paterno);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al obtener input',data:  $apellido_paterno);
         }
 
         $conyuge->apellido_paterno = $apellido_paterno;
 
-        $apellido_materno = $controler->html->input_text(cols: 6,disabled: false,name: 'conyuge[apellido_materno]',
-            place_holder: 'Apellido Mat', row_upd: $row_upd,value_vacio: false, required: false,
-            value:  $row_upd->apellido_materno);
+        $apellido_materno = $controler->html->input_text(cols: 6, disabled: false, name: 'conyuge[apellido_materno]',
+            place_holder: 'Apellido Mat', row_upd: $row_upd, value_vacio: false, class_css: array('conyuge_apellido_materno'),
+            required: false, value: $row_upd->apellido_materno);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al obtener input',data:  $apellido_materno);
         }
 
         $conyuge->apellido_materno = $apellido_materno;
 
-        $curp = $controler->html->input_text(cols: 6,disabled: false,name: 'conyuge[curp]',place_holder: 'CURP',
-            row_upd: $row_upd,value_vacio: false, required: false, value: $row_upd->curp);
+        $curp = $controler->html->input_text(cols: 6, disabled: false, name: 'conyuge[curp]', place_holder: 'CURP',
+            row_upd: $row_upd, value_vacio: false, class_css: array('conyuge_curp'), required: false, value: $row_upd->curp);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al obtener input',data:  $curp);
         }
 
         $conyuge->curp = $curp;
 
-        $rfc = $controler->html->input_text(cols: 6,disabled: false,name: 'conyuge[rfc]',place_holder: 'RFC',
-            row_upd: $row_upd,value_vacio: false, required: false, value: $row_upd->rfc);
+        $rfc = $controler->html->input_text(cols: 6, disabled: false, name: 'conyuge[rfc]', place_holder: 'RFC',
+            row_upd: $row_upd, value_vacio: false, class_css: array('conyuge_rfc'), required: false, value: $row_upd->rfc);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al obtener input',data:  $rfc);
         }
 
         $conyuge->rfc = $rfc;
 
-        $telefono_casa = $controler->html->input_text(cols: 6,disabled: false,name: 'conyuge[telefono_casa]',
-            place_holder: 'Tel Casa', row_upd: $row_upd,value_vacio: false, required: false, value: $row_upd->telefono_casa);
+        $telefono_casa = $controler->html->input_text(cols: 6, disabled: false, name: 'conyuge[telefono_casa]',
+            place_holder: 'Tel Casa', row_upd: $row_upd, value_vacio: false, class_css: array('conyuge_telefono_casa'), required: false, value: $row_upd->telefono_casa);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al obtener input',data:  $telefono_casa);
         }
 
         $conyuge->telefono_casa = $telefono_casa;
 
-        $telefono_celular = $controler->html->input_text(cols: 6,disabled: false,name: 'conyuge[telefono_celular]',
-            place_holder: 'Cel', row_upd: $row_upd,value_vacio: false, required: false, value: $row_upd->telefono_celular);
+        $telefono_celular = $controler->html->input_text(cols: 6, disabled: false, name: 'conyuge[telefono_celular]',
+            place_holder: 'Cel', row_upd: $row_upd, value_vacio: false, class_css: array('conyuge_telefono_celular'), required: false, value: $row_upd->telefono_celular);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al obtener input',data:  $telefono_celular);
         }

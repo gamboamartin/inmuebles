@@ -420,79 +420,10 @@ class controlador_inm_prospecto extends _ctl_formato {
                 mensaje: 'Error al generar salida de template',data:  $r_modifica,header: $header,ws: $ws);
         }
 
-        $adm_usuario = (new adm_usuario(link: $this->link))->registro(registro_id: $_SESSION['usuario_id'],
-            columnas: array('adm_grupo_root'));
-        if(errores::$error){
-            $error = (new errores())->error(mensaje: 'Error al obtener adm_usuario ',data:  $adm_usuario);
-            print_r($error);
-            exit;
-        }
-
-
-        $filtro = (new \gamboamartin\inmuebles\controllers\_inm_prospecto())->filtro_user(adm_usuario: $adm_usuario);
-        if(errores::$error){
-            $error = (new errores())->error(mensaje: 'Error al obtener filtro ',data:  $filtro);
-            print_r($error);
-            exit;
-        }
-
         $keys_selects = array();
 
-        $keys_selects = $this->key_select(cols:12, con_registros: true,filtro:  $filtro, key: 'com_agente_id',
-            keys_selects:$keys_selects, id_selected: $this->registro['com_agente_id'], label: 'Agente');
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects, header: $header,ws:  $ws);
-        }
-
-        $keys_selects = $this->key_select(cols:12, con_registros: true,filtro:  array(), key: 'com_tipo_prospecto_id',
-            keys_selects:$keys_selects, id_selected: $this->registro['com_tipo_prospecto_id'], label: 'Tipo de prospecto');
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects, header: $header,ws:  $ws);
-        }
-
-        $keys_selects = $this->key_select(cols:12, con_registros: true,filtro:  array(), key: 'inm_institucion_hipotecaria_id',
-            keys_selects:$keys_selects, id_selected: $this->registro['inm_institucion_hipotecaria_id'], label: 'Institucion Hipotecaria');
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects, header: $header,ws:  $ws);
-        }
-
-        $keys_selects = $this->key_select(cols:6, con_registros: true,filtro:  array(), key: 'inm_producto_infonavit_id',
-            keys_selects:$keys_selects, id_selected: $this->registro['inm_producto_infonavit_id'], label: 'Producto Infonavit');
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects, header: $header,ws:  $ws);
-        }
-
-        $keys_selects = $this->key_select(cols:6, con_registros: true,filtro:  array(), key: 'inm_attr_tipo_credito_id',
-            keys_selects:$keys_selects, id_selected: $this->registro['inm_attr_tipo_credito_id'], label: 'Tipo de Credito');
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects, header: $header,ws:  $ws);
-        }
-        $keys_selects = $this->key_select(cols:12, con_registros: true,filtro:  array(), key: 'inm_destino_credito_id',
-            keys_selects:$keys_selects, id_selected: $this->registro['inm_destino_credito_id'], label: 'Destino de Credito');
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects, header: $header,ws:  $ws);
-        }
-
-        $disabled = (new \gamboamartin\inmuebles\controllers\_inm_prospecto())->disabled_segundo_credito(registro: $this->registro);
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al maquetar disabled',data:  $disabled, header: $header,ws:  $ws);
-        }
-
-
-        $keys_selects = $this->key_select(cols:6, con_registros: true,filtro:  array(), key: 'inm_plazo_credito_sc_id',
-            keys_selects:$keys_selects, id_selected: $this->registro['inm_plazo_credito_sc_id'], label: 'Plazo de Segundo Credito',disabled: $disabled);
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects, header: $header,ws:  $ws);
-        }
-
-        $keys_selects = $this->key_select(cols:6, con_registros: true,filtro:  array(), key: 'inm_tipo_discapacidad_id',
-            keys_selects:$keys_selects, id_selected: $this->registro['inm_tipo_discapacidad_id'], label: 'Tipo de Discapacidad');
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects, header: $header,ws:  $ws);
-        }
-
-        $keys_selects = $this->key_select(cols:6, con_registros: true,filtro:  array(), key: 'inm_persona_discapacidad_id',
-            keys_selects:$keys_selects, id_selected: $this->registro['inm_persona_discapacidad_id'], label: 'Persona de Discapacidad');
+        $keys_selects = (new \gamboamartin\inmuebles\controllers\_inm_prospecto())->keys_selects_infonavit(
+            controlador: $this,keys_selects:  $keys_selects);
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects, header: $header,ws:  $ws);
         }
