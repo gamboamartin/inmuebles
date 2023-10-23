@@ -65,6 +65,33 @@ class _base_paqueteTest extends test {
         errores::$error = false;
     }
 
+    public function test_init_data_domicilio(): void
+    {
+        errores::$error = false;
+
+        $_GET['seccion'] = 'inm_producto_infonavit';
+        $_GET['accion'] = 'lista';
+        $_SESSION['grupo_id'] = 1;
+        $_SESSION['usuario_id'] = 2;
+        $_GET['session_id'] = '1';
+
+        $_inm = new _base_paquete();
+        //$_inm = new liberator($_inm);
+
+        $init_data = array();
+
+        $resultado = $_inm->init_data_domicilio($init_data);
+        $this->assertIsArray($resultado);
+        $this->assertNotTrue(errores::$error);
+        $this->assertEquals("gamboamartin\direccion_postal",$resultado['dp_pais']);
+        $this->assertEquals("gamboamartin\direccion_postal",$resultado['dp_estado']);
+        $this->assertEquals("gamboamartin\direccion_postal",$resultado['dp_municipio']);
+        $this->assertEquals("gamboamartin\direccion_postal",$resultado['dp_cp']);
+        $this->assertEquals("gamboamartin\direccion_postal",$resultado['dp_colonia_postal']);
+        $this->assertEquals("gamboamartin\direccion_postal",$resultado['dp_calle_pertenece']);
+        errores::$error = false;
+    }
+
     public function test_init_data_row(): void
     {
         errores::$error = false;
@@ -85,7 +112,7 @@ class _base_paqueteTest extends test {
         }
         $alta = (new base_test())->alta_inm_ubicacion(link: $this->link);
         if(errores::$error){
-            $error = (new errores())->error(mensaje:'Error al del', data: $del);
+            $error = (new errores())->error(mensaje:'Error al del', data: $alta);
             print_r($error);exit;
         }
 

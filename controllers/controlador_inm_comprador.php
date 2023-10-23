@@ -157,15 +157,10 @@ class controlador_inm_comprador extends _ctl_base {
 
         $this->link->beginTransaction();
 
-        $id_retorno = -1;
-        if(isset($_POST['id_retorno'])){
-            $id_retorno = $_POST['id_retorno'];
-            unset($_POST['id_retorno']);
-        }
-        $siguiente_view = (new actions())->init_alta_bd();
+        $retorno = (new \gamboamartin\inmuebles\controllers\_base())->init_retorno();
         if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al obtener siguiente view', data: $siguiente_view,
-                header:  $header, ws: $ws);
+            $this->link->rollBack();
+            return $this->retorno_error(mensaje: 'Error al obtener datos de retorno', data: $retorno, header: true, ws: false);
         }
 
         $inm_comprador_id = $this->registro_id;
@@ -196,10 +191,10 @@ class controlador_inm_comprador extends _ctl_base {
         $this->link->commit();
 
         if($header){
-            if($id_retorno === -1) {
-                $id_retorno = $this->registro_id;
+            if($retorno->id_retorno === -1) {
+                $retorno->id_retorno = $this->registro_id;
             }
-            $this->retorno_base(registro_id:$id_retorno, result: $result, siguiente_view: $siguiente_view,
+            $this->retorno_base(registro_id:$retorno->id_retorno, result: $result, siguiente_view: $retorno->siguiente_view,
                 ws:  $ws,seccion_retorno: $this->seccion, valida_permiso: true);
         }
         if($ws){
@@ -213,7 +208,7 @@ class controlador_inm_comprador extends _ctl_base {
             }
             exit;
         }
-        $result->siguiente_view = $siguiente_view;
+        $result->siguiente_view = $retorno->siguiente_view;
 
 
         return $result;

@@ -48,6 +48,7 @@ class _base_paquete{
      * Inicializa los elementos de domicilio
      * @param array $init_data Params previos
      * @return array
+     * @version 2.250.2
      */
     final public function init_data_domicilio(array $init_data): array
     {

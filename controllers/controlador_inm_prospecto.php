@@ -96,6 +96,10 @@ class controlador_inm_prospecto extends _ctl_formato {
         return $r_alta;
     }
 
+    /**
+     * Inicializa los campos view para frontend
+     * @return array
+     */
     protected function campos_view(): array
     {
         $keys = new stdClass();
@@ -141,19 +145,11 @@ class controlador_inm_prospecto extends _ctl_formato {
     {
         $this->link->beginTransaction();
 
-        $id_retorno = -1;
-        if(isset($_POST['id_retorno'])){
-            $id_retorno = $_POST['id_retorno'];
-            unset($_POST['id_retorno']);
-        }
-
-
-        $siguiente_view = (new actions())->init_alta_bd();
+        $retorno = (new \gamboamartin\inmuebles\controllers\_base())->init_retorno();
         if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al obtener siguiente view', data: $siguiente_view,
-                header:  $header, ws: $ws);
+            $this->link->rollBack();
+            return $this->retorno_error(mensaje: 'Error al obtener datos de retorno', data: $retorno, header: true, ws: false);
         }
-
 
         $conversion = (new inm_prospecto(link: $this->link))->convierte_cliente(inm_prospecto_id:  $this->registro_id);
 
@@ -166,10 +162,10 @@ class controlador_inm_prospecto extends _ctl_formato {
         $this->link->commit();
 
         if($header){
-            if($id_retorno === -1) {
-                $id_retorno = $this->registro_id;
+            if($retorno->id_retorno === -1) {
+                $retorno->id_retorno = $this->registro_id;
             }
-            $this->retorno_base(registro_id:$id_retorno, result: $conversion, siguiente_view: $siguiente_view,
+            $this->retorno_base(registro_id:$retorno->id_retorno, result: $conversion, siguiente_view: $retorno->siguiente_view,
                 ws:  $ws,seccion_retorno: $this->seccion, valida_permiso: true);
         }
         if($ws){
@@ -183,7 +179,7 @@ class controlador_inm_prospecto extends _ctl_formato {
             }
             exit;
         }
-        $conversion->r_alta_rel->siguiente_view = $siguiente_view;
+        $conversion->r_alta_rel->siguiente_view = $retorno->siguiente_view;
 
 
         return $conversion->r_alta_rel;

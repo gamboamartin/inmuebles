@@ -148,6 +148,7 @@ class inm_prospectoTest extends test {
 
         $id = 1;
         $resultado = $modelo->elimina_bd($id);
+       // print_r($resultado);exit;
         $this->assertIsArray($resultado);
         $this->assertTrue(errores::$error);
         $this->assertEquals("Error al eliminar",$resultado['mensaje_limpio']);

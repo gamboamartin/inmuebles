@@ -715,7 +715,10 @@ class base_test{
 
     public function del_com_tipo_prospecto(PDO $link): array
     {
-
+        $del = $this->del_inm_prospecto(link: $link);
+        if(errores::$error){
+            return (new errores())->error('Error al eliminar', $del);
+        }
 
         $del = (new \gamboamartin\comercial\test\base_test())->del_com_tipo_prospecto(link: $link);
         if(errores::$error){
