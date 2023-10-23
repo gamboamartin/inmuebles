@@ -783,6 +783,7 @@ class _keys_selects{
      * @param controlador_inm_prospecto $controler Controlador en ejecucion
      * @param array $keys_selects Parametros previos cargados
      * @return array
+     * @version 2.246.2
      */
     final public function keys_selects_prospecto(controlador_inm_prospecto $controler, array $keys_selects): array
     {
