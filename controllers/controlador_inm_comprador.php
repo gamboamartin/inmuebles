@@ -13,6 +13,7 @@ use gamboamartin\errores\errores;
 use gamboamartin\inmuebles\html\_base;
 use gamboamartin\inmuebles\html\inm_comprador_html;
 use gamboamartin\inmuebles\html\inm_referencia_html;
+use gamboamartin\inmuebles\models\_base_paquete;
 use gamboamartin\inmuebles\models\_inm_comprador;
 use gamboamartin\inmuebles\models\inm_comprador;
 use gamboamartin\inmuebles\models\inm_referencia;
@@ -343,12 +344,10 @@ class controlador_inm_comprador extends _ctl_base {
         $init_data['inm_nacionalidad'] = "gamboamartin\\inmuebles";
         $init_data['inm_ocupacion'] = "gamboamartin\\inmuebles";
 
-        $init_data['dp_pais'] = "gamboamartin\\direccion_postal";
-        $init_data['dp_estado'] = "gamboamartin\\direccion_postal";
-        $init_data['dp_municipio'] = "gamboamartin\\direccion_postal";
-        $init_data['dp_cp'] = "gamboamartin\\direccion_postal";
-        $init_data['dp_colonia_postal'] = "gamboamartin\\direccion_postal";
-        $init_data['dp_calle_pertenece'] = "gamboamartin\\direccion_postal";
+        $init_data = (new _base_paquete())->init_data_domicilio(init_data: $init_data);
+        if(errores::$error){
+            return $this->errores->error(mensaje: 'Error al inicializar campo view',data:  $init_data);
+        }
 
         $init_data['cat_sat_regimen_fiscal'] = "gamboamartin\\cat_sat";
         $init_data['cat_sat_moneda'] = "gamboamartin\\cat_sat";

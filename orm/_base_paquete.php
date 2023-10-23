@@ -45,6 +45,23 @@ class _base_paquete{
     }
 
     /**
+     * Inicializa los elementos de domicilio
+     * @param array $init_data Params previos
+     * @return array
+     */
+    final public function init_data_domicilio(array $init_data): array
+    {
+        $init_data['dp_pais'] = "gamboamartin\\direccion_postal";
+        $init_data['dp_estado'] = "gamboamartin\\direccion_postal";
+        $init_data['dp_municipio'] = "gamboamartin\\direccion_postal";
+        $init_data['dp_cp'] = "gamboamartin\\direccion_postal";
+        $init_data['dp_colonia_postal'] = "gamboamartin\\direccion_postal";
+        $init_data['dp_calle_pertenece'] = "gamboamartin\\direccion_postal";
+
+        return $init_data;
+    }
+
+    /**
      * Inicializa la descripcion basada en los keys de relacion
      * @param int $id Id de entidad
      * @param string $key_entidad_base_id Entidad de tipo proceso
