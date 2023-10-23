@@ -15,6 +15,7 @@ use gamboamartin\inmuebles\html\_base;
 use gamboamartin\inmuebles\html\inm_prospecto_html;
 use gamboamartin\inmuebles\models\_base_paquete;
 use gamboamartin\inmuebles\models\_inm_prospecto;
+use gamboamartin\inmuebles\models\inm_conyuge;
 use gamboamartin\inmuebles\models\inm_prospecto;
 use gamboamartin\inmuebles\models\inm_rel_conyuge_prospecto;
 use gamboamartin\system\links_menu;
@@ -144,39 +145,29 @@ class controlador_inm_prospecto extends _ctl_formato {
         $retorno = (new \gamboamartin\inmuebles\controllers\_base())->init_retorno();
         if(errores::$error){
             $this->link->rollBack();
-            return $this->retorno_error(mensaje: 'Error al obtener datos de retorno', data: $retorno, header: true, ws: false);
+            return $this->retorno_error(mensaje: 'Error al obtener datos de retorno', data: $retorno,
+                header: true, ws: false);
         }
 
         $conversion = (new inm_prospecto(link: $this->link))->convierte_cliente(inm_prospecto_id:  $this->registro_id);
 
         if(errores::$error){
             $this->link->rollBack();
-            return $this->retorno_error(mensaje: 'Error al convertir en cliente', data: $conversion, header: true, ws: false);
+            return $this->retorno_error(mensaje: 'Error al convertir en cliente', data: $conversion,
+                header: true, ws: false);
         }
-
 
         $this->link->commit();
 
-        if($header){
-            if($retorno->id_retorno === -1) {
-                $retorno->id_retorno = $this->registro_id;
-            }
-            $this->retorno_base(registro_id:$retorno->id_retorno, result: $conversion, siguiente_view: $retorno->siguiente_view,
-                ws:  $ws,seccion_retorno: $this->seccion, valida_permiso: true);
+        $out = (new \gamboamartin\inmuebles\controllers\_base())->out(controlador: $this,header:  $header,
+            result:  $conversion,retorno:  $retorno, ws: $ws);
+        if(errores::$error){
+            $this->link->rollBack();
+            return $this->retorno_error(mensaje: 'Error al dar salida', data: $out,
+                header: true, ws: false);
         }
-        if($ws){
-            header('Content-Type: application/json');
-            try {
-                echo json_encode($conversion, JSON_THROW_ON_ERROR);
-            }
-            catch (Throwable $e){
-                $error = (new errores())->error(mensaje: 'Error al maquetar JSON' , data: $e);
-                print_r($error);
-            }
-            exit;
-        }
-        $conversion->r_alta_rel->siguiente_view = $retorno->siguiente_view;
 
+        $conversion->r_alta_rel->siguiente_view = $retorno->siguiente_view;
 
         return $conversion->r_alta_rel;
 
@@ -676,13 +667,17 @@ class controlador_inm_prospecto extends _ctl_formato {
         }
 
         if($tiene_dato_conyuge){
-            $alta_rel_conyuge_prospecto = (new inm_rel_conyuge_prospecto(link: $this->link))->alta_registro(
+
+            $alta_conyuge = (new inm_conyuge(link: $this->link))->alta_registro(
                 registro: $conyuge);
             if(errores::$error){
                 $this->link->rollBack();
-                return $this->retorno_error(mensaje: 'Error al insertar conyuge',data:  $alta_rel_conyuge_prospecto,
+                return $this->retorno_error(mensaje: 'Error al insertar conyuge',data:  $alta_conyuge,
                     header: $header,ws:  $ws);
             }
+
+
+
         }
         else{
 

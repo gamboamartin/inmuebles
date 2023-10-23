@@ -190,24 +190,15 @@ class controlador_inm_comprador extends _ctl_base {
         }
         $this->link->commit();
 
-        if($header){
-            if($retorno->id_retorno === -1) {
-                $retorno->id_retorno = $this->registro_id;
-            }
-            $this->retorno_base(registro_id:$retorno->id_retorno, result: $result, siguiente_view: $retorno->siguiente_view,
-                ws:  $ws,seccion_retorno: $this->seccion, valida_permiso: true);
+
+        $out = (new \gamboamartin\inmuebles\controllers\_base())->out(controlador: $this,header:  $header,
+            result:  $result,retorno:  $retorno, ws: $ws);
+        if(errores::$error){
+            $this->link->rollBack();
+            return $this->retorno_error(mensaje: 'Error al dar salida', data: $out,
+                header: true, ws: false);
         }
-        if($ws){
-            header('Content-Type: application/json');
-            try {
-                echo json_encode($result, JSON_THROW_ON_ERROR);
-            }
-            catch (Throwable $e){
-                $error = (new errores())->error(mensaje: 'Error al maquetar JSON' , data: $e);
-                print_r($error);
-            }
-            exit;
-        }
+
         $result->siguiente_view = $retorno->siguiente_view;
 
 
