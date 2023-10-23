@@ -664,8 +664,9 @@ class _keys_selects{
     }
 
     /**
-     * @param controlador_inm_prospecto $controler
-     * @param array $keys_selects
+     * Genera un selector de tipo sindicato
+     * @param controlador_inm_prospecto $controler Controlador en ejecucion
+     * @param array $keys_selects Key precargados
      * @return array
      */
     private function key_select_sindicato(controlador_inm_prospecto $controler, array $keys_selects): array
@@ -689,6 +690,7 @@ class _keys_selects{
      * @param controlador_inm_prospecto $controler Controlador en ejecucion
      * @param array $keys_selects parametros precargados
      * @return array
+     * @version 2.242.2
      */
     private function key_select_tipo_agente(controlador_inm_prospecto $controler, array $keys_selects): array
     {

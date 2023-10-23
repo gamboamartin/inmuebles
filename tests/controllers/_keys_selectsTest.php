@@ -465,6 +465,28 @@ class _keys_selectsTest extends test {
         errores::$error = false;
     }
 
+    public function test_key_select_tipo_agente(): void
+    {
+        errores::$error = false;
+
+        $_GET['seccion'] = 'inm_producto_infonavit';
+        $_GET['accion'] = 'lista';
+        $_SESSION['grupo_id'] = 1;
+        $_SESSION['usuario_id'] = 2;
+        $_GET['session_id'] = '1';
+
+        $ks = new _keys_selects();
+        $ks = new liberator($ks);
+
+        $controler = new controlador_inm_prospecto(link: $this->link,paths_conf: $this->paths_conf);
+        $keys_selects = array();
+        $resultado = $ks->key_select_tipo_agente($controler, $keys_selects);
+        $this->assertIsArray($resultado);
+        $this->assertNotTrue(errores::$error);
+        $this->assertEquals(1,$resultado['com_tipo_prospecto_id']->id_selected);
+        errores::$error = false;
+    }
+
     public function test_key_selects_asigna_ubicacion(): void
     {
         errores::$error = false;
