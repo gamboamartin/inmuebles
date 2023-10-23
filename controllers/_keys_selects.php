@@ -634,9 +634,16 @@ class _keys_selects{
         }
         return $keys_selects;
     }
-    
-    private function key_select_nacionalidad(controlador_inm_prospecto $controler, array $keys_selects){
-        $inm_nacionalidad_id = (new inm_nacionalidad(link: $controler->link))->id_preferido_detalle(entidad_preferida: 'inm_nacionalidad');
+
+    /**
+     * @param controlador_inm_prospecto $controler
+     * @param array $keys_selects
+     * @return array
+     */
+    private function key_select_nacionalidad(controlador_inm_prospecto $controler, array $keys_selects): array
+    {
+        $inm_nacionalidad_id = (new inm_nacionalidad(link: $controler->link))->id_preferido_detalle(
+            entidad_preferida: 'inm_nacionalidad');
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al obtener id',data:  $inm_nacionalidad_id);
         }
@@ -648,9 +655,16 @@ class _keys_selects{
         }
         return $keys_selects;
     }
-    
-    private function key_select_ocupacion(controlador_inm_prospecto $controler, array $keys_selects){
-        $inm_ocupacion_id = (new inm_ocupacion(link: $controler->link))->id_preferido_detalle(entidad_preferida: 'inm_ocupacion');
+
+    /**
+     * @param controlador_inm_prospecto $controler
+     * @param array $keys_selects
+     * @return array
+     */
+    private function key_select_ocupacion(controlador_inm_prospecto $controler, array $keys_selects): array
+    {
+        $inm_ocupacion_id = (new inm_ocupacion(link: $controler->link))->id_preferido_detalle(
+            entidad_preferida: 'inm_ocupacion');
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al obtener id',data:  $inm_ocupacion_id);
         }
@@ -668,6 +682,7 @@ class _keys_selects{
      * @param controlador_inm_prospecto $controler Controlador en ejecucion
      * @param array $keys_selects Key precargados
      * @return array
+     * @version 2.243.2
      */
     private function key_select_sindicato(controlador_inm_prospecto $controler, array $keys_selects): array
     {
@@ -759,7 +774,13 @@ class _keys_selects{
         return $keys_selects;
     }
 
-    final public function keys_selects_prospecto(controlador_inm_prospecto $controler, array $keys_selects){
+    /**
+     * @param controlador_inm_prospecto $controler
+     * @param array $keys_selects
+     * @return array
+     */
+    final public function keys_selects_prospecto(controlador_inm_prospecto $controler, array $keys_selects): array
+    {
         $keys_selects = $this->key_select_agente(controler: $controler,keys_selects:  $keys_selects);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
