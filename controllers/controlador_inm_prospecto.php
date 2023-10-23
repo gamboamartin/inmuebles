@@ -429,11 +429,12 @@ class controlador_inm_prospecto extends _ctl_formato {
         }
 
 
-        $filtro = array();
-        if($adm_usuario['adm_grupo_root'] === 'inactivo'){
-            $filtro['adm_usuario.id'] = $_SESSION['usuario_id'];
+        $filtro = (new \gamboamartin\inmuebles\controllers\_inm_prospecto())->filtro_user(adm_usuario: $adm_usuario);
+        if(errores::$error){
+            $error = (new errores())->error(mensaje: 'Error al obtener filtro ',data:  $filtro);
+            print_r($error);
+            exit;
         }
-
 
         $keys_selects = array();
 
@@ -472,10 +473,11 @@ class controlador_inm_prospecto extends _ctl_formato {
             return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects, header: $header,ws:  $ws);
         }
 
-        $disabled = true;
-        if($this->registro['inm_prospecto_es_segundo_credito'] === 'SI'){
-            $disabled = false;
+        $disabled = (new \gamboamartin\inmuebles\controllers\_inm_prospecto())->disabled_segundo_credito(registro: $this->registro);
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al maquetar disabled',data:  $disabled, header: $header,ws:  $ws);
         }
+
 
         $keys_selects = $this->key_select(cols:6, con_registros: true,filtro:  array(), key: 'inm_plazo_credito_sc_id',
             keys_selects:$keys_selects, id_selected: $this->registro['inm_plazo_credito_sc_id'], label: 'Plazo de Segundo Credito',disabled: $disabled);
@@ -564,17 +566,10 @@ class controlador_inm_prospecto extends _ctl_formato {
         }
 
 
-
-        if($this->registro['inm_prospecto_nss'] === ''){
-            $this->row_upd->nss = '99999999999';
+        $row = (new \gamboamartin\inmuebles\controllers\_inm_prospecto())->row_base_fiscal(controlador: $this);
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al row',data:  $row, header: $header,ws:  $ws);
         }
-        if($this->registro['inm_prospecto_curp'] === ''){
-            $this->row_upd->curp = 'XEXX010101HNEXXXA4';
-        }
-        if($this->registro['inm_prospecto_rfc'] === ''){
-            $this->row_upd->rfc = 'XAXX010101000';
-        }
-
 
         $radios = (new \gamboamartin\inmuebles\models\_inm_comprador())->radios_chk(controler: $this);
         if(errores::$error){
@@ -587,15 +582,11 @@ class controlador_inm_prospecto extends _ctl_formato {
             return $this->retorno_error(mensaje: 'Error al integrar base',data:  $base, header: $header,ws:  $ws);
         }
 
-        $headers = array();
-        $headers['1'] = '1. DATOS PERSONALES';
-        $headers['2'] = '2. DATOS DE CONTACTO';
-        $headers['3'] = '3. DOMICILIO';
-        $headers['4'] = '4. CREDITO';
-        $headers['5'] = '5. MONTO CREDITO';
-        $headers['6'] = '6. DISCAPACIDAD';
-        $headers['7'] = '7. DATOS EMPRESA TRABAJADOR';
-        $headers['8'] = '8. DATOS DE CONYUGE';
+
+        $headers = (new \gamboamartin\inmuebles\controllers\_inm_prospecto())->headers_prospecto();
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al generar headers',data:  $headers, header: $header,ws:  $ws);
+        }
 
         $headers = (new _base(html: $this->html_base))->genera_headers(controler: $this,headers:  $headers);
         if(errores::$error){
@@ -635,8 +626,6 @@ class controlador_inm_prospecto extends _ctl_formato {
         }
 
         $this->inputs->fecha_nacimiento = $fecha_nacimiento;
-
-
 
 
         $conyuge = (new _conyuge())->inputs_conyuge(controler: $this);

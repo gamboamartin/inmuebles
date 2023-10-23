@@ -34,6 +34,10 @@ class _conyuge{
         $row_upd->rfc = '';
         $row_upd->telefono_casa = '';
         $row_upd->telefono_celular = '';
+        $row_upd->dp_estado_id = -1;
+        $row_upd->dp_municipio_id = -1;
+        $row_upd->inm_nacionalidad_id = -1;
+        $row_upd->inm_ocupacion_id = -1;
         if($existe_conyuge){
             $row_upd = (new inm_prospecto(link: $controler->link))->inm_conyuge(columnas_en_bruto: true,
                 inm_prospecto_id:  $controler->registro_id, retorno_obj: true);
@@ -41,6 +45,12 @@ class _conyuge{
             if(errores::$error){
                 return $this->error->error(mensaje: 'Error al obtener datos de conyuge',data:  $row_upd);
             }
+            $dp_municipio_data = (new dp_municipio(link: $controler->link))->registro(
+                registro_id: $row_upd->dp_municipio_id, columnas_en_bruto: true, retorno_obj: true);
+            if(errores::$error){
+                return $this->error->error(mensaje: 'Error al obtener datos  dp_municipio_data',data:  $dp_municipio_data);
+            }
+            $row_upd->dp_estado_id = $dp_municipio_data->dp_estado_id;
 
         }
 
@@ -103,8 +113,8 @@ class _conyuge{
         $conyuge->telefono_celular = $telefono_celular;
 
         $modelo = new dp_estado(link: $controler->link);
-        $dp_estado_id = $controler->html->select_catalogo(cols: 6,con_registros:  true,id_selected:  -1,
-            modelo:  $modelo, name: 'conyuge[dp_estado_id]');
+        $dp_estado_id = $controler->html->select_catalogo(cols: 6,con_registros:  true,
+            id_selected:  $row_upd->dp_estado_id, modelo:  $modelo, name: 'conyuge[dp_estado_id]');
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al obtener input',data:  $dp_estado_id);
         }
@@ -112,7 +122,7 @@ class _conyuge{
         $conyuge->dp_estado_id = $dp_estado_id;
 
         $modelo = new dp_municipio(link: $controler->link);
-        $dp_municipio_id = $controler->html->select_catalogo(cols: 6,con_registros:  true,id_selected:  -1,
+        $dp_municipio_id = $controler->html->select_catalogo(cols: 6,con_registros:  true,id_selected: $row_upd->dp_municipio_id,
             modelo:  $modelo, name: 'conyuge[dp_municipio_id]');
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al obtener input',data:  $dp_municipio_id);
@@ -121,7 +131,7 @@ class _conyuge{
         $conyuge->dp_municipio_id = $dp_municipio_id;
 
         $modelo = new inm_nacionalidad(link: $controler->link);
-        $inm_nacionalidad_id = $controler->html->select_catalogo(cols: 6,con_registros:  true,id_selected:  -1,
+        $inm_nacionalidad_id = $controler->html->select_catalogo(cols: 6,con_registros:  true,  id_selected: $row_upd->inm_nacionalidad_id,
             modelo:  $modelo, name: 'conyuge[inm_nacionalidad_id]');
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al obtener input',data:  $inm_nacionalidad_id);
@@ -130,7 +140,7 @@ class _conyuge{
         $conyuge->inm_nacionalidad_id = $inm_nacionalidad_id;
 
         $modelo = new inm_ocupacion(link: $controler->link);
-        $inm_ocupacion_id = $controler->html->select_catalogo(cols: 12,con_registros:  true,id_selected:  -1,
+        $inm_ocupacion_id = $controler->html->select_catalogo(cols: 12,con_registros:  true,  id_selected: $row_upd->inm_ocupacion_id,
             modelo:  $modelo, name: 'conyuge[inm_ocupacion_id]');
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al obtener input',data:  $inm_ocupacion_id);
