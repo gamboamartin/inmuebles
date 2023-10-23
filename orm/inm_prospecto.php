@@ -286,6 +286,17 @@ class inm_prospecto extends _modelo_parent{
         return $r_elimina;
     }
 
+    final public function existe_conyuge(int $inm_prospecto_id){
+        $filtro = array();
+        $filtro['inm_prospecto.id'] = $inm_prospecto_id;
+
+        $existe_conyuge = (new inm_rel_conyuge_prospecto(link: $this->link))->existe(filtro: $filtro);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al validar si existe conyuge',data:  $existe_conyuge);
+        }
+        return $existe_conyuge;
+    }
+
     /**
      * Obtiene los datos del cliente de fc basados en el comprador
      * @param int $inm_prospecto_id
@@ -309,6 +320,32 @@ class inm_prospecto extends _modelo_parent{
             return $this->error->error(mensaje: 'Error al obtener com_prospecto',data:  $com_prospecto);
         }
         return $com_prospecto;
+    }
+
+    final public function inm_conyuge(bool $columnas_en_bruto, int $inm_prospecto_id, bool $retorno_obj){
+        $filtro = array();
+        $filtro['inm_prospecto.id'] = $inm_prospecto_id;
+
+        $r_inm_rel_conyuge_prospecto = (new inm_rel_conyuge_prospecto(link: $this->link))->filtro_and(filtro: $filtro);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al obtener conyuge relacion',data:  $r_inm_rel_conyuge_prospecto);
+        }
+        if($r_inm_rel_conyuge_prospecto->n_registros === 0){
+            return $this->error->error(mensaje: 'Error no existe relacion',data:  $r_inm_rel_conyuge_prospecto);
+        }
+        if($r_inm_rel_conyuge_prospecto->n_registros > 1){
+            return $this->error->error(mensaje: 'Error de integridad',data:  $r_inm_rel_conyuge_prospecto);
+        }
+
+        $inm_rel_conyuge_prospecto = $r_inm_rel_conyuge_prospecto->registros[0];
+
+        $inm_conyuge = (new inm_conyuge(link: $this->link))->registro(
+            registro_id: $inm_rel_conyuge_prospecto['inm_conyuge_id'],columnas_en_bruto: $columnas_en_bruto,retorno_obj: $retorno_obj);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al obtener conyuge',data:  $inm_conyuge);
+        }
+
+        return $inm_conyuge;
     }
 
 

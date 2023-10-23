@@ -11,6 +11,7 @@ use gamboamartin\inmuebles\controllers\controlador_inm_attr_tipo_credito;
 use gamboamartin\inmuebles\controllers\controlador_inm_comprador;
 use gamboamartin\inmuebles\controllers\controlador_inm_plazo_credito_sc;
 use gamboamartin\inmuebles\controllers\controlador_inm_producto_infonavit;
+use gamboamartin\inmuebles\controllers\controlador_inm_prospecto;
 use gamboamartin\inmuebles\models\inm_comprador;
 use gamboamartin\test\liberator;
 use gamboamartin\test\test;
@@ -72,6 +73,30 @@ class _baseTest extends test {
 
         $resultado = $base->init_retorno();
         $this->assertIsObject($resultado);
+        $this->assertNotTrue(errores::$error);
+
+        errores::$error = false;
+    }
+
+    public function test_out(): void
+    {
+        $_SESSION['grupo_id'] = 1;
+        $_SESSION['usuario_id'] = 2;
+        $_GET['session_id'] = '1';
+        $_GET['seccion'] = 'inm_producto_infonavit';
+        $_GET['accion'] = 'lista';
+        errores::$error = false;
+
+        $base = new _base();
+        //$base = new liberator($base);
+
+        $header = false;
+        $result = '';
+        $retorno = new stdClass();
+        $ws = false;
+        $controlador = new controlador_inm_prospecto(link: $this->link,paths_conf: $this->paths_conf);
+        $resultado = $base->out($controlador, $header, $result, $retorno, $ws);
+        $this->assertIsString($resultado);
         $this->assertNotTrue(errores::$error);
 
         errores::$error = false;

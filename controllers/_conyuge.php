@@ -6,6 +6,7 @@ use gamboamartin\direccion_postal\models\dp_municipio;
 use gamboamartin\errores\errores;
 use gamboamartin\inmuebles\models\inm_nacionalidad;
 use gamboamartin\inmuebles\models\inm_ocupacion;
+use gamboamartin\inmuebles\models\inm_prospecto;
 use stdClass;
 
 class _conyuge{
@@ -18,8 +19,33 @@ class _conyuge{
 
         $conyuge = new stdClass();
 
+        $existe_conyuge = (new inm_prospecto(link: $controler->link))->existe_conyuge(
+            inm_prospecto_id: $controler->registro_id);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al validar si existe conyuge',data:  $existe_conyuge);
+        }
+
+        $row_upd = new stdClass();
+        $row_upd->nombre = '';
+        $row_upd->apellido_paterno = '';
+        $row_upd->apellido_materno = '';
+        $row_upd->fecha_nacimiento = '';
+        $row_upd->curp = '';
+        $row_upd->rfc = '';
+        $row_upd->telefono_casa = '';
+        $row_upd->telefono_celular = '';
+        if($existe_conyuge){
+            $row_upd = (new inm_prospecto(link: $controler->link))->inm_conyuge(columnas_en_bruto: true,
+                inm_prospecto_id:  $controler->registro_id, retorno_obj: true);
+
+            if(errores::$error){
+                return $this->error->error(mensaje: 'Error al obtener datos de conyuge',data:  $row_upd);
+            }
+
+        }
+
         $nombre = $controler->html->input_text(cols: 12,disabled: false,name: 'conyuge[nombre]',place_holder: 'Nombre',
-            row_upd: new stdClass(),value_vacio: false, required: false);
+            row_upd: $row_upd,value_vacio: false, required: false, value: $row_upd->nombre);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al obtener input',data:  $nombre);
         }
@@ -27,7 +53,8 @@ class _conyuge{
         $conyuge->nombre = $nombre;
 
         $apellido_paterno = $controler->html->input_text(cols: 6,disabled: false,name: 'conyuge[apellido_paterno]',
-            place_holder: 'Apellido Pat', row_upd: new stdClass(),value_vacio: false, required: false);
+            place_holder: 'Apellido Pat', row_upd: $row_upd,value_vacio: false, required: false,
+            value:  $row_upd->apellido_paterno);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al obtener input',data:  $apellido_paterno);
         }
@@ -35,15 +62,16 @@ class _conyuge{
         $conyuge->apellido_paterno = $apellido_paterno;
 
         $apellido_materno = $controler->html->input_text(cols: 6,disabled: false,name: 'conyuge[apellido_materno]',
-            place_holder: 'Apellido Mat', row_upd: new stdClass(),value_vacio: false, required: false);
+            place_holder: 'Apellido Mat', row_upd: $row_upd,value_vacio: false, required: false,
+            value:  $row_upd->apellido_materno);
         if(errores::$error){
-            return $this->error->error(mensaje: 'Error al obtener input',data:  $apellido_paterno);
+            return $this->error->error(mensaje: 'Error al obtener input',data:  $apellido_materno);
         }
 
         $conyuge->apellido_materno = $apellido_materno;
 
         $curp = $controler->html->input_text(cols: 6,disabled: false,name: 'conyuge[curp]',place_holder: 'CURP',
-            row_upd: new stdClass(),value_vacio: false, required: false);
+            row_upd: $row_upd,value_vacio: false, required: false, value: $row_upd->curp);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al obtener input',data:  $curp);
         }
@@ -51,7 +79,7 @@ class _conyuge{
         $conyuge->curp = $curp;
 
         $rfc = $controler->html->input_text(cols: 6,disabled: false,name: 'conyuge[rfc]',place_holder: 'RFC',
-            row_upd: new stdClass(),value_vacio: false, required: false);
+            row_upd: $row_upd,value_vacio: false, required: false, value: $row_upd->rfc);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al obtener input',data:  $rfc);
         }
@@ -59,7 +87,7 @@ class _conyuge{
         $conyuge->rfc = $rfc;
 
         $telefono_casa = $controler->html->input_text(cols: 6,disabled: false,name: 'conyuge[telefono_casa]',
-            place_holder: 'Tel Casa', row_upd: new stdClass(),value_vacio: false, required: false);
+            place_holder: 'Tel Casa', row_upd: $row_upd,value_vacio: false, required: false, value: $row_upd->telefono_casa);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al obtener input',data:  $telefono_casa);
         }
@@ -67,7 +95,7 @@ class _conyuge{
         $conyuge->telefono_casa = $telefono_casa;
 
         $telefono_celular = $controler->html->input_text(cols: 6,disabled: false,name: 'conyuge[telefono_celular]',
-            place_holder: 'Cel', row_upd: new stdClass(),value_vacio: false, required: false);
+            place_holder: 'Cel', row_upd: $row_upd,value_vacio: false, required: false, value: $row_upd->telefono_celular);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al obtener input',data:  $telefono_celular);
         }
@@ -110,8 +138,8 @@ class _conyuge{
 
         $conyuge->inm_ocupacion_id = $inm_ocupacion_id;
 
-        $fecha_nacimiento = $controler->html->input_fecha(cols: 6,row_upd:  new stdClass(),
-            value_vacio:  false, name: 'conyuge[fecha_nacimiento]', required: false);
+        $fecha_nacimiento = $controler->html->input_fecha(cols: 6,row_upd:  $row_upd,
+            value_vacio:  false, name: 'conyuge[fecha_nacimiento]', required: false, value: $row_upd->fecha_nacimiento);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al obtener fecha_nacimiento',data:  $fecha_nacimiento);
         }
