@@ -682,8 +682,15 @@ class controlador_inm_prospecto extends _ctl_formato {
                         header: $header, ws: $ws);
                 }
 
-                $inm_rel_conyuge_prospecto_ins['inm_prospecto_id'] = $this->registro_id;
-                $inm_rel_conyuge_prospecto_ins['inm_conyuge_id'] = $alta_conyuge->registro_id;
+                $inm_rel_conyuge_prospecto_ins = (new _inm_prospecto())->inm_rel_conyuge_prospecto_ins(
+                    inm_conyuge_id: $alta_conyuge->registro_id, inm_prospecto_id: $this->registro_id);
+
+                if (errores::$error) {
+                    $this->link->rollBack();
+                    return $this->retorno_error(mensaje: 'Error al maquetar conyuge relacion', data: $inm_rel_conyuge_prospecto_ins,
+                        header: $header, ws: $ws);
+                }
+
 
                 $r_inm_rel_conyuge_prospecto_bd = (new inm_rel_conyuge_prospecto(link: $this->link))->alta_registro(
                     registro: $inm_rel_conyuge_prospecto_ins);
@@ -694,6 +701,22 @@ class controlador_inm_prospecto extends _ctl_formato {
                 }
             }
             else{
+                $inm_conyuge_previo = (new inm_prospecto(link: $this->link))->inm_conyuge(
+                    columnas_en_bruto: true,inm_prospecto_id: $this->registro_id,retorno_obj: true);
+                if (errores::$error) {
+                    $this->link->rollBack();
+                    return $this->retorno_error(mensaje: 'Error al obtener conyuge', data: $inm_conyuge_previo,
+                        header: $header, ws: $ws);
+                }
+
+                $inm_conyuge_id = $inm_conyuge_previo->id;
+
+                $r_modifica_conyuge = (new inm_conyuge(link: $this->link))->modifica_bd(registro: $conyuge,id: $inm_conyuge_id);
+                if (errores::$error) {
+                    $this->link->rollBack();
+                    return $this->retorno_error(mensaje: 'Error al modificar conyuge', data: $r_modifica_conyuge,
+                        header: $header, ws: $ws);
+                }
 
             }
 

@@ -206,6 +206,13 @@ class _inm_prospecto{
     }
 
 
+    final public function inm_rel_conyuge_prospecto_ins(int $inm_conyuge_id, int $inm_prospecto_id): array
+    {
+        $inm_rel_conyuge_prospecto_ins['inm_prospecto_id'] = $inm_prospecto_id;
+        $inm_rel_conyuge_prospecto_ins['inm_conyuge_id'] = $inm_conyuge_id;
+
+        return $inm_rel_conyuge_prospecto_ins;
+    }
 
 
 

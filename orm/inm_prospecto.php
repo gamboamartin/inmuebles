@@ -286,7 +286,12 @@ class inm_prospecto extends _modelo_parent{
         return $r_elimina;
     }
 
-    final public function existe_conyuge(int $inm_prospecto_id){
+    /**
+     * @param int $inm_prospecto_id
+     * @return array|bool
+     */
+    final public function existe_conyuge(int $inm_prospecto_id): bool|array
+    {
         $filtro = array();
         $filtro['inm_prospecto.id'] = $inm_prospecto_id;
 
