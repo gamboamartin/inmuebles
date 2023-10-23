@@ -636,8 +636,9 @@ class _keys_selects{
     }
 
     /**
-     * @param controlador_inm_prospecto $controler
-     * @param array $keys_selects
+     * Genera un selector de nacionalidad
+     * @param controlador_inm_prospecto $controler controlador en ejecucion
+     * @param array $keys_selects Params previos cargados
      * @return array
      */
     private function key_select_nacionalidad(controlador_inm_prospecto $controler, array $keys_selects): array
@@ -657,8 +658,9 @@ class _keys_selects{
     }
 
     /**
-     * @param controlador_inm_prospecto $controler
-     * @param array $keys_selects
+     * Genera un selector de ocupacion
+     * @param controlador_inm_prospecto $controler Controlador en ejecucion
+     * @param array $keys_selects Parametros previos cargados
      * @return array
      */
     private function key_select_ocupacion(controlador_inm_prospecto $controler, array $keys_selects): array

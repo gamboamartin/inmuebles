@@ -63,6 +63,11 @@ class controlador_inm_prospecto extends _ctl_formato {
 
     }
 
+    /**
+     * @param bool $header
+     * @param bool $ws
+     * @return array|string
+     */
     public function alta(bool $header, bool $ws = false): array|string
     {
         $r_alta = $this->init_alta();
