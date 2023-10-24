@@ -9,7 +9,6 @@
 namespace gamboamartin\inmuebles\controllers;
 
 use base\controller\init;
-use gamboamartin\administrador\models\adm_usuario;
 use gamboamartin\errores\errores;
 use gamboamartin\inmuebles\html\_base;
 use gamboamartin\inmuebles\html\inm_prospecto_html;
@@ -25,7 +24,6 @@ use html\dp_estado_html;
 use html\dp_municipio_html;
 use PDO;
 use stdClass;
-use Throwable;
 
 class controlador_inm_prospecto extends _ctl_formato {
 
@@ -420,99 +418,26 @@ class controlador_inm_prospecto extends _ctl_formato {
                 mensaje: 'Error al generar salida de template',data:  $r_modifica,header: $header,ws: $ws);
         }
 
-        $keys_selects = array();
-
-        $keys_selects = (new \gamboamartin\inmuebles\controllers\_inm_prospecto())->keys_selects_infonavit(
-            controlador: $this,keys_selects:  $keys_selects);
+        $data = (new \gamboamartin\inmuebles\controllers\_inm_prospecto())->inputs_base(controlador: $this);
         if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects, header: $header,ws:  $ws);
+            return $this->retorno_error(mensaje: 'Error al integrar datos para front',data:  $data, header: $header,ws:  $ws);
         }
 
-        $keys_selects = (new \gamboamartin\inmuebles\controllers\_inm_prospecto())->keys_selects_dp(controlador: $this,keys_selects:  $keys_selects);
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects, header: $header,ws:  $ws);
-        }
-
-
-        $keys_selects = $this->key_select(cols:12, con_registros: true,filtro:  array(), key: 'inm_sindicato_id',
-            keys_selects:$keys_selects, id_selected: $this->registro['inm_sindicato_id'], label: 'Sindicato');
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects, header: $header,ws:  $ws);
-        }
-
-        $keys_selects = $this->key_select(cols:6, con_registros: true,filtro:  array(), key: 'inm_nacionalidad_id',
-            keys_selects:$keys_selects, id_selected: $this->registro['inm_nacionalidad_id'], label: 'Nacionalidad');
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects, header: $header,ws:  $ws);
-        }
-
-        $keys_selects = $this->key_select(cols:6, con_registros: true,filtro:  array(), key: 'inm_ocupacion_id',
-            keys_selects:$keys_selects, id_selected: $this->registro['inm_ocupacion_id'], label: 'Ocupacion');
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects, header: $header,ws:  $ws);
-        }
-
-
-        $row = (new \gamboamartin\inmuebles\controllers\_inm_prospecto())->row_base_fiscal(controlador: $this);
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al row',data:  $row, header: $header,ws:  $ws);
-        }
-
-        $radios = (new \gamboamartin\inmuebles\models\_inm_comprador())->radios_chk(controler: $this);
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al integrar radios',data:  $radios, header: $header,ws:  $ws);
-        }
-
-
-        $base = $this->base_upd(keys_selects: $keys_selects, params: array(),params_ajustados: array());
+        $base = $this->base_upd(keys_selects: $data->keys_selects, params: array(),params_ajustados: array());
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al integrar base',data:  $base, header: $header,ws:  $ws);
         }
 
 
-        $headers = (new \gamboamartin\inmuebles\controllers\_inm_prospecto())->headers_prospecto();
+        $headers = (new \gamboamartin\inmuebles\controllers\_inm_prospecto())->headers_front(controlador: $this);
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al generar headers',data:  $headers, header: $header,ws:  $ws);
         }
 
-        $headers = (new _base(html: $this->html_base))->genera_headers(controler: $this,headers:  $headers);
+        $inputs = (new \gamboamartin\inmuebles\controllers\_inm_prospecto())->inputs_nacimiento(controlador: $this);
         if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al generar headers',data:  $headers, header: $header,ws:  $ws);
+            return $this->retorno_error(mensaje: 'Error al generar inputs',data:  $inputs, header: $header,ws:  $ws);
         }
-
-
-        $dp_estado_nacimiento_id = (new dp_estado_html(html: $this->html_base))->select_dp_estado_id(cols: 6,
-            con_registros: true, id_selected: $this->registro['dp_estado_nacimiento_id'], link: $this->link,
-            label: 'Edo Nac', name: 'dp_estado_nacimiento_id');
-
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al obtener input',data:  $dp_estado_nacimiento_id,
-                header: $header,ws:  $ws);
-        }
-
-        $this->inputs->dp_estado_nacimiento_id = $dp_estado_nacimiento_id;
-
-        $filtro = array('dp_estado.id'=>$this->registro['dp_estado_nacimiento_id']);
-        $dp_municipio_nacimiento_id = (new dp_municipio_html(html: $this->html_base))->select_dp_municipio_id(cols: 6,
-            con_registros: true, id_selected: $this->registro['dp_municipio_nacimiento_id'], link: $this->link,
-            filtro: $filtro, label: 'Mun Nac', name: 'dp_municipio_nacimiento_id');
-
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al obtener input',data:  $dp_municipio_nacimiento_id,
-                header: $header,ws:  $ws);
-        }
-
-        $this->inputs->dp_municipio_nacimiento_id = $dp_municipio_nacimiento_id;
-
-
-        $fecha_nacimiento = $this->html->input_fecha(cols: 6, row_upd: $this->row_upd, value_vacio: false,
-            name: 'fecha_nacimiento', place_holder: 'Fecha Nac', value: $this->row_upd->fecha_nacimiento);
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al obtener input',data:  $fecha_nacimiento,
-                header: $header,ws:  $ws);
-        }
-
-        $this->inputs->fecha_nacimiento = $fecha_nacimiento;
 
 
         $conyuge = (new _conyuge())->inputs_conyuge(controler: $this);
