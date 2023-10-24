@@ -129,6 +129,7 @@ class _inm_prospecto{
     /**
      * Inicializa un registro de conyuge
      * @return array
+     * @version 2.263.2
      */
     private function init_conyuge(): array
     {
@@ -217,7 +218,8 @@ class _inm_prospecto{
             return $this->error->error(mensaje: 'Error al obtener filtro ',data:  $filtro);
         }
 
-        $keys_selects = $this->keys_selects_comercial(controlador: $controlador,filtro: $filtro,keys_selects:  $keys_selects);
+        $keys_selects = $this->keys_selects_comercial(controlador: $controlador,filtro: $filtro,
+            keys_selects:  $keys_selects);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
