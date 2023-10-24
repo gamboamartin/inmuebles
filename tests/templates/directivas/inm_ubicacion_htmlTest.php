@@ -567,7 +567,7 @@ class inm_ubicacion_htmlTest extends test {
 
         $this->assertIsString($resultado);
         $this->assertNotTrue(errores::$error);
-        $this->assertStringContainsStringIgnoringCase(" inm_ubicacion_id' data-live-search='true' id='inm_ubicacion_id' name='inm_ubicacion_id' required",$resultado);
+        $this->assertStringContainsStringIgnoringCase("y inm_ubicacion_id ' data-live-search='true' id='inm_ubicacion_id' name='inm_ubicacion_id' required ><option",$resultado);
         errores::$error = false;
     }
 

@@ -381,6 +381,33 @@ class inm_prospecto extends _modelo_parent{
         return $inm_prospecto_proceso_ins;
     }
 
+    final public function inserta_conyuge(array $conyuge, int $inm_prospecto_id){
+        $alta_conyuge = (new inm_conyuge(link: $this->link))->alta_registro(registro: $conyuge);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al insertar conyuge', data: $alta_conyuge);
+        }
+
+        $inm_rel_conyuge_prospecto_ins = (new _inm_prospecto())->inm_rel_conyuge_prospecto_ins(
+            inm_conyuge_id: $alta_conyuge->registro_id, inm_prospecto_id: $inm_prospecto_id);
+
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al maquetar conyuge relacion', data: $inm_rel_conyuge_prospecto_ins);
+        }
+
+
+        $r_inm_rel_conyuge_prospecto_bd = (new inm_rel_conyuge_prospecto(link: $this->link))->alta_registro(
+            registro: $inm_rel_conyuge_prospecto_ins);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al insertar conyuge', data: $r_inm_rel_conyuge_prospecto_bd);
+        }
+        $data = new stdClass();
+        $data->alta_conyuge = $alta_conyuge;
+        $data->inm_rel_conyuge_prospecto_ins = $inm_rel_conyuge_prospecto_ins;
+        $data->r_inm_rel_conyuge_prospecto_bd = $r_inm_rel_conyuge_prospecto_bd;
+
+        return $data;
+    }
+
     /**
      * Inserta un sub proceso de etapa en prospecto
      * @param int $inm_prospecto_id Identificador de prospecto

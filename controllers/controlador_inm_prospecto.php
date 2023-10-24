@@ -10,18 +10,14 @@ namespace gamboamartin\inmuebles\controllers;
 
 use base\controller\init;
 use gamboamartin\errores\errores;
-use gamboamartin\inmuebles\html\_base;
 use gamboamartin\inmuebles\html\inm_prospecto_html;
 use gamboamartin\inmuebles\models\_base_paquete;
 use gamboamartin\inmuebles\models\_inm_prospecto;
 use gamboamartin\inmuebles\models\inm_conyuge;
 use gamboamartin\inmuebles\models\inm_prospecto;
-use gamboamartin\inmuebles\models\inm_rel_conyuge_prospecto;
 use gamboamartin\system\links_menu;
 use gamboamartin\template\html;
 use html\doc_tipo_documento_html;
-use html\dp_estado_html;
-use html\dp_municipio_html;
 use PDO;
 use stdClass;
 
@@ -137,15 +133,16 @@ class controlador_inm_prospecto extends _ctl_formato {
     }
 
     /**
-     * @param bool $header
-     * @param bool $ws
+     * Convierte un prospecto en cliente
+     * @param bool $header Muestra resultado en web
+     * @param bool $ws Muestra resultado a nivel ws
      * @return array|string
      */
     public function convierte_cliente(bool $header, bool $ws = false): array|string
     {
         $this->link->beginTransaction();
 
-        $retorno = (new \gamboamartin\inmuebles\controllers\_base())->init_retorno();
+        $retorno = (new _base())->init_retorno();
         if(errores::$error){
             $this->link->rollBack();
             return $this->retorno_error(mensaje: 'Error al obtener datos de retorno', data: $retorno,
@@ -162,8 +159,8 @@ class controlador_inm_prospecto extends _ctl_formato {
 
         $this->link->commit();
 
-        $out = (new \gamboamartin\inmuebles\controllers\_base())->out(controlador: $this,header:  $header,
-            result:  $conversion,retorno:  $retorno, ws: $ws);
+        $out = (new _base())->out(controlador: $this,header:  $header, result:  $conversion,
+            retorno:  $retorno, ws: $ws);
         if(errores::$error){
             $this->link->rollBack();
             return $this->retorno_error(mensaje: 'Error al dar salida', data: $out,
@@ -456,56 +453,22 @@ class controlador_inm_prospecto extends _ctl_formato {
     {
         $this->link->beginTransaction();
 
-        $existe_conyuge = (new inm_prospecto(link: $this->link))->existe_conyuge(inm_prospecto_id: $this->registro_id);
+
+
+        $datos = (new \gamboamartin\inmuebles\controllers\_inm_prospecto())->datos_conyuge(
+            link: $this->link,inm_prospecto_id: $this->registro_id);
         if(errores::$error){
             $this->link->rollBack();
-            return $this->retorno_error(mensaje: 'Error al validar si existe conyuge',data:  $existe_conyuge,
+            return $this->retorno_error(mensaje: 'Error al obtener dato conyuge',data:  $datos,
                 header: $header,ws:  $ws);
         }
 
+        if($datos->tiene_dato_conyuge){
 
-        $conyuge = array();
-        if(isset($_POST['conyuge'])){
-            $conyuge = $_POST['conyuge'];
-            unset($_POST['conyuge']);
-        }
+            if(!$datos->existe_conyuge) {
 
-        $tiene_dato_conyuge = false;
-
-        foreach ($conyuge as $value){
-            if($value === null){
-                $value = '';
-            }
-            $value = trim($value);
-            if($value!==''){
-                $tiene_dato_conyuge = true;
-                break;
-            }
-        }
-
-        if($tiene_dato_conyuge){
-
-            if(!$existe_conyuge) {
-
-                $alta_conyuge = (new inm_conyuge(link: $this->link))->alta_registro(registro: $conyuge);
-                if (errores::$error) {
-                    $this->link->rollBack();
-                    return $this->retorno_error(mensaje: 'Error al insertar conyuge', data: $alta_conyuge,
-                        header: $header, ws: $ws);
-                }
-
-                $inm_rel_conyuge_prospecto_ins = (new _inm_prospecto())->inm_rel_conyuge_prospecto_ins(
-                    inm_conyuge_id: $alta_conyuge->registro_id, inm_prospecto_id: $this->registro_id);
-
-                if (errores::$error) {
-                    $this->link->rollBack();
-                    return $this->retorno_error(mensaje: 'Error al maquetar conyuge relacion', data: $inm_rel_conyuge_prospecto_ins,
-                        header: $header, ws: $ws);
-                }
-
-
-                $r_inm_rel_conyuge_prospecto_bd = (new inm_rel_conyuge_prospecto(link: $this->link))->alta_registro(
-                    registro: $inm_rel_conyuge_prospecto_ins);
+                $r_inm_rel_conyuge_prospecto_bd = (new inm_prospecto(link: $this->link))->inserta_conyuge(
+                    conyuge: $datos->conyuge,inm_prospecto_id: $this->registro_id);
                 if (errores::$error) {
                     $this->link->rollBack();
                     return $this->retorno_error(mensaje: 'Error al insertar conyuge', data: $r_inm_rel_conyuge_prospecto_bd,
@@ -523,7 +486,7 @@ class controlador_inm_prospecto extends _ctl_formato {
 
                 $inm_conyuge_id = $inm_conyuge_previo->id;
 
-                $r_modifica_conyuge = (new inm_conyuge(link: $this->link))->modifica_bd(registro: $conyuge,id: $inm_conyuge_id);
+                $r_modifica_conyuge = (new inm_conyuge(link: $this->link))->modifica_bd(registro: $datos->conyuge,id: $inm_conyuge_id);
                 if (errores::$error) {
                     $this->link->rollBack();
                     return $this->retorno_error(mensaje: 'Error al modificar conyuge', data: $r_modifica_conyuge,

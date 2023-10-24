@@ -89,7 +89,7 @@ class _inm_compradorTest extends test {
 
         $this->assertIsString($resultado);
         $this->assertNotTrue(errores::$error);
-        $this->assertEquals("<div class='control-group col-sm-12'><label class='control-label' for='inm_co_acreditado_id'>Co Acreditado</label><div class='controls'><select class='form-control selectpicker color-secondary  inm_co_acreditado_id' data-live-search='true' id='inm_co_acreditado_id' name='inm_co_acreditado_id' required ><option value=''  >Selecciona una opcion</option></select></div></div>",$resultado);
+        $this->assertEquals("<div class='control-group col-sm-12'><label class='control-label' for='inm_co_acreditado_id'>Co Acreditado</label><div class='controls'><select class='form-control selectpicker color-secondary inm_co_acreditado_id ' data-live-search='true' id='inm_co_acreditado_id' name='inm_co_acreditado_id' required ><option value=''  >Selecciona una opcion</option></select></div></div>",$resultado);
         errores::$error = false;
 
         $alta = (new base_test())->alta_inm_co_acreditado(link: $this->link);
@@ -103,7 +103,7 @@ class _inm_compradorTest extends test {
 
         $this->assertIsString($resultado);
         $this->assertNotTrue(errores::$error);
-        $this->assertEquals("<div class='control-group col-sm-12'><label class='control-label' for='inm_co_acreditado_id'>Co Acreditado</label><div class='controls'><select class='form-control selectpicker color-secondary  inm_co_acreditado_id' data-live-search='true' id='inm_co_acreditado_id' name='inm_co_acreditado_id' required ><option value=''  >Selecciona una opcion</option><option value='1'  >12345678912 XEXX010101MNEXXXA8 NOMBRE AP APELLIDO MATERNO</option></select></div></div>",$resultado);
+        $this->assertEquals("<div class='control-group col-sm-12'><label class='control-label' for='inm_co_acreditado_id'>Co Acreditado</label><div class='controls'><select class='form-control selectpicker color-secondary inm_co_acreditado_id ' data-live-search='true' id='inm_co_acreditado_id' name='inm_co_acreditado_id' required ><option value=''  >Selecciona una opcion</option><option value='1'  >12345678912 XEXX010101MNEXXXA8 NOMBRE AP APELLIDO MATERNO</option></select></div></div>",$resultado);
         errores::$error = false;
     }
 

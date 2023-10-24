@@ -30,6 +30,8 @@ let chk_es_segundo_credito = $(".es_segundo_credito");
 
 let sl_dp_pais_id = $("#dp_pais_id");
 let sl_dp_estado_id = $("#dp_estado_id");
+let sl_conyuge_dp_estado_id = $("#conyuge_dp_estado_id");
+let sl_conyuge_dp_municipio_id = $("#conyuge_dp_municipio_id");
 let sl_dp_municipio_id = $("#dp_municipio_id");
 let sl_dp_cp_id = $("#dp_cp_id");
 let sl_dp_colonia_postal_id = $("#dp_colonia_postal_id");
@@ -315,6 +317,11 @@ sl_dp_pais_id.change(function(){
 sl_dp_estado_id.change(function(){
     dp_estado_id = $(this).val();
     dp_asigna_municipios(dp_estado_id);
+});
+
+sl_conyuge_dp_estado_id.change(function(){
+    conyuge_dp_estado_id = $(this).val();
+    dp_asigna_municipios(conyuge_dp_estado_id,'','#conyuge_dp_municipio_id');
 });
 
 sl_dp_municipio_id.change(function(){

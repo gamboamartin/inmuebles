@@ -3,6 +3,7 @@ namespace gamboamartin\inmuebles\controllers;
 
 use gamboamartin\administrador\models\adm_usuario;
 use gamboamartin\errores\errores;
+use gamboamartin\inmuebles\models\inm_prospecto;
 use gamboamartin\validacion\validacion;
 use html\dp_estado_html;
 use html\dp_municipio_html;
@@ -17,6 +18,28 @@ class _inm_prospecto{
     public function __construct(){
         $this->error = new errores();
         $this->validacion = new validacion();
+    }
+    
+    final public function datos_conyuge(PDO $link, int $inm_prospecto_id){
+        $existe_conyuge = (new inm_prospecto(link: $link))->existe_conyuge(inm_prospecto_id: $inm_prospecto_id);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al validar si existe conyuge',data:  $existe_conyuge);
+        }
+
+        $conyuge = $this->init_conyuge();
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al inicializar conyuge',data:  $conyuge);
+        }
+
+        $tiene_dato_conyuge = $this->tiene_dato_conyuge(conyuge: $conyuge);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al validar si tiene dato conyuge',data:  $tiene_dato_conyuge);
+        }
+        $datos = new stdClass();
+        $datos->existe_conyuge = $existe_conyuge;
+        $datos->conyuge = $conyuge;
+        $datos->tiene_dato_conyuge = $tiene_dato_conyuge;
+        return $datos;
     }
 
     private function disabled_segundo_credito(array $registro): bool
@@ -94,6 +117,15 @@ class _inm_prospecto{
         $headers['7'] = '7. DATOS EMPRESA TRABAJADOR';
         $headers['8'] = '8. DATOS DE CONYUGE';
         return $headers;
+    }
+
+    private function init_conyuge(){
+        $conyuge = array();
+        if(isset($_POST['conyuge'])){
+            $conyuge = $_POST['conyuge'];
+            unset($_POST['conyuge']);
+        }
+        return $conyuge;
     }
 
     final public function inputs_base(controlador_inm_prospecto $controlador){
@@ -338,5 +370,21 @@ class _inm_prospecto{
             $controlador->row_upd->rfc = 'XAXX010101000';
         }
         return $controlador->row_upd;
+    }
+
+    private function tiene_dato_conyuge(array $conyuge): bool
+    {
+        $tiene_dato_conyuge = false;
+        foreach ($conyuge as $value){
+            if($value === null){
+                $value = '';
+            }
+            $value = trim($value);
+            if($value!==''){
+                $tiene_dato_conyuge = true;
+                break;
+            }
+        }
+        return $tiene_dato_conyuge;
     }
 }

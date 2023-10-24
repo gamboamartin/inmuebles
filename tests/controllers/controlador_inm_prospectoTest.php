@@ -52,7 +52,9 @@ class controlador_inm_prospectoTest extends test {
 
 
         assertStringContainsStringIgnoringCase("data-live-search='true' id='com_agente_id' name='com_agente_id' required >", $data);
-        assertStringContainsStringIgnoringCase(" com_tipo_prospecto_id' data-live-search='true' id='com_tipo_prospecto_id' name='com_tipo_prospecto_id' required >", $data);
+        assertStringContainsStringIgnoringCase("<label class='control-label' for='com_tipo_prospecto_id'>Tipo de prospecto<", $data);
+        assertStringContainsStringIgnoringCase("/label><div class='controls'><select class='form-control selectpicker", $data);
+        assertStringContainsStringIgnoringCase("color-secondary com_tipo_prospecto_id ' data-live-search='true' id='com_tipo_prospecto_id' name='com_tipo_prospecto_id' required >", $data);
         assertStringContainsStringIgnoringCase("<input type='text' name='nombre' value='' class='form-control' required id='nombre' placeholder='Nombre' ", $data);
         assertStringContainsStringIgnoringCase("<label class='control-label' for='apellido_paterno'>Apellido Paterno</label><div class='controls'><input type=", $data);
         assertStringContainsStringIgnoringCase("<label class='control-label' for='apellido_materno'>Apellido Materno</label><div class='controls'><input type=", $data);

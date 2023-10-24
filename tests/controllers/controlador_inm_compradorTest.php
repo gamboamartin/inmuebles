@@ -57,7 +57,8 @@ class controlador_inm_compradorTest extends test {
         assertStringContainsStringIgnoringCase("title='Es Segundo Credito'", $data);
         assertStringContainsStringIgnoringCase(" form-check-input' id='es_segundo_credito'", $data);
         assertStringContainsStringIgnoringCase("<label class='control-label' for='inm_plazo_credito_sc_id'>Plazo Segundo Credito</label>", $data);
-        assertStringContainsStringIgnoringCase("<div class='controls'><select class='form-control selectpicker color-secondary  inm_plazo_credito_sc_id", $data);
+        assertStringContainsStringIgnoringCase("<div class='control-group col-sm-6'><label class='control-label'", $data);
+        assertStringContainsStringIgnoringCase("for='inm_plazo_credito_sc_id'>", $data);
         assertStringContainsStringIgnoringCase("<hr><h4>2. DATOS PARA DETERMINAR EL MONTO DE CRÉDITO <a class='btn btn-primary' role='button' id='collapse_a2'>Ver/Ocultar</a> </h4><hr", $data);
         assertStringContainsStringIgnoringCase('<div id="apartado_2">', $data);
         assertStringContainsStringIgnoringCase("ss='control-label' for='descuento_pension_alimenticia_dh'>Descuento Pension Alimenticia Derechohabiente</label><di", $data);
@@ -65,7 +66,8 @@ class controlador_inm_compradorTest extends test {
         assertStringContainsStringIgnoringCase("<input type='radio' name='con_discapacidad", $data);
         assertStringContainsStringIgnoringCase("l-group col-sm-6'><label class='control-label' for='inm_tipo_discapacidad_id'>Tipo de Discapacidad</label><div class='controls'><select class=", $data);
         assertStringContainsStringIgnoringCase("<div class='control-group col-sm-12'><label class='control-label'", $data);
-        assertStringContainsStringIgnoringCase("_civil_id' data-live-search='true' id='inm_estado_civil_id' name='inm_estado_civil_id' required ><option value=''  >Selecciona una", $data);
+        assertStringContainsStringIgnoringCase("<label class='control-label' for='inm_estado_civil_id'>Estado Civil</label><div class='controls'>", $data);
+        assertStringContainsStringIgnoringCase("<select class='form-control selectpicker color-secondary inm_estado_civil_id ' data-live-search='true'", $data);
         assertStringContainsStringIgnoringCase("m-6'><label class='control-label' for='cat_sat_regimen_fiscal_id'>Regimen Fiscal</label><div class='controls'><select class='form-control se", $data);
         assertStringContainsStringIgnoringCase("e Cliente</label><div class='controls'><select class='form-control selectpick", $data);
         assertStringContainsStringIgnoringCase("<h4>", $data);
@@ -138,7 +140,8 @@ class controlador_inm_compradorTest extends test {
         assertStringContainsStringIgnoringCase('<main class="main section-color-primary">', $data);
         assertStringContainsStringIgnoringCase("<input type='hidden' name='registro_id' value='1'>", $data);
         assertStringContainsStringIgnoringCase('<div class="row">', $data);
-        assertStringContainsStringIgnoringCase("<div class='control-group col-sm-12'><label class='control-label' for='inm_co_acreditado_id'>Co Acreditado</label><div class='controls'><select class='form-control selectpicker color-secondary  inm_co_acreditado_id' data-live-search='true' id='inm_co_acreditado_id' name='inm_co_acreditado_id' required ><option value=''  >", $data);
+        assertStringContainsStringIgnoringCase("for='inm_co_acreditado_id'>Co Acreditado</label><div class='controls'><select class='form-control selectpicker", $data);
+        assertStringContainsStringIgnoringCase("color-secondary inm_co_acreditado_id ' data-live-search='true' id='inm_co_acreditado_id' name='inm_co_acreditado_id' required >", $data);
         assertStringContainsStringIgnoringCase("Selecciona una opcion</option><option value='1'  >12345678912 XEXX010101MNEXXXA8 NOMBRE AP APELLIDO MATERNO</option></select></div></div>", $data);
 
 
@@ -181,7 +184,8 @@ class controlador_inm_compradorTest extends test {
 
         assertStringContainsStringIgnoringCase("<label class='control-label' for='inm_ubicacion_id'>", $data);
         assertStringContainsStringIgnoringCase("<input type='text' name='precio_operacion' value='' class='form-control'", $data);
-        assertStringContainsStringIgnoringCase("<select class='form-control selectpicker color-secondary  com_tipo_cliente_id'", $data);
+        assertStringContainsStringIgnoringCase(" for='com_tipo_cliente_id'>Tipo de Cliente</label><div class='controls'><select class='form-control selectpicker", $data);
+        assertStringContainsStringIgnoringCase(" color-secondary com_tipo_cliente_id ' data-live-search='true' id='com_tipo_cliente_id'", $data);
         assertStringContainsStringIgnoringCase("<input type='hidden' name='inm_comprador_id' value='1'>", $data);
         assertStringContainsStringIgnoringCase("<input type='hidden' name='inm_comprador_id' value='1'>", $data);
         assertStringContainsStringIgnoringCase("<input type='hidden' name='seccion_retorno' value='inm_comprador'>", $data);

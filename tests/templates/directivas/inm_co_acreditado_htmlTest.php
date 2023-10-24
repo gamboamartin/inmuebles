@@ -326,7 +326,7 @@ class inm_co_acreditado_htmlTest extends test {
 
         $this->assertIsString($resultado);
         $this->assertNotTrue(errores::$error);
-        $this->assertStringContainsStringIgnoringCase("<div class='control-group col-sm-2'><label class='control-label' for='inm_co_acreditado_id'>Co Acreditado</label><div class='controls'><select class='form-control selectpicker color-secondary  inm_co_acreditado_id' data-live-search='true' id='inm_co_acreditado_id' name='inm_co_acreditado_id' required ><option value=''  >Selecciona una opcion</option><option value='1'  >NOMBRE AP APELLIDO MATERNO 12345678912 XEXX010101MNEXXXA8 AAA010101AAA",$resultado);
+        $this->assertStringContainsStringIgnoringCase("<div class='control-group col-sm-2'><label class='control-label' for='inm_co_acreditado_id'>Co Acreditado</label><div class='controls'><select class='form-control selectpicker color-secondary inm_co_acreditado_id ' data-live-search='true' id='inm_co_acreditado_id' name='inm_co_acreditado_id' required ><option value=''  >Selecciona una opcion</option><option value='1'  >NOMBRE AP APELLIDO MATERNO 12345678912 XEXX010101MNEXXXA8 AAA010101AAA",$resultado);
 
         errores::$error = false;
     }

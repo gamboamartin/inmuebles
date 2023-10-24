@@ -25,6 +25,7 @@ class _conyuge{
             return $this->error->error(mensaje: 'Error al validar si existe conyuge',data:  $existe_conyuge);
         }
 
+
         $row_upd = new stdClass();
         $row_upd->nombre = '';
         $row_upd->apellido_paterno = '';
@@ -113,8 +114,9 @@ class _conyuge{
         $conyuge->telefono_celular = $telefono_celular;
 
         $modelo = new dp_estado(link: $controler->link);
-        $dp_estado_id = $controler->html->select_catalogo(cols: 6,con_registros:  true,
-            id_selected:  $row_upd->dp_estado_id, modelo:  $modelo, name: 'conyuge[dp_estado_id]');
+        $dp_estado_id = $controler->html->select_catalogo(cols: 6, con_registros: true,
+            id_selected: $row_upd->dp_estado_id, modelo: $modelo, id_css: 'conyuge_dp_estado_id',
+            label: 'Estado Nac', name: 'conyuge[dp_estado_id]');
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al obtener input',data:  $dp_estado_id);
         }
@@ -122,8 +124,9 @@ class _conyuge{
         $conyuge->dp_estado_id = $dp_estado_id;
 
         $modelo = new dp_municipio(link: $controler->link);
-        $dp_municipio_id = $controler->html->select_catalogo(cols: 6,con_registros:  true,id_selected: $row_upd->dp_municipio_id,
-            modelo:  $modelo, name: 'conyuge[dp_municipio_id]');
+        $dp_municipio_id = $controler->html->select_catalogo(cols: 6, con_registros: true,
+            id_selected: $row_upd->dp_municipio_id, modelo: $modelo, filtro: array('dp_estado.id'=>$dp_estado_id),
+            id_css: 'conyuge_dp_municipio_id', label: 'Municipio Nac', name: 'conyuge[dp_municipio_id]');
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al obtener input',data:  $dp_municipio_id);
         }
@@ -131,8 +134,9 @@ class _conyuge{
         $conyuge->dp_municipio_id = $dp_municipio_id;
 
         $modelo = new inm_nacionalidad(link: $controler->link);
-        $inm_nacionalidad_id = $controler->html->select_catalogo(cols: 6,con_registros:  true,  id_selected: $row_upd->inm_nacionalidad_id,
-            modelo:  $modelo, name: 'conyuge[inm_nacionalidad_id]');
+        $inm_nacionalidad_id = $controler->html->select_catalogo(cols: 6, con_registros: true,
+            id_selected: $row_upd->inm_nacionalidad_id, modelo: $modelo, label: 'Nacionalidad',
+            name: 'conyuge[inm_nacionalidad_id]');
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al obtener input',data:  $inm_nacionalidad_id);
         }
@@ -140,16 +144,18 @@ class _conyuge{
         $conyuge->inm_nacionalidad_id = $inm_nacionalidad_id;
 
         $modelo = new inm_ocupacion(link: $controler->link);
-        $inm_ocupacion_id = $controler->html->select_catalogo(cols: 12,con_registros:  true,  id_selected: $row_upd->inm_ocupacion_id,
-            modelo:  $modelo, name: 'conyuge[inm_ocupacion_id]');
+        $inm_ocupacion_id = $controler->html->select_catalogo(cols: 12, con_registros: true,
+            id_selected: $row_upd->inm_ocupacion_id, modelo: $modelo, label: 'Ocupacion',
+            name: 'conyuge[inm_ocupacion_id]');
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al obtener input',data:  $inm_ocupacion_id);
         }
 
         $conyuge->inm_ocupacion_id = $inm_ocupacion_id;
 
-        $fecha_nacimiento = $controler->html->input_fecha(cols: 6,row_upd:  $row_upd,
-            value_vacio:  false, name: 'conyuge[fecha_nacimiento]', required: false, value: $row_upd->fecha_nacimiento);
+        $fecha_nacimiento = $controler->html->input_fecha(cols: 6, row_upd: $row_upd,
+            value_vacio: false, name: 'conyuge[fecha_nacimiento]', place_holder: 'Fecha Nac', required: false,
+            value: $row_upd->fecha_nacimiento);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al obtener fecha_nacimiento',data:  $fecha_nacimiento);
         }
