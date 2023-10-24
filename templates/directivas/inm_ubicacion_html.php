@@ -211,12 +211,13 @@ class inm_ubicacion_html extends html_controler {
         if(is_array($controler->inputs)){
             return $this->error->error(mensaje: 'Error inputs no esta inicializado',data:  $controler->inputs);
         }
+
         $columns_ds = array('inm_comprador_curp','inm_comprador_nombre','inm_comprador_apellido_paterno',
-            'inm_comprador_apellido_materno','inm_comprador_nss');
+            'inm_comprador_nss');
         $inm_comprador_id = (new inm_comprador_html(html: $controler->html_base))->select_inm_comprador_id(
             cols: 12, con_registros: true,id_selected: -1,link:  $controler->link, columns_ds: $columns_ds);
         if(errores::$error){
-            return $this->error->error(mensaje: 'Error al inm_comprador_id',data:  $inm_comprador_id);
+            return $this->error->error(mensaje: 'Error al obtener inm_comprador_id select',data:  $inm_comprador_id);
         }
 
         $controler->inputs->inm_comprador_id = $inm_comprador_id;

@@ -137,6 +137,7 @@ class _inm_comprador{
         $headers['8'] = '7. REFERENCIAS FAMILIARES DEL (DE LA) DERECHOHABIENTE / DATOS QUE SERÁN VALIDADOS';
         $headers['13'] = '13. DATOS FISCALES PARA FACTURACION';
         $headers['14'] = '14. CONTROL INTERNO';
+        $headers['15'] = '15. DATOS CONYUGE';
 
         return $headers;
     }

@@ -16,6 +16,8 @@ use gamboamartin\inmuebles\html\inm_referencia_html;
 use gamboamartin\inmuebles\models\_base_paquete;
 use gamboamartin\inmuebles\models\_inm_comprador;
 use gamboamartin\inmuebles\models\inm_comprador;
+use gamboamartin\inmuebles\models\inm_conyuge;
+use gamboamartin\inmuebles\models\inm_prospecto;
 use gamboamartin\inmuebles\models\inm_referencia;
 use gamboamartin\inmuebles\models\inm_ubicacion;
 use gamboamartin\system\_ctl_base;
@@ -580,8 +582,8 @@ class controlador_inm_comprador extends _ctl_base {
         }
 
         $sl_dp_estado_nacimiento_id = (new dp_estado_html(html: $this->html_base))->select_dp_estado_id(
-            cols: 6,con_registros:  true,id_selected:  $this->registro['dp_estado_nacimiento_id'],link:  $this->link, label: 'Estado Nac',
-            name: 'dp_estado_nacimiento_id');
+            cols: 6,con_registros:  true,id_selected:  $this->registro['dp_estado_nacimiento_id'],
+            link:  $this->link, label: 'Estado Nac', name: 'dp_estado_nacimiento_id');
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al integrar sl_dp_estado_nacimiento_id',
                 data:  $sl_dp_estado_nacimiento_id,header: $header,ws: $ws);
@@ -591,8 +593,8 @@ class controlador_inm_comprador extends _ctl_base {
         $this->inputs->dp_estado_nacimiento_id = $sl_dp_estado_nacimiento_id;
 
         $sl_dp_municipio_nacimiento_id = (new dp_municipio_html(html: $this->html_base))->select_dp_municipio_id(
-            cols: 6, con_registros: true, id_selected: $this->registro['dp_municipio_nacimiento_id'], link: $this->link, filtro: $filtro,
-            label: 'Municipio Nac', name: 'dp_municipio_nacimiento_id');
+            cols: 6, con_registros: true, id_selected: $this->registro['dp_municipio_nacimiento_id'],
+            link: $this->link, filtro: $filtro, label: 'Municipio Nac', name: 'dp_municipio_nacimiento_id');
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al integrar sl_dp_municipio_nacimiento_id',
                 data:  $sl_dp_municipio_nacimiento_id, header: $header,ws: $ws);
@@ -610,7 +612,8 @@ class controlador_inm_comprador extends _ctl_base {
 
         $this->inputs->fecha_nacimiento = $fecha_nacimiento;
 
-        $btn_collapse_all = $this->html->button_para_java(id_css: 'collapse_all',style:  'primary',tag:  'Ver/Ocultar Todo');
+        $btn_collapse_all = $this->html->button_para_java(id_css: 'collapse_all',style:  'primary',
+            tag:  'Ver/Ocultar Todo');
         if(errores::$error){
             return $this->retorno_error(
                 mensaje: 'Error al btn_collapse_all',data:  $btn_collapse_all, header: $header,ws:  $ws);
@@ -680,8 +683,97 @@ class controlador_inm_comprador extends _ctl_base {
 
         $this->buttons['edita_ref_2'] = $boton_edit_2;
 
+        $controlador_inm_prospecto = (new controlador_inm_prospecto(link: $this->link));
+        $conyuge = (new _conyuge())->inputs_conyuge(controler: $controlador_inm_prospecto);
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al obtener conyuge',data:  $conyuge,
+                header: $header,ws:  $ws);
+        }
+
+        $this->inputs->conyuge = $conyuge;
+
 
         return $r_modifica;
+    }
+
+    public function modifica_bd(bool $header, bool $ws): array|stdClass
+    {
+        $this->link->beginTransaction();
+
+        $tiene_prospecto = (new inm_comprador(link: $this->link))->tiene_prospecto(inm_comprador_id: $this->registro_id);
+        if(errores::$error){
+            $this->link->rollBack();
+            return $this->retorno_error(mensaje: 'Error al validar inm_prospecto',data:  $tiene_prospecto, header: $header,ws:  $ws);
+        }
+        if($tiene_prospecto) {
+            $inm_prospecto = (new inm_comprador(link: $this->link))->inm_prospecto(inm_comprador_id: $this->registro_id);
+            if (errores::$error) {
+                $this->link->rollBack();
+                return $this->retorno_error(mensaje: 'Error al obtener inm_prospecto', data: $inm_prospecto, header: $header, ws: $ws);
+            }
+
+            $datos = (new _inm_prospecto())->datos_conyuge(
+                link: $this->link, inm_prospecto_id: $inm_prospecto->inm_prospecto_id);
+            if (errores::$error) {
+                $this->link->rollBack();
+                return $this->retorno_error(mensaje: 'Error al obtener dato conyuge', data: $datos,
+                    header: $header, ws: $ws);
+            }
+
+            if ($datos->tiene_dato_conyuge) {
+
+                if (!$datos->existe_conyuge) {
+
+                    $r_inm_rel_conyuge_prospecto_bd = (new inm_prospecto(link: $this->link))->inserta_conyuge(
+                        conyuge: $datos->conyuge, inm_prospecto_id: $inm_prospecto->inm_prospecto_id);
+                    if (errores::$error) {
+                        $this->link->rollBack();
+                        return $this->retorno_error(mensaje: 'Error al insertar conyuge', data: $r_inm_rel_conyuge_prospecto_bd,
+                            header: $header, ws: $ws);
+                    }
+                } else {
+                    $inm_conyuge_previo = (new inm_prospecto(link: $this->link))->inm_conyuge(
+                        columnas_en_bruto: true, inm_prospecto_id: $inm_prospecto->inm_prospecto_id, retorno_obj: true);
+                    if (errores::$error) {
+                        $this->link->rollBack();
+                        return $this->retorno_error(mensaje: 'Error al obtener conyuge', data: $inm_conyuge_previo,
+                            header: $header, ws: $ws);
+                    }
+
+                    $inm_conyuge_id = $inm_conyuge_previo->id;
+
+                    $r_modifica_conyuge = (new inm_conyuge(link: $this->link))->modifica_bd(registro: $datos->conyuge, id: $inm_conyuge_id);
+                    if (errores::$error) {
+                        $this->link->rollBack();
+                        return $this->retorno_error(mensaje: 'Error al modificar conyuge', data: $r_modifica_conyuge,
+                            header: $header, ws: $ws);
+                    }
+
+                }
+
+            }
+        }
+        else{
+            if(isset($_POST['conyuge'])){
+                unset($_POST['conyuge']);
+            }
+        }
+
+
+        $r_modifica = parent::modifica_bd(header: false,ws:  $ws); // TODO: Change the autogenerated stub
+        if(errores::$error){
+            $this->link->rollBack();
+            return $this->retorno_error(mensaje: 'Error al modificar inm_prospecto',data:  $r_modifica,
+                header: $header,ws:  $ws);
+        }
+        $this->link->commit();
+
+        $_SESSION[$r_modifica->salida][]['mensaje'] = $r_modifica->mensaje.' del id '.$this->registro_id;
+        $this->header_out(result: $r_modifica, header: $header,ws:  $ws);
+
+        return $r_modifica;
+
+
     }
 
     public function solicitud_infonavit(bool $header, bool $ws = false)

@@ -217,6 +217,22 @@ if($controlador->row_upd->genero === 'F'){
 <?php echo $controlador->inputs->com_tipo_cliente_id; ?>
     </div>
 
+<?php echo $controlador->header_frontend->apartado_15; ?>
+<div  id="apartado_15">
+    <?php echo $controlador->inputs->conyuge->nombre; ?>
+    <?php echo $controlador->inputs->conyuge->apellido_paterno; ?>
+    <?php echo $controlador->inputs->conyuge->apellido_materno; ?>
+    <?php echo $controlador->inputs->conyuge->dp_estado_id; ?>
+    <?php echo $controlador->inputs->conyuge->dp_municipio_id; ?>
+    <?php echo $controlador->inputs->conyuge->fecha_nacimiento; ?>
+    <?php echo $controlador->inputs->conyuge->inm_nacionalidad_id; ?>
+    <?php echo $controlador->inputs->conyuge->curp; ?>
+    <?php echo $controlador->inputs->conyuge->rfc; ?>
+    <?php echo $controlador->inputs->conyuge->inm_ocupacion_id; ?>
+    <?php echo $controlador->inputs->conyuge->telefono_casa; ?>
+    <?php echo $controlador->inputs->conyuge->telefono_celular;  ?>
+</div>
+
 <?php echo $controlador->btn; ?>
 
 

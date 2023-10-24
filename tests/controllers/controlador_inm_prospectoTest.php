@@ -7,12 +7,15 @@ use gamboamartin\inmuebles\controllers\controlador_inm_attr_tipo_credito;
 use gamboamartin\inmuebles\controllers\controlador_inm_comprador;
 use gamboamartin\inmuebles\controllers\controlador_inm_producto_infonavit;
 use gamboamartin\inmuebles\controllers\controlador_inm_prospecto;
+use gamboamartin\inmuebles\models\inm_prospecto;
+use gamboamartin\inmuebles\models\inm_rel_prospecto_cliente;
 use gamboamartin\inmuebles\tests\base_test;
 use gamboamartin\test\liberator;
 use gamboamartin\test\test;
 
 
 use stdClass;
+use function PHPUnit\Framework\assertEmpty;
 use function PHPUnit\Framework\assertEquals;
 use function PHPUnit\Framework\assertStringContainsStringIgnoringCase;
 
@@ -87,6 +90,121 @@ class controlador_inm_prospectoTest extends test {
         $this->assertIsArray($resultado);
         $this->assertNotTrue(errores::$error);
         errores::$error = false;
+    }
+
+    public function test_convierte_cliente(): void
+    {
+        errores::$error = false;
+
+        $_SESSION['usuario_id'] = 2;
+
+        $del = (new base_test())->del_inm_prospecto(link: $this->link);
+        if(errores::$error){
+            $error = (new errores())->error(mensaje: 'Error al del',data:  $del);
+            print_r($error);;
+            exit;
+        }
+
+        $file = "inm_prospecto.convierte_cliente";
+
+        $ch = curl_init("http://localhost/inmuebles/index.php?seccion=inm_prospecto&accion=convierte_cliente&adm_menu_id=64&session_id=1590259697&adm_menu_id=64&registro_id=1");
+        $fp = fopen($file, "w");
+
+        curl_setopt($ch, CURLOPT_FILE, $fp);
+        curl_setopt($ch, CURLOPT_HEADER, 0);
+
+        curl_exec($ch);
+        curl_close($ch);
+        fclose($fp);
+
+        $data = file_get_contents($file);
+        assertStringContainsStringIgnoringCase("Error no existe registro de inm_prospecto", $data);
+
+        errores::$error = false;
+
+        $alta = (new base_test())->alta_inm_prospecto(link: $this->link);
+        if(errores::$error){
+            $error = (new errores())->error(mensaje: 'Error al alta',data:  $alta);
+            print_r($error);;
+            exit;
+        }
+
+        $ch = curl_init("http://localhost/inmuebles/index.php?seccion=inm_prospecto&accion=convierte_cliente&adm_menu_id=64&session_id=1590259697&adm_menu_id=64&registro_id=1");
+        $fp = fopen($file, "w");
+
+        curl_setopt($ch, CURLOPT_FILE, $fp);
+        curl_setopt($ch, CURLOPT_HEADER, 0);
+
+        curl_exec($ch);
+        curl_close($ch);
+        fclose($fp);
+
+        $data = file_get_contents($file);
+
+        assertStringContainsStringIgnoringCase("Error el campo cel_com no puede venir vacio", $data);
+
+        errores::$error = false;
+
+        $inm_prospecto_upd['cel_com'] = '1234567891';
+        $upd = (new inm_prospecto(link: $this->link))->modifica_bd(registro: $inm_prospecto_upd,id: 1);
+        if(errores::$error){
+            $error = (new errores())->error(mensaje: 'Error al upd',data:  $upd);
+            print_r($error);;
+            exit;
+        }
+
+        $ch = curl_init("http://localhost/inmuebles/index.php?seccion=inm_prospecto&accion=convierte_cliente&adm_menu_id=64&session_id=1590259697&adm_menu_id=64&registro_id=1");
+        $fp = fopen($file, "w");
+
+        curl_setopt($ch, CURLOPT_FILE, $fp);
+        curl_setopt($ch, CURLOPT_HEADER, 0);
+
+        curl_exec($ch);
+        curl_close($ch);
+        fclose($fp);
+
+        $data = file_get_contents($file);
+        assertStringContainsStringIgnoringCase("Error el campo correo_com no puede venir vacio", $data);
+
+        errores::$error = false;
+
+        $inm_prospecto_upd['correo_com'] = 'a@test.com';
+        $upd = (new inm_prospecto(link: $this->link))->modifica_bd(registro: $inm_prospecto_upd,id: 1);
+        if(errores::$error){
+            $error = (new errores())->error(mensaje: 'Error al upd',data:  $upd);
+            print_r($error);;
+            exit;
+        }
+
+        $ch = curl_init("http://localhost/inmuebles/index.php?seccion=inm_prospecto&accion=convierte_cliente&adm_menu_id=64&session_id=1590259697&adm_menu_id=64&registro_id=1");
+        $fp = fopen($file, "w");
+
+        curl_setopt($ch, CURLOPT_FILE, $fp);
+        curl_setopt($ch, CURLOPT_HEADER, 0);
+
+        curl_exec($ch);
+        curl_close($ch);
+        fclose($fp);
+
+        $data = file_get_contents($file);
+
+        assertEmpty($data);
+
+        $inm_rel_prospecto_cliente = (new inm_rel_prospecto_cliente(link: $this->link))->filtro_and(filtro: array('inm_prospecto.id'=>1));
+        if(errores::$error){
+            $error = (new errores())->error(mensaje: 'Error al obtener inm_rel_prospecto_cliente',data:  $inm_rel_prospecto_cliente);
+            print_r($error);;
+            exit;
+        }
+
+        $this->assertEquals(1, $inm_rel_prospecto_cliente->registros[0]['inm_prospecto_id']);
+
+
+        errores::$error = false;
+
+        unlink($file);
+
+
     }
 
 

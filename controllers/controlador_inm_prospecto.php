@@ -137,10 +137,17 @@ class controlador_inm_prospecto extends _ctl_formato {
      * @param bool $header Muestra resultado en web
      * @param bool $ws Muestra resultado a nivel ws
      * @return array|string
+     * @version 2.260.2
      */
     public function convierte_cliente(bool $header, bool $ws = false): array|string
     {
         $this->link->beginTransaction();
+
+        if($this->registro_id <=0){
+            $this->link->rollBack();
+            return $this->retorno_error(mensaje: 'Error registro_id debe ser mayor a 0', data: $this->registro_id,
+                header: true, ws: false);
+        }
 
         $retorno = (new _base())->init_retorno();
         if(errores::$error){

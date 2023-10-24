@@ -76,6 +76,7 @@ class _inm_prospecto{
      * Genera un filtro para obtencion de datos ligado a un usuario
      * @param PDO $link Conexion a la base de datos
      * @return array
+     * @version 2.260.2
      */
     private function genera_filtro_user(PDO $link): array
     {
@@ -196,8 +197,6 @@ class _inm_prospecto{
 
         $controlador->inputs->fecha_nacimiento = $fecha_nacimiento;
 
-
-
         return $controlador->inputs;
     }
 
@@ -214,7 +213,14 @@ class _inm_prospecto{
         return $keys_selects;
     }
 
-    private function keys_selects_comercial(controlador_inm_prospecto $controlador, array $filtro, array $keys_selects){
+    /**
+     * @param controlador_inm_prospecto $controlador
+     * @param array $filtro
+     * @param array $keys_selects
+     * @return array
+     */
+    private function keys_selects_comercial(controlador_inm_prospecto $controlador, array $filtro, array $keys_selects): array
+    {
         $keys_selects = $controlador->key_select(cols:12, con_registros: true,filtro:  $filtro, key: 'com_agente_id',
             keys_selects:$keys_selects, id_selected: $controlador->registro['com_agente_id'], label: 'Agente');
         if(errores::$error){

@@ -68,8 +68,25 @@ class _inm_prospectoTest extends test {
         errores::$error = false;
     }
 
+    public function test_genera_filtro_user(): void
+    {
+        errores::$error = false;
+
+        $_GET['seccion'] = 'inm_producto_infonavit';
+        $_GET['accion'] = 'lista';
+        $_SESSION['grupo_id'] = 1;
+        $_SESSION['usuario_id'] = 2;
+        $_GET['session_id'] = '1';
 
 
+        $_inm = new _inm_prospecto();
+        $_inm = new liberator($_inm);
 
+        $resultado = $_inm->genera_filtro_user(link: $this->link);
+        $this->assertIsArray($resultado);
+        $this->assertNotTrue(errores::$error);
+        $this->assertEmpty($resultado);
+        errores::$error = false;
+    }
 }
 

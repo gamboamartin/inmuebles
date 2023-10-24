@@ -30,6 +30,11 @@ class inm_prospecto extends _modelo_parent{
 
         $columnas_extra= array();
 
+        if(!isset($_SESSION['usuario_id'])){
+            $error = (new errores())->error(mensaje: 'Error $_SESSION[usuario_id] no existe',data:  $_SESSION);
+            print_r($error);
+            exit;
+        }
 
         $adm_usuario = (new adm_usuario(link: $link))->registro(registro_id: $_SESSION['usuario_id'],
             columnas: array('adm_grupo_root'));
