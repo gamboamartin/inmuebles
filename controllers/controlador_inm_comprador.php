@@ -683,7 +683,26 @@ class controlador_inm_comprador extends _ctl_base {
 
         $this->buttons['edita_ref_2'] = $boton_edit_2;
 
+        $inm_prospecto_id = -1;
+        $tiene_prospecto = (new inm_comprador(link: $this->link))->tiene_prospecto(inm_comprador_id: $this->registro_id);
+        if(errores::$error){
+            return $this->retorno_error(
+                mensaje: 'Error al validar tiene prospecto',data:  $tiene_prospecto, header: $header,ws:  $ws);
+        }
+
+        if($tiene_prospecto){
+            $inm_prospecto = (new inm_comprador(link: $this->link))->inm_prospecto(inm_comprador_id: $this->registro_id);
+            if(errores::$error){
+                return $this->retorno_error(
+                    mensaje: 'Error al obtener prospecto',data:  $inm_prospecto, header: $header,ws:  $ws);
+            }
+            $inm_prospecto_id = $inm_prospecto->inm_prospecto_id;
+        }
+
+
         $controlador_inm_prospecto = (new controlador_inm_prospecto(link: $this->link));
+        $controlador_inm_prospecto->registro_id = $inm_prospecto_id;
+
         $conyuge = (new _conyuge())->inputs_conyuge(controler: $controlador_inm_prospecto);
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al obtener conyuge',data:  $conyuge,
@@ -712,45 +731,11 @@ class controlador_inm_comprador extends _ctl_base {
                 return $this->retorno_error(mensaje: 'Error al obtener inm_prospecto', data: $inm_prospecto, header: $header, ws: $ws);
             }
 
-            $datos = (new _inm_prospecto())->datos_conyuge(
-                link: $this->link, inm_prospecto_id: $inm_prospecto->inm_prospecto_id);
+            $result_conyuge = (new inm_prospecto(link: $this->link))->transacciona_conyuge(inm_prospecto_id: $inm_prospecto->inm_prospecto_id);
             if (errores::$error) {
                 $this->link->rollBack();
-                return $this->retorno_error(mensaje: 'Error al obtener dato conyuge', data: $datos,
+                return $this->retorno_error(mensaje: 'Error al insertar conyuge', data: $result_conyuge,
                     header: $header, ws: $ws);
-            }
-
-            if ($datos->tiene_dato_conyuge) {
-
-                if (!$datos->existe_conyuge) {
-
-                    $r_inm_rel_conyuge_prospecto_bd = (new inm_prospecto(link: $this->link))->inserta_conyuge(
-                        conyuge: $datos->conyuge, inm_prospecto_id: $inm_prospecto->inm_prospecto_id);
-                    if (errores::$error) {
-                        $this->link->rollBack();
-                        return $this->retorno_error(mensaje: 'Error al insertar conyuge', data: $r_inm_rel_conyuge_prospecto_bd,
-                            header: $header, ws: $ws);
-                    }
-                } else {
-                    $inm_conyuge_previo = (new inm_prospecto(link: $this->link))->inm_conyuge(
-                        columnas_en_bruto: true, inm_prospecto_id: $inm_prospecto->inm_prospecto_id, retorno_obj: true);
-                    if (errores::$error) {
-                        $this->link->rollBack();
-                        return $this->retorno_error(mensaje: 'Error al obtener conyuge', data: $inm_conyuge_previo,
-                            header: $header, ws: $ws);
-                    }
-
-                    $inm_conyuge_id = $inm_conyuge_previo->id;
-
-                    $r_modifica_conyuge = (new inm_conyuge(link: $this->link))->modifica_bd(registro: $datos->conyuge, id: $inm_conyuge_id);
-                    if (errores::$error) {
-                        $this->link->rollBack();
-                        return $this->retorno_error(mensaje: 'Error al modificar conyuge', data: $r_modifica_conyuge,
-                            header: $header, ws: $ws);
-                    }
-
-                }
-
             }
         }
         else{

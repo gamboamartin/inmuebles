@@ -460,48 +460,11 @@ class controlador_inm_prospecto extends _ctl_formato {
     {
         $this->link->beginTransaction();
 
-
-
-        $datos = (new \gamboamartin\inmuebles\controllers\_inm_prospecto())->datos_conyuge(
-            link: $this->link,inm_prospecto_id: $this->registro_id);
-        if(errores::$error){
+        $result_conyuge = (new inm_prospecto(link: $this->link))->transacciona_conyuge(inm_prospecto_id: $this->registro_id);
+        if (errores::$error) {
             $this->link->rollBack();
-            return $this->retorno_error(mensaje: 'Error al obtener dato conyuge',data:  $datos,
-                header: $header,ws:  $ws);
-        }
-
-        if($datos->tiene_dato_conyuge){
-
-            if(!$datos->existe_conyuge) {
-
-                $r_inm_rel_conyuge_prospecto_bd = (new inm_prospecto(link: $this->link))->inserta_conyuge(
-                    conyuge: $datos->conyuge,inm_prospecto_id: $this->registro_id);
-                if (errores::$error) {
-                    $this->link->rollBack();
-                    return $this->retorno_error(mensaje: 'Error al insertar conyuge', data: $r_inm_rel_conyuge_prospecto_bd,
-                        header: $header, ws: $ws);
-                }
-            }
-            else{
-                $inm_conyuge_previo = (new inm_prospecto(link: $this->link))->inm_conyuge(
-                    columnas_en_bruto: true,inm_prospecto_id: $this->registro_id,retorno_obj: true);
-                if (errores::$error) {
-                    $this->link->rollBack();
-                    return $this->retorno_error(mensaje: 'Error al obtener conyuge', data: $inm_conyuge_previo,
-                        header: $header, ws: $ws);
-                }
-
-                $inm_conyuge_id = $inm_conyuge_previo->id;
-
-                $r_modifica_conyuge = (new inm_conyuge(link: $this->link))->modifica_bd(registro: $datos->conyuge,id: $inm_conyuge_id);
-                if (errores::$error) {
-                    $this->link->rollBack();
-                    return $this->retorno_error(mensaje: 'Error al modificar conyuge', data: $r_modifica_conyuge,
-                        header: $header, ws: $ws);
-                }
-
-            }
-
+            return $this->retorno_error(mensaje: 'Error al insertar conyuge', data: $result_conyuge,
+                header: $header, ws: $ws);
         }
 
 

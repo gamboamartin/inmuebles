@@ -4,6 +4,8 @@ let session_id = getParameterByName('session_id');
 
 let sl_dp_pais_id = $("#dp_pais_id");
 let sl_dp_estado_id = $("#dp_estado_id");
+let sl_conyuge_dp_estado_id = $("#conyuge_dp_estado_id");
+let sl_conyuge_dp_municipio_id = $("#conyuge_dp_municipio_id");
 let sl_dp_municipio_id = $("#dp_municipio_id");
 let sl_dp_cp_id = $("#dp_cp_id");
 let sl_dp_colonia_postal_id = $("#dp_colonia_postal_id");
@@ -43,6 +45,13 @@ let nss_ct = $("#nss");
 let numero_com_ct = $("#numero_com");
 let cel_com_ct = $("#cel_com");
 let correo_com_ct = $("#correo_com");
+let conyuge_nombre_ct = $(".conyuge_nombre");
+let conyuge_apellido_paterno_ct = $(".conyuge_apellido_paterno");
+let conyuge_apellido_materno_ct = $(".conyuge_apellido_materno");
+let conyuge_curp_ct = $(".conyuge_curp");
+let conyuge_rfc_ct = $(".conyuge_rfc");
+let conyuge_telefono_casa_ct = $(".conyuge_telefono_casa");
+let conyuge_telefono_celular_ct = $(".conyuge_telefono_celular");
 
 let inm_co_acreditado_nss = $("#inm_co_acreditado_nss");
 let inm_co_acreditado_curp = $("#inm_co_acreditado_curp");
@@ -238,6 +247,39 @@ edit_ref_2.click(function() {
         ref_2_habilitado = false;
     }
 
+});
+
+conyuge_nombre_ct.change(function() {
+    let value = $(this).val().trim().toUpperCase();
+    $(this).val(value);
+});
+conyuge_apellido_paterno_ct.change(function() {
+    let value = $(this).val().trim().toUpperCase();
+    $(this).val(value);
+});
+conyuge_apellido_materno_ct.change(function() {
+    let value = $(this).val().trim().toUpperCase();
+    $(this).val(value);
+});
+
+conyuge_curp_ct.change(function() {
+    let value = $(this).val().trim().toUpperCase();
+    $(this).val(value);
+});
+
+conyuge_rfc_ct.change(function() {
+    let value = $(this).val().trim().toUpperCase();
+    $(this).val(value);
+});
+
+conyuge_telefono_casa_ct.change(function() {
+    let value = $(this).val().trim().toUpperCase();
+    $(this).val(value);
+});
+
+conyuge_telefono_celular_ct.change(function() {
+    let value = $(this).val().trim().toUpperCase();
+    $(this).val(value);
 });
 inm_referencia_apellido_paterno_1.change(function() {
     let value = $(this).val().trim().toUpperCase();
@@ -992,7 +1034,10 @@ chk_con_discapacidad.change(function(){
     sl_inm_tipo_discapacidad_id.selectpicker('refresh');
     sl_inm_persona_discapacidad_id.selectpicker('refresh');
 });
-
+$("#conyuge_dp_estado_id").change(function(){
+    conyuge_dp_estado_id = $(this).val();
+    dp_asigna_municipios(conyuge_dp_estado_id,'',"#conyuge_dp_municipio_id");
+});
 
 $("#inm_referencia_dp_pais_id_1").change(function(){
     dp_pais_id = $(this).val();

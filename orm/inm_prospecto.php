@@ -113,6 +113,26 @@ class inm_prospecto extends _modelo_parent{
         return $r_modifica_descripcion;
     }
 
+    private function ajusta_conyuge(stdClass $datos, int $inm_prospecto_id){
+        if(!$datos->existe_conyuge) {
+            $r_inm_rel_conyuge_prospecto_bd = $this->inserta_conyuge(conyuge: $datos->conyuge,inm_prospecto_id: $inm_prospecto_id);
+            if (errores::$error) {
+                return $this->error->error(mensaje: 'Error al insertar conyuge', data: $r_inm_rel_conyuge_prospecto_bd);
+            }
+            $data = $r_inm_rel_conyuge_prospecto_bd;
+        }
+        else{
+            $r_modifica_conyuge = $this->modifica_conyuge(
+                conyuge: $datos->conyuge,inm_prospecto_id:  $inm_prospecto_id);
+            if (errores::$error) {
+                return $this->error->error(mensaje: 'Error al modificar conyuge', data: $r_modifica_conyuge);
+            }
+            $data = $r_modifica_conyuge;
+        }
+
+        return $data;
+    }
+
     /**
      * Ajusta un registro de datos
      * @param stdClass $r_modifica Resultado de modificacion base
@@ -337,7 +357,7 @@ class inm_prospecto extends _modelo_parent{
         return $com_prospecto;
     }
 
-    final public function inm_conyuge(bool $columnas_en_bruto, int $inm_prospecto_id, bool $retorno_obj){
+    private function inm_conyuge(bool $columnas_en_bruto, int $inm_prospecto_id, bool $retorno_obj){
         $filtro = array();
         $filtro['inm_prospecto.id'] = $inm_prospecto_id;
 
@@ -386,7 +406,7 @@ class inm_prospecto extends _modelo_parent{
         return $inm_prospecto_proceso_ins;
     }
 
-    final public function inserta_conyuge(array $conyuge, int $inm_prospecto_id){
+    private function inserta_conyuge(array $conyuge, int $inm_prospecto_id){
         $alta_conyuge = (new inm_conyuge(link: $this->link))->alta_registro(registro: $conyuge);
         if (errores::$error) {
             return $this->error->error(mensaje: 'Error al insertar conyuge', data: $alta_conyuge);
@@ -505,6 +525,26 @@ class inm_prospecto extends _modelo_parent{
         return $upd;
     }
 
+    private function modifica_conyuge(array $conyuge, int $inm_prospecto_id){
+        $inm_conyuge_previo = $this->inm_conyuge(columnas_en_bruto: true,inm_prospecto_id: $inm_prospecto_id,retorno_obj: true);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al obtener conyuge', data: $inm_conyuge_previo);
+        }
+
+        $inm_conyuge_id = $inm_conyuge_previo->id;
+
+        $r_modifica_conyuge = (new inm_conyuge(link: $this->link))->modifica_bd(registro: $conyuge,id: $inm_conyuge_id);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al modificar conyuge', data: $r_modifica_conyuge);
+        }
+
+        $data = new stdClass();
+        $data->inm_conyuge_previo = $inm_conyuge_previo;
+        $data->r_modifica_conyuge = $r_modifica_conyuge;
+
+        return $data;
+    }
+
     /**
      * Ejecta las modificaciones en prospecto comercial y descripcion misma
      * @param int $id Id de prospecto
@@ -571,6 +611,24 @@ class inm_prospecto extends _modelo_parent{
         }
 
         return $r_pr_sub_proceso->registros[0];
+    }
+
+    final public function transacciona_conyuge(int $inm_prospecto_id){
+        $datos = (new \gamboamartin\inmuebles\controllers\_inm_prospecto())->datos_conyuge(
+            link: $this->link,inm_prospecto_id: $inm_prospecto_id);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al obtener dato conyuge',data:  $datos);
+        }
+
+        if($datos->tiene_dato_conyuge){
+            $result_conyuge = $this->ajusta_conyuge(datos: $datos,inm_prospecto_id: $inm_prospecto_id);
+            if (errores::$error) {
+                return $this->error->error(mensaje: 'Error al insertar conyuge', data: $result_conyuge);
+            }
+            $datos->result_conyuge = $result_conyuge;
+        }
+        return $datos;
+
     }
 
     /**

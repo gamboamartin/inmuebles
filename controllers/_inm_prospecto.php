@@ -21,9 +21,15 @@ class _inm_prospecto{
     }
     
     final public function datos_conyuge(PDO $link, int $inm_prospecto_id){
-        $existe_conyuge = (new inm_prospecto(link: $link))->existe_conyuge(inm_prospecto_id: $inm_prospecto_id);
-        if(errores::$error){
-            return $this->error->error(mensaje: 'Error al validar si existe conyuge',data:  $existe_conyuge);
+
+        $existe_conyuge = false;
+
+        if($inm_prospecto_id > 0) {
+
+            $existe_conyuge = (new inm_prospecto(link: $link))->existe_conyuge(inm_prospecto_id: $inm_prospecto_id);
+            if (errores::$error) {
+                return $this->error->error(mensaje: 'Error al validar si existe conyuge', data: $existe_conyuge);
+            }
         }
 
         $conyuge = $this->init_conyuge();
@@ -214,6 +220,7 @@ class _inm_prospecto{
     }
 
     /**
+     * Genera los selectores parametros de tipo comercial
      * @param controlador_inm_prospecto $controlador
      * @param array $filtro
      * @param array $keys_selects

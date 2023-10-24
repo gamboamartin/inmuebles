@@ -19,11 +19,16 @@ class _conyuge{
 
         $conyuge = new stdClass();
 
-        $existe_conyuge = (new inm_prospecto(link: $controler->link))->existe_conyuge(
-            inm_prospecto_id: $controler->registro_id);
-        if(errores::$error){
-            return $this->error->error(mensaje: 'Error al validar si existe conyuge',data:  $existe_conyuge);
+        $existe_conyuge = false;
+        if($controler->registro_id > 0) {
+
+            $existe_conyuge = (new inm_prospecto(link: $controler->link))->existe_conyuge(
+                inm_prospecto_id: $controler->registro_id);
+            if (errores::$error) {
+                return $this->error->error(mensaje: 'Error al validar si existe conyuge', data: $existe_conyuge);
+            }
         }
+
 
 
         $row_upd = new stdClass();
@@ -123,9 +128,10 @@ class _conyuge{
 
         $conyuge->dp_estado_id = $dp_estado_id;
 
+        //print_r($dp_estado_id);exit;
         $modelo = new dp_municipio(link: $controler->link);
         $dp_municipio_id = $controler->html->select_catalogo(cols: 6, con_registros: true,
-            id_selected: $row_upd->dp_municipio_id, modelo: $modelo, filtro: array('dp_estado.id'=>$dp_estado_id),
+            id_selected: $row_upd->dp_municipio_id, modelo: $modelo, filtro: array('dp_estado.id'=>$row_upd->dp_estado_id),
             id_css: 'conyuge_dp_municipio_id', label: 'Municipio Nac', name: 'conyuge[dp_municipio_id]');
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al obtener input',data:  $dp_municipio_id);
