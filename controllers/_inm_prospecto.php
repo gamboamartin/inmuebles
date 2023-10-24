@@ -126,7 +126,12 @@ class _inm_prospecto{
         return $headers;
     }
 
-    private function init_conyuge(){
+    /**
+     * Inicializa un registro de conyuge
+     * @return array
+     */
+    private function init_conyuge(): array
+    {
         $conyuge = array();
         if(isset($_POST['conyuge'])){
             $conyuge = $_POST['conyuge'];
@@ -221,13 +226,21 @@ class _inm_prospecto{
 
     /**
      * Genera los selectores parametros de tipo comercial
-     * @param controlador_inm_prospecto $controlador
-     * @param array $filtro
-     * @param array $keys_selects
+     * @param controlador_inm_prospecto $controlador Controlador en ejecucion
+     * @param array $filtro Filtro de tipo user
+     * @param array $keys_selects Parametros previos cargados
      * @return array
+     * @version 2.262.2
      */
-    private function keys_selects_comercial(controlador_inm_prospecto $controlador, array $filtro, array $keys_selects): array
+    private function keys_selects_comercial(controlador_inm_prospecto $controlador, array $filtro,
+                                           array $keys_selects): array
     {
+        $keys = array('com_agente_id','com_tipo_prospecto_id');
+        $valida = $this->validacion->valida_ids(keys: $keys,registro:  $controlador->registro);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al valida controlador registro',data:  $valida);
+        }
+
         $keys_selects = $controlador->key_select(cols:12, con_registros: true,filtro:  $filtro, key: 'com_agente_id',
             keys_selects:$keys_selects, id_selected: $controlador->registro['com_agente_id'], label: 'Agente');
         if(errores::$error){

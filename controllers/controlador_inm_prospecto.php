@@ -13,7 +13,6 @@ use gamboamartin\errores\errores;
 use gamboamartin\inmuebles\html\inm_prospecto_html;
 use gamboamartin\inmuebles\models\_base_paquete;
 use gamboamartin\inmuebles\models\_inm_prospecto;
-use gamboamartin\inmuebles\models\inm_conyuge;
 use gamboamartin\inmuebles\models\inm_prospecto;
 use gamboamartin\system\links_menu;
 use gamboamartin\template\html;
@@ -460,7 +459,8 @@ class controlador_inm_prospecto extends _ctl_formato {
     {
         $this->link->beginTransaction();
 
-        $result_conyuge = (new inm_prospecto(link: $this->link))->transacciona_conyuge(inm_prospecto_id: $this->registro_id);
+        $result_conyuge = (new inm_prospecto(link: $this->link))->transacciona_conyuge(
+            inm_prospecto_id: $this->registro_id);
         if (errores::$error) {
             $this->link->rollBack();
             return $this->retorno_error(mensaje: 'Error al insertar conyuge', data: $result_conyuge,
