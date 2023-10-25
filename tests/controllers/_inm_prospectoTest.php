@@ -36,6 +36,39 @@ class _inm_prospectoTest extends test {
         $this->paths_conf->views = '/var/www/html/inmuebles/config/views.php';
     }
 
+    public function test_disabled_segundo_credito(): void
+    {
+        errores::$error = false;
+
+        $_GET['seccion'] = 'inm_producto_infonavit';
+        $_GET['accion'] = 'lista';
+        $_SESSION['grupo_id'] = 1;
+        $_SESSION['usuario_id'] = 2;
+        $_GET['session_id'] = '1';
+
+
+        $_inm = new _inm_prospecto();
+        $_inm = new liberator($_inm);
+        $registro = array();
+        $registro['inm_prospecto_es_segundo_credito'] = 'NO';
+        $resultado = $_inm->disabled_segundo_credito($registro);
+        $this->assertIsBool($resultado);
+        $this->assertNotTrue(errores::$error);
+        $this->assertTrue($resultado);
+
+        errores::$error = false;
+
+        $registro = array();
+        $registro['inm_prospecto_es_segundo_credito'] = 'SI';
+        $resultado = $_inm->disabled_segundo_credito($registro);
+
+        $this->assertIsBool($resultado);
+        $this->assertNotTrue(errores::$error);
+        $this->assertNotTrue($resultado);
+
+        errores::$error = false;
+    }
+
     public function test_filtro_user(): void
     {
         errores::$error = false;

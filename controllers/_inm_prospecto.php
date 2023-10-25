@@ -19,8 +19,15 @@ class _inm_prospecto{
         $this->error = new errores();
         $this->validacion = new validacion();
     }
-    
-    final public function datos_conyuge(PDO $link, int $inm_prospecto_id){
+
+    /**
+     * Obtiene los datos de un conyuge
+     * @param PDO $link Conexion a la base de datos
+     * @param int $inm_prospecto_id prospecto
+     * @return array|stdClass
+     */
+    final public function datos_conyuge(PDO $link, int $inm_prospecto_id): array|stdClass
+    {
 
         $existe_conyuge = false;
 
@@ -51,10 +58,17 @@ class _inm_prospecto{
     /**
      * Valida el attr segundo credito
      * @param array $registro Registro en proceso
-     * @return bool
+     * @return bool|array
+     * @version 2.262.2
      */
-    private function disabled_segundo_credito(array $registro): bool
+    private function disabled_segundo_credito(array $registro): bool|array
     {
+        $keys = array('inm_prospecto_es_segundo_credito');
+        $valida = $this->validacion->valida_existencia_keys(keys: $keys,registro:  $registro);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al validar registro',data:  $valida);
+        }
+
         $disabled = true;
         if($registro['inm_prospecto_es_segundo_credito'] === 'SI'){
             $disabled = false;
@@ -157,6 +171,11 @@ class _inm_prospecto{
         return $headers;
     }
 
+    /**
+     * Genera los identificadores para keys selects
+     * @param array $filtro Filtro de integracion par agente
+     * @return array
+     */
     private function identificadores_comercial(array $filtro): array
     {
         $identificadores['com_agente_id']['title'] = 'Agente';
@@ -216,7 +235,7 @@ class _inm_prospecto{
     }
 
     /**
-     * INtegra los identificadores para la creacion de un parametro de tipo key select
+     * Integra los identificadores para la creacion de un parametro de tipo key select
      * @param controlador_inm_prospecto $controlador Controlador en ejecucion
      * @return array
      */
@@ -349,7 +368,6 @@ class _inm_prospecto{
      * @param controlador_inm_prospecto $controlador
      * @param array $keys_selects
      * @return array
-     * @version 2.259.2
      */
     private function integra_keys_selects_comercial(controlador_inm_prospecto $controlador, array $keys_selects): array
     {
