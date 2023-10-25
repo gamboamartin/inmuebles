@@ -207,8 +207,9 @@ class _inm_prospecto{
 
 
     /**
-     * @param int $inm_conyuge_id
-     * @param int $inm_prospecto_id
+     * Genera un registro para la insersion de una relacion entre conyuge y prospecto
+     * @param int $inm_conyuge_id Id de conyuge
+     * @param int $inm_prospecto_id Id de prospecto
      * @return array
      */
     final public function inm_rel_conyuge_prospecto_ins(int $inm_conyuge_id, int $inm_prospecto_id): array

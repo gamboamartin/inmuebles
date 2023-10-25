@@ -424,6 +424,7 @@ class _inm_prospecto{
      * @param array $filtro Filtro de tipo user
      * @param array $keys_selects Parametros previos cargados
      * @return array
+     * @version 2.265.2
      */
     private function keys_selects_comercial(controlador_inm_prospecto $controlador, array $filtro,
                                            array $keys_selects): array
