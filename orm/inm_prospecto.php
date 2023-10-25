@@ -409,8 +409,8 @@ class inm_prospecto extends _modelo_parent{
 
     /**
      * Inserta conyuge y genera la liga con el prospecto
-     * @param array $conyuge
-     * @param int $inm_prospecto_id
+     * @param array $conyuge Registro de conyuge a insertar
+     * @param int $inm_prospecto_id Prospecto donde se relacionara el conyuge
      * @return array|stdClass
      */
     private function inserta_conyuge(array $conyuge, int $inm_prospecto_id): array|stdClass
