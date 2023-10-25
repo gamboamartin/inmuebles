@@ -107,7 +107,7 @@ class controlador_inm_beneficiario extends _ctl_base {
 
 
         $keys_selects = $this->key_select(cols:6, con_registros: true,filtro:  array(), key: 'inm_prospecto_id',
-            keys_selects: array(), id_selected: $this->registro['inm_rel_conyuge_prospecto_id'],
+            keys_selects: array(), id_selected: $this->registro['inm_prospecto_id'],
             label: 'Prospecto');
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects, header: $header,ws:  $ws);

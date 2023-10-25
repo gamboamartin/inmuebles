@@ -215,6 +215,10 @@ class _inm_prospecto{
         return $identificadores;
     }
 
+    /**
+     * @param controlador_inm_prospecto $controlador
+     * @return array
+     */
     private function identificadores_dp(controlador_inm_prospecto $controlador): array
     {
         $identificadores['dp_pais_id']['title'] = 'Pais';

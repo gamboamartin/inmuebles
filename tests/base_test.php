@@ -747,6 +747,16 @@ class base_test{
         }
         return $del;
     }
+    public function del_inm_beneficiario(PDO $link): array
+    {
+
+        $del = $this->del($link, 'gamboamartin\\inmuebles\\models\\inm_beneficiario');
+        if(errores::$error){
+            return (new errores())->error('Error al eliminar', $del);
+        }
+        return $del;
+    }
+
 
     public function del_inm_co_acreditado(PDO $link): array
     {
@@ -930,6 +940,10 @@ class base_test{
             return (new errores())->error('Error al eliminar', $del);
         }
         $del = $this->del_inm_rel_conyuge_prospecto(link: $link);
+        if(errores::$error){
+            return (new errores())->error('Error al eliminar', $del);
+        }
+        $del = $this->del_inm_beneficiario(link: $link);
         if(errores::$error){
             return (new errores())->error('Error al eliminar', $del);
         }
