@@ -483,10 +483,21 @@ class _inm_prospecto{
      * @param controlador_inm_prospecto $controlador Controlador en ejecucion
      * @param array $keys_selects Parametros previos cargados
      * @return array
+     * @version 2.269.2
      */
     private function keys_selects_infonavit(controlador_inm_prospecto $controlador, array $keys_selects): array
     {
 
+        $keys = array('com_agente_id','com_tipo_prospecto_id');
+        $valida = $this->validacion->valida_ids(keys: $keys,registro:  $controlador->registro);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al valida controlador registro',data:  $valida);
+        }
+        $keys = array('inm_prospecto_es_segundo_credito');
+        $valida = $this->validacion->valida_existencia_keys(keys: $keys,registro:  $controlador->registro);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al validar registro',data:  $valida);
+        }
 
         $keys_selects = $this->integra_keys_selects_comercial(controlador: $controlador,keys_selects:  $keys_selects);
         if(errores::$error){

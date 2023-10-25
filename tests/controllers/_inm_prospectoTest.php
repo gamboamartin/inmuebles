@@ -46,6 +46,11 @@ class _inm_prospectoTest extends test {
         $_SESSION['usuario_id'] = 2;
         $_GET['session_id'] = '1';
 
+        $del = (new base_test())->del_inm_conyuge(link: $this->link);
+        if(errores::$error){
+            $error = (new errores())->error(mensaje:'Error al del', data: $del);
+            print_r($error);exit;
+        }
 
         $_inm = new _inm_prospecto();
         //$_inm = new liberator($_inm);
@@ -343,6 +348,40 @@ class _inm_prospectoTest extends test {
         $this->assertNotTrue(errores::$error);
         $this->assertEquals(1,$resultado['com_agente_id']->id_selected);
         $this->assertEquals(1,$resultado['com_tipo_prospecto_id']->id_selected);
+        errores::$error = false;
+    }
+
+    public function test_keys_selects_infonavit(): void
+    {
+        errores::$error = false;
+
+        $_GET['seccion'] = 'inm_producto_infonavit';
+        $_GET['accion'] = 'lista';
+        $_SESSION['grupo_id'] = 1;
+        $_SESSION['usuario_id'] = 2;
+        $_GET['session_id'] = '1';
+
+
+        $_inm = new _inm_prospecto();
+        $_inm = new liberator($_inm);
+        $controlador = new controlador_inm_prospecto(link: $this->link, paths_conf: $this->paths_conf);
+        $controlador->registro['com_agente_id'] = 1;
+        $controlador->registro['com_tipo_prospecto_id'] = 1;
+        $controlador->registro['inm_prospecto_es_segundo_credito'] = 'SI';
+        $keys_selects = array();
+        $resultado = $_inm->keys_selects_infonavit($controlador, $keys_selects);
+        $this->assertIsArray($resultado);
+        $this->assertNotTrue(errores::$error);
+        $this->assertEquals(12,$resultado['com_agente_id']->cols);
+        $this->assertTrue($resultado['com_tipo_prospecto_id']->con_registros);
+        $this->assertEquals("Institucion Hipotecaria",$resultado['inm_institucion_hipotecaria_id']->label);
+        $this->assertEquals(-1,$resultado['inm_producto_infonavit_id']->id_selected);
+        $this->assertEmpty($resultado['inm_attr_tipo_credito_id']->filtro);
+        $this->assertEmpty($resultado['inm_destino_credito_id']->columns_ds);
+        $this->assertNotTrue($resultado['inm_tipo_discapacidad_id']->disabled);
+        $this->assertEquals(6,$resultado['inm_persona_discapacidad_id']->cols);
+        $this->assertTrue($resultado['inm_plazo_credito_sc_id']->con_registros);
+
         errores::$error = false;
     }
 

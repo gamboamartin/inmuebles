@@ -412,9 +412,25 @@ class inm_prospecto extends _modelo_parent{
      * @param array $conyuge Registro de conyuge a insertar
      * @param int $inm_prospecto_id Prospecto donde se relacionara el conyuge
      * @return array|stdClass
+     * @version 2.269.2
      */
     private function inserta_conyuge(array $conyuge, int $inm_prospecto_id): array|stdClass
     {
+        $keys = array('nombre','apellido_paterno','curp','rfc','dp_municipio_id','inm_nacionalidad_id',
+            'inm_ocupacion_id','telefono_casa','telefono_celular','fecha_nacimiento');
+        $valida = $this->validacion->valida_existencia_keys(keys: $keys,registro:  $conyuge);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al validar conyuge',data:  $valida);
+        }
+        $keys = array('dp_municipio_id','inm_nacionalidad_id', 'inm_ocupacion_id');
+        $valida = $this->validacion->valida_ids(keys: $keys,registro:  $conyuge);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al validar conyuge',data:  $valida);
+        }
+        if($inm_prospecto_id <= 0){
+            return $this->error->error(mensaje: 'Error inm_prospecto_id debe ser mayor a 0',data:  $inm_prospecto_id);
+        }
+
         $alta_conyuge = (new inm_conyuge(link: $this->link))->alta_registro(registro: $conyuge);
         if (errores::$error) {
             return $this->error->error(mensaje: 'Error al insertar conyuge', data: $alta_conyuge);
