@@ -48,6 +48,11 @@ class _inm_prospecto{
         return $datos;
     }
 
+    /**
+     * Valida el attr segundo credito
+     * @param array $registro Registro en proceso
+     * @return bool
+     */
     private function disabled_segundo_credito(array $registro): bool
     {
         $disabled = true;
@@ -99,7 +104,16 @@ class _inm_prospecto{
         return $filtro;
     }
 
-    private function genera_keys_selects(controlador_inm_prospecto $controlador, array $identificadores, array $keys_selects){
+    /**
+     * Integra in key select basado en parametros
+     * @param controlador_inm_prospecto $controlador Controlador en ejecucion
+     * @param array $identificadores identificadores a integrar
+     * @param array $keys_selects parametros previos cargados
+     * @return array
+     */
+    private function genera_keys_selects(controlador_inm_prospecto $controlador, array $identificadores,
+                                         array $keys_selects): array
+    {
         foreach ($identificadores as $identificador=>$data){
             $filtro = array();
             if(isset($data['filtro'])){
@@ -107,7 +121,8 @@ class _inm_prospecto{
             }
             $keys_selects = $controlador->key_select(cols: $data['cols'], con_registros: true,filtro: $filtro,
                 key: $identificador, keys_selects:$keys_selects,
-                id_selected: $controlador->registro[$identificador], label: $data['title'], disabled: $data['disabled']);
+                id_selected: $controlador->registro[$identificador], label: $data['title'],
+                disabled: $data['disabled']);
             if(errores::$error){
                 return $this->error->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
             }
@@ -200,7 +215,13 @@ class _inm_prospecto{
         return $identificadores;
     }
 
-    private function identificadores_infonavit(controlador_inm_prospecto $controlador){
+    /**
+     * INtegra los identificadores para la creacion de un parametro de tipo key select
+     * @param controlador_inm_prospecto $controlador Controlador en ejecucion
+     * @return array
+     */
+    private function identificadores_infonavit(controlador_inm_prospecto $controlador): array
+    {
         $identificadores['inm_institucion_hipotecaria_id']['title'] = 'Institucion Hipotecaria';
         $identificadores['inm_institucion_hipotecaria_id']['cols'] = 12;
         $identificadores['inm_institucion_hipotecaria_id']['disabled'] = false;
@@ -392,7 +413,8 @@ class _inm_prospecto{
             return $this->error->error(mensaje: 'Error al maquetar identificadores',data:  $identificadores);
         }
 
-        $keys_selects = $this->genera_keys_selects(controlador: $controlador,identificadores:  $identificadores,keys_selects:  $keys_selects);
+        $keys_selects = $this->genera_keys_selects(controlador: $controlador,identificadores:  $identificadores,
+            keys_selects:  $keys_selects);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
@@ -415,7 +437,8 @@ class _inm_prospecto{
             return $this->error->error(mensaje: 'Error al maquetar identificadores',data:  $identificadores);
         }
 
-        $keys_selects = $this->genera_keys_selects(controlador: $controlador,identificadores:  $identificadores,keys_selects:  $keys_selects);
+        $keys_selects = $this->genera_keys_selects(controlador: $controlador,identificadores:  $identificadores,
+            keys_selects:  $keys_selects);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
