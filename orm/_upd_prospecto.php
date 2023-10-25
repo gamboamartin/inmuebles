@@ -53,7 +53,7 @@ class _upd_prospecto{
      * @param bool $columnas_en_bruto si es true da resultado en campos tal como estan en base de datos
      * @param int $inm_prospecto_id Identificador de prospecto
      * @param PDO $link Conexion a la base de datos
-     * @param bool $retorno_obj
+     * @param bool $retorno_obj Si esta como true el resultado lo integra como un objeto
      * @return array|stdClass
      */
     final public function inm_conyuge(bool $columnas_en_bruto, int $inm_prospecto_id, PDO $link,

@@ -507,6 +507,7 @@ class _inm_prospecto{
     }
 
     /**
+     * Genera los selectores de tipo domicilio
      * @param controlador_inm_prospecto $controlador
      * @param array $keys_selects
      * @return array

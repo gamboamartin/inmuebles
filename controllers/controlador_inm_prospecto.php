@@ -471,7 +471,26 @@ class controlador_inm_prospecto extends _ctl_formato {
                 header: $header,ws:  $ws);
         }
 
+        $params['siguiente_view'] = __FUNCTION__;
+        $params['accion_retorno'] = __FUNCTION__;
+        $params['seccion_retorno'] = $this->tabla;
+        $params['id_retorno'] = $this->registro_id;
+
         $beneficiarios = $r_inm_beneficiario->registros;
+
+        foreach ($beneficiarios as $indice=>$beneficiario){
+
+            $btn_del = $this->html->button_href(accion: 'elimina_bd',etiqueta: 'Elimina',
+                registro_id:  $beneficiario['inm_beneficiario_id'],seccion: 'inm_beneficiario',style: 'danger',
+                params: $params);
+            if(errores::$error){
+                return $this->retorno_error(mensaje: 'Error al obtener link_del',data:  $btn_del,
+                    header: $header,ws:  $ws);
+            }
+            $beneficiarios[$indice]['btn_del'] = $btn_del;
+
+        }
+
         $this->beneficiarios = $beneficiarios;
 
 

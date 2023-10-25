@@ -120,6 +120,7 @@
                         <th>Nombre</th>
                         <th>Apellido Paterno</th>
                         <th>Apellido Materno</th>
+                        <th>Elimina</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -131,6 +132,7 @@
                         <td><?php echo $beneficiario['inm_beneficiario_nombre']; ?></td>
                         <td><?php echo $beneficiario['inm_beneficiario_apellido_paterno']; ?></td>
                         <td><?php echo $beneficiario['inm_beneficiario_apellido_materno']; ?></td>
+                        <td><?php echo $beneficiario['btn_del']; ?></td>
                     </tr>
                 <?php } ?>
                 </tbody>
