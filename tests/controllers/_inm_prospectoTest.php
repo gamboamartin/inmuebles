@@ -36,6 +36,78 @@ class _inm_prospectoTest extends test {
         $this->paths_conf->views = '/var/www/html/inmuebles/config/views.php';
     }
 
+    public function test_datos_conyuge(): void
+    {
+        errores::$error = false;
+
+        $_GET['seccion'] = 'inm_producto_infonavit';
+        $_GET['accion'] = 'lista';
+        $_SESSION['grupo_id'] = 1;
+        $_SESSION['usuario_id'] = 2;
+        $_GET['session_id'] = '1';
+
+
+        $_inm = new _inm_prospecto();
+        //$_inm = new liberator($_inm);
+
+        $inm_prospecto_id = -1;
+        $resultado = $_inm->datos_conyuge($this->link, $inm_prospecto_id);
+        $this->assertIsObject($resultado);
+        $this->assertNotTrue(errores::$error);
+        $this->assertNotTrue($resultado->existe_conyuge);
+        $this->assertEmpty($resultado->conyuge);
+        $this->assertIsArray($resultado->conyuge);
+        $this->assertNotTrue($resultado->tiene_dato_conyuge);
+
+        errores::$error = false;
+
+        $inm_prospecto_id = 1;
+        $resultado = $_inm->datos_conyuge($this->link, $inm_prospecto_id);
+        $this->assertIsObject($resultado);
+        $this->assertNotTrue(errores::$error);
+        $this->assertNotTrue($resultado->existe_conyuge);
+        $this->assertEmpty($resultado->conyuge);
+        $this->assertIsArray($resultado->conyuge);
+        $this->assertNotTrue($resultado->tiene_dato_conyuge);
+
+        errores::$error = false;
+
+        $inm_prospecto_id = 1;
+        $_POST['conyuge'] = array();
+        $resultado = $_inm->datos_conyuge($this->link, $inm_prospecto_id);
+        $this->assertIsObject($resultado);
+        $this->assertNotTrue(errores::$error);
+        $this->assertNotTrue($resultado->existe_conyuge);
+        $this->assertEmpty($resultado->conyuge);
+        $this->assertIsArray($resultado->conyuge);
+        $this->assertNotTrue($resultado->tiene_dato_conyuge);
+
+        errores::$error = false;
+
+        $inm_prospecto_id = 1;
+        $_POST['conyuge']['a'] = '';
+        $resultado = $_inm->datos_conyuge($this->link, $inm_prospecto_id);
+        $this->assertIsObject($resultado);
+        $this->assertNotTrue(errores::$error);
+        $this->assertNotTrue($resultado->existe_conyuge);
+        $this->assertNotEmpty($resultado->conyuge);
+        $this->assertIsArray($resultado->conyuge);
+        $this->assertNotTrue($resultado->tiene_dato_conyuge);
+
+        errores::$error = false;
+        $inm_prospecto_id = 1;
+        $_POST['conyuge']['a'] = 'x';
+        $resultado = $_inm->datos_conyuge($this->link, $inm_prospecto_id);
+        $this->assertIsObject($resultado);
+        $this->assertNotTrue(errores::$error);
+        $this->assertNotTrue($resultado->existe_conyuge);
+        $this->assertNotEmpty($resultado->conyuge);
+        $this->assertIsArray($resultado->conyuge);
+        $this->assertTrue($resultado->tiene_dato_conyuge);
+
+        errores::$error = false;
+    }
+
     public function test_disabled_segundo_credito(): void
     {
         errores::$error = false;
@@ -120,6 +192,29 @@ class _inm_prospectoTest extends test {
         $this->assertIsArray($resultado);
         $this->assertNotTrue(errores::$error);
         $this->assertEmpty($resultado);
+        errores::$error = false;
+    }
+
+    public function test_identificadores_comercial(): void
+    {
+        errores::$error = false;
+
+        $_GET['seccion'] = 'inm_producto_infonavit';
+        $_GET['accion'] = 'lista';
+        $_SESSION['grupo_id'] = 1;
+        $_SESSION['usuario_id'] = 2;
+        $_GET['session_id'] = '1';
+
+
+        $_inm = new _inm_prospecto();
+        $_inm = new liberator($_inm);
+
+        $filtro = array();
+        $resultado = $_inm->identificadores_comercial($filtro);
+        $this->assertIsArray($resultado);
+        $this->assertNotTrue(errores::$error);
+        $this->assertEquals('Agente',$resultado['com_agente_id']['title']);
+        $this->assertEquals(12,$resultado['com_tipo_prospecto_id']['cols']);
         errores::$error = false;
     }
 

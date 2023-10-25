@@ -25,6 +25,7 @@ class _inm_prospecto{
      * @param PDO $link Conexion a la base de datos
      * @param int $inm_prospecto_id prospecto
      * @return array|stdClass
+     * @version 2.263.2
      */
     final public function datos_conyuge(PDO $link, int $inm_prospecto_id): array|stdClass
     {
@@ -175,6 +176,7 @@ class _inm_prospecto{
      * Genera los identificadores para keys selects
      * @param array $filtro Filtro de integracion par agente
      * @return array
+     * @version 2.253.2
      */
     private function identificadores_comercial(array $filtro): array
     {
@@ -287,6 +289,9 @@ class _inm_prospecto{
         $conyuge = array();
         if(isset($_POST['conyuge'])){
             $conyuge = $_POST['conyuge'];
+            if(is_string($conyuge)){
+                return $this->error->error(mensaje: 'Error POST conyuge debe ser un array',data:  $conyuge);
+            }
             unset($_POST['conyuge']);
         }
         return $conyuge;
