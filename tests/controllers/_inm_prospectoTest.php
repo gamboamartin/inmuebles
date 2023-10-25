@@ -163,5 +163,42 @@ class _inm_prospectoTest extends test {
         $this->assertEquals(1,$resultado['com_tipo_prospecto_id']->id_selected);
         errores::$error = false;
     }
+
+    public function test_tiene_dato_conyuge(): void
+    {
+        errores::$error = false;
+
+        $_GET['seccion'] = 'inm_producto_infonavit';
+        $_GET['accion'] = 'lista';
+        $_SESSION['grupo_id'] = 1;
+        $_SESSION['usuario_id'] = 2;
+        $_GET['session_id'] = '1';
+
+
+        $_inm = new _inm_prospecto();
+        $_inm = new liberator($_inm);
+        $conyuge = array();
+        $resultado = $_inm->tiene_dato_conyuge($conyuge);
+        $this->assertIsBool($resultado);
+        $this->assertNotTrue(errores::$error);
+        $this->assertNotTrue($resultado);
+        errores::$error = false;
+
+        $conyuge = array();
+        $conyuge[] = '';
+        $resultado = $_inm->tiene_dato_conyuge($conyuge);
+        $this->assertIsBool($resultado);
+        $this->assertNotTrue(errores::$error);
+        $this->assertNotTrue($resultado);
+        errores::$error = false;
+
+        $conyuge = array();
+        $conyuge[] = 'a';
+        $resultado = $_inm->tiene_dato_conyuge($conyuge);
+        $this->assertIsBool($resultado);
+        $this->assertNotTrue(errores::$error);
+        $this->assertTrue($resultado);
+        errores::$error = false;
+    }
 }
 

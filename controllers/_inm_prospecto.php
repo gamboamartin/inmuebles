@@ -98,6 +98,22 @@ class _inm_prospecto{
         }
         return $filtro;
     }
+
+    private function genera_keys_selects(controlador_inm_prospecto $controlador, array $identificadores, array $keys_selects){
+        foreach ($identificadores as $identificador=>$data){
+            $filtro = array();
+            if(isset($data['filtro'])){
+                $filtro = $data['filtro'];
+            }
+            $keys_selects = $controlador->key_select(cols: $data['cols'], con_registros: true,filtro: $filtro,
+                key: $identificador, keys_selects:$keys_selects,
+                id_selected: $controlador->registro[$identificador], label: $data['title'], disabled: $data['disabled']);
+            if(errores::$error){
+                return $this->error->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+            }
+        }
+        return $keys_selects;
+    }
     
     final public function headers_front(controlador_inm_prospecto $controlador){
         $headers = $this->headers_prospecto();
@@ -124,6 +140,101 @@ class _inm_prospecto{
         $headers['7'] = '7. DATOS EMPRESA TRABAJADOR';
         $headers['8'] = '8. DATOS DE CONYUGE';
         return $headers;
+    }
+
+    private function identificadores_comercial(array $filtro): array
+    {
+        $identificadores['com_agente_id']['title'] = 'Agente';
+        $identificadores['com_agente_id']['cols'] = 12;
+        $identificadores['com_agente_id']['disabled'] = false;
+        $identificadores['com_agente_id']['filtro'] = $filtro;
+
+        $identificadores['com_tipo_prospecto_id']['title'] = 'Tipo de prospecto';
+        $identificadores['com_tipo_prospecto_id']['cols'] = 12;
+        $identificadores['com_tipo_prospecto_id']['disabled'] = false;
+        $identificadores['com_tipo_prospecto_id']['filtro'] = array();
+        return $identificadores;
+    }
+
+    private function identificadores_dp(controlador_inm_prospecto $controlador): array
+    {
+        $identificadores['dp_pais_id']['title'] = 'Pais';
+        $identificadores['dp_pais_id']['cols'] = 4;
+        $identificadores['dp_pais_id']['disabled'] = false;
+        $identificadores['dp_pais_id']['filtro'] = array();
+
+        $filtro = array();
+        $filtro['dp_pais.id'] = $controlador->registro['dp_pais_id'];
+        $identificadores['dp_estado_id']['title'] = 'Estado';
+        $identificadores['dp_estado_id']['cols'] = 4;
+        $identificadores['dp_estado_id']['disabled'] = false;
+        $identificadores['dp_estado_id']['filtro'] = $filtro;
+
+        $filtro = array();
+        $filtro['dp_estado.id'] = $controlador->registro['dp_estado_id'];
+        $identificadores['dp_municipio_id']['title'] = 'Municipio';
+        $identificadores['dp_municipio_id']['cols'] = 4;
+        $identificadores['dp_municipio_id']['disabled'] = false;
+        $identificadores['dp_municipio_id']['filtro'] = $filtro;
+
+        $filtro = array();
+        $filtro['dp_municipio.id'] = $controlador->registro['dp_municipio_id'];
+        $identificadores['dp_cp_id']['title'] = 'CP';
+        $identificadores['dp_cp_id']['cols'] = 12;
+        $identificadores['dp_cp_id']['disabled'] = false;
+        $identificadores['dp_cp_id']['filtro'] = $filtro;
+
+        $filtro = array();
+        $filtro['dp_cp.id'] = $controlador->registro['dp_cp_id'];
+        $identificadores['dp_colonia_postal_id']['title'] = 'Colonia';
+        $identificadores['dp_colonia_postal_id']['cols'] = 6;
+        $identificadores['dp_colonia_postal_id']['disabled'] = false;
+        $identificadores['dp_colonia_postal_id']['filtro'] = $filtro;
+
+        $filtro = array();
+        $filtro['dp_colonia_postal.id'] = $controlador->registro['dp_colonia_postal_id'];
+        $identificadores['dp_calle_pertenece_id']['title'] = 'Calle';
+        $identificadores['dp_calle_pertenece_id']['cols'] = 6;
+        $identificadores['dp_calle_pertenece_id']['disabled'] = false;
+        $identificadores['dp_calle_pertenece_id']['filtro'] = $filtro;
+        return $identificadores;
+    }
+
+    private function identificadores_infonavit(controlador_inm_prospecto $controlador){
+        $identificadores['inm_institucion_hipotecaria_id']['title'] = 'Institucion Hipotecaria';
+        $identificadores['inm_institucion_hipotecaria_id']['cols'] = 12;
+        $identificadores['inm_institucion_hipotecaria_id']['disabled'] = false;
+
+        $identificadores['inm_producto_infonavit_id']['title'] = 'Producto Infonavit';
+        $identificadores['inm_producto_infonavit_id']['cols'] = 6;
+        $identificadores['inm_producto_infonavit_id']['disabled'] = false;
+
+        $identificadores['inm_attr_tipo_credito_id']['title'] = 'Tipo de Credito';
+        $identificadores['inm_attr_tipo_credito_id']['cols'] = 6;
+        $identificadores['inm_attr_tipo_credito_id']['disabled'] = false;
+
+        $identificadores['inm_destino_credito_id']['title'] = 'Destino de Credito';
+        $identificadores['inm_destino_credito_id']['cols'] = 12;
+        $identificadores['inm_destino_credito_id']['disabled'] = false;
+
+        $identificadores['inm_tipo_discapacidad_id']['title'] = 'Tipo de Discapacidad';
+        $identificadores['inm_tipo_discapacidad_id']['cols'] = 6;
+        $identificadores['inm_tipo_discapacidad_id']['disabled'] = false;
+
+        $identificadores['inm_persona_discapacidad_id']['title'] = 'Persona de Discapacidad';
+        $identificadores['inm_persona_discapacidad_id']['cols'] = 6;
+        $identificadores['inm_persona_discapacidad_id']['disabled'] = false;
+
+        $disabled = $this->disabled_segundo_credito(registro: $controlador->registro);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al maquetar disabled',data:  $disabled);
+        }
+
+        $identificadores['inm_plazo_credito_sc_id']['title'] = 'Plazo de Segundo Credito';
+        $identificadores['inm_plazo_credito_sc_id']['cols'] = 6;
+        $identificadores['inm_plazo_credito_sc_id']['disabled'] = $disabled;
+
+        return $identificadores;
     }
 
     /**
@@ -246,7 +357,6 @@ class _inm_prospecto{
      * @param array $filtro Filtro de tipo user
      * @param array $keys_selects Parametros previos cargados
      * @return array
-     * @version 2.262.2
      */
     private function keys_selects_comercial(controlador_inm_prospecto $controlador, array $filtro,
                                            array $keys_selects): array
@@ -257,68 +367,37 @@ class _inm_prospecto{
             return $this->error->error(mensaje: 'Error al valida controlador registro',data:  $valida);
         }
 
-        $keys_selects = $controlador->key_select(cols:12, con_registros: true,filtro:  $filtro, key: 'com_agente_id',
-            keys_selects:$keys_selects, id_selected: $controlador->registro['com_agente_id'], label: 'Agente');
+
+        $identificadores = $this->identificadores_comercial(filtro: $filtro);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al maquetar identificadores',data:  $identificadores);
+        }
+
+        $keys_selects = $this->genera_keys_selects(controlador: $controlador,identificadores:  $identificadores,
+            keys_selects:  $keys_selects);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
-        $keys_selects = $controlador->key_select(cols:12, con_registros: true,filtro:  array(),
-            key: 'com_tipo_prospecto_id', keys_selects:$keys_selects,
-            id_selected: $controlador->registro['com_tipo_prospecto_id'], label: 'Tipo de prospecto');
-        if(errores::$error){
-            return $this->error->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
-        }
+
+
         return $keys_selects;
     }
 
     private function keys_selects_dp(controlador_inm_prospecto $controlador, array $keys_selects){
-        $keys_selects = $controlador->key_select(cols:6, con_registros: true,filtro:  array(), key: 'dp_pais_id',
-            keys_selects:$keys_selects, id_selected: $controlador->registro['dp_pais_id'], label: 'Pais');
+
+
+
+        $identificadores = $this->identificadores_dp(controlador: $controlador);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al maquetar identificadores',data:  $identificadores);
+        }
+
+        $keys_selects = $this->genera_keys_selects(controlador: $controlador,identificadores:  $identificadores,keys_selects:  $keys_selects);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
 
-        $filtro = array();
-        $filtro['dp_pais.id'] = $controlador->registro['dp_pais_id'];
 
-        $keys_selects = $controlador->key_select(cols:6, con_registros: true,filtro: $filtro, key: 'dp_estado_id',
-            keys_selects:$keys_selects, id_selected: $controlador->registro['dp_estado_id'], label: 'Estado');
-        if(errores::$error){
-            return $this->error->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
-        }
-
-        $filtro = array();
-        $filtro['dp_estado.id'] = $controlador->registro['dp_estado_id'];
-
-        $keys_selects = $controlador->key_select(cols:6, con_registros: true,filtro:  $filtro, key: 'dp_municipio_id',
-            keys_selects:$keys_selects, id_selected: $controlador->registro['dp_municipio_id'], label: 'Municipio');
-        if(errores::$error){
-            return $this->error->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
-        }
-
-        $filtro = array();
-        $filtro['dp_municipio.id'] = $controlador->registro['dp_municipio_id'];
-        $keys_selects = $controlador->key_select(cols:6, con_registros: true,filtro:  $filtro, key: 'dp_cp_id',
-            keys_selects:$keys_selects, id_selected: $controlador->registro['dp_cp_id'], label: 'CP');
-        if(errores::$error){
-            return $this->error->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
-        }
-
-        $filtro = array();
-        $filtro['dp_cp.id'] = $controlador->registro['dp_cp_id'];
-        $keys_selects = $controlador->key_select(cols:6, con_registros: true,filtro:  $filtro, key: 'dp_colonia_postal_id',
-            keys_selects:$keys_selects, id_selected: $controlador->registro['dp_colonia_postal_id'], label: 'Colonia');
-        if(errores::$error){
-            return $this->error->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
-        }
-
-        $filtro = array();
-        $filtro['dp_colonia_postal.id'] = $controlador->registro['dp_colonia_postal_id'];
-        $keys_selects = $controlador->key_select(cols:6, con_registros: true,filtro:  $filtro, key: 'dp_calle_pertenece_id',
-            keys_selects:$keys_selects, id_selected: $controlador->registro['dp_calle_pertenece_id'], label: 'Calle');
-        if(errores::$error){
-            return $this->error->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
-        }
         return $keys_selects;
     }
 
@@ -330,52 +409,17 @@ class _inm_prospecto{
             return $this->error->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
 
-        $keys_selects = $controlador->key_select(cols:12, con_registros: true,filtro:  array(), key: 'inm_institucion_hipotecaria_id',
-            keys_selects:$keys_selects, id_selected: $controlador->registro['inm_institucion_hipotecaria_id'], label: 'Institucion Hipotecaria');
+
+        $identificadores = $this->identificadores_infonavit(controlador: $controlador);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al maquetar identificadores',data:  $identificadores);
+        }
+
+        $keys_selects = $this->genera_keys_selects(controlador: $controlador,identificadores:  $identificadores,keys_selects:  $keys_selects);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
 
-        $keys_selects = $controlador->key_select(cols:6, con_registros: true,filtro:  array(), key: 'inm_producto_infonavit_id',
-            keys_selects:$keys_selects, id_selected: $controlador->registro['inm_producto_infonavit_id'], label: 'Producto Infonavit');
-        if(errores::$error){
-            return $this->error->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
-        }
-
-        $keys_selects = $controlador->key_select(cols:6, con_registros: true,filtro:  array(), key: 'inm_attr_tipo_credito_id',
-            keys_selects:$keys_selects, id_selected: $controlador->registro['inm_attr_tipo_credito_id'], label: 'Tipo de Credito');
-        if(errores::$error){
-            return $this->error->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
-        }
-        $keys_selects = $controlador->key_select(cols:12, con_registros: true,filtro:  array(), key: 'inm_destino_credito_id',
-            keys_selects:$keys_selects, id_selected: $controlador->registro['inm_destino_credito_id'], label: 'Destino de Credito');
-        if(errores::$error){
-            return $this->error->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
-        }
-
-        $disabled = $this->disabled_segundo_credito(registro: $controlador->registro);
-        if(errores::$error){
-            return $this->error->error(mensaje: 'Error al maquetar disabled',data:  $disabled);
-        }
-
-
-        $keys_selects = $controlador->key_select(cols:6, con_registros: true,filtro:  array(), key: 'inm_plazo_credito_sc_id',
-            keys_selects:$keys_selects, id_selected: $controlador->registro['inm_plazo_credito_sc_id'], label: 'Plazo de Segundo Credito',disabled: $disabled);
-        if(errores::$error){
-            return $this->error->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
-        }
-
-        $keys_selects = $controlador->key_select(cols:6, con_registros: true,filtro:  array(), key: 'inm_tipo_discapacidad_id',
-            keys_selects:$keys_selects, id_selected: $controlador->registro['inm_tipo_discapacidad_id'], label: 'Tipo de Discapacidad');
-        if(errores::$error){
-            return $this->error->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
-        }
-
-        $keys_selects = $controlador->key_select(cols:6, con_registros: true,filtro:  array(), key: 'inm_persona_discapacidad_id',
-            keys_selects:$keys_selects, id_selected: $controlador->registro['inm_persona_discapacidad_id'], label: 'Persona de Discapacidad');
-        if(errores::$error){
-            return $this->error->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
-        }
         return $keys_selects;
     }
 
@@ -418,6 +462,7 @@ class _inm_prospecto{
      * Verifica si hay datos para transaccionar de conyuge
      * @param array $conyuge Registro a verificar
      * @return bool
+     * @version 2.260.2
      */
     private function tiene_dato_conyuge(array $conyuge): bool
     {
