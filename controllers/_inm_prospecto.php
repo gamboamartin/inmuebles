@@ -478,7 +478,13 @@ class _inm_prospecto{
         return $keys_selects;
     }
 
-    private function keys_selects_infonavit(controlador_inm_prospecto $controlador, array $keys_selects){
+    /**
+     * @param controlador_inm_prospecto $controlador
+     * @param array $keys_selects
+     * @return array
+     */
+    private function keys_selects_infonavit(controlador_inm_prospecto $controlador, array $keys_selects): array
+    {
 
 
         $keys_selects = $this->integra_keys_selects_comercial(controlador: $controlador,keys_selects:  $keys_selects);

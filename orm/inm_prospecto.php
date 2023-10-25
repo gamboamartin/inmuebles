@@ -408,6 +408,7 @@ class inm_prospecto extends _modelo_parent{
     }
 
     /**
+     * Inserta conyuge y genera la liga con el prospecto
      * @param array $conyuge
      * @param int $inm_prospecto_id
      * @return array|stdClass
