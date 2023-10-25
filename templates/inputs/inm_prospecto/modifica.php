@@ -103,6 +103,11 @@
         <?php echo $controlador->inputs->conyuge->telefono_celular;  ?>
     </div>
 
+<?php echo $controlador->header_frontend->apartado_9; ?>
+    <div  id="apartado_9">
+
+    </div>
+
 
 
 <?php include (new views())->ruta_templates.'botons/submit/modifica_bd.php';?>

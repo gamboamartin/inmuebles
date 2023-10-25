@@ -192,6 +192,7 @@ class _inm_prospecto{
         $headers['6'] = '6. DISCAPACIDAD';
         $headers['7'] = '7. DATOS EMPRESA TRABAJADOR';
         $headers['8'] = '8. DATOS DE CONYUGE';
+        $headers['9'] = '9. BENEFICIARIOS';
         return $headers;
     }
 
@@ -216,7 +217,8 @@ class _inm_prospecto{
     }
 
     /**
-     * @param controlador_inm_prospecto $controlador
+     * Genera los identificadores para direcciones
+     * @param controlador_inm_prospecto $controlador Controlador en ejecucion
      * @return array
      */
     private function identificadores_dp(controlador_inm_prospecto $controlador): array

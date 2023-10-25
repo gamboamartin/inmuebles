@@ -452,6 +452,17 @@ class controlador_inm_prospecto extends _ctl_formato {
         $this->inputs->conyuge = $conyuge;
 
 
+        $beneficiario = (new _beneficiario())->inputs_beneficiario(controler: $this);
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al obtener beneficiario',data:  $beneficiario,
+                header: $header,ws:  $ws);
+        }
+
+        $this->inputs->beneficiario = $beneficiario;
+
+
+
+
         return $r_modifica;
     }
 

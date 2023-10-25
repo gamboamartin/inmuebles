@@ -364,12 +364,14 @@ class inm_prospecto extends _modelo_parent{
     }
 
     /**
-     * @param bool $columnas_en_bruto
+     * Obtiene un conyuge basado en el prospecto
+     * @param bool $columnas_en_bruto si es true da resultado en campos tal como estan en base de datos
      * @param int $inm_prospecto_id
      * @param bool $retorno_obj
      * @return array|stdClass
      */
-    private function inm_conyuge(bool $columnas_en_bruto, int $inm_prospecto_id, bool $retorno_obj): array|stdClass
+    final public function inm_conyuge(bool $columnas_en_bruto, int $inm_prospecto_id,
+                                      bool $retorno_obj): array|stdClass
     {
         $filtro = array();
         $filtro['inm_prospecto.id'] = $inm_prospecto_id;
