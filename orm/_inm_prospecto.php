@@ -211,9 +211,16 @@ class _inm_prospecto{
      * @param int $inm_conyuge_id Id de conyuge
      * @param int $inm_prospecto_id Id de prospecto
      * @return array
+     * @version 2.266.2
      */
     final public function inm_rel_conyuge_prospecto_ins(int $inm_conyuge_id, int $inm_prospecto_id): array
     {
+        if($inm_conyuge_id <= 0){
+            return $this->error->error(mensaje: 'Error inm_conyuge_id debe ser mayor a 0',data:  $inm_conyuge_id);
+        }
+        if($inm_prospecto_id <= 0){
+            return $this->error->error(mensaje: 'Error inm_prospecto_id debe ser mayor a 0',data:  $inm_prospecto_id);
+        }
         $inm_rel_conyuge_prospecto_ins['inm_prospecto_id'] = $inm_prospecto_id;
         $inm_rel_conyuge_prospecto_ins['inm_conyuge_id'] = $inm_conyuge_id;
 

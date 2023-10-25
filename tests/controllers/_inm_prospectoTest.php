@@ -243,6 +243,35 @@ class _inm_prospectoTest extends test {
         errores::$error = false;
     }
 
+    public function test_identificadores_infonavit(): void
+    {
+        errores::$error = false;
+
+        $_GET['seccion'] = 'inm_producto_infonavit';
+        $_GET['accion'] = 'lista';
+        $_SESSION['grupo_id'] = 1;
+        $_SESSION['usuario_id'] = 2;
+        $_GET['session_id'] = '1';
+
+
+        $_inm = new _inm_prospecto();
+        $_inm = new liberator($_inm);
+        $controlador = new controlador_inm_prospecto(link: $this->link, paths_conf: $this->paths_conf);
+        $controlador->registro['inm_prospecto_es_segundo_credito'] = 'NO';
+
+        $resultado = $_inm->identificadores_infonavit($controlador);
+        $this->assertIsArray($resultado);
+        $this->assertNotTrue(errores::$error);
+        $this->assertEquals("Institucion Hipotecaria",$resultado['inm_institucion_hipotecaria_id']['title']);
+        $this->assertEquals(6,$resultado['inm_producto_infonavit_id']['cols']);
+        $this->assertNotTrue($resultado['inm_attr_tipo_credito_id']['disabled']);
+        $this->assertEquals("Destino de Credito",$resultado['inm_destino_credito_id']['title']);
+        $this->assertEquals(6,$resultado['inm_tipo_discapacidad_id']['cols']);
+        $this->assertNotTrue($resultado['inm_persona_discapacidad_id']['disabled']);
+        $this->assertEquals("Plazo de Segundo Credito",$resultado['inm_plazo_credito_sc_id']['title']);
+        errores::$error = false;
+    }
+
     public function test_init_conyuge(): void
     {
         errores::$error = false;

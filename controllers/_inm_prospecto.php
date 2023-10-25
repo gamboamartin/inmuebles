@@ -263,9 +263,16 @@ class _inm_prospecto{
      * Integra los identificadores para la creacion de un parametro de tipo key select
      * @param controlador_inm_prospecto $controlador Controlador en ejecucion
      * @return array
+     * @version 2.266.2
      */
     private function identificadores_infonavit(controlador_inm_prospecto $controlador): array
     {
+        $keys = array('inm_prospecto_es_segundo_credito');
+        $valida = $this->validacion->valida_existencia_keys(keys: $keys,registro:  $controlador->registro);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al validar registro',data:  $valida);
+        }
+
         $identificadores['inm_institucion_hipotecaria_id']['title'] = 'Institucion Hipotecaria';
         $identificadores['inm_institucion_hipotecaria_id']['cols'] = 12;
         $identificadores['inm_institucion_hipotecaria_id']['disabled'] = false;
@@ -396,6 +403,7 @@ class _inm_prospecto{
      * @param controlador_inm_prospecto $controlador
      * @param array $keys_selects
      * @return array
+     * @version 2.266.2
      */
     private function integra_keys_selects_comercial(controlador_inm_prospecto $controlador, array $keys_selects): array
     {

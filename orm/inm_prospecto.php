@@ -407,7 +407,13 @@ class inm_prospecto extends _modelo_parent{
         return $inm_prospecto_proceso_ins;
     }
 
-    private function inserta_conyuge(array $conyuge, int $inm_prospecto_id){
+    /**
+     * @param array $conyuge
+     * @param int $inm_prospecto_id
+     * @return array|stdClass
+     */
+    private function inserta_conyuge(array $conyuge, int $inm_prospecto_id): array|stdClass
+    {
         $alta_conyuge = (new inm_conyuge(link: $this->link))->alta_registro(registro: $conyuge);
         if (errores::$error) {
             return $this->error->error(mensaje: 'Error al insertar conyuge', data: $alta_conyuge);
