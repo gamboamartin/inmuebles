@@ -129,7 +129,7 @@ class controlador_inm_prospectoTest extends test {
             exit;
         }
 
-        $ch = curl_init("http://localhost/inmuebles/index.php?seccion=inm_prospecto&accion=convierte_cliente&adm_menu_id=64&session_id=9484149974&adm_menu_id=64&registro_id=1");
+        $ch = curl_init("http://localhost/inmuebles/index.php?seccion=inm_prospecto&accion=convierte_cliente&adm_menu_id=64&session_id=9633405615&adm_menu_id=64&registro_id=1");
         $fp = fopen($file, "w");
 
         curl_setopt($ch, CURLOPT_FILE, $fp);
@@ -153,7 +153,7 @@ class controlador_inm_prospectoTest extends test {
             exit;
         }
 
-        $ch = curl_init("http://localhost/inmuebles/index.php?seccion=inm_prospecto&accion=convierte_cliente&adm_menu_id=64&session_id=9484149974&adm_menu_id=64&registro_id=1");
+        $ch = curl_init("http://localhost/inmuebles/index.php?seccion=inm_prospecto&accion=convierte_cliente&adm_menu_id=64&session_id=9633405615&adm_menu_id=64&registro_id=1");
         $fp = fopen($file, "w");
 
         curl_setopt($ch, CURLOPT_FILE, $fp);
@@ -176,7 +176,7 @@ class controlador_inm_prospectoTest extends test {
             exit;
         }
 
-        $ch = curl_init("http://localhost/inmuebles/index.php?seccion=inm_prospecto&accion=convierte_cliente&adm_menu_id=64&session_id=9484149974&adm_menu_id=64&registro_id=1");
+        $ch = curl_init("http://localhost/inmuebles/index.php?seccion=inm_prospecto&accion=convierte_cliente&adm_menu_id=64&session_id=9633405615&adm_menu_id=64&registro_id=1");
         $fp = fopen($file, "w");
 
         curl_setopt($ch, CURLOPT_FILE, $fp);

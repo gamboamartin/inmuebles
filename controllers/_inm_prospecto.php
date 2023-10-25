@@ -125,19 +125,42 @@ class _inm_prospecto{
      * @param array $identificadores identificadores a integrar
      * @param array $keys_selects parametros previos cargados
      * @return array
+     * @version 2.264.2
      */
     private function genera_keys_selects(controlador_inm_prospecto $controlador, array $identificadores,
                                          array $keys_selects): array
     {
         foreach ($identificadores as $identificador=>$data){
+            $identificador = trim($identificador);
+            if($identificador === ''){
+                return $this->error->error(mensaje: 'Error identificador esta vacio',data:  $identificador);
+            }
+            if(!is_array($data)){
+                return $this->error->error(mensaje: 'Error data debe ser un array',data:  $data);
+            }
             $filtro = array();
             if(isset($data['filtro'])){
                 $filtro = $data['filtro'];
             }
-            $keys_selects = $controlador->key_select(cols: $data['cols'], con_registros: true,filtro: $filtro,
-                key: $identificador, keys_selects:$keys_selects,
-                id_selected: $controlador->registro[$identificador], label: $data['title'],
-                disabled: $data['disabled']);
+            $cols = 12;
+            if(isset($data['cols'])){
+                $cols = $data['cols'];
+            }
+            $id_selected = -1;
+            if(isset($controlador->registro[$identificador])){
+                $id_selected = $controlador->registro[$identificador];
+            }
+            $title = $identificador;
+            if(isset($data['title'])){
+                $title = $data['title'];
+            }
+            $disabled = false;
+            if(isset($data['disabled'])){
+                $disabled = $data['disabled'];
+            }
+            $keys_selects = $controlador->key_select(cols: $cols, con_registros: true,filtro: $filtro,
+                key: $identificador, keys_selects:$keys_selects, id_selected: $id_selected, label: $title,
+                disabled: $disabled);
             if(errores::$error){
                 return $this->error->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
             }

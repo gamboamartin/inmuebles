@@ -375,7 +375,8 @@ class inm_prospecto extends _modelo_parent{
         $inm_rel_conyuge_prospecto = $r_inm_rel_conyuge_prospecto->registros[0];
 
         $inm_conyuge = (new inm_conyuge(link: $this->link))->registro(
-            registro_id: $inm_rel_conyuge_prospecto['inm_conyuge_id'],columnas_en_bruto: $columnas_en_bruto,retorno_obj: $retorno_obj);
+            registro_id: $inm_rel_conyuge_prospecto['inm_conyuge_id'],columnas_en_bruto: $columnas_en_bruto,
+            retorno_obj: $retorno_obj);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al obtener conyuge',data:  $inm_conyuge);
         }
@@ -416,9 +417,9 @@ class inm_prospecto extends _modelo_parent{
             inm_conyuge_id: $alta_conyuge->registro_id, inm_prospecto_id: $inm_prospecto_id);
 
         if (errores::$error) {
-            return $this->error->error(mensaje: 'Error al maquetar conyuge relacion', data: $inm_rel_conyuge_prospecto_ins);
+            return $this->error->error(mensaje: 'Error al maquetar conyuge relacion',
+                data: $inm_rel_conyuge_prospecto_ins);
         }
-
 
         $r_inm_rel_conyuge_prospecto_bd = (new inm_rel_conyuge_prospecto(link: $this->link))->alta_registro(
             registro: $inm_rel_conyuge_prospecto_ins);

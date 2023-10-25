@@ -206,6 +206,11 @@ class _inm_prospecto{
     }
 
 
+    /**
+     * @param int $inm_conyuge_id
+     * @param int $inm_prospecto_id
+     * @return array
+     */
     final public function inm_rel_conyuge_prospecto_ins(int $inm_conyuge_id, int $inm_prospecto_id): array
     {
         $inm_rel_conyuge_prospecto_ins['inm_prospecto_id'] = $inm_prospecto_id;
