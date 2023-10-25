@@ -52,7 +52,7 @@ class _upd_prospecto{
      * Obtiene un conyuge basado en el prospecto
      * @param bool $columnas_en_bruto si es true da resultado en campos tal como estan en base de datos
      * @param int $inm_prospecto_id Identificador de prospecto
-     * @param PDO $link
+     * @param PDO $link Conexion a la base de datos
      * @param bool $retorno_obj
      * @return array|stdClass
      */

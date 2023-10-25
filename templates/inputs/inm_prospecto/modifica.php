@@ -1,4 +1,4 @@
-<?php /** @var  gamboamartin\facturacion\controllers\controlador_fc_docto_relacionado $controlador  controlador en ejecucion */ ?>
+<?php /** @var  gamboamartin\inmuebles\controllers\controlador_inm_prospecto $controlador  controlador en ejecucion */ ?>
 <?php use config\views; ?>
 
 <?php echo $controlador->header_frontend->apartado_1; ?>
@@ -110,6 +110,32 @@
         <?php echo $controlador->inputs->beneficiario->nombre; ?>
         <?php echo $controlador->inputs->beneficiario->apellido_paterno; ?>
         <?php echo $controlador->inputs->beneficiario->apellido_materno; ?>
+        <div class="col-md-12 table-responsive">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>Tipo Beneficiario</th>
+                        <th>Parentesco</th>
+                        <th>Nombre</th>
+                        <th>Apellido Paterno</th>
+                        <th>Apellido Materno</th>
+                    </tr>
+                </thead>
+                <tbody>
+                <?php foreach ($controlador->beneficiarios as $beneficiario){ ?>
+                    <tr>
+                        <td><?php echo $beneficiario['inm_beneficiario_id']; ?></td>
+                        <td><?php echo $beneficiario['inm_tipo_beneficiario_descripcion']; ?></td>
+                        <td><?php echo $beneficiario['inm_parentesco_descripcion']; ?></td>
+                        <td><?php echo $beneficiario['inm_beneficiario_nombre']; ?></td>
+                        <td><?php echo $beneficiario['inm_beneficiario_apellido_paterno']; ?></td>
+                        <td><?php echo $beneficiario['inm_beneficiario_apellido_materno']; ?></td>
+                    </tr>
+                <?php } ?>
+                </tbody>
+            </table>
+        </div>
     </div>
 
 

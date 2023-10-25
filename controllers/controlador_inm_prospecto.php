@@ -13,6 +13,7 @@ use gamboamartin\errores\errores;
 use gamboamartin\inmuebles\html\inm_prospecto_html;
 use gamboamartin\inmuebles\models\_base_paquete;
 use gamboamartin\inmuebles\models\_inm_prospecto;
+use gamboamartin\inmuebles\models\inm_beneficiario;
 use gamboamartin\inmuebles\models\inm_prospecto;
 use gamboamartin\system\links_menu;
 use gamboamartin\template\html;
@@ -28,6 +29,8 @@ class controlador_inm_prospecto extends _ctl_formato {
     public string $link_inm_doc_prospecto_alta_bd = '';
 
     public array $inm_conf_docs_prospecto = array();
+
+    public array $beneficiarios = array();
 
 
     public function __construct(PDO      $link, html $html = new \gamboamartin\template_1\html(),
@@ -459,6 +462,17 @@ class controlador_inm_prospecto extends _ctl_formato {
         }
 
         $this->inputs->beneficiario = $beneficiario;
+
+        $filtro['inm_prospecto.id'] = $this->registro_id;
+
+        $r_inm_beneficiario = (new inm_beneficiario(link: $this->link))->filtro_and(filtro: $filtro);
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al obtener beneficiarios',data:  $r_inm_beneficiario,
+                header: $header,ws:  $ws);
+        }
+
+        $beneficiarios = $r_inm_beneficiario->registros;
+        $this->beneficiarios = $beneficiarios;
 
 
 
