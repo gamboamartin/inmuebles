@@ -212,7 +212,21 @@ class _inm_prospecto{
         return $controlador->inputs;
     }
 
-    private function integra_keys_selects_comercial(controlador_inm_prospecto $controlador, array $keys_selects){
+    /**
+     * Integra los parametros de selectores de tipo comercial
+     * @param controlador_inm_prospecto $controlador
+     * @param array $keys_selects
+     * @return array
+     * @version 2.259.2
+     */
+    private function integra_keys_selects_comercial(controlador_inm_prospecto $controlador, array $keys_selects): array
+    {
+        $keys = array('com_agente_id','com_tipo_prospecto_id');
+        $valida = $this->validacion->valida_ids(keys: $keys,registro:  $controlador->registro);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al valida controlador registro',data:  $valida);
+        }
+
         $filtro = $this->genera_filtro_user(link: $controlador->link);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al obtener filtro ',data:  $filtro);
@@ -400,6 +414,11 @@ class _inm_prospecto{
         return $controlador->row_upd;
     }
 
+    /**
+     * Verifica si hay datos para transaccionar de conyuge
+     * @param array $conyuge Registro a verificar
+     * @return bool
+     */
     private function tiene_dato_conyuge(array $conyuge): bool
     {
         $tiene_dato_conyuge = false;
