@@ -44,6 +44,8 @@ class inm_beneficiario extends _modelo_parent{
             $descripcion = $this->registro['inm_prospecto_id'];
             $descripcion .= ' '.$this->registro['inm_tipo_beneficiario_id'];
             $descripcion .= ' '.$this->registro['inm_parentesco_id'];
+            $descripcion .= ' '.$this->registro['nombre'];
+            $descripcion .= ' '.$this->registro['apellido_paterno'];
             $this->registro['descripcion'] = $descripcion;
         }
 

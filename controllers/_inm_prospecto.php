@@ -20,6 +20,25 @@ class _inm_prospecto{
         $this->validacion = new validacion();
     }
 
+    final public function datos_beneficiario(): array|stdClass
+    {
+
+        $beneficiario = $this->init_beneficiario();
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al inicializar beneficiario',data:  $beneficiario);
+        }
+
+        $tiene_dato_beneficiario = $this->tiene_dato_beneficiario(beneficiario: $beneficiario);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al validar si tiene dato tiene_dato_beneficiario',data:  $tiene_dato_beneficiario);
+        }
+        $datos = new stdClass();
+        $datos->existe_beneficiario = false;
+        $datos->beneficiario = $beneficiario;
+        $datos->tiene_dato_beneficiario = $tiene_dato_beneficiario;
+        return $datos;
+    }
+
     /**
      * Obtiene los datos de un conyuge
      * @param PDO $link Conexion a la base de datos
@@ -220,44 +239,53 @@ class _inm_prospecto{
      * Genera los identificadores para direcciones
      * @param controlador_inm_prospecto $controlador Controlador en ejecucion
      * @return array
+     * @version 2.272.2
      */
     private function identificadores_dp(controlador_inm_prospecto $controlador): array
     {
+        $row = $controlador->registro;
+        $keys = array('dp_pais_id','dp_estado_id','dp_municipio_id','dp_cp_id','dp_colonia_postal_id');
+        foreach ($keys as $key){
+            if(!isset($row[$key])){
+                $row[$key] = -1;
+            }
+        }
+
         $identificadores['dp_pais_id']['title'] = 'Pais';
         $identificadores['dp_pais_id']['cols'] = 4;
         $identificadores['dp_pais_id']['disabled'] = false;
         $identificadores['dp_pais_id']['filtro'] = array();
 
         $filtro = array();
-        $filtro['dp_pais.id'] = $controlador->registro['dp_pais_id'];
+        $filtro['dp_pais.id'] = $row['dp_pais_id'];
         $identificadores['dp_estado_id']['title'] = 'Estado';
         $identificadores['dp_estado_id']['cols'] = 4;
         $identificadores['dp_estado_id']['disabled'] = false;
         $identificadores['dp_estado_id']['filtro'] = $filtro;
 
         $filtro = array();
-        $filtro['dp_estado.id'] = $controlador->registro['dp_estado_id'];
+        $filtro['dp_estado.id'] = $row['dp_estado_id'];
         $identificadores['dp_municipio_id']['title'] = 'Municipio';
         $identificadores['dp_municipio_id']['cols'] = 4;
         $identificadores['dp_municipio_id']['disabled'] = false;
         $identificadores['dp_municipio_id']['filtro'] = $filtro;
 
         $filtro = array();
-        $filtro['dp_municipio.id'] = $controlador->registro['dp_municipio_id'];
+        $filtro['dp_municipio.id'] = $row['dp_municipio_id'];
         $identificadores['dp_cp_id']['title'] = 'CP';
         $identificadores['dp_cp_id']['cols'] = 12;
         $identificadores['dp_cp_id']['disabled'] = false;
         $identificadores['dp_cp_id']['filtro'] = $filtro;
 
         $filtro = array();
-        $filtro['dp_cp.id'] = $controlador->registro['dp_cp_id'];
+        $filtro['dp_cp.id'] = $row['dp_cp_id'];
         $identificadores['dp_colonia_postal_id']['title'] = 'Colonia';
         $identificadores['dp_colonia_postal_id']['cols'] = 6;
         $identificadores['dp_colonia_postal_id']['disabled'] = false;
         $identificadores['dp_colonia_postal_id']['filtro'] = $filtro;
 
         $filtro = array();
-        $filtro['dp_colonia_postal.id'] = $controlador->registro['dp_colonia_postal_id'];
+        $filtro['dp_colonia_postal.id'] = $row['dp_colonia_postal_id'];
         $identificadores['dp_calle_pertenece_id']['title'] = 'Calle';
         $identificadores['dp_calle_pertenece_id']['cols'] = 6;
         $identificadores['dp_calle_pertenece_id']['disabled'] = false;
@@ -313,6 +341,19 @@ class _inm_prospecto{
         $identificadores['inm_plazo_credito_sc_id']['disabled'] = $disabled;
 
         return $identificadores;
+    }
+
+    private function init_beneficiario(): array
+    {
+        $beneficiario = array();
+        if(isset($_POST['beneficiario'])){
+            $beneficiario = $_POST['beneficiario'];
+            if(is_string($beneficiario)){
+                return $this->error->error(mensaje: 'Error POST beneficiario debe ser un array',data:  $beneficiario);
+            }
+            unset($_POST['beneficiario']);
+        }
+        return $beneficiario;
     }
 
     /**
@@ -558,6 +599,22 @@ class _inm_prospecto{
             $controlador->row_upd->rfc = 'XAXX010101000';
         }
         return $controlador->row_upd;
+    }
+
+    private function tiene_dato_beneficiario(array $beneficiario): bool
+    {
+        $tiene_dato_beneficiario = false;
+        foreach ($beneficiario as $value){
+            if($value === null){
+                $value = '';
+            }
+            $value = trim($value);
+            if($value!==''){
+                $tiene_dato_beneficiario = true;
+                break;
+            }
+        }
+        return $tiene_dato_beneficiario;
     }
 
     /**

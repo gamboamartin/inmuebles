@@ -59,9 +59,9 @@ class _beneficiario{
         $beneficiario->inm_parentesco_id = $inm_parentesco_id;
 
         $modelo = new inm_tipo_beneficiario(link: $controler->link);
-        $inm_tipo_beneficiario_id = $controler->html->select_catalogo(cols: 12, con_registros: true,
+        $inm_tipo_beneficiario_id = $controler->html->select_catalogo(cols: 6, con_registros: true,
             id_selected: $row_upd->inm_parentesco_id, modelo: $modelo, label: 'Tipo de Beneficiario',
-            name: 'conyuge[inm_ocupacion_id]');
+            name: 'beneficiario[inm_tipo_beneficiario_id]');
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al obtener input',data:  $inm_tipo_beneficiario_id);
         }

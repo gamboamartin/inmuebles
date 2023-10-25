@@ -248,6 +248,33 @@ class _inm_prospectoTest extends test {
         errores::$error = false;
     }
 
+    public function test_identificadores_dp(): void
+    {
+        errores::$error = false;
+
+        $_GET['seccion'] = 'inm_producto_infonavit';
+        $_GET['accion'] = 'lista';
+        $_SESSION['grupo_id'] = 1;
+        $_SESSION['usuario_id'] = 2;
+        $_GET['session_id'] = '1';
+
+        $del = (new base_test())->del_inm_conyuge(link: $this->link);
+        if(errores::$error){
+            $error = (new errores())->error(mensaje:'Error al del', data: $del);
+            print_r($error);exit;
+        }
+
+        $_inm = new _inm_prospecto();
+        $_inm = new liberator($_inm);
+
+        $controlador = new controlador_inm_prospecto(link: $this->link, paths_conf: $this->paths_conf);
+        $resultado = $_inm->identificadores_dp($controlador);
+        $this->assertIsArray($resultado);
+        $this->assertNotTrue(errores::$error);
+
+        errores::$error = false;
+    }
+
     public function test_identificadores_infonavit(): void
     {
         errores::$error = false;

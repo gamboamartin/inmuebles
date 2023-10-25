@@ -105,7 +105,11 @@
 
 <?php echo $controlador->header_frontend->apartado_9; ?>
     <div  id="apartado_9">
-
+        <?php echo $controlador->inputs->beneficiario->inm_tipo_beneficiario_id; ?>
+        <?php echo $controlador->inputs->beneficiario->inm_parentesco_id; ?>
+        <?php echo $controlador->inputs->beneficiario->nombre; ?>
+        <?php echo $controlador->inputs->beneficiario->apellido_paterno; ?>
+        <?php echo $controlador->inputs->beneficiario->apellido_materno; ?>
     </div>
 
 
