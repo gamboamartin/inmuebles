@@ -304,6 +304,27 @@ class _inm_prospectoTest extends test {
         errores::$error = false;
     }
 
+    public function test_identificadores_personal(): void
+    {
+        errores::$error = false;
+
+        $_GET['seccion'] = 'inm_producto_infonavit';
+        $_GET['accion'] = 'lista';
+        $_SESSION['grupo_id'] = 1;
+        $_SESSION['usuario_id'] = 2;
+        $_GET['session_id'] = '1';
+
+
+        $_inm = new _inm_prospecto();
+        $_inm = new liberator($_inm);
+
+        $resultado = $_inm->identificadores_personal();
+        $this->assertIsArray($resultado);
+        $this->assertNotTrue(errores::$error);
+        $this->assertEquals("Sindicato",$resultado['inm_sindicato_id']['title']);
+        errores::$error = false;
+    }
+
     public function test_init_conyuge(): void
     {
         errores::$error = false;

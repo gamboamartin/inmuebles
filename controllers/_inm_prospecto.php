@@ -346,6 +346,7 @@ class _inm_prospecto{
     /**
      * Genera los identificadores para creacion de keys selects
      * @return array
+     * @version 2.279.2
      */
     private function identificadores_personal(): array
     {

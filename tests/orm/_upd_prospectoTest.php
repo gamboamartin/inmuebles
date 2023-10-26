@@ -133,6 +133,12 @@ class _upd_prospectoTest extends test {
         $modelo = new _upd_prospecto();
         $modelo = new liberator($modelo);
 
+        $del = (new base_test())->del_inm_rel_conyuge_prospecto(link: $this->link);
+        if(errores::$error){
+            $error = (new errores())->error(mensaje:'Error al del', data: $del);
+            print_r($error);exit;
+        }
+
         $alta = (new base_test())->alta_inm_rel_conyuge_prospecto(link: $this->link);
         if(errores::$error){
             $error = (new errores())->error(mensaje:'Error al alta', data: $alta);

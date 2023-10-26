@@ -27,7 +27,14 @@ class _upd_prospecto{
         return $datos;
     }
 
-    private function ajusta_conyuge(stdClass $datos, int $inm_prospecto_id, PDO $link){
+    /**
+     * @param stdClass $datos
+     * @param int $inm_prospecto_id
+     * @param PDO $link
+     * @return array|stdClass
+     */
+    private function ajusta_conyuge(stdClass $datos, int $inm_prospecto_id, PDO $link): array|stdClass
+    {
         if(!$datos->existe_conyuge) {
             $r_inm_rel_conyuge_prospecto_bd = $this->inserta_conyuge(conyuge: $datos->conyuge,
                 inm_prospecto_id: $inm_prospecto_id,link: $link);
