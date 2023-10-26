@@ -1011,6 +1011,10 @@ class base_test{
         if(errores::$error){
             return (new errores())->error('Error al eliminar', $del);
         }
+        $del = $this->del_inm_referencia_prospecto(link: $link);
+        if(errores::$error){
+            return (new errores())->error('Error al eliminar', $del);
+        }
 
         $del = $this->del($link, 'gamboamartin\\inmuebles\\models\\inm_prospecto');
         if(errores::$error){
@@ -1032,6 +1036,16 @@ class base_test{
     public function del_inm_referencia(PDO $link): array
     {
         $del = $this->del($link, 'gamboamartin\\inmuebles\\models\\inm_referencia');
+        if(errores::$error){
+            return (new errores())->error('Error al eliminar', $del);
+        }
+        return $del;
+    }
+
+    public function del_inm_referencia_prospecto(PDO $link): array
+    {
+
+        $del = $this->del($link, 'gamboamartin\\inmuebles\\models\\inm_referencia_prospecto');
         if(errores::$error){
             return (new errores())->error('Error al eliminar', $del);
         }

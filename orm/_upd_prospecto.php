@@ -175,11 +175,15 @@ class _upd_prospecto{
      * Modifica los datos de un conyuge ligado al prospecto
      * @param array $conyuge Registro de conyuge a transaccionar
      * @param int $inm_prospecto_id Identificador de prospecto
-     * @param PDO $link
+     * @param PDO $link Conexion a la base de datos
      * @return array|stdClass
+     * @version 2.278.2
      */
     private function modifica_conyuge(array $conyuge, int $inm_prospecto_id, PDO $link): array|stdClass
     {
+        if($inm_prospecto_id<=0){
+            return $this->error->error(mensaje: 'Error inm_prospecto_id debe ser mayor a 0', data:  $inm_prospecto_id);
+        }
         $inm_conyuge_previo = $this->inm_conyuge(columnas_en_bruto: true, inm_prospecto_id: $inm_prospecto_id,
             link: $link, retorno_obj: true);
         if (errores::$error) {

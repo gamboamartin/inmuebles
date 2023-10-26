@@ -119,6 +119,36 @@ class _upd_prospectoTest extends test {
         errores::$error = false;
     }
 
+    public function test_modifica_conyuge(): void
+    {
+        errores::$error = false;
+
+        $_GET['seccion'] = 'inm_producto_infonavit';
+        $_GET['accion'] = 'lista';
+        $_SESSION['grupo_id'] = 1;
+        $_SESSION['usuario_id'] = 2;
+        $_GET['session_id'] = '1';
+
+
+        $modelo = new _upd_prospecto();
+        $modelo = new liberator($modelo);
+
+        $alta = (new base_test())->alta_inm_rel_conyuge_prospecto(link: $this->link);
+        if(errores::$error){
+            $error = (new errores())->error(mensaje:'Error al alta', data: $alta);
+            print_r($error);exit;
+        }
+
+        $inm_prospecto_id = 1;
+        $link = $this->link;
+        $conyuge = array();
+        $resultado = $modelo->modifica_conyuge($conyuge, $inm_prospecto_id, $link);
+        $this->assertIsObject($resultado);
+        $this->assertNotTrue(errores::$error);
+
+        errores::$error = false;
+    }
+
 
 
 

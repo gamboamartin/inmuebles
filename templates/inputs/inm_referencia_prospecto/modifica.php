@@ -9,7 +9,7 @@
 
 
 <?php echo $controlador->inputs->inm_prospecto_id; ?>
-<?php echo $controlador->inputs->inm_perentesco_id; ?>
+<?php echo $controlador->inputs->inm_parentesco_id; ?>
 <?php echo $controlador->inputs->apellido_paterno; ?>
 <?php echo $controlador->inputs->apellido_materno; ?>
 <?php echo $controlador->inputs->nombre; ?>

@@ -343,6 +343,10 @@ class _inm_prospecto{
         return $identificadores;
     }
 
+    /**
+     * Genera los identificadores para creacion de keys selects
+     * @return array
+     */
     private function identificadores_personal(): array
     {
         $identificadores['inm_sindicato_id']['title'] = 'Sindicato';
