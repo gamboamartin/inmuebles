@@ -564,6 +564,17 @@ class base_test{
             }
         }
 
+        $existe = (new inm_prospecto(link: $link))->existe_by_id(registro_id: $inm_prospecto_id);
+        if(errores::$error){
+            return (new errores())->error(mensaje: 'Error al validar si existe inm_prospecto_id', data: $existe);
+        }
+        if(!$existe){
+            $alta = $this->alta_inm_prospecto(link: $link, id: $inm_prospecto_id);
+            if(errores::$error){
+                return (new errores())->error(mensaje: 'Error al insertar inm_prospecto_id', data: $alta);
+            }
+        }
+
 
         $registro['id'] = $id;
         $registro['inm_conyuge_id'] = $inm_conyuge_id;

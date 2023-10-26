@@ -509,8 +509,9 @@ class _inm_prospecto{
     /**
      * Genera los selectores de tipo domicilio
      * @param controlador_inm_prospecto $controlador Controlador en ejecucion
-     * @param array $keys_selects
+     * @param array $keys_selects Parametros cargados previamente
      * @return array
+     * @version 2.276.2
      */
     private function keys_selects_dp(controlador_inm_prospecto $controlador, array $keys_selects): array
     {

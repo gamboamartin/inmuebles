@@ -171,7 +171,15 @@ class _upd_prospecto{
         return $data;
     }
 
-    private function modifica_conyuge(array $conyuge, int $inm_prospecto_id, PDO $link){
+    /**
+     * Modifica los datos de un conyuge ligado al prospecto
+     * @param array $conyuge
+     * @param int $inm_prospecto_id
+     * @param PDO $link
+     * @return array|stdClass
+     */
+    private function modifica_conyuge(array $conyuge, int $inm_prospecto_id, PDO $link): array|stdClass
+    {
         $inm_conyuge_previo = $this->inm_conyuge(columnas_en_bruto: true, inm_prospecto_id: $inm_prospecto_id,
             link: $link, retorno_obj: true);
         if (errores::$error) {
