@@ -173,8 +173,8 @@ class _upd_prospecto{
 
     /**
      * Modifica los datos de un conyuge ligado al prospecto
-     * @param array $conyuge
-     * @param int $inm_prospecto_id
+     * @param array $conyuge Registro de conyuge a transaccionar
+     * @param int $inm_prospecto_id Identificador de prospecto
      * @param PDO $link
      * @return array|stdClass
      */

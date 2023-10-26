@@ -343,6 +343,22 @@ class _inm_prospecto{
         return $identificadores;
     }
 
+    private function identificadores_personal(): array
+    {
+        $identificadores['inm_sindicato_id']['title'] = 'Sindicato';
+        $identificadores['inm_sindicato_id']['cols'] = 12;
+        $identificadores['inm_sindicato_id']['disabled'] = false;
+
+        $identificadores['inm_nacionalidad_id']['title'] = 'Nacionalidad';
+        $identificadores['inm_nacionalidad_id']['cols'] = 6;
+        $identificadores['inm_nacionalidad_id']['disabled'] = false;
+
+        $identificadores['inm_ocupacion_id']['title'] = 'Ocupacion';
+        $identificadores['inm_ocupacion_id']['cols'] = 6;
+        $identificadores['inm_ocupacion_id']['disabled'] = false;
+        return $identificadores;
+    }
+
     private function init_beneficiario(): array
     {
         $beneficiario = array();
@@ -573,23 +589,18 @@ class _inm_prospecto{
     }
 
     private function keys_selects_personal(controlador_inm_prospecto $controlador, array $keys_selects){
-        $keys_selects = $controlador->key_select(cols:12, con_registros: true,filtro:  array(), key: 'inm_sindicato_id',
-            keys_selects:$keys_selects, id_selected: $controlador->registro['inm_sindicato_id'], label: 'Sindicato');
+
+        $identificadores = $this->identificadores_personal();
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al maquetar identificadores',data:  $identificadores);
+        }
+
+        $keys_selects = $this->genera_keys_selects(controlador: $controlador,identificadores:  $identificadores,
+            keys_selects:  $keys_selects);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
 
-        $keys_selects = $controlador->key_select(cols:6, con_registros: true,filtro:  array(), key: 'inm_nacionalidad_id',
-            keys_selects:$keys_selects, id_selected: $controlador->registro['inm_nacionalidad_id'], label: 'Nacionalidad');
-        if(errores::$error){
-            return $this->error->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
-        }
-
-        $keys_selects = $controlador->key_select(cols:6, con_registros: true,filtro:  array(), key: 'inm_ocupacion_id',
-            keys_selects:$keys_selects, id_selected: $controlador->registro['inm_ocupacion_id'], label: 'Ocupacion');
-        if(errores::$error){
-            return $this->error->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
-        }
         return $keys_selects;
     }
 
