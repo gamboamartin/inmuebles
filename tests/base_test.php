@@ -14,6 +14,7 @@ use gamboamartin\inmuebles\models\inm_co_acreditado;
 use gamboamartin\inmuebles\models\inm_comprador;
 use gamboamartin\inmuebles\models\inm_concepto;
 use gamboamartin\inmuebles\models\inm_conf_empresa;
+use gamboamartin\inmuebles\models\inm_conyuge;
 use gamboamartin\inmuebles\models\inm_costo;
 use gamboamartin\inmuebles\models\inm_opinion_valor;
 use gamboamartin\inmuebles\models\inm_precio;
@@ -21,6 +22,7 @@ use gamboamartin\inmuebles\models\inm_prospecto;
 use gamboamartin\inmuebles\models\inm_referencia;
 use gamboamartin\inmuebles\models\inm_rel_co_acred;
 use gamboamartin\inmuebles\models\inm_rel_comprador_com_cliente;
+use gamboamartin\inmuebles\models\inm_rel_conyuge_prospecto;
 use gamboamartin\inmuebles\models\inm_rel_ubi_comp;
 use gamboamartin\inmuebles\models\inm_tipo_concepto;
 use gamboamartin\inmuebles\models\inm_tipo_ubicacion;
@@ -258,6 +260,31 @@ class base_test{
         $registro['org_empresa_id'] = $org_empresa_id;
 
         $alta = (new inm_conf_empresa($link))->alta_registro($registro);
+        if(errores::$error){
+            return (new errores())->error(mensaje: 'Error al insertar', data: $alta);
+        }
+        return $alta;
+    }
+
+    public function alta_inm_conyuge(PDO $link, string $apellido_paterno = 'AP1', string $curp = 'XEXX010101HNEXXXA4',
+                                     int $dp_municipio_id = 1, string $fecha_nacimiento = '2020-01-01', int $id = 1, int $inm_nacionalidad_id = 1,
+                                     int $inm_ocupacion_id = 1, string $nombre = 'NOMBRE 1' ,
+                                     string $rfc = 'AAA010101CCC', string $telefono_casa = '9874563214', string $telefono_celular = '5698745874'): array|\stdClass
+    {
+
+        $registro['id'] = $id;
+        $registro['nombre'] = $nombre;
+        $registro['apellido_paterno'] = $apellido_paterno;
+        $registro['curp'] = $curp;
+        $registro['rfc'] = $rfc;
+        $registro['dp_municipio_id'] = $dp_municipio_id;
+        $registro['inm_nacionalidad_id'] = $inm_nacionalidad_id;
+        $registro['inm_ocupacion_id'] = $inm_ocupacion_id;
+        $registro['telefono_casa'] = $telefono_casa;
+        $registro['telefono_celular'] = $telefono_celular;
+        $registro['fecha_nacimiento'] = $fecha_nacimiento;
+
+        $alta = (new inm_conyuge($link))->alta_registro($registro);
         if(errores::$error){
             return (new errores())->error(mensaje: 'Error al insertar', data: $alta);
         }
@@ -517,6 +544,32 @@ class base_test{
         $registro['com_cliente_id'] = $com_cliente_id;
 
         $alta = (new inm_rel_comprador_com_cliente($link))->alta_registro($registro);
+        if(errores::$error){
+            return (new errores())->error(mensaje: 'Error al insertar', data: $alta);
+        }
+        return $alta;
+    }
+
+    public function alta_inm_rel_conyuge_prospecto(PDO $link, int $id = 1, int $inm_conyuge_id = 1,
+                                                   int $inm_prospecto_id = 1): array|\stdClass
+    {
+        $existe = (new inm_conyuge(link: $link))->existe_by_id(registro_id: $inm_conyuge_id);
+        if(errores::$error){
+            return (new errores())->error(mensaje: 'Error al validar si existe inm_conyuge_id', data: $existe);
+        }
+        if(!$existe){
+            $alta = $this->alta_inm_conyuge(link: $link, id: $inm_conyuge_id);
+            if(errores::$error){
+                return (new errores())->error(mensaje: 'Error al insertar inm_conyuge', data: $alta);
+            }
+        }
+
+
+        $registro['id'] = $id;
+        $registro['inm_conyuge_id'] = $inm_conyuge_id;
+        $registro['inm_prospecto_id'] = $inm_prospecto_id;
+
+        $alta = (new inm_rel_conyuge_prospecto($link))->alta_registro($registro);
         if(errores::$error){
             return (new errores())->error(mensaje: 'Error al insertar', data: $alta);
         }

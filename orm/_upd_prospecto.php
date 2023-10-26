@@ -55,10 +55,14 @@ class _upd_prospecto{
      * @param PDO $link Conexion a la base de datos
      * @param bool $retorno_obj Si esta como true el resultado lo integra como un objeto
      * @return array|stdClass
+     * @version 2.275.2
      */
     final public function inm_conyuge(bool $columnas_en_bruto, int $inm_prospecto_id, PDO $link,
                                       bool $retorno_obj): array|stdClass
     {
+        if($inm_prospecto_id<=0){
+            return $this->error->error(mensaje: 'Error inm_prospecto_id debe ser mayor a 0', data:  $inm_prospecto_id);
+        }
         $filtro = array();
         $filtro['inm_prospecto.id'] = $inm_prospecto_id;
 

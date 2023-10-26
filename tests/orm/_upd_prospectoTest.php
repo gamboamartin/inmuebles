@@ -36,6 +36,43 @@ class _upd_prospectoTest extends test {
         $this->paths_conf->views = '/var/www/html/inmuebles/config/views.php';
     }
 
+    public function test_inm_conyuge(): void
+    {
+        errores::$error = false;
+
+        $_GET['seccion'] = 'inm_producto_infonavit';
+        $_GET['accion'] = 'lista';
+        $_SESSION['grupo_id'] = 1;
+        $_SESSION['usuario_id'] = 2;
+        $_GET['session_id'] = '1';
+
+        $del = (new base_test())->del_inm_conyuge(link: $this->link);
+        if(errores::$error){
+            $error = (new errores())->error(mensaje:'Error al alta', data: $del);
+            print_r($error);exit;
+        }
+
+        $alta = (new base_test())->alta_inm_rel_conyuge_prospecto(link: $this->link);
+        if(errores::$error){
+            $error = (new errores())->error(mensaje:'Error al alta', data: $alta);
+            print_r($error);exit;
+        }
+
+        $modelo = new _upd_prospecto();
+        //$modelo = new liberator($modelo);
+
+        $columnas_en_bruto = false;
+        $inm_prospecto_id = 1;
+        $link = $this->link;
+        $retorno_obj = true;
+        $resultado = $modelo->inm_conyuge($columnas_en_bruto, $inm_prospecto_id, $link, $retorno_obj);
+        $this->assertIsObject($resultado);
+        $this->assertNotTrue(errores::$error);
+        $this->assertEquals(1,$resultado->inm_conyuge_id);
+
+        errores::$error = false;
+    }
+
     public function test_inserta_conyuge(): void
     {
         errores::$error = false;

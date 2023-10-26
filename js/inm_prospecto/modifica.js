@@ -23,6 +23,9 @@ let conyuge_apellido_materno_ct = $(".conyuge_apellido_materno");
 let conyuge_apellido_paterno_ct = $(".conyuge_apellido_paterno");
 let conyuge_curp_ct = $(".conyuge_curp");
 let conyuge_rfc_ct = $(".conyuge_rfc");
+let beneficiario_nombre_ct = $(".beneficiario_nombre");
+let beneficiario_apellido_paterno_ct = $(".beneficiario_apellido_paterno");
+let beneficiario_apellido_materno_ct = $(".beneficiario_apellido_materno");
 
 
 let chk_es_segundo_credito = $(".es_segundo_credito");
@@ -48,6 +51,15 @@ nombre = nombre_ct.val();
 apellido_paterno = apellido_paterno_ct.val();
 apellido_materno = apellido_materno_ct.val();
 
+beneficiario_nombre_ct.change(function() {
+    limpia_txt($(this));
+});
+beneficiario_apellido_paterno_ct.change(function() {
+    limpia_txt($(this));
+});
+beneficiario_apellido_materno_ct.change(function() {
+    limpia_txt($(this));
+});
 conyuge_nombre_ct.change(function() {
     limpia_txt($(this));
 });
