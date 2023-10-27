@@ -16,7 +16,7 @@ class inm_referencia_prospecto extends _modelo_parent{
             'inm_parentesco'=>$tabla);
 
         $campos_obligatorios = array('inm_prospecto_id','dp_calle_pertenece_id','inm_parentesco_id','apellido_paterno',
-            'apellido_materno','nombre','lada','numero','celular','numero_dom');
+            'nombre','lada','numero','celular','numero_dom');
 
         $columnas_extra= array();
 

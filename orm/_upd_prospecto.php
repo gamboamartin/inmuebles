@@ -30,7 +30,7 @@ class _upd_prospecto{
     /**
      * Ajusta los datos de un conyuge
      * @param stdClass $datos Datos de integracion de conyuge
-     * @param int $inm_prospecto_id
+     * @param int $inm_prospecto_id Identificador de prospecto
      * @param PDO $link
      * @return array|stdClass
      */

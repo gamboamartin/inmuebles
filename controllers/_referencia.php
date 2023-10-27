@@ -78,7 +78,7 @@ class _referencia{
 
         $referencia->numero = $numero;
 
-        $celular = $controler->html->input_text(cols: 6, disabled: false, name: 'referencia[celular]',
+        $celular = $controler->html->input_text(cols: 12, disabled: false, name: 'referencia[celular]',
             place_holder: 'Celular', row_upd: $row_upd, value_vacio: false, class_css: array('referencia_celular'),
             required: false, value: $row_upd->celular);
         if(errores::$error){
@@ -87,7 +87,7 @@ class _referencia{
 
         $referencia->celular = $celular;
 
-        $numero_dom = $controler->html->input_text(cols: 6, disabled: false, name: 'referencia[numero_dom]',
+        $numero_dom = $controler->html->input_text(cols: 12, disabled: false, name: 'referencia[numero_dom]',
             place_holder: 'Dom', row_upd: $row_upd, value_vacio: false, class_css: array('referencia_numero_dom'),
             required: false, value: $row_upd->numero_dom);
         if(errores::$error){
@@ -98,7 +98,7 @@ class _referencia{
 
 
         $modelo = new inm_parentesco(link: $controler->link);
-        $inm_parentesco_id = $controler->html->select_catalogo(cols: 6, con_registros: true,
+        $inm_parentesco_id = $controler->html->select_catalogo(cols: 12, con_registros: true,
             id_selected: $row_upd->inm_parentesco_id, modelo: $modelo, label: 'Parentesco',
             name: 'referencia[inm_parentesco_id]');
         if(errores::$error){
@@ -150,7 +150,7 @@ class _referencia{
 
 
         $modelo = new dp_calle_pertenece(link: $controler->link);
-        $dp_calle_pertenece_id = $controler->html->select_catalogo(cols: 6, con_registros: true,
+        $dp_calle_pertenece_id = $controler->html->select_catalogo(cols: 12, con_registros: true,
             id_selected: $row_upd->inm_parentesco_id, modelo: $modelo, label: 'Calle',
             name: 'referencia[dp_calle_pertenece_id]');
         if(errores::$error){

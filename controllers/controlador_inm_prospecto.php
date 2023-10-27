@@ -15,6 +15,7 @@ use gamboamartin\inmuebles\models\_base_paquete;
 use gamboamartin\inmuebles\models\_inm_prospecto;
 use gamboamartin\inmuebles\models\inm_beneficiario;
 use gamboamartin\inmuebles\models\inm_prospecto;
+use gamboamartin\inmuebles\models\inm_referencia_prospecto;
 use gamboamartin\system\links_menu;
 use gamboamartin\template\html;
 use html\doc_tipo_documento_html;
@@ -502,6 +503,36 @@ class controlador_inm_prospecto extends _ctl_formato {
                 header: $header,ws:  $ws);
         }
         $this->inputs->referencia = $referencia;
+
+
+
+        $r_inm_referencia_prospecto = (new inm_referencia_prospecto(link: $this->link))->filtro_and(filtro: $filtro);
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al obtener referencia_prospectos',data:  $r_inm_referencia_prospecto,
+                header: $header,ws:  $ws);
+        }
+
+        $params['siguiente_view'] = __FUNCTION__;
+        $params['accion_retorno'] = __FUNCTION__;
+        $params['seccion_retorno'] = $this->tabla;
+        $params['id_retorno'] = $this->registro_id;
+
+        $referencia_prospectos = $r_inm_referencia_prospecto->registros;
+
+        foreach ($referencia_prospectos as $indice=>$referencia_prospecto){
+
+            $btn_del = $this->html->button_href(accion: 'elimina_bd',etiqueta: 'Elimina',
+                registro_id:  $referencia_prospecto['inm_referencia_prospecto_id'],seccion: 'inm_referencia_prospecto',style: 'danger',
+                params: $params);
+            if(errores::$error){
+                return $this->retorno_error(mensaje: 'Error al obtener link_del',data:  $btn_del,
+                    header: $header,ws:  $ws);
+            }
+            $referencia_prospectos[$indice]['btn_del'] = $btn_del;
+
+        }
+
+        $this->referencias = $referencia_prospectos;
 
 
         return $r_modifica;
