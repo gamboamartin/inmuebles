@@ -358,10 +358,12 @@ class _inm_prospecto{
         return $identificadores;
     }
 
-
-
-
-    private function init_post(string $key_data){
+    /**
+     * @param string $key_data
+     * @return array
+     */
+    private function init_post(string $key_data): array
+    {
         $data = array();
         if(isset($_POST[$key_data])){
             $data = $_POST[$key_data];
@@ -590,6 +592,7 @@ class _inm_prospecto{
      * @param controlador_inm_prospecto $controlador Controlador en ejecucion
      * @param array $keys_selects Parametros previos cargados
      * @return array
+     * @version 2.283.2
      */
     private function keys_selects_personal(controlador_inm_prospecto $controlador, array $keys_selects): array
     {

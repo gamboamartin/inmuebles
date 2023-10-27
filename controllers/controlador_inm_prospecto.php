@@ -448,7 +448,6 @@ class controlador_inm_prospecto extends _ctl_formato {
             return $this->retorno_error(mensaje: 'Error al generar inputs',data:  $inputs, header: $header,ws:  $ws);
         }
 
-
         $conyuge = (new _conyuge())->inputs_conyuge(controler: $this);
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al obtener conyuge',data:  $conyuge,
@@ -456,7 +455,6 @@ class controlador_inm_prospecto extends _ctl_formato {
         }
 
         $this->inputs->conyuge = $conyuge;
-
 
         $beneficiario = (new _beneficiario())->inputs_beneficiario(controler: $this);
         if(errores::$error){
@@ -485,8 +483,6 @@ class controlador_inm_prospecto extends _ctl_formato {
 
         $beneficiarios = $r_inm_beneficiario->registros;
 
-
-
         $beneficiarios = (new \gamboamartin\inmuebles\controllers\_inm_prospecto())->rows(controlador: $this,
             datas: $beneficiarios,params:  $params, seccion_exe: 'inm_beneficiario');
         if(errores::$error){
@@ -494,9 +490,7 @@ class controlador_inm_prospecto extends _ctl_formato {
                 header: $header,ws:  $ws);
         }
 
-
         $this->beneficiarios = $beneficiarios;
-
 
         $referencia = (new _referencia())->inputs_referencia(controler: $this);
         if(errores::$error){
@@ -505,14 +499,11 @@ class controlador_inm_prospecto extends _ctl_formato {
         }
         $this->inputs->referencia = $referencia;
 
-
-
         $r_inm_referencia_prospecto = (new inm_referencia_prospecto(link: $this->link))->filtro_and(filtro: $filtro);
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al obtener referencia_prospectos',data:  $r_inm_referencia_prospecto,
                 header: $header,ws:  $ws);
         }
-
 
         $params = (new \gamboamartin\inmuebles\controllers\_inm_prospecto())->params_btn(accion_retorno: __FUNCTION__,
             registro_id:  $this->registro_id,seccion_retorno:  $this->tabla);
@@ -530,7 +521,6 @@ class controlador_inm_prospecto extends _ctl_formato {
             return $this->retorno_error(mensaje: 'Error al obtener beneficiarios link del',data:  $referencia_prospectos,
                 header: $header,ws:  $ws);
         }
-
 
         $this->referencias = $referencia_prospectos;
 
