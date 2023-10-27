@@ -28,7 +28,8 @@ class _upd_prospecto{
     }
 
     /**
-     * @param stdClass $datos
+     * Ajusta los datos de un conyuge
+     * @param stdClass $datos Datos de integracion de conyuge
      * @param int $inm_prospecto_id
      * @param PDO $link
      * @return array|stdClass
@@ -53,6 +54,18 @@ class _upd_prospecto{
         }
 
         return $data;
+    }
+
+    private function ajusta_referencia(stdClass $datos, int $inm_prospecto_id, PDO $link){
+
+        $r_inm_referencia_bd = $this->inserta_referencia(referencia: $datos->referencia,
+            inm_prospecto_id: $inm_prospecto_id,link: $link);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al insertar r_inm_beneficiario_bd', data: $r_inm_referencia_bd);
+        }
+        $datos = $r_inm_referencia_bd;
+
+        return $datos;
     }
 
     /**
@@ -178,6 +191,36 @@ class _upd_prospecto{
         return $data;
     }
 
+    private function inserta_referencia(array $referencia, int $inm_prospecto_id, PDO $link): array|stdClass
+    {
+        $keys = array('nombre','apellido_paterno','dp_calle_pertenece_id','inm_parentesco_id');
+        $valida = $this->validacion->valida_existencia_keys(keys: $keys,registro:  $referencia);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al validar referencia',data:  $valida);
+        }
+        $keys = array('dp_calle_pertenece_id','inm_parentesco_id');
+        $valida = $this->validacion->valida_ids(keys: $keys,registro:  $referencia);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al validar beneficiario',data:  $valida);
+        }
+        if($inm_prospecto_id <= 0){
+            return $this->error->error(mensaje: 'Error inm_prospecto_id debe ser mayor a 0',data:  $inm_prospecto_id);
+        }
+        $referencia['inm_prospecto_id'] = $inm_prospecto_id;
+
+        $alta_referencia= (new inm_referencia_prospecto(link: $link))->alta_registro(registro: $referencia);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al insertar alta_referencia', data: $alta_referencia);
+        }
+
+
+        $data = new stdClass();
+        $data->alta_referencia = $alta_referencia;
+
+
+        return $data;
+    }
+
     /**
      * Modifica los datos de un conyuge ligado al prospecto
      * @param array $conyuge Registro de conyuge a transaccionar
@@ -241,6 +284,22 @@ class _upd_prospecto{
                 return $this->error->error(mensaje: 'Error al insertar conyuge', data: $result_conyuge);
             }
             $datos->result_conyuge = $result_conyuge;
+        }
+        return $datos;
+
+    }
+    final public function transacciona_referencia(int $inm_prospecto_id, PDO $link){
+        $datos = (new \gamboamartin\inmuebles\controllers\_inm_prospecto())->datos_referencia();
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al obtener dato de referencia',data:  $datos);
+        }
+
+        if($datos->tiene_dato_referencia){
+            $result_referencia = $this->ajusta_referencia(datos: $datos,inm_prospecto_id: $inm_prospecto_id,link: $link);
+            if (errores::$error) {
+                return $this->error->error(mensaje: 'Error al insertar referencia', data: $result_referencia);
+            }
+            $datos->result_referencia = $result_referencia;
         }
         return $datos;
 

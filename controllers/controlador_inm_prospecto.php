@@ -31,6 +31,7 @@ class controlador_inm_prospecto extends _ctl_formato {
     public array $inm_conf_docs_prospecto = array();
 
     public array $beneficiarios = array();
+    public array $referencias = array();
 
 
     public function __construct(PDO      $link, html $html = new \gamboamartin\template_1\html(),
@@ -101,6 +102,7 @@ class controlador_inm_prospecto extends _ctl_formato {
             'monto_credito_solicitado_dh','monto_ahorro_voluntario','nombre_empresa_patron','nrp_nep','lada_nep',
             'numero_nep','extension_nep','nss','curp','rfc','numero_exterior','numero_interior','observaciones',
             'fecha_nacimiento','sub_cuenta','monto_final','descuento','puntos','telefono_casa','correo_empresa');
+
         $keys->selects = array();
 
         $init_data = array();
@@ -426,14 +428,14 @@ class controlador_inm_prospecto extends _ctl_formato {
 
         $data = (new \gamboamartin\inmuebles\controllers\_inm_prospecto())->inputs_base(controlador: $this);
         if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al integrar datos para front',data:  $data, header: $header,ws:  $ws);
+            return $this->retorno_error(mensaje: 'Error al integrar datos para front',data:  $data,
+                header: $header,ws:  $ws);
         }
 
         $base = $this->base_upd(keys_selects: $data->keys_selects, params: array(),params_ajustados: array());
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al integrar base',data:  $base, header: $header,ws:  $ws);
         }
-
 
         $headers = (new \gamboamartin\inmuebles\controllers\_inm_prospecto())->headers_front(controlador: $this);
         if(errores::$error){
@@ -494,6 +496,12 @@ class controlador_inm_prospecto extends _ctl_formato {
         $this->beneficiarios = $beneficiarios;
 
 
+        $referencia = (new _referencia())->inputs_referencia(controler: $this);
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al obtener referencias',data:  $referencia,
+                header: $header,ws:  $ws);
+        }
+        $this->inputs->referencia = $referencia;
 
 
         return $r_modifica;

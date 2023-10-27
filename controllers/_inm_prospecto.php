@@ -75,6 +75,25 @@ class _inm_prospecto{
         return $datos;
     }
 
+    final public function datos_referencia(): array|stdClass
+    {
+
+        $referencia = $this->init_referencia();
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al inicializar referencia',data:  $referencia);
+        }
+
+        $tiene_dato_referencia = $this->tiene_dato_referencia(referencia: $referencia);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al validar si tiene dato tiene_dato_referencia',data:  $tiene_dato_referencia);
+        }
+        $datos = new stdClass();
+        $datos->existe_referencia = false;
+        $datos->referencia = $referencia;
+        $datos->tiene_dato_referencia = $tiene_dato_referencia;
+        return $datos;
+    }
+
     /**
      * Valida el attr segundo credito
      * @param array $registro Registro en proceso
@@ -212,6 +231,7 @@ class _inm_prospecto{
         $headers['7'] = '7. DATOS EMPRESA TRABAJADOR';
         $headers['8'] = '8. DATOS DE CONYUGE';
         $headers['9'] = '9. BENEFICIARIOS';
+        $headers['10'] = '10. REFERENCIAS';
         return $headers;
     }
 
@@ -393,6 +413,19 @@ class _inm_prospecto{
             unset($_POST['conyuge']);
         }
         return $conyuge;
+    }
+
+    private function init_referencia(): array
+    {
+        $referencia = array();
+        if(isset($_POST['referencia'])){
+            $referencia = $_POST['referencia'];
+            if(is_string($referencia)){
+                return $this->error->error(mensaje: 'Error POST referencia debe ser un array',data:  $referencia);
+            }
+            unset($_POST['referencia']);
+        }
+        return $referencia;
     }
 
     final public function inputs_base(controlador_inm_prospecto $controlador){
@@ -593,7 +626,14 @@ class _inm_prospecto{
         return $keys_selects;
     }
 
-    private function keys_selects_personal(controlador_inm_prospecto $controlador, array $keys_selects){
+    /**
+     * Genera los selectores personales
+     * @param controlador_inm_prospecto $controlador
+     * @param array $keys_selects
+     * @return array
+     */
+    private function keys_selects_personal(controlador_inm_prospecto $controlador, array $keys_selects): array
+    {
 
         $identificadores = $this->identificadores_personal();
         if(errores::$error){
@@ -659,5 +699,21 @@ class _inm_prospecto{
             }
         }
         return $tiene_dato_conyuge;
+    }
+
+    private function tiene_dato_referencia(array $referencia): bool
+    {
+        $tiene_dato_referencia = false;
+        foreach ($referencia as $value){
+            if($value === null){
+                $value = '';
+            }
+            $value = trim($value);
+            if($value!==''){
+                $tiene_dato_referencia = true;
+                break;
+            }
+        }
+        return $tiene_dato_referencia;
     }
 }
