@@ -20,31 +20,30 @@ class _inm_prospecto{
         $this->validacion = new validacion();
     }
 
-    final public function datos_beneficiario(): array|stdClass
-    {
-
-        $beneficiario = $this->init_beneficiario();
+    final public function dato(bool $existe, string $key_data){
+        $row = $this->init_post(key_data: $key_data);
         if(errores::$error){
-            return $this->error->error(mensaje: 'Error al inicializar beneficiario',data:  $beneficiario);
+            return $this->error->error(mensaje: 'Error al inicializar row',data:  $row);
         }
 
-        $tiene_dato_beneficiario = $this->tiene_dato_beneficiario(beneficiario: $beneficiario);
+        $tiene_dato = $this->tiene_dato(row: $row);
         if(errores::$error){
-            return $this->error->error(mensaje: 'Error al validar si tiene dato tiene_dato_beneficiario',data:  $tiene_dato_beneficiario);
+            return $this->error->error(mensaje: 'Error al validar si tiene dato tiene_dato',data:  $tiene_dato);
         }
         $datos = new stdClass();
-        $datos->existe_beneficiario = false;
-        $datos->beneficiario = $beneficiario;
-        $datos->tiene_dato_beneficiario = $tiene_dato_beneficiario;
+        $datos->existe = $existe;
+        $datos->row = $row;
+        $datos->tiene_dato = $tiene_dato;
         return $datos;
     }
+
+
 
     /**
      * Obtiene los datos de un conyuge
      * @param PDO $link Conexion a la base de datos
      * @param int $inm_prospecto_id prospecto
      * @return array|stdClass
-     * @version 2.263.2
      */
     final public function datos_conyuge(PDO $link, int $inm_prospecto_id): array|stdClass
     {
@@ -59,40 +58,15 @@ class _inm_prospecto{
             }
         }
 
-        $conyuge = $this->init_conyuge();
+        $datos = $this->dato(existe: $existe_conyuge,key_data:  'conyuge');
         if(errores::$error){
-            return $this->error->error(mensaje: 'Error al inicializar conyuge',data:  $conyuge);
+            return $this->error->error(mensaje: 'Error al inicializar datos',data:  $datos);
         }
 
-        $tiene_dato_conyuge = $this->tiene_dato_conyuge(conyuge: $conyuge);
-        if(errores::$error){
-            return $this->error->error(mensaje: 'Error al validar si tiene dato conyuge',data:  $tiene_dato_conyuge);
-        }
-        $datos = new stdClass();
-        $datos->existe_conyuge = $existe_conyuge;
-        $datos->conyuge = $conyuge;
-        $datos->tiene_dato_conyuge = $tiene_dato_conyuge;
         return $datos;
     }
 
-    final public function datos_referencia(): array|stdClass
-    {
 
-        $referencia = $this->init_referencia();
-        if(errores::$error){
-            return $this->error->error(mensaje: 'Error al inicializar referencia',data:  $referencia);
-        }
-
-        $tiene_dato_referencia = $this->tiene_dato_referencia(referencia: $referencia);
-        if(errores::$error){
-            return $this->error->error(mensaje: 'Error al validar si tiene dato tiene_dato_referencia',data:  $tiene_dato_referencia);
-        }
-        $datos = new stdClass();
-        $datos->existe_referencia = false;
-        $datos->referencia = $referencia;
-        $datos->tiene_dato_referencia = $tiene_dato_referencia;
-        return $datos;
-    }
 
     /**
      * Valida el attr segundo credito
@@ -384,49 +358,22 @@ class _inm_prospecto{
         return $identificadores;
     }
 
-    private function init_beneficiario(): array
-    {
-        $beneficiario = array();
-        if(isset($_POST['beneficiario'])){
-            $beneficiario = $_POST['beneficiario'];
-            if(is_string($beneficiario)){
-                return $this->error->error(mensaje: 'Error POST beneficiario debe ser un array',data:  $beneficiario);
+
+
+
+    private function init_post(string $key_data){
+        $data = array();
+        if(isset($_POST[$key_data])){
+            $data = $_POST[$key_data];
+            if(is_string($data)){
+                return $this->error->error(mensaje: 'Error POST '.$key_data.' debe ser un array',data:  $data);
             }
-            unset($_POST['beneficiario']);
+            unset($_POST[$key_data]);
         }
-        return $beneficiario;
+        return $data;
     }
 
-    /**
-     * Inicializa un registro de conyuge
-     * @return array
-     * @version 2.263.2
-     */
-    private function init_conyuge(): array
-    {
-        $conyuge = array();
-        if(isset($_POST['conyuge'])){
-            $conyuge = $_POST['conyuge'];
-            if(is_string($conyuge)){
-                return $this->error->error(mensaje: 'Error POST conyuge debe ser un array',data:  $conyuge);
-            }
-            unset($_POST['conyuge']);
-        }
-        return $conyuge;
-    }
 
-    private function init_referencia(): array
-    {
-        $referencia = array();
-        if(isset($_POST['referencia'])){
-            $referencia = $_POST['referencia'];
-            if(is_string($referencia)){
-                return $this->error->error(mensaje: 'Error POST referencia debe ser un array',data:  $referencia);
-            }
-            unset($_POST['referencia']);
-        }
-        return $referencia;
-    }
 
     final public function inputs_base(controlador_inm_prospecto $controlador){
         $keys_selects = array();
@@ -497,6 +444,18 @@ class _inm_prospecto{
         $controlador->inputs->fecha_nacimiento = $fecha_nacimiento;
 
         return $controlador->inputs;
+    }
+
+    private function integra_button_del(controlador_inm_prospecto $controlador, array $data, array $datas, int $indice, array $params, string $seccion_exe){
+        $key_id = $seccion_exe.'_id';
+        $btn_del = $controlador->html->button_href(accion: 'elimina_bd',etiqueta: 'Elimina',
+            registro_id:  $data[$key_id],seccion: $seccion_exe,style: 'danger',
+            params: $params);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al obtener link_del',data:  $btn_del);
+        }
+        $datas[$indice]['btn_del'] = $btn_del;
+        return $datas;
     }
 
     /**
@@ -629,7 +588,7 @@ class _inm_prospecto{
     /**
      * Genera los selectores personales
      * @param controlador_inm_prospecto $controlador Controlador en ejecucion
-     * @param array $keys_selects
+     * @param array $keys_selects Parametros previos cargados
      * @return array
      */
     private function keys_selects_personal(controlador_inm_prospecto $controlador, array $keys_selects): array
@@ -649,6 +608,15 @@ class _inm_prospecto{
         return $keys_selects;
     }
 
+    final public function params_btn(string $accion_retorno, int $registro_id, string $seccion_retorno ): array
+    {
+        $params['siguiente_view'] = $accion_retorno;
+        $params['accion_retorno'] = $accion_retorno;
+        $params['seccion_retorno'] = $seccion_retorno;
+        $params['id_retorno'] = $registro_id;
+        return $params;
+    }
+
     private function row_base_fiscal(controlador_inm_prospecto $controlador): stdClass
     {
         if($controlador->registro['inm_prospecto_nss'] === ''){
@@ -663,57 +631,40 @@ class _inm_prospecto{
         return $controlador->row_upd;
     }
 
-    private function tiene_dato_beneficiario(array $beneficiario): bool
-    {
-        $tiene_dato_beneficiario = false;
-        foreach ($beneficiario as $value){
-            if($value === null){
-                $value = '';
-            }
-            $value = trim($value);
-            if($value!==''){
-                $tiene_dato_beneficiario = true;
-                break;
+    final public function rows(controlador_inm_prospecto $controlador, array $datas, array $params, string $seccion_exe){
+
+        foreach ($datas as $indice=>$data){
+
+            $datas = $this->integra_button_del(
+                controlador: $controlador, data: $data,datas:  $datas,indice:  $indice,params:  $params,seccion_exe:  $seccion_exe);
+
+            if(errores::$error){
+                return $this->error->error(mensaje: 'Error al obtener beneficiarios link del',data:  $datas);
             }
         }
-        return $tiene_dato_beneficiario;
+        return $datas;
+
     }
 
-    /**
-     * Verifica si hay datos para transaccionar de conyuge
-     * @param array $conyuge Registro a verificar
-     * @return bool
-     * @version 2.260.2
-     */
-    private function tiene_dato_conyuge(array $conyuge): bool
+    private function tiene_dato(array $row): bool
     {
-        $tiene_dato_conyuge = false;
-        foreach ($conyuge as $value){
+        $tiene_dato = false;
+        foreach ($row as $value){
             if($value === null){
                 $value = '';
             }
             $value = trim($value);
             if($value!==''){
-                $tiene_dato_conyuge = true;
+                $tiene_dato = true;
                 break;
             }
         }
-        return $tiene_dato_conyuge;
+        return $tiene_dato;
     }
 
-    private function tiene_dato_referencia(array $referencia): bool
-    {
-        $tiene_dato_referencia = false;
-        foreach ($referencia as $value){
-            if($value === null){
-                $value = '';
-            }
-            $value = trim($value);
-            if($value!==''){
-                $tiene_dato_referencia = true;
-                break;
-            }
-        }
-        return $tiene_dato_referencia;
-    }
+
+
+
+
+
 }

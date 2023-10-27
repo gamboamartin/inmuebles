@@ -27,6 +27,36 @@ let beneficiario_nombre_ct = $(".beneficiario_nombre");
 let beneficiario_apellido_paterno_ct = $(".beneficiario_apellido_paterno");
 let beneficiario_apellido_materno_ct = $(".beneficiario_apellido_materno");
 
+let referencia_nombre_ct = $(".referencia_nombre");
+let referencia_apellido_paterno_ct = $(".referencia_apellido_paterno");
+let referencia_apellido_materno_ct = $(".referencia_apellido_materno");
+let referencia_lada_ct = $(".referencia_lada");
+let referencia_numero_ct = $(".referencia_numero");
+let referencia_celular_ct = $(".referencia_celular");
+let referencia_numero_dom_ct = $(".referencia_numero_dom");
+
+referencia_nombre_ct.change(function() {
+    limpia_txt($(this));
+});
+referencia_apellido_paterno_ct.change(function() {
+    limpia_txt($(this));
+});
+referencia_apellido_materno_ct.change(function() {
+    limpia_txt($(this));
+});
+referencia_lada_ct.change(function() {
+    limpia_txt($(this));
+});
+referencia_numero_ct.change(function() {
+    limpia_txt($(this));
+});
+referencia_celular_ct.change(function() {
+    limpia_txt($(this));
+});
+referencia_numero_dom_ct.change(function() {
+    limpia_txt($(this));
+});
+
 
 let chk_es_segundo_credito = $(".es_segundo_credito");
 

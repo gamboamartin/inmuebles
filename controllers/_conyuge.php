@@ -4,6 +4,7 @@ namespace gamboamartin\inmuebles\controllers;
 use gamboamartin\direccion_postal\models\dp_estado;
 use gamboamartin\direccion_postal\models\dp_municipio;
 use gamboamartin\errores\errores;
+use gamboamartin\inmuebles\models\_upd_prospecto;
 use gamboamartin\inmuebles\models\inm_nacionalidad;
 use gamboamartin\inmuebles\models\inm_ocupacion;
 use gamboamartin\inmuebles\models\inm_prospecto;
@@ -45,8 +46,8 @@ class _conyuge{
         $row_upd->inm_nacionalidad_id = -1;
         $row_upd->inm_ocupacion_id = -1;
         if($existe_conyuge){
-            $row_upd = (new inm_prospecto(link: $controler->link))->inm_conyuge(columnas_en_bruto: true,
-                inm_prospecto_id:  $controler->registro_id, retorno_obj: true);
+            $row_upd = (new _upd_prospecto())->inm_conyuge(columnas_en_bruto: true,
+                inm_prospecto_id: $controler->registro_id, link: $controler->link, retorno_obj: true);
 
             if(errores::$error){
                 return $this->error->error(mensaje: 'Error al obtener datos de conyuge',data:  $row_upd);

@@ -474,25 +474,26 @@ class controlador_inm_prospecto extends _ctl_formato {
                 header: $header,ws:  $ws);
         }
 
-        $params['siguiente_view'] = __FUNCTION__;
-        $params['accion_retorno'] = __FUNCTION__;
-        $params['seccion_retorno'] = $this->tabla;
-        $params['id_retorno'] = $this->registro_id;
+
+        $params = (new \gamboamartin\inmuebles\controllers\_inm_prospecto())->params_btn(accion_retorno: __FUNCTION__,
+            registro_id:  $this->registro_id,seccion_retorno:  $this->tabla);
+
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al obtener params',data:  $params,
+                header: $header,ws:  $ws);
+        }
 
         $beneficiarios = $r_inm_beneficiario->registros;
 
-        foreach ($beneficiarios as $indice=>$beneficiario){
 
-            $btn_del = $this->html->button_href(accion: 'elimina_bd',etiqueta: 'Elimina',
-                registro_id:  $beneficiario['inm_beneficiario_id'],seccion: 'inm_beneficiario',style: 'danger',
-                params: $params);
-            if(errores::$error){
-                return $this->retorno_error(mensaje: 'Error al obtener link_del',data:  $btn_del,
-                    header: $header,ws:  $ws);
-            }
-            $beneficiarios[$indice]['btn_del'] = $btn_del;
 
+        $beneficiarios = (new \gamboamartin\inmuebles\controllers\_inm_prospecto())->rows(controlador: $this,
+            datas: $beneficiarios,params:  $params, seccion_exe: 'inm_beneficiario');
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al obtener beneficiarios link del',data:  $beneficiarios,
+                header: $header,ws:  $ws);
         }
+
 
         $this->beneficiarios = $beneficiarios;
 
@@ -512,25 +513,24 @@ class controlador_inm_prospecto extends _ctl_formato {
                 header: $header,ws:  $ws);
         }
 
-        $params['siguiente_view'] = __FUNCTION__;
-        $params['accion_retorno'] = __FUNCTION__;
-        $params['seccion_retorno'] = $this->tabla;
-        $params['id_retorno'] = $this->registro_id;
+
+        $params = (new \gamboamartin\inmuebles\controllers\_inm_prospecto())->params_btn(accion_retorno: __FUNCTION__,
+            registro_id:  $this->registro_id,seccion_retorno:  $this->tabla);
+
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al obtener params',data:  $params,
+                header: $header,ws:  $ws);
+        }
 
         $referencia_prospectos = $r_inm_referencia_prospecto->registros;
 
-        foreach ($referencia_prospectos as $indice=>$referencia_prospecto){
-
-            $btn_del = $this->html->button_href(accion: 'elimina_bd',etiqueta: 'Elimina',
-                registro_id:  $referencia_prospecto['inm_referencia_prospecto_id'],seccion: 'inm_referencia_prospecto',style: 'danger',
-                params: $params);
-            if(errores::$error){
-                return $this->retorno_error(mensaje: 'Error al obtener link_del',data:  $btn_del,
-                    header: $header,ws:  $ws);
-            }
-            $referencia_prospectos[$indice]['btn_del'] = $btn_del;
-
+        $referencia_prospectos = (new \gamboamartin\inmuebles\controllers\_inm_prospecto())->rows(controlador: $this,
+            datas: $referencia_prospectos,params:  $params, seccion_exe: 'inm_referencia_prospecto');
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al obtener beneficiarios link del',data:  $referencia_prospectos,
+                header: $header,ws:  $ws);
         }
+
 
         $this->referencias = $referencia_prospectos;
 

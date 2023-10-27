@@ -17,7 +17,7 @@ class _upd_prospecto{
 
     private function ajusta_beneficiario(stdClass $datos, int $inm_prospecto_id, PDO $link){
 
-        $r_inm_beneficiario_bd = $this->inserta_beneficiario(beneficiario: $datos->beneficiario,
+        $r_inm_beneficiario_bd = $this->inserta_beneficiario(beneficiario: $datos->row,
             inm_prospecto_id: $inm_prospecto_id,link: $link);
         if (errores::$error) {
             return $this->error->error(mensaje: 'Error al insertar r_inm_beneficiario_bd', data: $r_inm_beneficiario_bd);
@@ -37,7 +37,7 @@ class _upd_prospecto{
     private function ajusta_conyuge(stdClass $datos, int $inm_prospecto_id, PDO $link): array|stdClass
     {
         if(!$datos->existe_conyuge) {
-            $r_inm_rel_conyuge_prospecto_bd = $this->inserta_conyuge(conyuge: $datos->conyuge,
+            $r_inm_rel_conyuge_prospecto_bd = $this->inserta_conyuge(conyuge: $datos->row,
                 inm_prospecto_id: $inm_prospecto_id,link: $link);
             if (errores::$error) {
                 return $this->error->error(mensaje: 'Error al insertar conyuge', data: $r_inm_rel_conyuge_prospecto_bd);
@@ -58,7 +58,7 @@ class _upd_prospecto{
 
     private function ajusta_referencia(stdClass $datos, int $inm_prospecto_id, PDO $link){
 
-        $r_inm_referencia_bd = $this->inserta_referencia(referencia: $datos->referencia,
+        $r_inm_referencia_bd = $this->inserta_referencia(referencia: $datos->row,
             inm_prospecto_id: $inm_prospecto_id,link: $link);
         if (errores::$error) {
             return $this->error->error(mensaje: 'Error al insertar r_inm_beneficiario_bd', data: $r_inm_referencia_bd);
@@ -255,12 +255,12 @@ class _upd_prospecto{
     }
 
     final public function transacciona_beneficiario(int $inm_prospecto_id, PDO $link){
-        $datos = (new \gamboamartin\inmuebles\controllers\_inm_prospecto())->datos_beneficiario();
+        $datos = (new \gamboamartin\inmuebles\controllers\_inm_prospecto())->dato(existe:false,key_data: 'beneficiario');
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al obtener dato de beneficiario',data:  $datos);
         }
 
-        if($datos->tiene_dato_beneficiario){
+        if($datos->tiene_dato){
             $result_beneficiario = $this->ajusta_beneficiario(datos: $datos,inm_prospecto_id: $inm_prospecto_id,link: $link);
             if (errores::$error) {
                 return $this->error->error(mensaje: 'Error al insertar beneficiario', data: $result_beneficiario);
@@ -278,7 +278,7 @@ class _upd_prospecto{
             return $this->error->error(mensaje: 'Error al obtener dato conyuge',data:  $datos);
         }
 
-        if($datos->tiene_dato_conyuge){
+        if($datos->tiene_dato){
             $result_conyuge = $this->ajusta_conyuge(datos: $datos,inm_prospecto_id: $inm_prospecto_id,link: $link);
             if (errores::$error) {
                 return $this->error->error(mensaje: 'Error al insertar conyuge', data: $result_conyuge);
@@ -289,12 +289,12 @@ class _upd_prospecto{
 
     }
     final public function transacciona_referencia(int $inm_prospecto_id, PDO $link){
-        $datos = (new \gamboamartin\inmuebles\controllers\_inm_prospecto())->datos_referencia();
+        $datos = (new \gamboamartin\inmuebles\controllers\_inm_prospecto())->dato(existe: false,key_data: 'referencia');
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al obtener dato de referencia',data:  $datos);
         }
 
-        if($datos->tiene_dato_referencia){
+        if($datos->tiene_dato){
             $result_referencia = $this->ajusta_referencia(datos: $datos,inm_prospecto_id: $inm_prospecto_id,link: $link);
             if (errores::$error) {
                 return $this->error->error(mensaje: 'Error al insertar referencia', data: $result_referencia);

@@ -59,10 +59,10 @@ class _inm_prospectoTest extends test {
         $resultado = $_inm->datos_conyuge($this->link, $inm_prospecto_id);
         $this->assertIsObject($resultado);
         $this->assertNotTrue(errores::$error);
-        $this->assertNotTrue($resultado->existe_conyuge);
-        $this->assertEmpty($resultado->conyuge);
-        $this->assertIsArray($resultado->conyuge);
-        $this->assertNotTrue($resultado->tiene_dato_conyuge);
+        $this->assertNotTrue($resultado->existe);
+        $this->assertEmpty($resultado->row);
+        $this->assertIsArray($resultado->row);
+        $this->assertNotTrue($resultado->tiene_dato);
 
         errores::$error = false;
 
@@ -70,10 +70,10 @@ class _inm_prospectoTest extends test {
         $resultado = $_inm->datos_conyuge($this->link, $inm_prospecto_id);
         $this->assertIsObject($resultado);
         $this->assertNotTrue(errores::$error);
-        $this->assertNotTrue($resultado->existe_conyuge);
-        $this->assertEmpty($resultado->conyuge);
-        $this->assertIsArray($resultado->conyuge);
-        $this->assertNotTrue($resultado->tiene_dato_conyuge);
+        $this->assertNotTrue($resultado->existe);
+        $this->assertEmpty($resultado->row);
+        $this->assertIsArray($resultado->row);
+        $this->assertNotTrue($resultado->tiene_dato);
 
         errores::$error = false;
 
@@ -82,10 +82,10 @@ class _inm_prospectoTest extends test {
         $resultado = $_inm->datos_conyuge($this->link, $inm_prospecto_id);
         $this->assertIsObject($resultado);
         $this->assertNotTrue(errores::$error);
-        $this->assertNotTrue($resultado->existe_conyuge);
-        $this->assertEmpty($resultado->conyuge);
-        $this->assertIsArray($resultado->conyuge);
-        $this->assertNotTrue($resultado->tiene_dato_conyuge);
+        $this->assertNotTrue($resultado->existe);
+        $this->assertEmpty($resultado->row);
+        $this->assertIsArray($resultado->row);
+        $this->assertNotTrue($resultado->tiene_dato);
 
         errores::$error = false;
 
@@ -94,10 +94,10 @@ class _inm_prospectoTest extends test {
         $resultado = $_inm->datos_conyuge($this->link, $inm_prospecto_id);
         $this->assertIsObject($resultado);
         $this->assertNotTrue(errores::$error);
-        $this->assertNotTrue($resultado->existe_conyuge);
-        $this->assertNotEmpty($resultado->conyuge);
-        $this->assertIsArray($resultado->conyuge);
-        $this->assertNotTrue($resultado->tiene_dato_conyuge);
+        $this->assertNotTrue($resultado->existe);
+        $this->assertNotEmpty($resultado->row);
+        $this->assertIsArray($resultado->row);
+        $this->assertNotTrue($resultado->tiene_dato);
 
         errores::$error = false;
         $inm_prospecto_id = 1;
@@ -105,10 +105,10 @@ class _inm_prospectoTest extends test {
         $resultado = $_inm->datos_conyuge($this->link, $inm_prospecto_id);
         $this->assertIsObject($resultado);
         $this->assertNotTrue(errores::$error);
-        $this->assertNotTrue($resultado->existe_conyuge);
-        $this->assertNotEmpty($resultado->conyuge);
-        $this->assertIsArray($resultado->conyuge);
-        $this->assertTrue($resultado->tiene_dato_conyuge);
+        $this->assertNotTrue($resultado->existe);
+        $this->assertNotEmpty($resultado->row);
+        $this->assertIsArray($resultado->row);
+        $this->assertTrue($resultado->tiene_dato);
 
         errores::$error = false;
     }
@@ -325,26 +325,7 @@ class _inm_prospectoTest extends test {
         errores::$error = false;
     }
 
-    public function test_init_conyuge(): void
-    {
-        errores::$error = false;
 
-        $_GET['seccion'] = 'inm_producto_infonavit';
-        $_GET['accion'] = 'lista';
-        $_SESSION['grupo_id'] = 1;
-        $_SESSION['usuario_id'] = 2;
-        $_GET['session_id'] = '1';
-
-
-        $_inm = new _inm_prospecto();
-        $_inm = new liberator($_inm);
-
-        $resultado = $_inm->init_conyuge();
-        $this->assertIsArray($resultado);
-        $this->assertNotTrue(errores::$error);
-        $this->assertEmpty($resultado);
-        errores::$error = false;
-    }
 
     public function test_integra_keys_selects_comercial(): void
     {
@@ -455,41 +436,6 @@ class _inm_prospectoTest extends test {
         errores::$error = false;
     }
 
-    public function test_tiene_dato_conyuge(): void
-    {
-        errores::$error = false;
 
-        $_GET['seccion'] = 'inm_producto_infonavit';
-        $_GET['accion'] = 'lista';
-        $_SESSION['grupo_id'] = 1;
-        $_SESSION['usuario_id'] = 2;
-        $_GET['session_id'] = '1';
-
-
-        $_inm = new _inm_prospecto();
-        $_inm = new liberator($_inm);
-        $conyuge = array();
-        $resultado = $_inm->tiene_dato_conyuge($conyuge);
-        $this->assertIsBool($resultado);
-        $this->assertNotTrue(errores::$error);
-        $this->assertNotTrue($resultado);
-        errores::$error = false;
-
-        $conyuge = array();
-        $conyuge[] = '';
-        $resultado = $_inm->tiene_dato_conyuge($conyuge);
-        $this->assertIsBool($resultado);
-        $this->assertNotTrue(errores::$error);
-        $this->assertNotTrue($resultado);
-        errores::$error = false;
-
-        $conyuge = array();
-        $conyuge[] = 'a';
-        $resultado = $_inm->tiene_dato_conyuge($conyuge);
-        $this->assertIsBool($resultado);
-        $this->assertNotTrue(errores::$error);
-        $this->assertTrue($resultado);
-        errores::$error = false;
-    }
 }
 
