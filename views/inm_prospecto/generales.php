@@ -25,6 +25,9 @@
                     <label>ESTADO CIVIL: </label> <?php echo $controlador->registro->inm_prospecto->inm_estado_civil_descripcion; ?>
                     <label>NACIONALIDAD: </label> <?php echo $controlador->registro->inm_prospecto->inm_nacionalidad_descripcion; ?>
                     <br>
+                    <label>CURP: </label> <?php echo $controlador->registro->inm_prospecto->inm_prospecto_curp; ?>
+                    <label>RFC: </label> <?php echo $controlador->registro->inm_prospecto->inm_prospecto_rfc; ?>
+                    <br>
                     <label>OCUPACION: </label> <?php echo $controlador->registro->inm_prospecto->inm_ocupacion_descripcion; ?>
                     <label>TELEFONO CELULAR: </label> <?php echo $controlador->registro->inm_prospecto->inm_prospecto_cel_com; ?>
                 </div>

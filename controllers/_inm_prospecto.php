@@ -381,9 +381,12 @@ class _inm_prospecto{
         return $data;
     }
 
-
-
-    final public function inputs_base(controlador_inm_prospecto $controlador){
+    /**
+     * @param controlador_inm_prospecto $controlador
+     * @return array|stdClass
+     */
+    final public function inputs_base(controlador_inm_prospecto $controlador): array|stdClass
+    {
         $keys_selects = array();
 
         $keys_selects = $this->keys_selects_infonavit(
@@ -678,7 +681,7 @@ class _inm_prospecto{
 
     /**
      * Valida si un registro tiene o no un datos
-     * @param array $row
+     * @param array $row Registro en proceso
      * @return bool
      */
     private function tiene_dato(array $row): bool
