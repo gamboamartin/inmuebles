@@ -38,6 +38,8 @@
                     <br>
                     <label>REGISTRO PATRONAL: </label> <?php echo $controlador->registro->inm_prospecto->inm_prospecto_nrp_nep; ?>
                     <label>TELEFONO: </label> <?php echo $controlador->registro->inm_prospecto->inm_prospecto_telefono_empresa; ?>
+                    <br>
+                    <label>CORREO ELECTRONICO: </label> <?php echo $controlador->registro->inm_prospecto->inm_prospecto_correo_empresa; ?>
                 </div>
             </div>
 

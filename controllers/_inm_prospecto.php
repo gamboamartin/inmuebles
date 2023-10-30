@@ -23,7 +23,7 @@ class _inm_prospecto{
 
     /**
      * Obtiene los datos de children
-     * @param bool $existe
+     * @param bool $existe Init existe bool
      * @param string $key_data
      * @return array|stdClass
      */
@@ -721,7 +721,12 @@ class _inm_prospecto{
         return $tiene_dato;
     }
 
-    private function valida_base(controlador_inm_prospecto $controlador){
+    /**
+     * @param controlador_inm_prospecto $controlador
+     * @return array|true
+     */
+    private function valida_base(controlador_inm_prospecto $controlador): bool|array
+    {
         $keys = array('com_agente_id','com_tipo_prospecto_id');
         $valida = $this->validacion->valida_ids(keys: $keys,registro:  $controlador->registro);
         if(errores::$error){
