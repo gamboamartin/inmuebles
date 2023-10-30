@@ -33,6 +33,8 @@
                     <br>
                     <label>TELEFONO CASA: </label> <?php echo $controlador->registro->inm_prospecto->inm_prospecto_telefono_casa; ?>
                     <label>EMAIL: </label> <?php echo $controlador->registro->inm_prospecto->inm_prospecto_correo_com; ?>
+                    <br>
+                    <label>EMPRESA: </label> <?php echo $controlador->registro->inm_prospecto->inm_prospecto_nombre_empresa_patron; ?>
                 </div>
             </div>
 

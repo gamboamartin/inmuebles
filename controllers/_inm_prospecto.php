@@ -20,7 +20,13 @@ class _inm_prospecto{
         $this->validacion = new validacion();
     }
 
-    final public function dato(bool $existe, string $key_data){
+    /**
+     * @param bool $existe
+     * @param string $key_data
+     * @return array|stdClass
+     */
+    final public function dato(bool $existe, string $key_data): array|stdClass
+    {
         $row = $this->init_post(key_data: $key_data);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al inicializar row',data:  $row);
@@ -383,7 +389,7 @@ class _inm_prospecto{
 
     /**
      * Genera lso inputs base de un prospecto
-     * @param controlador_inm_prospecto $controlador
+     * @param controlador_inm_prospecto $controlador Controlador en ejecucion
      * @return array|stdClass
      */
     final public function inputs_base(controlador_inm_prospecto $controlador): array|stdClass
