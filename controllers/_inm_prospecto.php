@@ -359,7 +359,8 @@ class _inm_prospecto{
     }
 
     /**
-     * @param string $key_data
+     * Inicializa la entrada de POST para dependencias
+     * @param string $key_data Keys a integrar
      * @return array
      */
     private function init_post(string $key_data): array
@@ -620,6 +621,10 @@ class _inm_prospecto{
         return $params;
     }
 
+    /**
+     * @param controlador_inm_prospecto $controlador
+     * @return stdClass
+     */
     private function row_base_fiscal(controlador_inm_prospecto $controlador): stdClass
     {
         if($controlador->registro['inm_prospecto_nss'] === ''){

@@ -207,6 +207,35 @@ class controlador_inm_prospecto extends _ctl_formato {
 
     }
 
+    public function generales(bool $header, bool $ws = false): array|stdClass
+    {
+
+        $inm_prospecto = (new inm_prospecto(link: $this->link))->registro(registro_id: $this->registro_id,retorno_obj: true);
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al obtener inm_prospecto',data:  $inm_prospecto, header: $header,ws:  $ws);
+        }
+
+        $nombre_completo = $inm_prospecto->inm_prospecto_nombre;
+        $nombre_completo .= ' '.$inm_prospecto->inm_prospecto_apellido_paterno;
+        $nombre_completo .= ' '.$inm_prospecto->inm_prospecto_apellido_materno;
+
+        $inm_prospecto->inm_prospecto_nombre_completo = $nombre_completo;
+
+        $lugar_fecha_nac = $inm_prospecto->dp_municipio_nacimiento_descripcion;
+        $lugar_fecha_nac .= ' '.$inm_prospecto->dp_estado_nacimiento_descripcion;
+        $lugar_fecha_nac .= ' EL DIA  ';
+        $lugar_fecha_nac .= ' '.$inm_prospecto->inm_prospecto_fecha_nacimiento;
+
+
+        $inm_prospecto->inm_prospecto_lugar_fecha_nac = $lugar_fecha_nac;
+
+        $this->registro = new stdClass();
+        $this->registro->inm_prospecto = $inm_prospecto;
+
+
+        return new stdClass();
+    }
+
 
     /**
      * Inicializa los elementos mostrables para datatables
