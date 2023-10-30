@@ -1,6 +1,7 @@
 <?php
 namespace gamboamartin\inmuebles\controllers;
 
+use base\controller\controler;
 use gamboamartin\administrador\models\adm_usuario;
 use gamboamartin\errores\errores;
 use gamboamartin\inmuebles\models\inm_prospecto;
@@ -21,6 +22,7 @@ class _inm_prospecto{
     }
 
     /**
+     * Obtiene los datos de children
      * @param bool $existe
      * @param string $key_data
      * @return array|stdClass
@@ -394,6 +396,16 @@ class _inm_prospecto{
      */
     final public function inputs_base(controlador_inm_prospecto $controlador): array|stdClass
     {
+        $valida = $this->valida_base(controlador: $controlador);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al validar registro',data:  $valida);
+        }
+
+        if(is_array($controlador->inputs)){
+            return $this->error->error(mensaje: 'Error controler->inputs no esta inicializado',
+                data: $controlador->inputs);
+        }
+
         $keys_selects = array();
 
         $keys_selects = $this->keys_selects_infonavit(
@@ -417,6 +429,14 @@ class _inm_prospecto{
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al row',data:  $row);
         }
+
+        if(!isset($controlador->row_upd->es_segundo_credito)){
+            $controlador->row_upd->es_segundo_credito = 'NO';
+        }
+        if(!isset($controlador->row_upd->con_discapacidad)){
+            $controlador->row_upd->con_discapacidad = 'NO';
+        }
+
 
         $radios = (new \gamboamartin\inmuebles\models\_inm_comprador())->radios_chk(controler: $controlador);
         if(errores::$error){
@@ -568,18 +588,11 @@ class _inm_prospecto{
      * @param controlador_inm_prospecto $controlador Controlador en ejecucion
      * @param array $keys_selects Parametros previos cargados
      * @return array
-     * @version 2.269.2
      */
     private function keys_selects_infonavit(controlador_inm_prospecto $controlador, array $keys_selects): array
     {
 
-        $keys = array('com_agente_id','com_tipo_prospecto_id');
-        $valida = $this->validacion->valida_ids(keys: $keys,registro:  $controlador->registro);
-        if(errores::$error){
-            return $this->error->error(mensaje: 'Error al valida controlador registro',data:  $valida);
-        }
-        $keys = array('inm_prospecto_es_segundo_credito');
-        $valida = $this->validacion->valida_existencia_keys(keys: $keys,registro:  $controlador->registro);
+        $valida = $this->valida_base(controlador: $controlador);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al validar registro',data:  $valida);
         }
@@ -645,7 +658,6 @@ class _inm_prospecto{
      */
     private function row_base_fiscal(controlador_inm_prospecto $controlador): stdClass|array
     {
-
         if(!isset($controlador->registro['inm_prospecto_nss'])){
             $controlador->registro['inm_prospecto_nss'] = '99999999999';
             $controlador->row_upd->nss = '99999999999';
@@ -709,9 +721,18 @@ class _inm_prospecto{
         return $tiene_dato;
     }
 
-
-
-
-
+    private function valida_base(controlador_inm_prospecto $controlador){
+        $keys = array('com_agente_id','com_tipo_prospecto_id');
+        $valida = $this->validacion->valida_ids(keys: $keys,registro:  $controlador->registro);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al valida controlador registro',data:  $valida);
+        }
+        $keys = array('inm_prospecto_es_segundo_credito');
+        $valida = $this->validacion->valida_existencia_keys(keys: $keys,registro:  $controlador->registro);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al validar registro',data:  $valida);
+        }
+        return true;
+    }
 
 }

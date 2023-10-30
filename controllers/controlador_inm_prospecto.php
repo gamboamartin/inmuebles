@@ -244,6 +244,9 @@ class controlador_inm_prospecto extends _ctl_formato {
 
         $inm_prospecto->inm_prospecto_edad = $edad;
 
+        $inm_prospecto_telefono_empresa = $inm_prospecto->inm_prospecto_lada_nep.$inm_prospecto->inm_prospecto_numero_nep;
+        $inm_prospecto->inm_prospecto_telefono_empresa  = $inm_prospecto_telefono_empresa;
+
         $this->registro = new stdClass();
         $this->registro->inm_prospecto = $inm_prospecto;
 

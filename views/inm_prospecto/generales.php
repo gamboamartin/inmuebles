@@ -35,6 +35,9 @@
                     <label>EMAIL: </label> <?php echo $controlador->registro->inm_prospecto->inm_prospecto_correo_com; ?>
                     <br>
                     <label>EMPRESA: </label> <?php echo $controlador->registro->inm_prospecto->inm_prospecto_nombre_empresa_patron; ?>
+                    <br>
+                    <label>REGISTRO PATRONAL: </label> <?php echo $controlador->registro->inm_prospecto->inm_prospecto_nrp_nep; ?>
+                    <label>TELEFONO: </label> <?php echo $controlador->registro->inm_prospecto->inm_prospecto_telefono_empresa; ?>
                 </div>
             </div>
 
