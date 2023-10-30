@@ -30,6 +30,9 @@
                     <br>
                     <label>OCUPACION: </label> <?php echo $controlador->registro->inm_prospecto->inm_ocupacion_descripcion; ?>
                     <label>TELEFONO CELULAR: </label> <?php echo $controlador->registro->inm_prospecto->inm_prospecto_cel_com; ?>
+                    <br>
+                    <label>TELEFONO CASA: </label> <?php echo $controlador->registro->inm_prospecto->inm_prospecto_telefono_casa; ?>
+                    <label>EMAIL: </label> <?php echo $controlador->registro->inm_prospecto->inm_prospecto_correo_com; ?>
                 </div>
             </div>
 

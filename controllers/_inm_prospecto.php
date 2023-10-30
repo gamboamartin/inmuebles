@@ -382,6 +382,7 @@ class _inm_prospecto{
     }
 
     /**
+     * Genera lso inputs base de un prospecto
      * @param controlador_inm_prospecto $controlador
      * @return array|stdClass
      */
@@ -457,7 +458,8 @@ class _inm_prospecto{
         return $controlador->inputs;
     }
 
-    private function integra_button_del(controlador_inm_prospecto $controlador, array $data, array $datas, int $indice, array $params, string $seccion_exe){
+    private function integra_button_del(controlador_inm_prospecto $controlador, array $data, array $datas,
+                                        int $indice, array $params, string $seccion_exe){
         $key_id = $seccion_exe.'_id';
         $btn_del = $controlador->html->button_href(accion: 'elimina_bd',etiqueta: 'Elimina',
             registro_id:  $data[$key_id],seccion: $seccion_exe,style: 'danger',
@@ -683,6 +685,7 @@ class _inm_prospecto{
      * Valida si un registro tiene o no un datos
      * @param array $row Registro en proceso
      * @return bool
+     * @version 2.289.2
      */
     private function tiene_dato(array $row): bool
     {
