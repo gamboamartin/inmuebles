@@ -629,12 +629,28 @@ class _inm_prospecto{
     /**
      * Inicializa los elementos fiscales de identificacion
      * @param controlador_inm_prospecto $controlador Controlador en ejecucion
-     * @return stdClass
+     * @return stdClass|array
+     * @version 2.287.2
      */
-    private function row_base_fiscal(controlador_inm_prospecto $controlador): stdClass
+    private function row_base_fiscal(controlador_inm_prospecto $controlador): stdClass|array
     {
+
+        if(!isset($controlador->registro['inm_prospecto_nss'])){
+            $controlador->registro['inm_prospecto_nss'] = '99999999999';
+            $controlador->row_upd->nss = '99999999999';
+        }
+        if(!isset($controlador->registro['inm_prospecto_curp'] )){
+            $controlador->registro['inm_prospecto_curp'] = 'XEXX010101HNEXXXA4';
+            $controlador->row_upd->curp = 'XEXX010101HNEXXXA4';
+        }
+        if(!isset($controlador->registro['inm_prospecto_rfc'] )){
+            $controlador->registro['inm_prospecto_rfc'] = 'XAXX010101000';
+            $controlador->row_upd->rfc = 'XAXX010101000';
+        }
+
         if($controlador->registro['inm_prospecto_nss'] === ''){
             $controlador->row_upd->nss = '99999999999';
+            $controlador->row_upd->rfc = 'XAXX010101000';
         }
         if($controlador->registro['inm_prospecto_curp'] === ''){
             $controlador->row_upd->curp = 'XEXX010101HNEXXXA4';
@@ -661,6 +677,7 @@ class _inm_prospecto{
     }
 
     /**
+     * Valida si un registro tiene o no un datos
      * @param array $row
      * @return bool
      */

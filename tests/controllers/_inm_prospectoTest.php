@@ -480,6 +480,30 @@ class _inm_prospectoTest extends test {
         errores::$error = false;
     }
 
+    public function test_row_base_fiscal(): void
+    {
+        errores::$error = false;
+
+        $_GET['seccion'] = 'inm_producto_infonavit';
+        $_GET['accion'] = 'lista';
+        $_SESSION['grupo_id'] = 1;
+        $_SESSION['usuario_id'] = 2;
+        $_GET['session_id'] = '1';
+
+
+        $_inm = new _inm_prospecto();
+        $_inm = new liberator($_inm);
+        $controlador = new controlador_inm_prospecto(link: $this->link, paths_conf: $this->paths_conf);
+        $controlador->row_upd = new stdClass();
+        $resultado = $_inm->row_base_fiscal($controlador);
+        $this->assertIsObject($resultado);
+        $this->assertNotTrue(errores::$error);
+        $this->assertEquals("99999999999",$controlador->row_upd->nss);
+        $this->assertEquals("XEXX010101HNEXXXA4",$controlador->row_upd->curp);
+        $this->assertEquals("XAXX010101000",$controlador->row_upd->rfc);
+        errores::$error = false;
+    }
+
 
 }
 

@@ -24,6 +24,9 @@
                     <label>EDAD: </label> <?php echo $controlador->registro->inm_prospecto->inm_prospecto_edad; ?> AÑOS
                     <label>ESTADO CIVIL: </label> <?php echo $controlador->registro->inm_prospecto->inm_estado_civil_descripcion; ?>
                     <label>NACIONALIDAD: </label> <?php echo $controlador->registro->inm_prospecto->inm_nacionalidad_descripcion; ?>
+                    <br>
+                    <label>OCUPACION: </label> <?php echo $controlador->registro->inm_prospecto->inm_ocupacion_descripcion; ?>
+                    <label>TELEFONO CELULAR: </label> <?php echo $controlador->registro->inm_prospecto->inm_prospecto_cel_com; ?>
                 </div>
             </div>
 
