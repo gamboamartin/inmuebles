@@ -9,6 +9,7 @@
 namespace gamboamartin\inmuebles\controllers;
 
 use base\controller\init;
+use DateTime;
 use gamboamartin\errores\errores;
 use gamboamartin\inmuebles\html\inm_prospecto_html;
 use gamboamartin\inmuebles\models\_base_paquete;
@@ -21,6 +22,7 @@ use gamboamartin\template\html;
 use html\doc_tipo_documento_html;
 use PDO;
 use stdClass;
+use Throwable;
 
 class controlador_inm_prospecto extends _ctl_formato {
 
@@ -228,6 +230,19 @@ class controlador_inm_prospecto extends _ctl_formato {
 
 
         $inm_prospecto->inm_prospecto_lugar_fecha_nac = $lugar_fecha_nac;
+
+        try {
+            $ahora = new DateTime(date("Y-m-d"));
+            $fecha_nacimiento =  new DateTime($inm_prospecto->inm_prospecto_fecha_nacimiento);
+        }
+        catch (Throwable $e){
+            return $this->retorno_error(mensaje: 'Error al obtener ahora',data:  $e, header: $header,ws:  $ws);
+        }
+        //print_r($inm_prospecto);exit;
+        $diferencia = $ahora->diff($fecha_nacimiento);
+        $edad =$diferencia->format("%y");
+
+        $inm_prospecto->inm_prospecto_edad = $edad;
 
         $this->registro = new stdClass();
         $this->registro->inm_prospecto = $inm_prospecto;

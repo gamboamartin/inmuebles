@@ -21,7 +21,8 @@
                     <br>
                     <label>LUGAR Y FECHA DE NACIMIENTO: </label> <?php echo $controlador->registro->inm_prospecto->inm_prospecto_lugar_fecha_nac; ?>
                     <br>
-                    <label>EDAD: </label> <?php echo $controlador->registro->inm_prospecto->inm_prospecto_lugar_fecha_nac; ?>
+                    <label>EDAD: </label> <?php echo $controlador->registro->inm_prospecto->inm_prospecto_edad; ?> AÑOS
+                    <label>ESTADO CIVIL: </label> <?php echo $controlador->registro->inm_prospecto->inm_prospecto_edad; ?>
                 </div>
             </div>
 

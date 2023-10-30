@@ -362,9 +362,14 @@ class _inm_prospecto{
      * Inicializa la entrada de POST para dependencias
      * @param string $key_data Keys a integrar
      * @return array
+     * @version 2.285.2
      */
     private function init_post(string $key_data): array
     {
+        $key_data = trim($key_data);
+        if($key_data === ''){
+            return $this->error->error(mensaje: 'Error key_data esta vacio',data:  $key_data);
+        }
         $data = array();
         if(isset($_POST[$key_data])){
             $data = $_POST[$key_data];
@@ -622,6 +627,7 @@ class _inm_prospecto{
     }
 
     /**
+     * Inicializa los elementos fiscales de identificacion
      * @param controlador_inm_prospecto $controlador
      * @return stdClass
      */

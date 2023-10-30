@@ -325,6 +325,28 @@ class _inm_prospectoTest extends test {
         errores::$error = false;
     }
 
+    public function testinit_post(): void
+    {
+        errores::$error = false;
+
+        $_GET['seccion'] = 'inm_producto_infonavit';
+        $_GET['accion'] = 'lista';
+        $_SESSION['grupo_id'] = 1;
+        $_SESSION['usuario_id'] = 2;
+        $_GET['session_id'] = '1';
+
+
+        $_inm = new _inm_prospecto();
+        $_inm = new liberator($_inm);
+        $key_data = 'a';
+        $_POST['a'] = array('');
+        $resultado = $_inm->init_post($key_data);
+        $this->assertIsArray($resultado);
+        $this->assertNotTrue(errores::$error);
+        $this->assertEquals("",$resultado[0]);
+        errores::$error = false;
+    }
+
 
 
     public function test_integra_keys_selects_comercial(): void
