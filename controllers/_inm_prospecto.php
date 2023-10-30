@@ -628,7 +628,7 @@ class _inm_prospecto{
 
     /**
      * Inicializa los elementos fiscales de identificacion
-     * @param controlador_inm_prospecto $controlador
+     * @param controlador_inm_prospecto $controlador Controlador en ejecucion
      * @return stdClass
      */
     private function row_base_fiscal(controlador_inm_prospecto $controlador): stdClass
@@ -660,6 +660,10 @@ class _inm_prospecto{
 
     }
 
+    /**
+     * @param array $row
+     * @return bool
+     */
     private function tiene_dato(array $row): bool
     {
         $tiene_dato = false;
