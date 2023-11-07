@@ -209,7 +209,6 @@ class _ubicacion{
      * @param controlador_inm_ubicacion $controler Controlador en ejecucion
      * @param array $disableds Atributo disabled
      * @return array
-     * @version 2.140.0
      */
     final public function init_alta(controlador_inm_ubicacion $controler, array $disableds): array
     {
@@ -227,8 +226,16 @@ class _ubicacion{
             return $this->error->error(mensaje: 'Error al obtener keys_selects', data:  $keys_selects);
         }
 
+        $inm_ubicacion_id_ultimo = $controler->modelo->ultimo_registro_id();
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al obtener inm_ubicacion_id_ultimo',
+                data:  $inm_ubicacion_id_ultimo);
+        }
+
+        $codigo = $inm_ubicacion_id_ultimo+1;
 
         $controler->row_upd->costo_directo = 0;
+        $controler->row_upd->codigo = $codigo;
         return $keys_selects;
     }
 
