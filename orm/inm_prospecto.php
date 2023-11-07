@@ -351,8 +351,13 @@ class inm_prospecto extends _modelo_parent{
         return $com_prospecto;
     }
 
+    final public function inm_conyuge(int $inm_prospecto_id){
+        $filtro['inm_prospecto.id'] = $inm_prospecto_id;
+        $r_inm_rel_conyuge_prospecto = (new inm_rel_conyuge_prospecto(link: $this->link))->filtro_and(filtro: $filtro);
 
 
+
+    }
 
     /**
      * Genera un registro para insercion de prospecto proceso
@@ -375,9 +380,6 @@ class inm_prospecto extends _modelo_parent{
 
         return $inm_prospecto_proceso_ins;
     }
-
-
-
 
 
     /**

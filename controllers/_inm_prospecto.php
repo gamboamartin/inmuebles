@@ -393,6 +393,7 @@ class _inm_prospecto{
      * Genera lso inputs base de un prospecto
      * @param controlador_inm_prospecto $controlador Controlador en ejecucion
      * @return array|stdClass
+     * @version 2.299.2
      */
     final public function inputs_base(controlador_inm_prospecto $controlador): array|stdClass
     {

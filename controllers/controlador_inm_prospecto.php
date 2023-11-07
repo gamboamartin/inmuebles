@@ -250,6 +250,13 @@ class controlador_inm_prospecto extends _ctl_formato {
         $this->registro = new stdClass();
         $this->registro->inm_prospecto = $inm_prospecto;
 
+        $inm_conyuge = (new inm_prospecto(link: $this->link))->inm_conyuge(inm_prospecto_id: $this->registro_id);
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al obtener inm_conyuge',data:  $inm_conyuge, header: $header,ws:  $ws);
+        }
+
+        $this->registro->inm_conyuge = $inm_conyuge;
+
 
         return new stdClass();
     }

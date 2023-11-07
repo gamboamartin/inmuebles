@@ -44,7 +44,7 @@
 
                 <div  class="col-md-12">
                     <h4>CONYUGE::</h4>
-                    <label>NOMBRE: </label> <?php echo $controlador->registro->inm_prospecto->inm_prospecto_nombre_completo; ?>
+                    <label>NOMBRE: </label> <?php echo $controlador->registro->inm_conyuge->inm_conyuge_nombre_completo; ?>
 
                 </div>
 
