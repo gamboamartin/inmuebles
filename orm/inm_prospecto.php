@@ -354,7 +354,29 @@ class inm_prospecto extends _modelo_parent{
     final public function inm_conyuge(int $inm_prospecto_id){
         $filtro['inm_prospecto.id'] = $inm_prospecto_id;
         $r_inm_rel_conyuge_prospecto = (new inm_rel_conyuge_prospecto(link: $this->link))->filtro_and(filtro: $filtro);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al obtener r_inm_rel_conyuge_prospecto',
+                data:  $r_inm_rel_conyuge_prospecto);
+        }
 
+        if($r_inm_rel_conyuge_prospecto->n_registros === 0){
+            return $this->error->error(mensaje: 'Error al no existe conyuge relacionado',
+                data:  $r_inm_rel_conyuge_prospecto);
+        }
+
+        if($r_inm_rel_conyuge_prospecto->n_registros > 1){
+            return $this->error->error(mensaje: 'Error solo debe existir un conyuge',
+                data:  $r_inm_rel_conyuge_prospecto);
+        }
+
+        $inm_conyuge_id = $r_inm_rel_conyuge_prospecto->registros[0]['inm_conyuge_id'];
+        $inm_conyuge = (new inm_conyuge(link: $this->link))->registro(registro_id: $inm_conyuge_id, retorno_obj: true);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al obtener inm_conyuge',
+                data:  $inm_conyuge);
+        }
+
+        return $inm_conyuge;
 
 
     }

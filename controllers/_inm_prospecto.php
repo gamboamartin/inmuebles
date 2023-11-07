@@ -201,6 +201,9 @@ class _inm_prospecto{
         return $headers;
     }
 
+    /**
+     * @return array
+     */
     private function headers_prospecto(): array
     {
         $headers = array();
