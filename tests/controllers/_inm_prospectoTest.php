@@ -553,6 +553,30 @@ class _inm_prospectoTest extends test {
         errores::$error = false;
     }
 
+    public function test_valida_base(): void
+    {
+        errores::$error = false;
+
+        $_GET['seccion'] = 'inm_producto_infonavit';
+        $_GET['accion'] = 'lista';
+        $_SESSION['grupo_id'] = 1;
+        $_SESSION['usuario_id'] = 2;
+        $_GET['session_id'] = '1';
+
+
+        $_inm = new _inm_prospecto();
+        $_inm = new liberator($_inm);
+        $controlador = new controlador_inm_prospecto(link: $this->link, paths_conf: $this->paths_conf);
+        $controlador->registro['com_agente_id'] = 1;
+        $controlador->registro['com_tipo_prospecto_id'] = 1;
+        $controlador->registro['inm_prospecto_es_segundo_credito'] = 1;
+        $resultado = $_inm->valida_base($controlador);
+        $this->assertIsBool($resultado);
+        $this->assertNotTrue(errores::$error);
+        $this->assertTrue($resultado);
+        errores::$error = false;
+    }
+
 
 }
 

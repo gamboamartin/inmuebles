@@ -10,7 +10,6 @@ namespace gamboamartin\inmuebles\controllers;
 
 use base\controller\init;
 use gamboamartin\errores\errores;
-use gamboamartin\inmuebles\html\inm_concepto_html;
 use gamboamartin\inmuebles\html\inm_ubicacion_html;
 use gamboamartin\inmuebles\html\inm_valuador_html;
 use gamboamartin\inmuebles\models\inm_ubicacion;
@@ -146,7 +145,7 @@ class controlador_inm_ubicacion extends _ctl_base {
     {
         $keys = new stdClass();
         $keys->inputs = array('descripcion', 'manzana', 'lote','costo_directo','numero_exterior','numero_interior',
-            'cuenta_predial');
+            'cuenta_predial','codigo');
         $keys->selects = array();
 
 
@@ -205,8 +204,9 @@ class controlador_inm_ubicacion extends _ctl_base {
      */
     private function init_datatable(): stdClass
     {
-        $columns["inm_tipo_ubicacion_descripcion"]["titulo"] = "Tipo de Ubicacion";
         $columns["inm_ubicacion_id"]["titulo"] = "Id";
+        $columns["inm_ubicacion_codigo"]["titulo"] = "Cod";
+        $columns["inm_tipo_ubicacion_descripcion"]["titulo"] = "Tipo de Ubicacion";
         $columns["dp_municipio_descripcion"]["titulo"] = "Municipio";
         $columns["dp_cp_descripcion"]["titulo"] = "CP";
         $columns["dp_colonia_descripcion"]["titulo"] = "Colonia";
@@ -288,7 +288,7 @@ class controlador_inm_ubicacion extends _ctl_base {
         if(errores::$error){
             return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
-        $keys_selects = (new init())->key_select_txt(cols: 6,key: 'cuenta_predial', keys_selects:$keys_selects,
+        $keys_selects = (new init())->key_select_txt(cols: 12,key: 'cuenta_predial', keys_selects:$keys_selects,
             place_holder: 'Cuenta Predial');
         if(errores::$error){
             return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
@@ -300,6 +300,12 @@ class controlador_inm_ubicacion extends _ctl_base {
         }
         $keys_selects = (new init())->key_select_txt(cols: 6,key: 'numero_interior', keys_selects: $keys_selects,
             place_holder: 'Interior',required: false);
+        if(errores::$error){
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        }
+
+        $keys_selects = (new init())->key_select_txt(cols: 12,key: 'codigo', keys_selects: $keys_selects,
+            place_holder: 'Codigo',required: false);
         if(errores::$error){
             return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
