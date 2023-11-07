@@ -45,6 +45,8 @@
                 <div  class="col-md-12">
                     <h4>CONYUGE::</h4>
                     <label>NOMBRE: </label> <?php echo $controlador->registro->inm_conyuge->inm_conyuge_nombre_completo; ?>
+                    <br>
+                    <label>LUGAR Y FECHA DE NACIMIENTO: </label> <?php echo $controlador->registro->inm_conyuge->inm_conyuge_lugar_fecha_nac; ?>
 
                 </div>
 

@@ -256,6 +256,8 @@ class controlador_inm_prospecto extends _ctl_formato {
         $inm_conyuge->inm_conyuge_nombre = '';
         $inm_conyuge->inm_conyuge_apellido_paterno = '';
         $inm_conyuge->inm_conyuge_apellido_materno = '';
+        $inm_conyuge->dp_municipio_descripcion = '';
+        $inm_conyuge->inm_conyuge_fecha_nacimiento = '';
 
         $existe_conyuge = (new inm_prospecto(link: $this->link))->existe_conyuge(inm_prospecto_id: $this->registro_id);
         if(errores::$error){
@@ -270,8 +272,11 @@ class controlador_inm_prospecto extends _ctl_formato {
         }
 
         $inm_conyuge->inm_conyuge_nombre_completo = $inm_conyuge->inm_conyuge_nombre;
-        $inm_conyuge->inm_conyuge_nombre_completo .= $inm_conyuge->inm_conyuge_apellido_paterno;
-        $inm_conyuge->inm_conyuge_nombre_completo .= $inm_conyuge->inm_conyuge_apellido_materno;
+        $inm_conyuge->inm_conyuge_nombre_completo .= ' '.$inm_conyuge->inm_conyuge_apellido_paterno;
+        $inm_conyuge->inm_conyuge_nombre_completo .= ' '.$inm_conyuge->inm_conyuge_apellido_materno;
+
+        $inm_conyuge->inm_conyuge_lugar_fecha_nac = $inm_conyuge->inm_conyuge_nombre;
+        $inm_conyuge->inm_conyuge_lugar_fecha_nac .= ' '.$inm_conyuge->inm_conyuge_fecha_nacimiento;
 
         $this->registro->inm_conyuge = $inm_conyuge;
 
