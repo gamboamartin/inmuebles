@@ -722,6 +722,7 @@ class _inm_prospecto{
     }
 
     /**
+     * Valida los elementos base de un prospecto
      * @param controlador_inm_prospecto $controlador
      * @return array|true
      */
