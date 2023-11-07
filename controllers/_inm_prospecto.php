@@ -723,7 +723,7 @@ class _inm_prospecto{
 
     /**
      * Valida los elementos base de un prospecto
-     * @param controlador_inm_prospecto $controlador
+     * @param controlador_inm_prospecto $controlador Controlador en ejecucion
      * @return array|true
      */
     private function valida_base(controlador_inm_prospecto $controlador): bool|array
