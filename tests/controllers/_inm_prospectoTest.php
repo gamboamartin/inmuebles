@@ -225,6 +225,30 @@ class _inm_prospectoTest extends test {
         errores::$error = false;
     }
 
+    public function test_headers_prospecto(): void
+    {
+        errores::$error = false;
+
+        $_GET['seccion'] = 'inm_producto_infonavit';
+        $_GET['accion'] = 'lista';
+        $_SESSION['grupo_id'] = 1;
+        $_SESSION['usuario_id'] = 2;
+        $_GET['session_id'] = '1';
+
+
+        $_inm = new _inm_prospecto();
+        $_inm = new liberator($_inm);
+
+        $resultado = $_inm->headers_prospecto();
+        $this->assertIsArray($resultado);
+        $this->assertNotTrue(errores::$error);
+        $this->assertEquals('1. DATOS PERSONALES',$resultado[1]);
+        $this->assertEquals('5. MONTO CREDITO',$resultado[5]);
+        $this->assertEquals('10. REFERENCIAS',$resultado[10]);
+
+        errores::$error = false;
+    }
+
     public function test_identificadores_comercial(): void
     {
         errores::$error = false;
@@ -373,8 +397,6 @@ class _inm_prospectoTest extends test {
         errores::$error = false;
 
     }
-
-
 
     public function test_integra_keys_selects_comercial(): void
     {

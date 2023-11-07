@@ -204,6 +204,7 @@ class _inm_prospecto{
     /**
      * Obtiene los headers para frontend de views
      * @return array
+     * @version 2.302.2
      */
     private function headers_prospecto(): array
     {

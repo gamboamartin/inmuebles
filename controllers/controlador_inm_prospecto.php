@@ -10,6 +10,7 @@ namespace gamboamartin\inmuebles\controllers;
 
 use base\controller\init;
 use DateTime;
+use gamboamartin\calculo\calculo;
 use gamboamartin\errores\errores;
 use gamboamartin\inmuebles\html\inm_prospecto_html;
 use gamboamartin\inmuebles\models\_base_paquete;
@@ -231,16 +232,11 @@ class controlador_inm_prospecto extends _ctl_formato {
 
         $inm_prospecto->inm_prospecto_lugar_fecha_nac = $lugar_fecha_nac;
 
-        try {
-            $ahora = new DateTime(date("Y-m-d"));
-            $fecha_nacimiento =  new DateTime($inm_prospecto->inm_prospecto_fecha_nacimiento);
+
+        $edad = (new calculo())->edad_hoy(fecha_nacimiento: $inm_prospecto->inm_prospecto_fecha_nacimiento);
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al obtener edad',data:  $edad, header: $header,ws:  $ws);
         }
-        catch (Throwable $e){
-            return $this->retorno_error(mensaje: 'Error al obtener ahora',data:  $e, header: $header,ws:  $ws);
-        }
-        //print_r($inm_prospecto);exit;
-        $diferencia = $ahora->diff($fecha_nacimiento);
-        $edad =$diferencia->format("%y");
 
         $inm_prospecto->inm_prospecto_edad = $edad;
 
@@ -258,6 +254,9 @@ class controlador_inm_prospecto extends _ctl_formato {
         $inm_conyuge->inm_conyuge_apellido_materno = '';
         $inm_conyuge->dp_municipio_descripcion = '';
         $inm_conyuge->inm_conyuge_fecha_nacimiento = '';
+        $inm_conyuge->dp_estado_descripcion = '';
+        $inm_conyuge->inm_conyuge_edad = '';
+
 
         $existe_conyuge = (new inm_prospecto(link: $this->link))->existe_conyuge(inm_prospecto_id: $this->registro_id);
         if(errores::$error){
@@ -269,14 +268,23 @@ class controlador_inm_prospecto extends _ctl_formato {
             if (errores::$error) {
                 return $this->retorno_error(mensaje: 'Error al obtener inm_conyuge', data: $inm_conyuge, header: $header, ws: $ws);
             }
+            $inm_conyuge->inm_conyuge_edad = (new calculo())->edad_hoy(fecha_nacimiento: $inm_conyuge->inm_conyuge_fecha_nacimiento);
+            if(errores::$error){
+                return $this->retorno_error(mensaje: 'Error al obtener edad',data:  $edad, header: $header,ws:  $ws);
+            }
+            $inm_conyuge->inm_conyuge_edad.= ' AÑOS';
         }
 
         $inm_conyuge->inm_conyuge_nombre_completo = $inm_conyuge->inm_conyuge_nombre;
         $inm_conyuge->inm_conyuge_nombre_completo .= ' '.$inm_conyuge->inm_conyuge_apellido_paterno;
         $inm_conyuge->inm_conyuge_nombre_completo .= ' '.$inm_conyuge->inm_conyuge_apellido_materno;
 
-        $inm_conyuge->inm_conyuge_lugar_fecha_nac = $inm_conyuge->inm_conyuge_nombre;
+        $inm_conyuge->inm_conyuge_lugar_fecha_nac = $inm_conyuge->dp_municipio_descripcion;
+        $inm_conyuge->inm_conyuge_lugar_fecha_nac .= ' '.$inm_conyuge->dp_estado_descripcion;
         $inm_conyuge->inm_conyuge_lugar_fecha_nac .= ' '.$inm_conyuge->inm_conyuge_fecha_nacimiento;
+
+
+
 
         $this->registro->inm_conyuge = $inm_conyuge;
 

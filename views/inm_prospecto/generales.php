@@ -47,6 +47,8 @@
                     <label>NOMBRE: </label> <?php echo $controlador->registro->inm_conyuge->inm_conyuge_nombre_completo; ?>
                     <br>
                     <label>LUGAR Y FECHA DE NACIMIENTO: </label> <?php echo $controlador->registro->inm_conyuge->inm_conyuge_lugar_fecha_nac; ?>
+                    <br>
+                    <label>EDAD: </label> <?php echo $controlador->registro->inm_conyuge->inm_conyuge_edad; ?>
 
                 </div>
 
