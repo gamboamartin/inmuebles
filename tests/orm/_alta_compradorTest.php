@@ -314,7 +314,7 @@ class _alta_compradorTest extends test {
         $this->assertEquals('D',$resultado['nss']);
         $this->assertEquals('D',$resultado['curp']);
         $this->assertEquals('D',$resultado['rfc']);
-        $this->assertStringContainsStringIgnoringCase('D D  D D D 2023-10-',$resultado['descripcion']);
+        $this->assertStringContainsStringIgnoringCase('D D  D D D 2023-11-',$resultado['descripcion']);
 
         errores::$error = false;
     }

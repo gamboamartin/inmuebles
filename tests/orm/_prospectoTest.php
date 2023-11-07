@@ -87,7 +87,7 @@ class _prospectoTest extends test {
 
         $this->assertIsArray($resultado);
         $this->assertNotTrue(errores::$error);
-        $this->assertStringContainsStringIgnoringCase('a a  a a a 2023-10-',$resultado['descripcion']);
+        $this->assertStringContainsStringIgnoringCase('a a  a a a 2023-11-',$resultado['descripcion']);
         errores::$error = false;
     }
 
