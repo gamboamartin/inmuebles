@@ -49,7 +49,16 @@
                     <label>LUGAR Y FECHA DE NACIMIENTO: </label> <?php echo $controlador->registro->inm_conyuge->inm_conyuge_lugar_fecha_nac; ?>
                     <br>
                     <label>EDAD: </label> <?php echo $controlador->registro->inm_conyuge->inm_conyuge_edad; ?>
-
+                    <label>ESTADO CIVIL: </label> <?php echo $controlador->registro->inm_conyuge->inm_conyuge_estado_civil; ?>
+                    <label>NACIONALIDAD: </label> <?php echo $controlador->registro->inm_conyuge->inm_nacionalidad_descripcion; ?>
+                    <br>
+                    <label>CURP: </label> <?php echo $controlador->registro->inm_conyuge->inm_conyuge_curp; ?>
+                    <label>RFC: </label> <?php echo $controlador->registro->inm_conyuge->inm_conyuge_rfc; ?>
+                    <br>
+                    <label>OCUPACION: </label> <?php echo $controlador->registro->inm_conyuge->inm_ocupacion_descripcion; ?>
+                    <label>TELEFONO CASA: </label> <?php echo $controlador->registro->inm_conyuge->inm_conyuge_telefono_casa; ?>
+                    <br>
+                    <label>TELEFONO CELULAR: </label> <?php echo $controlador->registro->inm_conyuge->inm_conyuge_telefono_celular; ?>
                 </div>
 
             </div>

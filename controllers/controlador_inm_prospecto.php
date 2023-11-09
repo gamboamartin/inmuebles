@@ -256,6 +256,13 @@ class controlador_inm_prospecto extends _ctl_formato {
         $inm_conyuge->inm_conyuge_fecha_nacimiento = '';
         $inm_conyuge->dp_estado_descripcion = '';
         $inm_conyuge->inm_conyuge_edad = '';
+        $inm_conyuge->inm_conyuge_estado_civil= '';
+        $inm_conyuge->inm_nacionalidad_descripcion= '';
+        $inm_conyuge->inm_conyuge_curp= '';
+        $inm_conyuge->inm_conyuge_rfc= '';
+        $inm_conyuge->inm_ocupacion_descripcion= '';
+        $inm_conyuge->inm_conyuge_telefono_casa= '';
+        $inm_conyuge->inm_conyuge_telefono_celular= '';
 
 
         $existe_conyuge = (new inm_prospecto(link: $this->link))->existe_conyuge(inm_prospecto_id: $this->registro_id);
@@ -273,6 +280,8 @@ class controlador_inm_prospecto extends _ctl_formato {
                 return $this->retorno_error(mensaje: 'Error al obtener edad',data:  $edad, header: $header,ws:  $ws);
             }
             $inm_conyuge->inm_conyuge_edad.= ' AÑOS';
+
+            $inm_conyuge->inm_conyuge_estado_civil= $inm_prospecto->inm_estado_civil_descripcion;
         }
 
         $inm_conyuge->inm_conyuge_nombre_completo = $inm_conyuge->inm_conyuge_nombre;
@@ -282,7 +291,6 @@ class controlador_inm_prospecto extends _ctl_formato {
         $inm_conyuge->inm_conyuge_lugar_fecha_nac = $inm_conyuge->dp_municipio_descripcion;
         $inm_conyuge->inm_conyuge_lugar_fecha_nac .= ' '.$inm_conyuge->dp_estado_descripcion;
         $inm_conyuge->inm_conyuge_lugar_fecha_nac .= ' '.$inm_conyuge->inm_conyuge_fecha_nacimiento;
-
 
 
 
