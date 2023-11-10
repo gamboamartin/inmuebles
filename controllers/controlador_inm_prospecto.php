@@ -190,6 +190,48 @@ class controlador_inm_prospecto extends _ctl_formato {
 
     }
 
+    private function data_nacimiento(string $entidad_edo, string $entidad_mun, string $entidad_name,stdClass $row): string
+    {
+        $key_fecha_nac = $entidad_name.'_fecha_nacimiento';
+
+        $key_mun = $entidad_mun.'_descripcion';
+        $key_edo = $entidad_edo.'_descripcion';
+
+        $lugar_fecha_nac = $row->$key_mun;
+        $lugar_fecha_nac .= ' '.$row->$key_edo;
+        $lugar_fecha_nac .= ' EL DIA  ';
+        $lugar_fecha_nac .= ' '.$row->$key_fecha_nac;
+
+        return trim($lugar_fecha_nac);
+
+    }
+
+    private function data_prospecto(stdClass $inm_prospecto): array|stdClass
+    {
+        $nombre_completo = $this->nombre_completo(name_entidad: 'inm_prospecto',row:  $inm_prospecto);
+        if(errores::$error){
+            return $this->errores->error(mensaje: 'Error al obtener nombre_completo',data:  $nombre_completo);
+        }
+
+        $inm_prospecto->inm_prospecto_nombre_completo = $nombre_completo;
+        $lugar_fecha_nac = $this->data_nacimiento(entidad_edo: 'dp_estado_nacimiento',
+            entidad_mun: 'dp_municipio_nacimiento', entidad_name: 'inm_prospecto', row: $inm_prospecto);
+        if(errores::$error){
+            return $this->errores->error(mensaje: 'Error al obtener lugar_fecha_nac',data:  $lugar_fecha_nac);
+        }
+
+        $inm_prospecto->inm_prospecto_lugar_fecha_nac = $lugar_fecha_nac;
+        $edad = (new calculo())->edad_hoy(fecha_nacimiento: $inm_prospecto->inm_prospecto_fecha_nacimiento);
+        if(errores::$error){
+            return $this->errores->error(mensaje: 'Error al obtener edad',data:  $edad);
+        }
+        $inm_prospecto->inm_prospecto_edad = $edad;
+        $inm_prospecto_telefono_empresa = $inm_prospecto->inm_prospecto_lada_nep.$inm_prospecto->inm_prospecto_numero_nep;
+        $inm_prospecto->inm_prospecto_telefono_empresa  = $inm_prospecto_telefono_empresa;
+
+        return $inm_prospecto;
+    }
+
     final public function documentos(bool $header, bool $ws = false): array
     {
 
@@ -219,32 +261,11 @@ class controlador_inm_prospecto extends _ctl_formato {
             return $this->retorno_error(mensaje: 'Error al obtener inm_prospecto',data:  $inm_prospecto, header: $header,ws:  $ws);
         }
 
-        $nombre_completo = $this->nombre_completo(name_entidad: 'inm_prospecto',row:  $inm_prospecto);
+
+        $inm_prospecto = $this->data_prospecto(inm_prospecto: $inm_prospecto);
         if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al obtener nombre_completo',data:  $nombre_completo, header: $header,ws:  $ws);
+            return $this->retorno_error(mensaje: 'Error al ajusta prospecto',data:  $inm_prospecto, header: $header,ws:  $ws);
         }
-
-
-        $inm_prospecto->inm_prospecto_nombre_completo = $nombre_completo;
-
-        $lugar_fecha_nac = $inm_prospecto->dp_municipio_nacimiento_descripcion;
-        $lugar_fecha_nac .= ' '.$inm_prospecto->dp_estado_nacimiento_descripcion;
-        $lugar_fecha_nac .= ' EL DIA  ';
-        $lugar_fecha_nac .= ' '.$inm_prospecto->inm_prospecto_fecha_nacimiento;
-
-
-        $inm_prospecto->inm_prospecto_lugar_fecha_nac = $lugar_fecha_nac;
-
-
-        $edad = (new calculo())->edad_hoy(fecha_nacimiento: $inm_prospecto->inm_prospecto_fecha_nacimiento);
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al obtener edad',data:  $edad, header: $header,ws:  $ws);
-        }
-
-        $inm_prospecto->inm_prospecto_edad = $edad;
-
-        $inm_prospecto_telefono_empresa = $inm_prospecto->inm_prospecto_lada_nep.$inm_prospecto->inm_prospecto_numero_nep;
-        $inm_prospecto->inm_prospecto_telefono_empresa  = $inm_prospecto_telefono_empresa;
 
         $this->registro = new stdClass();
         $this->registro->inm_prospecto = $inm_prospecto;
@@ -295,9 +316,13 @@ class controlador_inm_prospecto extends _ctl_formato {
 
         $inm_conyuge->inm_conyuge_nombre_completo = $nombre_completo;
 
-        $inm_conyuge->inm_conyuge_lugar_fecha_nac = $inm_conyuge->dp_municipio_descripcion;
-        $inm_conyuge->inm_conyuge_lugar_fecha_nac .= ' '.$inm_conyuge->dp_estado_descripcion;
-        $inm_conyuge->inm_conyuge_lugar_fecha_nac .= ' '.$inm_conyuge->inm_conyuge_fecha_nacimiento;
+
+        $lugar_fecha_nac = $this->data_nacimiento(entidad_edo: 'dp_estado', entidad_mun: 'dp_municipio', entidad_name: 'inm_conyuge', row: $inm_conyuge);
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al obtener lugar_fecha_nac',data:  $lugar_fecha_nac, header: $header,ws:  $ws);
+        }
+
+        $inm_conyuge->inm_conyuge_lugar_fecha_nac = $lugar_fecha_nac;
 
 
         $inm_tipo_beneficiarios = (new inm_tipo_beneficiario(link: $this->link))->registros_activos(retorno_obj: true);
@@ -339,6 +364,18 @@ class controlador_inm_prospecto extends _ctl_formato {
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al obtener inm_referencias',data:  $inm_referencias,
                 header: $header,ws:  $ws);
+        }
+
+        foreach ($inm_referencias as $indice => $inm_referencia){
+            $nombre_completo = $this->nombre_completo(name_entidad: 'inm_referencia_prospecto',row:  $inm_referencia);
+            if(errores::$error){
+                return $this->retorno_error(mensaje: 'Error al obtener nombre_completo',data:  $nombre_completo, header: $header,ws:  $ws);
+            }
+            $inm_referencia->inm_referencia_prospecto_nombre_completo = $nombre_completo;
+            $inm_referencia->inm_referencia_prospecto_telefono = $inm_referencia->inm_referencia_prospecto_lada;
+            $inm_referencia->inm_referencia_prospecto_telefono .= $inm_referencia->inm_referencia_prospecto_numero;
+
+            $inm_referencias[$indice] = $inm_referencia;
         }
 
         $this->registro->inm_referencias = $inm_referencias;

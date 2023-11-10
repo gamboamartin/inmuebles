@@ -16,7 +16,9 @@
 
                 </div>
                 <div  class="col-md-12">
+                    <hr>
                     <h4>ACREDITADO:</h4>
+                    <hr>
                     <label>NOMBRE: </label> <?php echo $controlador->registro->inm_prospecto->inm_prospecto_nombre_completo; ?>
                     <br>
                     <label>LUGAR Y FECHA DE NACIMIENTO: </label> <?php echo $controlador->registro->inm_prospecto->inm_prospecto_lugar_fecha_nac; ?>
@@ -43,7 +45,9 @@
                 </div>
 
                 <div  class="col-md-12">
+                    <hr>
                     <h4>CONYUGE:</h4>
+                    <hr>
                     <label>NOMBRE: </label> <?php echo $controlador->registro->inm_conyuge->inm_conyuge_nombre_completo; ?>
                     <br>
                     <label>LUGAR Y FECHA DE NACIMIENTO: </label> <?php echo $controlador->registro->inm_conyuge->inm_conyuge_lugar_fecha_nac; ?>
@@ -62,7 +66,9 @@
                 </div>
 
                 <div  class="col-md-12">
+                    <hr>
                     <h4>BENEFICIARIOS:</h4>
+                    <hr>
                     <label>NOTA: </label>
                     Solo pueden designar como beneficiario a padres, hijos y/o esposa (o). En caso de unión
                     libre no se puede designar al cónyuge como beneficiario. Cuando el crédito es conyugal deben de
@@ -72,9 +78,9 @@
 
                 <?php foreach ($controlador->registro->inm_tipo_beneficiarios as $inm_tipo_beneficiario){ ?>
                 <div  class="col-md-12">
-
+                    <hr>
                     <h4>BENEFICIARIOS <?php echo $inm_tipo_beneficiario->inm_tipo_beneficiario_descripcion; ?>:</h4>
-
+                    <hr>
                     <?php foreach ($inm_tipo_beneficiario->inm_beneficiarios as $inm_beneficiario){ ?>
                     <label>NOMBRE: </label> <?php echo $inm_beneficiario->inm_beneficiario_nombre_completo; ?>
                     <label>PARENTESCO: </label> <?php echo $inm_beneficiario->inm_parentesco_descripcion; ?>
@@ -84,12 +90,14 @@
                 <?php } ?>
 
                 <div  class="col-md-12">
+                    <hr>
                     <h4>REFERENCIAS:</h4>
+                    <hr>
                         <?php foreach ($controlador->registro->inm_referencias as $inm_referencia){ ?>
-                        <label>NOMBRE: </label> <?php echo $controlador->registro->inm_referencia->inm_referencia_nombre_completo; ?>
+                        <label>NOMBRE: </label> <?php echo $inm_referencia->inm_referencia_prospecto_nombre_completo; ?>
                         <br>
-                        <label>TELEFONO: </label> <?php echo $controlador->registro->inm_referencia->inm_referencia_telefono; ?>
-                        <label>PARENTESCO: </label> <?php echo $controlador->registro->inm_referencia->inm_parentesco_descripcion; ?>
+                        <label>TELEFONO: </label> <?php echo $inm_referencia->inm_referencia_prospecto_telefono; ?>
+                        <label>PARENTESCO: </label> <?php echo $inm_referencia->inm_parentesco_descripcion; ?>
                             <br>
                     <?php } ?>
                 </div>

@@ -417,20 +417,8 @@ class inm_prospecto extends _modelo_parent{
             return$this->error->error(mensaje: 'Error al obtener r_inm_referencia_prospecto', data: $r_inm_referencia_prospecto);
         }
 
-        $inm_referencias_prospecto = $r_inm_referencia_prospecto->registros_obj;
 
-        $inm_referencias = array();
-        foreach ($inm_referencias_prospecto as $inm_referencia_prospecto){
-            $inm_referencia = (new inm_referencia(link: $this->link))->registro(registro_id: $inm_referencia_prospecto->inm_refernecia_id, retorno_obj: true);
-            if(errores::$error){
-                return$this->error->error(mensaje: 'Error al obtener inm_referencia', data: $inm_referencia);
-            }
-
-            $inm_referencias[] = $inm_referencia;
-
-        }
-
-        return $inm_referencias;
+        return $r_inm_referencia_prospecto->registros_obj;
     }
 
 
