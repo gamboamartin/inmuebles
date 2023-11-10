@@ -83,6 +83,19 @@
                 </div>
                 <?php } ?>
 
+                <div  class="col-md-12">
+                    <h4>REFERENCIAS:</h4>
+                        <?php foreach ($controlador->registro->inm_referencias as $inm_referencia){ ?>
+                        <label>NOMBRE: </label> <?php echo $controlador->registro->inm_referencia->inm_referencia_nombre_completo; ?>
+                        <br>
+                        <label>TELEFONO: </label> <?php echo $controlador->registro->inm_referencia->inm_referencia_telefono; ?>
+                        <label>PARENTESCO: </label> <?php echo $controlador->registro->inm_referencia->inm_parentesco_descripcion; ?>
+                            <br>
+                    <?php } ?>
+                </div>
+
+
+
             </div>
 
         </div>

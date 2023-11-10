@@ -190,14 +190,7 @@ class inm_prospecto extends _modelo_parent{
         return $r_alta_bd;
     }
 
-    final public function inm_beneficiarios(int $inm_prospecto_id){
-        $filtro['inm_prospecto.id'] = $inm_prospecto_id;
-        $r_inm_beneficiario = (new inm_beneficiario(link: $this->link))->filtro_and(filtro: $filtro,);
-        if(errores::$error){
-            return$this->error->error(mensaje: 'Error al obtener beneficiarios', data: $r_inm_beneficiario);
-        }
-        return $r_inm_beneficiario->registros_obj;
-    }
+
 
     /**
      * Convierte un prospecto en cliente generado una relacion con inm_rel_prospecto_cliente y inm_comprador
@@ -356,6 +349,15 @@ class inm_prospecto extends _modelo_parent{
         return $com_prospecto;
     }
 
+    final public function inm_beneficiarios(int $inm_prospecto_id){
+        $filtro['inm_prospecto.id'] = $inm_prospecto_id;
+        $r_inm_beneficiario = (new inm_beneficiario(link: $this->link))->filtro_and(filtro: $filtro,);
+        if(errores::$error){
+            return$this->error->error(mensaje: 'Error al obtener beneficiarios', data: $r_inm_beneficiario);
+        }
+        return $r_inm_beneficiario->registros_obj;
+    }
+
     final public function inm_conyuge(int $inm_prospecto_id){
         $filtro['inm_prospecto.id'] = $inm_prospecto_id;
         $r_inm_rel_conyuge_prospecto = (new inm_rel_conyuge_prospecto(link: $this->link))->filtro_and(filtro: $filtro);
@@ -406,6 +408,29 @@ class inm_prospecto extends _modelo_parent{
         $inm_prospecto_proceso_ins['inm_prospecto_id'] = $inm_prospecto_id;
 
         return $inm_prospecto_proceso_ins;
+    }
+
+    final public function inm_referencias(int $inm_prospecto_id){
+        $filtro['inm_prospecto.id'] = $inm_prospecto_id;
+        $r_inm_referencia_prospecto = (new inm_referencia_prospecto(link: $this->link))->filtro_and(filtro: $filtro);
+        if(errores::$error){
+            return$this->error->error(mensaje: 'Error al obtener r_inm_referencia_prospecto', data: $r_inm_referencia_prospecto);
+        }
+
+        $inm_referencias_prospecto = $r_inm_referencia_prospecto->registros_obj;
+
+        $inm_referencias = array();
+        foreach ($inm_referencias_prospecto as $inm_referencia_prospecto){
+            $inm_referencia = (new inm_referencia(link: $this->link))->registro(registro_id: $inm_referencia_prospecto->inm_refernecia_id, retorno_obj: true);
+            if(errores::$error){
+                return$this->error->error(mensaje: 'Error al obtener inm_referencia', data: $inm_referencia);
+            }
+
+            $inm_referencias[] = $inm_referencia;
+
+        }
+
+        return $inm_referencias;
     }
 
 

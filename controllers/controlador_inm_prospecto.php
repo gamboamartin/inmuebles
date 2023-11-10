@@ -219,9 +219,11 @@ class controlador_inm_prospecto extends _ctl_formato {
             return $this->retorno_error(mensaje: 'Error al obtener inm_prospecto',data:  $inm_prospecto, header: $header,ws:  $ws);
         }
 
-        $nombre_completo = $inm_prospecto->inm_prospecto_nombre;
-        $nombre_completo .= ' '.$inm_prospecto->inm_prospecto_apellido_paterno;
-        $nombre_completo .= ' '.$inm_prospecto->inm_prospecto_apellido_materno;
+        $nombre_completo = $this->nombre_completo(name_entidad: 'inm_prospecto',row:  $inm_prospecto);
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al obtener nombre_completo',data:  $nombre_completo, header: $header,ws:  $ws);
+        }
+
 
         $inm_prospecto->inm_prospecto_nombre_completo = $nombre_completo;
 
@@ -285,9 +287,13 @@ class controlador_inm_prospecto extends _ctl_formato {
             $inm_conyuge->inm_conyuge_estado_civil= $inm_prospecto->inm_estado_civil_descripcion;
         }
 
-        $inm_conyuge->inm_conyuge_nombre_completo = $inm_conyuge->inm_conyuge_nombre;
-        $inm_conyuge->inm_conyuge_nombre_completo .= ' '.$inm_conyuge->inm_conyuge_apellido_paterno;
-        $inm_conyuge->inm_conyuge_nombre_completo .= ' '.$inm_conyuge->inm_conyuge_apellido_materno;
+
+        $nombre_completo = $this->nombre_completo(name_entidad: 'inm_conyuge',row:  $inm_conyuge);
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al obtener nombre_completo',data:  $nombre_completo, header: $header,ws:  $ws);
+        }
+
+        $inm_conyuge->inm_conyuge_nombre_completo = $nombre_completo;
 
         $inm_conyuge->inm_conyuge_lugar_fecha_nac = $inm_conyuge->dp_municipio_descripcion;
         $inm_conyuge->inm_conyuge_lugar_fecha_nac .= ' '.$inm_conyuge->dp_estado_descripcion;
@@ -312,20 +318,30 @@ class controlador_inm_prospecto extends _ctl_formato {
                 $inm_tipo_beneficiario->inm_beneficiarios = array();
             }
             foreach ($inm_beneficiarios as $inm_beneficiario){
-                $inm_beneficiario->inm_beneficiario_nombre_completo = $inm_beneficiario->inm_beneficiario_nombre;
-                $inm_beneficiario->inm_beneficiario_nombre_completo .= ' '.$inm_beneficiario->inm_beneficiario_apellido_paterno;
-                $inm_beneficiario->inm_beneficiario_nombre_completo .= ' '.$inm_beneficiario->inm_beneficiario_apellido_materno;
+
+                $nombre_completo = $this->nombre_completo(name_entidad: 'inm_beneficiario',row:  $inm_beneficiario);
+                if(errores::$error){
+                    return $this->retorno_error(mensaje: 'Error al obtener nombre_completo',data:  $nombre_completo, header: $header,ws:  $ws);
+                }
+                $inm_beneficiario->inm_beneficiario_nombre_completo = $nombre_completo;
+
                 if((int)$inm_beneficiario->inm_tipo_beneficiario_id === (int)$inm_tipo_beneficiario->inm_tipo_beneficiario_id){
                     $inm_tipo_beneficiario->inm_beneficiarios[] = $inm_beneficiario;
                 }
                 $inm_tipo_beneficiarios[$indice] = $inm_tipo_beneficiario;
             }
         }
-
         $this->registro->inm_conyuge = $inm_conyuge;
-
         $this->registro->inm_tipo_beneficiarios = $inm_tipo_beneficiarios;
 
+
+        $inm_referencias = (new inm_prospecto(link: $this->link))->inm_referencias(inm_prospecto_id: $this->registro_id);
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al obtener inm_referencias',data:  $inm_referencias,
+                header: $header,ws:  $ws);
+        }
+
+        $this->registro->inm_referencias = $inm_referencias;
 
         return new stdClass();
     }
@@ -677,6 +693,18 @@ class controlador_inm_prospecto extends _ctl_formato {
         return $r_modifica;
 
 
+    }
+
+    private function nombre_completo(string $name_entidad, stdClass $row): string
+    {
+        $key_nombre = $name_entidad.'_nombre';
+        $key_apellido_paterno = $name_entidad.'_apellido_paterno';
+        $key_apellido_materno = $name_entidad.'_apellido_materno';
+        $nombre_completo = $row->$key_nombre;
+        $nombre_completo .= ' '.$row->$key_apellido_paterno;
+        $nombre_completo .= ' '.$row->$key_apellido_materno;
+
+        return trim($nombre_completo);
     }
 
     public function regenera_curp(bool $header, bool $ws = false): array|string{
