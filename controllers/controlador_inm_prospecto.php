@@ -190,47 +190,9 @@ class controlador_inm_prospecto extends _ctl_formato {
 
     }
 
-    private function data_nacimiento(string $entidad_edo, string $entidad_mun, string $entidad_name,stdClass $row): string
-    {
-        $key_fecha_nac = $entidad_name.'_fecha_nacimiento';
 
-        $key_mun = $entidad_mun.'_descripcion';
-        $key_edo = $entidad_edo.'_descripcion';
 
-        $lugar_fecha_nac = $row->$key_mun;
-        $lugar_fecha_nac .= ' '.$row->$key_edo;
-        $lugar_fecha_nac .= ' EL DIA  ';
-        $lugar_fecha_nac .= ' '.$row->$key_fecha_nac;
 
-        return trim($lugar_fecha_nac);
-
-    }
-
-    private function data_prospecto(stdClass $inm_prospecto): array|stdClass
-    {
-        $nombre_completo = $this->nombre_completo(name_entidad: 'inm_prospecto',row:  $inm_prospecto);
-        if(errores::$error){
-            return $this->errores->error(mensaje: 'Error al obtener nombre_completo',data:  $nombre_completo);
-        }
-
-        $inm_prospecto->inm_prospecto_nombre_completo = $nombre_completo;
-        $lugar_fecha_nac = $this->data_nacimiento(entidad_edo: 'dp_estado_nacimiento',
-            entidad_mun: 'dp_municipio_nacimiento', entidad_name: 'inm_prospecto', row: $inm_prospecto);
-        if(errores::$error){
-            return $this->errores->error(mensaje: 'Error al obtener lugar_fecha_nac',data:  $lugar_fecha_nac);
-        }
-
-        $inm_prospecto->inm_prospecto_lugar_fecha_nac = $lugar_fecha_nac;
-        $edad = (new calculo())->edad_hoy(fecha_nacimiento: $inm_prospecto->inm_prospecto_fecha_nacimiento);
-        if(errores::$error){
-            return $this->errores->error(mensaje: 'Error al obtener edad',data:  $edad);
-        }
-        $inm_prospecto->inm_prospecto_edad = $edad;
-        $inm_prospecto_telefono_empresa = $inm_prospecto->inm_prospecto_lada_nep.$inm_prospecto->inm_prospecto_numero_nep;
-        $inm_prospecto->inm_prospecto_telefono_empresa  = $inm_prospecto_telefono_empresa;
-
-        return $inm_prospecto;
-    }
 
     final public function documentos(bool $header, bool $ws = false): array
     {
@@ -256,38 +218,20 @@ class controlador_inm_prospecto extends _ctl_formato {
     public function generales(bool $header, bool $ws = false): array|stdClass
     {
 
-        $inm_prospecto = (new inm_prospecto(link: $this->link))->registro(registro_id: $this->registro_id,retorno_obj: true);
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al obtener inm_prospecto',data:  $inm_prospecto, header: $header,ws:  $ws);
-        }
-
-
-        $inm_prospecto = $this->data_prospecto(inm_prospecto: $inm_prospecto);
+        $inm_prospecto = (new _generales())->inm_prospecto(inm_prospecto_id: $this->registro_id,link: $this->link);
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al ajusta prospecto',data:  $inm_prospecto, header: $header,ws:  $ws);
         }
+
 
         $this->registro = new stdClass();
         $this->registro->inm_prospecto = $inm_prospecto;
 
 
-        $inm_conyuge = new stdClass();
-
-        $inm_conyuge->inm_conyuge_nombre = '';
-        $inm_conyuge->inm_conyuge_apellido_paterno = '';
-        $inm_conyuge->inm_conyuge_apellido_materno = '';
-        $inm_conyuge->dp_municipio_descripcion = '';
-        $inm_conyuge->inm_conyuge_fecha_nacimiento = '';
-        $inm_conyuge->dp_estado_descripcion = '';
-        $inm_conyuge->inm_conyuge_edad = '';
-        $inm_conyuge->inm_conyuge_estado_civil= '';
-        $inm_conyuge->inm_nacionalidad_descripcion= '';
-        $inm_conyuge->inm_conyuge_curp= '';
-        $inm_conyuge->inm_conyuge_rfc= '';
-        $inm_conyuge->inm_ocupacion_descripcion= '';
-        $inm_conyuge->inm_conyuge_telefono_casa= '';
-        $inm_conyuge->inm_conyuge_telefono_celular= '';
-
+        $inm_conyuge = (new _generales())->inm_conyuge_init();
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al al inicializar inm_conyuge',data:  $inm_conyuge, header: $header,ws:  $ws);
+        }
 
         $existe_conyuge = (new inm_prospecto(link: $this->link))->existe_conyuge(inm_prospecto_id: $this->registro_id);
         if(errores::$error){
@@ -299,17 +243,18 @@ class controlador_inm_prospecto extends _ctl_formato {
             if (errores::$error) {
                 return $this->retorno_error(mensaje: 'Error al obtener inm_conyuge', data: $inm_conyuge, header: $header, ws: $ws);
             }
-            $inm_conyuge->inm_conyuge_edad = (new calculo())->edad_hoy(fecha_nacimiento: $inm_conyuge->inm_conyuge_fecha_nacimiento);
+            $edad = (new calculo())->edad_hoy(fecha_nacimiento: $inm_conyuge->inm_conyuge_fecha_nacimiento);
             if(errores::$error){
                 return $this->retorno_error(mensaje: 'Error al obtener edad',data:  $edad, header: $header,ws:  $ws);
             }
+            $inm_conyuge->inm_conyuge_edad = $edad;
             $inm_conyuge->inm_conyuge_edad.= ' AÑOS';
 
             $inm_conyuge->inm_conyuge_estado_civil= $inm_prospecto->inm_estado_civil_descripcion;
         }
 
 
-        $nombre_completo = $this->nombre_completo(name_entidad: 'inm_conyuge',row:  $inm_conyuge);
+        $nombre_completo = (new _generales())->nombre_completo(name_entidad: 'inm_conyuge',row:  $inm_conyuge);
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al obtener nombre_completo',data:  $nombre_completo, header: $header,ws:  $ws);
         }
@@ -317,7 +262,7 @@ class controlador_inm_prospecto extends _ctl_formato {
         $inm_conyuge->inm_conyuge_nombre_completo = $nombre_completo;
 
 
-        $lugar_fecha_nac = $this->data_nacimiento(entidad_edo: 'dp_estado', entidad_mun: 'dp_municipio', entidad_name: 'inm_conyuge', row: $inm_conyuge);
+        $lugar_fecha_nac = (new _generales())->data_nacimiento(entidad_edo: 'dp_estado', entidad_mun: 'dp_municipio', entidad_name: 'inm_conyuge', row: $inm_conyuge);
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al obtener lugar_fecha_nac',data:  $lugar_fecha_nac, header: $header,ws:  $ws);
         }
@@ -344,7 +289,7 @@ class controlador_inm_prospecto extends _ctl_formato {
             }
             foreach ($inm_beneficiarios as $inm_beneficiario){
 
-                $nombre_completo = $this->nombre_completo(name_entidad: 'inm_beneficiario',row:  $inm_beneficiario);
+                $nombre_completo = (new _generales())->nombre_completo(name_entidad: 'inm_beneficiario',row:  $inm_beneficiario);
                 if(errores::$error){
                     return $this->retorno_error(mensaje: 'Error al obtener nombre_completo',data:  $nombre_completo, header: $header,ws:  $ws);
                 }
@@ -367,7 +312,7 @@ class controlador_inm_prospecto extends _ctl_formato {
         }
 
         foreach ($inm_referencias as $indice => $inm_referencia){
-            $nombre_completo = $this->nombre_completo(name_entidad: 'inm_referencia_prospecto',row:  $inm_referencia);
+            $nombre_completo = (new _generales())->nombre_completo(name_entidad: 'inm_referencia_prospecto',row:  $inm_referencia);
             if(errores::$error){
                 return $this->retorno_error(mensaje: 'Error al obtener nombre_completo',data:  $nombre_completo, header: $header,ws:  $ws);
             }
@@ -732,17 +677,7 @@ class controlador_inm_prospecto extends _ctl_formato {
 
     }
 
-    private function nombre_completo(string $name_entidad, stdClass $row): string
-    {
-        $key_nombre = $name_entidad.'_nombre';
-        $key_apellido_paterno = $name_entidad.'_apellido_paterno';
-        $key_apellido_materno = $name_entidad.'_apellido_materno';
-        $nombre_completo = $row->$key_nombre;
-        $nombre_completo .= ' '.$row->$key_apellido_paterno;
-        $nombre_completo .= ' '.$row->$key_apellido_materno;
 
-        return trim($nombre_completo);
-    }
 
     public function regenera_curp(bool $header, bool $ws = false): array|string{
         $columnas[]  ='inm_prospecto_id';

@@ -1,0 +1,26 @@
+@media print {
+    .header{
+        display: none;
+    }
+    .breadcrumb{
+        display: none;
+    }
+    .page-title-big{
+        display: none;
+    }
+    .widget-header h2{
+        text-align: center;
+    }
+    hr {
+        margin-top: 0;
+        margin-bottom: 0;
+    }
+    .top-title {
+        padding: 0 0;
+    }
+    .footer .footer-bottom {
+        padding: 0 0;
+        display: none;
+    }
+
+}
