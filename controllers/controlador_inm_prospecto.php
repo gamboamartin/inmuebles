@@ -18,6 +18,7 @@ use gamboamartin\inmuebles\models\_inm_prospecto;
 use gamboamartin\inmuebles\models\inm_beneficiario;
 use gamboamartin\inmuebles\models\inm_prospecto;
 use gamboamartin\inmuebles\models\inm_referencia_prospecto;
+use gamboamartin\inmuebles\models\inm_tipo_beneficiario;
 use gamboamartin\system\links_menu;
 use gamboamartin\template\html;
 use html\doc_tipo_documento_html;
@@ -293,8 +294,37 @@ class controlador_inm_prospecto extends _ctl_formato {
         $inm_conyuge->inm_conyuge_lugar_fecha_nac .= ' '.$inm_conyuge->inm_conyuge_fecha_nacimiento;
 
 
+        $inm_tipo_beneficiarios = (new inm_tipo_beneficiario(link: $this->link))->registros_activos(retorno_obj: true);
+
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al obtener inm_tipo_beneficiarios',data:  $inm_tipo_beneficiarios,
+                header: $header,ws:  $ws);
+        }
+
+        $inm_beneficiarios = (new inm_prospecto(link: $this->link))->inm_beneficiarios(inm_prospecto_id: $this->registro_id);
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al obtener inm_beneficiarios',data:  $inm_beneficiarios,
+                header: $header,ws:  $ws);
+        }
+
+        foreach ($inm_tipo_beneficiarios as $indice=>$inm_tipo_beneficiario){
+            if(!isset($inm_tipo_beneficiario->inm_beneficiarios)){
+                $inm_tipo_beneficiario->inm_beneficiarios = array();
+            }
+            foreach ($inm_beneficiarios as $inm_beneficiario){
+                $inm_beneficiario->inm_beneficiario_nombre_completo = $inm_beneficiario->inm_beneficiario_nombre;
+                $inm_beneficiario->inm_beneficiario_nombre_completo .= ' '.$inm_beneficiario->inm_beneficiario_apellido_paterno;
+                $inm_beneficiario->inm_beneficiario_nombre_completo .= ' '.$inm_beneficiario->inm_beneficiario_apellido_materno;
+                if((int)$inm_beneficiario->inm_tipo_beneficiario_id === (int)$inm_tipo_beneficiario->inm_tipo_beneficiario_id){
+                    $inm_tipo_beneficiario->inm_beneficiarios[] = $inm_beneficiario;
+                }
+                $inm_tipo_beneficiarios[$indice] = $inm_tipo_beneficiario;
+            }
+        }
 
         $this->registro->inm_conyuge = $inm_conyuge;
+
+        $this->registro->inm_tipo_beneficiarios = $inm_tipo_beneficiarios;
 
 
         return new stdClass();

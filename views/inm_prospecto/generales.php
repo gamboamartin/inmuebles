@@ -43,7 +43,7 @@
                 </div>
 
                 <div  class="col-md-12">
-                    <h4>CONYUGE::</h4>
+                    <h4>CONYUGE:</h4>
                     <label>NOMBRE: </label> <?php echo $controlador->registro->inm_conyuge->inm_conyuge_nombre_completo; ?>
                     <br>
                     <label>LUGAR Y FECHA DE NACIMIENTO: </label> <?php echo $controlador->registro->inm_conyuge->inm_conyuge_lugar_fecha_nac; ?>
@@ -60,6 +60,28 @@
                     <br>
                     <label>TELEFONO CELULAR: </label> <?php echo $controlador->registro->inm_conyuge->inm_conyuge_telefono_celular; ?>
                 </div>
+
+                <div  class="col-md-12">
+                    <h4>BENEFICIARIOS:</h4>
+                    <label>NOTA: </label>
+                    Solo pueden designar como beneficiario a padres, hijos y/o esposa (o). En caso de unión
+                    libre no se puede designar al cónyuge como beneficiario. Cuando el crédito es conyugal deben de
+                    designar ambos a uno o dos beneficiarios.
+
+                </div>
+
+                <?php foreach ($controlador->registro->inm_tipo_beneficiarios as $inm_tipo_beneficiario){ ?>
+                <div  class="col-md-12">
+
+                    <h4>BENEFICIARIOS <?php echo $inm_tipo_beneficiario->inm_tipo_beneficiario_descripcion; ?>:</h4>
+
+                    <?php foreach ($inm_tipo_beneficiario->inm_beneficiarios as $inm_beneficiario){ ?>
+                    <label>NOMBRE: </label> <?php echo $inm_beneficiario->inm_beneficiario_nombre_completo; ?>
+                    <label>PARENTESCO: </label> <?php echo $inm_beneficiario->inm_parentesco_descripcion; ?>
+                    <?php } ?>
+
+                </div>
+                <?php } ?>
 
             </div>
 

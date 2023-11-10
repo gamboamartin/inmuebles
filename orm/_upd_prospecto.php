@@ -36,7 +36,7 @@ class _upd_prospecto{
      */
     private function ajusta_conyuge(stdClass $datos, int $inm_prospecto_id, PDO $link): array|stdClass
     {
-        if(!$datos->existe_conyuge) {
+        if(!$datos->existe) {
             $r_inm_rel_conyuge_prospecto_bd = $this->inserta_conyuge(conyuge: $datos->row,
                 inm_prospecto_id: $inm_prospecto_id,link: $link);
             if (errores::$error) {
@@ -46,7 +46,7 @@ class _upd_prospecto{
         }
         else{
             $r_modifica_conyuge = $this->modifica_conyuge(
-                conyuge: $datos->conyuge,inm_prospecto_id:  $inm_prospecto_id,link: $link);
+                conyuge: $datos->row,inm_prospecto_id:  $inm_prospecto_id,link: $link);
             if (errores::$error) {
                 return $this->error->error(mensaje: 'Error al modificar conyuge', data: $r_modifica_conyuge);
             }
