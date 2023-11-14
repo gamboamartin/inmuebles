@@ -178,8 +178,9 @@ class _inm_prospecto{
             if(isset($data['disabled'])){
                 $disabled = $data['disabled'];
             }
-            $keys_selects = $controlador->key_select(cols: $cols, con_registros: true,filtro: $filtro,
-                key: $identificador, keys_selects:$keys_selects, id_selected: $id_selected, label: $title,
+
+            $keys_selects = $controlador->key_select(cols: $cols, con_registros: true, filtro: $filtro,
+                key: $identificador, keys_selects: $keys_selects, id_selected: $id_selected, label: $title,
                 disabled: $disabled);
             if(errores::$error){
                 return $this->error->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
@@ -199,7 +200,8 @@ class _inm_prospecto{
             return $this->error->error(mensaje: 'Error al generar headers',data:  $headers);
         }
 
-        $headers = (new \gamboamartin\inmuebles\html\_base(html: $controlador->html_base))->genera_headers(controler: $controlador,headers:  $headers);
+        $headers = (new \gamboamartin\inmuebles\html\_base(html: $controlador->html_base))->genera_headers(
+            controler: $controlador,headers:  $headers);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al generar headers',data:  $headers);
         }

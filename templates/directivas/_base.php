@@ -310,7 +310,7 @@ class _base extends html_controler{
      * Genera un header para collapsibles
      * @param controlador_inm_comprador|controlador_inm_prospecto $controler Controlador en ejecucion
      * @param int $n_apartado No de apartado en frontend
-     * @param string $tag_header
+     * @param string $tag_header Tag a mostrar en div
      * @return array|stdClass
      */
     private function header_frontend(controlador_inm_comprador|controlador_inm_prospecto $controler,
