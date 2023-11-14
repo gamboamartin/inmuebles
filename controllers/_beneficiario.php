@@ -50,7 +50,7 @@ class _beneficiario{
 
         $modelo = new inm_parentesco(link: $controler->link);
         $inm_parentesco_id = $controler->html->select_catalogo(cols: 6, con_registros: true,
-            id_selected: $row_upd->inm_parentesco_id, modelo: $modelo, label: 'Perentesco',
+            id_selected: $row_upd->inm_parentesco_id, modelo: $modelo, label: 'Parentesco',
             name: 'beneficiario[inm_parentesco_id]');
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al obtener input',data:  $inm_parentesco_id);
