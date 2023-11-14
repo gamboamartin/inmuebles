@@ -111,7 +111,7 @@ class _referencia{
         $modelo = new dp_estado(link: $controler->link);
         $dp_estado_id = $controler->html->select_catalogo(cols: 6, con_registros: true,
             id_selected: $row_upd->dp_estado_id, modelo: $modelo, columns_ds: array('dp_estado_descripcion'),
-            label: 'Estado', name: 'referencia[dp_estado_id]');
+            id_css: 'referencia_dp_estado_id', label: 'Estado', name: 'referencia[dp_estado_id]');
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al obtener input',data:  $dp_estado_id);
         }
@@ -119,9 +119,9 @@ class _referencia{
         $referencia->dp_estado_id = $dp_estado_id;
 
         $modelo = new dp_municipio(link: $controler->link);
-        $dp_municipio_id = $controler->html->select_catalogo(cols: 6, con_registros: true,
+        $dp_municipio_id = $controler->html->select_catalogo(cols: 6, con_registros: false,
             id_selected: $row_upd->dp_municipio_id, modelo: $modelo, columns_ds: array('dp_municipio_descripcion'),
-            label: 'Municipio', name: 'referencia[dp_municipio_id]');
+            id_css: 'referencia_dp_municipio_id', label: 'Municipio', name: 'referencia[dp_municipio_id]');
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al obtener input',data:  $dp_municipio_id);
         }
@@ -129,9 +129,9 @@ class _referencia{
         $referencia->dp_municipio_id = $dp_municipio_id;
 
         $modelo = new dp_cp(link: $controler->link);
-        $dp_cp_id = $controler->html->select_catalogo(cols: 6, con_registros: true,
+        $dp_cp_id = $controler->html->select_catalogo(cols: 6, con_registros: false,
             id_selected: $row_upd->dp_cp_id, modelo: $modelo, columns_ds: array('dp_cp_descripcion'),
-            label: 'CP', name: 'referencia[dp_cp_id]');
+            id_css: 'referencia_dp_cp_id', label: 'CP', name: 'referencia[dp_cp_id]');
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al obtener input',data:  $dp_cp_id);
         }
@@ -139,9 +139,9 @@ class _referencia{
         $referencia->dp_cp_id = $dp_cp_id;
 
         $modelo = new dp_colonia_postal(link: $controler->link);
-        $dp_colonia_postal_id = $controler->html->select_catalogo(cols: 6, con_registros: true,
+        $dp_colonia_postal_id = $controler->html->select_catalogo(cols: 6, con_registros: false,
             id_selected: $row_upd->dp_colonia_postal_id, modelo: $modelo, columns_ds: array('dp_colonia_descripcion'),
-            label: 'Colonia', name: 'referencia[dp_colonia_postal_id]');
+            id_css: 'referencia_dp_colonia_postal_id', label: 'Colonia', name: 'referencia[dp_colonia_postal_id]');
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al obtener input',data:  $dp_colonia_postal_id);
         }
@@ -150,9 +150,9 @@ class _referencia{
 
 
         $modelo = new dp_calle_pertenece(link: $controler->link);
-        $dp_calle_pertenece_id = $controler->html->select_catalogo(cols: 12, con_registros: true,
+        $dp_calle_pertenece_id = $controler->html->select_catalogo(cols: 12, con_registros: false,
             id_selected: $row_upd->inm_parentesco_id, modelo: $modelo, columns_ds: array('dp_calle_descripcion'),
-            label: 'Calle', name: 'referencia[dp_calle_pertenece_id]');
+            id_css: 'referencia_dp_calle_pertenece_id', label: 'Calle', name: 'referencia[dp_calle_pertenece_id]');
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al obtener input',data:  $dp_calle_pertenece_id);
         }
