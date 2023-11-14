@@ -187,8 +187,13 @@ class _inm_prospecto{
         }
         return $keys_selects;
     }
-    
-    final public function headers_front(controlador_inm_prospecto $controlador){
+
+    /**
+     * @param controlador_inm_prospecto $controlador
+     * @return array
+     */
+    final public function headers_front(controlador_inm_prospecto $controlador): array
+    {
         $headers = $this->headers_prospecto();
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al generar headers',data:  $headers);
@@ -455,8 +460,13 @@ class _inm_prospecto{
 
         return $data;
     }
-    
-    final public function inputs_nacimiento(controlador_inm_prospecto $controlador){
+
+    /**
+     * @param controlador_inm_prospecto $controlador
+     * @return array|stdClass
+     */
+    final public function inputs_nacimiento(controlador_inm_prospecto $controlador): array|stdClass
+    {
         $dp_estado_nacimiento_id = (new dp_estado_html(html: $controlador->html_base))->select_dp_estado_id(cols: 6,
             con_registros: true, id_selected: $controlador->registro['dp_estado_nacimiento_id'], link: $controlador->link,
             label: 'Edo Nac', name: 'dp_estado_nacimiento_id');

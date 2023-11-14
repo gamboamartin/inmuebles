@@ -118,6 +118,7 @@ class controlador_inm_prospectoTest extends test {
         fclose($fp);
 
         $data = file_get_contents($file);
+       // print_r($data);exit;
         assertStringContainsStringIgnoringCase("Error no existe registro de inm_prospecto", $data);
 
         errores::$error = false;

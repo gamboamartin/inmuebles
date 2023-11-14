@@ -282,8 +282,14 @@ class _base extends html_controler{
         return $dp_pais_id;
     }
 
+    /**
+     * @param controlador_inm_comprador|controlador_inm_prospecto $controler
+     * @param array $headers
+     * @return array
+     */
     final public function genera_headers(controlador_inm_comprador|controlador_inm_prospecto $controler,
-                                         array $headers){
+                                         array $headers): array
+    {
         $data = array();
         foreach ($headers as $n_apartado=>$tag_header){
 
@@ -300,8 +306,16 @@ class _base extends html_controler{
         return $data;
     }
 
+    /**
+     * Genera un header para collapsibles
+     * @param controlador_inm_comprador|controlador_inm_prospecto $controler
+     * @param int $n_apartado
+     * @param string $tag_header
+     * @return array|stdClass
+     */
     private function header_frontend(controlador_inm_comprador|controlador_inm_prospecto $controler,
-                                     int $n_apartado, string $tag_header){
+                                     int $n_apartado, string $tag_header): array|stdClass
+    {
         $id_css_button = "collapse_a$n_apartado";
         $key_header = "apartado_$n_apartado";
 
@@ -316,6 +330,9 @@ class _base extends html_controler{
         return $controler->header_frontend;
     }
 
+    /**
+     * @return array
+     */
     private function headers_base(): array
     {
         $headers['1'] = '1. CRÉDITO SOLICITADO';
