@@ -37,6 +37,32 @@ class _baseTest extends test {
         $this->paths_conf->views = '/var/www/html/inmuebles/config/views.php';
     }
 
+    public function test_header_frontend(): void
+    {
+        errores::$error = false;
+
+        $_GET['seccion'] = 'inm_producto_infonavit';
+        $_GET['accion'] = 'lista';
+        $_SESSION['grupo_id'] = 1;
+        $_SESSION['usuario_id'] = 2;
+        $_GET['session_id'] = '1';
+
+        $html_ = new \gamboamartin\template_1\html();
+        $html = new _base($html_);
+        $html = new liberator($html);
+
+        $controler = new controlador_inm_comprador(link: $this->link, paths_conf: $this->paths_conf);
+        $controler->row_upd = new stdClass();
+        $controler->inputs = new stdClass();
+        $n_apartado = '1';
+        $tag_header = '';
+        $resultado = $html->header_frontend($controler, $n_apartado, $tag_header);
+        $this->assertIsObject($resultado);
+        $this->assertNotTrue(errores::$error);
+        $this->assertEquals("<div class='col-md-12'><hr><h4> <a class='btn btn-primary' role='button' id='collapse_a1'>Ver/Ocultar</a> </h4><hr></div>",$resultado->apartado_1);
+        errores::$error = false;
+    }
+
     public function test_inputs_alta(): void
     {
         errores::$error = false;

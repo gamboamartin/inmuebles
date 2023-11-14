@@ -312,6 +312,7 @@ class _base extends html_controler{
      * @param int $n_apartado No de apartado en frontend
      * @param string $tag_header Tag a mostrar en div
      * @return array|stdClass
+     * @version 2.313.2
      */
     private function header_frontend(controlador_inm_comprador|controlador_inm_prospecto $controler,
                                      int $n_apartado, string $tag_header): array|stdClass
