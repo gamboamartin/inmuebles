@@ -206,16 +206,17 @@ class _conversion{
         if($inm_comprador_id <= 0){
             return $this->error->error(mensaje: 'Error inm_comprador_id debe ser mayor a 0', data: $inm_comprador_id);
         }
+
         $inm_referencia_ins['inm_comprador_id'] = $inm_comprador_id;
-        $inm_referencia_ins['apellido_paterno'] = $inm_referencia_prospecto->apellido_paterno;
-        $inm_referencia_ins['apellido_materno'] = $inm_referencia_prospecto->apellido_materno;
-        $inm_referencia_ins['nombre'] = $inm_referencia_prospecto->nombre;
-        $inm_referencia_ins['lada'] =$inm_referencia_prospecto->lada;
-        $inm_referencia_ins['numero'] = $inm_referencia_prospecto->numero;
-        $inm_referencia_ins['celular'] = $inm_referencia_prospecto->celular;
-        $inm_referencia_ins['dp_calle_pertenece_id'] = $inm_referencia_prospecto->dp_calle_pertenece_id;
-        $inm_referencia_ins['inm_parentesco_id'] = $inm_referencia_prospecto->inm_parentesco_id;
-        $inm_referencia_ins['numero_dom'] = $inm_referencia_prospecto->numero_dom;
+        $inm_referencia_ins['apellido_paterno'] = $inm_referencia_prospecto->inm_referencia_prospecto_apellido_paterno;
+        $inm_referencia_ins['apellido_materno'] = $inm_referencia_prospecto->inm_referencia_prospecto_apellido_materno;
+        $inm_referencia_ins['nombre'] = $inm_referencia_prospecto->inm_referencia_prospecto_nombre;
+        $inm_referencia_ins['lada'] = $inm_referencia_prospecto->inm_referencia_prospecto_lada;
+        $inm_referencia_ins['numero'] = $inm_referencia_prospecto->inm_referencia_prospecto_numero;
+        $inm_referencia_ins['celular'] = $inm_referencia_prospecto->inm_referencia_prospecto_celular;
+        $inm_referencia_ins['dp_calle_pertenece_id'] = $inm_referencia_prospecto->inm_referencia_prospecto_dp_calle_pertenece_id;
+        $inm_referencia_ins['inm_parentesco_id'] = $inm_referencia_prospecto->inm_referencia_prospecto_inm_parentesco_id;
+        $inm_referencia_ins['numero_dom'] = $inm_referencia_prospecto->inm_referencia_prospecto_numero_dom;
 
         return $inm_referencia_ins;
     }
@@ -304,7 +305,7 @@ class _conversion{
 
         $r_alta_rels = array();
         if($inm_referencia_prospecto->n_registros > 0){
-            foreach ($inm_referencia_prospecto->registros as $registro){
+            foreach ($inm_referencia_prospecto->registros_obj as $registro){
                 $inm_referencia_ins = $this->inm_referencia(
                     inm_comprador_id: $inm_comprador_id, inm_referencia_prospecto: $registro);
                 if (errores::$error) {
