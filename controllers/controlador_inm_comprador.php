@@ -15,6 +15,7 @@ use gamboamartin\inmuebles\html\inm_comprador_html;
 use gamboamartin\inmuebles\html\inm_referencia_html;
 use gamboamartin\inmuebles\models\_base_paquete;
 use gamboamartin\inmuebles\models\_inm_comprador;
+use gamboamartin\inmuebles\models\_upd_prospecto;
 use gamboamartin\inmuebles\models\inm_beneficiario;
 use gamboamartin\inmuebles\models\inm_comprador;
 use gamboamartin\inmuebles\models\inm_conyuge;
@@ -766,10 +767,16 @@ class controlador_inm_comprador extends _ctl_base {
                 return $this->retorno_error(mensaje: 'Error al obtener inm_prospecto', data: $inm_prospecto, header: $header, ws: $ws);
             }
 
-            $result_conyuge = (new inm_prospecto(link: $this->link))->transacciona_conyuge(inm_prospecto_id: $inm_prospecto->inm_prospecto_id);
+            $result_conyuge =  (new _upd_prospecto())->transacciona_conyuge(inm_prospecto_id: $inm_prospecto->inm_prospecto_id,link: $this->link);
             if (errores::$error) {
                 $this->link->rollBack();
                 return $this->retorno_error(mensaje: 'Error al insertar conyuge', data: $result_conyuge,
+                    header: $header, ws: $ws);
+            }
+
+            $result_beneficiario = (new _upd_prospecto())->transacciona_beneficiario(inm_prospecto_id: $inm_prospecto->inm_prospecto_id,link: $this->link);
+            if (errores::$error) {
+                return $this->retorno_error(mensaje: 'Error al insertar beneficiario', data: $result_beneficiario,
                     header: $header, ws: $ws);
             }
         }
