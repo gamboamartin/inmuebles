@@ -139,6 +139,7 @@ class _inm_comprador{
         $headers['14'] = '14. CONTROL INTERNO';
         $headers['15'] = '15. DATOS CONYUGE';
         $headers['16'] = '16. BENEFICIARIOS';
+        $headers['17'] = '17. REFERENCIAS';
 
         return $headers;
     }
