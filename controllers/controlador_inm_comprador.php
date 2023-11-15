@@ -772,7 +772,7 @@ class controlador_inm_comprador extends _ctl_base {
         $referencia_prospectos = $r_inm_referencia_prospecto->registros;
 
         $referencia_prospectos = (new _inm_prospecto())->rows(controlador: $controlador_inm_prospecto,
-            datas: $referencia_prospectos,params:  $params, seccion_exe: 'inm_referencia_prospecto');
+            datas: $referencia_prospectos,params:  $params, seccion_exe: 'inm_referencia');
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al obtener beneficiarios link del',data:  $referencia_prospectos,
                 header: $header,ws:  $ws);
