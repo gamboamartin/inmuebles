@@ -200,6 +200,26 @@ class _conversion{
         return $inm_rel_prospecto_cliente_ins;
     }
 
+
+    private function inm_referencia(int $inm_comprador_id, stdClass $inm_referencia_prospecto): array
+    {
+        if($inm_comprador_id <= 0){
+            return $this->error->error(mensaje: 'Error inm_comprador_id debe ser mayor a 0', data: $inm_comprador_id);
+        }
+        $inm_referencia_ins['inm_comprador_id'] = $inm_comprador_id;
+        $inm_referencia_ins['apellido_paterno'] = $inm_referencia_prospecto->apellido_paterno;
+        $inm_referencia_ins['apellido_materno'] = $inm_referencia_prospecto->apellido_materno;
+        $inm_referencia_ins['nombre'] = $inm_referencia_prospecto->nombre;
+        $inm_referencia_ins['lada'] =$inm_referencia_prospecto->lada;
+        $inm_referencia_ins['numero'] = $inm_referencia_prospecto->numero;
+        $inm_referencia_ins['celular'] = $inm_referencia_prospecto->celular;
+        $inm_referencia_ins['dp_calle_pertenece_id'] = $inm_referencia_prospecto->dp_calle_pertenece_id;
+        $inm_referencia_ins['inm_parentesco_id'] = $inm_referencia_prospecto->inm_parentesco_id;
+        $inm_referencia_ins['numero_dom'] = $inm_referencia_prospecto->numero_dom;
+
+        return $inm_referencia_ins;
+    }
+
     /**
      * Inserta un comprador
      * @param int $inm_prospecto_id Identificador de prospecto
@@ -265,6 +285,40 @@ class _conversion{
             return $this->error->error(mensaje: 'Error al insertar inm_rel_prospecto_cliente_ins', data: $r_alta_rel);
         }
         return $r_alta_rel;
+    }
+
+    public function inserta_referencia(int $inm_comprador_id, int $inm_prospecto_id, PDO $link): array|stdClass
+    {
+        if ($inm_prospecto_id <= 0) {
+            return $this->error->error(mensaje: 'Error inm_prospecto_id debe ser mayor a 0', data: $inm_prospecto_id);
+        }
+        if ($inm_comprador_id <= 0) {
+            return $this->error->error(mensaje: 'Error inm_comprador_id debe ser mayor a 0', data: $inm_comprador_id);
+        }
+
+        $filtro['inm_prospecto.id'] = $inm_prospecto_id;
+        $inm_referencia_prospecto = (new inm_referencia_prospecto(link: $link))->filtro_and(filtro: $filtro);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al obtener prospecto', data: $inm_referencia_prospecto);
+        }
+
+        $r_alta_rels = array();
+        if($inm_referencia_prospecto->n_registros > 0){
+            foreach ($inm_referencia_prospecto->registros as $registro){
+                $inm_referencia_ins = $this->inm_referencia(
+                    inm_comprador_id: $inm_comprador_id, inm_referencia_prospecto: $registro);
+                if (errores::$error) {
+                    return $this->error->error(mensaje: 'Error al insertar relacion', data: $inm_referencia_ins);
+                }
+
+                $r_alta_rel = (new inm_referencia(link: $link))->alta_registro(registro: $inm_referencia_ins);
+                if(errores::$error){
+                    return $this->error->error(mensaje: 'Error al insertar inm_rel_prospecto_cliente_ins', data: $r_alta_rel);
+                }
+                $r_alta_rels[] = $r_alta_rel;
+            }
+        }
+        return $r_alta_rels;
     }
 
     /**
