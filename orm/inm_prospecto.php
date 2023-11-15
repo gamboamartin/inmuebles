@@ -36,20 +36,17 @@ class inm_prospecto extends _modelo_parent{
             exit;
         }
 
-        $sql = "(SELECT IF(adm_usuario.id = $_SESSION[usuario_id], $_SESSION[usuario_id], -1))";
-        if(!isset($_SESSION['adm_grupo_root'])) {
-            $adm_usuario = (new adm_usuario(link: $link))->registro(registro_id: $_SESSION['usuario_id'],
-                columnas: array('adm_grupo_root'));
-            if (errores::$error) {
-                $error = (new errores())->error(mensaje: 'Error al obtener adm_usuario ', data: $adm_usuario);
-                print_r($error);
-                exit;
-            }
+        $adm_usuario = (new adm_usuario(link: $link))->registro(registro_id: $_SESSION['usuario_id'],
+            columnas: array('adm_grupo_root'));
+        if(errores::$error){
+            $error = (new errores())->error(mensaje: 'Error al obtener adm_usuario ',data:  $adm_usuario);
+            print_r($error);
+            exit;
+        }
 
-            if ($adm_usuario['adm_grupo_root'] === 'activo') {
-                $_SESSION['adm_grupo_root'] = 'activo';
-                $sql = $_SESSION['usuario_id'];
-            }
+        $sql = "(SELECT IF(adm_usuario.id = $_SESSION[usuario_id], $_SESSION[usuario_id], -1))";
+        if($adm_usuario['adm_grupo_root'] === 'activo'){
+            $sql = $_SESSION['usuario_id'];
         }
         $columnas_extra['usuario_permitido_id'] = $sql;
 
