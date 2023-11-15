@@ -21,6 +21,7 @@ use gamboamartin\inmuebles\models\inm_comprador;
 use gamboamartin\inmuebles\models\inm_conyuge;
 use gamboamartin\inmuebles\models\inm_prospecto;
 use gamboamartin\inmuebles\models\inm_referencia;
+use gamboamartin\inmuebles\models\inm_referencia_prospecto;
 use gamboamartin\inmuebles\models\inm_ubicacion;
 use gamboamartin\system\_ctl_base;
 use gamboamartin\system\actions;
@@ -54,6 +55,7 @@ class controlador_inm_comprador extends _ctl_base {
 
     public array $inm_referencias = array();
     public array $beneficiarios = array();
+    public array $referencias = array();
 
 
 
@@ -746,6 +748,37 @@ class controlador_inm_comprador extends _ctl_base {
         }
 
         $this->beneficiarios = $beneficiarios;
+
+        $referencia = (new _referencia())->inputs_referencia(controler: $controlador_inm_prospecto);
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al obtener referencias',data:  $referencia,
+                header: $header,ws:  $ws);
+        }
+        $this->inputs->referencia = $referencia;
+        $filtro_ref['inm_comprador.id'] = $this->registro_id;
+        $r_inm_referencia_prospecto = (new inm_referencia(link: $this->link))->filtro_and(filtro: $filtro_ref);
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al obtener referencia_prospectos',data:  $r_inm_referencia_prospecto,
+                header: $header,ws:  $ws);
+        }
+
+        $params = (new _inm_prospecto())->params_btn(accion_retorno: __FUNCTION__,
+            registro_id:  $this->registro_id,seccion_retorno:  $this->tabla);
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al obtener params',data:  $params,
+                header: $header,ws:  $ws);
+        }
+
+        $referencia_prospectos = $r_inm_referencia_prospecto->registros;
+
+        $referencia_prospectos = (new _inm_prospecto())->rows(controlador: $controlador_inm_prospecto,
+            datas: $referencia_prospectos,params:  $params, seccion_exe: 'inm_referencia_prospecto');
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al obtener beneficiarios link del',data:  $referencia_prospectos,
+                header: $header,ws:  $ws);
+        }
+
+        $this->referencias = $referencia_prospectos;
 
 
         return $r_modifica;
