@@ -13,19 +13,19 @@ class inm_referencia extends _modelo_parent{
     public function __construct(PDO $link)
     {
         $tabla = 'inm_referencia';
-        $columnas = array($tabla=>false,'inm_comprador'=>$tabla, 'dp_calle_pertenece'=>$tabla,
+        $columnas = array($tabla=>false, 'inm_parentesco'=>$tabla, 'inm_comprador'=>$tabla, 'dp_calle_pertenece'=>$tabla,
             'dp_colonia_postal'=>'dp_calle_pertenece','dp_cp'=>'dp_colonia_postal','dp_municipio'=>'dp_cp',
             'dp_estado'=>'dp_municipio','dp_pais'=>'dp_estado','dp_colonia'=>'dp_colonia_postal',
             'dp_calle'=>'dp_calle_pertenece');
 
         $campos_obligatorios = array('inm_comprador_id','apellido_paterno', 'nombre','lada', 'numero', 'celular',
-            'dp_calle_pertenece_id','numero_dom');
+            'dp_calle_pertenece_id','numero_dom','inm_parentesco_id');
 
         $columnas_extra= array();
         $renombres= array();
 
         $atributos_criticos = array('inm_comprador_id','apellido_paterno','apellido_materno', 'nombre','lada',
-            'numero', 'celular','dp_calle_pertenece_id','numero_dom');
+            'numero', 'celular','dp_calle_pertenece_id','inm_parentesco_id','numero_dom');
 
         $tipo_campos['lada'] = 'lada';
         $tipo_campos['numero'] = 'tel_sin_lada';
