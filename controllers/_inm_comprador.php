@@ -138,6 +138,7 @@ class _inm_comprador{
         $headers['13'] = '13. DATOS FISCALES PARA FACTURACION';
         $headers['14'] = '14. CONTROL INTERNO';
         $headers['15'] = '15. DATOS CONYUGE';
+        $headers['16'] = '16. BENEFICIARIOS';
 
         return $headers;
     }

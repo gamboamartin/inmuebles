@@ -15,6 +15,7 @@ use gamboamartin\inmuebles\html\inm_comprador_html;
 use gamboamartin\inmuebles\html\inm_referencia_html;
 use gamboamartin\inmuebles\models\_base_paquete;
 use gamboamartin\inmuebles\models\_inm_comprador;
+use gamboamartin\inmuebles\models\inm_beneficiario;
 use gamboamartin\inmuebles\models\inm_comprador;
 use gamboamartin\inmuebles\models\inm_conyuge;
 use gamboamartin\inmuebles\models\inm_prospecto;
@@ -51,6 +52,7 @@ class controlador_inm_comprador extends _ctl_base {
     public bool $aplica_seccion_co_acreditado = false;
 
     public array $inm_referencias = array();
+    public array $beneficiarios = array();
 
 
 
@@ -710,6 +712,39 @@ class controlador_inm_comprador extends _ctl_base {
         }
 
         $this->inputs->conyuge = $conyuge;
+
+        $beneficiario = (new _beneficiario())->inputs_beneficiario(controler: $controlador_inm_prospecto);
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al obtener beneficiario',data:  $beneficiario,
+                header: $header,ws:  $ws);
+        }
+
+        $this->inputs->beneficiario = $beneficiario;
+
+        $filtro_ben['inm_prospecto.id'] = $inm_prospecto_id;
+        $r_inm_beneficiario = (new inm_beneficiario(link: $this->link))->filtro_and(filtro: $filtro_ben);
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al obtener beneficiarios',data:  $r_inm_beneficiario,
+                header: $header,ws:  $ws);
+        }
+
+        $params = (new _inm_prospecto())->params_btn(accion_retorno: __FUNCTION__,
+            registro_id:  $this->registro_id,seccion_retorno:  $this->tabla);
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al obtener params',data:  $params,
+                header: $header,ws:  $ws);
+        }
+
+        $beneficiarios = $r_inm_beneficiario->registros;
+
+        $beneficiarios = (new _inm_prospecto())->rows(controlador: $controlador_inm_prospecto,
+            datas: $beneficiarios,params:  $params, seccion_exe: 'inm_beneficiario');
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al obtener beneficiarios link del',data:  $beneficiarios,
+                header: $header,ws:  $ws);
+        }
+
+        $this->beneficiarios = $beneficiarios;
 
 
         return $r_modifica;
