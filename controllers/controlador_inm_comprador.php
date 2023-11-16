@@ -823,6 +823,12 @@ class controlador_inm_comprador extends _ctl_base {
             if(isset($_POST['conyuge'])){
                 unset($_POST['conyuge']);
             }
+            if(isset($_POST['beneficiario'])){
+                unset($_POST['beneficiario']);
+            }
+            if(isset($_POST['referencia'])){
+                unset($_POST['referencia']);
+            }
         }
 
 
