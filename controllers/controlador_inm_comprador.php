@@ -755,8 +755,8 @@ class controlador_inm_comprador extends _ctl_base {
                 header: $header,ws:  $ws);
         }
         $this->inputs->referencia = $referencia;
-        $filtro_ref['inm_comprador.id'] = $this->registro_id;
-        $r_inm_referencia_prospecto = (new inm_referencia(link: $this->link))->filtro_and(filtro: $filtro_ref);
+
+        $r_inm_referencia_prospecto = (new inm_referencia_prospecto(link: $this->link))->filtro_and(filtro: $filtro_ben);
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al obtener referencia_prospectos',data:  $r_inm_referencia_prospecto,
                 header: $header,ws:  $ws);
@@ -772,7 +772,7 @@ class controlador_inm_comprador extends _ctl_base {
         $referencia_prospectos = $r_inm_referencia_prospecto->registros;
 
         $referencia_prospectos = (new _inm_prospecto())->rows(controlador: $controlador_inm_prospecto,
-            datas: $referencia_prospectos,params:  $params, seccion_exe: 'inm_referencia');
+            datas: $referencia_prospectos,params:  $params, seccion_exe: 'inm_referencia_prospecto');
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al obtener beneficiarios link del',data:  $referencia_prospectos,
                 header: $header,ws:  $ws);
@@ -810,6 +810,12 @@ class controlador_inm_comprador extends _ctl_base {
             $result_beneficiario = (new _upd_prospecto())->transacciona_beneficiario(inm_prospecto_id: $inm_prospecto->inm_prospecto_id,link: $this->link);
             if (errores::$error) {
                 return $this->retorno_error(mensaje: 'Error al insertar beneficiario', data: $result_beneficiario,
+                    header: $header, ws: $ws);
+            }
+
+            $result_referencia = (new _upd_prospecto())->transacciona_referencia(inm_prospecto_id:  $inm_prospecto->inm_prospecto_id,link: $this->link);
+            if (errores::$error) {
+                return $this->retorno_error(mensaje: 'Error al insertar referencia', data: $result_referencia,
                     header: $header, ws: $ws);
             }
         }

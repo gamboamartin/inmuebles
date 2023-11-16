@@ -302,12 +302,12 @@ if($controlador->row_upd->genero === 'F'){
             <tbody>
             <?php foreach ($controlador->referencias as $referencia){ ?>
                 <tr>
-                    <td><?php echo $referencia['inm_referencia_id']; ?></td>
-                    <td><?php echo $referencia['inm_referencia_nombre']; ?></td>
-                    <td><?php echo $referencia['inm_referencia_apellido_paterno']; ?></td>
-                    <td><?php echo $referencia['inm_referencia_apellido_materno']; ?></td>
+                    <td><?php echo $referencia['inm_referencia_prospecto_id']; ?></td>
+                    <td><?php echo $referencia['inm_referencia_prospecto_nombre']; ?></td>
+                    <td><?php echo $referencia['inm_referencia_prospecto_apellido_paterno']; ?></td>
+                    <td><?php echo $referencia['inm_referencia_prospecto_apellido_materno']; ?></td>
                     <td><?php echo $referencia['inm_parentesco_descripcion']; ?></td>
-                    <td><?php echo $referencia['inm_referencia_celular']; ?></td>
+                    <td><?php echo $referencia['inm_referencia_prospecto_celular']; ?></td>
                     <td><?php echo $referencia['btn_del']; ?></td>
                 </tr>
             <?php } ?>
