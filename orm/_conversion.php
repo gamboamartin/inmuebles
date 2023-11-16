@@ -254,6 +254,109 @@ class _conversion{
         return $r_alta_comprador;
     }
 
+    public function inserta_inm_prospecto(int $inm_comprador_id, inm_comprador $modelo): array|stdClass
+    {
+        if($inm_comprador_id<=0){
+            return $this->error->error(mensaje: 'Error inm_prospecto_id es menor a 0', data: $inm_comprador_id);
+        }
+
+        $data = $this->data_comprador(inm_comprador_id: $inm_comprador_id,modelo: $modelo);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al obtener prospecto', data: $data);
+        }
+
+        $inm_prospecto_ins = $this->inm_prospecto_ins(data: $data,link: $modelo->link);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al obtener id_pref', data: $inm_prospecto_ins);
+        }
+
+        $r_alta_prospecto = (new inm_prospecto(link: $modelo->link))->alta_registro(registro: $inm_prospecto_ins);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al insertar cliente', data: $r_alta_prospecto);
+        }
+
+        return $r_alta_prospecto;
+    }
+
+    private function data_comprador(int $inm_comprador_id, inm_comprador $modelo): array|stdClass
+    {
+        if($inm_comprador_id<=0){
+            return $this->error->error(mensaje: 'Error inm_comprador_id es menor a 0', data: $inm_comprador_id);
+        }
+
+        $inm_comprador = $modelo->registro(registro_id: $inm_comprador_id, columnas_en_bruto: true, retorno_obj: true);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al obtener comprador', data: $inm_comprador);
+        }
+
+        $data = new stdClass();
+        $data->inm_comprador = $inm_comprador;
+
+        return $data;
+    }
+
+    private function inm_prospecto_ins(stdClass $data, PDO $link): array
+    {
+        if(!isset($data->inm_comprador)){
+            return $this->error->error(mensaje: 'Error $data->inm_prospecto no existe', data: $data);
+        }
+        if(!is_object($data->inm_comprador)){
+            return $this->error->error(mensaje: 'Error $data->inm_prospecto debe ser un objeto', data: $data);
+        }
+
+        $keys = $this->keys_data_comprador();
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al obtener keys', data: $keys);
+        }
+
+        $inm_prospecto_ins = $this->inm_prospecto_ins_init(data: $data,keys:  $keys);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al inicializar inm_prospecto', data: $inm_prospecto_ins);
+        }
+
+        return $inm_prospecto_ins;
+    }
+
+    private function inm_prospecto_ins_init(stdClass $data, array $keys): array
+    {
+        if(!isset($data->inm_comprador)){
+            return $this->error->error(mensaje: 'Error $data->inm_prospecto no existe', data: $data);
+        }
+        if(!is_object($data->inm_comprador)){
+            return $this->error->error(mensaje: 'Error $data->inm_prospecto debe ser un objeto', data: $data);
+        }
+
+        $inm_prospecto_ins = array();
+        foreach ($keys as $key){
+            $key = trim($key);
+            if($key === ''){
+                return $this->error->error(mensaje: 'Error key esta vacio', data: $key);
+            }
+            if(is_numeric($key)){
+                return $this->error->error(mensaje: 'Error key debe ser un texto', data: $key);
+            }
+            if(!isset($data->inm_comprador->$key)){
+                return $this->error->error(mensaje: 'Error no existe atributo', data: $key);
+            }
+
+            $inm_prospecto_ins[$key] = $data->inm_comprador->$key;
+        }
+        return $inm_prospecto_ins;
+    }
+
+    private function keys_data_comprador(): array
+    {
+        return array('inm_producto_infonavit_id','inm_attr_tipo_credito_id','inm_destino_credito_id',
+            'es_segundo_credito','inm_plazo_credito_sc_id','descuento_pension_alimenticia_dh',
+            'descuento_pension_alimenticia_fc','monto_credito_solicitado_dh','monto_ahorro_voluntario','nss','curp',
+            'nombre','apellido_paterno','apellido_materno','con_discapacidad','nombre_empresa_patron','nrp_nep',
+            'lada_nep','numero_nep','extension_nep','lada_com','numero_com','cel_com','genero','correo_com',
+            'inm_tipo_discapacidad_id','inm_persona_discapacidad_id','inm_estado_civil_id',
+            'inm_institucion_hipotecaria_id','inm_sindicato_id','dp_municipio_nacimiento_id','fecha_nacimiento',
+            'sub_cuenta','monto_final','descuento','puntos','inm_nacionalidad_id','inm_ocupacion_id','telefono_casa',
+            'correo_empresa');
+    }
+
     /**
      * Inserta una relacion entre prospecto y cliente
      * @param int $inm_comprador_id Identificador de comprador
