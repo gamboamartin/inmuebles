@@ -1,6 +1,8 @@
 <?php
 namespace gamboamartin\inmuebles\models;
+use gamboamartin\comercial\models\com_agente;
 use gamboamartin\comercial\models\com_cliente;
+use gamboamartin\comercial\models\com_tipo_prospecto;
 use gamboamartin\errores\errores;
 use gamboamartin\validacion\validacion;
 use PDO;
@@ -312,6 +314,35 @@ class _conversion{
         $inm_prospecto_ins = $this->inm_prospecto_ins_init(data: $data,keys:  $keys);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al inicializar inm_prospecto', data: $inm_prospecto_ins);
+        }
+
+        $inm_prospecto_ins['razon_social'] = $data->inm_comprador->nombre." ".$data->inm_comprador->apellido_paterno." ".
+            $data->inm_comprador->apellido_materno;
+
+        if(!isset($data->inm_comprador->com_agente_id)) {
+            $filtro['com_agente.predeterminado'] = 'activo';
+            $r_com_agente = (new com_agente($link))->filtro_and(filtro: $filtro);
+            if (errores::$error) {
+                return $this->error->error(mensaje: 'Error al obtener agente default', data: $r_com_agente);
+            }
+            if($r_com_agente->n_registros <= 0){
+                return $this->error->error(mensaje: 'Error no existe agente predeterminado', data: $r_com_agente);
+            }
+
+            $inm_prospecto_ins['com_agente_id'] = $r_com_agente->registros[0]['com_agente_id'];
+        }
+
+        if(!isset($data->inm_comprador->com_tipo_prospecto_id)) {
+            $filtro_tipo['com_tipo_prospecto.predeterminado'] = 'activo';
+            $r_com_tipo_prospecto = (new com_tipo_prospecto($link))->filtro_and(filtro: $filtro_tipo);
+            if (errores::$error) {
+                return $this->error->error(mensaje: 'Error al obtener agente default', data: $r_com_tipo_prospecto);
+            }
+            if($r_com_tipo_prospecto->n_registros <= 0){
+                return $this->error->error(mensaje: 'Error no existe agente predeterminado', data: $r_com_tipo_prospecto);
+            }
+
+            $inm_prospecto_ins['com_tipo_prospecto_id'] = $r_com_tipo_prospecto->registros[0]['com_tipo_prospecto_id'];
         }
 
         return $inm_prospecto_ins;
