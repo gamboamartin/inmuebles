@@ -285,7 +285,7 @@ class _base extends html_controler{
     /**
      * Genera los encabezados para las vistas de prospeccion y clientes
      * @param controlador_inm_comprador|controlador_inm_prospecto $controler
-     * @param array $headers
+     * @param array $headers Conjunto de datos para ser mostrados en Frontend
      * @return array
      */
     final public function genera_headers(controlador_inm_comprador|controlador_inm_prospecto $controler,

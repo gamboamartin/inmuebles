@@ -190,6 +190,7 @@ class _inm_prospecto{
     }
 
     /**
+     * Genera los headers para ser mostrados en front por seccion
      * @param controlador_inm_prospecto $controlador
      * @return array
      */
@@ -464,6 +465,7 @@ class _inm_prospecto{
     }
 
     /**
+     * Genera los inputs de nacimiento
      * @param controlador_inm_prospecto $controlador
      * @return array|stdClass
      */
