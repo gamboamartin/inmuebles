@@ -64,6 +64,7 @@
         "gamboa.martin/notificaciones": "^9.0.0",
         "gamboa.martin/facturacion": "^18.0.0",
         "gamboa.martin/banco": "^7.0.0",
+        "gamboa.martin/comisiones": "^1.0.0",
       "ext-openssl": "*",
       "ext-mbstring": "*"
     },
