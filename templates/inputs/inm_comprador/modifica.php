@@ -233,6 +233,90 @@ if($controlador->row_upd->genero === 'F'){
     <?php echo $controlador->inputs->conyuge->telefono_celular;  ?>
 </div>
 
+<?php echo $controlador->header_frontend->apartado_16; ?>
+<div  id="apartado_16">
+    <?php echo $controlador->inputs->beneficiario->inm_tipo_beneficiario_id; ?>
+    <?php echo $controlador->inputs->beneficiario->inm_parentesco_id; ?>
+    <?php echo $controlador->inputs->beneficiario->nombre; ?>
+    <?php echo $controlador->inputs->beneficiario->apellido_paterno; ?>
+    <?php echo $controlador->inputs->beneficiario->apellido_materno; ?>
+    <div class="col-md-12 table-responsive">
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>Id</th>
+                <th>Tipo Beneficiario</th>
+                <th>Parentesco</th>
+                <th>Nombre</th>
+                <th>Apellido Paterno</th>
+                <th>Apellido Materno</th>
+                <th>Elimina</th>
+            </tr>
+            </thead>
+            <tbody>
+            <?php foreach ($controlador->beneficiarios as $beneficiario){ ?>
+                <tr>
+                    <td><?php echo $beneficiario['inm_beneficiario_id']; ?></td>
+                    <td><?php echo $beneficiario['inm_tipo_beneficiario_descripcion']; ?></td>
+                    <td><?php echo $beneficiario['inm_parentesco_descripcion']; ?></td>
+                    <td><?php echo $beneficiario['inm_beneficiario_nombre']; ?></td>
+                    <td><?php echo $beneficiario['inm_beneficiario_apellido_paterno']; ?></td>
+                    <td><?php echo $beneficiario['inm_beneficiario_apellido_materno']; ?></td>
+                    <td><?php echo $beneficiario['btn_del']; ?></td>
+                </tr>
+            <?php } ?>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+<?php echo $controlador->header_frontend->apartado_17; ?>
+<div  id="apartado_17">
+    <?php echo $controlador->inputs->referencia->nombre; ?>
+    <?php echo $controlador->inputs->referencia->apellido_paterno; ?>
+    <?php echo $controlador->inputs->referencia->apellido_materno; ?>
+    <?php echo $controlador->inputs->referencia->lada; ?>
+    <?php echo $controlador->inputs->referencia->numero; ?>
+    <?php echo $controlador->inputs->referencia->celular; ?>
+    <?php echo $controlador->inputs->referencia->dp_estado_id; ?>
+    <?php echo $controlador->inputs->referencia->dp_municipio_id; ?>
+    <?php echo $controlador->inputs->referencia->dp_cp_id; ?>
+    <?php echo $controlador->inputs->referencia->dp_colonia_postal_id; ?>
+    <?php echo $controlador->inputs->referencia->dp_calle_pertenece_id; ?>
+    <?php echo $controlador->inputs->referencia->numero_dom; ?>
+    <?php echo $controlador->inputs->referencia->inm_parentesco_id; ?>
+    <div class="col-md-12 table-responsive">
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>Id</th>
+                <th>Nombre</th>
+                <th>AP</th>
+                <th>AM</th>
+                <th>Parentesto</th>
+                <th>Celular</th>
+                <th>Elimina</th>
+            </tr>
+            </thead>
+            <tbody>
+            <?php foreach ($controlador->referencias as $referencia){ ?>
+                <tr>
+                    <td><?php echo $referencia['inm_referencia_prospecto_id']; ?></td>
+                    <td><?php echo $referencia['inm_referencia_prospecto_nombre']; ?></td>
+                    <td><?php echo $referencia['inm_referencia_prospecto_apellido_paterno']; ?></td>
+                    <td><?php echo $referencia['inm_referencia_prospecto_apellido_materno']; ?></td>
+                    <td><?php echo $referencia['inm_parentesco_descripcion']; ?></td>
+                    <td><?php echo $referencia['inm_referencia_prospecto_celular']; ?></td>
+                    <td><?php echo $referencia['btn_del']; ?></td>
+                </tr>
+            <?php } ?>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
 <?php echo $controlador->btn; ?>
 
 

@@ -15,10 +15,13 @@ use gamboamartin\inmuebles\html\inm_comprador_html;
 use gamboamartin\inmuebles\html\inm_referencia_html;
 use gamboamartin\inmuebles\models\_base_paquete;
 use gamboamartin\inmuebles\models\_inm_comprador;
+use gamboamartin\inmuebles\models\_upd_prospecto;
+use gamboamartin\inmuebles\models\inm_beneficiario;
 use gamboamartin\inmuebles\models\inm_comprador;
 use gamboamartin\inmuebles\models\inm_conyuge;
 use gamboamartin\inmuebles\models\inm_prospecto;
 use gamboamartin\inmuebles\models\inm_referencia;
+use gamboamartin\inmuebles\models\inm_referencia_prospecto;
 use gamboamartin\inmuebles\models\inm_ubicacion;
 use gamboamartin\system\_ctl_base;
 use gamboamartin\system\actions;
@@ -51,6 +54,8 @@ class controlador_inm_comprador extends _ctl_base {
     public bool $aplica_seccion_co_acreditado = false;
 
     public array $inm_referencias = array();
+    public array $beneficiarios = array();
+    public array $referencias = array();
 
 
 
@@ -711,6 +716,70 @@ class controlador_inm_comprador extends _ctl_base {
 
         $this->inputs->conyuge = $conyuge;
 
+        $beneficiario = (new _beneficiario())->inputs_beneficiario(controler: $controlador_inm_prospecto);
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al obtener beneficiario',data:  $beneficiario,
+                header: $header,ws:  $ws);
+        }
+
+        $this->inputs->beneficiario = $beneficiario;
+
+        $filtro_ben['inm_prospecto.id'] = $inm_prospecto_id;
+        $r_inm_beneficiario = (new inm_beneficiario(link: $this->link))->filtro_and(filtro: $filtro_ben);
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al obtener beneficiarios',data:  $r_inm_beneficiario,
+                header: $header,ws:  $ws);
+        }
+
+        $params = (new _inm_prospecto())->params_btn(accion_retorno: __FUNCTION__,
+            registro_id:  $this->registro_id,seccion_retorno:  $this->tabla);
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al obtener params',data:  $params,
+                header: $header,ws:  $ws);
+        }
+
+        $beneficiarios = $r_inm_beneficiario->registros;
+
+        $beneficiarios = (new _inm_prospecto())->rows(controlador: $controlador_inm_prospecto,
+            datas: $beneficiarios,params:  $params, seccion_exe: 'inm_beneficiario');
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al obtener beneficiarios link del',data:  $beneficiarios,
+                header: $header,ws:  $ws);
+        }
+
+        $this->beneficiarios = $beneficiarios;
+
+        $referencia = (new _referencia())->inputs_referencia(controler: $controlador_inm_prospecto);
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al obtener referencias',data:  $referencia,
+                header: $header,ws:  $ws);
+        }
+        $this->inputs->referencia = $referencia;
+
+        $r_inm_referencia_prospecto = (new inm_referencia_prospecto(link: $this->link))->filtro_and(filtro: $filtro_ben);
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al obtener referencia_prospectos',data:  $r_inm_referencia_prospecto,
+                header: $header,ws:  $ws);
+        }
+
+        $params = (new _inm_prospecto())->params_btn(accion_retorno: __FUNCTION__,
+            registro_id:  $this->registro_id,seccion_retorno:  $this->tabla);
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al obtener params',data:  $params,
+                header: $header,ws:  $ws);
+        }
+
+        $referencia_prospectos = $r_inm_referencia_prospecto->registros;
+
+        $referencia_prospectos = (new _inm_prospecto())->rows(controlador: $controlador_inm_prospecto,
+            datas: $referencia_prospectos,params:  $params, seccion_exe: 'inm_referencia_prospecto');
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al obtener beneficiarios link del',data:  $referencia_prospectos,
+                header: $header,ws:  $ws);
+        }
+
+        $this->referencias = $referencia_prospectos;
+
 
         return $r_modifica;
     }
@@ -731,16 +800,34 @@ class controlador_inm_comprador extends _ctl_base {
                 return $this->retorno_error(mensaje: 'Error al obtener inm_prospecto', data: $inm_prospecto, header: $header, ws: $ws);
             }
 
-            $result_conyuge = (new inm_prospecto(link: $this->link))->transacciona_conyuge(inm_prospecto_id: $inm_prospecto->inm_prospecto_id);
+            $result_conyuge =  (new _upd_prospecto())->transacciona_conyuge(inm_prospecto_id: $inm_prospecto->inm_prospecto_id,link: $this->link);
             if (errores::$error) {
                 $this->link->rollBack();
                 return $this->retorno_error(mensaje: 'Error al insertar conyuge', data: $result_conyuge,
+                    header: $header, ws: $ws);
+            }
+
+            $result_beneficiario = (new _upd_prospecto())->transacciona_beneficiario(inm_prospecto_id: $inm_prospecto->inm_prospecto_id,link: $this->link);
+            if (errores::$error) {
+                return $this->retorno_error(mensaje: 'Error al insertar beneficiario', data: $result_beneficiario,
+                    header: $header, ws: $ws);
+            }
+
+            $result_referencia = (new _upd_prospecto())->transacciona_referencia(inm_prospecto_id:  $inm_prospecto->inm_prospecto_id,link: $this->link);
+            if (errores::$error) {
+                return $this->retorno_error(mensaje: 'Error al insertar referencia', data: $result_referencia,
                     header: $header, ws: $ws);
             }
         }
         else{
             if(isset($_POST['conyuge'])){
                 unset($_POST['conyuge']);
+            }
+            if(isset($_POST['beneficiario'])){
+                unset($_POST['beneficiario']);
+            }
+            if(isset($_POST['referencia'])){
+                unset($_POST['referencia']);
             }
         }
 

@@ -216,6 +216,7 @@ class inm_prospecto extends _modelo_parent{
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al insertar inm_rel_prospecto_cliente_ins', data: $r_alta_rel);
         }
+
         $data = new stdClass();
         $data->r_alta_comprador = $r_alta_comprador;
         $data->r_alta_rel = $r_alta_rel;

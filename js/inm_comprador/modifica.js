@@ -89,7 +89,32 @@ let inm_referencia_numero_dom_2 = $("#inm_referencia_numero_dom_2");
 let edit_ref_1 = $("#edit_ref_1");
 let edit_ref_2 = $("#edit_ref_2");
 
+let sl_referencia_dp_estado_id = $("#referencia_dp_estado_id");
+let sl_referencia_dp_municipio_id = $("#referencia_dp_municipio_id");
+let sl_referencia_dp_cp_id = $("#referencia_dp_cp_id");
+let sl_referencia_dp_colonia_postal_id = $("#referencia_dp_colonia_postal_id");
+let sl_referencia_dp_calle_pertenece_id = $("#referencia_dp_calle_pertenece_id");
 
+
+sl_referencia_dp_estado_id.change(function(){
+    let referencia_dp_estado_id = $(this).val();
+    dp_asigna_municipios(referencia_dp_estado_id,'','#referencia_dp_municipio_id');
+});
+
+sl_referencia_dp_municipio_id.change(function(){
+    let referencia_dp_municipio_id = $(this).val();
+    dp_asigna_cps(referencia_dp_municipio_id,'','#referencia_dp_cp_id');
+});
+
+sl_referencia_dp_cp_id.change(function(){
+    let referencia_dp_cp_id = $(this).val();
+    dp_asigna_colonias_postales(referencia_dp_cp_id,'','#referencia_dp_colonia_postal_id');
+});
+
+sl_referencia_dp_colonia_postal_id.change(function(){
+    let referencia_dp_colonia_postal_id = $(this).val();
+    dp_asigna_calles_pertenece(referencia_dp_colonia_postal_id,'','#referencia_dp_calle_pertenece_id');
+});
 
 function habilita_ref_1(){
     inm_referencia_apellido_paterno_1.prop('disabled',false);
