@@ -7,6 +7,7 @@
  *
  */
 namespace gamboamartin\inmuebles\controllers;
+use base\controller\init;
 use gamboamartin\comercial\models\com_agente;
 use gamboamartin\errores\errores;
 use gamboamartin\inmuebles\models\inm_ubicacion;
@@ -18,7 +19,7 @@ class controlador_comi_comision extends \gamboamartin\comisiones\controllers\con
     protected function campos_view(array $inputs = array()): array
     {
         $keys = new stdClass();
-        $keys->inputs = array();
+        $keys->inputs = array('monto_pago');
         $keys->selects = array();
 
         $init_data = array();
@@ -64,6 +65,12 @@ class controlador_comi_comision extends \gamboamartin\comisiones\controllers\con
         if(errores::$error){
             return $this->retorno_error(
                 mensaje: 'Error al inicializar alta',data:  $r_alta, header: $header,ws:  $ws);
+        }
+
+        $keys_selects = (new init())->key_select_txt(cols: 6, key: 'monto_pago',
+            keys_selects: $keys_selects, place_holder: 'Monto Pago');
+        if (errores::$error) {
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $keys_selects);
         }
 
         $inputs = $this->inputs(keys_selects: $keys_selects);
