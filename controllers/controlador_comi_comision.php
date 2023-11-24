@@ -10,6 +10,9 @@ namespace gamboamartin\inmuebles\controllers;
 use base\controller\init;
 use gamboamartin\comercial\models\com_agente;
 use gamboamartin\errores\errores;
+use gamboamartin\facturacion\models\fc_factura;
+use gamboamartin\inmuebles\models\inm_rel_comprador_com_cliente;
+use gamboamartin\inmuebles\models\inm_rel_ubi_comp;
 use gamboamartin\inmuebles\models\inm_ubicacion;
 use PDO;
 use stdClass;
@@ -25,6 +28,7 @@ class controlador_comi_comision extends \gamboamartin\comisiones\controllers\con
         $init_data = array();
         $init_data['com_agente'] = "gamboamartin\\comercial";
         $init_data['inm_ubicacion'] = "gamboamartin\\inmuebles";
+        $init_data['inm_comprador'] = "gamboamartin\\inmuebles";
         $init_data['comi_conf_comision'] = "gamboamartin\\comisiones";
 
         $campos_view = $this->campos_view_base(init_data: $init_data, keys: $keys);
@@ -52,6 +56,13 @@ class controlador_comi_comision extends \gamboamartin\comisiones\controllers\con
         }
         $keys_selects = $this->key_select(cols:6, con_registros: true,filtro:  array(), key: 'com_agente_id',
             keys_selects:$keys_selects, id_selected: -1, label: 'Agente');
+        if(errores::$error){
+            return $this->retorno_error(
+                mensaje: 'Error al inicializar alta',data:  $r_alta, header: $header,ws:  $ws);
+        }
+        $columns_ds_com = array('inm_comprador_descripcion');
+        $keys_selects = $this->key_select(cols:12, con_registros: true,filtro:  array(), key: 'inm_comprador_id',
+            keys_selects:$keys_selects, id_selected: -1, label: 'Cliente',columns_ds: $columns_ds_com);
         if(errores::$error){
             return $this->retorno_error(
                 mensaje: 'Error al inicializar alta',data:  $r_alta, header: $header,ws:  $ws);
@@ -117,5 +128,57 @@ class controlador_comi_comision extends \gamboamartin\comisiones\controllers\con
             return $this->errores->error(mensaje: 'Error al obtener com_ubicacion',data:  $r_com_ubicacion);
         }
         return $r_com_ubicacion->registros;
+    }
+
+    public function alta_bd(bool $header, bool $ws = false): array|stdClass
+    {
+        if(!isset($_POST['codigo'])){
+            $_POST['codigo'] = $_POST['com_agente_id'].$_POST['com_agente_id'].rand();
+        }
+        if(!isset($_POST['descripcion'])){
+            $_POST['descripcion'] = $_POST['codigo'].rand();
+        }
+        if(!isset($_POST['descripcion_select'])){
+            $_POST['descripcion_select'] = $_POST['descripcion'];
+        }
+
+        $filtro['inm_comprador.id'] = $_POST['inm_comprador_id'];
+        $r_inm_rel_comprador_com_cliente = (new inm_rel_comprador_com_cliente($this->link))->filtro_and(filtro: $filtro);
+        if(errores::$error){
+            return $this->retorno_error(
+                mensaje: 'Error al obtener inputs',data:  $r_inm_rel_comprador_com_cliente, header: $header,ws:  $ws);
+        }
+        if($r_inm_rel_comprador_com_cliente->n_registros < 0){
+            return $this->retorno_error(
+                mensaje: 'Error al obtener inputs',data:  $r_inm_rel_comprador_com_cliente, header: $header,ws:  $ws);
+        }
+
+        $modelo_inm_rel_ubi_comp = new inm_rel_ubi_comp($this->link);
+        $modelo_inm_rel_ubi_comp->registro['inm_ubicacion_id'] = $_POST['inm_ubicacion_id'];
+        $modelo_inm_rel_ubi_comp->registro['inm_comprador_id'] = $_POST['inm_comprador_id'];
+        $modelo_inm_rel_ubi_comp->registro['precio_operacion'] = '100000.00';
+        $r_inm_rel_ubi_comp = $modelo_inm_rel_ubi_comp->alta_bd();
+        if(errores::$error){
+            return $this->retorno_error(
+                mensaje: 'Error al obtener inputs',data:  $r_inm_rel_ubi_comp, header: $header,ws:  $ws);
+        }
+
+        if(!isset($_POSR['fc_factura_id'])){
+            $filtro_fc['fc_factura.predeterminado'] = 'activo';
+            $r_inm_rel_ubi_comp = (new fc_factura($this->link))->filtro_and(filtro: $filtro_fc);
+            if(errores::$error){
+                return $this->retorno_error(
+                    mensaje: 'Error al obtener inputs',data:  $r_inm_rel_ubi_comp, header: $header,ws:  $ws);
+            }
+            $_POST['fc_factura_id'] = $r_inm_rel_ubi_comp->registros[0]['fc_factura_id'];
+        }
+
+        $r_alta_bd =  parent::alta_bd($header, $ws);
+        if(errores::$error){
+            return $this->retorno_error(
+                mensaje: 'Error al obtener inputs',data:  $r_alta_bd, header: $header,ws:  $ws);
+        }
+
+        return $r_alta_bd;
     }
 }

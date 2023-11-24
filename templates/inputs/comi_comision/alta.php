@@ -3,6 +3,7 @@
 <?php echo $controlador->inputs->com_agente_id; ?>
 <?php echo $controlador->inputs->comi_conf_comision_id; ?>
 <?php echo $controlador->inputs->inm_ubicacion_id; ?>
+<?php echo $controlador->inputs->inm_comprador_id; ?>
 <?php echo $controlador->inputs->monto_pago; ?>
     <div class="control-group col-sm-6">
         <label class="control-label" for="fecha_pago">Fecha Pago</label>
