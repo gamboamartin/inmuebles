@@ -519,7 +519,6 @@ class inm_comprador extends _modelo_parent{
         }
 
         return $existe;
-
     }
 
     /**
