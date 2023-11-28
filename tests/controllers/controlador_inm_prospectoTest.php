@@ -17,6 +17,7 @@ use gamboamartin\test\test;
 use stdClass;
 use function PHPUnit\Framework\assertEmpty;
 use function PHPUnit\Framework\assertEquals;
+use function PHPUnit\Framework\assertNotEmpty;
 use function PHPUnit\Framework\assertStringContainsStringIgnoringCase;
 
 
@@ -98,6 +99,20 @@ class controlador_inm_prospectoTest extends test {
 
         $_SESSION['usuario_id'] = 2;
 
+        $del = (new base_test())->del_com_cliente(link: $this->link);
+        if(errores::$error){
+            $error = (new errores())->error(mensaje: 'Error al del',data:  $del);
+            print_r($error);;
+            exit;
+        }
+
+        $alta = (new base_test())->alta_com_cliente(link: $this->link);
+        if(errores::$error){
+            $error = (new errores())->error(mensaje: 'Error al alta',data:  $alta);
+            print_r($error);;
+            exit;
+        }
+
         $del = (new base_test())->del_inm_prospecto(link: $this->link);
         if(errores::$error){
             $error = (new errores())->error(mensaje: 'Error al del',data:  $del);
@@ -169,6 +184,20 @@ class controlador_inm_prospectoTest extends test {
 
         errores::$error = false;
 
+        $del = (new base_test())->del_inm_comprador(link: $this->link);
+        if(errores::$error){
+            $error = (new errores())->error(mensaje: 'Error al del',data:  $del);
+            print_r($error);;
+            exit;
+        }
+
+        $del = (new base_test())->del_inm_rel_prospecto_cliente(link: $this->link);
+        if(errores::$error){
+            $error = (new errores())->error(mensaje: 'Error al del',data:  $del);
+            print_r($error);;
+            exit;
+        }
+
         $inm_prospecto_upd['correo_com'] = 'a@test.com';
         $upd = (new inm_prospecto(link: $this->link))->modifica_bd(registro: $inm_prospecto_upd,id: 1);
         if(errores::$error){
@@ -189,7 +218,8 @@ class controlador_inm_prospectoTest extends test {
 
         $data = file_get_contents($file);
 
-        assertEmpty($data);
+        //print_r($data);exit;
+        $this->assertEmpty($data);
 
         $inm_rel_prospecto_cliente = (new inm_rel_prospecto_cliente(link: $this->link))->filtro_and(filtro: array('inm_prospecto.id'=>1));
         if(errores::$error){
@@ -197,6 +227,8 @@ class controlador_inm_prospectoTest extends test {
             print_r($error);;
             exit;
         }
+
+       // PRINT_R($inm_rel_prospecto_cliente);EXIT;
 
         $this->assertEquals(1, $inm_rel_prospecto_cliente->registros[0]['inm_prospecto_id']);
 

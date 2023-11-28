@@ -122,18 +122,18 @@ class inm_comprador extends _modelo_parent{
         }
 
         if(!$tiene_prospecto) {
-            $r_alta_prospecto = (new _conversion())->inserta_inm_prospecto(inm_comprador_id: $r_alta_bd->registro_id,
+            /*$r_alta_prospecto = (new _conversion())->inserta_inm_prospecto(inm_comprador_id: $r_alta_bd->registro_id,
                 modelo: $this);
             if(errores::$error){
                 return $this->error->error(mensaje: 'Error al insertar cliente', data: $r_alta_prospecto);
-            }
+            }*/
 
-            $r_alta_rel = (new _conversion())->inserta_rel_prospecto_cliente(
+            /*$r_alta_rel = (new _conversion())->inserta_rel_prospecto_cliente(
                 inm_comprador_id: $r_alta_bd->registro_id,inm_prospecto_id:  $r_alta_prospecto->registro_id,
                 link: $this->link);
             if(errores::$error){
                 return $this->error->error(mensaje: 'Error al insertar inm_rel_prospecto_cliente_ins', data: $r_alta_rel);
-            }
+            }*/
         }
 
         $transacciones = (new _alta_comprador())->posterior_alta(

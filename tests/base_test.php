@@ -17,6 +17,7 @@ use gamboamartin\inmuebles\models\inm_conf_empresa;
 use gamboamartin\inmuebles\models\inm_conyuge;
 use gamboamartin\inmuebles\models\inm_costo;
 use gamboamartin\inmuebles\models\inm_opinion_valor;
+use gamboamartin\inmuebles\models\inm_parentesco;
 use gamboamartin\inmuebles\models\inm_precio;
 use gamboamartin\inmuebles\models\inm_prospecto;
 use gamboamartin\inmuebles\models\inm_referencia;
@@ -60,12 +61,12 @@ class base_test{
 
     public function alta_com_cliente(PDO $link, int $cat_sat_regimen_fiscal_id = 601, int $cat_sat_tipo_persona_id = 4,
                                      string $codigo = '1',string $descripcion = 'YADIRA MAGALY MONTAÑEZ FELIX',
-                                     int $id = 1): array|\stdClass
+                                     $dp_calle_pertenece_id = 1, int $id = 1): array|\stdClass
     {
 
         $alta = (new \gamboamartin\comercial\test\base_test())->alta_com_cliente(link: $link, cat_sat_metodo_pago_id: 1,
             cat_sat_regimen_fiscal_id: $cat_sat_regimen_fiscal_id, cat_sat_tipo_persona_id: $cat_sat_tipo_persona_id,
-            codigo: $codigo, descripcion: $descripcion, id: $id);
+            codigo: $codigo, descripcion: $descripcion, dp_calle_pertenece_id: $dp_calle_pertenece_id, id: $id);
         if(errores::$error){
             return (new errores())->error(mensaje: 'Error al insertar', data: $alta);
         }
@@ -362,6 +363,21 @@ class base_test{
         return $alta;
     }
 
+
+    public function alta_inm_parentesco(PDO $link, string $descripcion = 'SIN PARENTESCO', int $id = 1): array|\stdClass
+    {
+
+
+        $registro['id'] = $id;
+        $registro['descripcion'] = $descripcion;
+
+        $alta = (new inm_parentesco($link))->alta_registro($registro);
+        if(errores::$error){
+            return (new errores())->error(mensaje: 'Error al insertar', data: $alta);
+        }
+        return $alta;
+    }
+
     public function alta_inm_precio(PDO $link, string $fecha_final = '2030-01-01', string $fecha_inicial = '2020-01-01',
                                     int $id = 1, int $inm_institucion_hipotecaria_id = 1, int $inm_ubicacion_id = 1,
                                     float $precio_venta = 450000): array|\stdClass
@@ -438,8 +454,9 @@ class base_test{
 
     public function alta_inm_referencia(PDO $link, string $apellido_materno = 'AM', string $apellido_paterno = 'AP',
                                         string $celular = '1234567890', int $dp_calle_pertenece_id = 109, int $id = 1,
-                                        int $inm_comprador_id= 1, string $lada = '123', string $nombre = 'NOMBRE',
-                                        string $numero = '1234567', string $numero_dom = 'NUMERO DOM'): array|\stdClass
+                                        int $inm_comprador_id= 1, int $inm_parentesco_id = 1, string $lada = '123',
+                                        string $nombre = 'NOMBRE', string $numero = '1234567',
+                                        string $numero_dom = 'NUMERO DOM'): array|\stdClass
     {
         $existe = (new inm_comprador(link: $link))->existe_by_id(registro_id: $inm_comprador_id);
         if(errores::$error){
@@ -462,6 +479,7 @@ class base_test{
         $registro['celular'] = $celular;
         $registro['dp_calle_pertenece_id'] = $dp_calle_pertenece_id;
         $registro['numero_dom'] = $numero_dom;
+        $registro['inm_parentesco_id'] = $inm_parentesco_id;
 
         $alta = (new inm_referencia($link))->alta_registro($registro);
         if(errores::$error){
@@ -777,6 +795,21 @@ class base_test{
         return $del;
     }
 
+    public function del_com_prospecto(PDO $link): array
+    {
+
+        $del = $this->del_inm_prospecto(link: $link);
+        if(errores::$error){
+            return (new errores())->error('Error al eliminar', $del);
+        }
+
+        $del = (new \gamboamartin\comercial\test\base_test())->del_com_prospecto(link: $link);
+        if(errores::$error){
+            return (new errores())->error('Error al eliminar', $del);
+        }
+        return $del;
+    }
+
     public function del_com_tipo_prospecto(PDO $link): array
     {
         $del = $this->del_inm_prospecto(link: $link);
@@ -972,6 +1005,25 @@ class base_test{
     {
 
         $del = $this->del($link, 'gamboamartin\\inmuebles\\models\\inm_opinion_valor');
+        if(errores::$error){
+            return (new errores())->error('Error al eliminar', $del);
+        }
+        return $del;
+    }
+
+    public function del_inm_parentesco(PDO $link): array
+    {
+
+        $del = $this->del_inm_referencia_prospecto(link: $link);
+        if(errores::$error){
+            return (new errores())->error('Error al eliminar', $del);
+        }
+        $del = $this->del_inm_referencia(link: $link);
+        if(errores::$error){
+            return (new errores())->error('Error al eliminar', $del);
+        }
+
+        $del = $this->del($link, 'gamboamartin\\inmuebles\\models\\inm_parentesco');
         if(errores::$error){
             return (new errores())->error('Error al eliminar', $del);
         }

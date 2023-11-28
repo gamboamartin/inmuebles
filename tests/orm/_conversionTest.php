@@ -250,6 +250,7 @@ class _conversionTest extends test {
             exit;
         }
 
+
         $inm_prospecto_upd['cel_com'] = '1234567890';
         $inm_prospecto_upd['correo_com'] = 'a@com.com';
         $inm_prospecto_upd['telefono_casa'] = '1234567890';
@@ -261,6 +262,7 @@ class _conversionTest extends test {
             print_r($error);
             exit;
         }
+
 
         $inm_prospecto_id = 1;
         $modelo = new inm_prospecto(link: $this->link);

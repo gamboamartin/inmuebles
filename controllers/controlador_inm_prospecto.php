@@ -190,10 +190,6 @@ class controlador_inm_prospecto extends _ctl_formato {
 
     }
 
-
-
-
-
     final public function documentos(bool $header, bool $ws = false): array
     {
 

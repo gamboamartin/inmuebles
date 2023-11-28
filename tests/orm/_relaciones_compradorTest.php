@@ -279,6 +279,7 @@ class _relaciones_compradorTest extends test {
         $inm_referencia_ins['celular'] = '1234567890';
         $inm_referencia_ins['dp_calle_pertenece_id'] = '1';
         $inm_referencia_ins['numero_dom'] = '1';
+        $inm_referencia_ins['inm_parentesco_id'] = '1';
         $link = $this->link;
 
 
@@ -413,6 +414,7 @@ class _relaciones_compradorTest extends test {
         $inm_referencia_ins['numero'] = 12345678;
         $inm_referencia_ins['celular'] = 1234567890;
         $inm_referencia_ins['numero_dom'] = 1;
+        $inm_referencia_ins['inm_parentesco_id'] = 1;
         $indice = 1;
         $inm_comprador_id = 1;
         $modelo_inm_comprador = new inm_comprador(link: $this->link);

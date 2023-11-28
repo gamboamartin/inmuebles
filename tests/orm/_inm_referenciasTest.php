@@ -45,6 +45,19 @@ class _inm_referenciasTest extends test {
         $_SESSION['usuario_id'] = 2;
         $_GET['session_id'] = '1';
 
+        $del = (new base_test())->del_inm_parentesco(link: $this->link);
+        if(errores::$error){
+            $error = (new errores())->error(mensaje: 'Error al del',data:  $del);
+            print_r($error);
+            exit;
+        }
+
+        $alta = (new base_test())->alta_inm_parentesco(link: $this->link);
+        if(errores::$error){
+            $error = (new errores())->error(mensaje: 'Error al alta',data:  $alta);
+            print_r($error);
+            exit;
+        }
 
         $inm = new _referencias();
         //$inm = new liberator($inm);
@@ -75,12 +88,13 @@ class _inm_referenciasTest extends test {
 
         $inm_comprador_upd['inm_referencia_apellido_paterno_1'] = '12';
         $inm_comprador_upd['inm_referencia_nombre_1'] = '12';
-        $inm_comprador_upd['inm_referencia_dp_calle_pertenece_id_1'] = '12';
+        $inm_comprador_upd['inm_referencia_dp_calle_pertenece_id_1'] = '1';
         $inm_comprador_upd['inm_referencia_lada_1'] = '12';
         $inm_comprador_upd['inm_referencia_numero_1'] = '12345678';
         $inm_comprador_upd['inm_referencia_celular_1'] = '1234567890';
         $inm_comprador_upd['inm_referencia_numero_dom_1'] = '12';
         $inm_comprador_upd['inm_referencia_telefono_1'] = '12345678';
+        $inm_comprador_upd['inm_referencia_inm_parentesco_id_1'] = '1';
 
         $resultado = $inm->operaciones_referencia($indice, $inm_comprador_id, $inm_comprador_upd, $modelo_inm_comprador);
 

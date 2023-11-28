@@ -11,6 +11,7 @@ use gamboamartin\inmuebles\controllers\controlador_inm_comprador;
 use gamboamartin\inmuebles\controllers\controlador_inm_plazo_credito_sc;
 use gamboamartin\inmuebles\controllers\controlador_inm_producto_infonavit;
 use gamboamartin\inmuebles\models\inm_comprador;
+use gamboamartin\inmuebles\tests\base_test;
 use gamboamartin\test\liberator;
 use gamboamartin\test\test;
 
@@ -71,6 +72,29 @@ class _dps_initTest extends test {
             $error = (new errores())->error(mensaje: 'Error al obtener dp_calle_pertenece_id', data: $dp_calle_pertenece_id);
             print_r($error);
             exit;
+        }
+
+        $del = (new base_test())->del_com_prospecto(link: $this->link);
+        if(errores::$error){
+            $error = (new errores())->error(mensaje:'Error al del', data: $del);
+            print_r($error);exit;
+        }
+        $del = (new base_test())->del_com_cliente(link: $this->link);
+        if(errores::$error){
+            $error = (new errores())->error(mensaje:'Error al del', data: $del);
+            print_r($error);exit;
+        }
+
+        $del = (new base_test())->del_inm_comprador(link: $this->link);
+        if(errores::$error){
+            $error = (new errores())->error(mensaje:'Error al del', data: $del);
+            print_r($error);exit;
+        }
+
+        $alta = (new base_test())->alta_com_cliente(link: $this->link,dp_calle_pertenece_id: 1);
+        if(errores::$error){
+            $error = (new errores())->error(mensaje:'Error al alta', data: $alta);
+            print_r($error);exit;
         }
 
         $row_upd = new stdClass();

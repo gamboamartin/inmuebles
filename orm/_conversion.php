@@ -2,6 +2,7 @@
 namespace gamboamartin\inmuebles\models;
 use gamboamartin\comercial\models\com_agente;
 use gamboamartin\comercial\models\com_cliente;
+use gamboamartin\comercial\models\com_tipo_agente;
 use gamboamartin\comercial\models\com_tipo_prospecto;
 use gamboamartin\errores\errores;
 use gamboamartin\validacion\validacion;
@@ -326,23 +327,84 @@ class _conversion{
                 return $this->error->error(mensaje: 'Error al obtener agente default', data: $r_com_agente);
             }
             if($r_com_agente->n_registros <= 0){
-                return $this->error->error(mensaje: 'Error no existe agente predeterminado', data: $r_com_agente);
+
+                $filtro = array();
+                $filtro['com_tipo_agente.predeterminado'] = 'activo';
+                $r_com_tipo_agente = (new com_tipo_agente($link))->filtro_and(filtro: $filtro);
+                if (errores::$error) {
+                    return $this->error->error(mensaje: 'Error al obtener tipo de agente default',
+                        data: $r_com_tipo_agente);
+                }
+
+                if($r_com_tipo_agente->n_registros === 0){
+                    $com_tipo_agente_pred['predeterminado'] = 'activo';
+                    $com_tipo_agente_pred['descripcion'] = 'PREDETERMINADO';
+
+                    $alta_tipo_agente = (new com_tipo_agente(link: $link))->alta_registro(registro: $com_tipo_agente_pred);
+                    if (errores::$error) {
+                        return $this->error->error(mensaje: 'Error al insertar tipo de agente default',
+                            data: $alta_tipo_agente);
+                    }
+                    $com_tipo_agente_id = $alta_tipo_agente->registro_id;
+                }
+                else{
+                    $com_tipo_agente_id = $r_com_tipo_agente->registros[0]['com_tipo_agente_id'];
+                }
+
+
+                $com_agente_pred['predeterminado'] = 'activo';
+                $com_agente_pred['com_tipo_agente_id'] = $com_tipo_agente_id;
+                $com_agente_pred['nombre'] = 'PREDETERMINADO';
+                $com_agente_pred['apellido_paterno'] = 'PREDETERMINADO';
+                $com_agente_pred['user'] = 'PREDETERMINADO';
+                $com_agente_pred['email'] = 'test@test.com';
+                $com_agente_pred['telefono'] = mt_rand(10,99).mt_rand(10,99).mt_rand(10,99).mt_rand(10,99);
+                $com_agente_pred['telefono'] . mt_rand(10,99);
+                $com_agente_pred['adm_grupo_id'] = 2;
+
+                $caracteres_permitidos = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ.-*';
+                $longitud = 12;
+                $chars = substr(str_shuffle($caracteres_permitidos), 0, $longitud);
+
+                $com_agente_pred['password'] = mt_rand(10,99).mt_rand(10,99).mt_rand(10,99).mt_rand(10,99);
+                $com_agente_pred['password'] .= $chars;
+
+                $alta_agente = (new com_agente(link: $link))->alta_registro(registro: $com_agente_pred);
+                if (errores::$error) {
+                    return $this->error->error(mensaje: 'Error al insertar agente default', data: $alta_agente);
+                }
+                $com_agente_id = $alta_agente->registro_id;
+            }
+            else{
+                $com_agente_id = $r_com_agente->registros[0]['com_agente_id'];
             }
 
-            $inm_prospecto_ins['com_agente_id'] = $r_com_agente->registros[0]['com_agente_id'];
+            $inm_prospecto_ins['com_agente_id'] = $com_agente_id;
         }
 
         if(!isset($data->inm_comprador->com_tipo_prospecto_id)) {
             $filtro_tipo['com_tipo_prospecto.predeterminado'] = 'activo';
             $r_com_tipo_prospecto = (new com_tipo_prospecto($link))->filtro_and(filtro: $filtro_tipo);
             if (errores::$error) {
-                return $this->error->error(mensaje: 'Error al obtener agente default', data: $r_com_tipo_prospecto);
+                return $this->error->error(mensaje: 'Error al obtener com_tipo_prospecto default',
+                    data: $r_com_tipo_prospecto);
             }
             if($r_com_tipo_prospecto->n_registros <= 0){
-                return $this->error->error(mensaje: 'Error no existe agente predeterminado', data: $r_com_tipo_prospecto);
+
+                $com_tipo_prospecto_pred['predeterminado'] = 'activo';
+                $com_tipo_prospecto_pred['descripcion'] = 'PREDETERMINADO';
+                $alta_tipo_prospecto = (new com_tipo_prospecto(link: $link))->alta_registro(registro: $com_tipo_prospecto_pred);
+                if (errores::$error) {
+                    return $this->error->error(mensaje: 'Error al insertar tipo prospecto default', data: $alta_tipo_prospecto);
+                }
+                $com_tipo_prospecto_id = $alta_tipo_prospecto->registro_id;
+
+            }
+            else{
+                $com_tipo_prospecto_id = $r_com_tipo_prospecto->registros[0]['com_tipo_prospecto_id'];
             }
 
-            $inm_prospecto_ins['com_tipo_prospecto_id'] = $r_com_tipo_prospecto->registros[0]['com_tipo_prospecto_id'];
+            $inm_prospecto_ins['com_tipo_prospecto_id'] = $com_tipo_prospecto_id;
         }
 
         return $inm_prospecto_ins;
@@ -366,8 +428,11 @@ class _conversion{
             if(is_numeric($key)){
                 return $this->error->error(mensaje: 'Error key debe ser un texto', data: $key);
             }
+            if(is_null($data->inm_comprador->$key)){
+                $data->inm_comprador->$key = '';
+            }
             if(!isset($data->inm_comprador->$key)){
-                return $this->error->error(mensaje: 'Error no existe atributo', data: $key);
+                return $this->error->error(mensaje: 'Error no existe atributo '.$key, data: $data->inm_comprador);
             }
 
             $inm_prospecto_ins[$key] = $data->inm_comprador->$key;

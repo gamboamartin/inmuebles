@@ -218,6 +218,27 @@ class _alta_compradorTest extends test {
 
         errores::$error = false;
 
+        $del = (new base_test())->del_inm_comprador(link: $this->link);
+        if(errores::$error){
+            $error = (new errores())->error(mensaje: 'Error al del',data:  $del);
+            print_r($error);;
+            exit;
+        }
+
+        $alta = (new base_test())->alta_inm_comprador(link: $this->link);
+        if(errores::$error){
+            $error = (new errores())->error(mensaje: 'Error al alta',data:  $alta);
+            print_r($error);;
+            exit;
+        }
+
+        $del = (new base_test())->del_inm_comprador_etapa(link: $this->link);
+        if(errores::$error){
+            $error = (new errores())->error(mensaje: 'Error al del',data:  $del);
+            print_r($error);;
+            exit;
+        }
+
         $accion = 'alta_bd';
         $etapa = 'ALTA';
         $inm_comprador_id= 1;
@@ -276,6 +297,26 @@ class _alta_compradorTest extends test {
         $inm = new _alta_comprador();
         $inm = new liberator($inm);
 
+        $del = (new base_test())->del_inm_comprador(link: $this->link);
+        if(errores::$error){
+            $error = (new errores())->error(mensaje: 'Error al del',data:  $del);
+            print_r($error);;
+            exit;
+        }
+
+        $alta = (new base_test())->alta_inm_comprador(link: $this->link);
+        if(errores::$error){
+            $error = (new errores())->error(mensaje: 'Error al alta',data:  $alta);
+            print_r($error);;
+            exit;
+        }
+
+        $del = (new base_test())->del_inm_comprador_proceso(link: $this->link);
+        if(errores::$error){
+            $error = (new errores())->error(mensaje: 'Error al del',data:  $del);
+            print_r($error);;
+            exit;
+        }
 
         $link = $this->link;
         $inm_comprador_id = 1;
@@ -456,6 +497,12 @@ class _alta_compradorTest extends test {
         }
 
         $del = (new base_test())->del_com_cliente(link: $this->link);
+        if(errores::$error){
+            $error = (new errores())->error(mensaje: 'Error al eliminar',data:  $del);
+            print_r($error);
+            exit;
+        }
+        $del = (new base_test())->del_inm_prospecto(link: $this->link);
         if(errores::$error){
             $error = (new errores())->error(mensaje: 'Error al eliminar',data:  $del);
             print_r($error);

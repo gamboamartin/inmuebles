@@ -39,7 +39,7 @@ class _referencias{
         $result = new stdClass();
 
         $keys = array('apellido_paterno','nombre', 'lada', 'numero','celular','inm_comprador_id',
-            'dp_calle_pertenece_id','numero_dom');
+            'dp_calle_pertenece_id','numero_dom','inm_parentesco_id');
 
         $inm_ins = (new _relaciones_comprador())->inm_ins(entidad: 'inm_referencia', indice: $indice,
             inm_comprador_id: $inm_comprador_id, keys: $keys, registro: $inm_comprador_upd);
