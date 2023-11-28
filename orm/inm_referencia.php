@@ -3,7 +3,6 @@
 namespace gamboamartin\inmuebles\models;
 
 use base\orm\_modelo_parent;
-use gamboamartin\comercial\models\com_cliente;
 use gamboamartin\errores\errores;
 use PDO;
 use stdClass;

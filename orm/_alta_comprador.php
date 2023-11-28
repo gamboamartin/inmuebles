@@ -394,7 +394,6 @@ class _alta_comprador{
      * @param array $registro_entrada Registro de tipo comprador
      * @param string $tabla Tabla de ejecucion
      * @return array|stdClass
-     * @version 2.48.0
      */
     final public function posterior_alta(
         string $accion,string $etapa, int $inm_comprador_id, PDO $link, string $pr_proceso_descripcion,

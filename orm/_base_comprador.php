@@ -63,7 +63,6 @@ class _base_comprador{
      * Inicializa los elementos default posterior upd
      * @param stdClass $r_modifica Resultado de modificacion
      * @return stdClass|array
-     * @version 2.57.0
      */
     final public function data_upd_post(stdClass $r_modifica): stdClass|array
     {
@@ -194,7 +193,6 @@ class _base_comprador{
      * @param inm_comprador $modelo_inm_comprador Modelo de comprador
      * @param stdClass $r_modifica Resultado de la modificacion de comprador
      * @return array|stdClass
-     * @version 2.92.0
      */
     final public function transacciones_posterior_upd(array $inm_comprador_upd,int $inm_comprador_id,
                                                       inm_comprador $modelo_inm_comprador,
@@ -258,7 +256,6 @@ class _base_comprador{
      * Valida que los elementos base existen en un modificacion de comprador
      * @param stdClass $r_modifica Resultado de modifica_bd
      * @return bool|array
-     * @version 2.56.0
      */
     final public function valida_r_modifica(stdClass $r_modifica): bool|array
     {

@@ -196,7 +196,6 @@ class inm_prospecto extends _modelo_parent{
      * Convierte un prospecto en cliente generado una relacion con inm_rel_prospecto_cliente y inm_comprador
      * @param int $inm_prospecto_id Identificador de prospecto
      * @return array|stdClass
-     * @version 2.221.2
      */
     final public function convierte_cliente(int $inm_prospecto_id): array|stdClass
     {

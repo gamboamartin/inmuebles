@@ -16,7 +16,6 @@ class _base{
 
     /**
      * @return int|array
-     * @version 2.251.2
      */
     private function id_retorno(): int|array
     {
@@ -33,7 +32,6 @@ class _base{
 
     /**
      * @return array|stdClass
-     * @version 2.252.2
      */
     final public function init_retorno(): array|stdClass
     {

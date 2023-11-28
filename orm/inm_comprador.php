@@ -152,7 +152,6 @@ class inm_comprador extends _modelo_parent{
      * @param int $inm_comprador_id Identificador
      * @param array $inm_co_acreditado Registro de co acreditado
      * @return array|stdClass
-     * @version 2.50.0
      */
     final public function asigna_nuevo_co_acreditado_bd(
         int $inm_comprador_id, array $inm_co_acreditado): array|stdClass
@@ -462,7 +461,6 @@ class inm_comprador extends _modelo_parent{
      * @param stdClass $data_upd Datos de actualizacion
      * @param int $id Id de comprador
      * @return array|stdClass
-     * @version 2.57.0
      */
     private function r_modifica_post(stdClass $data_upd, int $id): array|stdClass
     {
@@ -490,7 +488,6 @@ class inm_comprador extends _modelo_parent{
      * @param stdClass $data_upd Datos de upd
      * @param int $id Id de comprador
      * @return array|stdClass
-     * @version 2.58.0
      */
     private function result_upd_post(stdClass $data_upd, int $id): array|stdClass
     {
@@ -526,7 +523,6 @@ class inm_comprador extends _modelo_parent{
      * @param int $id Id de comprador
      * @param stdClass $r_modifica resultado de modificacion
      * @return array|stdClass
-     * @version 2.59.0
      */
     final public function upd_post(int $id, stdClass $r_modifica): array|stdClass
     {

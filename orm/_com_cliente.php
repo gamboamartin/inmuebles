@@ -22,7 +22,6 @@ class _com_cliente{
      * @param int $inm_comprador_id Comprador ligado a cliente
      * @param PDO $link Conexion a la base de datos
      * @return array|stdClass
-     * @version 2.63.0
      */
     private function actualiza_com_cliente(array $com_cliente_upd, int $inm_comprador_id, PDO $link): array|stdClass
     {
@@ -46,7 +45,6 @@ class _com_cliente{
      * @param int $inm_comprador_id Id de comprador
      * @param PDO $link Conexion a la base de datos
      * @return array|int
-     * @version 2.62.0
      */
     private function com_cliente_id(int $inm_comprador_id, PDO $link): int|array
     {
@@ -77,7 +75,6 @@ class _com_cliente{
      * @param string $razon_social Razon social de comprador
      * @param array $registro_entrada Registro en proceso
      * @return array
-     * @version 2.15.0
      */
     private function com_cliente_ins(string $numero_interior, string $razon_social, array $registro_entrada): array
     {
@@ -108,7 +105,6 @@ class _com_cliente{
      * Ajusta un row para actualizar un cliente
      * @param stdClass $registro Registro de tipo comprador
      * @return array
-     * @version 2.61.0
      */
     private function com_cliente_upd(stdClass $registro): array
     {
@@ -142,7 +138,6 @@ class _com_cliente{
      * @param array $registro Registro en proceso de tipo inm_comprador
      * @param string $telefono Telefono ajustado a 10 digitos
      * @return array
-     * @version 2.14.0
      */
     private function com_cliente_data_transaccion(string $numero_interior, string $razon_social, array $registro,
                                                   string $telefono): array
@@ -489,7 +484,6 @@ class _com_cliente{
      * Integra el numero interior ajustado en caso de no existir
      * @param array $registro_entrada Registro en proceso
      * @return string
-     * @version 2.9.0
      */
     private function numero_interior(array $registro_entrada): string
     {
@@ -549,7 +543,6 @@ class _com_cliente{
      * @param bool $con_prefijo Si integra prefijo o no de inm_comprador
      * @param stdClass $registro Registro en proceso
      * @return string|array
-     * @version 2.7.0
      */
     private function razon_social(bool $con_prefijo, stdClass $registro): string|array
     {
@@ -761,7 +754,6 @@ class _com_cliente{
      * Valida los elementos base que debe tener un comprador para hacer la transaccion con com_cliente
      * @param array|stdClass $registro_entrada Registro en proceso
      * @return array|true
-     * @version 2.13.0
      */
     final public function valida_base_com(array|stdClass $registro_entrada): bool|array
     {
@@ -823,7 +815,6 @@ class _com_cliente{
      * Valida los datos previos a una transaccion con cliente
      * @param array|stdClass $registro_entrada Registro de comprador
      * @return array|true
-     * @version 2.28.0
      */
     private function valida_data_transaccion_cliente(array|stdClass $registro_entrada): bool|array
     {
@@ -870,7 +861,6 @@ class _com_cliente{
      * Valida los ids de tipo comercial que deben existir en inm_comprador
      * @param array|stdClass $registro_entrada registro en proceso
      * @return array
-     * @version 2.12.0
      *
      */
     private function valida_ids_com(array|stdClass $registro_entrada): array

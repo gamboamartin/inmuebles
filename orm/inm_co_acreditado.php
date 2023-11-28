@@ -115,10 +115,9 @@ class inm_co_acreditado extends _modelo_parent{
     }
 
     /**
-     * .Valida los tipos de datos
+     * Valida los tipos de datos
      * @param array $inm_co_acreditado Registro a validar
      * @return array|true
-     * @version 2.50.0
      */
     final public function valida_alta(array $inm_co_acreditado): bool|array
     {
@@ -157,7 +156,6 @@ class inm_co_acreditado extends _modelo_parent{
      * Valida que los elementos base de un co acreditado sean validos
      * @param array $inm_co_acreditado Registro a validar
      * @return array|true
-     * @version 2.50.0
      */
     final public function valida_data_alta(array $inm_co_acreditado): bool|array
     {

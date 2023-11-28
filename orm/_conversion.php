@@ -22,7 +22,6 @@ class _conversion{
      * @param int $inm_prospecto_id Identificador de prospecto
      * @param inm_prospecto $modelo Modelo en ejecucion
      * @return array|stdClass
-     * @version 2.211.1
      */
     private function data_prospecto(int $inm_prospecto_id, inm_prospecto $modelo): array|stdClass
     {
@@ -49,7 +48,6 @@ class _conversion{
      * Campos de inicializacion
      * @param array $inm_comprador_ins comprador registro
      * @return array
-     * @version 2.214.1
      */
     private function defaults_alta_comprador(array $inm_comprador_ins): array
     {
@@ -98,7 +96,6 @@ class _conversion{
      * @param stdClass $data Datos de prospecto
      * @param PDO $link Conexion a la base de datos
      * @return array
-     * @version 2.217.1
      */
     private function inm_comprador_ins(stdClass $data, PDO $link): array
     {
@@ -153,7 +150,6 @@ class _conversion{
      * @param stdClass $data datos para asignacion
      * @param array $keys Keys para inicializar
      * @return array
-     * @version 2.213.1
      */
     private function inm_comprador_ins_init(stdClass $data, array $keys): array
     {
@@ -229,7 +225,6 @@ class _conversion{
      * @param int $inm_prospecto_id Identificador de prospecto
      * @param inm_prospecto $modelo Modelo inm_prospecto
      * @return array|stdClass
-     * @version 2.218.1
      */
     final public function inserta_inm_comprador(int $inm_prospecto_id, inm_prospecto $modelo): array|stdClass
     {
@@ -527,7 +522,6 @@ class _conversion{
      * @param array $inm_comprador_ins Registro de comprador
      * @param inm_comprador|com_cliente $modelo Modelo de integracion
      * @return array
-     * @version 2.215.1
      */
     private function integra_id_pref(string $entidad, array $inm_comprador_ins,
                                      inm_comprador|com_cliente $modelo): array
@@ -550,7 +544,6 @@ class _conversion{
      * @param array $inm_comprador_ins Registro de comprador
      * @param PDO $link Conexion a la base de datos
      * @return array
-     * @version 2.216.1
      */
     private function integra_ids_prefs(array $inm_comprador_ins, PDO $link): array
     {
@@ -583,7 +576,6 @@ class _conversion{
     /**
      * Obtiene los keys de un prospecto para integrarlos con un cliente
      * @return string[]
-     * @version 2.212.1
      */
     private function keys_data_prospecto(): array
     {

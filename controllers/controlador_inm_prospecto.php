@@ -9,7 +9,6 @@
 namespace gamboamartin\inmuebles\controllers;
 
 use base\controller\init;
-use DateTime;
 use gamboamartin\calculo\calculo;
 use gamboamartin\errores\errores;
 use gamboamartin\inmuebles\html\inm_prospecto_html;
@@ -24,7 +23,6 @@ use gamboamartin\template\html;
 use html\doc_tipo_documento_html;
 use PDO;
 use stdClass;
-use Throwable;
 
 class controlador_inm_prospecto extends _ctl_formato {
 
@@ -146,7 +144,6 @@ class controlador_inm_prospecto extends _ctl_formato {
      * @param bool $header Muestra resultado en web
      * @param bool $ws Muestra resultado a nivel ws
      * @return array|string
-     * @version 2.260.2
      */
     public function convierte_cliente(bool $header, bool $ws = false): array|string
     {

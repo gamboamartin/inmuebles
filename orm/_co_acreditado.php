@@ -21,7 +21,6 @@ class _co_acreditado{
      * @param array $inm_comprador_upd datos de registro en proceso
      * @param inm_comprador $modelo_inm_comprador Modelo de comprador
      * @return array|stdClass
-     * @version 2.75.0
      */
     final public function operaciones_co_acreditado(int $inm_comprador_id, array $inm_comprador_upd,
                                                     inm_comprador $modelo_inm_comprador): array|stdClass

@@ -43,11 +43,11 @@ class inm_referencia_prospecto extends _modelo_parent{
         }
 
         if(!isset($this->registro['descripcion'])){
-            $descripcion = $this->registro['inm_prospecto_id'];
-            $descripcion .= ' '.$this->registro['dp_calle_pertenece_id'];
-            $descripcion .= ' '.$this->registro['inm_parentesco_id'];
-            $descripcion .= ' '.$this->registro['nombre'];
-            $descripcion .= ' '.$this->registro['apellido_paterno'];
+            $descripcion = $this->descripcion(registro: $this->registro);
+            if(errores::$error){
+                return $this->error->error(mensaje: 'Error al integrar descripcion',data:  $descripcion);
+            }
+
             $this->registro['descripcion'] = $descripcion;
         }
 
@@ -59,6 +59,17 @@ class inm_referencia_prospecto extends _modelo_parent{
 
         return $r_alta_bd;
 
+    }
+
+    private function descripcion(array $registro): string
+    {
+        $descripcion = $registro['inm_prospecto_id'];
+        $descripcion .= ' '.$registro['dp_calle_pertenece_id'];
+        $descripcion .= ' '.$registro['inm_parentesco_id'];
+        $descripcion .= ' '.$registro['nombre'];
+        $descripcion .= ' '.$registro['apellido_paterno'];
+
+        return $descripcion;
     }
 
 }

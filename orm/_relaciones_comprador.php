@@ -21,7 +21,6 @@ class _relaciones_comprador{
      * Valida si aplica o no un alta de co_acreditado
      * @param array $inm_ins Registro a validar
      * @return bool
-     * @version 2.70.0
      */
     final public function aplica_alta(array $inm_ins): bool
     {
@@ -54,7 +53,6 @@ class _relaciones_comprador{
      * @param string $key Key a integrar
      * @param array $registro Registro en proceso
      * @return array
-     * @version 1.172.1
      */
     private function asigna_campo(string $campo, array $inm_ins, string $key, array $registro): array
     {
@@ -161,7 +159,6 @@ class _relaciones_comprador{
      * @param array $keys Key a integrar
      * @param array $registro registro en proceso
      * @return array
-     * @version 2.69.0
      */
     final public function inm_ins(string $entidad, int $indice, int $inm_comprador_id, array $keys,
                                   array $registro): array
@@ -186,7 +183,6 @@ class _relaciones_comprador{
      * @param int $inm_co_acreditado_id Co acreditado id
      * @param int $inm_comprador_id Comprador id
      * @return array
-     * @version 2.72.0
      */
     private function inm_rel_co_acreditado_ins(int $inm_co_acreditado_id, int $inm_comprador_id): array
     {
@@ -207,7 +203,6 @@ class _relaciones_comprador{
      * @param int $inm_comprador_id Comprador id
      * @param PDO $link Conexion a la base de datos
      * @return array|stdClass
-     * @version 2.73.0
      */
     private function inserta_data_co_acreditado(array $inm_co_acreditado_ins, int $inm_comprador_id,
                                                 PDO $link): array|stdClass
@@ -280,7 +275,6 @@ class _relaciones_comprador{
      * @param string $key Key de base modifica
      * @param array $registro Registro en proceso
      * @return array
-     * @version 2.68.0
      */
     private function integra_campo(string $campo, array $inm_ins, string $key, array $registro): array
     {
@@ -311,7 +305,6 @@ class _relaciones_comprador{
      * @param array $registro Registro en proceso
      * @param string $entidad de relacion
      * @return array
-     * @version 2.68.0
      */
     private function integra_value(string $campo, string $entidad, int $indice, array $inm_ins, array $registro): array
     {
@@ -340,7 +333,6 @@ class _relaciones_comprador{
      * @param int $inm_comprador_id Comprador id
      * @param inm_comprador $modelo_inm_comprador Modelo de comprador
      * @return array|stdClass
-     * @version 2.74.0
      */
     final public function transacciones_co_acreditado(array $inm_co_acreditado_ins, int $inm_comprador_id,
                                                  inm_comprador $modelo_inm_comprador): array|stdClass
@@ -453,7 +445,6 @@ class _relaciones_comprador{
      * @param string $key Key a integrar
      * @param array $registro Registro en proceso
      * @return array|true
-     * @version 2.67.0
      */
     private function valida_data(string $campo, string $key, array $registro): bool|array
     {
