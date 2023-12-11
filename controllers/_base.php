@@ -15,7 +15,9 @@ class _base{
     }
 
     /**
+     * Obtiene el id de retorno determinado por POST[id_retorno]
      * @return int|array
+     * @version 2.319.2
      */
     private function id_retorno(): int|array
     {
@@ -24,13 +26,14 @@ class _base{
             $id_retorno = trim($_POST['id_retorno']);
             unset($_POST['id_retorno']);
         }
-        if(!is_int($id_retorno)){
+        if(!is_numeric($id_retorno)){
             return $this->error->error(mensaje: 'Error id_retorno debe ser un entero', data: $id_retorno);
         }
-        return $id_retorno;
+        return (int)$id_retorno;
     }
 
     /**
+     * Inicializa los datos de retorno de una transaccion via POST
      * @return array|stdClass
      */
     final public function init_retorno(): array|stdClass

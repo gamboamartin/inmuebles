@@ -56,6 +56,24 @@ class _baseTest extends test {
 
         errores::$error = false;
 
+        unset($_POST['id_retorno']);
+
+        $resultado = $base->id_retorno();
+        $this->assertIsInt($resultado);
+        $this->assertNotTrue(errores::$error);
+        $this->assertEquals(-1,$resultado);
+
+        errores::$error = false;
+
+        $_POST['id_retorno'] = 10;
+
+        $resultado = $base->id_retorno();
+        $this->assertIsInt($resultado);
+        $this->assertNotTrue(errores::$error);
+        $this->assertEquals(10,$resultado);
+
+        errores::$error = false;
+
 
     }
 
