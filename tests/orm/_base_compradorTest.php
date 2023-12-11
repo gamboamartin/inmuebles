@@ -128,7 +128,7 @@ class _base_compradorTest extends test {
         $resultado = $inm->descripcion(registro: $registro);
         $this->assertIsString($resultado);
         $this->assertNotTrue(errores::$error);
-        $this->assertStringContainsStringIgnoringCase("Z Z  Z Z Z 2023-11-",$resultado);
+        $this->assertStringContainsStringIgnoringCase("Z Z  Z Z Z 2023-12-",$resultado);
         errores::$error = false;
     }
 
