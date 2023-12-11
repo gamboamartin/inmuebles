@@ -614,6 +614,11 @@ class _keys_selectsTest extends test {
             $error = (new errores())->error(mensaje:'Error al eliminar', data: $del);
             print_r($error);exit;
         }
+        $del = (new base_test())->del_inm_prospecto(link: $this->link);
+        if(errores::$error){
+            $error = (new errores())->error(mensaje:'Error al eliminar', data: $del);
+            print_r($error);exit;
+        }
 
         $ks = new _keys_selects();
         //$ks = new liberator($ks);

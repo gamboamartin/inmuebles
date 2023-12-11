@@ -197,6 +197,11 @@ class inm_compradorTest extends test {
             $error = (new errores())->error(mensaje:'Error al eliminar', data: $del);
             print_r($error);exit;
         }
+        $del = (new base_test())->del_inm_prospecto(link: $this->link);
+        if(errores::$error){
+            $error = (new errores())->error(mensaje:'Error al eliminar', data: $del);
+            print_r($error);exit;
+        }
 
         $del = (new base_test())->del_inm_conf_empresa(link: $this->link);
         if(errores::$error){
@@ -263,6 +268,12 @@ class inm_compradorTest extends test {
             print_r($error);exit;
         }
 
+        $del = (new base_test())->del_inm_prospecto(link: $this->link);
+        if(errores::$error){
+            $error = (new errores())->error(mensaje:'Error al eliminar', data: $del);
+            print_r($error);exit;
+        }
+
         $resultado = $inm->elimina_bd(id: $id);
 
 
@@ -304,6 +315,12 @@ class inm_compradorTest extends test {
             print_r($error);exit;
         }
 
+        $del = (new base_test())->del_inm_prospecto(link: $this->link);
+        if(errores::$error){
+            $error = (new errores())->error(mensaje:'Error al eliminar', data: $del);
+            print_r($error);exit;
+        }
+
         $inm_comprador_id = 1;
         $resultado = $inm->get_co_acreditados($inm_comprador_id);
         $this->assertIsArray($resultado);
@@ -340,6 +357,11 @@ class inm_compradorTest extends test {
 
 
         $del = (new base_test())->del_inm_comprador(link: $this->link);
+        if(errores::$error){
+            $error = (new errores())->error(mensaje:'Error al eliminar', data: $del);
+            print_r($error);exit;
+        }
+        $del = (new base_test())->del_inm_prospecto(link: $this->link);
         if(errores::$error){
             $error = (new errores())->error(mensaje:'Error al eliminar', data: $del);
             print_r($error);exit;

@@ -243,8 +243,11 @@ class _conversion{
             return $this->error->error(mensaje: 'Error al obtener id_pref', data: $inm_comprador_ins);
         }
 
+        $inm_comprador_modelo = new inm_comprador(link: $modelo->link);
 
-        $r_alta_comprador = (new inm_comprador(link: $modelo->link))->alta_registro(registro: $inm_comprador_ins);
+        $inm_comprador_modelo->desde_prospecto = true;
+
+        $r_alta_comprador = $inm_comprador_modelo->alta_registro(registro: $inm_comprador_ins);
 
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al insertar cliente', data: $r_alta_comprador);

@@ -10,6 +10,7 @@ use stdClass;
 
 
 class inm_comprador extends _modelo_parent{
+    public bool $desde_prospecto = false;
     public function __construct(PDO $link)
     {
         $tabla = 'inm_comprador';
@@ -114,26 +115,28 @@ class inm_comprador extends _modelo_parent{
             return $this->error->error(mensaje: 'Error al insertar',data:  $r_alta_bd);
         }
 
-        $tiene_prospecto = (new inm_comprador(link: $this->link))->tiene_prospecto(
-            inm_comprador_id: $r_alta_bd->registro_id);
-        if(errores::$error){
-            $this->link->rollBack();
-            return $this->error->error(mensaje: 'Error al validar inm_prospecto',data:  $tiene_prospecto);
-        }
+        if(!$this->desde_prospecto) {
+            $tiene_prospecto = (new inm_comprador(link: $this->link))->tiene_prospecto(
+                inm_comprador_id: $r_alta_bd->registro_id);
+            if (errores::$error) {
+                $this->link->rollBack();
+                return $this->error->error(mensaje: 'Error al validar inm_prospecto', data: $tiene_prospecto);
+            }
 
-        if(!$tiene_prospecto) {
-            /*$r_alta_prospecto = (new _conversion())->inserta_inm_prospecto(inm_comprador_id: $r_alta_bd->registro_id,
-                modelo: $this);
-            if(errores::$error){
-                return $this->error->error(mensaje: 'Error al insertar cliente', data: $r_alta_prospecto);
-            }*/
+            if (!$tiene_prospecto) {
+                $r_alta_prospecto = (new _conversion())->inserta_inm_prospecto(inm_comprador_id: $r_alta_bd->registro_id,
+                    modelo: $this);
+                if (errores::$error) {
+                    return $this->error->error(mensaje: 'Error al insertar cliente', data: $r_alta_prospecto);
+                }
 
-            /*$r_alta_rel = (new _conversion())->inserta_rel_prospecto_cliente(
-                inm_comprador_id: $r_alta_bd->registro_id,inm_prospecto_id:  $r_alta_prospecto->registro_id,
-                link: $this->link);
-            if(errores::$error){
-                return $this->error->error(mensaje: 'Error al insertar inm_rel_prospecto_cliente_ins', data: $r_alta_rel);
-            }*/
+                $r_alta_rel = (new _conversion())->inserta_rel_prospecto_cliente(
+                    inm_comprador_id: $r_alta_bd->registro_id, inm_prospecto_id: $r_alta_prospecto->registro_id,
+                    link: $this->link);
+                if (errores::$error) {
+                    return $this->error->error(mensaje: 'Error al insertar inm_rel_prospecto_cliente_ins', data: $r_alta_rel);
+                }
+            }
         }
 
         $transacciones = (new _alta_comprador())->posterior_alta(
@@ -146,6 +149,7 @@ class inm_comprador extends _modelo_parent{
         return $r_alta_bd;
 
     }
+
 
     /**
      * Asigna un co acreditado a un comprador
