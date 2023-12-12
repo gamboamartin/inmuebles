@@ -24,7 +24,7 @@ class _inm_prospecto{
     /**
      * Obtiene los datos de children
      * @param bool $existe Init existe bool
-     * @param string $key_data
+     * @param string $key_data Keys a integrar en la actualizacion
      * @return array|stdClass
      */
     final public function dato(bool $existe, string $key_data): array|stdClass

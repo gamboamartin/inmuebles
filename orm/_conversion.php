@@ -5,7 +5,6 @@ use gamboamartin\comercial\models\com_cliente;
 use gamboamartin\comercial\models\com_tipo_agente;
 use gamboamartin\comercial\models\com_tipo_prospecto;
 use gamboamartin\errores\errores;
-use gamboamartin\validacion\validacion;
 use PDO;
 use stdClass;
 
@@ -22,6 +21,7 @@ class _conversion{
      * @param int $inm_prospecto_id Identificador de prospecto
      * @param inm_prospecto $modelo Modelo en ejecucion
      * @return array|stdClass
+     * @version 2.322.2
      */
     private function data_prospecto(int $inm_prospecto_id, inm_prospecto $modelo): array|stdClass
     {
