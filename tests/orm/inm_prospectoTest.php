@@ -481,7 +481,7 @@ class inm_prospectoTest extends test {
         $resultado = $modelo->modifica_com_prospecto($registro);
         $this->assertIsObject($resultado);
         $this->assertNotTrue(errores::$error);
-        $this->assertEquals('NOMBRE 1AP1',$resultado->registro_actualizado->com_prospecto_codigo);
+        $this->assertEquals('NOMBRE 1 AP1',$resultado->registro_actualizado->com_prospecto_codigo);
         errores::$error = false;
     }
 
@@ -538,7 +538,7 @@ class inm_prospectoTest extends test {
 
         $this->assertIsObject($resultado);
         $this->assertNotTrue(errores::$error);
-        $this->assertEquals('NOMBRE 1AP1',$resultado->upd_com_prospecto->registro_actualizado->com_prospecto_codigo);
+        $this->assertEquals('NOMBRE 1 AP1',$resultado->upd_com_prospecto->registro_actualizado->com_prospecto_codigo);
         errores::$error = false;
     }
 

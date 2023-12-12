@@ -356,8 +356,8 @@ class _conversion{
                 $com_agente_pred['apellido_paterno'] = 'PREDETERMINADO';
                 $com_agente_pred['user'] = 'PREDETERMINADO';
                 $com_agente_pred['email'] = 'test@test.com';
-                $com_agente_pred['telefono'] = mt_rand(10,99).mt_rand(10,99).mt_rand(10,99).mt_rand(10,99);
-                $com_agente_pred['telefono'] . mt_rand(10,99);
+                $telefono = mt_rand(10,99).mt_rand(10,99).mt_rand(10,99).mt_rand(10,99).mt_rand(10,99);
+                $com_agente_pred['telefono'] = $telefono;
                 $com_agente_pred['adm_grupo_id'] = 2;
 
                 $caracteres_permitidos = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ.-*';
@@ -438,6 +438,9 @@ class _conversion{
         return $inm_prospecto_ins;
     }
 
+    /**
+     * @return string[]
+     */
     private function keys_data_comprador(): array
     {
         return array('inm_producto_infonavit_id','inm_attr_tipo_credito_id','inm_destino_credito_id',
