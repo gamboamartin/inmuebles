@@ -156,46 +156,6 @@ if($controlador->row_upd->genero === 'F'){
 
 <?php } ?>
 
-<?php echo $controlador->header_frontend->apartado_8; ?>
-    <div  id="apartado_8">
-        <div class="col-md-12">
-            <h4>7.1 Referencia 1</h4>
-            <?php echo $controlador->buttons['edita_ref_1']; ?>
-            <hr>
-            <?php echo $controlador->inputs->inm_referencias[0]->apellido_paterno; ?>
-            <?php echo $controlador->inputs->inm_referencias[0]->apellido_materno; ?>
-            <?php echo $controlador->inputs->inm_referencias[0]->nombre; ?>
-            <?php echo $controlador->inputs->inm_referencias[0]->lada; ?>
-            <?php echo $controlador->inputs->inm_referencias[0]->numero; ?>
-            <?php echo $controlador->inputs->inm_referencias[0]->celular; ?>
-            <?php echo $controlador->inputs->inm_referencias[0]->dp_pais_id; ?>
-            <?php echo $controlador->inputs->inm_referencias[0]->dp_estado_id; ?>
-            <?php echo $controlador->inputs->inm_referencias[0]->dp_municipio_id; ?>
-            <?php echo $controlador->inputs->inm_referencias[0]->dp_cp_id; ?>
-            <?php echo $controlador->inputs->inm_referencias[0]->dp_colonia_postal_id; ?>
-            <?php echo $controlador->inputs->inm_referencias[0]->dp_calle_pertenece_id; ?>
-            <?php echo $controlador->inputs->inm_referencias[0]->numero_dom; ?>
-        </div>
-        <div class="col-md-12">
-            <h4>7.1 Referencia 2</h4>
-            <?php echo $controlador->buttons['edita_ref_2']; ?>
-            <hr>
-            <?php echo $controlador->inputs->inm_referencias[1]->apellido_paterno; ?>
-            <?php echo $controlador->inputs->inm_referencias[1]->apellido_materno; ?>
-            <?php echo $controlador->inputs->inm_referencias[1]->nombre; ?>
-            <?php echo $controlador->inputs->inm_referencias[1]->lada; ?>
-            <?php echo $controlador->inputs->inm_referencias[1]->numero; ?>
-            <?php echo $controlador->inputs->inm_referencias[1]->celular; ?>
-            <?php echo $controlador->inputs->inm_referencias[1]->dp_pais_id; ?>
-            <?php echo $controlador->inputs->inm_referencias[1]->dp_estado_id; ?>
-            <?php echo $controlador->inputs->inm_referencias[1]->dp_municipio_id; ?>
-            <?php echo $controlador->inputs->inm_referencias[1]->dp_cp_id; ?>
-            <?php echo $controlador->inputs->inm_referencias[1]->dp_colonia_postal_id; ?>
-            <?php echo $controlador->inputs->inm_referencias[1]->dp_calle_pertenece_id; ?>
-            <?php echo $controlador->inputs->inm_referencias[1]->numero_dom; ?>
-        </div>
-    </div>
-
 
 <?php echo $controlador->header_frontend->apartado_13; ?>
 

@@ -58,6 +58,7 @@ class _inm_prospecto{
      * @param PDO $link Conexion a la base de datos
      * @param int $inm_prospecto_id prospecto
      * @return array|stdClass
+     * @version 2.323.2
      */
     final public function datos_conyuge(PDO $link, int $inm_prospecto_id): array|stdClass
     {
