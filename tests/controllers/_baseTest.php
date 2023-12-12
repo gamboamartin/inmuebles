@@ -94,6 +94,21 @@ class _baseTest extends test {
         $this->assertNotTrue(errores::$error);
 
         errores::$error = false;
+
+        $_POST['id_retorno'] = 'a';
+        $resultado = $base->init_retorno();
+        $this->assertIsArray($resultado);
+        $this->assertTrue(errores::$error);
+
+        errores::$error = false;
+        $_POST['id_retorno'] = '12';
+        $_POST['btn_action_next'] = 'ALFA';
+        $resultado = $base->init_retorno();
+        $this->assertIsObject($resultado);
+        $this->assertNotTrue(errores::$error);
+        $this->assertEquals(12,$resultado->id_retorno);
+        $this->assertEquals('ALFA',$resultado->siguiente_view);
+        errores::$error = false;
     }
 
     public function test_out(): void

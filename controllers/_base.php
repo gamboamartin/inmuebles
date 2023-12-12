@@ -35,6 +35,7 @@ class _base{
     /**
      * Inicializa los datos de retorno de una transaccion via POST
      * @return array|stdClass
+     * @version 2.321.0
      */
     final public function init_retorno(): array|stdClass
     {
@@ -42,7 +43,6 @@ class _base{
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al obtener id siguiente', data: $id_retorno);
         }
-
         $siguiente_view = (new actions())->init_alta_bd();
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al obtener siguiente view', data: $siguiente_view);
