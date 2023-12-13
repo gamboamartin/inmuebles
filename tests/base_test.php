@@ -787,6 +787,14 @@ class base_test{
         if(errores::$error){
             return (new errores())->error('Error al eliminar', $del);
         }
+        $del = $this->del_fc_nota_credito(link: $link);
+        if(errores::$error){
+            return (new errores())->error('Error al eliminar', $del);
+        }
+        $del = $this->del_fc_factura(link: $link);
+        if(errores::$error){
+            return (new errores())->error('Error al eliminar', $del);
+        }
 
         $del = (new \gamboamartin\comercial\test\base_test())->del_com_cliente(link: $link);
         if(errores::$error){
@@ -810,6 +818,7 @@ class base_test{
         return $del;
     }
 
+
     public function del_com_tipo_prospecto(PDO $link): array
     {
         $del = $this->del_inm_prospecto(link: $link);
@@ -829,6 +838,26 @@ class base_test{
 
 
         $del = (new \gamboamartin\facturacion\tests\base_test())->del_fc_csd(link: $link);
+        if(errores::$error){
+            return (new errores())->error('Error al eliminar', $del);
+        }
+        return $del;
+    }
+
+    public function del_fc_factura(PDO $link): array
+    {
+
+
+        $del = (new \gamboamartin\facturacion\tests\base_test())->del_fc_factura(link: $link);
+        if(errores::$error){
+            return (new errores())->error('Error al eliminar', $del);
+        }
+        return $del;
+    }
+    public function del_fc_nota_credito(PDO $link): array
+    {
+
+        $del = (new \gamboamartin\facturacion\tests\base_test())->del_fc_nota_credito(link: $link);
         if(errores::$error){
             return (new errores())->error('Error al eliminar', $del);
         }

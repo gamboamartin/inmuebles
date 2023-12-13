@@ -582,6 +582,7 @@ class _conversion{
     /**
      * Obtiene los keys de un prospecto para integrarlos con un cliente
      * @return string[]
+     * @version 2.328.2
      */
     private function keys_data_prospecto(): array
     {
