@@ -45,10 +45,24 @@ class inm_prospecto extends _modelo_parent{
         }
 
         $sql = "(SELECT IF(adm_usuario.id = $_SESSION[usuario_id], $_SESSION[usuario_id], -1))";
+
+
         if($adm_usuario['adm_grupo_root'] === 'activo'){
             $sql = $_SESSION['usuario_id'];
         }
         $columnas_extra['usuario_permitido_id'] = $sql;
+
+       /* $sql = " (SELECT
+                    adm_usuario_permitido.id 
+                    FROM com_agente AS com_agente_permitido 
+                    LEFT JOIN adm_usuario AS adm_usuario_permitido ON  com_agente_permitido.adm_usuario_id = adm_usuario_permitido.id
+                    LEFT JOIN com_rel_agente ON com_rel_agente.com_agente_id = com_agente_permitido.id 
+                    WHERE  adm_usuario_permitido.id = $_SESSION[usuario_id] )";
+
+        /*$columnas_extra['usuario_permitido_rel_id'] = $sql;*/
+
+
+       // $columnas_extra['abc'] = "1";*/
 
         $atributos_criticos = array('com_prospecto_id','razon_social','dp_calle_pertenece_id','rfc',
             'numero_exterior','numero_interior','inm_sindicato_id','dp_municipio_nacimiento_id','observaciones',
