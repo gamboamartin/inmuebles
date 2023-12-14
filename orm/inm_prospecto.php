@@ -471,7 +471,6 @@ class inm_prospecto extends _modelo_parent{
      * @param bool $reactiva valida la reactivacion del registro
      * @param array $keys_integra_ds columnas para descripcion select
      * @return array|stdClass
-     * @version 2.233.2
      */
     public function modifica_bd(array $registro, int $id, bool $reactiva = false,
                                 array $keys_integra_ds = array('codigo', 'descripcion')): array|stdClass
@@ -500,7 +499,6 @@ class inm_prospecto extends _modelo_parent{
      * Modifica un com_prospecto cuando se modifica inm_prospecto
      * @param stdClass $registro Registro en proceso
      * @return array|stdClass
-     * @version 2.229.2
      */
     private function modifica_com_prospecto(stdClass $registro): array|stdClass
     {
@@ -520,6 +518,13 @@ class inm_prospecto extends _modelo_parent{
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al modificar prospecto',data:  $upd);
         }
+
+        $regenera = (new com_prospecto(link: $this->link))->regenera_agente_inicial(
+            com_prospecto_id: $registro->com_prospecto_id);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al regenerar relaciones',data:  $regenera);
+        }
+
         return $upd;
     }
 
@@ -532,7 +537,6 @@ class inm_prospecto extends _modelo_parent{
      * @param stdClass $r_modifica Resultado de modificacion
      * @param bool $reactiva valida la reactivacion
      * @return array|stdClass
-     * @version 2.232.1
      */
     private function post_upd(int $id, array $keys_integra_ds, stdClass $r_modifica, bool $reactiva): array|stdClass
     {
@@ -624,7 +628,6 @@ class inm_prospecto extends _modelo_parent{
      * @param bool $reactiva valida la reactivacion de un registro
      * @param stdClass $registro Registro modificado
      * @return array|stdClass
-     * @version 2.230.2
      */
     private function transacciones_externas(int $id, array $keys_integra_ds, bool $reactiva,
                                             stdClass $registro): array|stdClass

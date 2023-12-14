@@ -399,6 +399,37 @@ class _conversionTest extends test {
         errores::$error = false;
     }
 
+    /**
+     * Validates a key using the "valida_key" method of the _conversion class.
+     *
+     * This method performs the following steps:
+     * 1. Sets the errores::$error property to false.
+     * 2. Creates an instance of the _conversion class.
+     * 3. Calls the "valida_key" method of the _conversion instance with a given key.
+     * 4. Asserts that the returned value is a boolean.
+     * 5. Asserts that errores::$error is not true.
+     * 6. Asserts that the returned value is true.
+     * 7. Sets the errores::$error property to false.
+     *
+     * @return void
+     */
+    public function test_valida_key(): void
+    {
+        errores::$error = false;
+
+
+        $conversion = new _conversion();
+        $conversion = new liberator($conversion);
+
+        $key = 'a';
+        $resultado = $conversion->valida_key($key);
+        $this->assertIsBool($resultado);
+        $this->assertNotTrue(errores::$error);
+        $this->assertTrue($resultado);
+
+        errores::$error = false;
+    }
+
 
 
 }

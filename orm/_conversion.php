@@ -556,7 +556,14 @@ class _conversion{
         return $inm_comprador_ins;
     }
 
-    private function integra_key(stdClass $data, array $inm_comprador_ins, string $key)
+
+    /**
+     * @param stdClass $data
+     * @param array $inm_comprador_ins
+     * @param string $key
+     * @return array
+     */
+    private function integra_key(stdClass $data, array $inm_comprador_ins, string $key): array
     {
         $key = trim($key);
         $valida = $this->valida_key(key: $key);
@@ -570,6 +577,7 @@ class _conversion{
         $inm_comprador_ins[$key] = $data->inm_prospecto->$key;
         return $inm_comprador_ins;
     }
+
 
     /**
      * @return string[]
@@ -610,6 +618,7 @@ class _conversion{
      *
      * @param string $key The key to be validated.
      * @return true|array Returns true if the key is valid, or an array containing an error message and the invalid key if it is not valid.
+     * @version 2.331.2
      */
     private function valida_key(string $key): true|array
     {
