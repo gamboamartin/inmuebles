@@ -731,24 +731,16 @@ class controlador_inm_prospecto extends _ctl_formato {
 
     public function regenera_rel_com_agente(bool $header, bool $ws = false): array|string{
 
-        $registros = (new inm_prospecto(link: $this->link))->registros();
+        $this->link->beginTransaction();
+        $regenera = (new inm_prospecto(link: $this->link))->regenera_agentes_iniciales();
         if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al obtener prospectos',data:  $registros,
+            $this->link->rollBack();
+            return $this->retorno_error(mensaje: 'Error al regenerar',data:  $regenera,
                 header: $header,ws:  $ws);
         }
+        $this->link->commit();
+        print_r($regenera);
 
-        foreach ($registros as $inm_prospecto){
-            $this->link->beginTransaction();
-            $com_prospecto_id = $inm_prospecto->com_prospecto_id;
-            $regenera = (new com_prospecto(link: $this->link))->regenera_agente_inicial(com_prospecto_id: $com_prospecto_id);
-            if(errores::$error){
-                $this->link->rollBack();
-                return $this->retorno_error(mensaje: 'Error al regenerar relacion inicial', data: $regenera,
-                    header: $header, ws: $ws);
-            }
-            var_dump($regenera);
-            $this->link->commit();
-        }
         exit;
     }
 

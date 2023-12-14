@@ -597,6 +597,40 @@ class inm_prospecto extends _modelo_parent{
         return $r_pr_sub_proceso->registros[0];
     }
 
+    private function regenera_agente_inicial(int $inm_prospecto_id)
+    {
+        $inm_prospecto = $this->registro(registro_id: $inm_prospecto_id, columnas_en_bruto: true, retorno_obj: true);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al obtener inm_prospecto',data:  $inm_prospecto);
+        }
+
+        $com_prospecto_id = $inm_prospecto->com_prospecto_id;
+        $regenera = (new com_prospecto(link: $this->link))->regenera_agente_inicial(com_prospecto_id: $com_prospecto_id);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al regenerar relacion inicial', data: $regenera);
+        }
+        return $regenera;
+
+    }
+
+    final public function regenera_agentes_iniciales()
+    {
+        $registros = $this->registros(return_obj: true);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al obtener prospectos',data:  $registros);
+        }
+        $regeneraciones = array();
+        foreach ($registros as $inm_prospecto){
+            $regenera = $this->regenera_agente_inicial($inm_prospecto->com_prospecto_id);
+            if(errores::$error){
+                return $this->error->error(mensaje: 'Error al regenerar relacion inicial', data: $regenera);
+            }
+            $regeneraciones[] = $regenera;
+        }
+        return $regeneraciones;
+
+    }
+
 
 
     final public function transacciones_upd(int $inm_prospecto_id){
