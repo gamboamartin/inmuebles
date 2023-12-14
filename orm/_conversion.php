@@ -605,6 +605,12 @@ class _conversion{
             'correo_empresa');
     }
 
+    /**
+     * Validates a key.
+     *
+     * @param string $key The key to be validated.
+     * @return true|array Returns true if the key is valid, or an array containing an error message and the invalid key if it is not valid.
+     */
     private function valida_key(string $key): true|array
     {
         $key = trim($key);

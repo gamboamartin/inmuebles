@@ -167,7 +167,6 @@ class inm_prospecto extends _modelo_parent{
      * Inserta un prospecto
      * @param array $keys_integra_ds Identificadores para descripciones de tipo select
      * @return array|stdClass
-     * @version 2.208.1
      */
     public function alta_bd(array $keys_integra_ds = array('codigo', 'descripcion')): array|stdClass
     {
@@ -201,8 +200,6 @@ class inm_prospecto extends _modelo_parent{
 
         return $r_alta_bd;
     }
-
-
 
     /**
      * Convierte un prospecto en cliente generado una relacion con inm_rel_prospecto_cliente y inm_comprador
