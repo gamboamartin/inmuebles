@@ -577,7 +577,7 @@ class _prospecto{
      * 6. Si hay algún error limpiando el nombre completo válido, retorna un error.
      * 7. Finalmente, retorna el nombre completo válido limpiado sin espacios, puntos.
      */
-    private function nombre_completo_valida(array $registro): string
+    final public function nombre_completo_valida(array $registro): string
     {
 
         $apellido_materno = $this->apellido_materno(registro: $registro);
