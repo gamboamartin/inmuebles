@@ -718,6 +718,21 @@ class controlador_inm_prospecto extends _ctl_formato {
         exit;
     }
 
+    public function regenera_nombre_completo_valida(bool $header, bool $ws = false): array|string{
+
+        $this->link->beginTransaction();
+        $regenera = (new inm_prospecto(link: $this->link))->regenera_nombre_completo_valida();
+        if(errores::$error){
+            $this->link->rollBack();
+            return $this->retorno_error(mensaje: 'Error al regenerar',data:  $regenera,
+                header: $header,ws:  $ws);
+        }
+        $this->link->commit();
+        print_r($regenera);
+
+        exit;
+    }
+
     public function regenera_nss(bool $header, bool $ws = false): array|string{
         $columnas[]  ='inm_prospecto_id';
         $columnas[]  ='inm_prospecto_nss';

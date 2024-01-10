@@ -663,6 +663,33 @@ class inm_prospecto extends _modelo_parent{
 
     }
 
+    final public function regenera_nombre_completo_valida()
+    {
+        $registros = $this->registros(columnas_en_bruto: true);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al obtener prospectos',data:  $registros);
+        }
+        $regeneraciones = array();
+        foreach ($registros as $inm_prospecto){
+
+            $nombre_completo_valida = (new _prospecto())->nombre_completo_valida(registro: $inm_prospecto);
+            if(errores::$error){
+                return $this->error->error(mensaje: 'Error al obtener nombre_completo_valida',data:  $nombre_completo_valida);
+            }
+
+            $registro_upd['nombre_completo_valida'] = $nombre_completo_valida;
+            $upd = $this->modifica_bd(registro: $this->registro,id:  $inm_prospecto['id']);
+            if(errores::$error){
+                return $this->error->error(mensaje: 'Error al actualizar registro',data:  $upd);
+            }
+
+
+            $regeneraciones[] = $upd;
+        }
+        return $regeneraciones;
+
+    }
+
 
 
     final public function transacciones_upd(int $inm_prospecto_id){
