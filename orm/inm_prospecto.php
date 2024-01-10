@@ -653,7 +653,7 @@ class inm_prospecto extends _modelo_parent{
         }
         $regeneraciones = array();
         foreach ($registros as $inm_prospecto){
-            $regenera = $this->regenera_agente_inicial($inm_prospecto->com_prospecto_id);
+            $regenera = $this->regenera_agente_inicial($inm_prospecto->inm_prospecto_id);
             if(errores::$error){
                 return $this->error->error(mensaje: 'Error al regenerar relacion inicial', data: $regenera);
             }
