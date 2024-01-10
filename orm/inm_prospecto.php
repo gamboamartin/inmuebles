@@ -147,14 +147,10 @@ class inm_prospecto extends _modelo_parent{
             return $this->error->error(mensaje: 'Error al modificar prospecto',data:  $nombre_completo_valida);
         }
 
-        $filtro['inm_prospecto.nombre_completo_valida'] = $nombre_completo_valida;
-        $n_prospectos = $this->cuenta(filtro: $filtro);
+
+        $valida = $this->valida_prospecto_repetido_nombre(nombre_completo_valida: $nombre_completo_valida);
         if(errores::$error){
-            return $this->error->error(mensaje: 'Error al contar prospectos',data:  $n_prospectos);
-        }
-        if($n_prospectos > 1){
-            return $this->error->error(mensaje: 'Error existe mas de un prospecto con el mismo nombre',
-                data:  $n_prospectos);
+            return $this->error->error(mensaje: 'Error al validar prospecto repetido por nombre',data:  $valida);
         }
 
         return $r_modifica_nombre_completo_valida;
@@ -741,6 +737,21 @@ class inm_prospecto extends _modelo_parent{
         $data->r_modifica_nombre_completo_valida = $r_modifica_nombre_completo_valida;
         $data->upd_com_prospecto = $upd;
         return $data;
+    }
+
+    private function valida_prospecto_repetido_nombre(string $nombre_completo_valida)
+    {
+        $filtro['inm_prospecto.nombre_completo_valida'] = $nombre_completo_valida;
+        $n_prospectos = $this->cuenta(filtro: $filtro);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al contar prospectos',data:  $n_prospectos);
+        }
+        if($n_prospectos > 1){
+            return $this->error->error(mensaje: 'Error existe mas de un prospecto con el mismo nombre',
+                data:  $n_prospectos);
+        }
+        return true;
+
     }
 
 }
