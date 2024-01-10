@@ -26,7 +26,7 @@ class inm_prospecto extends _modelo_parent{
         $campos_obligatorios = array('com_prospecto_id','razon_social','dp_calle_pertenece_id','rfc',
             'numero_exterior','numero_interior','inm_sindicato_id','dp_municipio_nacimiento_id','fecha_nacimiento',
             'monto_final','sub_cuenta','descuento','puntos','inm_nacionalidad_id','inm_ocupacion_id','telefono_casa',
-            'correo_empresa');
+            'correo_empresa','nombre_completo_valida');
 
         $columnas_extra= array();
 
@@ -44,8 +44,6 @@ class inm_prospecto extends _modelo_parent{
             exit;
         }
 
-        //$sql = "(SELECT IF(adm_usuario.id = $_SESSION[usuario_id], $_SESSION[usuario_id], -1))";
-        //$columnas_extra['usuario_permitido_id'] = $sql;
 
         $sql = "( IFNULL ((SELECT
                     adm_usuario_permitido.id 

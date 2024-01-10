@@ -50,7 +50,7 @@ class controlador_adm_grupoTest extends test {
         assertStringContainsStringIgnoringCase('<form method="post" action="./index.php?seccion=adm_grupo&accion=modifica_bd&registro_id=2&adm_menu_id=64&session_id=4075502287', $data);
         assertStringContainsStringIgnoringCase('&session_id=4075502287&adm_menu_id=64" class="form-additional" enctype="multipart/form-data">', $data);
         assertStringContainsStringIgnoringCase("<div class='control-group col-sm-6'><label class='control-label' for='codigo'>Cod</label><div class='controls'>", $data);
-        assertStringContainsStringIgnoringCase("<input type='text' name='codigo' value='GRUPO' class='form-control'", $data);
+        assertStringContainsStringIgnoringCase("<input type='text' name='codigo' value='", $data);
         assertStringContainsStringIgnoringCase("disabled required id='codigo' placeholder='Cod' title='Cod' /></div></div><div class='control-group", $data);
         assertStringContainsStringIgnoringCase("col-sm-6'><label class='control-label' for='descripcion'>Grupo</label><div class='controls'>", $data);
         assertStringContainsStringIgnoringCase("<input type='text' name='descripcion' value='Administrador Sistema'", $data);

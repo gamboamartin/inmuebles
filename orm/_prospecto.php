@@ -18,11 +18,33 @@ class _prospecto{
     }
 
     /**
+     * Obtiene el apellido materno del array del registro proporcionado.
+     *
+     * @param array $registro Es el array que contiene los datos del registro.
+     *
+     * @return string Retorna el apellido materno si está presente en el array del registro. En caso contrario, retorna una cadena vacía.
+     *
+     * Aquí está el funcionamiento de la función:
+     * Comprueba si el índice 'apellido_materno' está presente en el array del registro.
+     * Si existe, obtiene el valor del índice 'apellido_materno' y lo retorna.
+     * En caso contrario, retorna una cadena vacía.
+     */
+    private function apellido_materno(array $registro): string
+    {
+        $apellido_materno = '';
+
+        if(isset($registro['apellido_materno'])){
+            $apellido_materno = $registro['apellido_materno'];
+        }
+        return $apellido_materno;
+    }
+
+    /**
      * Asigna los datos de alta para un prospecto
      * @param inm_prospecto $modelo Modelo en ejecucion
      * @param array $registro Registro en proceso
      * @return array
-     * @version 2.196.1
+
      */
     private function asigna_datos_alta(inm_prospecto $modelo, array $registro): array
     {
@@ -52,6 +74,13 @@ class _prospecto{
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al inicializar registro',data:  $registro);
         }
+        $nombre_completo_valida = $this->nombre_completo_valida(registro: $registro);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al integrar nombre_completo_valida',
+                data:  $nombre_completo_valida);
+        }
+        $registro['nombre_completo_valida'] = $nombre_completo_valida;
+
         return $registro;
     }
 
@@ -148,6 +177,24 @@ class _prospecto{
             $dp_calle_pertenece_id = 100;
         }
         return $dp_calle_pertenece_id;
+    }
+
+    /**
+     * Genera un nombre completo válido a partir del apellido materno y el array del registro proporcionado.
+     *
+     * @param string $apellido_materno Es la cadena del apellido materno.
+     * @param array $registro Es el array que contiene los datos del registro.
+     *
+     * @return string Retorna el nombre completo válido sin espacios al inicio y al final.
+     *
+     * Aquí está el funcionamiento de la función:
+     * 1. Concatena el 'nombre', 'apellido_paterno' del array del registro y 'apellido_materno'; esto resulta en el nombre completo.
+     * 2. Finalmente, retorna el nombre completo después de quitar los espacios iniciales y finales usando la función `trim`.
+     */
+    private function get_nombre_completo_valida(string $apellido_materno,array $registro): string
+    {
+        $nombre_completo_valida = $registro['nombre'].$registro['apellido_paterno'].$apellido_materno;
+        return trim($nombre_completo_valida);
     }
 
 
@@ -486,11 +533,80 @@ class _prospecto{
     }
 
     /**
+     * Realiza la limpieza del nombre completo proporcionado.
+     *
+     * @param string $nombre_completo_valida Es la cadena del nombre completo que se limpiará.
+     *
+     * @return string El nombre completo después de realizar las operaciones de limpieza.
+     *
+     * Aquí está el funcionamiento de la función:
+     * 1. Remueve todos los espacios en blanco del nombre completo.
+     * 2. Remueve todos los puntos del nombre completo.
+     * 3. Reemplaza todas las ocurrencias de 'ñ' con 'n' en el nombre completo.
+     * 4. Reemplaza todas las ocurrencias de 'Ñ' con 'N' en el nombre completo.
+     *
+     * Este proceso de limpieza se repetirá 10 veces en un bucle.
+     */
+    private function limpia_nombre_completo(string $nombre_completo_valida): string
+    {
+        $i = 0;
+        while ($i <= 10) {
+            $nombre_completo_valida = str_replace(' ', '', $nombre_completo_valida);
+            $nombre_completo_valida = str_replace('.', '', $nombre_completo_valida);
+            $nombre_completo_valida = str_replace('ñ', 'n', $nombre_completo_valida);
+            $nombre_completo_valida = str_replace('Ñ', 'N', $nombre_completo_valida);
+            $i++;
+        }
+        return $nombre_completo_valida;
+
+    }
+
+    /**
+     * Genera un nombre completo válido a partir del array del registro proporcionado.
+     *
+     * @param array $registro es el array que contiene los datos del registro.
+     *
+     * @return string Retorna el nombre completo válido. Si se encuentra algún error durante el proceso, retorna un error.
+     *
+     * Aquí está el funcionamiento de la función:
+     * 1. Obtiene el apellido materno del array del registro utilizando la función `apellido_materno`.
+     * 2. Si hay algún error obteniendo el apellido materno, retorna un error.
+     * 3. Obtiene el nombre completo válido utilizando la función `get_nombre_completo_valida` con el apellido materno y el array del registro.
+     * 4. Si hay algún error obteniendo el nombre completo válido, retorna un error.
+     * 5. Limpia el nombre completo válido utilizando la función `limpia_nombre_completo`.
+     * 6. Si hay algún error limpiando el nombre completo válido, retorna un error.
+     * 7. Finalmente, retorna el nombre completo válido limpiado sin espacios, puntos.
+     */
+    private function nombre_completo_valida(array $registro): string
+    {
+
+        $apellido_materno = $this->apellido_materno(registro: $registro);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al obtener apellido_materno', data:  $apellido_materno);
+        }
+
+        $nombre_completo_valida = $this->get_nombre_completo_valida(apellido_materno: $apellido_materno,
+            registro: $registro);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al obtener nombre_completo_valida',
+                data:  $nombre_completo_valida);
+        }
+
+        $nombre_completo_valida = $this->limpia_nombre_completo(nombre_completo_valida: $nombre_completo_valida);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al limpiar nombre_completo_valida',
+                data:  $nombre_completo_valida);
+        }
+
+        return $nombre_completo_valida;
+
+    }
+
+    /**
      * Ajusta los elementos necesarios previo a un alta de registro
      * @param inm_prospecto $modelo Modelo de prospecto
      * @param array $registro registro previo de insersion
      * @return array
-     * @version 2.204.1
      */
     final public function previo_alta(inm_prospecto $modelo, array $registro): array
     {
@@ -548,6 +664,14 @@ class _prospecto{
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al validar registro',data:  $valida);
         }
+
+        /*$apellido_materno = '';
+        if(!isset($registro['apellido_materno'])){
+
+        }*/
+
+        //$nombre_completo_sin_espacios = $registro['nombre'].$registro['apellido_paterno'];
+
         return true;
     }
 }
