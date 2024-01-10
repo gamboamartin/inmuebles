@@ -674,7 +674,7 @@ class _prospecto{
         return true;
     }
 
-    private function valida_prospecto_nombre_duplicado(inm_prospecto $modelo, array $registro)
+    final public function valida_prospecto_nombre_duplicado(inm_prospecto $modelo, array $registro)
     {
         $nombre_completo_valida = $registro['nombre_completo_valida'];
         $filtro['inm_prospecto.nombre_completo_valida'] = $nombre_completo_valida;
