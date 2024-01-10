@@ -482,7 +482,6 @@ class _prospecto{
      * @param PDO $link Conexion a la base de datos
      * @param array $registro Registro en proceso
      * @return array|stdClass
-     * @version 2.204.1
      */
     private function inserta_com_prospecto(PDO $link, array $registro): array|stdClass
     {
@@ -641,6 +640,16 @@ class _prospecto{
 
         }
 
+        $nombre_completo_valida = $registro['nombre_completo_valida'];
+        $filtro['inm_prospecto.nombre_completo_valida'] = $nombre_completo_valida;
+        $existe = $modelo->existe(filtro: $filtro);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al validar si existe inm_prospecto',data:  $existe);
+        }
+        if($existe){
+            return $this->error->error(mensaje: 'Error el prospecto ya existe',data:  $registro);
+        }
+
         return $registro;
     }
 
@@ -648,7 +657,6 @@ class _prospecto{
      * Verifica que los elementos de un alta sean correctos
      * @param array $registro Registro en proceso
      * @return array|true
-     * @version 2.203.1
      */
     private function valida_alta_prospecto(array $registro): bool|array
     {
@@ -665,12 +673,6 @@ class _prospecto{
             return $this->error->error(mensaje: 'Error al validar registro',data:  $valida);
         }
 
-        /*$apellido_materno = '';
-        if(!isset($registro['apellido_materno'])){
-
-        }*/
-
-        //$nombre_completo_sin_espacios = $registro['nombre'].$registro['apellido_paterno'];
 
         return true;
     }
