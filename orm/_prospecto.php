@@ -640,14 +640,11 @@ class _prospecto{
 
         }
 
-        $nombre_completo_valida = $registro['nombre_completo_valida'];
-        $filtro['inm_prospecto.nombre_completo_valida'] = $nombre_completo_valida;
-        $existe = $modelo->existe(filtro: $filtro);
+        $valida_prospecto_nombre_duplicado = $this->valida_prospecto_nombre_duplicado(
+            modelo: $modelo,registro:  $registro);
         if(errores::$error){
-            return $this->error->error(mensaje: 'Error al validar si existe inm_prospecto',data:  $existe);
-        }
-        if($existe){
-            return $this->error->error(mensaje: 'Error el prospecto ya existe',data:  $registro);
+            return $this->error->error(mensaje: 'Error al validar si existe nombre de prospecto duplicado',
+                data:  $valida_prospecto_nombre_duplicado);
         }
 
         return $registro;
@@ -675,5 +672,21 @@ class _prospecto{
 
 
         return true;
+    }
+
+    private function valida_prospecto_nombre_duplicado(inm_prospecto $modelo, array $registro)
+    {
+        $nombre_completo_valida = $registro['nombre_completo_valida'];
+        $filtro['inm_prospecto.nombre_completo_valida'] = $nombre_completo_valida;
+        $existe = $modelo->existe(filtro: $filtro);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al validar si existe inm_prospecto',data:  $existe);
+        }
+        if($existe){
+            return $this->error->error(mensaje: 'Error el prospecto ya existe',data:  $registro);
+        }
+
+        return $existe;
+
     }
 }
