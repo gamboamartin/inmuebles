@@ -334,10 +334,12 @@ class controlador_inm_prospecto extends _ctl_formato {
         $columns["inm_prospecto_nss"]["titulo"] = "NSS";
         $columns["inm_prospecto_rfc"]["titulo"] = "RFC";
         $columns["inm_prospecto_curp"]["titulo"] = "CURP";
+        $columns["com_agente_id"]["titulo"] = "Agente Id";
+        $columns["com_agente_descripcion"]["titulo"] = "Agente";
 
 
         $filtro = array("inm_prospecto.id","inm_prospecto.razon_social",'inm_prospecto.nss','inm_prospecto.rfc',
-            'inm_prospecto.curp');
+            'inm_prospecto.curp','com_agente.id','com_agente.descripcion');
 
         $datatables = new stdClass();
         $datatables->columns = $columns;
