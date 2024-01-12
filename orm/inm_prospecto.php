@@ -678,7 +678,7 @@ class inm_prospecto extends _modelo_parent{
             }
 
             $registro_upd['nombre_completo_valida'] = $nombre_completo_valida;
-            $upd = $this->modifica_bd(registro: $this->registro,id:  $inm_prospecto['id']);
+            $upd = $this->modifica_bd(registro: $registro_upd,id:  $inm_prospecto['id']);
             if(errores::$error){
                 return $this->error->error(mensaje: 'Error al actualizar registro',data:  $upd);
             }
@@ -751,7 +751,7 @@ class inm_prospecto extends _modelo_parent{
 
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al modificar nombre_completo_valida',
-                data:  $r_modifica_descripcion);
+                data:  $r_modifica_nombre_completo_valida);
         }
 
         $upd = $this->modifica_com_prospecto(registro: $registro);
@@ -775,7 +775,7 @@ class inm_prospecto extends _modelo_parent{
         }
         if($n_prospectos > 1){
             return $this->error->error(mensaje: 'Error existe mas de un prospecto con el mismo nombre',
-                data:  $n_prospectos);
+                data:  array($n_prospectos,$filtro));
         }
         return true;
 

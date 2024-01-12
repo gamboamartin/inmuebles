@@ -14,6 +14,8 @@ $_GET['session_id'] = $_SESSION['session_id'];
 $con = new conexion();
 $link = conexion::$link;
 
+errores::$error = false;
+
 $link->beginTransaction();
 
 $inm_prospecto_modelo = new inm_prospecto(link: $link);
