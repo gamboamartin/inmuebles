@@ -98,7 +98,7 @@ class controlador_inm_ubicacionTest extends test {
         errores::$error = false;
 
         $file = "inm_ubicacion.asigna_costo";
-        $session_id = '6118729420';
+        $session_id = '1590259697';
 
 
         $ch = curl_init("http://localhost/inmuebles/index.php?seccion=inm_ubicacion&accion=asigna_costo&adm_menu_id=64&session_id=$session_id&adm_menu_id=64&registro_id=1");
@@ -133,7 +133,7 @@ class controlador_inm_ubicacionTest extends test {
         }
 
         $file = "inm_ubicacion.detalle_costo";
-        $session_id = '6118729420';
+        $session_id = '1590259697';
 
 
         $ch = curl_init("http://localhost/inmuebles/index.php?seccion=inm_ubicacion&accion=detalle_costo&adm_menu_id=64&session_id=$session_id&adm_menu_id=64&registro_id=1");

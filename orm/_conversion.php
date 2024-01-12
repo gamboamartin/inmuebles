@@ -5,7 +5,6 @@ use gamboamartin\comercial\models\com_cliente;
 use gamboamartin\comercial\models\com_tipo_agente;
 use gamboamartin\comercial\models\com_tipo_prospecto;
 use gamboamartin\errores\errores;
-use gamboamartin\validacion\validacion;
 use PDO;
 use stdClass;
 
@@ -16,12 +15,30 @@ class _conversion{
         $this->error = new errores();
     }
 
+    private function data_comprador(int $inm_comprador_id, inm_comprador $modelo): array|stdClass
+    {
+        if($inm_comprador_id<=0){
+            return $this->error->error(mensaje: 'Error inm_comprador_id es menor a 0', data: $inm_comprador_id);
+        }
+
+        $inm_comprador = $modelo->registro(registro_id: $inm_comprador_id, columnas_en_bruto: true, retorno_obj: true);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al obtener comprador', data: $inm_comprador);
+        }
+
+        $data = new stdClass();
+        $data->inm_comprador = $inm_comprador;
+
+        return $data;
+    }
+
 
     /**
      * Obtiene los datos de un prospecto
      * @param int $inm_prospecto_id Identificador de prospecto
      * @param inm_prospecto $modelo Modelo en ejecucion
      * @return array|stdClass
+     * @version 2.322.2
      */
     private function data_prospecto(int $inm_prospecto_id, inm_prospecto $modelo): array|stdClass
     {
@@ -162,20 +179,33 @@ class _conversion{
         $inm_comprador_ins = array();
 
         foreach ($keys as $key){
-            $key = trim($key);
-            if($key === ''){
-                return $this->error->error(mensaje: 'Error key esta vacio', data: $key);
+            $inm_comprador_ins = $this->integra_key(data: $data,inm_comprador_ins:  $inm_comprador_ins,key:  $key);
+            if(errores::$error){
+                return $this->error->error(mensaje: 'Error al integrar key', data: $inm_comprador_ins);
             }
-            if(is_numeric($key)){
-                return $this->error->error(mensaje: 'Error key debe ser un texto', data: $key);
-            }
-            if(!isset($data->inm_prospecto->$key)){
-                return $this->error->error(mensaje: 'Error no existe atributo', data: $key);
-            }
-
-            $inm_comprador_ins[$key] = $data->inm_prospecto->$key;
         }
+
         return $inm_comprador_ins;
+    }
+
+    private function inm_referencia(int $inm_comprador_id, stdClass $inm_referencia_prospecto): array
+    {
+        if($inm_comprador_id <= 0){
+            return $this->error->error(mensaje: 'Error inm_comprador_id debe ser mayor a 0', data: $inm_comprador_id);
+        }
+
+        $inm_referencia_ins['inm_comprador_id'] = $inm_comprador_id;
+        $inm_referencia_ins['apellido_paterno'] = $inm_referencia_prospecto->inm_referencia_prospecto_apellido_paterno;
+        $inm_referencia_ins['apellido_materno'] = $inm_referencia_prospecto->inm_referencia_prospecto_apellido_materno;
+        $inm_referencia_ins['nombre'] = $inm_referencia_prospecto->inm_referencia_prospecto_nombre;
+        $inm_referencia_ins['lada'] = $inm_referencia_prospecto->inm_referencia_prospecto_lada;
+        $inm_referencia_ins['numero'] = $inm_referencia_prospecto->inm_referencia_prospecto_numero;
+        $inm_referencia_ins['celular'] = $inm_referencia_prospecto->inm_referencia_prospecto_celular;
+        $inm_referencia_ins['dp_calle_pertenece_id'] = $inm_referencia_prospecto->inm_referencia_prospecto_dp_calle_pertenece_id;
+        $inm_referencia_ins['inm_parentesco_id'] = $inm_referencia_prospecto->inm_referencia_prospecto_inm_parentesco_id;
+        $inm_referencia_ins['numero_dom'] = $inm_referencia_prospecto->inm_referencia_prospecto_numero_dom;
+
+        return $inm_referencia_ins;
     }
 
     /**
@@ -200,26 +230,6 @@ class _conversion{
     }
 
 
-    private function inm_referencia(int $inm_comprador_id, stdClass $inm_referencia_prospecto): array
-    {
-        if($inm_comprador_id <= 0){
-            return $this->error->error(mensaje: 'Error inm_comprador_id debe ser mayor a 0', data: $inm_comprador_id);
-        }
-
-        $inm_referencia_ins['inm_comprador_id'] = $inm_comprador_id;
-        $inm_referencia_ins['apellido_paterno'] = $inm_referencia_prospecto->inm_referencia_prospecto_apellido_paterno;
-        $inm_referencia_ins['apellido_materno'] = $inm_referencia_prospecto->inm_referencia_prospecto_apellido_materno;
-        $inm_referencia_ins['nombre'] = $inm_referencia_prospecto->inm_referencia_prospecto_nombre;
-        $inm_referencia_ins['lada'] = $inm_referencia_prospecto->inm_referencia_prospecto_lada;
-        $inm_referencia_ins['numero'] = $inm_referencia_prospecto->inm_referencia_prospecto_numero;
-        $inm_referencia_ins['celular'] = $inm_referencia_prospecto->inm_referencia_prospecto_celular;
-        $inm_referencia_ins['dp_calle_pertenece_id'] = $inm_referencia_prospecto->inm_referencia_prospecto_dp_calle_pertenece_id;
-        $inm_referencia_ins['inm_parentesco_id'] = $inm_referencia_prospecto->inm_referencia_prospecto_inm_parentesco_id;
-        $inm_referencia_ins['numero_dom'] = $inm_referencia_prospecto->inm_referencia_prospecto_numero_dom;
-
-        return $inm_referencia_ins;
-    }
-
     /**
      * Inserta un comprador
      * @param int $inm_prospecto_id Identificador de prospecto
@@ -243,8 +253,11 @@ class _conversion{
             return $this->error->error(mensaje: 'Error al obtener id_pref', data: $inm_comprador_ins);
         }
 
+        $inm_comprador_modelo = new inm_comprador(link: $modelo->link);
 
-        $r_alta_comprador = (new inm_comprador(link: $modelo->link))->alta_registro(registro: $inm_comprador_ins);
+        $inm_comprador_modelo->desde_prospecto = true;
+
+        $r_alta_comprador = $inm_comprador_modelo->alta_registro(registro: $inm_comprador_ins);
 
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al insertar cliente', data: $r_alta_comprador);
@@ -274,23 +287,6 @@ class _conversion{
         }
 
         return $r_alta_prospecto;
-    }
-
-    private function data_comprador(int $inm_comprador_id, inm_comprador $modelo): array|stdClass
-    {
-        if($inm_comprador_id<=0){
-            return $this->error->error(mensaje: 'Error inm_comprador_id es menor a 0', data: $inm_comprador_id);
-        }
-
-        $inm_comprador = $modelo->registro(registro_id: $inm_comprador_id, columnas_en_bruto: true, retorno_obj: true);
-        if(errores::$error){
-            return $this->error->error(mensaje: 'Error al obtener comprador', data: $inm_comprador);
-        }
-
-        $data = new stdClass();
-        $data->inm_comprador = $inm_comprador;
-
-        return $data;
     }
 
     private function inm_prospecto_ins(stdClass $data, PDO $link): array
@@ -353,8 +349,8 @@ class _conversion{
                 $com_agente_pred['apellido_paterno'] = 'PREDETERMINADO';
                 $com_agente_pred['user'] = 'PREDETERMINADO';
                 $com_agente_pred['email'] = 'test@test.com';
-                $com_agente_pred['telefono'] = mt_rand(10,99).mt_rand(10,99).mt_rand(10,99).mt_rand(10,99);
-                $com_agente_pred['telefono'] . mt_rand(10,99);
+                $telefono = mt_rand(10,99).mt_rand(10,99).mt_rand(10,99).mt_rand(10,99).mt_rand(10,99);
+                $com_agente_pred['telefono'] = $telefono;
                 $com_agente_pred['adm_grupo_id'] = 2;
 
                 $caracteres_permitidos = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ.-*';
@@ -435,17 +431,38 @@ class _conversion{
         return $inm_prospecto_ins;
     }
 
-    private function keys_data_comprador(): array
+    public function inserta_referencia(int $inm_comprador_id, int $inm_prospecto_id, PDO $link): array|stdClass
     {
-        return array('inm_producto_infonavit_id','inm_attr_tipo_credito_id','inm_destino_credito_id',
-            'es_segundo_credito','inm_plazo_credito_sc_id','descuento_pension_alimenticia_dh',
-            'descuento_pension_alimenticia_fc','monto_credito_solicitado_dh','monto_ahorro_voluntario','nss','curp',
-            'nombre','apellido_paterno','apellido_materno','con_discapacidad','nombre_empresa_patron','nrp_nep',
-            'lada_nep','numero_nep','extension_nep','lada_com','numero_com','cel_com','genero','correo_com',
-            'inm_tipo_discapacidad_id','inm_persona_discapacidad_id','inm_estado_civil_id',
-            'inm_institucion_hipotecaria_id','inm_sindicato_id','dp_municipio_nacimiento_id','fecha_nacimiento',
-            'sub_cuenta','monto_final','descuento','puntos','inm_nacionalidad_id','inm_ocupacion_id','telefono_casa',
-            'correo_empresa');
+        if ($inm_prospecto_id <= 0) {
+            return $this->error->error(mensaje: 'Error inm_prospecto_id debe ser mayor a 0', data: $inm_prospecto_id);
+        }
+        if ($inm_comprador_id <= 0) {
+            return $this->error->error(mensaje: 'Error inm_comprador_id debe ser mayor a 0', data: $inm_comprador_id);
+        }
+
+        $filtro['inm_prospecto.id'] = $inm_prospecto_id;
+        $inm_referencia_prospecto = (new inm_referencia_prospecto(link: $link))->filtro_and(filtro: $filtro);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al obtener prospecto', data: $inm_referencia_prospecto);
+        }
+
+        $r_alta_rels = array();
+        if($inm_referencia_prospecto->n_registros > 0){
+            foreach ($inm_referencia_prospecto->registros_obj as $registro){
+                $inm_referencia_ins = $this->inm_referencia(
+                    inm_comprador_id: $inm_comprador_id, inm_referencia_prospecto: $registro);
+                if (errores::$error) {
+                    return $this->error->error(mensaje: 'Error al insertar relacion', data: $inm_referencia_ins);
+                }
+
+                $r_alta_rel = (new inm_referencia(link: $link))->alta_registro(registro: $inm_referencia_ins);
+                if(errores::$error){
+                    return $this->error->error(mensaje: 'Error al insertar inm_rel_prospecto_cliente_ins', data: $r_alta_rel);
+                }
+                $r_alta_rels[] = $r_alta_rel;
+            }
+        }
+        return $r_alta_rels;
     }
 
     /**
@@ -480,40 +497,6 @@ class _conversion{
             return $this->error->error(mensaje: 'Error al insertar inm_rel_prospecto_cliente_ins', data: $r_alta_rel);
         }
         return $r_alta_rel;
-    }
-
-    public function inserta_referencia(int $inm_comprador_id, int $inm_prospecto_id, PDO $link): array|stdClass
-    {
-        if ($inm_prospecto_id <= 0) {
-            return $this->error->error(mensaje: 'Error inm_prospecto_id debe ser mayor a 0', data: $inm_prospecto_id);
-        }
-        if ($inm_comprador_id <= 0) {
-            return $this->error->error(mensaje: 'Error inm_comprador_id debe ser mayor a 0', data: $inm_comprador_id);
-        }
-
-        $filtro['inm_prospecto.id'] = $inm_prospecto_id;
-        $inm_referencia_prospecto = (new inm_referencia_prospecto(link: $link))->filtro_and(filtro: $filtro);
-        if (errores::$error) {
-            return $this->error->error(mensaje: 'Error al obtener prospecto', data: $inm_referencia_prospecto);
-        }
-
-        $r_alta_rels = array();
-        if($inm_referencia_prospecto->n_registros > 0){
-            foreach ($inm_referencia_prospecto->registros_obj as $registro){
-                $inm_referencia_ins = $this->inm_referencia(
-                    inm_comprador_id: $inm_comprador_id, inm_referencia_prospecto: $registro);
-                if (errores::$error) {
-                    return $this->error->error(mensaje: 'Error al insertar relacion', data: $inm_referencia_ins);
-                }
-
-                $r_alta_rel = (new inm_referencia(link: $link))->alta_registro(registro: $inm_referencia_ins);
-                if(errores::$error){
-                    return $this->error->error(mensaje: 'Error al insertar inm_rel_prospecto_cliente_ins', data: $r_alta_rel);
-                }
-                $r_alta_rels[] = $r_alta_rel;
-            }
-        }
-        return $r_alta_rels;
     }
 
     /**
@@ -573,9 +556,49 @@ class _conversion{
         return $inm_comprador_ins;
     }
 
+
+    /**
+     * @param stdClass $data
+     * @param array $inm_comprador_ins
+     * @param string $key
+     * @return array
+     */
+    private function integra_key(stdClass $data, array $inm_comprador_ins, string $key): array
+    {
+        $key = trim($key);
+        $valida = $this->valida_key(key: $key);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al validar key', data: $valida);
+        }
+        if(!isset($data->inm_prospecto->$key)){
+            return $this->error->error(mensaje: 'Error no existe atributo', data: $key);
+        }
+
+        $inm_comprador_ins[$key] = $data->inm_prospecto->$key;
+        return $inm_comprador_ins;
+    }
+
+
+    /**
+     * @return string[]
+     */
+    private function keys_data_comprador(): array
+    {
+        return array('inm_producto_infonavit_id','inm_attr_tipo_credito_id','inm_destino_credito_id',
+            'es_segundo_credito','inm_plazo_credito_sc_id','descuento_pension_alimenticia_dh',
+            'descuento_pension_alimenticia_fc','monto_credito_solicitado_dh','monto_ahorro_voluntario','nss','curp',
+            'nombre','apellido_paterno','apellido_materno','con_discapacidad','nombre_empresa_patron','nrp_nep',
+            'lada_nep','numero_nep','extension_nep','lada_com','numero_com','cel_com','genero','correo_com',
+            'inm_tipo_discapacidad_id','inm_persona_discapacidad_id','inm_estado_civil_id',
+            'inm_institucion_hipotecaria_id','inm_sindicato_id','dp_municipio_nacimiento_id','fecha_nacimiento',
+            'sub_cuenta','monto_final','descuento','puntos','inm_nacionalidad_id','inm_ocupacion_id','telefono_casa',
+            'correo_empresa');
+    }
+
     /**
      * Obtiene los keys de un prospecto para integrarlos con un cliente
      * @return string[]
+     * @version 2.328.2
      */
     private function keys_data_prospecto(): array
     {
@@ -588,5 +611,24 @@ class _conversion{
             'inm_institucion_hipotecaria_id','inm_sindicato_id','dp_municipio_nacimiento_id','fecha_nacimiento',
             'sub_cuenta','monto_final','descuento','puntos','inm_nacionalidad_id','inm_ocupacion_id','telefono_casa',
             'correo_empresa');
+    }
+
+    /**
+     * Validates a key.
+     *
+     * @param string $key The key to be validated.
+     * @return true|array Returns true if the key is valid, or an array containing an error message and the invalid key if it is not valid.
+     * @version 2.331.2
+     */
+    private function valida_key(string $key): true|array
+    {
+        $key = trim($key);
+        if($key === ''){
+            return $this->error->error(mensaje: 'Error key esta vacio', data: $key);
+        }
+        if(is_numeric($key)){
+            return $this->error->error(mensaje: 'Error key debe ser un texto', data: $key);
+        }
+        return true;
     }
 }

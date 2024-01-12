@@ -31,7 +31,7 @@ class _upd_prospecto{
      * Ajusta los datos de un conyuge
      * @param stdClass $datos Datos de integracion de conyuge
      * @param int $inm_prospecto_id Identificador de prospecto
-     * @param PDO $link
+     * @param PDO $link Conexion a la base de datos
      * @return array|stdClass
      */
     private function ajusta_conyuge(stdClass $datos, int $inm_prospecto_id, PDO $link): array|stdClass

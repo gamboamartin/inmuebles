@@ -304,6 +304,13 @@ class _alta_compradorTest extends test {
             exit;
         }
 
+        $del = (new base_test())->del_inm_prospecto(link: $this->link);
+        if(errores::$error){
+            $error = (new errores())->error(mensaje: 'Error al del',data:  $del);
+            print_r($error);;
+            exit;
+        }
+
         $alta = (new base_test())->alta_inm_comprador(link: $this->link);
         if(errores::$error){
             $error = (new errores())->error(mensaje: 'Error al alta',data:  $alta);
@@ -355,7 +362,7 @@ class _alta_compradorTest extends test {
         $this->assertEquals('D',$resultado['nss']);
         $this->assertEquals('D',$resultado['curp']);
         $this->assertEquals('D',$resultado['rfc']);
-        $this->assertStringContainsStringIgnoringCase('D D  D D D 2023-11-',$resultado['descripcion']);
+        $this->assertStringContainsStringIgnoringCase('D D  D D D 2024-01-',$resultado['descripcion']);
 
         errores::$error = false;
     }

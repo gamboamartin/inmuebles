@@ -24,11 +24,17 @@ class _inm_prospecto{
     /**
      * Obtiene los datos de children
      * @param bool $existe Init existe bool
-     * @param string $key_data
+     * @param string $key_data Keys a integrar en la actualizacion
      * @return array|stdClass
+     * @version 2.323.2
      */
     final public function dato(bool $existe, string $key_data): array|stdClass
     {
+        $key_data = trim($key_data);
+        if($key_data === ''){
+            return $this->error->error(mensaje: 'Error key_data esta vacio',data:  $key_data);
+        }
+
         $row = $this->init_post(key_data: $key_data);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al inicializar row',data:  $row);
@@ -52,6 +58,7 @@ class _inm_prospecto{
      * @param PDO $link Conexion a la base de datos
      * @param int $inm_prospecto_id prospecto
      * @return array|stdClass
+     * @version 2.323.2
      */
     final public function datos_conyuge(PDO $link, int $inm_prospecto_id): array|stdClass
     {

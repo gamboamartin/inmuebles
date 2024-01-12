@@ -128,7 +128,7 @@ class _base_compradorTest extends test {
         $resultado = $inm->descripcion(registro: $registro);
         $this->assertIsString($resultado);
         $this->assertNotTrue(errores::$error);
-        $this->assertStringContainsStringIgnoringCase("Z Z  Z Z Z 2023-11-",$resultado);
+        $this->assertStringContainsStringIgnoringCase("Z Z  Z Z Z 2024-01-",$resultado);
         errores::$error = false;
     }
 
@@ -158,6 +158,11 @@ class _base_compradorTest extends test {
         }
 
         $del = (new base_test())->del_org_empresa(link: $this->link);
+        if(errores::$error){
+            $error = (new errores())->error(mensaje:'Error al eliminar', data: $del);
+            print_r($error);exit;
+        }
+        $del = (new base_test())->del_inm_prospecto(link: $this->link);
         if(errores::$error){
             $error = (new errores())->error(mensaje:'Error al eliminar', data: $del);
             print_r($error);exit;

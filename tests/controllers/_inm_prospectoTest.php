@@ -36,6 +36,30 @@ class _inm_prospectoTest extends test {
         $this->paths_conf->views = '/var/www/html/inmuebles/config/views.php';
     }
 
+    public function test_dato(): void
+    {
+        errores::$error = false;
+
+        $_GET['seccion'] = 'inm_producto_infonavit';
+        $_GET['accion'] = 'lista';
+        $_SESSION['grupo_id'] = 1;
+        $_SESSION['usuario_id'] = 2;
+        $_GET['session_id'] = '1';
+
+
+        $_inm = new _inm_prospecto();
+        //$_inm = new liberator($_inm);
+        $_POST['a'] = array('z'=>'p');
+        $existe = false;
+        $key_data = 'a';
+        $resultado = $_inm->dato($existe, $key_data);
+        $this->assertIsObject($resultado);
+        $this->assertNotTrue(errores::$error);
+        $this->assertNotTrue($resultado->existe);
+        $this->assertEquals('p',$resultado->row['z']);
+        errores::$error = false;
+    }
+
     public function test_datos_conyuge(): void
     {
         errores::$error = false;

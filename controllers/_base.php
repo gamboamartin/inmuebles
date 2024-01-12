@@ -15,7 +15,9 @@ class _base{
     }
 
     /**
+     * Obtiene el id de retorno determinado por POST[id_retorno]
      * @return int|array
+     * @version 2.319.2
      */
     private function id_retorno(): int|array
     {
@@ -24,14 +26,16 @@ class _base{
             $id_retorno = trim($_POST['id_retorno']);
             unset($_POST['id_retorno']);
         }
-        if(!is_int($id_retorno)){
+        if(!is_numeric($id_retorno)){
             return $this->error->error(mensaje: 'Error id_retorno debe ser un entero', data: $id_retorno);
         }
-        return $id_retorno;
+        return (int)$id_retorno;
     }
 
     /**
+     * Inicializa los datos de retorno de una transaccion via POST
      * @return array|stdClass
+     * @version 2.321.0
      */
     final public function init_retorno(): array|stdClass
     {
@@ -39,7 +43,6 @@ class _base{
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al obtener id siguiente', data: $id_retorno);
         }
-
         $siguiente_view = (new actions())->init_alta_bd();
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al obtener siguiente view', data: $siguiente_view);

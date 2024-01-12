@@ -56,6 +56,12 @@ class inm_rel_ubi_compTest extends test {
             print_r($error);exit;
         }
 
+        $del = (new base_test())->del_inm_prospecto(link: $this->link);
+        if(errores::$error){
+            $error = (new errores())->error(mensaje:'Error al eliminar', data: $del);
+            print_r($error);exit;
+        }
+
 
         $inm_comprador_id = 1;
         $resultado = $inm->imp_rel_ubi_comp($inm_comprador_id);

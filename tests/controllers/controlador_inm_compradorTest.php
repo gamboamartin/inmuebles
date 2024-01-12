@@ -162,6 +162,12 @@ class controlador_inm_compradorTest extends test {
             print_r($error);;
             exit;
         }
+        $del = (new base_test())->del_inm_prospecto(link: $this->link);
+        if(errores::$error){
+            $error = (new errores())->error(mensaje: 'Error al del',data:  $del);
+            print_r($error);;
+            exit;
+        }
 
         $alta = (new base_test())->alta_inm_comprador(link: $this->link);
         if(errores::$error){

@@ -18,13 +18,10 @@ use gamboamartin\inmuebles\models\_inm_comprador;
 use gamboamartin\inmuebles\models\_upd_prospecto;
 use gamboamartin\inmuebles\models\inm_beneficiario;
 use gamboamartin\inmuebles\models\inm_comprador;
-use gamboamartin\inmuebles\models\inm_conyuge;
-use gamboamartin\inmuebles\models\inm_prospecto;
 use gamboamartin\inmuebles\models\inm_referencia;
 use gamboamartin\inmuebles\models\inm_referencia_prospecto;
 use gamboamartin\inmuebles\models\inm_ubicacion;
 use gamboamartin\system\_ctl_base;
-use gamboamartin\system\actions;
 use gamboamartin\system\links_menu;
 use gamboamartin\template\html;
 use html\doc_tipo_documento_html;
@@ -33,7 +30,6 @@ use html\dp_municipio_html;
 use PDO;
 use setasign\Fpdi\Fpdi;
 use stdClass;
-use Throwable;
 
 class controlador_inm_comprador extends _ctl_base {
 

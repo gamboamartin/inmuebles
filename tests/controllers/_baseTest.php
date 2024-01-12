@@ -56,6 +56,24 @@ class _baseTest extends test {
 
         errores::$error = false;
 
+        unset($_POST['id_retorno']);
+
+        $resultado = $base->id_retorno();
+        $this->assertIsInt($resultado);
+        $this->assertNotTrue(errores::$error);
+        $this->assertEquals(-1,$resultado);
+
+        errores::$error = false;
+
+        $_POST['id_retorno'] = 10;
+
+        $resultado = $base->id_retorno();
+        $this->assertIsInt($resultado);
+        $this->assertNotTrue(errores::$error);
+        $this->assertEquals(10,$resultado);
+
+        errores::$error = false;
+
 
     }
 
@@ -75,6 +93,21 @@ class _baseTest extends test {
         $this->assertIsObject($resultado);
         $this->assertNotTrue(errores::$error);
 
+        errores::$error = false;
+
+        $_POST['id_retorno'] = 'a';
+        $resultado = $base->init_retorno();
+        $this->assertIsArray($resultado);
+        $this->assertTrue(errores::$error);
+
+        errores::$error = false;
+        $_POST['id_retorno'] = '12';
+        $_POST['btn_action_next'] = 'ALFA';
+        $resultado = $base->init_retorno();
+        $this->assertIsObject($resultado);
+        $this->assertNotTrue(errores::$error);
+        $this->assertEquals(12,$resultado->id_retorno);
+        $this->assertEquals('ALFA',$resultado->siguiente_view);
         errores::$error = false;
     }
 
