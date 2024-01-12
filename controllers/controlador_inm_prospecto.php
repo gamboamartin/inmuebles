@@ -10,7 +10,6 @@ namespace gamboamartin\inmuebles\controllers;
 
 use base\controller\init;
 use gamboamartin\calculo\calculo;
-use gamboamartin\comercial\models\com_prospecto;
 use gamboamartin\errores\errores;
 use gamboamartin\inmuebles\html\inm_prospecto_html;
 use gamboamartin\inmuebles\models\_base_paquete;
@@ -38,6 +37,7 @@ class controlador_inm_prospecto extends _ctl_formato {
     public array $referencias = array();
 
 
+
     public function __construct(PDO      $link, html $html = new \gamboamartin\template_1\html(),
                                 stdClass $paths_conf = new stdClass())
     {
@@ -58,6 +58,7 @@ class controlador_inm_prospecto extends _ctl_formato {
         $this->html_entidad = $html_;
 
         $this->header_frontend = new stdClass();
+        $this->lista_get_data = true;
 
 
     }
@@ -324,9 +325,14 @@ class controlador_inm_prospecto extends _ctl_formato {
 
 
     /**
-     * Inicializa los elementos mostrables para datatables
-     * @return stdClass
-     * @version 1.2.0
+     * Por documentar en wiki
+     * Inicializa el objeto de datos 'datatables' con cinco columnas - Id, Nombre, NSS, RFC y CURP.
+     * También establece el filtro en estas columnas para buscar y filtrar en la tabla de datos.
+     *
+     * @return stdClass Un objeto con dos propiedades 'columns' y 'filtro', que definen las columnas que se mostrarán
+     *  en la tabla de datos y los campos a filtrar respectivamente.
+     * @version 2.347.3
+     *
      */
     private function init_datatable(): stdClass
     {
