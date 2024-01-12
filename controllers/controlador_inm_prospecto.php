@@ -68,7 +68,6 @@ class controlador_inm_prospecto extends _ctl_formato {
      * @param bool $header Muestra resultado en web
      * @param bool $ws Muestra resultado a nivel ws
      * @return array|string
-     * @version 2.247.2
      */
     public function alta(bool $header, bool $ws = false): array|string
     {
@@ -325,7 +324,7 @@ class controlador_inm_prospecto extends _ctl_formato {
 
 
     /**
-     * Por documentar en wiki
+     * POR DOCUMENTAR EN WIKI
      * Inicializa el objeto de datos 'datatables' con cinco columnas - Id, Nombre, NSS, RFC y CURP.
      * También establece el filtro en estas columnas para buscar y filtrar en la tabla de datos.
      *
