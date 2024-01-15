@@ -49,6 +49,8 @@ class controlador_inm_ubicacion extends _ctl_base {
 
         parent::__construct(html:$html_, link: $link,modelo:  $modelo, obj_link: $obj_link, datatables: $datatables,
             paths_conf: $paths_conf);
+
+        $this->lista_get_data = true;
     }
 
     /**
@@ -197,12 +199,15 @@ class controlador_inm_ubicacion extends _ctl_base {
     }
 
     /**
-     * Inicializa los elementos mostrables para datatables
-     * @return stdClass
-     * @version 2.126.0
+     * Inicializa el objeto Datatables con las columnas y filtros necesarios para visualizar la ubicación de los inmuebles.
+     * La funcion consigue los datos para un tabla que debe mostrar la información sobre el id, código,
+     * tipo de ubicación, municipio, CP, colonia, calle, número exterior, número interior, manzana, lote, etapa,
+     * cuenta predial, número de opiniones de valor, valor estimado y costo de una ubicación de inmueble.
+     * @return stdClass Objeto con la configuración de Datatables.
      */
     private function init_datatable(): stdClass
     {
+        // Definir los títulos de las columnas para el datatable
         $columns["inm_ubicacion_id"]["titulo"] = "Id";
         $columns["inm_ubicacion_codigo"]["titulo"] = "Cod";
         $columns["inm_tipo_ubicacion_descripcion"]["titulo"] = "Tipo de Ubicacion";
@@ -220,11 +225,13 @@ class controlador_inm_ubicacion extends _ctl_base {
         $columns["inm_ubicacion_monto_opinion_promedio"]["titulo"] = "Valor Est";
         $columns["inm_ubicacion_costo"]["titulo"] = "Costo";
 
+        // Definir los filtros para el datatable
         $filtro = array("inm_ubicacion.id","dp_municipio.descripcion",'dp_cp.descripcion','dp_colonia.descripcion',
             'dp_calle.descripcion','inm_ubicacion.numero_exterior','inm_ubicacion.numero_interior',
             'inm_ubicacion.manzana','inm_ubicacion.lote','inm_ubicacion.cuenta_predial',
             'inm_tipo_ubicacion.descripcion');
 
+        // Crear el objeto Datatables y asignarle las columnas y filtros definidos
         $datatables = new stdClass();
         $datatables->columns = $columns;
         $datatables->filtro = $filtro;
