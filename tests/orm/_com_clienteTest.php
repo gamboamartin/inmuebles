@@ -115,8 +115,10 @@ class _com_clienteTest extends test {
         $registro['dp_calle_pertenece_id'] = 1;
         $registro['numero_exterior'] = 1;
         $registro['rfc'] = 1;
+        $registro['dp_municipio_id'] = 1;
 
         $resultado = $inm->com_cliente_data_transaccion($numero_interior, $razon_social, $registro, $telefono);
+        //print_r($resultado);exit;
         $this->assertIsArray($resultado);
         $this->assertNotTrue(errores::$error);
         $this->assertEquals('v',$resultado['telefono']);
@@ -247,10 +249,11 @@ class _com_clienteTest extends test {
         $registro_entrada['cat_sat_uso_cfdi_id'] = '1';
         $registro_entrada['com_tipo_cliente_id'] = '1';
         $registro_entrada['cat_sat_tipo_persona_id'] = '1';
-
-
+        $registro_entrada['cp'] = '1';
+        $registro_entrada['dp_municipio_id'] = '1';
 
         $resultado = $inm->com_cliente_ins($numero_interior, $razon_social, $registro_entrada);
+        //print_r($resultado);exit;
         $this->assertIsArray($resultado);
         $this->assertNotTrue(errores::$error);
         $this->assertEquals('A',$resultado['codigo']);
@@ -514,6 +517,8 @@ class _com_clienteTest extends test {
         $registro_entrada['cat_sat_tipo_persona_id'] = '4';
         $registro_entrada['nombre'] = 'Z';
         $registro_entrada['apellido_paterno'] = 'k';
+        $registro_entrada['cp'] = 'k';
+        $registro_entrada['dp_municipio_id'] = '1';
 
         $resultado = $inm->inserta_com_cliente(link: $this->link,registro_entrada:  $registro_entrada);
         $this->assertIsObject($resultado);
@@ -691,6 +696,7 @@ class _com_clienteTest extends test {
         $registro_entrada['dp_calle_pertenece_id'] = '1';
         $registro_entrada['numero_exterior'] = '1';
         $registro_entrada['rfc'] = 'AAA010101AAA';
+        $registro_entrada['dp_municipio_id'] = '1';
         $filtro = array();
         $filtro['com_cliente.id'] = 1;
         $link = $this->link;
@@ -792,6 +798,8 @@ class _com_clienteTest extends test {
         $registro_entrada['cat_sat_tipo_persona_id'] = '4';
         $registro_entrada['nombre'] = '1';
         $registro_entrada['apellido_paterno'] = '1';
+        $registro_entrada['cp'] = '1';
+        $registro_entrada['dp_municipio_id'] = '1';
 
 
 
@@ -828,6 +836,8 @@ class _com_clienteTest extends test {
         $registro_entrada['cat_sat_tipo_persona_id'] = '4';
         $registro_entrada['nombre'] = '1';
         $registro_entrada['apellido_paterno'] = '1';
+        $registro_entrada['cp'] = '1';
+        $registro_entrada['dp_municipio_id'] = '1';
 
         $filtro['com_cliente.id'] = 1;
 
@@ -927,10 +937,11 @@ class _com_clienteTest extends test {
         $registro_entrada['cat_sat_tipo_persona_id'] = '1';
         $registro_entrada['nombre'] = 'Z';
         $registro_entrada['apellido_paterno'] = 'k';
-
-
+        $registro_entrada['dp_municipio_id'] = '1';
+        $registro_entrada['cp'] = '1';
 
         $resultado = $inm->row_com_cliente_ins($registro_entrada);
+       // print_r($resultado);exit;
         $this->assertIsArray($resultado);
         $this->assertNotTrue(errores::$error);
         $this->assertEquals("Z k",$resultado['razon_social']);
@@ -968,10 +979,10 @@ class _com_clienteTest extends test {
         $registro_entrada['dp_calle_pertenece_id'] ='1';
         $registro_entrada['numero_exterior'] ='A';
         $registro_entrada['rfc'] ='A';
-
-
+        $registro_entrada['dp_municipio_id'] ='1';
 
         $resultado = $inm->row_upd($registro_entrada);
+        //print_r($resultado);exit;
         $this->assertIsArray($resultado);
         $this->assertNotTrue(errores::$error);
         $this->assertEquals("A A",$resultado['razon_social']);
@@ -1012,6 +1023,8 @@ class _com_clienteTest extends test {
         $registro_entrada['cat_sat_tipo_persona_id'] = '4';
         $registro_entrada['nombre'] = '4';
         $registro_entrada['apellido_paterno'] = '4';
+        $registro_entrada['cp'] = '4';
+        $registro_entrada['dp_municipio_id'] = '4';
 
 
         $resultado = $inm->transacciona_com_cliente($link, $registro_entrada);
@@ -1047,6 +1060,7 @@ class _com_clienteTest extends test {
         $registro_entrada['cat_sat_uso_cfdi_id'] = '1';
         $registro_entrada['com_tipo_cliente_id'] = '1';
         $registro_entrada['cat_sat_tipo_persona_id'] = '1';
+        $registro_entrada['cp'] = '1';
 
         $resultado = $inm->valida_base_com($registro_entrada);
         $this->assertIsBool($resultado);
@@ -1114,6 +1128,7 @@ class _com_clienteTest extends test {
         $registro_entrada['dp_calle_pertenece_id'] = '1';
         $registro_entrada['numero_exterior'] = '1';
         $registro_entrada['rfc'] = '1';
+        $registro_entrada['dp_municipio_id'] = '1';
 
         $resultado = $inm->valida_data_result_cliente(registro_entrada: $registro_entrada);
         $this->assertIsBool($resultado);
@@ -1153,6 +1168,7 @@ class _com_clienteTest extends test {
         $registro_entrada['dp_calle_pertenece_id'] ='1';
         $registro_entrada['numero_exterior'] ='A';
         $registro_entrada['rfc'] ='A';
+        $registro_entrada['dp_municipio_id'] ='1';
 
 
 
@@ -1189,6 +1205,7 @@ class _com_clienteTest extends test {
         $registro_entrada['cat_sat_uso_cfdi_id'] = '1';
         $registro_entrada['com_tipo_cliente_id'] = '1';
         $registro_entrada['cat_sat_tipo_persona_id'] = '1';
+        $registro_entrada['cp'] = '1';
 
         $resultado = $inm->valida_existencia_keys_com($registro_entrada);
 

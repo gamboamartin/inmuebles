@@ -128,7 +128,7 @@ class _base_compradorTest extends test {
         $resultado = $inm->descripcion(registro: $registro);
         $this->assertIsString($resultado);
         $this->assertNotTrue(errores::$error);
-        $this->assertStringContainsStringIgnoringCase("Z Z  Z Z Z 2024-01-",$resultado);
+        $this->assertStringContainsStringIgnoringCase("Z Z  Z Z Z 2024-02-",$resultado);
         errores::$error = false;
     }
 
@@ -235,6 +235,8 @@ class _base_compradorTest extends test {
         $registro_entrada['cat_sat_tipo_persona_id'] = '4';
         $registro_entrada['nombre'] = '1';
         $registro_entrada['apellido_paterno'] = '1';
+        $registro_entrada['cp'] = '1';
+        $registro_entrada['dp_municipio_id'] = '1';
 
         $resultado = $inm->integra_relacion_com_cliente($inm_comprador_id, $link, $registro_entrada);
         $this->assertIsObject($resultado);

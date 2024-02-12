@@ -99,7 +99,7 @@ class inm_compradorTest extends test {
         $resultado = $inm->alta_bd();
         $this->assertIsObject($resultado);
         $this->assertNotTrue(errores::$error);
-        $this->assertStringContainsStringIgnoringCase("Nombre Apellido Paterno  12345678890 XEXX010101HNEXXXA4 AAA010101AAA 2024-01",
+        $this->assertStringContainsStringIgnoringCase("Nombre Apellido Paterno  12345678890 XEXX010101HNEXXXA4 AAA010101AAA 2024-02",
             $resultado->registro['inm_comprador_descripcion']);
 
         $inm_comprador_id = $resultado->registro_id;
@@ -138,6 +138,18 @@ class inm_compradorTest extends test {
             print_r($error);
             exit;
         }
+        $del = (new base_test())->del_com_cliente(link: $this->link);
+        if(errores::$error){
+            $error = (new errores())->error(mensaje: 'Error al eliminar',data:  $del);
+            print_r($error);
+            exit;
+        }
+        $del = (new base_test())->del_com_prospecto(link: $this->link);
+        if(errores::$error){
+            $error = (new errores())->error(mensaje: 'Error al eliminar',data:  $del);
+            print_r($error);
+            exit;
+        }
 
         $alta = (new base_test())->alta_inm_comprador(link: $this->link);
         if(errores::$error){
@@ -171,7 +183,7 @@ class inm_compradorTest extends test {
         $resultado = $inm->asigna_nuevo_co_acreditado_bd($inm_comprador_id, $inm_co_acreditado);
         $this->assertIsObject($resultado);
         $this->assertNotTrue(errores::$error);
-        $this->assertStringContainsStringIgnoringCase("A A A 12345678901 XEXX010101HNEXXXA4 XXX010101AAA 2024-01-",
+        $this->assertStringContainsStringIgnoringCase("A A A 12345678901 XEXX010101HNEXXXA4 XXX010101AAA 2024-02-",
             $resultado->inm_co_acreditado->registro['inm_co_acreditado_descripcion']);
 
         errores::$error = false;

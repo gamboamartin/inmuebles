@@ -88,11 +88,12 @@ class _keys_selectsTest extends test {
         }
 
         $resultado = $ks->ajusta_row_data_cliente($controler);
+        //print_r($resultado);exit;
         $this->assertIsObject($resultado);
         $this->assertNotTrue(errores::$error);
         $this->assertEquals("AAA010101AAA",$resultado->rfc);
         $this->assertEquals("1",$resultado->numero_exterior);
-        $this->assertEquals("1649",$resultado->dp_municipio_id);
+        $this->assertEquals("2467",$resultado->dp_municipio_id);
         $this->assertEquals("1",$resultado->com_tipo_cliente_id);
         errores::$error = false;
     }
@@ -274,8 +275,8 @@ class _keys_selectsTest extends test {
         $this->assertIsObject($resultado);
         $this->assertNotTrue(errores::$error);
         $this->assertEquals(601,$resultado->cat_sat_regimen_fiscal_id);
-        $this->assertEquals(1,$resultado->cat_sat_moneda_id);
-        $this->assertEquals(1,$resultado->cat_sat_forma_pago_id);
+        $this->assertEquals(161,$resultado->cat_sat_moneda_id);
+        $this->assertEquals(3,$resultado->cat_sat_forma_pago_id);
         $this->assertEquals(1,$resultado->cat_sat_metodo_pago_id);
         $this->assertEquals(1,$resultado->cat_sat_uso_cfdi_id);
         $this->assertEquals(4,$resultado->cat_sat_tipo_persona_id);

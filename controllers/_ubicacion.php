@@ -81,7 +81,6 @@ class _ubicacion{
      * @param array $disableds Anexa attr disabled
      * @param string $funcion Funcion de retorno
      * @return array|stdClass
-     * @version 2.147.0
      */
     final public function base_view_accion_data(controlador_inm_ubicacion $controler, array $disableds,
                                                 string $funcion): array|stdClass

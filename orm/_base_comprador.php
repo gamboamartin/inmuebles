@@ -161,12 +161,12 @@ class _base_comprador{
      * @param PDO $link Conexion de base de datos
      * @param array $registro_entrada registro de comprador
      * @return array|stdClass
-     * @version 2.39.0
      */
     final public function integra_relacion_com_cliente(int $inm_comprador_id, PDO $link,
                                                        array $registro_entrada): array|stdClass
     {
-        $valida = (new _alta_comprador())->valida_transacciones(inm_comprador_id: $inm_comprador_id,registro_entrada:  $registro_entrada);
+        $valida = (new _alta_comprador())->valida_transacciones(
+            inm_comprador_id: $inm_comprador_id,registro_entrada:  $registro_entrada);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al validar registro',data:  $valida);
         }

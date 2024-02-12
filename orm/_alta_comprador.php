@@ -399,6 +399,7 @@ class _alta_comprador{
         string $accion,string $etapa, int $inm_comprador_id, PDO $link, string $pr_proceso_descripcion,
         array $registro_entrada, string $tabla): array|stdClass
     {
+        //print_r($registro_entrada);exit;
 
         $valida = $this->valida_transacciones(inm_comprador_id: $inm_comprador_id,
             registro_entrada:  $registro_entrada);
@@ -686,10 +687,10 @@ class _alta_comprador{
      * @param int $inm_comprador_id Identificador de comprador
      * @param array $registro_entrada registro de comprador
      * @return array|true
-     * @version 2.44.0
      */
     final public function valida_transacciones(int $inm_comprador_id, array $registro_entrada): bool|array
     {
+        //print_r($registro_entrada);exit;
         $valida = (new _com_cliente())->valida_base_com(registro_entrada: $registro_entrada);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al validar registro_entrada',data:  $valida);

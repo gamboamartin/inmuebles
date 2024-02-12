@@ -45,7 +45,8 @@ class controlador_inm_ubicacionTest extends test {
 
         $this->assertStringContainsStringIgnoringCase('<form method="post" action="./index.php?seccion=inm_ubicacion&accion=alta_bd&adm_menu_id=64&se', $data);
         $this->assertStringContainsStringIgnoringCase('session_id=4075502287&adm_menu_id=64" class="form-additional"', $data);
-        $this->assertStringContainsStringIgnoringCase('enctype="multipart/form-data">', $data);
+        //print_r($data);exit;
+        $this->assertStringContainsStringIgnoringCase('enctype="multipart/form-data" id="form_inm_ubicacion_alta">', $data);
         $this->assertStringContainsStringIgnoringCase("<div class='control-group col-sm-12'><label class='control-label' for='inm_tipo_ubicacion_id'>", $data);
         $this->assertStringContainsStringIgnoringCase("Tipo de Ubicacion</label><div class='controls'><select class='form-control selectpicker color-secondary", $data);
         $this->assertStringContainsStringIgnoringCase("<select class='form-control selectpicker color-secondary inm_tipo_ubicacion_id '", $data);

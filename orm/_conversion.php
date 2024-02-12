@@ -4,6 +4,7 @@ use gamboamartin\comercial\models\com_agente;
 use gamboamartin\comercial\models\com_cliente;
 use gamboamartin\comercial\models\com_tipo_agente;
 use gamboamartin\comercial\models\com_tipo_prospecto;
+use gamboamartin\direccion_postal\models\dp_calle_pertenece;
 use gamboamartin\errores\errores;
 use PDO;
 use stdClass;
@@ -38,7 +39,6 @@ class _conversion{
      * @param int $inm_prospecto_id Identificador de prospecto
      * @param inm_prospecto $modelo Modelo en ejecucion
      * @return array|stdClass
-     * @version 2.322.2
      */
     private function data_prospecto(int $inm_prospecto_id, inm_prospecto $modelo): array|stdClass
     {
@@ -153,10 +153,24 @@ class _conversion{
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al obtener id_pref', data: $inm_comprador_ins);
         }
+        if(!isset($data->inm_prospecto_completo->dp_cp_codigo)){
+            $data->inm_prospecto_completo->dp_cp_codigo = '99999';
+        }
+        if(!isset($data->inm_prospecto_completo->dp_municipio_id)){
+            $data->inm_prospecto_completo->dp_municipio_id = '1';
+        }
 
+        $cp = $data->inm_prospecto_completo->dp_cp_codigo;
+
+        if($cp === 'PRED'){
+            $cp = 99999;
+        }
 
         $inm_comprador_ins['rfc'] = $data->inm_prospecto_completo->com_prospecto_rfc;
         $inm_comprador_ins['numero_exterior'] = 'POR ASIGNAR';
+        $inm_comprador_ins['dp_municipio_id'] = $data->inm_prospecto_completo->dp_municipio_id;;
+        $inm_comprador_ins['cp'] = $cp;
+
 
         return $inm_comprador_ins;
     }
@@ -252,7 +266,7 @@ class _conversion{
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al obtener id_pref', data: $inm_comprador_ins);
         }
-
+        //print_r($inm_comprador_ins);exit;
         $inm_comprador_modelo = new inm_comprador(link: $modelo->link);
 
         $inm_comprador_modelo->desde_prospecto = true;
@@ -471,7 +485,6 @@ class _conversion{
      * @param int $inm_prospecto_id Identificador de prospecto
      * @param PDO $link Conexion a la base de datos
      * @return array|stdClass
-     * @version 2.220.1
      */
     final public function inserta_rel_prospecto_cliente(
         int $inm_comprador_id, int $inm_prospecto_id, PDO $link): array|stdClass
@@ -542,8 +555,8 @@ class _conversion{
             }
         }
 
-        $entidades_pref = array('dp_calle_pertenece','cat_sat_regimen_fiscal','cat_sat_moneda',
-            'cat_sat_forma_pago','cat_sat_metodo_pago','cat_sat_uso_cfdi','com_tipo_cliente','cat_sat_tipo_persona');
+        $entidades_pref = array('cat_sat_regimen_fiscal','cat_sat_moneda', 'cat_sat_forma_pago',
+            'cat_sat_metodo_pago','cat_sat_uso_cfdi','com_tipo_cliente','cat_sat_tipo_persona');
 
         $modelo_com_cliente = new com_cliente(link: $link);
         foreach ($entidades_pref as $entidad){
@@ -598,7 +611,6 @@ class _conversion{
     /**
      * Obtiene los keys de un prospecto para integrarlos con un cliente
      * @return string[]
-     * @version 2.328.2
      */
     private function keys_data_prospecto(): array
     {
@@ -610,7 +622,7 @@ class _conversion{
             'inm_tipo_discapacidad_id','inm_persona_discapacidad_id','inm_estado_civil_id',
             'inm_institucion_hipotecaria_id','inm_sindicato_id','dp_municipio_nacimiento_id','fecha_nacimiento',
             'sub_cuenta','monto_final','descuento','puntos','inm_nacionalidad_id','inm_ocupacion_id','telefono_casa',
-            'correo_empresa');
+            'correo_empresa','dp_calle_pertenece_id');
     }
 
     /**

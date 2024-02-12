@@ -2,6 +2,7 @@
 namespace gamboamartin\inmuebles\models;
 
 use gamboamartin\comercial\models\com_cliente;
+use gamboamartin\direccion_postal\models\dp_calle_pertenece;
 use gamboamartin\errores\errores;
 use gamboamartin\validacion\validacion;
 use PDO;
@@ -93,7 +94,7 @@ class _com_cliente{
 
 
         $com_cliente_ins = $this->com_cliente_data_transaccion(numero_interior: $numero_interior,
-            razon_social:  $razon_social,registro:  $registro_entrada,telefono:  $telefono);
+            razon_social: $razon_social, registro: $registro_entrada, telefono: $telefono);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al maquetar row', data: $com_cliente_ins);
         }
@@ -152,14 +153,15 @@ class _com_cliente{
             return $this->error->error(mensaje: 'Error telefono esta vacio',data:  $telefono);
         }
 
+
         $valida = $this->valida_data_transaccion_cliente(registro_entrada: $registro);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al validar registro',data:  $valida);
         }
 
+
         $com_cliente_data['razon_social'] = trim($razon_social);
         $com_cliente_data['rfc'] = $registro['rfc'];
-        $com_cliente_data['dp_calle_pertenece_id'] = $registro['dp_calle_pertenece_id'];
         $com_cliente_data['numero_exterior'] = $registro['numero_exterior'];
         $com_cliente_data['numero_interior'] = $numero_interior;
         $com_cliente_data['telefono'] = $telefono;
@@ -172,6 +174,7 @@ class _com_cliente{
         $com_cliente_data['com_tipo_cliente_id'] = $registro['com_tipo_cliente_id'];
         $com_cliente_data['cat_sat_tipo_persona_id'] = $registro['cat_sat_tipo_persona_id'];
         $com_cliente_data['cat_sat_tipo_de_comprobante_id'] = 1;
+        $com_cliente_data['dp_municipio_id'] = $registro['dp_municipio_id'];
         return $com_cliente_data;
     }
 
@@ -376,7 +379,6 @@ class _com_cliente{
      * @param PDO $link Conexion a base de datos
      * @param array $registro_entrada registro en proceso
      * @return array|stdClass
-     * @version 2.17.0
      */
     private function inserta_com_cliente(PDO $link, array $registro_entrada): array|stdClass
     {
@@ -500,7 +502,6 @@ class _com_cliente{
      * @param PDO $link Conexion a la base de datos
      * @param array $registro_entrada Registro en proceso
      * @return array|stdClass
-     * @version 2.29.0
      */
     private function r_com_cliente(array $filtro, PDO $link, array $registro_entrada): array|stdClass
     {
@@ -586,7 +587,6 @@ class _com_cliente{
      * @param PDO $link conexion a la base de datos
      * @param array $registro_entrada registro de entrada de comprador
      * @return array|stdClass
-     * @version 2.30.0
      */
     private function result_com_cliente(bool $existe_cliente, array $filtro, PDO $link,
                                         array $registro_entrada): array|stdClass
@@ -654,7 +654,6 @@ class _com_cliente{
      * Integra un registro de tipo cliente para su insersion
      * @param array $registro_entrada Registro de tipo inm_comprador
      * @return array
-     * @version 2.16.0
      */
     private function row_com_cliente_ins(array $registro_entrada): array
     {
@@ -681,8 +680,8 @@ class _com_cliente{
             return $this->error->error(mensaje: 'Error al generar numero_interior',data:  $numero_interior);
         }
 
-        $com_cliente_ins = $this->com_cliente_ins(numero_interior: $numero_interior,
-            razon_social:  $razon_social,registro_entrada:  $registro_entrada);
+        $com_cliente_ins = $this->com_cliente_ins(numero_interior: $numero_interior, razon_social: $razon_social,
+            registro_entrada: $registro_entrada);
 
         if (errores::$error) {
             return $this->error->error(mensaje: 'Error al integrar registro de cliente', data: $com_cliente_ins);
@@ -694,7 +693,6 @@ class _com_cliente{
      * Ajusta los campos para una actualizacion de un cliente
      * @param array|stdClass $registro_entrada Registro en proceso
      * @return array
-     * @version 2.28.0
      */
     private function row_upd(array|stdClass $registro_entrada): array
     {
@@ -711,7 +709,7 @@ class _com_cliente{
         }
 
         $row_upd = $this->com_cliente_data_transaccion(numero_interior: $data_upd->numero_interior,
-            razon_social:  $data_upd->razon_social,registro:  $registro_entrada,telefono:  $data_upd->telefono);
+            razon_social: $data_upd->razon_social, registro: $registro_entrada, telefono: $data_upd->telefono);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al maquetar row', data: $row_upd);
         }
@@ -723,7 +721,6 @@ class _com_cliente{
      * @param PDO $link Conexion a la base de datos
      * @param array $registro_entrada Registro de inm_comprador
      * @return array|stdClass
-     * @version 2.31.0
      */
     final public function transacciona_com_cliente(PDO $link, array $registro_entrada): array|stdClass
     {
@@ -794,7 +791,6 @@ class _com_cliente{
      * Valida los elementos de alta de un cliente
      * @param array|stdClass $registro_entrada registro de comprador
      * @return array|true
-     * @version 2.38.0
      */
     final public function valida_data_result_cliente(array|stdClass $registro_entrada): bool|array
     {
@@ -819,8 +815,8 @@ class _com_cliente{
     private function valida_data_transaccion_cliente(array|stdClass $registro_entrada): bool|array
     {
         $keys = array('cat_sat_forma_pago_id','cat_sat_metodo_pago_id','cat_sat_moneda_id','cat_sat_regimen_fiscal_id',
-            'cat_sat_tipo_persona_id', 'cat_sat_uso_cfdi_id','com_tipo_cliente_id','dp_calle_pertenece_id',
-            'numero_exterior','rfc');
+            'cat_sat_tipo_persona_id', 'cat_sat_uso_cfdi_id','com_tipo_cliente_id', 'numero_exterior','rfc',
+            'dp_municipio_id');
 
         $valida = $this->validacion->valida_existencia_keys(keys: $keys,registro:  $registro_entrada);
         if(errores::$error){
@@ -828,7 +824,7 @@ class _com_cliente{
         }
 
         $keys = array('cat_sat_forma_pago_id','cat_sat_metodo_pago_id','cat_sat_moneda_id','cat_sat_regimen_fiscal_id',
-            'cat_sat_tipo_persona_id', 'cat_sat_uso_cfdi_id','com_tipo_cliente_id','dp_calle_pertenece_id');
+            'cat_sat_tipo_persona_id', 'cat_sat_uso_cfdi_id','com_tipo_cliente_id','dp_municipio_id');
 
         $valida = $this->validacion->valida_ids(keys: $keys,registro:  $registro_entrada);
         if(errores::$error){
@@ -842,13 +838,12 @@ class _com_cliente{
      * Valida la existencia de campos en un registro
      * @param array|stdClass $registro_entrada Registro de comprador
      * @return array|bool
-     * @version 2.10.0
      */
     private function valida_existencia_keys_com(array|stdClass $registro_entrada): bool|array
     {
-        $keys = array('rfc','dp_calle_pertenece_id','numero_exterior','lada_com','numero_com',
-            'cat_sat_regimen_fiscal_id','cat_sat_moneda_id','cat_sat_forma_pago_id','cat_sat_metodo_pago_id',
-            'cat_sat_uso_cfdi_id','com_tipo_cliente_id','cat_sat_tipo_persona_id');
+        $keys = array('rfc','numero_exterior','lada_com','numero_com', 'cat_sat_regimen_fiscal_id','cat_sat_moneda_id',
+            'cat_sat_forma_pago_id','cat_sat_metodo_pago_id', 'cat_sat_uso_cfdi_id','com_tipo_cliente_id',
+            'cat_sat_tipo_persona_id','cp');
 
         $valida = $this->validacion->valida_existencia_keys(keys: $keys,registro:  $registro_entrada);
         if(errores::$error){
@@ -866,8 +861,7 @@ class _com_cliente{
     private function valida_ids_com(array|stdClass $registro_entrada): array
     {
         $keys = array('cat_sat_forma_pago_id','cat_sat_metodo_pago_id','cat_sat_moneda_id','cat_sat_regimen_fiscal_id',
-            'cat_sat_tipo_persona_id', 'cat_sat_uso_cfdi_id','com_tipo_cliente_id','dp_calle_pertenece_id', 'lada_com',
-            'numero_com');
+            'cat_sat_tipo_persona_id', 'cat_sat_uso_cfdi_id','com_tipo_cliente_id', 'lada_com', 'numero_com');
 
         $valida = $this->validacion->valida_ids(keys: $keys,registro:  $registro_entrada);
         if(errores::$error){

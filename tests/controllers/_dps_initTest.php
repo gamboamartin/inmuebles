@@ -78,24 +78,7 @@ class _dps_initTest extends test {
             exit;
         }
 
-        $dp_cp_id = (new com_cliente(link: $this->link))->id_preferido_detalle(entidad_preferida: 'dp_cp');
-        if(errores::$error){
-            $error = (new errores())->error(mensaje: 'Error al obtener dp_cp_id', data: $dp_cp_id);
-            print_r($error);
-            exit;
-        }
-        $dp_colonia_postal_id = (new com_cliente(link: $this->link))->id_preferido_detalle(entidad_preferida: 'dp_colonia_postal');
-        if(errores::$error){
-            $error = (new errores())->error(mensaje: 'Error al obtener dp_colonia_postal_id', data: $dp_colonia_postal_id);
-            print_r($error);
-            exit;
-        }
-        $dp_calle_pertenece_id = (new com_cliente(link: $this->link))->id_preferido_detalle(entidad_preferida: 'dp_calle_pertenece');
-        if(errores::$error){
-            $error = (new errores())->error(mensaje: 'Error al obtener dp_calle_pertenece_id', data: $dp_calle_pertenece_id);
-            print_r($error);
-            exit;
-        }
+
 
 
 
@@ -103,14 +86,13 @@ class _dps_initTest extends test {
         $modelo = new com_cliente(link: $this->link);
         $resultado = $dps->dps_init_ids($modelo, $row_upd);
 
+        //print_r($resultado);exit;
+
         $this->assertIsObject($resultado);
         $this->assertNotTrue(errores::$error);
         $this->assertEquals(151,$resultado->dp_pais_id);
         $this->assertEquals(14,$resultado->dp_estado_id);
         $this->assertEquals($dp_municipio_id,$resultado->dp_municipio_id);
-        $this->assertEquals($dp_cp_id,$resultado->dp_cp_id);
-        $this->assertEquals($dp_colonia_postal_id,$resultado->dp_colonia_postal_id);
-        $this->assertEquals($dp_calle_pertenece_id,$resultado->dp_calle_pertenece_id);
         errores::$error = false;
 
 
@@ -166,12 +148,12 @@ class _dps_initTest extends test {
         $_SESSION['usuario_id'] = 2;
         $_GET['session_id'] = '1';
 
-        $dp_calle_pertenece_id = (new com_cliente(link: $this->link))->id_preferido_detalle(entidad_preferida: 'dp_calle_pertenece');
+        /*$dp_calle_pertenece_id = (new com_cliente(link: $this->link))->id_preferido_detalle(entidad_preferida: 'dp_calle_pertenece');
         if(errores::$error){
             $error = (new errores())->error(mensaje: 'Error al obtener dp_calle_pertenece_id', data: $dp_calle_pertenece_id);
             print_r($error);
             exit;
-        }
+        }*/
 
 
         $controler = new controlador_inm_comprador(link: $this->link, paths_conf: $this->paths_conf);
@@ -184,8 +166,8 @@ class _dps_initTest extends test {
         $this->assertEquals(151,$resultado['dp_estado_id']->filtro['dp_pais.id']);
         $this->assertEquals('Municipio',$resultado['dp_municipio_id']->label);
         $this->assertTrue($resultado['dp_cp_id']->con_registros);
-        $this->assertEquals(6,$resultado['dp_colonia_postal_id']->cols);
-        $this->assertEquals($dp_calle_pertenece_id,$resultado['dp_calle_pertenece_id']->id_selected);
+        //$this->assertEquals(6,$resultado['dp_colonia_postal_id']->cols);
+        //$this->assertEquals($dp_calle_pertenece_id,$resultado['dp_calle_pertenece_id']->id_selected);
         errores::$error = false;
     }
 

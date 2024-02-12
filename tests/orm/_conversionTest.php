@@ -155,6 +155,7 @@ class _conversionTest extends test {
         $data->inm_prospecto->inm_ocupacion_id = 1;
         $data->inm_prospecto->telefono_casa = 1;
         $data->inm_prospecto->correo_empresa = 1;
+        $data->inm_prospecto->dp_calle_pertenece_id = 1;
         $data->inm_prospecto_completo = new stdClass();
         $data->inm_prospecto_completo->com_prospecto_rfc = '';
         $resultado = $conversion->inm_comprador_ins($data, $link);

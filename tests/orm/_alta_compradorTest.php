@@ -362,7 +362,7 @@ class _alta_compradorTest extends test {
         $this->assertEquals('D',$resultado['nss']);
         $this->assertEquals('D',$resultado['curp']);
         $this->assertEquals('D',$resultado['rfc']);
-        $this->assertStringContainsStringIgnoringCase('D D  D D D 2024-01-',$resultado['descripcion']);
+        $this->assertStringContainsStringIgnoringCase('D D  D D D 2024-02-',$resultado['descripcion']);
 
         errores::$error = false;
     }
@@ -553,6 +553,8 @@ class _alta_compradorTest extends test {
         $registro_entrada['cat_sat_tipo_persona_id'] = '4';
         $registro_entrada['nombre'] = '1';
         $registro_entrada['apellido_paterno'] = '1';
+        $registro_entrada['cp'] = '1';
+        $registro_entrada['dp_municipio_id'] = '1';
         $resultado = $inm->posterior_alta(accion: 'alta_bd', etapa: 'ALTA', inm_comprador_id: $inm_comprador_id,
             link: $link, pr_proceso_descripcion: 'INMOBILIARIA CLIENTES', registro_entrada: $registro_entrada,
             tabla: $tabla);
@@ -888,7 +890,7 @@ class _alta_compradorTest extends test {
         $resultado = $inm->valida_transacciones($inm_comprador_id, $registro_entrada);
         $this->assertIsArray($resultado);
         $this->assertTrue(errores::$error);
-        $this->assertEquals("Error al validar registro",$resultado['mensaje_limpio']);
+        $this->assertEquals("Error al validar registro_entrada",$resultado['mensaje_limpio']);
         errores::$error = false;
 
         $inm_comprador_id = -1;
@@ -913,7 +915,7 @@ class _alta_compradorTest extends test {
 
         $this->assertIsArray($resultado);
         $this->assertTrue(errores::$error);
-        $this->assertEquals("Error inm_comprador_id debe ser mayor a 0",$resultado['mensaje_limpio']);
+        $this->assertEquals("Error al validar registro_entrada",$resultado['mensaje_limpio']);
         errores::$error = false;
 
         $inm_comprador_id = 1;
@@ -932,6 +934,8 @@ class _alta_compradorTest extends test {
         $registro_entrada['cat_sat_tipo_persona_id'] = '1';
         $registro_entrada['nombre'] = '1';
         $registro_entrada['apellido_paterno'] = '1';
+        $registro_entrada['cp'] = '1';
+        $registro_entrada['dp_municipio_id'] = '1';
 
 
         $resultado = $inm->valida_transacciones($inm_comprador_id, $registro_entrada);

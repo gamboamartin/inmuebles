@@ -21,7 +21,6 @@ class _dps_init{
      * @param modelo $modelo Modelo de cliente
      * @param stdClass $row_upd Registro en proceso
      * @return stdClass|array
-     * @version 1.46.1
      */
     private function dps_init_ids(modelo $modelo, stdClass $row_upd): stdClass|array
     {
@@ -29,9 +28,6 @@ class _dps_init{
         $entidades_pref[] = 'dp_pais';
         $entidades_pref[] = 'dp_estado';
         $entidades_pref[] = 'dp_municipio';
-        $entidades_pref[] = 'dp_cp';
-        $entidades_pref[] = 'dp_colonia_postal';
-        $entidades_pref[] = 'dp_calle_pertenece';
 
         foreach ($entidades_pref as $entidad){
             $entidad_id = $modelo->id_preferido_detalle(entidad_preferida: $entidad);
@@ -85,7 +81,6 @@ class _dps_init{
      * @param array $keys_selects Key previos cargados
      * @param stdClass $row_upd Registro en proceso
      * @return array
-     * @version 1.55.1
      */
     final public function ks_dp(_ctl_base $controler, array $keys_selects, stdClass $row_upd): array
     {
@@ -127,21 +122,6 @@ class _dps_init{
         }
 
 
-        $columns_ds = array('dp_colonia_descripcion');
-        $keys_selects = $controler->key_select(cols:6, con_registros: true,filtro:  $filtro,
-            key: 'dp_colonia_postal_id', keys_selects: $keys_selects, id_selected: $row_upd->dp_colonia_postal_id,
-            label: 'Colonia', columns_ds: $columns_ds);
-        if(errores::$error){
-            return $this->error->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
-        }
-
-        $columns_ds = array('dp_calle_descripcion');
-        $keys_selects = $controler->key_select(cols:6, con_registros: true,filtro:  $filtro,
-            key: 'dp_calle_pertenece_id', keys_selects: $keys_selects, id_selected: $row_upd->dp_calle_pertenece_id,
-            label: 'Calle', columns_ds: $columns_ds);
-        if(errores::$error){
-            return $this->error->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
-        }
 
         return $keys_selects;
     }

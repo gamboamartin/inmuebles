@@ -34,7 +34,6 @@ class _keys_selects{
      * Ajusta los elementos para front obtenidos del cliente
      * @param controlador_inm_comprador $controler Controlador en ejecucion
      * @return array|stdClass
-     * @version 1.69.1
      */
     private function ajusta_row_data_cliente(controlador_inm_comprador $controler): array|stdClass
     {
@@ -202,7 +201,6 @@ class _keys_selects{
      * @param controlador_inm_comprador $controler Controlador en ejecucion
      * @param string $function Funcion de retorno
      * @return array|stdClass
-     * @version 1.148.1
      */
     final public function base_plantilla(controlador_inm_comprador $controler, string $function): array|stdClass
     {
@@ -322,7 +320,6 @@ class _keys_selects{
      * @param controlador_inm_comprador $controler Controlador en ejecucion
      * @param stdClass $row_upd Registro en proceso
      * @return array
-     * @version 1.61.1
      */
     final public function init(controlador_inm_comprador $controler, stdClass $row_upd): array
     {
@@ -732,7 +729,6 @@ class _keys_selects{
      * Obtiene los keys para view asigna ubicacion
      * @param controlador_inm_comprador $controler Controlador en ejecucion
      * @return array
-     * @version 1.102.1
      */
     final public function key_selects_asigna_ubicacion(controlador_inm_comprador $controler): array
     {
@@ -757,7 +753,6 @@ class _keys_selects{
      * Ajusta los selects para forms upd
      * @param controlador_inm_comprador $controler Controlador en ejecucion
      * @return array
-     * @version 1.71.0
      */
     final public function key_selects_base(controlador_inm_comprador $controler): array
     {
@@ -1196,13 +1191,11 @@ class _keys_selects{
      * @param array $com_cliente Registro de tipo cliente
      * @param controlador_inm_comprador $controler Controlador en ejecucion
      * @return stdClass|array
-     * @version 1.67.1
      */
     private function row_data_cliente(array $com_cliente, controlador_inm_comprador $controler): stdClass|array
     {
         $keys = array('com_cliente_rfc','com_cliente_numero_exterior','com_cliente_telefono','dp_pais_id',
-            'dp_estado_id','dp_municipio_id','dp_cp_id','dp_colonia_postal_id','dp_calle_pertenece_id',
-            'com_tipo_cliente_id');
+            'dp_estado_id','dp_municipio_id', 'com_tipo_cliente_id');
 
         $valida = (new valida())->valida_existencia_keys(keys: $keys,registro:  $com_cliente);
         if(errores::$error){
@@ -1213,8 +1206,7 @@ class _keys_selects{
             $com_cliente['com_cliente_numero_interior'] = '';
         }
 
-        $keys = array('dp_pais_id', 'dp_estado_id','dp_municipio_id','dp_cp_id','dp_colonia_postal_id',
-            'dp_calle_pertenece_id', 'com_tipo_cliente_id');
+        $keys = array('dp_pais_id', 'dp_estado_id','dp_municipio_id', 'com_tipo_cliente_id');
 
         $valida = (new valida())->valida_ids(keys: $keys,registro:  $com_cliente);
         if(errores::$error){
@@ -1229,9 +1221,6 @@ class _keys_selects{
         $controler->row_upd->dp_pais_id = $com_cliente['dp_pais_id'];
         $controler->row_upd->dp_estado_id = $com_cliente['dp_estado_id'];
         $controler->row_upd->dp_municipio_id = $com_cliente['dp_municipio_id'];
-        $controler->row_upd->dp_cp_id = $com_cliente['dp_cp_id'];
-        $controler->row_upd->dp_colonia_postal_id = $com_cliente['dp_colonia_postal_id'];
-        $controler->row_upd->dp_calle_pertenece_id = $com_cliente['dp_calle_pertenece_id'];
         $controler->row_upd->com_tipo_cliente_id = $com_cliente['com_tipo_cliente_id'];
         return $controler->row_upd;
     }

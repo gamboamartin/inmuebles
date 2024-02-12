@@ -87,7 +87,6 @@ class controlador_inm_ubicacion extends _ctl_base {
      * @param bool $header Retorna datos via WEB
      * @param bool $ws Retorna datos vis JSON
      * @return array|stdClass
-     * @version 2.150.0
      */
     final public function asigna_comprador(bool $header, bool $ws = false): array|stdClass
     {
@@ -290,10 +289,11 @@ class controlador_inm_ubicacion extends _ctl_base {
             return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
         $keys_selects = (new init())->key_select_txt(cols: 6,key: 'costo_directo', keys_selects:$keys_selects,
-            place_holder: 'Costo Directo', value: 0);
+            place_holder: 'Costo Directo');
         if(errores::$error){
             return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
+        $keys_selects['value'] = 0.0;
         $keys_selects = (new init())->key_select_txt(cols: 12,key: 'cuenta_predial', keys_selects:$keys_selects,
             place_holder: 'Cuenta Predial');
         if(errores::$error){
