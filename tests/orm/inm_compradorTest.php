@@ -56,6 +56,11 @@ class inm_compradorTest extends test {
             $error = (new errores())->error(mensaje:'Error al eliminar', data: $del);
             print_r($error);exit;
         }
+        $del = (new base_test())->del_com_prospecto(link: $this->link);
+        if(errores::$error){
+            $error = (new errores())->error(mensaje:'Error al eliminar', data: $del);
+            print_r($error);exit;
+        }
 
         $inm = new inm_comprador(link: $this->link);
         //$inm = new liberator($inm);
@@ -86,7 +91,7 @@ class inm_compradorTest extends test {
         $inm->registro['dp_calle_pertenece_id'] = '1';
         $inm->registro['numero_exterior'] = '1';
         $inm->registro['cat_sat_regimen_fiscal_id'] = '605';
-        $inm->registro['cat_sat_moneda_id'] = '1';
+        $inm->registro['cat_sat_moneda_id'] = '161';
         $inm->registro['cat_sat_forma_pago_id'] = '1';
         $inm->registro['cat_sat_metodo_pago_id'] = '1';
         $inm->registro['cat_sat_uso_cfdi_id'] = '1';

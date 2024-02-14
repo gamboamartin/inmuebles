@@ -227,7 +227,7 @@ class _base_compradorTest extends test {
         $registro_entrada['lada_com'] = '11';
         $registro_entrada['numero_com'] = '33445566';
         $registro_entrada['cat_sat_regimen_fiscal_id'] = '601';
-        $registro_entrada['cat_sat_moneda_id'] = '1';
+        $registro_entrada['cat_sat_moneda_id'] = '161';
         $registro_entrada['cat_sat_forma_pago_id'] = '1';
         $registro_entrada['cat_sat_metodo_pago_id'] = '1';
         $registro_entrada['cat_sat_uso_cfdi_id'] = '1';

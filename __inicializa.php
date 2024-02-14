@@ -76,5 +76,3 @@ if(errores::$error){
 print_r($instala);
 
 $link->commit();
-
-

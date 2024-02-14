@@ -509,7 +509,7 @@ class _com_clienteTest extends test {
         $registro_entrada['lada_com'] = '11';
         $registro_entrada['numero_com'] = '22222222';
         $registro_entrada['cat_sat_regimen_fiscal_id'] = '601';
-        $registro_entrada['cat_sat_moneda_id'] = '1';
+        $registro_entrada['cat_sat_moneda_id'] = '161';
         $registro_entrada['cat_sat_forma_pago_id'] = '1';
         $registro_entrada['cat_sat_metodo_pago_id'] = '1';
         $registro_entrada['cat_sat_uso_cfdi_id'] = '1';
@@ -688,7 +688,7 @@ class _com_clienteTest extends test {
         $registro_entrada['apellido_paterno'] = 'A';
         $registro_entrada['cat_sat_forma_pago_id'] = '1';
         $registro_entrada['cat_sat_metodo_pago_id'] = '1';
-        $registro_entrada['cat_sat_moneda_id'] = '1';
+        $registro_entrada['cat_sat_moneda_id'] = '161';
         $registro_entrada['cat_sat_regimen_fiscal_id'] = '601';
         $registro_entrada['cat_sat_tipo_persona_id'] = '4';
         $registro_entrada['cat_sat_uso_cfdi_id'] = '1';
@@ -790,7 +790,7 @@ class _com_clienteTest extends test {
         $registro_entrada['lada_com'] = '1';
         $registro_entrada['numero_com'] = '1';
         $registro_entrada['cat_sat_regimen_fiscal_id'] = '601';
-        $registro_entrada['cat_sat_moneda_id'] = '1';
+        $registro_entrada['cat_sat_moneda_id'] = '161';
         $registro_entrada['cat_sat_forma_pago_id'] = '1';
         $registro_entrada['cat_sat_metodo_pago_id'] = '1';
         $registro_entrada['cat_sat_uso_cfdi_id'] = '1';
@@ -828,7 +828,7 @@ class _com_clienteTest extends test {
         $registro_entrada['lada_com'] = '1';
         $registro_entrada['numero_com'] = '1';
         $registro_entrada['cat_sat_regimen_fiscal_id'] = '601';
-        $registro_entrada['cat_sat_moneda_id'] = '1';
+        $registro_entrada['cat_sat_moneda_id'] = '161';
         $registro_entrada['cat_sat_forma_pago_id'] = '1';
         $registro_entrada['cat_sat_metodo_pago_id'] = '1';
         $registro_entrada['cat_sat_uso_cfdi_id'] = '1';
@@ -1015,7 +1015,7 @@ class _com_clienteTest extends test {
         $registro_entrada['lada_com'] = '1';
         $registro_entrada['numero_com'] = '1';
         $registro_entrada['cat_sat_regimen_fiscal_id'] = '601';
-        $registro_entrada['cat_sat_moneda_id'] = '1';
+        $registro_entrada['cat_sat_moneda_id'] = '161';
         $registro_entrada['cat_sat_forma_pago_id'] = '1';
         $registro_entrada['cat_sat_metodo_pago_id'] = '1';
         $registro_entrada['cat_sat_uso_cfdi_id'] = '1';

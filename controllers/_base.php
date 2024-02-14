@@ -15,9 +15,19 @@ class _base{
     }
 
     /**
-     * Obtiene el id de retorno determinado por POST[id_retorno]
-     * @return int|array
-     * @version 2.319.2
+     * POR DOCUMENTAR EN WIKI
+     * Esta función es privada y se llama id_retorno.
+     *
+     * @return int|array Devuelve un entero o un array en caso de error.
+     *
+     * Este método se encarga de gestionar la tarea de obtener el valor POST de 'id_retorno'.
+     * Primero, inicializa la variable id_retorno con un valor de -1.
+     * Comprueba si 'id_retorno' se ha establecido y, si es así, recupera el valor, lo limpia y lo asigna a la variable id_retorno.
+     * Luego, comprueba si id_retorno no es un número. En ese caso, devuelve un mensaje de error que indica que el
+     * id_retorno debe ser un número entero.
+     * Finalmente, devuelve el id_retorno como un número entero.
+     * Se utiliza principalmente para obtener el id_retorno de una entrada POST y realizar un control de errores básico.
+     * @version 3.0.0
      */
     private function id_retorno(): int|array
     {
@@ -35,7 +45,6 @@ class _base{
     /**
      * Inicializa los datos de retorno de una transaccion via POST
      * @return array|stdClass
-     * @version 2.321.0
      */
     final public function init_retorno(): array|stdClass
     {
