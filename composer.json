@@ -14,6 +14,7 @@
         "psr-4": {
           "gamboamartin\\inmuebles\\controllers\\": "controllers",
           "gamboamartin\\inmuebles\\models\\": "orm",
+          "gamboamartin\\inmuebles\\instalacion\\": "instalacion",
           "config\\": "config/",
           "gamboamartin\\inmuebles\\tests\\": "tests",
           "links\\": "links/",

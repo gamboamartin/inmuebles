@@ -75,4 +75,16 @@ if(errores::$error){
 
 print_r($instala);
 
+$inmuebles = new gamboamartin\inmuebles\instalacion\instalacion();
+
+$instala = $inmuebles->instala(link: $link);
+if(errores::$error){
+    $link->rollBack();
+    $error = (new errores())->error(mensaje: 'Error al instalar inmuebles', data: $instala);
+    print_r($error);
+    exit;
+}
+
+print_r($instala);
+
 $link->commit();
