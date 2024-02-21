@@ -1,12 +1,110 @@
 <?php
 namespace gamboamartin\inmuebles\instalacion;
+use gamboamartin\administrador\instalacion\_adm;
 use gamboamartin\administrador\models\_instalacion;
 use gamboamartin\errores\errores;
+use gamboamartin\inmuebles\models\inm_comprador;
 use PDO;
 use stdClass;
 
 class instalacion
 {
+
+
+
+    private function _add_inm_comprador(PDO $link): array|stdClass
+    {
+        $out = new stdClass();
+        $init = (new _instalacion(link: $link));
+
+        $create = $init->create_table_new(table: 'inm_comprador');
+        if(errores::$error){
+            return (new errores())->error(mensaje: 'Error al agregar tabla', data:  $create);
+        }
+        $out->create = $create;
+
+        $columnas = new stdClass();
+
+        $campos_new = array('descuento_pension_alimenticia_dh','descuento_pension_alimenticia_fc',
+            'monto_credito_solicitado_dh','monto_ahorro_voluntario','monto_final','sub_cuenta','descuento','puntos');
+
+        $columnas = $init->campos_double(campos: $columnas,campos_new:  $campos_new);
+        if(errores::$error){
+            return (new errores())->error(mensaje: 'Error al agregar campo double', data:  $columnas);
+        }
+
+
+        $columnas->es_segundo_credito = new stdClass();
+        $columnas->es_segundo_credito->default = 'NO';
+
+        $columnas->nss = new stdClass();
+        $columnas->curp = new stdClass();
+        $columnas->nombre = new stdClass();
+        $columnas->apellido_paterno = new stdClass();
+        $columnas->apellido_materno = new stdClass();
+
+        $columnas->con_discapacidad = new stdClass();
+        $columnas->con_discapacidad->default = 'NO';
+
+        $columnas->nombre_empresa_patron = new stdClass();
+        $columnas->nrp_nep = new stdClass();
+        $columnas->lada_nep = new stdClass();
+        $columnas->numero_nep = new stdClass();
+        $columnas->extension_nep = new stdClass();
+        $columnas->lada_com = new stdClass();
+        $columnas->numero_com = new stdClass();
+        $columnas->cel_com = new stdClass();
+        $columnas->genero = new stdClass();
+        $columnas->correo_com = new stdClass();
+        $columnas->etapa = new stdClass();
+        $columnas->proceso = new stdClass();
+
+        $columnas->telefono_casa = new stdClass();
+        $columnas->telefono_casa->default = '3333333333';
+
+        $columnas->correo_empresa = new stdClass();
+        $columnas->correo_empresa->default = 'sincorreo@correo.com';
+
+        $columnas->fecha_nacimiento = new stdClass();
+        $columnas->fecha_nacimiento->tipo_dato = 'DATE';
+        $columnas->fecha_nacimiento->default = '1900-01-01';
+
+        $add_colums = $init->add_columns(campos: $columnas,table:  'inm_comprador');
+        if(errores::$error){
+            return (new errores())->error(mensaje: 'Error al agregar columnas', data:  $add_colums);
+        }
+        $out->add_colums_base = $add_colums;
+
+
+        $foraneas = array();
+        $foraneas['inm_producto_infonavit_id'] = new stdClass();
+        $foraneas['inm_attr_tipo_credito_id'] = new stdClass();
+        $foraneas['inm_destino_credito_id'] = new stdClass();
+        $foraneas['inm_plazo_credito_sc_id'] = new stdClass();
+        $foraneas['inm_tipo_discapacidad_id'] = new stdClass();
+        $foraneas['inm_estado_civil_id'] = new stdClass();
+        $foraneas['bn_cuenta_id'] = new stdClass();
+        $foraneas['inm_persona_discapacidad_id'] = new stdClass();
+        $foraneas['inm_institucion_hipotecaria_id'] = new stdClass();
+        $foraneas['dp_municipio_nacimiento_id'] = new stdClass();
+        $foraneas['inm_nacionalidad_id'] = new stdClass();
+        $foraneas['inm_ocupacion_id'] = new stdClass();
+        $foraneas['dp_calle_pertenece_id'] = new stdClass();
+        $foraneas['dp_calle_pertenece_id']->default = '100';
+        $foraneas['dp_calle_pertenece_id']->modelo = new inm_comprador(link: $link, valida_atributos_criticos: false);
+
+
+        $result = $init->foraneas(foraneas: $foraneas,table:  'inm_comprador');
+
+        if(errores::$error){
+            return (new errores())->error(mensaje: 'Error al ajustar foranea', data:  $result);
+        }
+
+        $out->foraneas = $result;
+
+
+        return $out;
+    }
     private function _add_inm_prospecto(PDO $link): array|stdClass
     {
         $out = new stdClass();
@@ -120,6 +218,70 @@ class instalacion
         return $out;
     }
 
+    private function inm_comprador(PDO $link): array|stdClass
+    {
+        $out = new stdClass();
+
+        $create = $this->_add_inm_comprador(link: $link);
+        if(errores::$error){
+            return (new errores())->error(mensaje: 'Error al agregar tabla', data:  $create);
+        }
+
+        $out->create = $create;
+
+
+
+        $modelo = new inm_comprador(link: $link);
+
+        $registros = $modelo->registros();
+        if(errores::$error){
+            return (new errores())->error(mensaje: 'Error al obtener registros', data:  $registros);
+        }
+
+        ob_clean();
+        foreach ($registros as $registro){
+            $tiene_prospecto = $modelo->tiene_prospecto(inm_comprador_id: $registro['inm_comprador_id']);
+            if(errores::$error){
+                return (new errores())->error(mensaje: 'Error al validar si tiene prospecto', data:  $tiene_prospecto);
+            }
+            if($tiene_prospecto){
+                $inm_prospecto = $modelo->inm_prospecto(inm_comprador_id: $registro['inm_comprador_id']);
+                if(errores::$error){
+                    return (new errores())->error(mensaje: 'Error al obtener prospecto', data:  $inm_prospecto);
+                }
+                $upd_cte = array();
+                $upd_cte['dp_calle_pertenece_id'] = $inm_prospecto->dp_calle_pertenece_id;
+                $upd = $modelo->modifica_bd_base(registro: $upd_cte, id: $registro['inm_comprador_id']);
+                if(errores::$error){
+                    return (new errores())->error(mensaje: 'Error al actualizar cliente', data:  $upd);
+                }
+            }
+
+
+
+        }
+
+
+
+        $adm_menu_descripcion = 'Clientes';
+        $adm_sistema_descripcion = 'inmuebles';
+        $etiqueta_label = 'Clientes';
+        $adm_seccion_pertenece_descripcion = 'inmuebles';
+        $adm_namespace_descripcion = 'gamboa.martin/inmuebles';
+        $adm_namespace_name = 'gamboamartin/inmuebles';
+
+        $acl = (new _adm())->integra_acl(adm_menu_descripcion: $adm_menu_descripcion,
+            adm_namespace_name: $adm_namespace_name, adm_namespace_descripcion: $adm_namespace_descripcion,
+            adm_seccion_descripcion: __FUNCTION__, adm_seccion_pertenece_descripcion: $adm_seccion_pertenece_descripcion,
+            adm_sistema_descripcion: $adm_sistema_descripcion, etiqueta_label: $etiqueta_label, link: $link);
+        if(errores::$error){
+            return (new errores())->error(mensaje: 'Error al obtener acl', data:  $acl);
+        }
+
+
+        return $out;
+
+    }
 
     private function inm_prospecto(PDO $link): array|stdClass
     {
@@ -302,11 +464,20 @@ class instalacion
     {
         $out = new stdClass();
 
-        $com_producto = $this->inm_prospecto(link: $link);
+        $inm_prospecto = $this->inm_prospecto(link: $link);
         if(errores::$error){
-            return (new errores())->error(mensaje: 'Error integrar com_producto', data:  $com_producto);
+            return (new errores())->error(mensaje: 'Error integrar inm_prospecto', data:  $inm_prospecto);
         }
-        $out->com_producto = $com_producto;
+        $out->inm_prospecto = $inm_prospecto;
+
+        $inm_comprador = $this->inm_comprador(link: $link);
+        if(errores::$error){
+            return (new errores())->error(mensaje: 'Error integrar inm_comprador', data:  $inm_comprador);
+        }
+        $out->inm_comprador = $inm_comprador;
+
+
+
         return $out;
 
     }

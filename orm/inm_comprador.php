@@ -11,7 +11,7 @@ use stdClass;
 
 class inm_comprador extends _modelo_parent{
     public bool $desde_prospecto = false;
-    public function __construct(PDO $link)
+    public function __construct(PDO $link, bool $valida_atributos_criticos = true)
     {
         $tabla = 'inm_comprador';
         $columnas = array($tabla=>false,'inm_producto_infonavit'=>$tabla,'inm_attr_tipo_credito'=>$tabla,
@@ -87,7 +87,8 @@ class inm_comprador extends _modelo_parent{
 
         parent::__construct(link: $link, tabla: $tabla, campos_obligatorios: $campos_obligatorios,
             columnas: $columnas, columnas_extra: $columnas_extra, renombres: $renombres,
-            tipo_campos: $tipo_campos, atributos_criticos: $atributos_criticos);
+            tipo_campos: $tipo_campos, atributos_criticos: $atributos_criticos,
+            valida_atributos_criticos: $valida_atributos_criticos);
 
         $this->NAMESPACE = __NAMESPACE__;
         $this->etiqueta = 'Comprador de Vivienda';

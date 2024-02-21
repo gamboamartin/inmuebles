@@ -46,7 +46,7 @@ class controlador_inm_compradorTest extends test {
 
         $data = file_get_contents("inm_comprador.alta");
 
-
+        //print_r($data);exit;
 
         assertStringContainsStringIgnoringCase("<div class='control-group col-sm-6'><label class='control-label' for='inm_producto_infonavit_id'>Producto</label><div", $data);
         assertStringContainsStringIgnoringCase("Es Segundo Credito", $data);
