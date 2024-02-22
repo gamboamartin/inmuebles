@@ -54,7 +54,6 @@ class _dps_init{
      * @param stdClass $row_upd Registro en proceso
      * @param array $filtro Filtro para registros a mostrar en options
      * @return array
-     * @version 1.53.1
      */
     private function key_con_descripcion(_ctl_base $controler, string $entidad, array $keys_selects, string $label,
                                          stdClass $row_upd, array $filtro = array()): array
@@ -125,6 +124,12 @@ class _dps_init{
 
         $keys_selects = $this->key_con_descripcion(controler: $controler,entidad: 'dp_cp',
             keys_selects:  $keys_selects,label: 'CP',row_upd:  $row_upd, filtro: $filtro);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        }
+
+        $keys_selects = $this->key_con_descripcion(controler: $controler,entidad: 'dp_colonia_postal',
+            keys_selects:  $keys_selects,label: 'Colonia',row_upd:  $row_upd, filtro: $filtro);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }

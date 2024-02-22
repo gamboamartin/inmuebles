@@ -331,8 +331,7 @@ class _keys_selects{
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
-        //print_r($keys_selects);exit;
-        //print_r($row_upd);exit;
+
         $keys_selects = (new _dps_init())->ks_dp(controler: $controler,keys_selects:  $keys_selects,row_upd: $row_upd);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
