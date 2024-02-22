@@ -5,6 +5,7 @@ namespace gamboamartin\inmuebles\controllers;
 use base\orm\modelo;
 use gamboamartin\comercial\models\com_cliente;
 use gamboamartin\errores\errores;
+use gamboamartin\inmuebles\models\inm_comprador;
 use gamboamartin\system\_ctl_base;
 use stdClass;
 
@@ -25,6 +26,7 @@ class _dps_init{
     private function dps_init_ids(modelo $modelo, stdClass $row_upd): stdClass|array
     {
 
+        //print_r($row_upd);exit;
         $entidades_pref[] = 'dp_pais';
         $entidades_pref[] = 'dp_estado';
         $entidades_pref[] = 'dp_municipio';
@@ -35,7 +37,9 @@ class _dps_init{
                 return $this->error->error(mensaje: 'Error al obtener id pref',data:  $entidad_id);
             }
             $key_entidad_id = $entidad.'_id';
-            $row_upd->$key_entidad_id = $entidad_id;
+            if(!isset($row_upd->$key_entidad_id) || (int)$row_upd->$key_entidad_id === -1) {
+                $row_upd->$key_entidad_id = $entidad_id;
+            }
         }
 
         return $row_upd;
@@ -87,10 +91,14 @@ class _dps_init{
 
         $modelo_cliente = new com_cliente(link: $controler->link);
 
-        $row_upd = $this->dps_init_ids(modelo: $modelo_cliente, row_upd: $row_upd);
+        $modelo_inm_comprador = new inm_comprador(link: $controler->link);
+
+        $row_upd = $this->dps_init_ids(modelo: $modelo_inm_comprador, row_upd: $row_upd);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al inicializar row_upd',data:  $row_upd);
         }
+
+       // print_r($row_upd);
 
         $keys_selects = $this->key_con_descripcion(controler: $controler,entidad: 'dp_pais',
             keys_selects:  $keys_selects,label: 'Pais',row_upd:  $row_upd);

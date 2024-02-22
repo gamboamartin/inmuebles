@@ -148,12 +148,26 @@ class _dps_initTest extends test {
         $_SESSION['usuario_id'] = 2;
         $_GET['session_id'] = '1';
 
-        /*$dp_calle_pertenece_id = (new com_cliente(link: $this->link))->id_preferido_detalle(entidad_preferida: 'dp_calle_pertenece');
+
+        $del = (new base_test())->del_inm_comprador(link: $this->link);
         if(errores::$error){
-            $error = (new errores())->error(mensaje: 'Error al obtener dp_calle_pertenece_id', data: $dp_calle_pertenece_id);
+            $error = (new errores())->error(mensaje: 'Error al eliminar', data: $del);
             print_r($error);
             exit;
-        }*/
+        }
+        $del = (new base_test())->del_inm_prospecto(link: $this->link);
+        if(errores::$error){
+            $error = (new errores())->error(mensaje: 'Error al eliminar', data: $del);
+            print_r($error);
+            exit;
+        }
+
+        $alta = (new base_test())->alta_inm_comprador(link: $this->link);
+        if(errores::$error){
+            $error = (new errores())->error(mensaje: 'Error al insertar', data: $alta);
+            print_r($error);
+            exit;
+        }
 
 
         $controler = new controlador_inm_comprador(link: $this->link, paths_conf: $this->paths_conf);

@@ -63,6 +63,9 @@ class _keys_selectsTest extends test {
         $controler = new controlador_inm_comprador(link: $this->link, paths_conf: $this->paths_conf);
         $controler->registro_id = 1;
         $controler->row_upd = new stdClass();
+        $controler->registro['dp_pais_id'] = 1;
+        $controler->registro['dp_estado_id'] = 1;
+        $controler->registro['dp_municipio_id'] = 1;
 
         $resultado = $ks->ajusta_row_data_cliente($controler);
         $this->assertIsArray($resultado);
@@ -93,7 +96,7 @@ class _keys_selectsTest extends test {
         $this->assertNotTrue(errores::$error);
         $this->assertEquals("AAA010101AAA",$resultado->rfc);
         $this->assertEquals("1",$resultado->numero_exterior);
-        $this->assertEquals("2467",$resultado->dp_municipio_id);
+        $this->assertEquals("1",$resultado->dp_municipio_id);
         $this->assertEquals("1",$resultado->com_tipo_cliente_id);
         errores::$error = false;
     }
@@ -154,7 +157,9 @@ class _keys_selectsTest extends test {
         $controler->row_upd = new stdClass();
         $controler->inputs = new stdClass();
         $controler->registro = array();
-        $controler->registro[] = '';
+        $controler->registro['dp_pais_id'] = 1;
+        $controler->registro['dp_estado_id'] = 1;
+        $controler->registro['dp_municipio_id'] = 1;
 
         $function = 'd';
 
@@ -586,6 +591,11 @@ class _keys_selectsTest extends test {
             $error = (new errores())->error(mensaje:'Error al eliminar', data: $del);
             print_r($error);exit;
         }
+        $del = (new base_test())->del_inm_prospecto(link: $this->link);
+        if(errores::$error){
+            $error = (new errores())->error(mensaje:'Error al del', data: $del);
+            print_r($error);exit;
+        }
         $alta = (new base_test())->alta_inm_comprador(link: $this->link);
         if(errores::$error){
             $error = (new errores())->error(mensaje:'Error al insertar', data: $alta);
@@ -598,8 +608,12 @@ class _keys_selectsTest extends test {
         $controler = new controlador_inm_comprador(link: $this->link, paths_conf: $this->paths_conf);
         $controler->registro_id = 1;
         $controler->row_upd = new stdClass();
+        $controler->registro['dp_pais_id'] = 1;
+        $controler->registro['dp_estado_id'] = 1;
+        $controler->registro['dp_municipio_id'] = 1;
 
         $resultado = $ks->key_selects_asigna_ubicacion($controler);
+        //print_r($resultado);exit;
         $this->assertIsArray($resultado);
         $this->assertNotTrue(errores::$error);
         $this->assertTrue($resultado['inm_plazo_credito_sc_id']->disabled);
@@ -633,6 +647,9 @@ class _keys_selectsTest extends test {
         $controler = new controlador_inm_comprador(link: $this->link, paths_conf: $this->paths_conf);
         $controler->registro_id = 1;
         $controler->row_upd = new stdClass();
+        $controler->registro['dp_pais_id'] = 1;
+        $controler->registro['dp_estado_id'] = 1;
+        $controler->registro['dp_municipio_id'] = 1;
 
         $resultado = $ks->key_selects_base($controler);
         $this->assertIsArray($resultado);
@@ -648,7 +665,7 @@ class _keys_selectsTest extends test {
         }
 
         $resultado = $ks->key_selects_base($controler);
-
+        //print_r($resultado);exit;
         $this->assertIsArray($resultado);
         $this->assertNotTrue(errores::$error);
         $this->assertEquals("Producto",$resultado['inm_producto_infonavit_id']->label);
@@ -802,6 +819,9 @@ class _keys_selectsTest extends test {
 
         $controler = new controlador_inm_comprador(link: $this->link, paths_conf: $this->paths_conf);
         $controler->row_upd = new stdClass();
+        $controler->registro['dp_pais_id'] = 1;
+        $controler->registro['dp_estado_id'] = 1;
+        $controler->registro['dp_municipio_id'] = 1;
 
         $com_cliente = array();
         $com_cliente['com_cliente_rfc'] = -1;
@@ -815,6 +835,7 @@ class _keys_selectsTest extends test {
         $com_cliente['dp_calle_pertenece_id'] = 1;
         $com_cliente['com_tipo_cliente_id'] = 1;
         $resultado = $ks->row_data_cliente($com_cliente, $controler);
+        //print_r($resultado);exit;
         $this->assertIsObject($resultado);
         $this->assertNotTrue(errores::$error);
         $this->assertEquals(1,$resultado->dp_pais_id);

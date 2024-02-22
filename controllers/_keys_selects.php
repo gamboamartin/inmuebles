@@ -330,7 +330,8 @@ class _keys_selects{
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
-
+        //print_r($keys_selects);exit;
+        //print_r($row_upd);exit;
         $keys_selects = (new _dps_init())->ks_dp(controler: $controler,keys_selects:  $keys_selects,row_upd: $row_upd);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
@@ -766,6 +767,7 @@ class _keys_selects{
             return $this->error->error(mensaje: 'Error al obtener row_upd',data:  $row_upd);
         }
 
+        //print_r($row_upd);exit;
         $keys_selects = $this->init(controler: $controler,row_upd: $controler->row_upd);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
@@ -1213,14 +1215,23 @@ class _keys_selects{
             return $this->error->error(mensaje: 'Error al validar com_cliente',data:  $valida);
         }
 
+        $keys = array('dp_pais_id', 'dp_estado_id','dp_municipio_id');
+
+        $valida = (new valida())->valida_ids(keys: $keys,registro:  $controler->registro);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al validar com_cliente',data:  $valida);
+        }
+
+        //print_r($controler->registro);exit;
+
 
         $controler->row_upd->rfc = $com_cliente['com_cliente_rfc'];
         $controler->row_upd->numero_exterior = $com_cliente['com_cliente_numero_exterior'];
         $controler->row_upd->numero_interior = $com_cliente['com_cliente_numero_interior'];
         $controler->row_upd->telefono = $com_cliente['com_cliente_telefono'];
-        $controler->row_upd->dp_pais_id = $com_cliente['dp_pais_id'];
-        $controler->row_upd->dp_estado_id = $com_cliente['dp_estado_id'];
-        $controler->row_upd->dp_municipio_id = $com_cliente['dp_municipio_id'];
+        $controler->row_upd->dp_pais_id = $controler->registro['dp_pais_id'];
+        $controler->row_upd->dp_estado_id = $controler->registro['dp_estado_id'];
+        $controler->row_upd->dp_municipio_id = $controler->registro['dp_municipio_id'];
         $controler->row_upd->com_tipo_cliente_id = $com_cliente['com_tipo_cliente_id'];
         return $controler->row_upd;
     }

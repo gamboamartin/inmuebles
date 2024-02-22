@@ -22,7 +22,7 @@ if(errores::$error){
     exit;
 }
 
-print_r($instala);
+//print_r($instala);
 
 
 $cat_sat = new gamboamartin\cat_sat\instalacion\instalacion();
@@ -34,8 +34,7 @@ if(errores::$error){
     print_r($error);
     exit;
 }
-
-print_r($instala);
+//print_r($instala);
 
 $organigrama = new gamboamartin\organigrama\instalacion\instalacion();
 
@@ -46,8 +45,7 @@ if(errores::$error){
     print_r($error);
     exit;
 }
-
-print_r($instala);
+//print_r($instala);
 
 
 $comercial = new gamboamartin\comercial\instalacion\instalacion();
@@ -60,8 +58,7 @@ if(errores::$error){
     exit;
 }
 
-print_r($instala);
-
+//print_r($instala);
 
 $facturacion = new gamboamartin\facturacion\instalacion\instalacion();
 
@@ -73,7 +70,7 @@ if(errores::$error){
     exit;
 }
 
-print_r($instala);
+//print_r($instala);
 
 $inmuebles = new gamboamartin\inmuebles\instalacion\instalacion();
 
@@ -85,6 +82,6 @@ if(errores::$error){
     exit;
 }
 
-print_r($instala);
+//print_r($instala);
 
 $link->commit();

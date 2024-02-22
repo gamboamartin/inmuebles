@@ -19,7 +19,9 @@ class inm_comprador extends _modelo_parent{
             'inm_tipo_discapacidad'=>$tabla,'inm_persona_discapacidad'=>$tabla,'inm_estado_civil'=>$tabla,
             'bn_cuenta'=>$tabla,'org_sucursal'=>'bn_cuenta','org_empresa'=>'org_sucursal',
             'inm_institucion_hipotecaria'=>$tabla,'inm_sindicato'=>$tabla,'inm_nacionalidad'=>$tabla,
-            'inm_ocupacion'=>$tabla);
+            'inm_ocupacion'=>$tabla,'dp_calle_pertenece'=>$tabla,'dp_calle'=>'dp_calle_pertenece',
+            'dp_colonia_postal'=>'dp_calle_pertenece','dp_colonia'=>'dp_colonia_postal','dp_cp'=>'dp_colonia_postal',
+            'dp_municipio'=>'dp_cp','dp_estado'=>'dp_municipio','dp_pais'=>'dp_estado');
 
         $campos_obligatorios = array('apellido_paterno','bn_cuenta_id','cel_com','correo_com','curp',
             'descuento_pension_alimenticia_dh', 'descuento_pension_alimenticia_fc', 'es_segundo_credito',
@@ -337,11 +339,12 @@ class inm_comprador extends _modelo_parent{
     /**
      * Obtiene los datos del cliente de fc basados en el comprador
      * @param int $inm_comprador_id Comprador id
+     * @param bool $columnas_en_bruto
      * @param bool $retorno_obj Retorna un objeto en caso de ser true
      * @return array|object
-     * @version 1.66.1
      */
-    final public function get_com_cliente(int $inm_comprador_id, bool $retorno_obj = false): object|array
+    final public function get_com_cliente(int $inm_comprador_id, bool $columnas_en_bruto = false,
+                                          bool $retorno_obj = false): object|array
     {
         if($inm_comprador_id<=0){
             return $this->error->error(mensaje: 'Error inm_comprador_id es menor a 0',data:  $inm_comprador_id);
@@ -354,7 +357,7 @@ class inm_comprador extends _modelo_parent{
         }
 
         $com_cliente = (new _base_comprador())->com_cliente(com_cliente_id: $imp_rel_comprador_com_cliente['com_cliente_id'],
-            link: $this->link, retorno_obj: $retorno_obj);
+            link: $this->link, columnas_en_bruto: $columnas_en_bruto, retorno_obj: $retorno_obj);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al obtener com_cliente',data:  $com_cliente);
         }

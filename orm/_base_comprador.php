@@ -22,11 +22,11 @@ class _base_comprador{
      * Obtiene el cliente fiscal asignado al comprador de vivienda
      * @param int $com_cliente_id Identificador de cliente
      * @param PDO $link Conexion a la base de datos
+     * @param bool $columnas_en_bruto
      * @param bool $retorno_obj Retorna un objeto en caso de ser verdadero
      * @return array|object
-     * @version 1.64.1
      */
-    final public function com_cliente(int $com_cliente_id, PDO $link, bool $retorno_obj = false): object|array
+    final public function com_cliente(int $com_cliente_id, PDO $link, bool $columnas_en_bruto = false, bool $retorno_obj = false): object|array
     {
 
         if($com_cliente_id<=0){
@@ -35,7 +35,7 @@ class _base_comprador{
 
         $filtro['com_cliente.id'] = $com_cliente_id;
 
-        $r_com_cliente = (new com_cliente(link: $link))->filtro_and(filtro:$filtro);
+        $r_com_cliente = (new com_cliente(link: $link))->filtro_and(columnas_en_bruto: $columnas_en_bruto, filtro: $filtro);
         if(errores::$error){
             return $this->error->error(
                 mensaje: 'Error al obtener com_cliente',data:  $r_com_cliente);

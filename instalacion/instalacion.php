@@ -2,6 +2,8 @@
 namespace gamboamartin\inmuebles\instalacion;
 use gamboamartin\administrador\instalacion\_adm;
 use gamboamartin\administrador\models\_instalacion;
+use gamboamartin\comercial\models\com_cliente;
+use gamboamartin\direccion_postal\models\dp_calle_pertenece;
 use gamboamartin\errores\errores;
 use gamboamartin\inmuebles\models\inm_comprador;
 use PDO;
@@ -101,6 +103,47 @@ class instalacion
         }
 
         $out->foraneas = $result;
+
+
+        $modelo = new inm_comprador(link: $link);
+
+        $registros = $modelo->registros(columnas_en_bruto: true, return_obj: true);
+        if(errores::$error){
+            return (new errores())->error(mensaje: 'Error al obtener registros', data:  $result);
+        }
+
+        foreach ($registros as $registro){
+            $registro_id = $registro->id;
+            $com_cliente = (new inm_comprador(link: $link))->get_com_cliente(inm_comprador_id: $registro_id,
+
+
+                columnas_en_bruto: true, retorno_obj: true);
+            if(errores::$error){
+                return (new errores())->error(mensaje: 'Error al obtener com_cliente', data:  $com_cliente);
+            }
+            $dp_calle_pertenece_id = $com_cliente->dp_calle_pertenece_id;
+
+            $dp_calle_pertenece = (new dp_calle_pertenece(link: $link))->registro(registro_id: $dp_calle_pertenece_id, retorno_obj: true);
+            if(errores::$error){
+                return (new errores())->error(mensaje: 'Error al obtener dp_calle_pertenece', data:  $dp_calle_pertenece,);
+            }
+
+
+            if((int)$registro->dp_calle_pertenece_id !== (int)$dp_calle_pertenece->dp_calle_pertenece_id){
+                $upd = array();
+                $upd['dp_calle_pertenece_id'] = $dp_calle_pertenece_id;
+
+                $upd_data = $modelo->modifica_bd_base(registro: $upd,id:  $registro_id);
+                if(errores::$error){
+                    return (new errores())->error(mensaje: 'Error al actualizar upd_data', data:  $upd_data,);
+                }
+            }
+
+            //print_r($dp_calle_pertenece);exit;
+        }
+
+        //print_r($registros);exit;
+
 
 
         return $out;
