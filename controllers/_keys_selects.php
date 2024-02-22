@@ -51,6 +51,7 @@ class _keys_selects{
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al obtener row_upd',data:  $row_upd);
         }
+        //print_r($row_upd);exit;
         return $row_upd;
     }
 
@@ -767,7 +768,6 @@ class _keys_selects{
             return $this->error->error(mensaje: 'Error al obtener row_upd',data:  $row_upd);
         }
 
-        //print_r($row_upd);exit;
         $keys_selects = $this->init(controler: $controler,row_upd: $controler->row_upd);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
@@ -1233,6 +1233,11 @@ class _keys_selects{
         $controler->row_upd->dp_estado_id = $controler->registro['dp_estado_id'];
         $controler->row_upd->dp_municipio_id = $controler->registro['dp_municipio_id'];
         $controler->row_upd->com_tipo_cliente_id = $com_cliente['com_tipo_cliente_id'];
+        $controler->row_upd->dp_cp_id = $controler->registro['dp_cp_id'];
+        $controler->row_upd->dp_calle_id = $controler->registro['dp_calle_id'];
+        $controler->row_upd->dp_colonia_id = $controler->registro['dp_colonia_id'];
+        $controler->row_upd->dp_colonia_postal_id = $controler->registro['dp_colonia_postal_id'];
+        $controler->row_upd->dp_calle_pertenece_id = $controler->registro['dp_calle_pertenece_id'];
         return $controler->row_upd;
     }
 }

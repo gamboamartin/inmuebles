@@ -125,7 +125,6 @@ class _base_comprador{
      * @param int $inm_comprador_id Comprador identificador
      * @param PDO $link Conexion a  la base de datos
      * @return array
-     * @version 1.63.1
      */
     final public function inm_rel_comprador_cliente(int $inm_comprador_id, PDO $link): array
     {

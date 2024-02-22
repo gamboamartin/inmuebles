@@ -570,14 +570,11 @@ class controlador_inm_comprador extends _ctl_base {
             return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects,
                 header: $header,ws:  $ws);
         }
-        //print_r($this->inputs->dp_calle_pertenece_id);exit;
-        //print_r($keys_selects);exit;
 
         $base = $this->base_upd(keys_selects: $keys_selects, params: array(),params_ajustados: array());
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al integrar base',data:  $base, header: $header,ws:  $ws);
         }
-
 
         $radios = (new _inm_comprador())->radios_chk(controler: $this);
         if(errores::$error){

@@ -2,7 +2,6 @@
 namespace gamboamartin\inmuebles\instalacion;
 use gamboamartin\administrador\instalacion\_adm;
 use gamboamartin\administrador\models\_instalacion;
-use gamboamartin\comercial\models\com_cliente;
 use gamboamartin\direccion_postal\models\dp_calle_pertenece;
 use gamboamartin\errores\errores;
 use gamboamartin\inmuebles\models\inm_comprador;
