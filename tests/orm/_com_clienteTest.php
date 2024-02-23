@@ -276,8 +276,10 @@ class _com_clienteTest extends test {
         $registro = new stdClass();
         $registro->inm_comprador_nombre = 'A';
         $registro->inm_comprador_apellido_paterno = 'B';
+        $registro->dp_calle_pertenece_id = '1';
 
-        $resultado = $inm->com_cliente_upd($registro);
+        $resultado = $inm->com_cliente_upd($this->link, $registro);
+        //print_r($resultado);exit;
         $this->assertIsArray($resultado);
         $this->assertNotTrue(errores::$error);
         $this->assertEquals('A B',$resultado['razon_social']);
@@ -602,6 +604,43 @@ class _com_clienteTest extends test {
         errores::$error = false;
     }
 
+    public function test_keys_name_cliente(): void
+    {
+        errores::$error = false;
+
+        $_GET['seccion'] = 'inm_producto_infonavit';
+        $_GET['accion'] = 'lista';
+        $_SESSION['grupo_id'] = 1;
+        $_SESSION['usuario_id'] = 2;
+        $_GET['session_id'] = '1';
+
+
+
+        $inm = new _com_cliente();
+        $inm = new liberator($inm);
+
+        $con_prefijo = false;
+        $resultado = $inm->keys_name_cliente($con_prefijo);
+        //print_r($resultado);exit;
+        $this->assertIsObject($resultado);
+        $this->assertNotTrue(errores::$error);
+        $this->assertEquals('nombre',$resultado->key_nombre);
+        $this->assertEquals('apellido_paterno',$resultado->key_apellido_paterno);
+        $this->assertEquals('apellido_materno',$resultado->key_apellido_materno);
+
+        errores::$error = false;
+
+        $con_prefijo = true;
+        $resultado = $inm->keys_name_cliente($con_prefijo);
+        $this->assertIsObject($resultado);
+        $this->assertNotTrue(errores::$error);
+        $this->assertEquals('inm_comprador_nombre',$resultado->key_nombre);
+        $this->assertEquals('inm_comprador_apellido_paterno',$resultado->key_apellido_paterno);
+        $this->assertEquals('inm_comprador_apellido_materno',$resultado->key_apellido_materno);
+
+        errores::$error = false;
+    }
+
     public function test_modifica_com_cliente(): void
     {
         errores::$error = false;
@@ -623,6 +662,7 @@ class _com_clienteTest extends test {
         $inm_comprador->inm_comprador_nombre = 'Z';
         $inm_comprador->inm_comprador_apellido_paterno = 'P';
         $inm_comprador->inm_comprador_id = 1;
+        $inm_comprador->dp_calle_pertenece_id = 1;
         $resultado = $inm->modifica_com_cliente($inm_comprador, $link);
         $this->assertIsObject($resultado);
         $this->assertNotTrue(errores::$error);

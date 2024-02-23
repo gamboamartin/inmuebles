@@ -104,13 +104,14 @@ class _com_cliente{
 
     /**
      * Ajusta un row para actualizar un cliente
+     * @param PDO $link
      * @param stdClass $registro Registro de tipo comprador
      * @return array
      */
-    private function com_cliente_upd(stdClass $registro): array
+    private function com_cliente_upd(PDO $link, stdClass $registro): array
     {
 
-        $keys = array('inm_comprador_nombre','inm_comprador_apellido_paterno');
+        $keys = array('inm_comprador_nombre','inm_comprador_apellido_paterno','dp_calle_pertenece_id');
         $valida = $this->validacion->valida_existencia_keys(keys: $keys,registro:  $registro);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al al validar $registro',data:  $valida);
@@ -129,6 +130,20 @@ class _com_cliente{
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al obtener com_cliente_upd',data:  $com_cliente_upd);
         }
+
+        $dp_calle_pertenece = (new dp_calle_pertenece(link: $link))->registro(
+            registro_id: $registro->dp_calle_pertenece_id,retorno_obj: true);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al obtener dp_calle_pertenece',data:  $dp_calle_pertenece);
+        }
+
+        $keys_dom = array('pais','estado','municipio','colonia','calle','cp');
+        foreach ($keys_dom as $key_dom){
+            $key_row = 'dp_'.$key_dom.'_descripcion';
+            $com_cliente_upd[$key_dom] = $dp_calle_pertenece->$key_row;
+        }
+        $com_cliente_upd['dp_municipio_id'] = $dp_calle_pertenece->dp_municipio_id;
+
         return $com_cliente_upd;
     }
 
@@ -336,7 +351,6 @@ class _com_cliente{
      * Inicializa los keys de un cliente
      * @param array $com_cliente_upd Cliente a ajustar
      * @return array
-     * @version 2.60.0
      */
     private function init_keys_com_cliente(array $com_cliente_upd): array
     {
@@ -359,7 +373,6 @@ class _com_cliente{
      * @param int $com_cliente_id Identificador de cliente
      * @param int $inm_comprador_id Identificador de comprador
      * @return array
-     * @version 2.32.0
      */
     private function inm_rel_com_cliente_ins(int $com_cliente_id, int $inm_comprador_id): array
     {
@@ -407,7 +420,6 @@ class _com_cliente{
      * @param int $inm_comprador_id Comprador id
      * @param PDO $link Conexion a la base de datos
      * @return array|stdClass
-     * @version 2.38.0
      */
     final public function inserta_inm_rel_comprador_com_cliente(int $com_cliente_id, int $inm_comprador_id,
                                                                 PDO $link): array|stdClass
@@ -440,7 +452,6 @@ class _com_cliente{
     /**
      * Integra los keys de un cliente
      * @return string[]
-     * @version 2.59.0
      */
     private function key_com_cliente(): array
     {
@@ -449,12 +460,32 @@ class _com_cliente{
             'cat_sat_metodo_pago_id','cat_sat_uso_cfdi_id','cat_sat_tipo_persona_id');
     }
 
+    private function keys_name_cliente(bool $con_prefijo): stdClass
+    {
+        $key_nombre = 'nombre';
+        $key_apellido_paterno = 'apellido_paterno';
+        $key_apellido_materno = 'apellido_materno';
+
+        if($con_prefijo){
+            $key_nombre = 'inm_comprador_'.$key_nombre;
+            $key_apellido_paterno = 'inm_comprador_'.$key_apellido_paterno;
+            $key_apellido_materno = 'inm_comprador_'.$key_apellido_materno;
+        }
+
+        $data = new stdClass();
+        $data->key_nombre = $key_nombre;
+        $data->key_apellido_paterno = $key_apellido_paterno;
+        $data->key_apellido_materno = $key_apellido_materno;
+
+        return $data;
+
+    }
+
     /**
      * Modifica los datos de un cliente relacionado con el comprador
      * @param stdClass $inm_comprador Registro de comprador
      * @param PDO $link Conexion de base de datos
      * @return array|stdClass
-     * @version 2.92.0
      */
     final public function modifica_com_cliente(stdClass $inm_comprador, PDO $link): array|stdClass
     {
@@ -465,7 +496,7 @@ class _com_cliente{
         }
 
 
-        $com_cliente_upd = $this->com_cliente_upd(registro: $inm_comprador);
+        $com_cliente_upd = $this->com_cliente_upd(link: $link, registro: $inm_comprador);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al obtener com_cliente_upd',data:  $com_cliente_upd);
         }
@@ -547,15 +578,16 @@ class _com_cliente{
      */
     private function razon_social(bool $con_prefijo, stdClass $registro): string|array
     {
-        $key_nombre = 'nombre';
-        $key_apellido_paterno = 'apellido_paterno';
-        $key_apellido_materno = 'apellido_materno';
 
-        if($con_prefijo){
-            $key_nombre = 'inm_comprador_'.$key_nombre;
-            $key_apellido_paterno = 'inm_comprador_'.$key_apellido_paterno;
-            $key_apellido_materno = 'inm_comprador_'.$key_apellido_materno;
+
+        $keys = $this->keys_name_cliente(con_prefijo: $con_prefijo);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al obtener keys',data:  $keys);
         }
+
+        $key_apellido_materno = $keys->key_apellido_materno;
+        $key_nombre = $keys->key_nombre;
+        $key_apellido_paterno = $keys->key_apellido_paterno;
 
         if(!isset($registro->$key_apellido_materno)){
             $registro->$key_apellido_materno = '';
@@ -573,11 +605,24 @@ class _com_cliente{
             return $this->error->error(mensaje: 'Error al valida registro',data:  $valida);
         }
 
-        $razon_social = $registro->$key_nombre;
-        $razon_social .= ' '.$registro->$key_apellido_paterno;
-        $razon_social .= ' '.$registro->$key_apellido_materno;
+        $razon_social = $this->razon_social_base(key_apellido_materno: $key_apellido_materno,
+            key_apellido_paterno:  $key_apellido_paterno,key_nombre:  $key_nombre,registro:  $registro);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al maquetar razon_social',data:  $valida);
+        }
 
         return trim($razon_social);
+    }
+
+    private function razon_social_base(string $key_apellido_materno, string $key_apellido_paterno,
+                                       string $key_nombre, stdClass $registro): string
+    {
+        $razon_social = trim($registro->$key_nombre);
+        $razon_social .= ' '.trim($registro->$key_apellido_paterno);
+        $razon_social .= ' '.trim($registro->$key_apellido_materno);
+
+        return trim($razon_social);
+
     }
 
     /**

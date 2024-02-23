@@ -278,6 +278,7 @@ class _base_compradorTest extends test {
         $r_modifica->registro_actualizado->inm_comprador_nombre = 'A';
         $r_modifica->registro_actualizado->inm_comprador_apellido_paterno = 'B';
         $r_modifica->registro_actualizado->inm_comprador_id = 1;
+        $r_modifica->registro_actualizado->dp_calle_pertenece_id = 1;
 
         $resultado = $inm->transacciones_posterior_upd($inm_comprador_upd, $inm_comprador_id, $modelo_inm_comprador,
             $r_modifica);
