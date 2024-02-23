@@ -120,7 +120,6 @@ class _base_paquete{
      * @param string $enlace Enlace base
      * @param array $renombres Tablas previas
      * @return array
-     * @version 2.185.1
      */
     final public function rename_data_nac(string $enlace, array $renombres): array
     {
@@ -137,10 +136,26 @@ class _base_paquete{
     }
 
     /**
-     * Integra tablas de renombre
-     * @param array $renombres Renombres de tablas
-     * @return array
-     * @version 2.184.1
+     * POR DOCUMENTAR EN WIKI
+     * Este método private se llama rename_estado.
+     *
+     * @param array $renombres Recibe un array como parámetro.
+     * @return array Devuelve un array.
+     *
+     * En este método, se reestructura el array de argumento con respecto al estado de nacimiento ('dp_estado_nacimiento').
+     * En esta reestructuración se asignan o se renombran las siguientes claves:
+     *
+     * - 'nombre_original' se establece como 'dp_estado'.
+     * - 'enlace' se establece como 'dp_municipio_nacimiento'.
+     * - 'key' se establece como 'id'.
+     * - 'key_enlace' se establece como 'dp_estado_id'.
+     *
+     * Estas claves se pueden interpretar como una forma de mapear o renombrar las variables usadas en el sistema.
+     * Luego, el array $renombres modificado se devuelve como resultado.
+     *
+     * En resumen, este método se utiliza para renombrar o reasignar valores a determinadas claves de un array,
+     * específicamente relacionadas con el estado de nacimiento ('dp_estado_nacimiento').
+     * @version 3.7.0
      */
     private function rename_estado(array $renombres): array
     {
