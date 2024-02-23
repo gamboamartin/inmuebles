@@ -1,7 +1,6 @@
 <?php
 namespace gamboamartin\inmuebles\controllers;
 
-use base\controller\controler;
 use gamboamartin\administrador\models\adm_usuario;
 use gamboamartin\errores\errores;
 use gamboamartin\inmuebles\models\inm_prospecto;
@@ -26,7 +25,6 @@ class _inm_prospecto{
      * @param bool $existe Init existe bool
      * @param string $key_data Keys a integrar en la actualizacion
      * @return array|stdClass
-     * @version 2.323.2
      */
     final public function dato(bool $existe, string $key_data): array|stdClass
     {
@@ -244,7 +242,6 @@ class _inm_prospecto{
      * Genera los identificadores para keys selects
      * @param array $filtro Filtro de integracion par agente
      * @return array
-     * @version 2.253.2
      */
     private function identificadores_comercial(array $filtro): array
     {
@@ -252,11 +249,12 @@ class _inm_prospecto{
         $identificadores['com_agente_id']['cols'] = 12;
         $identificadores['com_agente_id']['disabled'] = false;
         $identificadores['com_agente_id']['filtro'] = $filtro;
+        $identificadores['com_agente_id']['columns_ds'] = array();
 
         $identificadores['com_tipo_prospecto_id']['title'] = 'Tipo de prospecto';
         $identificadores['com_tipo_prospecto_id']['cols'] = 12;
         $identificadores['com_tipo_prospecto_id']['disabled'] = false;
-        $identificadores['com_tipo_prospecto_id']['filtro'] = array();
+        $identificadores['com_tipo_prospecto_id']['columns_ds'] = array('com_tipo_prospecto_descripcion');
         return $identificadores;
     }
 
@@ -327,7 +325,6 @@ class _inm_prospecto{
      * Integra los identificadores para la creacion de un parametro de tipo key select
      * @param controlador_inm_prospecto $controlador Controlador en ejecucion
      * @return array
-     * @version 2.266.2
      */
     private function identificadores_infonavit(controlador_inm_prospecto $controlador): array
     {
@@ -340,26 +337,32 @@ class _inm_prospecto{
         $identificadores['inm_institucion_hipotecaria_id']['title'] = 'Institucion Hipotecaria';
         $identificadores['inm_institucion_hipotecaria_id']['cols'] = 12;
         $identificadores['inm_institucion_hipotecaria_id']['disabled'] = false;
+        $identificadores['inm_institucion_hipotecaria_id']['columns_ds'] = array('inm_institucion_hipotecaria_descripcion');
 
         $identificadores['inm_producto_infonavit_id']['title'] = 'Producto Infonavit';
         $identificadores['inm_producto_infonavit_id']['cols'] = 6;
         $identificadores['inm_producto_infonavit_id']['disabled'] = false;
+        $identificadores['inm_producto_infonavit_id']['columns_ds'] = array('inm_producto_infonavit_descripcion');
 
         $identificadores['inm_attr_tipo_credito_id']['title'] = 'Tipo de Credito';
         $identificadores['inm_attr_tipo_credito_id']['cols'] = 6;
         $identificadores['inm_attr_tipo_credito_id']['disabled'] = false;
+        $identificadores['inm_attr_tipo_credito_id']['columns_ds'] = array('inm_attr_tipo_credito_descripcion');
 
         $identificadores['inm_destino_credito_id']['title'] = 'Destino de Credito';
         $identificadores['inm_destino_credito_id']['cols'] = 12;
         $identificadores['inm_destino_credito_id']['disabled'] = false;
+        $identificadores['inm_destino_credito_id']['columns_ds'] = array('inm_destino_credito_descripcion');
 
         $identificadores['inm_tipo_discapacidad_id']['title'] = 'Tipo de Discapacidad';
         $identificadores['inm_tipo_discapacidad_id']['cols'] = 6;
         $identificadores['inm_tipo_discapacidad_id']['disabled'] = false;
+        $identificadores['inm_tipo_discapacidad_id']['columns_ds'] = array('inm_tipo_discapacidad_descripcion');
 
         $identificadores['inm_persona_discapacidad_id']['title'] = 'Persona de Discapacidad';
         $identificadores['inm_persona_discapacidad_id']['cols'] = 6;
         $identificadores['inm_persona_discapacidad_id']['disabled'] = false;
+        $identificadores['inm_persona_discapacidad_id']['columns_ds'] = array('inm_persona_discapacidad_descripcion');
 
         $disabled = $this->disabled_segundo_credito(registro: $controlador->registro);
         if(errores::$error){
@@ -369,6 +372,7 @@ class _inm_prospecto{
         $identificadores['inm_plazo_credito_sc_id']['title'] = 'Plazo de Segundo Credito';
         $identificadores['inm_plazo_credito_sc_id']['cols'] = 6;
         $identificadores['inm_plazo_credito_sc_id']['disabled'] = $disabled;
+        $identificadores['inm_plazo_credito_sc_id']['columns_ds'] = array('inm_plazo_credito_sc_descripcion');
 
         return $identificadores;
     }
@@ -376,21 +380,23 @@ class _inm_prospecto{
     /**
      * Genera los identificadores para creacion de keys selects
      * @return array
-     * @version 2.279.2
      */
     private function identificadores_personal(): array
     {
         $identificadores['inm_sindicato_id']['title'] = 'Sindicato';
         $identificadores['inm_sindicato_id']['cols'] = 12;
         $identificadores['inm_sindicato_id']['disabled'] = false;
+        $identificadores['inm_sindicato_id']['columns_ds'] = array('inm_sindicato_descripcion');
 
         $identificadores['inm_nacionalidad_id']['title'] = 'Nacionalidad';
         $identificadores['inm_nacionalidad_id']['cols'] = 6;
         $identificadores['inm_nacionalidad_id']['disabled'] = false;
+        $identificadores['inm_nacionalidad_id']['columns_ds'] = array('inm_nacionalidad_descripcion');
 
         $identificadores['inm_ocupacion_id']['title'] = 'Ocupacion';
         $identificadores['inm_ocupacion_id']['cols'] = 6;
         $identificadores['inm_ocupacion_id']['disabled'] = false;
+        $identificadores['inm_ocupacion_id']['columns_ds'] = array('inm_ocupacion_descripcion');
         return $identificadores;
     }
 
@@ -398,7 +404,6 @@ class _inm_prospecto{
      * Inicializa la entrada de POST para dependencias
      * @param string $key_data Keys a integrar
      * @return array
-     * @version 2.285.2
      */
     private function init_post(string $key_data): array
     {
@@ -421,7 +426,6 @@ class _inm_prospecto{
      * Genera lso inputs base de un prospecto
      * @param controlador_inm_prospecto $controlador Controlador en ejecucion
      * @return array|stdClass
-     * @version 2.299.2
      */
     final public function inputs_base(controlador_inm_prospecto $controlador): array|stdClass
     {
@@ -566,7 +570,6 @@ class _inm_prospecto{
      * @param array $filtro Filtro de tipo user
      * @param array $keys_selects Parametros previos cargados
      * @return array
-     * @version 2.265.2
      */
     private function keys_selects_comercial(controlador_inm_prospecto $controlador, array $filtro,
                                            array $keys_selects): array
@@ -622,7 +625,6 @@ class _inm_prospecto{
      * @param controlador_inm_prospecto $controlador Controlador en ejecucion
      * @param array $keys_selects Parametros previos cargados
      * @return array
-     * @version 2.297.2
      */
     private function keys_selects_infonavit(controlador_inm_prospecto $controlador, array $keys_selects): array
     {
@@ -657,7 +659,6 @@ class _inm_prospecto{
      * @param controlador_inm_prospecto $controlador Controlador en ejecucion
      * @param array $keys_selects Parametros previos cargados
      * @return array
-     * @version 2.283.2
      */
     private function keys_selects_personal(controlador_inm_prospecto $controlador, array $keys_selects): array
     {

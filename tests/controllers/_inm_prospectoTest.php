@@ -523,7 +523,7 @@ class _inm_prospectoTest extends test {
         $this->assertEquals("Institucion Hipotecaria",$resultado['inm_institucion_hipotecaria_id']->label);
         $this->assertEquals(-1,$resultado['inm_producto_infonavit_id']->id_selected);
         $this->assertEmpty($resultado['inm_attr_tipo_credito_id']->filtro);
-        $this->assertEmpty($resultado['inm_destino_credito_id']->columns_ds);
+        $this->assertCount(1,$resultado['inm_destino_credito_id']->columns_ds);
         $this->assertNotTrue($resultado['inm_tipo_discapacidad_id']->disabled);
         $this->assertEquals(6,$resultado['inm_persona_discapacidad_id']->cols);
         $this->assertTrue($resultado['inm_plazo_credito_sc_id']->con_registros);
