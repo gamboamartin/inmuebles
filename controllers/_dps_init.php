@@ -18,10 +18,26 @@ class _dps_init{
     }
 
     /**
-     * Inicializa los elementos de domicilio
-     * @param modelo $modelo Modelo de cliente
-     * @param stdClass $row_upd Registro en proceso
-     * @return stdClass|array
+     * POR DOCUMENTAR EN WIKI
+     * Este es un método privado llamado dps_init_ids.
+     *
+     * @param modelo $modelo Recibe una instancia del objeto 'modelo' como parámetro.
+     * @param stdClass $row_upd Recibe una instancia de la clase estándar de PHP, que generalmente representa un
+     *  objeto genérico.
+     * @return stdClass|array Devuelve una instancia de la clase estándar de PHP o un array en caso de error.
+     *
+     * Este método se ocupa de inicializar los ID de las entidades 'dp_pais', 'dp_estado' y 'dp_municipio'.
+     * Para cada una de estas entidades, busca el ID preferido usando la función 'id_preferido_detalle' del objeto 'modelo'.
+     * Si hay algún error durante esta búsqueda, el método devuelve un error con un mensaje específico.
+     *
+     * Luego, para cada entidad, si no se ha establecido el ID de la entidad en el objeto '$row_upd' o si el ID de la entidad es -1,
+     * asigna el ID preferido de la entidad al objeto '$row_upd'.
+     *
+     * Finalmente, devuelve el objeto '$row_upd' actualizado.
+     *
+     * En conclusión, este método se utiliza para inicializar o actualizar los ID de ciertos elementos en el sistema,
+     * a partir de un objeto de modelo dado.
+     * @version 3.8.0
      */
     private function dps_init_ids(modelo $modelo, stdClass $row_upd): stdClass|array
     {
@@ -52,11 +68,12 @@ class _dps_init{
      * @param array $keys_selects Parametros previamente cargados
      * @param string $label Etiqueta a mostrar en select
      * @param stdClass $row_upd Registro en proceso
+     * @param array $columns_ds
      * @param array $filtro Filtro para registros a mostrar en options
      * @return array
      */
     private function key_con_descripcion(_ctl_base $controler, string $entidad, array $keys_selects, string $label,
-                                         stdClass $row_upd, array $filtro = array()): array
+                                         stdClass $row_upd, array $columns_ds = array(), array $filtro = array()): array
     {
         $entidad = trim($entidad);
         if($entidad === ''){
@@ -64,7 +81,9 @@ class _dps_init{
         }
         $key_ds = $entidad.'_descripcion';
         $key_id = $entidad.'_id';
-        $columns_ds = array($key_ds);
+        if(count($columns_ds) === 0) {
+            $columns_ds = array($key_ds);
+        }
 
         if(!isset($row_upd->$key_id)){
             $row_upd->$key_id = -1;
@@ -128,14 +147,16 @@ class _dps_init{
             return $this->error->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
 
-        $keys_selects = $this->key_con_descripcion(controler: $controler,entidad: 'dp_colonia_postal',
-            keys_selects:  $keys_selects,label: 'Colonia',row_upd:  $row_upd, filtro: $filtro);
+        $columns_ds = array('dp_colonia_descripcion');
+        $keys_selects = $this->key_con_descripcion(controler: $controler, entidad: 'dp_colonia_postal',
+            keys_selects: $keys_selects, label: 'Colonia', row_upd: $row_upd, columns_ds: $columns_ds, filtro: $filtro);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
 
-        $keys_selects = $this->key_con_descripcion(controler: $controler,entidad: 'dp_calle_pertenece',
-            keys_selects:  $keys_selects,label: 'Calle',row_upd:  $row_upd, filtro: $filtro);
+        $columns_ds = array('dp_calle_descripcion');
+        $keys_selects = $this->key_con_descripcion(controler: $controler, entidad: 'dp_calle_pertenece',
+            keys_selects: $keys_selects, label: 'Calle', row_upd: $row_upd, columns_ds: $columns_ds, filtro: $filtro);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
