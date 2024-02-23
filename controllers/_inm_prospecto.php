@@ -152,7 +152,6 @@ class _inm_prospecto{
      * @param array $identificadores identificadores a integrar
      * @param array $keys_selects parametros previos cargados
      * @return array
-     * @version 2.264.2
      */
     private function genera_keys_selects(controlador_inm_prospecto $controlador, array $identificadores,
                                          array $keys_selects): array
@@ -185,10 +184,14 @@ class _inm_prospecto{
             if(isset($data['disabled'])){
                 $disabled = $data['disabled'];
             }
+            $columns_ds = array();
+            if(isset($data['columns_ds'])){
+                $columns_ds = $data['columns_ds'];
+            }
 
             $keys_selects = $controlador->key_select(cols: $cols, con_registros: true, filtro: $filtro,
                 key: $identificador, keys_selects: $keys_selects, id_selected: $id_selected, label: $title,
-                disabled: $disabled);
+                columns_ds: $columns_ds, disabled: $disabled);
             if(errores::$error){
                 return $this->error->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
             }
@@ -261,7 +264,6 @@ class _inm_prospecto{
      * Genera los identificadores para direcciones
      * @param controlador_inm_prospecto $controlador Controlador en ejecucion
      * @return array
-     * @version 2.272.2
      */
     private function identificadores_dp(controlador_inm_prospecto $controlador): array
     {
@@ -277,6 +279,7 @@ class _inm_prospecto{
         $identificadores['dp_pais_id']['cols'] = 4;
         $identificadores['dp_pais_id']['disabled'] = false;
         $identificadores['dp_pais_id']['filtro'] = array();
+        $identificadores['dp_pais_id']['columns_ds'] = array('dp_pais_descripcion');
 
         $filtro = array();
         $filtro['dp_pais.id'] = $row['dp_pais_id'];
@@ -284,6 +287,7 @@ class _inm_prospecto{
         $identificadores['dp_estado_id']['cols'] = 4;
         $identificadores['dp_estado_id']['disabled'] = false;
         $identificadores['dp_estado_id']['filtro'] = $filtro;
+        $identificadores['dp_estado_id']['columns_ds'] =  array('dp_estado_descripcion');
 
         $filtro = array();
         $filtro['dp_estado.id'] = $row['dp_estado_id'];
@@ -291,6 +295,7 @@ class _inm_prospecto{
         $identificadores['dp_municipio_id']['cols'] = 4;
         $identificadores['dp_municipio_id']['disabled'] = false;
         $identificadores['dp_municipio_id']['filtro'] = $filtro;
+        $identificadores['dp_municipio_id']['columns_ds'] =  array('dp_municipio_descripcion');
 
         $filtro = array();
         $filtro['dp_municipio.id'] = $row['dp_municipio_id'];
@@ -298,6 +303,7 @@ class _inm_prospecto{
         $identificadores['dp_cp_id']['cols'] = 12;
         $identificadores['dp_cp_id']['disabled'] = false;
         $identificadores['dp_cp_id']['filtro'] = $filtro;
+        $identificadores['dp_cp_id']['columns_ds'] =  array('dp_cp_codigo');
 
         $filtro = array();
         $filtro['dp_cp.id'] = $row['dp_cp_id'];
@@ -305,6 +311,7 @@ class _inm_prospecto{
         $identificadores['dp_colonia_postal_id']['cols'] = 6;
         $identificadores['dp_colonia_postal_id']['disabled'] = false;
         $identificadores['dp_colonia_postal_id']['filtro'] = $filtro;
+        $identificadores['dp_colonia_postal_id']['columns_ds'] =  array('dp_colonia_descripcion');
 
         $filtro = array();
         $filtro['dp_colonia_postal.id'] = $row['dp_colonia_postal_id'];
@@ -312,6 +319,7 @@ class _inm_prospecto{
         $identificadores['dp_calle_pertenece_id']['cols'] = 6;
         $identificadores['dp_calle_pertenece_id']['disabled'] = false;
         $identificadores['dp_calle_pertenece_id']['filtro'] = $filtro;
+        $identificadores['dp_calle_pertenece_id']['columns_ds'] = array('dp_calle_descripcion');
         return $identificadores;
     }
 
@@ -590,7 +598,6 @@ class _inm_prospecto{
      * @param controlador_inm_prospecto $controlador Controlador en ejecucion
      * @param array $keys_selects Parametros cargados previamente
      * @return array
-     * @version 2.276.2
      */
     private function keys_selects_dp(controlador_inm_prospecto $controlador, array $keys_selects): array
     {
