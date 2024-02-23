@@ -134,6 +134,12 @@ class _dps_init{
             return $this->error->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
 
+        $keys_selects = $this->key_con_descripcion(controler: $controler,entidad: 'dp_calle_pertenece',
+            keys_selects:  $keys_selects,label: 'Calle',row_upd:  $row_upd, filtro: $filtro);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        }
+
 
 
         return $keys_selects;

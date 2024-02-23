@@ -66,6 +66,11 @@ class _keys_selectsTest extends test {
         $controler->registro['dp_pais_id'] = 1;
         $controler->registro['dp_estado_id'] = 1;
         $controler->registro['dp_municipio_id'] = 1;
+        $controler->registro['dp_cp_id'] = 1;
+        $controler->registro['dp_calle_id'] = 1;
+        $controler->registro['dp_colonia_id'] = 1;
+        $controler->registro['dp_colonia_postal_id'] = 1;
+        $controler->registro['dp_calle_pertenece_id'] = 1;
 
         $resultado = $ks->ajusta_row_data_cliente($controler);
         $this->assertIsArray($resultado);
@@ -141,6 +146,25 @@ class _keys_selectsTest extends test {
             print_r($error);
             exit;
         }
+        $del = (new base_test())->del_inm_comprador(link: $this->link);
+        if(errores::$error){
+            $error = (new errores())->error(mensaje: 'Error al eliminar', data: $del);
+            print_r($error);
+            exit;
+        }
+        $del = (new base_test())->del_inm_prospecto(link: $this->link);
+        if(errores::$error){
+            $error = (new errores())->error(mensaje: 'Error al eliminar', data: $del);
+            print_r($error);
+            exit;
+        }
+
+        $alta = (new base_test())->alta_inm_comprador(link: $this->link);
+        if(errores::$error){
+            $error = (new errores())->error(mensaje: 'Error al insertar', data: $alta);
+            print_r($error);
+            exit;
+        }
 
         $alta = (new base_test())->alta_inm_co_acreditado(link: $this->link);
         if(errores::$error){
@@ -148,6 +172,8 @@ class _keys_selectsTest extends test {
             print_r($error);
             exit;
         }
+
+
 
         $ks = new _keys_selects();
         //$ks = new liberator($ks);
@@ -160,6 +186,11 @@ class _keys_selectsTest extends test {
         $controler->registro['dp_pais_id'] = 1;
         $controler->registro['dp_estado_id'] = 1;
         $controler->registro['dp_municipio_id'] = 1;
+        $controler->registro['dp_cp_id'] = 1;
+        $controler->registro['dp_calle_id'] = 1;
+        $controler->registro['dp_colonia_id'] = 1;
+        $controler->registro['dp_colonia_postal_id'] = 1;
+        $controler->registro['dp_calle_pertenece_id'] = 1;
 
         $function = 'd';
 
@@ -611,6 +642,11 @@ class _keys_selectsTest extends test {
         $controler->registro['dp_pais_id'] = 1;
         $controler->registro['dp_estado_id'] = 1;
         $controler->registro['dp_municipio_id'] = 1;
+        $controler->registro['dp_cp_id'] = 1;
+        $controler->registro['dp_calle_id'] = 1;
+        $controler->registro['dp_colonia_id'] = 1;
+        $controler->registro['dp_colonia_postal_id'] = 1;
+        $controler->registro['dp_calle_pertenece_id'] = 1;
 
         $resultado = $ks->key_selects_asigna_ubicacion($controler);
         //print_r($resultado);exit;
@@ -650,6 +686,11 @@ class _keys_selectsTest extends test {
         $controler->registro['dp_pais_id'] = 1;
         $controler->registro['dp_estado_id'] = 1;
         $controler->registro['dp_municipio_id'] = 1;
+        $controler->registro['dp_cp_id'] = 1;
+        $controler->registro['dp_calle_id'] = 1;
+        $controler->registro['dp_colonia_id'] = 1;
+        $controler->registro['dp_colonia_postal_id'] = 1;
+        $controler->registro['dp_calle_pertenece_id'] = 1;
 
         $resultado = $ks->key_selects_base($controler);
         $this->assertIsArray($resultado);
@@ -822,6 +863,11 @@ class _keys_selectsTest extends test {
         $controler->registro['dp_pais_id'] = 1;
         $controler->registro['dp_estado_id'] = 1;
         $controler->registro['dp_municipio_id'] = 1;
+        $controler->registro['dp_cp_id'] = 1;
+        $controler->registro['dp_calle_id'] = 1;
+        $controler->registro['dp_colonia_id'] = 1;
+        $controler->registro['dp_colonia_postal_id'] = 1;
+        $controler->registro['dp_calle_pertenece_id'] = 1;
 
         $com_cliente = array();
         $com_cliente['com_cliente_rfc'] = -1;
