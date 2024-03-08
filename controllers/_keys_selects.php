@@ -1089,7 +1089,6 @@ class _keys_selects{
      * @param array $keys_selects Configuraciones precargadas
      * @param stdClass $row_upd Registro en proceso
      * @return array
-     * @version 1.42.0
      */
     private function ks_infonavit(controlador_inm_comprador $controler, array $keys_selects, stdClass $row_upd): array
     {

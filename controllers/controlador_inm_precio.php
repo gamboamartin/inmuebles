@@ -61,17 +61,20 @@ class controlador_inm_precio extends _ctl_base {
 
 
         $keys_selects = array();
-
+        $columns_ds = array();
+        $columns_ds[] = 'inm_ubicacion_descripcion';
         $keys_selects = $this->key_select(cols:12, con_registros: true,filtro:  array(), key: 'inm_ubicacion_id',
-            keys_selects: $keys_selects, id_selected: -1, label: 'Ubicacion', columns_ds: array());
+            keys_selects: $keys_selects, id_selected: -1, label: 'Ubicacion', columns_ds: $columns_ds);
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects,
                 header: $header,ws:  $ws);
         }
 
+        $columns_ds = array();
+        $columns_ds[] = 'inm_institucion_hipotecaria_descripcion';
         $keys_selects = $this->key_select(cols:12, con_registros: true,filtro:  array(),
             key: 'inm_institucion_hipotecaria_id',
-            keys_selects: $keys_selects, id_selected: -1, label: 'Institucion', columns_ds: array());
+            keys_selects: $keys_selects, id_selected: -1, label: 'Institucion', columns_ds: $columns_ds);
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects,
                 header: $header,ws:  $ws);
