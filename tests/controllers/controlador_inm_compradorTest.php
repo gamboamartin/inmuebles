@@ -19,9 +19,9 @@ use function PHPUnit\Framework\assertStringContainsStringIgnoringCase;
 class controlador_inm_compradorTest extends test {
     public errores $errores;
     private stdClass $paths_conf;
-    public function __construct(?string $name = null, array $data = [], $dataName = '')
+    public function __construct(?string $name = null)
     {
-        parent::__construct($name, $data, $dataName);
+        parent::__construct($name);
         $this->errores = new errores();
         $this->paths_conf = new stdClass();
         $this->paths_conf->generales = '/var/www/html/inmuebles/config/generales.php';
