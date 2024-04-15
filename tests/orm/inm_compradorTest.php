@@ -104,7 +104,7 @@ class inm_compradorTest extends test {
         $resultado = $inm->alta_bd();
         $this->assertIsObject($resultado);
         $this->assertNotTrue(errores::$error);
-        $this->assertStringContainsStringIgnoringCase("Nombre Apellido Paterno  12345678890 XEXX010101HNEXXXA4 AAA010101AAA 2024-03",
+        $this->assertStringContainsStringIgnoringCase("Nombre Apellido Paterno  12345678890 XEXX010101HNEXXXA4 AAA010101AAA 2024-04",
             $resultado->registro['inm_comprador_descripcion']);
 
         $inm_comprador_id = $resultado->registro_id;
@@ -188,7 +188,7 @@ class inm_compradorTest extends test {
         $resultado = $inm->asigna_nuevo_co_acreditado_bd($inm_comprador_id, $inm_co_acreditado);
         $this->assertIsObject($resultado);
         $this->assertNotTrue(errores::$error);
-        $this->assertStringContainsStringIgnoringCase("A A A 12345678901 XEXX010101HNEXXXA4 XXX010101AAA 2024-03-",
+        $this->assertStringContainsStringIgnoringCase("A A A 12345678901 XEXX010101HNEXXXA4 XXX010101AAA 2024-04-",
             $resultado->inm_co_acreditado->registro['inm_co_acreditado_descripcion']);
 
         errores::$error = false;
