@@ -235,6 +235,7 @@ class _inm_prospecto{
         $headers['8'] = '8. DATOS DE CONYUGE';
         $headers['9'] = '9. BENEFICIARIOS';
         $headers['10'] = '10. REFERENCIAS';
+        $headers['11'] = '11. MI CUENTA INFONAVIT';
         return $headers;
     }
 

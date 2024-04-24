@@ -186,6 +186,14 @@
         </div>
     </div>
 
+<?php echo $controlador->header_frontend->apartado_11; ?>
+    <div  id="apartado_11">
+        <?php echo $controlador->inputs->nss_extra; ?>
+        <?php echo $controlador->inputs->correo_mi_cuenta_infonavit; ?>
+        <?php echo $controlador->inputs->password_mi_cuenta_infonavit; ?>
+
+    </div>
+
 
 
 <?php include (new views())->ruta_templates.'botons/submit/modifica_bd.php';?>
