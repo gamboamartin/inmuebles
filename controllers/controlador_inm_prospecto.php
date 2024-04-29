@@ -10,6 +10,7 @@ namespace gamboamartin\inmuebles\controllers;
 
 use base\controller\init;
 use gamboamartin\calculo\calculo;
+use gamboamartin\comercial\models\com_prospecto;
 use gamboamartin\errores\errores;
 use gamboamartin\inmuebles\html\inm_prospecto_html;
 use gamboamartin\inmuebles\models\_base_paquete;
@@ -84,6 +85,22 @@ class controlador_inm_prospecto extends _ctl_formato {
                 header: $header,ws:  $ws);
         }
 
+        $keys_selects = (new init())->key_select_txt(cols: 12,key: 'liga_red_social',
+            keys_selects:$keys_selects, place_holder: 'Liga Red Social', required: false);
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects,
+                    header: $header,ws:  $ws);
+        }
+        $keys_selects['liga_red_social']->disabled = true;
+
+        $keys_selects = $this->key_select(cols:12, con_registros: true,filtro:  array(),
+            key: 'com_medio_prospeccion_id', keys_selects:$keys_selects, id_selected: -1,
+            label: 'Medio de Prospeccion');
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects,
+                header: $header,ws:  $ws);
+        }
+
         $inputs = $this->inputs(keys_selects: $keys_selects);
         if(errores::$error){
             return $this->retorno_error(
@@ -106,13 +123,14 @@ class controlador_inm_prospecto extends _ctl_formato {
             'monto_credito_solicitado_dh','monto_ahorro_voluntario','nombre_empresa_patron','nrp_nep','lada_nep',
             'numero_nep','extension_nep','nss','curp','rfc','numero_exterior','numero_interior','observaciones',
             'fecha_nacimiento','sub_cuenta','monto_final','descuento','puntos','telefono_casa','correo_empresa',
-            'correo_mi_cuenta_infonavit','password_mi_cuenta_infonavit','nss_extra');
+            'correo_mi_cuenta_infonavit','password_mi_cuenta_infonavit','nss_extra','liga_red_social');
 
         $keys->selects = array();
 
         $init_data = array();
         $init_data['com_agente'] = "gamboamartin\\comercial";
         $init_data['com_tipo_prospecto'] = "gamboamartin\\comercial";
+        $init_data['com_medio_prospeccion'] = "gamboamartin\\comercial";
 
         $init_data['inm_institucion_hipotecaria'] = "gamboamartin\\inmuebles";
         $init_data['inm_producto_infonavit'] = "gamboamartin\\inmuebles";
@@ -556,31 +574,6 @@ class controlador_inm_prospecto extends _ctl_formato {
         }
 
         $keys_selects['correo_empresa']->regex = $this->validacion->patterns['correo_html5'];
-
-        $keys_selects = (new init())->key_select_txt(cols: 12,key: 'nss_extra',
-            keys_selects:$keys_selects, place_holder: 'NSS', required: false);
-        if(errores::$error){
-            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
-        }
-        $keys_selects['nss_extra']->disabled = true;
-        $this->row_upd->nss_extra = $this->row_upd->nss;
-
-        $keys_selects = (new init())->key_select_txt(cols: 6,key: 'correo_mi_cuenta_infonavit',
-            keys_selects:$keys_selects, place_holder: 'Correo', required: false);
-        if(errores::$error){
-            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
-        }
-        $this->row_upd->correo_mi_cuenta_infonavit = $this->row_upd->correo_com;
-
-        $keys_selects['correo_mi_cuenta_infonavit']->regex = $this->validacion->patterns['correo_html5'];
-
-        $keys_selects = (new init())->key_select_txt(cols: 6,key: 'password_mi_cuenta_infonavit',
-            keys_selects:$keys_selects, place_holder: 'Contraseña', required: false);
-        if(errores::$error){
-            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
-        }
-
-        $keys_selects['password_mi_cuenta_infonavit']->regex = $this->validacion->patterns['correo_html5'];
 
         return $keys_selects;
     }

@@ -1,6 +1,7 @@
 <?php
 namespace gamboamartin\inmuebles\controllers;
 
+use base\controller\init;
 use gamboamartin\administrador\models\adm_usuario;
 use gamboamartin\errores\errores;
 use gamboamartin\inmuebles\models\inm_prospecto;
@@ -256,6 +257,11 @@ class _inm_prospecto{
         $identificadores['com_tipo_prospecto_id']['cols'] = 12;
         $identificadores['com_tipo_prospecto_id']['disabled'] = false;
         $identificadores['com_tipo_prospecto_id']['columns_ds'] = array('com_tipo_prospecto_descripcion');
+
+        $identificadores['com_medio_prospeccion_id']['title'] = 'Medio Prospeccion';
+        $identificadores['com_medio_prospeccion_id']['cols'] = 12;
+        $identificadores['com_medio_prospeccion_id']['disabled'] = false;
+        $identificadores['com_medio_prospeccion_id']['columns_ds'] = array('com_medio_prospeccion_descripcion');
         return $identificadores;
     }
 
@@ -442,6 +448,39 @@ class _inm_prospecto{
 
         $keys_selects = array();
 
+        $keys_selects = (new init())->key_select_txt(cols: 12,key: 'nss_extra',
+            keys_selects:$keys_selects, place_holder: 'NSS', required: false);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        }
+        $keys_selects['nss_extra']->disabled = true;
+        $controlador->row_upd->nss_extra = $controlador->row_upd->nss;
+
+        $keys_selects = (new init())->key_select_txt(cols: 6,key: 'correo_mi_cuenta_infonavit',
+            keys_selects:$keys_selects, place_holder: 'Correo', required: false);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        }
+        $controlador->row_upd->correo_mi_cuenta_infonavit = $controlador->row_upd->correo_com;
+
+        $keys_selects['correo_mi_cuenta_infonavit']->regex = $this->validacion->patterns['correo_html5'];
+
+        $keys_selects = (new init())->key_select_txt(cols: 6,key: 'password_mi_cuenta_infonavit',
+            keys_selects:$keys_selects, place_holder: 'Contraseña', required: false);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        }
+
+        $keys_selects['password_mi_cuenta_infonavit']->regex = $this->validacion->patterns['correo_html5'];
+
+        $keys_selects = (new init())->key_select_txt(cols: 12,key: 'liga_red_social',
+            keys_selects:$keys_selects, place_holder: 'Liga Red Social', required: false);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        }
+
+        $keys_selects['liga_red_social']->disabled = true;
+
         $keys_selects = $this->keys_selects_infonavit(
             controlador: $controlador,keys_selects:  $keys_selects);
         if(errores::$error){
@@ -546,7 +585,7 @@ class _inm_prospecto{
      */
     private function integra_keys_selects_comercial(controlador_inm_prospecto $controlador, array $keys_selects): array
     {
-        $keys = array('com_agente_id','com_tipo_prospecto_id');
+        $keys = array('com_agente_id','com_tipo_prospecto_id','com_medio_prospeccion_id');
         $valida = $this->validacion->valida_ids(keys: $keys,registro:  $controlador->registro);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al valida controlador registro',data:  $valida);
@@ -575,7 +614,7 @@ class _inm_prospecto{
     private function keys_selects_comercial(controlador_inm_prospecto $controlador, array $filtro,
                                            array $keys_selects): array
     {
-        $keys = array('com_agente_id','com_tipo_prospecto_id');
+        $keys = array('com_agente_id','com_tipo_prospecto_id','com_medio_prospeccion_id');
         $valida = $this->validacion->valida_ids(keys: $keys,registro:  $controlador->registro);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al valida controlador registro',data:  $valida);
