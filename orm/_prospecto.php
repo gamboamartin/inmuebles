@@ -70,6 +70,11 @@ class _prospecto{
             return $this->error->error(mensaje: 'Error al asignar dp_calle_pertenece_id',data:  $registro);
         }
 
+        $registro = $this->asigna_com_medio_prospeccion_id(modelo: $modelo,registro:  $registro);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al asignar com_medio_prospeccion_id',data:  $registro);
+        }
+
         $registro = $this->init_numbers_dom(registro: $registro);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al inicializar registro',data:  $registro);
@@ -127,6 +132,18 @@ class _prospecto{
         return $registro;
     }
 
+    private function asigna_com_medio_prospeccion_id(inm_prospecto $modelo, array $registro): array
+    {
+        if(!isset($registro['com_medio_prospeccion_id'])){
+            $com_medio_prospeccion_id = $this->com_medio_prospeccion_id(modelo: $modelo);
+            if(errores::$error){
+                return $this->error->error(mensaje: 'Error al obtener com_medio_prospeccion_id',data:  $com_medio_prospeccion_id);
+            }
+            $registro['com_medio_prospeccion_id'] = $com_medio_prospeccion_id;
+        }
+        return $registro;
+    }
+
     /**
      * Integra los campos de par ala insersion de un prospecto
      * @param array $registro
@@ -157,6 +174,7 @@ class _prospecto{
         $com_prospecto_ins['razon_social'] = trim($registro['razon_social']);
         $com_prospecto_ins['com_agente_id'] = $registro['com_agente_id'];
         $com_prospecto_ins['com_tipo_prospecto_id'] = $registro['com_tipo_prospecto_id'];
+        $com_prospecto_ins['com_medio_prospeccion_id'] = $registro['com_medio_prospeccion_id'];
 
         return $com_prospecto_ins;
     }
@@ -177,6 +195,18 @@ class _prospecto{
             $dp_calle_pertenece_id = 100;
         }
         return $dp_calle_pertenece_id;
+    }
+
+    private function  com_medio_prospeccion_id(inm_prospecto $modelo): int|array
+    {
+        $com_medio_prospeccion_id = $modelo->id_preferido_detalle(entidad_preferida: 'com_medio_prospeccion');
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al obtener com_medio_prospeccion_id',data:  $com_medio_prospeccion_id);
+        }
+        if($com_medio_prospeccion_id === -1){
+            $com_medio_prospeccion_id = 100;
+        }
+        return $com_medio_prospeccion_id;
     }
 
     /**
