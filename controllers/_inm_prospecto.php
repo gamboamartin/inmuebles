@@ -497,6 +497,9 @@ class _inm_prospecto{
             return $this->error->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
 
+        $extra_params_keys[] = 'com_medio_prospeccion_id';
+        $extra_params_keys[] = 'com_medio_prospeccion_es_red_social';
+        $keys_selects['com_medio_prospeccion_id']->extra_params_keys = $extra_params_keys;
 
         $row = $this->row_base_fiscal(controlador: $controlador);
         if(errores::$error){

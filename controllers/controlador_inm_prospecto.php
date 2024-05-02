@@ -100,6 +100,9 @@ class controlador_inm_prospecto extends _ctl_formato {
             return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects,
                 header: $header,ws:  $ws);
         }
+        $extra_params_keys[] = 'com_medio_prospeccion_id';
+        $extra_params_keys[] = 'com_medio_prospeccion_es_red_social';
+        $keys_selects['com_medio_prospeccion_id']->extra_params_keys = $extra_params_keys;
 
         $inputs = $this->inputs(keys_selects: $keys_selects);
         if(errores::$error){

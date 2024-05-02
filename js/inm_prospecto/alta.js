@@ -9,7 +9,16 @@ let liga_red_social = $("#liga_red_social");
 
 com_medio_prospeccion_id_sl.change(function(){
     com_medio_prospeccion_id = $(this).val();
-    obten_medio_prospeccion(com_medio_prospeccion_id);
+
+    let selected = $(this).find('option:selected');
+    let es_red_social = selected.data('com_medio_prospeccion_es_red_social');
+
+    if(es_red_social === 'activo'){
+        liga_red_social.prop('disabled', false);
+    }else {
+        liga_red_social.val("");
+        liga_red_social.prop('disabled', true);
+    }
 });
 
 function obten_medio_prospeccion(com_medio_prospeccion_id = ''){
@@ -29,6 +38,7 @@ function obten_medio_prospeccion(com_medio_prospeccion_id = ''){
             }
         });
     }).fail(function (jqXHR, textStatus, errorThrown){ // Función que se ejecuta si algo ha ido mal
+
         alert('Error al ejecutar');
         console.log("The following error occured: "+ textStatus +" "+ errorThrown);
     });
