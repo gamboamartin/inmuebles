@@ -2,6 +2,33 @@ let url = getAbsolutePath();
 let registro_id = getParameterByName('registro_id');
 let session_id = getParameterByName('session_id');
 
+let com_medio_prospeccion_id_sl = $("#com_medio_prospeccion_id");
+let liga_red_social = $("#liga_red_social");
+
+
+let selected = com_medio_prospeccion_id_sl.find('option:selected');
+let es_red_social = selected.data('com_medio_prospeccion_es_red_social');
+if(es_red_social === 'activo'){
+    liga_red_social.prop('disabled', false);
+}else {
+    liga_red_social.val("");
+    liga_red_social.prop('disabled', true);
+}
+com_medio_prospeccion_id_sl.change(function(){
+    com_medio_prospeccion_id = $(this).val();
+
+    let selected = $(this).find('option:selected');
+    let es_red_social = selected.data('com_medio_prospeccion_es_red_social');
+
+    if(es_red_social === 'activo'){
+        liga_red_social.prop('disabled', false);
+    }else {
+        liga_red_social.val("");
+        liga_red_social.prop('disabled', true);
+    }
+});
+
+
 let sl_inm_plazo_credito_sc_id = $("#inm_plazo_credito_sc_id");
 
 
