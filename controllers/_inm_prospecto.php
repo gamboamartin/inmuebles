@@ -211,7 +211,7 @@ class _inm_prospecto{
         }
 
         $headers = (new \gamboamartin\inmuebles\html\_base(html: $controlador->html_base))->genera_headers(
-            controler: $controlador,headers:  $headers);
+            controler: $controlador,headers:  $headers, acciones_headers: $controlador->acciones_headers);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al generar headers',data:  $headers);
         }
@@ -465,7 +465,7 @@ class _inm_prospecto{
         if($controlador->row_upd->correo_mi_cuenta_infonavit === 'SIN CORREO'){
             $controlador->row_upd->correo_mi_cuenta_infonavit = $controlador->row_upd->correo_com;
         }
-        
+
         $keys_selects['correo_mi_cuenta_infonavit']->regex = $this->validacion->patterns['correo_html5'];
 
         $keys_selects = (new init())->key_select_txt(cols: 6,key: 'password_mi_cuenta_infonavit',

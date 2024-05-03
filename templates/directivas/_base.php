@@ -289,20 +289,17 @@ class _base extends html_controler{
      * @return array
      */
     final public function genera_headers(controlador_inm_comprador|controlador_inm_prospecto $controler,
-                                         array $headers): array
+                                         array $headers, array $acciones_headers = array()): array
     {
         $data = array();
         foreach ($headers as $n_apartado=>$tag_header){
-
-
-            $header = $this->header_frontend(controler: $controler,n_apartado:  $n_apartado,tag_header:  $tag_header);
-
+            $header = $this->header_frontend(controler: $controler,n_apartado:  $n_apartado,tag_header:  $tag_header,
+                acciones_headers: $acciones_headers);
             if(errores::$error){
                 return $this->error->error(mensaje: 'Error al generar header',data:  $header);
             }
 
             $data[] = $header;
-
         }
         return $data;
     }
@@ -316,14 +313,14 @@ class _base extends html_controler{
      * @version 2.313.2
      */
     private function header_frontend(controlador_inm_comprador|controlador_inm_prospecto $controler,
-                                     int $n_apartado, string $tag_header): array|stdClass
+                                     int $n_apartado, string $tag_header, array $acciones_headers = array()): array|stdClass
     {
         $id_css_button = "collapse_a$n_apartado";
         $key_header = "apartado_$n_apartado";
 
         $header_apartado = $controler->html_entidad->header_collapsible(id_css_button: $id_css_button,
-            style_button: 'primary', tag_button: 'Ver/Ocultar',tag_header:  $tag_header);
-
+            style_button: 'primary', tag_button: 'Ver/Ocultar',tag_header:  $tag_header,
+            acciones_headers: $acciones_headers, n_apartado: $n_apartado);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al generar header',data:  $header_apartado);
         }
