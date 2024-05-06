@@ -189,7 +189,7 @@ class _upd_prospecto{
         return $data;
     }
 
-    private function inserta_referencia(array $referencia, int $inm_prospecto_id, PDO $link): array|stdClass
+    public function inserta_referencia(array $referencia, int $inm_prospecto_id, PDO $link): array|stdClass
     {
         $keys = array('nombre','apellido_paterno','dp_calle_pertenece_id','inm_parentesco_id');
         $valida = $this->validacion->valida_existencia_keys(keys: $keys,registro:  $referencia);
@@ -210,6 +210,7 @@ class _upd_prospecto{
         if (errores::$error) {
             return $this->error->error(mensaje: 'Error al insertar alta_referencia', data: $alta_referencia);
         }
+        print_r($alta_referencia);exit;
 
 
         $data = new stdClass();

@@ -401,13 +401,20 @@ class controlador_inm_prospecto extends _ctl_formato {
 
     public function inserta_referencia(bool $header, bool $ws): array|stdClass
     {
-        $result_referencia = (new _upd_prospecto())->transacciona_referencia(inm_prospecto_id: $this->registro_id,link: $this->link);
+        $r_inm_referencia_bd = (new _upd_prospecto())->inserta_referencia(referencia: $_POST,
+            inm_prospecto_id: $_GET['registro_id'],link: $this->link);
         if (errores::$error) {
-            return $this->retorno_error(
-                mensaje: 'Error al insertar referencia', data:  $result_referencia,header: $header,ws: $ws);
+            return $this->retorno_error(mensaje: 'Error al insertar r_inm_referencia_bd', data: $r_inm_referencia_bd,
+                header: $header,ws: $ws);
         }
 
-        return $result_referencia;
+        if ($ws) {
+            header('Content-Type: application/json');
+            echo json_encode($r_inm_referencia_bd, JSON_THROW_ON_ERROR);
+            exit;
+        }
+
+        return $r_inm_referencia_bd;
     }
 
     public function integra_relacion(bool $header, bool $ws = false): array|stdClass{

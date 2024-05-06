@@ -99,8 +99,8 @@ class _referencia{
 
         $modelo = new inm_parentesco(link: $controler->link);
         $inm_parentesco_id = $controler->html->select_catalogo(cols: 12, con_registros: true,
-            id_selected: $row_upd->inm_parentesco_id, modelo: $modelo, label: 'Parentesco',
-            name: 'referencia[inm_parentesco_id]');
+            id_selected: $row_upd->inm_parentesco_id, modelo: $modelo,class_css: array('referencia_inm_parentesco_id'),
+            label: 'Parentesco', name: 'referencia[inm_parentesco_id]');
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al obtener input',data:  $inm_parentesco_id);
         }
@@ -151,8 +151,9 @@ class _referencia{
 
         $modelo = new dp_calle_pertenece(link: $controler->link);
         $dp_calle_pertenece_id = $controler->html->select_catalogo(cols: 12, con_registros: false,
-            id_selected: $row_upd->inm_parentesco_id, modelo: $modelo, columns_ds: array('dp_calle_descripcion'),
-            id_css: 'referencia_dp_calle_pertenece_id', label: 'Calle', name: 'referencia[dp_calle_pertenece_id]');
+            id_selected: $row_upd->inm_parentesco_id, modelo: $modelo,class_css: array('referencia_dp_calle_pertenece_id'),
+            columns_ds: array('dp_calle_descripcion'), id_css: 'referencia_dp_calle_pertenece_id', label: 'Calle',
+            name: 'referencia[dp_calle_pertenece_id]');
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al obtener input',data:  $dp_calle_pertenece_id);
         }

@@ -58,8 +58,6 @@ let beneficiario_apellido_paterno_ct = $(".beneficiario_apellido_paterno");
 let beneficiario_apellido_materno_ct = $(".beneficiario_apellido_materno");
 let beneficiario_inm_parentesco_id_ct = $(".beneficiario_inm_parentesco_id");
 let beneficiario_inm_tipo_beneficiario_id_ct = $(".beneficiario_inm_tipo_beneficiario_id");
-var table_gt_beneficiario = $(".gt_beneficiario_table");
-
 
 let btn_inserta_referencia = $("#inserta_referencia");
 let referencia_nombre_ct = $(".referencia_nombre");
@@ -69,6 +67,8 @@ let referencia_lada_ct = $(".referencia_lada");
 let referencia_numero_ct = $(".referencia_numero");
 let referencia_celular_ct = $(".referencia_celular");
 let referencia_numero_dom_ct = $(".referencia_numero_dom");
+let referencia_inm_parentesco_id_ct = $(".referencia_inm_parentesco_id");
+let referencia_dp_calle_pertenece_id_ct = $(".referencia_dp_calle_pertenece_id");
 
 
 btn_inserta_beneficiario.click(function (){
@@ -91,6 +91,32 @@ btn_inserta_beneficiario.click(function (){
         window.location.reload()
 
         console.log(data);
+    }).fail(function (jqXHR, textStatus, errorThrown){ // Función que se ejecuta si algo ha ido mal
+
+        alert('Error al ejecutar');
+        console.log("The following error occured: "+ textStatus +" "+ errorThrown);
+    });
+});
+
+btn_inserta_referencia.click(function (){
+    let url = "index.php?seccion=inm_prospecto&ws=1&accion=inserta_referencia&registro_id="+registro_id+"&session_id="+session_id;
+
+    $.ajax({
+        type: 'POST',
+        url: url,
+        data: { "nombre" : referencia_nombre_ct.val(),
+        "apellido_paterno": referencia_apellido_paterno_ct.val(),
+        "apellido_materno": referencia_apellido_materno_ct.val(),
+        "lada": referencia_lada_ct.val(),
+        "numero": referencia_numero_ct.val(),
+        "celular": referencia_celular_ct.val(),
+        "numero_dom": referencia_numero_dom_ct.val(),
+        "inm_parentesco_id": referencia_inm_parentesco_id_ct.val(),
+        "dp_calle_pertenece_id": referencia_dp_calle_pertenece_id_ct.val()}
+    }).done(function( data ) {  // Función que se ejecuta si todo ha ido bien
+        window.location.reload();
+        console.log(data);
+
     }).fail(function (jqXHR, textStatus, errorThrown){ // Función que se ejecuta si algo ha ido mal
 
         alert('Error al ejecutar');
@@ -125,7 +151,7 @@ let chk_es_segundo_credito = $(".es_segundo_credito");
 
 
 let sl_dp_pais_id = $("#dp_pais_id");
-//let sl_dp_estado_id = $("#dp_estado_id");
+let sl_dp_estado_id = $("#dp_estado_id");
 let sl_conyuge_dp_estado_id = $("#conyuge_dp_estado_id");
 let sl_conyuge_dp_municipio_id = $("#conyuge_dp_municipio_id");
 let sl_dp_municipio_id = $("#dp_municipio_id");
