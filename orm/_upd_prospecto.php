@@ -210,8 +210,6 @@ class _upd_prospecto{
         if (errores::$error) {
             return $this->error->error(mensaje: 'Error al insertar alta_referencia', data: $alta_referencia);
         }
-        print_r($alta_referencia);exit;
-
 
         $data = new stdClass();
         $data->alta_referencia = $alta_referencia;
