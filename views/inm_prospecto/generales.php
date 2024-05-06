@@ -84,6 +84,7 @@
                     <?php foreach ($inm_tipo_beneficiario->inm_beneficiarios as $inm_beneficiario){ ?>
                     <label>NOMBRE: </label> <?php echo $inm_beneficiario->inm_beneficiario_nombre_completo; ?>
                     <label>PARENTESCO: </label> <?php echo $inm_beneficiario->inm_parentesco_descripcion; ?>
+                        <br>
                     <?php } ?>
 
                 </div>
