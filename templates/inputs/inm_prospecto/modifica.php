@@ -29,8 +29,6 @@
 <?php echo $controlador->inputs->cel_com; ?>
 <?php echo $controlador->inputs->correo_com; ?>
 <?php echo $controlador->inputs->razon_social; ?>
-<?php echo $controlador->inputs->direccion_empresa; ?>
-<?php echo $controlador->inputs->area_empresa; ?>
     </div>
 
 <?php echo $controlador->header_frontend->apartado_3; ?>
@@ -89,6 +87,8 @@
 <?php echo $controlador->inputs->extension_nep; ?>
 <?php echo $controlador->inputs->inm_sindicato_id; ?>
 <?php echo $controlador->inputs->correo_empresa; ?>
+<?php echo $controlador->inputs->direccion_empresa; ?>
+<?php echo $controlador->inputs->area_empresa; ?>
     </div>
 
 <?php echo $controlador->header_frontend->apartado_8; ?>
