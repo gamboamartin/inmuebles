@@ -110,7 +110,7 @@ class _upd_prospecto{
         return $inm_conyuge;
     }
 
-    private function inserta_beneficiario(array $beneficiario, int $inm_prospecto_id, PDO $link): array|stdClass
+    public function inserta_beneficiario(array $beneficiario, int $inm_prospecto_id, PDO $link): array|stdClass
     {
         $keys = array('nombre','apellido_paterno','inm_tipo_beneficiario_id','inm_parentesco_id');
         $valida = $this->validacion->valida_existencia_keys(keys: $keys,registro:  $beneficiario);
@@ -132,10 +132,8 @@ class _upd_prospecto{
             return $this->error->error(mensaje: 'Error al insertar alta_beneficiario', data: $alta_beneficiario);
         }
 
-
         $data = new stdClass();
         $data->alta_conyuge = $alta_beneficiario;
-
 
         return $data;
     }

@@ -15,6 +15,7 @@ use gamboamartin\errores\errores;
 use gamboamartin\inmuebles\html\inm_prospecto_html;
 use gamboamartin\inmuebles\models\_base_paquete;
 use gamboamartin\inmuebles\models\_inm_prospecto;
+use gamboamartin\inmuebles\models\_upd_prospecto;
 use gamboamartin\inmuebles\models\inm_beneficiario;
 use gamboamartin\inmuebles\models\inm_prospecto;
 use gamboamartin\inmuebles\models\inm_referencia_prospecto;
@@ -378,6 +379,35 @@ class controlador_inm_prospecto extends _ctl_formato {
         $datatables->filtro = $filtro;
 
         return $datatables;
+    }
+
+    public function inserta_beneficiario(bool $header, bool $ws): array|stdClass
+    {
+        $r_inm_beneficiario_bd = (new _upd_prospecto())->inserta_beneficiario(beneficiario: $_POST,
+            inm_prospecto_id: $_GET['registro_id'],link: $this->link);
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al insertar r_inm_beneficiario_bd', data: $r_inm_beneficiario_bd,
+                header: $header,ws: $ws);
+        }
+
+        if ($ws) {
+            header('Content-Type: application/json');
+            echo json_encode($r_inm_beneficiario_bd, JSON_THROW_ON_ERROR);
+            exit;
+        }
+
+        return $r_inm_beneficiario_bd;
+    }
+
+    public function inserta_referencia(bool $header, bool $ws): array|stdClass
+    {
+        $result_referencia = (new _upd_prospecto())->transacciona_referencia(inm_prospecto_id: $this->registro_id,link: $this->link);
+        if (errores::$error) {
+            return $this->retorno_error(
+                mensaje: 'Error al insertar referencia', data:  $result_referencia,header: $header,ws: $ws);
+        }
+
+        return $result_referencia;
     }
 
     public function integra_relacion(bool $header, bool $ws = false): array|stdClass{
