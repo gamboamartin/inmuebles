@@ -41,7 +41,9 @@
                     <label>REGISTRO PATRONAL: </label> <?php echo $controlador->registro->inm_prospecto->inm_prospecto_nrp_nep; ?>
                     <label>TELEFONO: </label> <?php echo $controlador->registro->inm_prospecto->inm_prospecto_telefono_empresa; ?>
                     <br>
-                    <label>CORREO ELECTRONICS: </label> <?php echo $controlador->registro->inm_prospecto->inm_prospecto_correo_empresa; ?>
+                    <label>SINDICATO: </label> <?php echo $controlador->registro->inm_prospecto->inm_sindicato_descripcion; ?>
+                    <br>
+                    <label>CORREO ELECTRONICO: </label> <?php echo $controlador->registro->inm_prospecto->inm_prospecto_correo_empresa; ?>
                 </div>
 
                 <div  class="col-md-12">
