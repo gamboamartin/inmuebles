@@ -223,7 +223,20 @@ class instalacion
 
         $columnas->nombre_completo_valida = new stdClass();
 
+        $columnas->liga_red_social = new stdClass();
+        $columnas->liga_red_social->defautl = 'SIN LIGA';
 
+        $columnas->correo_mi_cuenta_infonavit = new stdClass();
+        $columnas->correo_mi_cuenta_infonavit->defautl = 'sincorreo@correo.com';
+
+        $columnas->password_mi_cuenta_infonavit = new stdClass();
+        $columnas->password_mi_cuenta_infonavit->defautl = 'SIN CONTRASEÑA';
+
+        $columnas->direccion_empresa = new stdClass();
+        $columnas->direccion_empresa->defautl = 'SIN DIRECCION';
+
+        $columnas->area_empresa = new stdClass();
+        $columnas->area_empresa->defautl = 'SIN AREA';
 
         $add_colums = $init->add_columns(campos: $columnas,table:  'inm_prospecto');
         if(errores::$error){

@@ -130,7 +130,8 @@ class controlador_inm_prospecto extends _ctl_formato {
             'monto_credito_solicitado_dh','monto_ahorro_voluntario','nombre_empresa_patron','nrp_nep','lada_nep',
             'numero_nep','extension_nep','nss','curp','rfc','numero_exterior','numero_interior','observaciones',
             'fecha_nacimiento','sub_cuenta','monto_final','descuento','puntos','telefono_casa','correo_empresa',
-            'correo_mi_cuenta_infonavit','password_mi_cuenta_infonavit','nss_extra','liga_red_social');
+            'correo_mi_cuenta_infonavit','password_mi_cuenta_infonavit','nss_extra','liga_red_social',
+            'direccion_empresa','area_empresa');
 
         $keys->selects = array();
 
