@@ -462,7 +462,7 @@ class _inm_prospecto{
             return $this->error->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
 
-        if($controlador->row_upd->correo_mi_cuenta_infonavit === 'SIN CORREO'){
+        if($controlador->row_upd->correo_mi_cuenta_infonavit === 'sincorreo@correo.com'){
             $controlador->row_upd->correo_mi_cuenta_infonavit = $controlador->row_upd->correo_com;
         }
 

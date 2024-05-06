@@ -455,7 +455,7 @@ class controlador_inm_prospecto extends _ctl_formato {
             return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
         $keys_selects = (new init())->key_select_txt(cols: 6,key: 'lada_com',
-            keys_selects:$keys_selects, place_holder: 'Lada', required: false);
+            keys_selects:$keys_selects, place_holder: 'Lada',required: false);
         if(errores::$error){
             return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
@@ -463,7 +463,7 @@ class controlador_inm_prospecto extends _ctl_formato {
         $keys_selects['lada_com']->regex = $this->validacion->patterns['lada_html'];
 
         $keys_selects = (new init())->key_select_txt(cols: 6,key: 'numero_com',
-            keys_selects:$keys_selects, place_holder: 'Numero', required: false);
+            keys_selects:$keys_selects, place_holder: 'Numero',required: false);
         if(errores::$error){
             return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
@@ -471,7 +471,7 @@ class controlador_inm_prospecto extends _ctl_formato {
         $keys_selects['numero_com']->regex = $this->validacion->patterns['tel_sin_lada_html'];
 
         $keys_selects = (new init())->key_select_txt(cols: 6,key: 'cel_com',
-            keys_selects:$keys_selects, place_holder: 'Cel');
+            keys_selects:$keys_selects, place_holder: 'Cel', required: false);
         if(errores::$error){
             return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
