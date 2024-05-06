@@ -58,6 +58,8 @@ let beneficiario_apellido_paterno_ct = $(".beneficiario_apellido_paterno");
 let beneficiario_apellido_materno_ct = $(".beneficiario_apellido_materno");
 let beneficiario_inm_parentesco_id_ct = $(".beneficiario_inm_parentesco_id");
 let beneficiario_inm_tipo_beneficiario_id_ct = $(".beneficiario_inm_tipo_beneficiario_id");
+var table_gt_beneficiario = $(".gt_beneficiario_table");
+
 
 let btn_inserta_referencia = $("#inserta_referencia");
 let referencia_nombre_ct = $(".referencia_nombre");
@@ -86,6 +88,7 @@ btn_inserta_beneficiario.click(function (){
         limpia_txt(beneficiario_apellido_materno_ct);
         beneficiario_inm_parentesco_id_ct.selectpicker('refresh');
         beneficiario_inm_tipo_beneficiario_id_ct.selectpicker('refresh');
+        window.location.reload()
 
         console.log(data);
     }).fail(function (jqXHR, textStatus, errorThrown){ // Función que se ejecuta si algo ha ido mal
@@ -94,12 +97,6 @@ btn_inserta_beneficiario.click(function (){
         console.log("The following error occured: "+ textStatus +" "+ errorThrown);
     });
 });
-
-function crear_beneficiario(beneficioario){
-
-
-
-}
 
 referencia_nombre_ct.change(function() {
     limpia_txt($(this));

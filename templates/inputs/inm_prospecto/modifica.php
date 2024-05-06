@@ -112,7 +112,7 @@
         <?php echo $controlador->inputs->beneficiario->nombre; ?>
         <?php echo $controlador->inputs->beneficiario->apellido_paterno; ?>
         <?php echo $controlador->inputs->beneficiario->apellido_materno; ?>
-        <div class="col-md-12 table-responsive">
+        <div class="col-md-12 table-responsive gt_beneficiario_table">
             <table class="table table-striped">
                 <thead>
                     <tr>
