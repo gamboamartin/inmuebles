@@ -34,14 +34,15 @@
 <?php echo $controlador->header_frontend->apartado_3; ?>
     <div  id="apartado_3">
 
+<?php echo $controlador->inputs->com_tipo_direccion_id; ?>
 <?php echo $controlador->inputs->dp_pais_id; ?>
 <?php echo $controlador->inputs->dp_estado_id; ?>
 <?php echo $controlador->inputs->dp_municipio_id; ?>
 <?php echo $controlador->inputs->dp_cp_id; ?>
 <?php echo $controlador->inputs->dp_colonia_postal_id; ?>
 <?php echo $controlador->inputs->dp_calle_pertenece_id; ?>
-<?php echo $controlador->inputs->numero_exterior; ?>
-<?php echo $controlador->inputs->numero_interior; ?>
+<?php echo $controlador->inputs->texto_exterior; ?>
+<?php echo $controlador->inputs->texto_interior; ?>
     </div>
 
 <?php echo $controlador->header_frontend->apartado_4; ?>
@@ -197,7 +198,6 @@
         <?php echo $controlador->inputs->password_mi_cuenta_infonavit; ?>
 
     </div>
-
 
 
 <?php include (new views())->ruta_templates.'botons/submit/modifica_bd.php';?>
