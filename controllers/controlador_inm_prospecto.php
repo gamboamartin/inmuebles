@@ -10,6 +10,7 @@ namespace gamboamartin\inmuebles\controllers;
 
 use base\controller\init;
 use gamboamartin\calculo\calculo;
+use gamboamartin\comercial\models\com_direccion;
 use gamboamartin\comercial\models\com_prospecto;
 use gamboamartin\errores\errores;
 use gamboamartin\inmuebles\html\inm_prospecto_html;
@@ -35,6 +36,7 @@ class controlador_inm_prospecto extends _ctl_formato {
 
     public array $inm_conf_docs_prospecto = array();
 
+    public array $direcciones = array();
     public array $beneficiarios = array();
     public array $referencias = array();
     public array $acciones_headers = array();
@@ -718,6 +720,13 @@ class controlador_inm_prospecto extends _ctl_formato {
                 header: $header,ws:  $ws);
         }
 
+        $direcciones = (new com_direccion(link: $this->link))->registros();
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al obtener direcciones',data:  $direcciones,
+                header: $header,ws:  $ws);
+        }
+
+        $this->direcciones = $direcciones;
         $this->beneficiarios = $beneficiarios;
 
         $referencia = (new _referencia())->inputs_referencia(controler: $this);
