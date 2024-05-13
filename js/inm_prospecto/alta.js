@@ -2,8 +2,6 @@ let url = getAbsolutePath();
 let registro_id = getParameterByName('registro_id');
 let session_id = getParameterByName('session_id');
 
-
-
 let com_medio_prospeccion_id_sl = $("#com_medio_prospeccion_id");
 let liga_red_social = $("#liga_red_social");
 
@@ -18,32 +16,11 @@ com_medio_prospeccion_id_sl.change(function(){
     }else {
         liga_red_social.val("");
         liga_red_social.prop('disabled', true);
+        nombre_ct.prop('required', true);
+        apellido_paterno_ct.prop('required', true);
+        razon_social_ct.prop('required', true);
     }
 });
-
-function obten_medio_prospeccion(com_medio_prospeccion_id = ''){
-
-    let url = "index.php?seccion=com_medio_prospeccion&ws=1&accion=get_medio_prospeccion&com_medio_propeccion_id="+com_medio_prospeccion_id+"&session_id="+session_id;
-
-    $.ajax({
-        type: 'GET',
-        url: url,
-    }).done(function( data ) {  // Función que se ejecuta si todo ha ido bien
-        console.log(data.registros);
-
-        $.each(data.registros, function( index, com_medio ) {
-            console.log(com_medio.com_medio_prospeccion_es_red_social);
-            if(com_medio.com_medio_prospeccion_es_red_social === 'activo'){
-                liga_red_social.prop('disabled', false);
-            }
-        });
-    }).fail(function (jqXHR, textStatus, errorThrown){ // Función que se ejecuta si algo ha ido mal
-
-        alert('Error al ejecutar');
-        console.log("The following error occured: "+ textStatus +" "+ errorThrown);
-    });
-
-}
 
 let nombre_ct = $("#nombre");
 let apellido_paterno_ct = $("#apellido_paterno");
@@ -59,7 +36,11 @@ let apellido_paterno = '';
 let apellido_materno = '';
 let razon_social = '';
 
-
+liga_red_social.change(function (){
+    nombre_ct.prop('required', false);
+    apellido_paterno_ct.prop('required', false);
+    razon_social_ct.prop('required', false);
+});
 
 let btn_valida = $(".btn-success");
 
