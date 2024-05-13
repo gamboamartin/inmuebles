@@ -658,6 +658,11 @@ class controlador_inm_prospecto extends _ctl_formato {
             return $this->retorno_error(mensaje: 'Error al integrar base',data:  $base, header: $header,ws:  $ws);
         }
 
+        $this->acciones_headers['3'] = new  stdClass();
+        $this->acciones_headers['3']->id_css_button_acc = 'inserta_domicilio';
+        $this->acciones_headers['3']->style_button_acc = 'success';
+        $this->acciones_headers['3']->tag_button_acc = 'Guardar';
+
         $this->acciones_headers['9'] = new  stdClass();
         $this->acciones_headers['9']->id_css_button_acc = 'inserta_beneficiario';
         $this->acciones_headers['9']->style_button_acc = 'success';

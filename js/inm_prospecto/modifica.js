@@ -70,6 +70,13 @@ let referencia_numero_dom_ct = $(".referencia_numero_dom");
 let referencia_inm_parentesco_id_ct = $(".referencia_inm_parentesco_id");
 let referencia_dp_calle_pertenece_id_ct = $(".referencia_dp_calle_pertenece_id");
 
+let btn_inserta_domicilio = $("#inserta_domicilio");
+let sl_dp_pais_id = $("#dp_pais_id");
+let sl_dp_estado_id = $("#dp_estado_id");
+let sl_dp_municipio_id = $("#dp_municipio_id");
+let sl_dp_cp_id = $("#dp_cp_id");
+let sl_dp_colonia_postal_id = $("#dp_colonia_postal_id");
+let sl_dp_calle_pertenece_id = $("#dp_calle_pertenece_id");
 
 btn_inserta_beneficiario.click(function (){
     let url = "index.php?seccion=inm_prospecto&ws=1&accion=inserta_beneficiario&registro_id="+registro_id+"&session_id="+session_id;
@@ -124,6 +131,35 @@ btn_inserta_referencia.click(function (){
     });
 });
 
+btn_inserta_domicilio.click(function (){
+    let url = "index.php?seccion=inm_prospecto&ws=1&accion=inserta_domicilio&registro_id="+registro_id+"&session_id="+session_id;
+
+    if (sl_dp_calle_pertenece_id.val() === '-1'){
+        alert('Seleccione una calle');
+        return;
+    }
+
+    $.ajax({
+        type: 'POST',
+        url: url,
+        data: { "dp_calle_pertenece_id" : sl_dp_calle_pertenece_id.val(),
+            "texto_exterior": beneficiario_apellido_paterno_ct.val(),
+            "texto_interior": beneficiario_apellido_materno_ct.val()},
+    }).done(function( data ) {  // Función que se ejecuta si todo ha ido bien
+        sl_dp_pais_id.selectpicker('refresh');
+        sl_dp_estado_id.selectpicker('refresh');
+        sl_dp_municipio_id.selectpicker('refresh');
+        sl_dp_cp_id.selectpicker('refresh');
+        sl_dp_colonia_postal_id.selectpicker('refresh');
+        dp_calle_pertenece_id.selectpicker('refresh');
+        window.location.reload()
+    }).fail(function (jqXHR, textStatus, errorThrown){ // Función que se ejecuta si algo ha ido mal
+
+        alert('Error al ejecutar');
+        console.log("The following error occured: "+ textStatus +" "+ errorThrown);
+    });
+});
+
 referencia_nombre_ct.change(function() {
     limpia_txt($(this));
 });
@@ -150,14 +186,9 @@ referencia_numero_dom_ct.change(function() {
 let chk_es_segundo_credito = $(".es_segundo_credito");
 
 
-let sl_dp_pais_id = $("#dp_pais_id");
-let sl_dp_estado_id = $("#dp_estado_id");
+
 let sl_conyuge_dp_estado_id = $("#conyuge_dp_estado_id");
 let sl_conyuge_dp_municipio_id = $("#conyuge_dp_municipio_id");
-let sl_dp_municipio_id = $("#dp_municipio_id");
-let sl_dp_cp_id = $("#dp_cp_id");
-let sl_dp_colonia_postal_id = $("#dp_colonia_postal_id");
-let sl_dp_calle_pertenece_id = $("#dp_calle_pertenece_id");
 let sl_dp_estado_nacimiento_id = $("#dp_estado_nacimiento_id");
 let sl_dp_municipio_nacimiento_id = $("#dp_municipio_nacimiento_id");
 
