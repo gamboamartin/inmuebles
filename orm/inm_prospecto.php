@@ -221,12 +221,9 @@ class inm_prospecto extends _modelo_parent{
             }
         }
 
-        if($res){
-            return $this->error->error(mensaje: 'Error al no existe ningun dato de contacto',data:  $temp);
-        }
-
         $resultado = array();
 
+        $resultado['resultado_completo'] = $res;
         $resultado['status_disabled'] = $temp;
         $resultado['registro'] = $registro;
 
@@ -245,6 +242,10 @@ class inm_prospecto extends _modelo_parent{
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al validar datos de contacto default',
                 data:  $resultado);
+        }
+
+        if($resultado['resultado_completo']){
+            return $this->error->error(mensaje: 'Error al no existe ningun dato de contacto',data:  $resultado);
         }
 
         $this->registro = $resultado['registro'];

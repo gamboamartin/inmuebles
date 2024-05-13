@@ -961,4 +961,20 @@ class controlador_inm_prospecto extends _ctl_formato {
 
     }
 
+
+    public function valida_prioridad(bool $header, bool $ws = false){
+        $inm_prospecto_id = (new inm_prospecto(link: $this->link))->valida_prioridad_campo($_GET);
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al generar input', data: $inm_prospecto_id, header: $header, ws: $ws);
+        }
+
+        if ($ws) {
+            header('Content-Type: application/json');
+            echo json_encode($inm_prospecto_id, JSON_THROW_ON_ERROR);
+            exit;
+        }
+
+        return $inm_prospecto_id;
+    }
+
 }

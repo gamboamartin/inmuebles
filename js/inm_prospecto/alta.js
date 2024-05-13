@@ -50,7 +50,7 @@ let apellido_paterno_ct = $("#apellido_paterno");
 let apellido_materno_ct = $("#apellido_materno");
 let lada_com_ct = $("#lada_com");
 let numero_com_ct = $("#numero_com");
-let cel_com_ct = $("#cel_com_ct");
+let cel_com_ct = $("#cel_com");
 let correo_com_ct = $("#correo_com");
 let razon_social_ct = $("#razon_social");
 
@@ -59,6 +59,31 @@ let apellido_paterno = '';
 let apellido_materno = '';
 let razon_social = '';
 
+
+
+let btn_valida = $(".btn-success");
+
+btn_valida.click(function() {
+    let url = "index.php?seccion=inm_prospecto&ws=1&accion=valida_prioridad&liga_red_social="+liga_red_social.val()+"&lada_com="+lada_com_ct.val()+"&numero_com="+numero_com_ct.val()+"&cel_com="+cel_com_ct.val()+"&correo_com="+correo_com_ct.val()+"&session_id="+session_id;
+
+    $.ajax({
+        type: 'GET',
+        url: url,
+    }).done(function( data ) {  // Función que se ejecuta si todo ha ido bien
+        console.log(data);
+        if(data.resultado_completo){
+            alert('No hay datos de contacto');
+        }
+    }).fail(function (jqXHR, textStatus, errorThrown){ // Función que se ejecuta si algo ha ido mal
+        alert('Error al ejecutar');
+        console.log("The following error occured: "+ textStatus +" "+ errorThrown);
+    });
+
+});
+
+function valida_registro(lista){
+
+}
 nombre_ct.change(function() {
     limpia_txt($(this));
     nombre = $(this).val().trim();
