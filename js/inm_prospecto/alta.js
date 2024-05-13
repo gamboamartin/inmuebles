@@ -45,6 +45,11 @@ liga_red_social.change(function (){
 let btn_valida = $(".btn-success");
 
 btn_valida.click(function() {
+
+
+});
+
+function valida_registro( ){
     let url = "index.php?seccion=inm_prospecto&ws=1&accion=valida_prioridad&liga_red_social="+liga_red_social.val()+"&lada_com="+lada_com_ct.val()+"&numero_com="+numero_com_ct.val()+"&cel_com="+cel_com_ct.val()+"&correo_com="+correo_com_ct.val()+"&session_id="+session_id;
 
     $.ajax({
@@ -59,11 +64,6 @@ btn_valida.click(function() {
         alert('Error al ejecutar');
         console.log("The following error occured: "+ textStatus +" "+ errorThrown);
     });
-
-});
-
-function valida_registro(lista){
-
 }
 nombre_ct.change(function() {
     limpia_txt($(this));
