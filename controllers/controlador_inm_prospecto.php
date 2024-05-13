@@ -413,9 +413,13 @@ class controlador_inm_prospecto extends _ctl_formato {
                 header: $header,ws: $ws);
         }
 
-        print_r($domicilio);exit();
+        if ($ws) {
+            header('Content-Type: application/json');
+            echo json_encode($domicilio, JSON_THROW_ON_ERROR);
+            exit;
+        }
 
-        return $_POST;
+        return $domicilio;
     }
 
     public function inserta_referencia(bool $header, bool $ws): array|stdClass

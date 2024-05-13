@@ -67,6 +67,7 @@
         "gamboa.martin/facturacion": "^33.0.0",
         "gamboa.martin/banco": "^14.0.0",
         "gamboa.martin/comisiones": "^10.0.0",
+        "gamboa.martin/where": "^1.0.0",
       "ext-openssl": "*",
       "ext-mbstring": "*",
       "phpunit/phpunit": "^10.0.0"
