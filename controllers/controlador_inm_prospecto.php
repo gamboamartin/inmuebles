@@ -10,6 +10,7 @@ namespace gamboamartin\inmuebles\controllers;
 
 use base\controller\init;
 use gamboamartin\calculo\calculo;
+use gamboamartin\comercial\models\com_direccion;
 use gamboamartin\comercial\models\com_prospecto;
 use gamboamartin\errores\errores;
 use gamboamartin\inmuebles\html\inm_prospecto_html;
@@ -35,6 +36,7 @@ class controlador_inm_prospecto extends _ctl_formato {
 
     public array $inm_conf_docs_prospecto = array();
 
+    public array $direcciones = array();
     public array $beneficiarios = array();
     public array $referencias = array();
     public array $acciones_headers = array();
@@ -131,7 +133,7 @@ class controlador_inm_prospecto extends _ctl_formato {
             'numero_nep','extension_nep','nss','curp','rfc','numero_exterior','numero_interior','observaciones',
             'fecha_nacimiento','sub_cuenta','monto_final','descuento','puntos','telefono_casa','correo_empresa',
             'correo_mi_cuenta_infonavit','password_mi_cuenta_infonavit','nss_extra','liga_red_social',
-            'direccion_empresa','area_empresa');
+            'direccion_empresa','area_empresa', 'texto_exterior', 'texto_interior');
 
         $keys->selects = array();
 
@@ -139,6 +141,7 @@ class controlador_inm_prospecto extends _ctl_formato {
         $init_data['com_agente'] = "gamboamartin\\comercial";
         $init_data['com_tipo_prospecto'] = "gamboamartin\\comercial";
         $init_data['com_medio_prospeccion'] = "gamboamartin\\comercial";
+        $init_data['com_prospecto'] = "gamboamartin\\comercial";
 
         $init_data['inm_institucion_hipotecaria'] = "gamboamartin\\inmuebles";
         $init_data['inm_producto_infonavit'] = "gamboamartin\\inmuebles";
@@ -149,7 +152,7 @@ class controlador_inm_prospecto extends _ctl_formato {
         $init_data['inm_persona_discapacidad'] = "gamboamartin\\inmuebles";
         $init_data['inm_sindicato'] = "gamboamartin\\inmuebles";
         $init_data['inm_ocupacion'] = "gamboamartin\\inmuebles";
-
+        $init_data['com_tipo_direccion'] = "gamboamartin\\comercial";
 
         $init_data = (new _base_paquete())->init_data_domicilio(init_data: $init_data);
         if(errores::$error){
@@ -540,6 +543,19 @@ class controlador_inm_prospecto extends _ctl_formato {
             return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
 
+        $keys_selects = (new init())->key_select_txt(cols: 6,key: 'texto_exterior',
+            keys_selects:$keys_selects, place_holder: 'Numero Ext', required: false);
+        if(errores::$error){
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        }
+
+
+        $keys_selects = (new init())->key_select_txt(cols: 6,key: 'texto_interior',
+            keys_selects:$keys_selects, place_holder: 'Numero Ext', required: false);
+        if(errores::$error){
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        }
+
         $keys_selects = (new init())->key_select_txt(cols: 6,key: 'nss',
             keys_selects:$keys_selects, place_holder: 'NSS', required: false);
         if(errores::$error){
@@ -704,6 +720,13 @@ class controlador_inm_prospecto extends _ctl_formato {
                 header: $header,ws:  $ws);
         }
 
+        $direcciones = (new com_direccion(link: $this->link))->registros();
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al obtener direcciones',data:  $direcciones,
+                header: $header,ws:  $ws);
+        }
+
+        $this->direcciones = $direcciones;
         $this->beneficiarios = $beneficiarios;
 
         $referencia = (new _referencia())->inputs_referencia(controler: $this);

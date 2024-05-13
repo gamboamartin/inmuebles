@@ -237,6 +237,7 @@ class _inm_prospecto{
         $headers['9'] = '9. BENEFICIARIOS';
         $headers['10'] = '10. REFERENCIAS';
         $headers['11'] = '11. MI CUENTA INFONAVIT';
+        $headers['12'] = '12. PROSPECTO';
         return $headers;
     }
 
@@ -262,6 +263,17 @@ class _inm_prospecto{
         $identificadores['com_medio_prospeccion_id']['cols'] = 12;
         $identificadores['com_medio_prospeccion_id']['disabled'] = false;
         $identificadores['com_medio_prospeccion_id']['columns_ds'] = array('com_medio_prospeccion_descripcion');
+
+        $identificadores['com_prospecto_id']['title'] = 'Prospecto';
+        $identificadores['com_prospecto_id']['cols'] = 12;
+        $identificadores['com_prospecto_id']['disabled'] = false;
+        $identificadores['com_prospecto_id']['columns_ds'] = array('com_prospecto_descripcion');
+
+        $identificadores['com_tipo_direccion_id']['title'] = 'Tipo Dirección';
+        $identificadores['com_tipo_direccion_id']['cols'] = 12;
+        $identificadores['com_tipo_direccion_id']['disabled'] = false;
+        $identificadores['com_tipo_direccion_id']['columns_ds'] = array('com_tipo_direccion_descripcion');
+
         return $identificadores;
     }
 
@@ -281,7 +293,7 @@ class _inm_prospecto{
         }
 
         $identificadores['dp_pais_id']['title'] = 'Pais';
-        $identificadores['dp_pais_id']['cols'] = 4;
+        $identificadores['dp_pais_id']['cols'] = 6;
         $identificadores['dp_pais_id']['disabled'] = false;
         $identificadores['dp_pais_id']['filtro'] = array();
         $identificadores['dp_pais_id']['columns_ds'] = array('dp_pais_descripcion');
@@ -289,7 +301,7 @@ class _inm_prospecto{
         $filtro = array();
         $filtro['dp_pais.id'] = $row['dp_pais_id'];
         $identificadores['dp_estado_id']['title'] = 'Estado';
-        $identificadores['dp_estado_id']['cols'] = 4;
+        $identificadores['dp_estado_id']['cols'] = 6;
         $identificadores['dp_estado_id']['disabled'] = false;
         $identificadores['dp_estado_id']['filtro'] = $filtro;
         $identificadores['dp_estado_id']['columns_ds'] =  array('dp_estado_descripcion');
@@ -297,7 +309,7 @@ class _inm_prospecto{
         $filtro = array();
         $filtro['dp_estado.id'] = $row['dp_estado_id'];
         $identificadores['dp_municipio_id']['title'] = 'Municipio';
-        $identificadores['dp_municipio_id']['cols'] = 4;
+        $identificadores['dp_municipio_id']['cols'] = 6;
         $identificadores['dp_municipio_id']['disabled'] = false;
         $identificadores['dp_municipio_id']['filtro'] = $filtro;
         $identificadores['dp_municipio_id']['columns_ds'] =  array('dp_municipio_descripcion');
@@ -305,7 +317,7 @@ class _inm_prospecto{
         $filtro = array();
         $filtro['dp_municipio.id'] = $row['dp_municipio_id'];
         $identificadores['dp_cp_id']['title'] = 'CP';
-        $identificadores['dp_cp_id']['cols'] = 12;
+        $identificadores['dp_cp_id']['cols'] = 6;
         $identificadores['dp_cp_id']['disabled'] = false;
         $identificadores['dp_cp_id']['filtro'] = $filtro;
         $identificadores['dp_cp_id']['columns_ds'] =  array('dp_cp_codigo');
@@ -526,7 +538,6 @@ class _inm_prospecto{
             $controlador->row_upd->con_discapacidad = 'NO';
         }
 
-
         $radios = (new \gamboamartin\inmuebles\models\_inm_comprador())->radios_chk(controler: $controlador);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al integrar radios',data:  $radios);
@@ -601,7 +612,7 @@ class _inm_prospecto{
      */
     private function integra_keys_selects_comercial(controlador_inm_prospecto $controlador, array $keys_selects): array
     {
-        $keys = array('com_agente_id','com_tipo_prospecto_id','com_medio_prospeccion_id');
+        $keys = array('com_agente_id','com_tipo_prospecto_id','com_medio_prospeccion_id', 'com_prospecto_id');
         $valida = $this->validacion->valida_ids(keys: $keys,registro:  $controlador->registro);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al valida controlador registro',data:  $valida);
@@ -630,7 +641,7 @@ class _inm_prospecto{
     private function keys_selects_comercial(controlador_inm_prospecto $controlador, array $filtro,
                                            array $keys_selects): array
     {
-        $keys = array('com_agente_id','com_tipo_prospecto_id','com_medio_prospeccion_id');
+        $keys = array('com_agente_id','com_tipo_prospecto_id','com_medio_prospeccion_id', 'com_prospecto_id');
         $valida = $this->validacion->valida_ids(keys: $keys,registro:  $controlador->registro);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al valida controlador registro',data:  $valida);
