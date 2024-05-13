@@ -403,6 +403,20 @@ class controlador_inm_prospecto extends _ctl_formato {
         return $r_inm_beneficiario_bd;
     }
 
+    public function inserta_domicilio(bool $header, bool $ws): array|stdClass
+    {
+        $domicilio = (new _upd_prospecto())->inserta_domicilio(domicilio: $_POST,
+            inm_prospecto_id: $this->registro_id,link: $this->link);
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al insertar domicilio', data: $domicilio,
+                header: $header,ws: $ws);
+        }
+
+        print_r($domicilio);exit();
+
+        return $_POST;
+    }
+
     public function inserta_referencia(bool $header, bool $ws): array|stdClass
     {
         $r_inm_referencia_bd = (new _upd_prospecto())->inserta_referencia(referencia: $_POST,
