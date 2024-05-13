@@ -43,6 +43,7 @@
         <?php echo $controlador->inputs->dp_calle_pertenece_id; ?>
         <?php echo $controlador->inputs->texto_exterior; ?>
         <?php echo $controlador->inputs->texto_interior; ?>
+
         <div class="col-md-12 table-responsive com_direccion_table">
             <table class="table table-striped">
                 <thead>
