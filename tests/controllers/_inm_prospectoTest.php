@@ -412,6 +412,8 @@ class _inm_prospectoTest extends test {
         $controlador->registro['com_agente_id'] = 1;
         $controlador->registro['com_tipo_prospecto_id'] = 1;
         $controlador->registro['inm_prospecto_es_segundo_credito'] = 'activo';
+        $controlador->registro['com_medio_prospeccion_id'] = 100;
+        $controlador->registro['com_prospecto_id'] = 1;
         $controlador->row_upd = new stdClass();
         $controlador->inputs = new stdClass();
         $resultado = $_inm->inputs_base($controlador);
@@ -438,9 +440,12 @@ class _inm_prospectoTest extends test {
         $controlador = new controlador_inm_prospecto(link: $this->link, paths_conf: $this->paths_conf);
         $controlador->registro['com_agente_id'] = 1;
         $controlador->registro['com_tipo_prospecto_id'] = 1;
+        $controlador->registro['com_prospecto_id'] = 1;
+        $controlador->registro['com_medio_prospeccion_id'] = 1;
         $keys_selects = array();
 
         $resultado = $_inm->integra_keys_selects_comercial($controlador, $keys_selects);
+       // print_r($resultado);exit;
         $this->assertIsArray($resultado);
         $this->assertNotTrue(errores::$error);
         $this->assertEquals(1,$resultado['com_agente_id']->id_selected);
@@ -467,6 +472,8 @@ class _inm_prospectoTest extends test {
         $keys_selects = array();
         $controlador->registro['com_agente_id'] = 1;
         $controlador->registro['com_tipo_prospecto_id'] = 1;
+        $controlador->registro['com_prospecto_id'] = 1;
+        $controlador->registro['com_medio_prospeccion_id'] = 1;
         $resultado = $_inm->keys_selects_comercial($controlador, $filtro, $keys_selects);
         $this->assertIsArray($resultado);
         $this->assertNotTrue(errores::$error);
@@ -514,8 +521,11 @@ class _inm_prospectoTest extends test {
         $controlador->registro['com_agente_id'] = 1;
         $controlador->registro['com_tipo_prospecto_id'] = 1;
         $controlador->registro['inm_prospecto_es_segundo_credito'] = 'SI';
+        $controlador->registro['com_medio_prospeccion_id'] = '100';
+        $controlador->registro['com_prospecto_id'] = '1';
         $keys_selects = array();
         $resultado = $_inm->keys_selects_infonavit($controlador, $keys_selects);
+
         $this->assertIsArray($resultado);
         $this->assertNotTrue(errores::$error);
         $this->assertEquals(12,$resultado['com_agente_id']->cols);

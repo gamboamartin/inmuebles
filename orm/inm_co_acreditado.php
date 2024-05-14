@@ -115,9 +115,11 @@ class inm_co_acreditado extends _modelo_parent{
     }
 
     /**
+     * TOTAL
      * Valida los tipos de datos
      * @param array $inm_co_acreditado Registro a validar
      * @return array|true
+     * @url https://github.com/gamboamartin/inmuebles/wiki/orm.inm_co_acreditado.valida_alta.4.30.2
      */
     final public function valida_alta(array $inm_co_acreditado): bool|array
     {
@@ -153,11 +155,13 @@ class inm_co_acreditado extends _modelo_parent{
     }
 
     /**
+     * TOTAL
      * Valida que los elementos base de un co acreditado sean validos
      * @param array $inm_co_acreditado Registro a validar
      * @return array|true
+     * @url https://github.com/gamboamartin/inmuebles/wiki/orm.inm_co_acreditado.valida_data_alta.4.30.2
      */
-    final public function valida_data_alta(array $inm_co_acreditado): bool|array
+    final public function valida_data_alta(array $inm_co_acreditado): true|array
     {
         $keys = array('nombre','apellido_paterno','nss','curp','rfc','apellido_materno');
         $valida = $this->validacion->valida_existencia_keys(keys: $keys,registro:  $inm_co_acreditado,

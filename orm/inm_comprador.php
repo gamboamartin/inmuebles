@@ -529,6 +529,17 @@ class inm_comprador extends _modelo_parent{
         return $r_modifica_post;
     }
 
+    final public function tiene_cliente(int $inm_comprador_id):bool
+    {
+        $filtro['inm_comprador.id'] = $inm_comprador_id;
+        $existe = (new inm_rel_comprador_com_cliente(link: $this->link))->existe(filtro: $filtro);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al validar si existe cliente',data:  $existe);
+        }
+        return $existe;
+
+    }
+
     final public function tiene_prospecto(int $inm_comprador_id){
         $filtro['inm_comprador.id'] = $inm_comprador_id;
         $existe = (new inm_rel_prospecto_cliente(link: $this->link))->existe(filtro: $filtro);

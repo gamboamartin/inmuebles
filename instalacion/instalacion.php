@@ -4,6 +4,7 @@ use gamboamartin\administrador\instalacion\_adm;
 use gamboamartin\administrador\models\_instalacion;
 use gamboamartin\direccion_postal\models\dp_calle_pertenece;
 use gamboamartin\errores\errores;
+use gamboamartin\inmuebles\models\_base_comprador;
 use gamboamartin\inmuebles\models\inm_comprador;
 use PDO;
 use stdClass;
@@ -113,10 +114,59 @@ class instalacion
 
         foreach ($registros as $registro){
             $registro_id = $registro->id;
+
+            $tiene_cliente = (new inm_comprador(link: $link))->tiene_cliente(inm_comprador_id: $registro_id);
+            if(errores::$error){
+                return (new errores())->error(mensaje: 'Error al validar si tiene cliente', data:  $tiene_cliente);
+            }
+
+            if(!$tiene_cliente){
+
+                if(!isset($registro->rfc)|| trim($registro->rfc) === ''){
+                    $registro->rfc = 'AAA010101AAA';
+                }
+                if(!isset($registro->numero_exterior)|| trim($registro->numero_exterior) === ''){
+                    $registro->numero_exterior = 'SIN NUM';
+                }
+                if(!isset($registro->cat_sat_regimen_fiscal_id)|| trim($registro->cat_sat_regimen_fiscal_id) === ''){
+                    $registro->cat_sat_regimen_fiscal_id = 605;
+                }
+                if(!isset($registro->cat_sat_moneda_id)|| trim($registro->cat_sat_moneda_id) === ''){
+                    $registro->cat_sat_moneda_id = 161;
+                }
+                if(!isset($registro->cat_sat_forma_pago_id)|| trim($registro->cat_sat_forma_pago_id) === ''){
+                    $registro->cat_sat_forma_pago_id = 99;
+                }
+                if(!isset($registro->cat_sat_metodo_pago_id)|| trim($registro->cat_sat_metodo_pago_id) === ''){
+                    $registro->cat_sat_metodo_pago_id = 2;
+                }
+                if(!isset($registro->cat_sat_uso_cfdi_id)|| trim($registro->cat_sat_uso_cfdi_id) === ''){
+                    $registro->cat_sat_uso_cfdi_id = 22;
+                }
+                if(!isset($registro->com_tipo_cliente_id)|| trim($registro->com_tipo_cliente_id) === ''){
+                    $registro->com_tipo_cliente_id = 7;
+                }
+                if(!isset($registro->cat_sat_tipo_persona_id)|| trim($registro->cat_sat_tipo_persona_id) === ''){
+                    $registro->cat_sat_tipo_persona_id = 5;
+                }
+                if(!isset($registro->cp)|| trim($registro->cp) === ''){
+                    $registro->cp = 99999;
+                }
+                if(!isset($registro->dp_municipio_id)|| trim($registro->dp_municipio_id) === ''){
+                    $registro->dp_municipio_id = 2467;
+                }
+
+                $integra_relacion_com_cliente = (new _base_comprador())->integra_relacion_com_cliente(
+                    inm_comprador_id: $registro_id, link: $link, registro_entrada: (array)$registro);
+                if (errores::$error) {
+                    return (new errores())->error(mensaje: 'Error al integrar cliente',
+                        data: $integra_relacion_com_cliente);
+                }
+            }
+
             $com_cliente = (new inm_comprador(link: $link))->get_com_cliente(inm_comprador_id: $registro_id,
-
-
                 columnas_en_bruto: true, retorno_obj: true);
+
             if(errores::$error){
                 return (new errores())->error(mensaje: 'Error al obtener com_cliente', data:  $com_cliente);
             }

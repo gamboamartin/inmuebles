@@ -15,7 +15,7 @@ class _base{
     }
 
     /**
-     * POR DOCUMENTAR EN WIKI
+     * TOTAL
      * Esta función es privada y se llama id_retorno.
      *
      * @return int|array Devuelve un entero o un array en caso de error.
@@ -28,6 +28,7 @@ class _base{
      * Finalmente, devuelve el id_retorno como un número entero.
      * Se utiliza principalmente para obtener el id_retorno de una entrada POST y realizar un control de errores básico.
      * @version 3.0.0
+     * @url https://github.com/gamboamartin/inmuebles/wiki/controllers._base.id_retorno.4.30.2
      */
     private function id_retorno(): int|array
     {
@@ -37,14 +38,17 @@ class _base{
             unset($_POST['id_retorno']);
         }
         if(!is_numeric($id_retorno)){
-            return $this->error->error(mensaje: 'Error id_retorno debe ser un entero', data: $id_retorno);
+            return $this->error->error(mensaje: 'Error id_retorno debe ser un entero', data: $id_retorno,
+                es_final: true);
         }
         return (int)$id_retorno;
     }
 
     /**
+     * TOTAL
      * Inicializa los datos de retorno de una transaccion via POST
      * @return array|stdClass
+     * @url https://github.com/gamboamartin/inmuebles/wiki/controllers._base.init_retorno.4.30.2
      */
     final public function init_retorno(): array|stdClass
     {

@@ -163,7 +163,8 @@ class controlador_inm_comprador extends _ctl_base {
         $retorno = (new \gamboamartin\inmuebles\controllers\_base())->init_retorno();
         if(errores::$error){
             $this->link->rollBack();
-            return $this->retorno_error(mensaje: 'Error al obtener datos de retorno', data: $retorno, header: true, ws: false);
+            return $this->retorno_error(mensaje: 'Error al obtener datos de retorno', data: $retorno,
+                header: true, ws: false);
         }
 
         $inm_comprador_id = $this->registro_id;
