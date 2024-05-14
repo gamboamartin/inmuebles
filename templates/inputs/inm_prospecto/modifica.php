@@ -74,7 +74,7 @@
                         <td><?php echo $direccion['dp_calle_pertenece_descripcion']; ?></td>
                         <td><?php echo $direccion['com_direccion_texto_exterior']; ?></td>
                         <td><?php echo $direccion['com_direccion_texto_interior']; ?></td>
-                        <!--<td><?php echo $direccion['btn_del']; ?></td> -->
+                        <td><?php echo $direccion['btn_del']; ?></td>
                     </tr>
                 <?php } ?>
                 </tbody>

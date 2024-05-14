@@ -742,6 +742,8 @@ class controlador_inm_prospecto extends _ctl_formato {
                 header: $header,ws:  $ws);
         }
 
+        $this->beneficiarios = $beneficiarios;
+
         $direcciones = (new com_direccion_prospecto(link: $this->link))->filtro_and(filtro: array('com_prospecto_id' =>
             $this->registro['com_prospecto_id']));
         if(errores::$error){
@@ -749,8 +751,14 @@ class controlador_inm_prospecto extends _ctl_formato {
                 header: $header,ws:  $ws);
         }
 
-        $this->direcciones = $direcciones->registros;
-        $this->beneficiarios = $beneficiarios;
+        $direcciones = (new \gamboamartin\inmuebles\controllers\_inm_prospecto())->rows(controlador: $this,
+            datas: $direcciones->registros,params:  $params, seccion_exe: 'com_direccion_prospecto');
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al obtener beneficiarios link del',data:  $direcciones,
+                header: $header,ws:  $ws);
+        }
+
+        $this->direcciones = $direcciones;
 
         $referencia = (new _referencia())->inputs_referencia(controler: $this);
         if(errores::$error){
