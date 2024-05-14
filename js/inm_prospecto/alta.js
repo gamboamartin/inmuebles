@@ -13,9 +13,11 @@ com_medio_prospeccion_id_sl.change(function(){
 
     if(es_red_social === 'activo'){
         liga_red_social.prop('disabled', false);
+        liga_red_social.prop('required', true);
     }else {
         liga_red_social.val("");
         liga_red_social.prop('disabled', true);
+        liga_red_social.prop('required', false);
         nombre_ct.prop('required', true);
         apellido_paterno_ct.prop('required', true);
         razon_social_ct.prop('required', true);
