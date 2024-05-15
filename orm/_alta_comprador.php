@@ -399,7 +399,35 @@ class _alta_comprador{
         string $accion,string $etapa, int $inm_comprador_id, PDO $link, string $pr_proceso_descripcion,
         array $registro_entrada, string $tabla): array|stdClass
     {
-        //print_r($registro_entrada);exit;
+
+        if(!isset($registro_entrada['cat_sat_forma_pago_id'])|| $registro_entrada['cat_sat_forma_pago_id'] === '' ||
+            (int)$registro_entrada['cat_sat_forma_pago_id'] === -1){
+            $registro_entrada['cat_sat_forma_pago_id'] = 99;
+        }
+        if(!isset($registro_entrada['cat_sat_metodo_pago_id'])|| $registro_entrada['cat_sat_metodo_pago_id'] === '' ||
+            (int)$registro_entrada['cat_sat_metodo_pago_id'] === -1){
+            $registro_entrada['cat_sat_metodo_pago_id'] = 2;
+        }
+        if(!isset($registro_entrada['cat_sat_moneda_id'])|| $registro_entrada['cat_sat_moneda_id'] === '' ||
+            (int)$registro_entrada['cat_sat_moneda_id'] === -1){
+            $registro_entrada['cat_sat_moneda_id'] = 161;
+        }
+        if(!isset($registro_entrada['cat_sat_regimen_fiscal_id'])|| $registro_entrada['cat_sat_regimen_fiscal_id'] === '' ||
+            (int)$registro_entrada['cat_sat_regimen_fiscal_id'] === -1){
+            $registro_entrada['cat_sat_regimen_fiscal_id'] = 605;
+        }
+        if(!isset($registro_entrada['cat_sat_tipo_persona_id'])|| $registro_entrada['cat_sat_tipo_persona_id'] === '' ||
+            (int)$registro_entrada['cat_sat_tipo_persona_id'] === -1){
+            $registro_entrada['cat_sat_tipo_persona_id'] = 5;
+        }
+        if(!isset($registro_entrada['cat_sat_uso_cfdi_id'])|| $registro_entrada['cat_sat_uso_cfdi_id'] === '' ||
+            (int)$registro_entrada['cat_sat_uso_cfdi_id'] === -1){
+            $registro_entrada['cat_sat_uso_cfdi_id'] = 3;
+        }
+        if(!isset($registro_entrada['com_tipo_cliente_id'])|| $registro_entrada['com_tipo_cliente_id'] === '' ||
+            (int)$registro_entrada['com_tipo_cliente_id'] === -1){
+            $registro_entrada['com_tipo_cliente_id'] = 7;
+        }
 
         $valida = $this->valida_transacciones(inm_comprador_id: $inm_comprador_id,
             registro_entrada:  $registro_entrada);

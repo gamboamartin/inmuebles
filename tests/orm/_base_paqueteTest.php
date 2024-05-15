@@ -60,7 +60,7 @@ class _base_paqueteTest extends test {
         $resultado = $_inm->descripcion($registro);
         $this->assertIsString($resultado);
         $this->assertNotTrue(errores::$error);
-        $this->assertStringContainsStringIgnoringCase("A A  A A A 2024-04-",$resultado);
+        $this->assertStringContainsStringIgnoringCase("A A  A A A 2024-05-",$resultado);
 
         errores::$error = false;
     }

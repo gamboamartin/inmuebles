@@ -62,9 +62,9 @@ class controlador_inm_prospectoTest extends test {
         assertStringContainsStringIgnoringCase("<input type='text' name='nombre' value='' class='form-control' required id='nombre' placeholder='Nombre' ", $data);
         assertStringContainsStringIgnoringCase("<label class='control-label' for='apellido_paterno'>Apellido Paterno</label><div class='controls'><input type=", $data);
         assertStringContainsStringIgnoringCase("<label class='control-label' for='apellido_materno'>Apellido Materno</label><div class='controls'><input type=", $data);
-        assertStringContainsStringIgnoringCase("' required id='lada_com' placeholder='Lada' pattern='[0-9]{2,3}' title='Lada' ", $data);
-        assertStringContainsStringIgnoringCase(" class='form-control' required id='numero_com' placeholder='Numero' pattern='[0-9]{7,8}' title='Numero' />", $data);
-        assertStringContainsStringIgnoringCase("class='form-control' required id='cel_com' placeholder='Cel' pattern='[1-9]{1}[0-9]{9}' title='Cel'", $data);
+        assertStringContainsStringIgnoringCase("' id='lada_com' placeholder='Lada' pattern='[0-9]{2,3}' title='Lada' ", $data);
+        assertStringContainsStringIgnoringCase(" class='form-control' id='numero_com' placeholder='Numero' pattern='[0-9]{7,8}' title='Numero' />", $data);
+        assertStringContainsStringIgnoringCase("class='form-control' id='cel_com' placeholder='Cel' pattern='[1-9]{1}[0-9]{9}' title='Cel'", $data);
         assertStringContainsStringIgnoringCase("_com' value='' class='form-control' id='correo_com' placeholder='Correo' pattern='[a-z0-9!#$%&'*+", $data);
         assertStringContainsStringIgnoringCase("<input type='text' name='razon_social' value='' class='form", $data);
         assertStringContainsStringIgnoringCase("placeholder='Observaciones' title='Observaciones' /></div>", $data);
@@ -145,6 +145,15 @@ class controlador_inm_prospectoTest extends test {
             exit;
         }
 
+        $upd_data['cel_com'] = '';
+
+        $upd = (new inm_prospecto(link: $this->link))->modifica_bd(registro: $upd_data,id:  1);
+        if(errores::$error){
+            $error = (new errores())->error(mensaje: 'Error al upd',data:  $upd);
+            print_r($error);;
+            exit;
+        }
+
         $ch = curl_init("http://localhost/inmuebles/index.php?seccion=inm_prospecto&accion=convierte_cliente&adm_menu_id=64&session_id=9633405615&adm_menu_id=64&registro_id=1");
         $fp = fopen($file, "w");
 
@@ -162,12 +171,14 @@ class controlador_inm_prospectoTest extends test {
         errores::$error = false;
 
         $inm_prospecto_upd['cel_com'] = '1234567891';
+        $inm_prospecto_upd['correo_com'] = '';
         $upd = (new inm_prospecto(link: $this->link))->modifica_bd(registro: $inm_prospecto_upd,id: 1);
         if(errores::$error){
             $error = (new errores())->error(mensaje: 'Error al upd',data:  $upd);
             print_r($error);;
             exit;
         }
+
 
         $ch = curl_init("http://localhost/inmuebles/index.php?seccion=inm_prospecto&accion=convierte_cliente&adm_menu_id=64&session_id=9633405615&adm_menu_id=64&registro_id=1");
         $fp = fopen($file, "w");

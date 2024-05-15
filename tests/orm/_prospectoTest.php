@@ -87,7 +87,7 @@ class _prospectoTest extends test {
 
         $this->assertIsArray($resultado);
         $this->assertNotTrue(errores::$error);
-        $this->assertStringContainsStringIgnoringCase('a a  a a a 2024-04-',$resultado['descripcion']);
+        $this->assertStringContainsStringIgnoringCase('a a  a a a 2024-05-',$resultado['descripcion']);
         errores::$error = false;
     }
 
@@ -460,6 +460,7 @@ class _prospectoTest extends test {
         $registro['razon_social'] = 'A';
         $registro['com_agente_id'] = '1';
         $registro['com_tipo_prospecto_id'] = '1';
+        $registro['com_medio_prospeccion_id'] = '100';
         $link = $this->link;
         $resultado = $_pr->inserta_com_prospecto($link, $registro);
         $this->assertIsObject($resultado);

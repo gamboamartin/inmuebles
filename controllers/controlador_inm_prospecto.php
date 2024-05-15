@@ -190,7 +190,7 @@ class controlador_inm_prospecto extends _ctl_formato {
         if(errores::$error){
             $this->link->rollBack();
             return $this->retorno_error(mensaje: 'Error al obtener datos de retorno', data: $retorno,
-                header: true, ws: false);
+                header: true, ws: false,class: __CLASS__,file: __FILE__,function: __FILE__,line: __LINE__);
         }
 
         $conversion = (new inm_prospecto(link: $this->link))->convierte_cliente(inm_prospecto_id:  $this->registro_id);
@@ -198,7 +198,7 @@ class controlador_inm_prospecto extends _ctl_formato {
         if(errores::$error){
             $this->link->rollBack();
             return $this->retorno_error(mensaje: 'Error al convertir en cliente', data: $conversion,
-                header: true, ws: false);
+                header: true, ws: false,class: __CLASS__,file: __FILE__,function: __FILE__,line: __LINE__);
         }
 
         $this->link->commit();
@@ -208,7 +208,7 @@ class controlador_inm_prospecto extends _ctl_formato {
         if(errores::$error){
             $this->link->rollBack();
             return $this->retorno_error(mensaje: 'Error al dar salida', data: $out,
-                header: true, ws: false);
+                header: true, ws: false,class: __CLASS__,file: __FILE__,function: __FILE__,line: __LINE__);
         }
 
         $conversion->r_alta_rel->siguiente_view = $retorno->siguiente_view;

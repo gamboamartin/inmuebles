@@ -15,10 +15,12 @@ class _base_paquete{
     }
 
     /**
+     * TOTAL
      * Integra una descripcion basada en nombres y generales
      * @param array|stdClass $registro Registro en proceso
      * @return string|array
      * @version 1.175.1
+     * @url https://github.com/gamboamartin/inmuebles/wiki/orm._base_paquete.descripcion.4.31.0
      */
     final public function descripcion(array|stdClass $registro): string|array
     {

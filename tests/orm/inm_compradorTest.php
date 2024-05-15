@@ -104,7 +104,7 @@ class inm_compradorTest extends test {
         $resultado = $inm->alta_bd();
         $this->assertIsObject($resultado);
         $this->assertNotTrue(errores::$error);
-        $this->assertStringContainsStringIgnoringCase("Nombre Apellido Paterno  12345678890 XEXX010101HNEXXXA4 AAA010101AAA 2024-04",
+        $this->assertStringContainsStringIgnoringCase("Nombre Apellido Paterno  12345678890 XEXX010101HNEXXXA4 AAA010101AAA 2024-05",
             $resultado->registro['inm_comprador_descripcion']);
 
         $inm_comprador_id = $resultado->registro_id;
@@ -125,6 +125,267 @@ class inm_compradorTest extends test {
         $this->assertEquals("2147483647", $com_cliente['com_cliente_telefono']);
 
         errores::$error = false;
+
+        $inm = new inm_comprador(link: $this->link);
+
+        $resultado = $inm->alta_bd();
+        $this->assertIsArray($com_cliente);
+        $this->assertTrue(errores::$error);
+        $this->assertEquals("Error nombre no existe en el registro", $resultado['data']['data']['mensaje_limpio']);
+
+        errores::$error = false;
+        $inm->registro['nombre'] = 'Nombre';
+        $resultado = $inm->alta_bd();
+        $this->assertIsArray($com_cliente);
+        $this->assertTrue(errores::$error);
+        $this->assertEquals("Error apellido_paterno no existe en el registro", $resultado['data']['data']['mensaje_limpio']);
+
+        errores::$error = false;
+        $inm->registro['nombre'] = 'Nombre';
+        $inm->registro['apellido_paterno'] = 'AP';
+        $resultado = $inm->alta_bd();
+        $this->assertIsArray($com_cliente);
+        $this->assertTrue(errores::$error);
+        $this->assertEquals("Error nss no existe en el registro", $resultado['data']['data']['mensaje_limpio']);
+
+        errores::$error = false;
+        $inm->registro['nombre'] = 'Nombre';
+        $inm->registro['apellido_paterno'] = 'AP';
+        $inm->registro['nss'] = 'NSS';
+        $resultado = $inm->alta_bd();
+        $this->assertIsArray($com_cliente);
+        $this->assertTrue(errores::$error);
+        $this->assertEquals("Error curp no existe en el registro", $resultado['data']['data']['mensaje_limpio']);
+
+        errores::$error = false;
+        $inm->registro['nombre'] = 'Nombre';
+        $inm->registro['apellido_paterno'] = 'AP';
+        $inm->registro['nss'] = 'NSS';
+        $inm->registro['curp'] = 'CURP';
+        $resultado = $inm->alta_bd();
+        $this->assertIsArray($com_cliente);
+        $this->assertTrue(errores::$error);
+        $this->assertEquals("Error rfc no existe en el registro", $resultado['data']['data']['mensaje_limpio']);
+
+        errores::$error = false;
+        $inm->registro['nombre'] = 'Nombre';
+        $inm->registro['apellido_paterno'] = 'AP';
+        $inm->registro['nss'] = 'NSS';
+        $inm->registro['curp'] = 'CURP';
+        $inm->registro['rfc'] = 'RFC';
+        $resultado = $inm->alta_bd();
+       //RINT_R($resultado);exit;
+        $this->assertIsArray($com_cliente);
+        $this->assertTrue(errores::$error);
+        $this->assertEquals("Error lada_nep no existe en el registro", $resultado['data']['data']['data']['mensaje_limpio']);
+
+        errores::$error = false;
+        $inm->registro['nombre'] = 'Nombre';
+        $inm->registro['apellido_paterno'] = 'AP';
+        $inm->registro['nss'] = 'NSS';
+        $inm->registro['curp'] = 'CURP';
+        $inm->registro['rfc'] = 'RFC';
+        $inm->registro['lada_nep'] = 'LADA NEP';
+        $resultado = $inm->alta_bd();
+        $this->assertIsArray($com_cliente);
+        $this->assertTrue(errores::$error);
+        $this->assertEquals("Error numero_nep no existe en el registro", $resultado['data']['data']['data']['mensaje_limpio']);
+
+        errores::$error = false;
+        $inm->registro['nombre'] = 'Nombre';
+        $inm->registro['apellido_paterno'] = 'AP';
+        $inm->registro['nss'] = 'NSS';
+        $inm->registro['curp'] = 'CURP';
+        $inm->registro['rfc'] = 'RFC';
+        $inm->registro['lada_nep'] = 'LADA NEP';
+        $inm->registro['numero_nep'] = 'numero NEP';
+        $resultado = $inm->alta_bd();
+        $this->assertIsArray($com_cliente);
+        $this->assertTrue(errores::$error);
+        $this->assertEquals("Error lada_com no existe en el registro", $resultado['data']['data']['data']['mensaje_limpio']);
+
+        errores::$error = false;
+        $inm->registro['nombre'] = 'Nombre';
+        $inm->registro['apellido_paterno'] = 'AP';
+        $inm->registro['nss'] = 'NSS';
+        $inm->registro['curp'] = 'CURP';
+        $inm->registro['rfc'] = 'RFC';
+        $inm->registro['lada_nep'] = 'LADA NEP';
+        $inm->registro['numero_nep'] = 'numero NEP';
+        $inm->registro['lada_com'] = 'lada com';
+        $resultado = $inm->alta_bd();
+        $this->assertIsArray($com_cliente);
+        $this->assertTrue(errores::$error);
+        $this->assertEquals("Error numero_com no existe en el registro", $resultado['data']['data']['data']['mensaje_limpio']);
+
+        errores::$error = false;
+        $inm->registro['nombre'] = 'Nombre';
+        $inm->registro['apellido_paterno'] = 'AP';
+        $inm->registro['nss'] = 'NSS';
+        $inm->registro['curp'] = 'CURP';
+        $inm->registro['rfc'] = 'RFC';
+        $inm->registro['lada_nep'] = 'LADA NEP';
+        $inm->registro['numero_nep'] = 'numero NEP';
+        $inm->registro['lada_com'] = 'lada com';
+        $inm->registro['numero_com'] = 'nuemro com';
+        $resultado = $inm->alta_bd();
+        $this->assertIsArray($com_cliente);
+        $this->assertTrue(errores::$error);
+        $this->assertEquals("Error lada debe ser un numero", $resultado['data']['data']['data']['data']['data']['data']['mensaje_limpio']);
+
+        errores::$error = false;
+        $inm->registro['nombre'] = 'Nombre';
+        $inm->registro['apellido_paterno'] = 'AP';
+        $inm->registro['nss'] = 'NSS';
+        $inm->registro['curp'] = 'CURP';
+        $inm->registro['rfc'] = 'RFC';
+        $inm->registro['lada_nep'] = '1';
+        $inm->registro['numero_nep'] = 'numero NEP';
+        $inm->registro['lada_com'] = 'lada';
+        $inm->registro['numero_com'] = 'nuemro com';
+        $resultado = $inm->alta_bd();
+        $this->assertIsArray($com_cliente);
+        $this->assertTrue(errores::$error);
+        $this->assertEquals("Error lada invalida", $resultado['data']['data']['data']['data']['data']['data']['mensaje_limpio']);
+
+        errores::$error = false;
+        $inm->registro['nombre'] = 'Nombre';
+        $inm->registro['apellido_paterno'] = 'AP';
+        $inm->registro['nss'] = 'NSS';
+        $inm->registro['curp'] = 'CURP';
+        $inm->registro['rfc'] = 'RFC';
+        $inm->registro['lada_nep'] = '12';
+        $inm->registro['numero_nep'] = 'numero NEP';
+        $inm->registro['lada_com'] = 'lada';
+        $inm->registro['numero_com'] = 'nuemro com';
+        $resultado = $inm->alta_bd();
+        $this->assertIsArray($com_cliente);
+        $this->assertTrue(errores::$error);
+        $this->assertEquals("Error tel debe ser un numero", $resultado['data']['data']['data']['data']['data']['data']['mensaje_limpio']);
+
+        errores::$error = false;
+        $inm->registro['nombre'] = 'Nombre';
+        $inm->registro['apellido_paterno'] = 'AP';
+        $inm->registro['nss'] = 'NSS';
+        $inm->registro['curp'] = 'CURP';
+        $inm->registro['rfc'] = 'RFC';
+        $inm->registro['lada_nep'] = '12';
+        $inm->registro['numero_nep'] = '1';
+        $inm->registro['lada_com'] = 'lada';
+        $inm->registro['numero_com'] = 'nuemro com';
+        $resultado = $inm->alta_bd();
+        $this->assertIsArray($com_cliente);
+        $this->assertTrue(errores::$error);
+        $this->assertEquals("Error telefono invalido", $resultado['data']['data']['data']['data']['data']['data']['mensaje_limpio']);
+
+        errores::$error = false;
+        $inm->registro['nombre'] = 'Nombre';
+        $inm->registro['apellido_paterno'] = 'AP';
+        $inm->registro['nss'] = 'NSS';
+        $inm->registro['curp'] = 'CURP';
+        $inm->registro['rfc'] = 'AAA010101AAA';
+        $inm->registro['lada_nep'] = '12';
+        $inm->registro['numero_nep'] = '12345678';
+        $inm->registro['lada_com'] = '12';
+        $inm->registro['numero_com'] = '12345678';
+        $inm->registro['cel_com'] = '12345678';
+        $inm->registro['correo_com'] = '12345678';
+        $inm->registro['descuento_pension_alimenticia_dh'] = '12345678';
+        $inm->registro['descuento_pension_alimenticia_fc'] = '12345678';
+        $inm->registro['es_segundo_credito'] = '12345678';
+        $inm->registro['inm_attr_tipo_credito_id'] = '12345678';
+        $inm->registro['inm_destino_credito_id'] = '12345678';
+        $inm->registro['inm_estado_civil_id'] = '12345678';
+        $inm->registro['inm_producto_infonavit_id'] = '12345678';
+        $inm->registro['monto_ahorro_voluntario'] = '12345678';
+        $inm->registro['monto_credito_solicitado_dh'] = '12345678';
+        $inm->registro['nombre_empresa_patron'] = '12345678';
+        $inm->registro['nrp_nep'] = '12345678';
+        $inm->registro['inm_institucion_hipotecaria_id'] = '12345678';
+        $inm->registro['fecha_nacimiento'] = '12345678';
+        $inm->registro['telefono_casa'] = '12345678';
+        $inm->registro['correo_empresa'] = '12345678';
+        $resultado = $inm->alta_bd();
+
+        $this->assertIsArray($com_cliente);
+        $this->assertTrue(errores::$error);
+        $this->assertEquals("Error al insertar", $resultado['mensaje_limpio']);
+
+        errores::$error = false;
+        $inm->registro['nombre'] = 'Nombre';
+        $inm->registro['apellido_paterno'] = 'AP';
+        $inm->registro['nss'] = '12345678912';
+        $inm->registro['curp'] = 'XEXX010101MNEXXXA8';
+        $inm->registro['rfc'] = 'AAA010101AAA';
+        $inm->registro['lada_nep'] = '12';
+        $inm->registro['numero_nep'] = '12345678';
+        $inm->registro['lada_com'] = '12';
+        $inm->registro['numero_com'] = '12345678';
+        $inm->registro['cel_com'] = '1234567811';
+        $inm->registro['correo_com'] = 'x@x.com';
+        $inm->registro['descuento_pension_alimenticia_dh'] = '12345678';
+        $inm->registro['descuento_pension_alimenticia_fc'] = '12345678';
+        $inm->registro['es_segundo_credito'] = '12345678';
+        $inm->registro['inm_attr_tipo_credito_id'] = '12345678';
+        $inm->registro['inm_destino_credito_id'] = '12345678';
+        $inm->registro['inm_estado_civil_id'] = '12345678';
+        $inm->registro['inm_producto_infonavit_id'] = '12345678';
+        $inm->registro['monto_ahorro_voluntario'] = '12345678';
+        $inm->registro['monto_credito_solicitado_dh'] = '12345678';
+        $inm->registro['nombre_empresa_patron'] = '12345678';
+        $inm->registro['nrp_nep'] = '12345678';
+        $inm->registro['inm_institucion_hipotecaria_id'] = '12345678';
+        $inm->registro['fecha_nacimiento'] = '12345678';
+        $inm->registro['telefono_casa'] = '1234567811';
+        $inm->registro['correo_empresa'] = 'aaa@sss.com';
+        $resultado = $inm->alta_bd();
+        $this->assertIsArray($com_cliente);
+        $this->assertTrue(errores::$error);
+        $this->assertEquals("Error al insertar", $resultado['mensaje_limpio']);
+
+        errores::$error = false;
+        $inm->registro['nombre'] = 'Nombre';
+        $inm->registro['apellido_paterno'] = 'AP';
+        $inm->registro['nss'] = '12345678912';
+        $inm->registro['curp'] = 'XEXX010101MNEXXXA8';
+        $inm->registro['rfc'] = 'AAA010101AAA';
+        $inm->registro['lada_nep'] = '12';
+        $inm->registro['numero_nep'] = '12345678';
+        $inm->registro['lada_com'] = '12';
+        $inm->registro['numero_com'] = '12345678';
+        $inm->registro['cel_com'] = '1234567811';
+        $inm->registro['correo_com'] = 'x@x.com';
+        $inm->registro['descuento_pension_alimenticia_dh'] = '12345678';
+        $inm->registro['descuento_pension_alimenticia_fc'] = '12345678';
+        $inm->registro['es_segundo_credito'] = '12345678';
+        $inm->registro['inm_attr_tipo_credito_id'] = '1';
+        $inm->registro['inm_destino_credito_id'] = '1';
+        $inm->registro['inm_estado_civil_id'] = '1';
+        $inm->registro['inm_producto_infonavit_id'] = '1';
+        $inm->registro['monto_ahorro_voluntario'] = '12345678';
+        $inm->registro['monto_credito_solicitado_dh'] = '12345678';
+        $inm->registro['nombre_empresa_patron'] = '12345678';
+        $inm->registro['nrp_nep'] = '12345678';
+        $inm->registro['inm_institucion_hipotecaria_id'] = '1';
+        $inm->registro['fecha_nacimiento'] = '12345678';
+        $inm->registro['telefono_casa'] = '1234567811';
+        $inm->registro['correo_empresa'] = 'aaa@sss.com';
+        $inm->registro['numero_exterior'] = 'x';
+        $inm->registro['cat_sat_regimen_fiscal_id'] = '601';
+        $inm->registro['cat_sat_moneda_id'] = '161';
+        $inm->registro['cat_sat_forma_pago_id'] = '1';
+        $inm->registro['cat_sat_metodo_pago_id'] = '1';
+        $inm->registro['cat_sat_uso_cfdi_id'] = '1';
+        $inm->registro['com_tipo_cliente_id'] = '1';
+        $inm->registro['cat_sat_tipo_persona_id'] = '4';
+        $resultado = $inm->alta_bd();
+
+
+        $this->assertIsObject($resultado);
+        $this->assertNotTrue(errores::$error);
+        errores::$error = false;
+
+
     }
 
     public function test_asigna_nuevo_co_acreditado_bd(): void
@@ -188,7 +449,7 @@ class inm_compradorTest extends test {
         $resultado = $inm->asigna_nuevo_co_acreditado_bd($inm_comprador_id, $inm_co_acreditado);
         $this->assertIsObject($resultado);
         $this->assertNotTrue(errores::$error);
-        $this->assertStringContainsStringIgnoringCase("A A A 12345678901 XEXX010101HNEXXXA4 XXX010101AAA 2024-04-",
+        $this->assertStringContainsStringIgnoringCase("A A A 12345678901 XEXX010101HNEXXXA4 XXX010101AAA 2024-05-",
             $resultado->inm_co_acreditado->registro['inm_co_acreditado_descripcion']);
 
         errores::$error = false;

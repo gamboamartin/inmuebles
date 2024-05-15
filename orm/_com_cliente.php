@@ -880,9 +880,11 @@ class _com_cliente{
     }
 
     /**
+     * TOTAL
      * Valida la existencia de campos en un registro
      * @param array|stdClass $registro_entrada Registro de comprador
      * @return array|bool
+     * @url https://github.com/gamboamartin/inmuebles/wiki/orm._com_cliente.valida_existencia_keys_com.4.34.2
      */
     private function valida_existencia_keys_com(array|stdClass $registro_entrada): bool|array
     {
@@ -898,9 +900,11 @@ class _com_cliente{
     }
 
     /**
+     * TOTAL
      * Valida los ids de tipo comercial que deben existir en inm_comprador
      * @param array|stdClass $registro_entrada registro en proceso
      * @return array
+     * @url https://github.com/gamboamartin/inmuebles/wiki/orm._com_cliente.valida_ids_com.4.34.0
      *
      */
     private function valida_ids_com(array|stdClass $registro_entrada): array
