@@ -8,6 +8,7 @@ use gamboamartin\comercial\models\com_agente;
 use gamboamartin\comercial\models\com_cliente;
 use gamboamartin\comercial\models\com_tipo_cliente;
 use gamboamartin\comercial\models\com_tipo_prospecto;
+use gamboamartin\comisiones\models\comi_comision;
 use gamboamartin\errores\errores;
 
 use gamboamartin\inmuebles\models\inm_co_acreditado;
@@ -765,6 +766,11 @@ class base_test{
     public function del_com_agente(PDO $link): array
     {
 
+        $del = $this->del_comi_comision(link: $link);
+        if(errores::$error){
+            return (new errores())->error('Error al eliminar', $del);
+        }
+
         $del = $this->del_inm_prospecto(link: $link);
         if(errores::$error){
             return (new errores())->error('Error al eliminar', $del);
@@ -1098,6 +1104,16 @@ class base_test{
         }
 
         $del = $this->del($link, 'gamboamartin\\inmuebles\\models\\inm_prospecto');
+        if(errores::$error){
+            return (new errores())->error('Error al eliminar', $del);
+        }
+        return $del;
+    }
+
+    public function del_comi_comision(PDO $link): array
+    {
+
+        $del = (new comi_comision(link: $link))->elimina_todo();
         if(errores::$error){
             return (new errores())->error('Error al eliminar', $del);
         }
