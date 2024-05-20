@@ -3,6 +3,7 @@ namespace gamboamartin\inmuebles\models;
 
 use gamboamartin\comercial\models\com_direccion;
 use gamboamartin\comercial\models\com_direccion_prospecto;
+use gamboamartin\comercial\models\com_tipo_direccion;
 use gamboamartin\errores\errores;
 use gamboamartin\validacion\validacion;
 use PDO;
@@ -142,7 +143,7 @@ class _upd_prospecto{
 
     public function inserta_domicilio(array $domicilio, int $inm_prospecto_id, PDO $link): array|stdClass
     {
-        $keys = array('com_tipo_direccion_id','dp_calle_pertenece_id');
+        $keys = array('dp_calle_pertenece_id');
         $valida = $this->validacion->valida_existencia_keys(keys: $keys,registro:  $domicilio);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al validar campos',data:  $valida);
@@ -152,25 +153,32 @@ class _upd_prospecto{
             return $this->error->error(mensaje: 'Error inm_prospecto_id debe ser mayor a 0',data:  $inm_prospecto_id);
         }
 
+        $tipos_direccion = (new com_tipo_direccion(link: $link))->obten_registros();
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al obtener registros de tipo direccion',data:  $tipos_direccion);
+        }
+
         $prospecto = (new inm_prospecto(link: $link))->registro(registro_id: $inm_prospecto_id);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al obtener prospecto',data:  $prospecto);
         }
 
-        $registro['com_tipo_direccion_id'] = $domicilio['com_tipo_direccion_id'];
-        $registro['dp_calle_pertenece_id'] = $domicilio['dp_calle_pertenece_id'];
-        $registro['texto_interior'] = $domicilio['texto_interior'];
-        $registro['texto_exterior'] = $domicilio['texto_exterior'];
-        $alta_direccion = (new com_direccion(link: $link))->alta_registro(registro: $registro);
-        if (errores::$error) {
-            return $this->error->error(mensaje: 'Error al insertar alta_direccion', data: $alta_direccion);
-        }
+        foreach ($tipos_direccion->registros as $tipo){
+            $registro['com_tipo_direccion_id'] = $tipo['com_tipo_direccion_id'];
+            $registro['dp_calle_pertenece_id'] = $domicilio['dp_calle_pertenece_id'];
+            $registro['texto_interior'] = $domicilio['texto_interior'];
+            $registro['texto_exterior'] = $domicilio['texto_exterior'];
+            $alta_direccion = (new com_direccion(link: $link))->alta_registro(registro: $registro);
+            if (errores::$error) {
+                return $this->error->error(mensaje: 'Error al insertar alta_direccion', data: $alta_direccion);
+            }
 
-        $relacion['com_direccion_id'] = $alta_direccion->registro_id;
-        $relacion['com_prospecto_id'] = $prospecto['com_prospecto_id'];
-        $alta_relacion = (new com_direccion_prospecto(link: $link))->alta_registro(registro: $relacion);
-        if (errores::$error) {
-            return $this->error->error(mensaje: 'Error al insertar alta_relacion', data: $alta_relacion);
+            $relacion['com_direccion_id'] = $alta_direccion->registro_id;
+            $relacion['com_prospecto_id'] = $prospecto['com_prospecto_id'];
+            $alta_relacion = (new com_direccion_prospecto(link: $link))->alta_registro(registro: $relacion);
+            if (errores::$error) {
+                return $this->error->error(mensaje: 'Error al insertar alta_relacion', data: $alta_relacion);
+            }
         }
 
         return $alta_relacion;

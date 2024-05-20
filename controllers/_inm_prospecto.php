@@ -494,13 +494,13 @@ class _inm_prospecto{
 
         $keys_selects['liga_red_social']->disabled = true;
 
-        $keys_selects = (new init())->key_select_txt(cols: 6,key: 'direccion_empresa',
+        $keys_selects = (new init())->key_select_txt(cols: 12,key: 'direccion_empresa',
             keys_selects:$keys_selects, place_holder: 'Direccion Empresa', required: false);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
 
-        $keys_selects = (new init())->key_select_txt(cols: 6,key: 'area_empresa',
+        $keys_selects = (new init())->key_select_txt(cols: 12,key: 'area_empresa',
             keys_selects:$keys_selects, place_holder: 'Area Empresa', required: false);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
