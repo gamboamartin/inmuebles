@@ -2,6 +2,7 @@
 namespace gamboamartin\inmuebles\models;
 use gamboamartin\comercial\models\com_agente;
 use gamboamartin\comercial\models\com_cliente;
+use gamboamartin\comercial\models\com_medio_prospeccion;
 use gamboamartin\comercial\models\com_tipo_agente;
 use gamboamartin\comercial\models\com_tipo_prospecto;
 use gamboamartin\direccion_postal\models\dp_calle_pertenece;
@@ -410,6 +411,31 @@ class _conversion{
             }
 
             $inm_prospecto_ins['com_tipo_prospecto_id'] = $com_tipo_prospecto_id;
+        }
+
+        if(!isset($data->inm_comprador->com_medio_prospeccion_id)) {
+            $filtro_medio['com_medio_prospeccion.predeterminado'] = 'activo';
+            $r_com_medio_prospeccion = (new com_medio_prospeccion($link))->filtro_and(filtro: $filtro_medio);
+            if (errores::$error) {
+                return $this->error->error(mensaje: 'Error al obtener com_medio_prospeccion default',
+                    data: $r_com_medio_prospeccion);
+            }
+            if($r_com_medio_prospeccion->n_registros <= 0){
+
+                $com_medio_prospeccion_pred['predeterminado'] = 'activo';
+                $com_medio_prospeccion_pred['descripcion'] = 'PREDETERMINADO';
+                $alta_tipo_prospecto = (new com_medio_prospeccion(link: $link))->alta_registro(registro: $com_medio_prospeccion_pred);
+                if (errores::$error) {
+                    return $this->error->error(mensaje: 'Error al insertar tipo prospecto default', data: $alta_tipo_prospecto);
+                }
+                $com_medio_prospeccion_id = $alta_tipo_prospecto->registro_id;
+
+            }
+            else{
+                $com_medio_prospeccion_id = $r_com_medio_prospeccion->registros[0]['com_medio_prospeccion_id'];
+            }
+
+            $inm_prospecto_ins['com_medio_prospeccion_id'] = $com_medio_prospeccion_id;
         }
 
         return $inm_prospecto_ins;
