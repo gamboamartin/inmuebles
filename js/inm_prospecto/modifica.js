@@ -164,6 +164,11 @@ btn_inserta_domicilio.click(function () {
         sl_dp_calle_pertenece_id.selectpicker('refresh');
         window.location.reload()
         console.log(data);
+
+        if (data.error !== undefined) {
+            alert(data.error);
+        }
+
     }).fail(function (jqXHR, textStatus, errorThrown) { // Función que se ejecuta si algo ha ido mal
 
         alert('Error al ejecutar');

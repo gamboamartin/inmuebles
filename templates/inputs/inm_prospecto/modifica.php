@@ -34,7 +34,6 @@
 <?php echo $controlador->header_frontend->apartado_3; ?>
     <div id="apartado_3">
 
-        <?php //echo $controlador->inputs->com_tipo_direccion_id; ?>
         <?php echo $controlador->inputs->dp_pais_id; ?>
         <?php echo $controlador->inputs->dp_estado_id; ?>
         <?php echo $controlador->inputs->dp_municipio_id; ?>

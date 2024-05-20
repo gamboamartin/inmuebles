@@ -153,45 +153,39 @@ class _upd_prospecto{
             return $this->error->error(mensaje: 'Error inm_prospecto_id debe ser mayor a 0',data:  $inm_prospecto_id);
         }
 
-        $tipos_direccion = (new com_tipo_direccion(link: $link))->obten_registros();
-        if(errores::$error){
-            return $this->error->error(mensaje: 'Error al obtener registros de tipo direccion',data:  $tipos_direccion);
-        }
-
         $prospecto = (new inm_prospecto(link: $link))->registro(registro_id: $inm_prospecto_id);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al obtener prospecto',data:  $prospecto);
         }
 
-        foreach ($tipos_direccion->registros as $tipo){
-            $filtro_dir['com_direccion_prospecto.com_prospecto_id'] =  $prospecto['com_prospecto_id'];
-            $filtro_dir['com_direccion.dp_calle_pertenece_id'] = $domicilio['dp_calle_pertenece_id'];
-            $filtro_dir['com_direccion.com_tipo_direccion_id'] =  $tipo['com_tipo_direccion_id'];
-            $direccion = (new com_direccion_prospecto(link: $link))->existe(filtro: $filtro_dir);
+        $tipo_direccion = (new com_tipo_direccion(link: $link))->filtro_and();
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al obtener tipo_direccion',data:  $tipo_direccion);
+        }
+
+        if ($tipo_direccion->n_registros === 0) {
+            return ['error' => 'No existe un tipo de dirección valido registrado en el sistema'] ;
+        }
+
+        foreach ($tipo_direccion->registros as $value) {
+            $registro['com_tipo_direccion_id'] = $value['com_tipo_direccion_id'];
+            $registro['dp_calle_pertenece_id'] = $domicilio['dp_calle_pertenece_id'];
+            $registro['texto_interior'] = $domicilio['texto_interior'];
+            $registro['texto_exterior'] = $domicilio['texto_exterior'];
+            $alta_direccion = (new com_direccion(link: $link))->alta_registro(registro: $registro);
             if (errores::$error) {
-                return $this->error->error(mensaje: 'Error al insertar alta_direccion', data: $direccion);
+                return $this->error->error(mensaje: 'Error al insertar alta_direccion', data: $alta_direccion);
             }
 
-            if(!$direccion){
-                $registro['com_tipo_direccion_id'] = $tipo['com_tipo_direccion_id'];
-                $registro['dp_calle_pertenece_id'] = $domicilio['dp_calle_pertenece_id'];
-                $registro['texto_interior'] = $domicilio['texto_interior'];
-                $registro['texto_exterior'] = $domicilio['texto_exterior'];
-                $alta_direccion = (new com_direccion(link: $link))->alta_registro(registro: $registro);
-                if (errores::$error) {
-                    return $this->error->error(mensaje: 'Error al insertar alta_direccion', data: $alta_direccion);
-                }
-
-                $relacion['com_direccion_id'] = $alta_direccion->registro_id;
-                $relacion['com_prospecto_id'] = $prospecto['com_prospecto_id'];
-                $alta_relacion = (new com_direccion_prospecto(link: $link))->alta_registro(registro: $relacion);
-                if (errores::$error) {
-                    return $this->error->error(mensaje: 'Error al insertar alta_relacion', data: $alta_relacion);
-                }
+            $relacion['com_direccion_id'] = $alta_direccion->registro_id;
+            $relacion['com_prospecto_id'] = $prospecto['com_prospecto_id'];
+            $alta_relacion = (new com_direccion_prospecto(link: $link))->alta_registro(registro: $relacion);
+            if (errores::$error) {
+                return $this->error->error(mensaje: 'Error al insertar alta_relacion', data: $alta_relacion);
             }
         }
 
-        return $alta_relacion;
+        return $prospecto;
     }
 
     /**
