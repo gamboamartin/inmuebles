@@ -306,10 +306,10 @@ class instalacion
         $foraneas['inm_estado_civil_id'] = new stdClass();
         $foraneas['inm_institucion_hipotecaria_id'] = new stdClass();
         $foraneas['dp_calle_pertenece_id'] = new stdClass();
-        $foraneas['dp_municipio_nacimiento_id'] = new stdClass();
+        $foraneas['dp_municipio_id'] = new stdClass();
+        $foraneas['dp_municipio_id']->name_indice_opt = 'dp_municipio_nacimiento_id';
         $foraneas['inm_nacionalidad_id'] = new stdClass();
         $foraneas['inm_ocupacion_id'] = new stdClass();
-
 
         $result = $init->foraneas(foraneas: $foraneas,table:  'inm_prospecto');
 
@@ -319,6 +319,32 @@ class instalacion
 
         $out->foraneas = $result;
 
+
+        return $out;
+    }
+
+    private function _add_inm_rel_prospecto_cliente(PDO $link): array|stdClass
+    {
+        $out = new stdClass();
+        $init = (new _instalacion(link: $link));
+
+        $create = $init->create_table_new(table: 'inm_rel_prospecto_cliente');
+        if(errores::$error){
+            return (new errores())->error(mensaje: 'Error al agregar tabla', data:  $create);
+        }
+        $out->create = $create;
+
+        $foraneas = array();
+        $foraneas['inm_comprador_id'] = new stdClass();
+        $foraneas['inm_prospecto_id'] = new stdClass();
+
+        $result = $init->foraneas(foraneas: $foraneas,table:  'inm_rel_prospecto_cliente');
+
+        if(errores::$error){
+            return (new errores())->error(mensaje: 'Error al ajustar foranea', data:  $result);
+        }
+
+        $out->foraneas = $result;
 
         return $out;
     }
@@ -334,7 +360,10 @@ class instalacion
 
         $out->create = $create;
 
-
+        $create = $this->_add_inm_rel_prospecto_cliente(link: $link);
+        if(errores::$error){
+            return (new errores())->error(mensaje: 'Error al agregar tabla', data:  $create);
+        }
 
         $modelo = new inm_comprador(link: $link);
 
@@ -607,6 +636,36 @@ class instalacion
 
     }
 
+    private function inm_rel_prospecto_cliente(PDO $link): array|stdClass
+    {
+        $out = new stdClass();
+
+        $create = $this->_add_inm_rel_prospecto_cliente(link: $link);
+        if(errores::$error){
+            return (new errores())->error(mensaje: 'Error al agregar tabla', data:  $create);
+        }
+
+        $out->create = $create;
+
+        $adm_menu_descripcion = 'Clientes';
+        $adm_sistema_descripcion = 'inmuebles';
+        $etiqueta_label = 'Clientes';
+        $adm_seccion_pertenece_descripcion = 'inmuebles';
+        $adm_namespace_descripcion = 'gamboa.martin/inmuebles';
+        $adm_namespace_name = 'gamboamartin/inmuebles';
+
+        $acl = (new _adm())->integra_acl(adm_menu_descripcion: $adm_menu_descripcion,
+            adm_namespace_name: $adm_namespace_name, adm_namespace_descripcion: $adm_namespace_descripcion,
+            adm_seccion_descripcion: __FUNCTION__, adm_seccion_pertenece_descripcion: $adm_seccion_pertenece_descripcion,
+            adm_sistema_descripcion: $adm_sistema_descripcion, etiqueta_label: $etiqueta_label, link: $link);
+        if(errores::$error){
+            return (new errores())->error(mensaje: 'Error al obtener acl', data:  $acl);
+        }
+
+        return $out;
+
+    }
+
     final public function instala(PDO $link): array|stdClass
     {
         $out = new stdClass();
@@ -623,7 +682,11 @@ class instalacion
         }
         $out->inm_comprador = $inm_comprador;
 
-
+        $inm_rel_prospecto_cliente = $this->inm_rel_prospecto_cliente(link: $link);
+        if(errores::$error){
+            return (new errores())->error(mensaje: 'Error integrar inm_rel_prospecto_cliente', data:  $inm_rel_prospecto_cliente);
+        }
+        $out->inm_rel_prospecto_cliente = $inm_rel_prospecto_cliente;
 
         return $out;
 
