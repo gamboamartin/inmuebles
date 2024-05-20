@@ -164,20 +164,30 @@ class _upd_prospecto{
         }
 
         foreach ($tipos_direccion->registros as $tipo){
-            $registro['com_tipo_direccion_id'] = $tipo['com_tipo_direccion_id'];
-            $registro['dp_calle_pertenece_id'] = $domicilio['dp_calle_pertenece_id'];
-            $registro['texto_interior'] = $domicilio['texto_interior'];
-            $registro['texto_exterior'] = $domicilio['texto_exterior'];
-            $alta_direccion = (new com_direccion(link: $link))->alta_registro(registro: $registro);
+            $filtro_dir['com_direccion_prospecto.com_prospecto_id'] =  $prospecto['com_prospecto_id'];
+            $filtro_dir['com_direccion.dp_calle_pertenece_id'] = $domicilio['dp_calle_pertenece_id'];
+            $filtro_dir['com_direccion.com_tipo_direccion_id'] =  $tipo['com_tipo_direccion_id'];
+            $direccion = (new com_direccion_prospecto(link: $link))->existe(filtro: $filtro_dir);
             if (errores::$error) {
-                return $this->error->error(mensaje: 'Error al insertar alta_direccion', data: $alta_direccion);
+                return $this->error->error(mensaje: 'Error al insertar alta_direccion', data: $direccion);
             }
 
-            $relacion['com_direccion_id'] = $alta_direccion->registro_id;
-            $relacion['com_prospecto_id'] = $prospecto['com_prospecto_id'];
-            $alta_relacion = (new com_direccion_prospecto(link: $link))->alta_registro(registro: $relacion);
-            if (errores::$error) {
-                return $this->error->error(mensaje: 'Error al insertar alta_relacion', data: $alta_relacion);
+            if(!$direccion){
+                $registro['com_tipo_direccion_id'] = $tipo['com_tipo_direccion_id'];
+                $registro['dp_calle_pertenece_id'] = $domicilio['dp_calle_pertenece_id'];
+                $registro['texto_interior'] = $domicilio['texto_interior'];
+                $registro['texto_exterior'] = $domicilio['texto_exterior'];
+                $alta_direccion = (new com_direccion(link: $link))->alta_registro(registro: $registro);
+                if (errores::$error) {
+                    return $this->error->error(mensaje: 'Error al insertar alta_direccion', data: $alta_direccion);
+                }
+
+                $relacion['com_direccion_id'] = $alta_direccion->registro_id;
+                $relacion['com_prospecto_id'] = $prospecto['com_prospecto_id'];
+                $alta_relacion = (new com_direccion_prospecto(link: $link))->alta_registro(registro: $relacion);
+                if (errores::$error) {
+                    return $this->error->error(mensaje: 'Error al insertar alta_relacion', data: $alta_relacion);
+                }
             }
         }
 

@@ -752,14 +752,15 @@ class controlador_inm_prospecto extends _ctl_formato {
                 header: $header,ws:  $ws);
         }
 
-        $direcciones = (new \gamboamartin\inmuebles\controllers\_inm_prospecto())->rows(controlador: $this,
-            datas: $direcciones->registros,params:  $params, seccion_exe: 'com_direccion_prospecto');
+
+        $direcciones_reg = (new \gamboamartin\inmuebles\controllers\_inm_prospecto())->rows_direccion(controlador: $this,
+            datas: $direcciones->registros,params:  $params, seccion_exe: 'com_direccion',seccion_sec: 'com_direccion_prospecto');
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al obtener beneficiarios link del',data:  $direcciones,
                 header: $header,ws:  $ws);
         }
 
-        $this->direcciones = $direcciones;
+        $this->direcciones = $direcciones_reg;
 
         $referencia = (new _referencia())->inputs_referencia(controler: $this);
         if(errores::$error){
