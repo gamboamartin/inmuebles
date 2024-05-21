@@ -549,6 +549,23 @@ sl_dp_estado_nacimiento_id.change(function () {
     dp_asigna_municipios(dp_municipio_nacimiento_id, '', '#dp_municipio_nacimiento_id');
 });
 
+var modal = document.getElementById("myModal");
+var closeBtn = document.getElementById("closeModalBtn");
+
+$("td a.btn-warning").click(function(event) {
+    event.preventDefault();
+    modal.showModal();
+});
+
+closeBtn.onclick = function() {
+    modal.close();
+}
+modal.addEventListener('click', function(event) {
+    if (event.target === modal) {
+        modal.close();
+    }
+});
+
 
 
 

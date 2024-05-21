@@ -84,6 +84,22 @@
 
     </div>
 
+    <dialog id="myModal">
+        <span class="close-btn" id="closeModalBtn">&times;</span>
+        <h2>Modificar dirección</h2>
+        <?php echo $controlador->inputs->dp_pais_id; ?>
+        <?php echo $controlador->inputs->dp_estado_id; ?>
+        <?php echo $controlador->inputs->dp_municipio_id; ?>
+        <?php echo $controlador->inputs->dp_cp_id; ?>
+        <?php echo $controlador->inputs->dp_colonia_postal_id; ?>
+        <?php echo $controlador->inputs->dp_calle_pertenece_id; ?>
+        <?php echo $controlador->inputs->texto_exterior; ?>
+        <?php echo $controlador->inputs->texto_interior; ?>
+
+    </dialog>
+
+
+
 <?php echo $controlador->header_frontend->apartado_4; ?>
     <div id="apartado_4">
 
