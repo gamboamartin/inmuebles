@@ -84,29 +84,6 @@
 
     </div>
 
-    <dialog id="myModal">
-        <form method="post" action="<?php echo $controlador->link_modifica_direccion; ?>" class="form-additional" enctype="multipart/form-data">
-            <span class="close-btn" id="closeModalBtn">&times;</span>
-            <h2>Modificar dirección</h2>
-            <?php echo $controlador->inputs->dp_pais_id; ?>
-            <?php echo $controlador->inputs->dp_estado_id; ?>
-            <?php echo $controlador->inputs->dp_municipio_id; ?>
-            <?php echo $controlador->inputs->dp_cp_id; ?>
-            <?php echo $controlador->inputs->dp_colonia_postal_id; ?>
-            <?php echo $controlador->inputs->dp_calle_pertenece_id; ?>
-            <?php echo $controlador->inputs->texto_exterior; ?>
-            <?php echo $controlador->inputs->texto_interior; ?>
-
-            <div class="control-group btn-modifica">
-                <div class="controls">
-                    <button type="submit" class="btn btn-success ">Modifica</button><br>
-                </div>
-            </div>
-        </form>
-    </dialog>
-
-
-
 <?php echo $controlador->header_frontend->apartado_4; ?>
     <div id="apartado_4">
 
