@@ -10,6 +10,7 @@ namespace gamboamartin\inmuebles\controllers;
 
 use base\controller\init;
 use gamboamartin\calculo\calculo;
+use gamboamartin\comercial\models\com_direccion;
 use gamboamartin\comercial\models\com_direccion_prospecto;
 use gamboamartin\errores\errores;
 use gamboamartin\inmuebles\html\inm_prospecto_html;
@@ -873,13 +874,21 @@ class controlador_inm_prospecto extends _ctl_formato {
             unset($_POST['btn_action_next']);
         }
 
-        print_r($_POST);exit();
-
+        $modifica = array();
+        $modifica['dp_calle_pertenece_id'] = $_POST['dp_calle_pertenece_id'];
+        $modifica['texto_exterior'] = $_POST['texto_exterior'];
+        $modifica['texto_interior'] = $_POST['texto_interior'];
+        $modifica = (new com_direccion(link: $this->link))->modifica_bd(registro: $modifica, id: $_POST['com_direccion_id']);
+        if (errores::$error) {
+            $this->link->rollBack();
+            return $this->retorno_error(mensaje: 'Error al modificar com_direccion', data: $modifica,
+                header: $header, ws: $ws);
+        }
 
         $this->link->commit();
 
         if ($header) {
-            $this->retorno_base(registro_id: $this->registro_id, result: array(),
+            $this->retorno_base(registro_id: $this->registro_id, result: $modifica,
                 siguiente_view: "modifica", ws: $ws);
         }
         if ($ws) {
@@ -888,7 +897,7 @@ class controlador_inm_prospecto extends _ctl_formato {
             exit;
         }
 
-        return array();
+        return $modifica;
     }
 
 

@@ -85,7 +85,7 @@
                                             <td><?php echo $direccion['dp_calle_pertenece_descripcion']; ?></td>
                                             <td><?php echo $direccion['com_direccion_texto_exterior']; ?></td>
                                             <td><?php echo $direccion['com_direccion_texto_interior']; ?></td>
-                                            <td><?php echo $direccion['btn_mod']; ?></td>
+                                            <td data-id="<?php echo $direccion['com_direccion_id']; ?>"><?php echo $direccion['btn_mod']; ?></td>
                                             <td><?php echo $direccion['btn_del']; ?></td>
                                         </tr>
                                     <?php } ?>
@@ -264,6 +264,7 @@
           enctype="multipart/form-data">
         <span class="close-btn" id="closeModalBtn">&times;</span>
         <h2>Modificar dirección</h2>
+       <input type="hidden" name="com_direccion_id" id="com_direccion_id" value=""/>
         <?php echo $controlador->inputs->dp_pais_id; ?>
         <?php echo $controlador->inputs->dp_estado_id; ?>
         <?php echo $controlador->inputs->dp_municipio_id; ?>
