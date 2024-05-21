@@ -554,6 +554,7 @@ var closeBtn = document.getElementById("closeModalBtn");
 
 $("td a.btn-warning").click(function(event) {
     event.preventDefault();
+
     modal.showModal();
 });
 

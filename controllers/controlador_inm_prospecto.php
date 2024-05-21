@@ -20,6 +20,7 @@ use gamboamartin\inmuebles\models\inm_beneficiario;
 use gamboamartin\inmuebles\models\inm_prospecto;
 use gamboamartin\inmuebles\models\inm_referencia_prospecto;
 use gamboamartin\inmuebles\models\inm_tipo_beneficiario;
+use gamboamartin\system\actions;
 use gamboamartin\system\links_menu;
 use gamboamartin\template\html;
 use html\doc_tipo_documento_html;
@@ -32,6 +33,7 @@ class controlador_inm_prospecto extends _ctl_formato {
     public inm_prospecto_html $html_entidad;
 
     public string $link_inm_doc_prospecto_alta_bd = '';
+    public string $link_modifica_direccion = '';
 
     public array $inm_conf_docs_prospecto = array();
 
@@ -66,7 +68,12 @@ class controlador_inm_prospecto extends _ctl_formato {
 
         $this->acciones_headers = array();
 
-
+        $init_links = $this->init_links();
+        if (errores::$error) {
+            $error = $this->errores->error(mensaje: 'Error al inicializar links', data: $init_links);
+            print_r($error);
+            die('Error');
+        }
     }
 
     /**
@@ -383,6 +390,26 @@ class controlador_inm_prospecto extends _ctl_formato {
         $datatables->filtro = $filtro;
 
         return $datatables;
+    }
+
+    protected function init_links(): array|string
+    {
+        $links = $this->obj_link->genera_links(controler: $this);
+        if (errores::$error) {
+            $error = $this->errores->error(mensaje: 'Error al generar links', data: $links);
+            print_r($error);
+            exit;
+        }
+
+        $link = $this->obj_link->get_link(seccion: "inm_prospecto", accion: "modifica_direccion");
+        if (errores::$error) {
+            $error = $this->errores->error(mensaje: 'Error al recuperar link modifica_direccion', data: $link);
+            print_r($error);
+            exit;
+        }
+        $this->link_modifica_direccion = $link;
+
+        return $link;
     }
 
     public function inserta_beneficiario(bool $header, bool $ws): array|stdClass
@@ -825,6 +852,46 @@ class controlador_inm_prospecto extends _ctl_formato {
 
 
     }
+
+    public function modifica_direccion(bool $header, bool $ws = false): array|stdClass
+    {
+        if (!isset($_POST['dp_calle_pertenece_id'])) {
+            return $this->retorno_error(mensaje: 'Error no existe dp_calle_pertenece_id', data: $_POST, header: $header,
+                ws: $ws);
+        }
+
+        $this->link->beginTransaction();
+
+        $siguiente_view = (new actions())->init_alta_bd();
+        if (errores::$error) {
+            $this->link->rollBack();
+            return $this->retorno_error(mensaje: 'Error al obtener siguiente view', data: $siguiente_view,
+                header: $header, ws: $ws);
+        }
+
+        if (isset($_POST['btn_action_next'])) {
+            unset($_POST['btn_action_next']);
+        }
+
+        print_r($_POST);exit();
+
+
+        $this->link->commit();
+
+        if ($header) {
+            $this->retorno_base(registro_id: $this->registro_id, result: array(),
+                siguiente_view: "modifica", ws: $ws);
+        }
+        if ($ws) {
+            header('Content-Type: application/json');
+            echo json_encode(array(), JSON_THROW_ON_ERROR);
+            exit;
+        }
+
+        return array();
+    }
+
+
 
     public function regenera_curp(bool $header, bool $ws = false): array|string{
         $columnas[]  ='inm_prospecto_id';

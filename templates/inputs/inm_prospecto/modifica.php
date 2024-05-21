@@ -85,7 +85,7 @@
     </div>
 
     <dialog id="myModal">
-        <form method="post" action=<?php echo $controlador->link_modifica_bd; ?>"" class="form-additional" enctype="multipart/form-data">
+        <form method="post" action="<?php echo $controlador->link_modifica_direccion; ?>" class="form-additional" enctype="multipart/form-data">
             <span class="close-btn" id="closeModalBtn">&times;</span>
             <h2>Modificar dirección</h2>
             <?php echo $controlador->inputs->dp_pais_id; ?>
