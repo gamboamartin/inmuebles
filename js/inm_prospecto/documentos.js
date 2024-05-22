@@ -3,11 +3,7 @@ var closeBtn = document.getElementById("closeModalBtn");
 
 $("td a[title='Vista Previa']").click(function (event) {
     event.preventDefault();
-    let registro_id = getParameterByName('registro_id');
-    let absolute = getAbsolutePath();
-    let path = get_url("inm_doc_prospecto", "vista_previa", {registro_id: registro_id});
-    var url =  absolute + path.replace(/&ws=1/, '');
-
+    var url = $(this).attr("href");
     $.ajax({
         url: url,
         type: 'GET',
