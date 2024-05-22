@@ -49,7 +49,7 @@
                     <tr>
                         <td><?php echo $doc_tipo_documento['doc_tipo_documento_descripcion']; ?></td>
                         <td><?php echo $doc_tipo_documento['descarga']; ?></td>
-                        <td><?php echo $doc_tipo_documento['vista_previa']; ?></td>
+                        <td data-id="id" ><?php echo $doc_tipo_documento['vista_previa']; ?></td>
                         <td><?php echo $doc_tipo_documento['descarga_zip']; ?></td>
                         <td><?php echo $doc_tipo_documento['elimina_bd']; ?></td>
                     </tr>
