@@ -4,7 +4,7 @@
 <main class="main section-color-primary">
     <div class="container">
 
-        <div class="row">
+        <div class="row view">
 
             <div class="col-lg-12">
 
