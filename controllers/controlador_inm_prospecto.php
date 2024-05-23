@@ -255,8 +255,13 @@ class controlador_inm_prospecto extends _ctl_formato
             return $this->retorno_error(mensaje: 'Error al integrar buttons', data: $inm_conf_docs_prospecto, header: $header, ws: $ws);
         }
 
+        $salida['draw'] = count($inm_conf_docs_prospecto);
+        $salida['recordsTotal'] = count($inm_conf_docs_prospecto);
+        $salida['recordsFiltered'] = count($inm_conf_docs_prospecto);
+        $salida['data'] = $inm_conf_docs_prospecto;
+
         header('Content-Type: application/json');
-        echo json_encode($inm_conf_docs_prospecto);
+        echo json_encode($salida);
         exit;
     }
 

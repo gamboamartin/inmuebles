@@ -128,7 +128,9 @@ class controlador_inm_doc_prospecto extends _ctl_formato {
         }
 
         if($header) {
-            ob_clean();
+            if (ob_get_level() > 0) {
+                ob_end_clean();
+            }
             // Define headers
             header("Cache-Control: public");
             header("Content-Description: File Transfer");

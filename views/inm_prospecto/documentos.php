@@ -1,4 +1,4 @@
-<?php /** @var  gamboamartin\inmuebles\controllers\controlador_inm_comprador $controlador  controlador en ejecucion */ ?>
+<?php /** @var  gamboamartin\inmuebles\controllers\controlador_inm_prospecto $controlador  controlador en ejecucion */ ?>
 <?php use config\views; ?>
 
 <main class="main section-color-primary">
@@ -58,6 +58,14 @@
                     ?>
                     </tbody>
                 </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12 table-responsive">
+                <table id="table-inm_prospecto" class="table mb-0 table-striped table-sm "></table>
             </div>
         </div>
     </div>
