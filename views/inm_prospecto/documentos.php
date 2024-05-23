@@ -30,6 +30,14 @@
     </div>
     <br>
 
+    <div class="container" style="margin-top: 20px;">
+        <div class="row">
+            <div class="col-lg-12">
+                <a id="agrupar" class="btn btn-success">Agrupar</a>
+            </div>
+        </div>
+    </div>
+
     <div class="container">
         <div class="row">
             <div class="col-lg-12 table-responsive">

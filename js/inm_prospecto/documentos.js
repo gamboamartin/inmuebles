@@ -59,7 +59,6 @@ $(document).on("click", "#table-inm_prospecto a[title='Vista Previa']", function
     });
 });
 
-
 closeBtn.onclick = function () {
     $("#myModal .content").empty();
     modal.close();
@@ -71,6 +70,23 @@ modal.addEventListener('click', function (event) {
     }
 });
 
+let documentos_seleccionados = [];
 
+$("#table-inm_prospecto").on('click', 'thead:first-child, tbody', function (e) {
+    let timer = null;
 
+    clearTimeout(timer);
+
+    timer = setTimeout(() => {
+        let selectedData = table_tipos_documentos.rows({selected: true}).data();
+
+        documentos_seleccionados = [];
+
+        selectedData.each(function (value, index, data) {
+            documentos_seleccionados.push(value.doc_tipo_documento_id);
+        });
+
+        $('#documentos').val(documentos_seleccionados);
+    }, 500);
+});
 
