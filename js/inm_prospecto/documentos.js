@@ -1,3 +1,5 @@
+const registro_id = getParameterByName('registro_id');
+
 const columns_tipos_documentos = [
     {
         title: "Tipo documento",
@@ -21,21 +23,23 @@ const columns_tipos_documentos = [
     }
 ];
 
-const table_tipos_documentos = table('inm_prospecto', columns_tipos_documentos, [], [], function () {}, true,
-    "tipos_documentos",{registro_id: getParameterByName('registro_id')});
+const options = {paging: false, info: false, searching: false}
 
-
-
-
-
+const table_tipos_documentos = table('inm_prospecto', columns_tipos_documentos, [], [], function () {
+    }, true,
+    "tipos_documentos", {registro_id: registro_id}, options);
 
 
 var modal = document.getElementById("myModal");
 var closeBtn = document.getElementById("closeModalBtn");
 
-$("td a[title='Vista Previa']").click(function (event) {
+$(document).on("click", "#table-inm_prospecto a[title='Vista Previa']", function (event) {
     event.preventDefault();
     var url = $(this).attr("href");
+
+    var loaderOverlay = $('<div class="loader-overlay"><div class="loader"></div></div>');
+    $('body').append(loaderOverlay);
+
     $.ajax({
         url: url,
         type: 'GET',
@@ -44,13 +48,17 @@ $("td a[title='Vista Previa']").click(function (event) {
             var viewContent = tempDiv.find(".view");
 
             $("#myModal .content").html(viewContent);
+            modal.showModal();
+            loaderOverlay.remove();
         },
         error: function () {
             $("#myModal .content").html("<p>Error al cargar el contenido.</p>");
+            modal.showModal();
+            loaderOverlay.remove();
         }
     });
-    modal.showModal();
 });
+
 
 closeBtn.onclick = function () {
     $("#myModal .content").empty();

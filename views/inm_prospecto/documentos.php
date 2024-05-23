@@ -29,38 +29,6 @@
         </div>
     </div>
     <br>
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-12 table-responsive">
-                <table class="table table-striped">
-                    <thead>
-
-                         <th>Tipo de Documento</th>
-                         <th>Descarga</th>
-                         <th>Vista Previa</th>
-                         <th>ZIP</th>
-                         <th>Elimina</th>
-
-                    </thead>
-                    <tbody>
-                    <?php
-                    foreach ($controlador->inm_conf_docs_prospecto as $doc_tipo_documento){ ?>
-
-                    <tr>
-                        <td><?php echo $doc_tipo_documento['doc_tipo_documento_descripcion']; ?></td>
-                        <td><?php echo $doc_tipo_documento['descarga']; ?></td>
-                        <td data-id="id" ><?php echo $doc_tipo_documento['vista_previa']; ?></td>
-                        <td><?php echo $doc_tipo_documento['descarga_zip']; ?></td>
-                        <td><?php echo $doc_tipo_documento['elimina_bd']; ?></td>
-                    </tr>
-                    <?php
-                    }
-                    ?>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </div>
 
     <div class="container">
         <div class="row">
