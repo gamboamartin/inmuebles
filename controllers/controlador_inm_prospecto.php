@@ -19,6 +19,7 @@ use gamboamartin\inmuebles\models\_base_paquete;
 use gamboamartin\inmuebles\models\_inm_prospecto;
 use gamboamartin\inmuebles\models\_upd_prospecto;
 use gamboamartin\inmuebles\models\inm_beneficiario;
+use gamboamartin\inmuebles\models\inm_doc_prospecto;
 use gamboamartin\inmuebles\models\inm_prospecto;
 use gamboamartin\inmuebles\models\inm_referencia_prospecto;
 use gamboamartin\inmuebles\models\inm_tipo_beneficiario;
@@ -27,7 +28,15 @@ use gamboamartin\system\links_menu;
 use gamboamartin\template\html;
 use html\doc_tipo_documento_html;
 use PDO;
+use setasign\Fpdi\Fpdi;
+use setasign\Fpdi\PdfReader\PdfReader;
+use setasign\Fpdi\PdfReader\PdfReaderException;
 use stdClass;
+use Tomsgu\PdfMerger\Exception\FileNotFoundException;
+use Tomsgu\PdfMerger\Exception\InvalidArgumentException;
+use Tomsgu\PdfMerger\PdfCollection;
+use Tomsgu\PdfMerger\PdfFile;
+use Tomsgu\PdfMerger\PdfMerger;
 
 class controlador_inm_prospecto extends _ctl_formato
 {
@@ -37,6 +46,7 @@ class controlador_inm_prospecto extends _ctl_formato
 
     public string $link_inm_doc_prospecto_alta_bd = '';
     public string $link_modifica_direccion = '';
+    public string $link_agrupa_documentos = '';
 
     public array $inm_conf_docs_prospecto = array();
 
@@ -247,6 +257,46 @@ class controlador_inm_prospecto extends _ctl_formato
         return $inm_conf_docs_prospecto;
     }
 
+
+
+    final public function agrupa_documentos(bool $header, bool $ws = false): void
+    {
+        $documentos = explode(',', $_POST['documentos']);
+        $pdfCollection = new PdfCollection();
+        $fpdi = new Fpdi();
+        $pdfMerger = new PdfMerger($fpdi);
+
+        $name_file = 'union.pdf';
+
+        foreach ($documentos as $documento) {
+            $registro = (new inm_doc_prospecto($this->link))->registro(registro_id: $documento, retorno_obj: true);
+            if (errores::$error) {
+                $this->retorno_error(mensaje: 'Error al obtener documento', data: $registro, header: $header, ws: $ws);
+                return; //
+            }
+            $ruta_doc = $this->path_base . "$registro->doc_documento_ruta_relativa";
+            //$pdfCollection->addPdf($ruta_doc);
+        }
+
+        //$pdfMerger->merge($pdfCollection, $name_file, PdfMerger::MODE_DOWNLOAD);
+
+        exit();
+    }
+
+
+    function unir_pdfs($archivos, $salida) {
+        $pdfMerger = new PdfMerger();
+
+        foreach ($archivos as $file) {
+            $pdfMerger->addPDF($file, 'all');
+        }
+
+        // Combinar los PDFs y guardarlos en el archivo de salida
+        $pdfMerger->merge('file', $salida);
+
+        echo "PDFs merged into $salida";
+    }
+
     public function tipos_documentos(bool $header, bool $ws = false): array
     {
         $inm_conf_docs_prospecto = (new _inm_prospecto())->integra_inm_documentos(controler: $this);
@@ -427,6 +477,14 @@ class controlador_inm_prospecto extends _ctl_formato
             exit;
         }
         $this->link_modifica_direccion = $link;
+
+        $link = $this->obj_link->get_link(seccion: "inm_prospecto", accion: "agrupa_documentos");
+        if (errores::$error) {
+            $error = $this->errores->error(mensaje: 'Error al recuperar link agrupa_documentos', data: $link);
+            print_r($error);
+            exit;
+        }
+        $this->link_agrupa_documentos = $link;
 
         return $link;
     }

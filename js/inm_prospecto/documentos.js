@@ -86,9 +86,10 @@ $("#table-inm_prospecto").on('click', 'thead:first-child, tbody', function (e) {
             const url = $(value.vista_previa).attr('href')
             const params = new URLSearchParams(url);
             const accion = params.get('accion');
+            const id = params.get('registro_id');
 
             if (accion === 'vista_previa') {
-                documentos_seleccionados.push(value.doc_tipo_documento_id);
+                documentos_seleccionados.push(id);
             } else {
                 const rowIndex = table_tipos_documentos.rows().indexes().filter((idx) => {
                     return table_tipos_documentos.row(idx).data() === value;
