@@ -83,10 +83,30 @@ $("#table-inm_prospecto").on('click', 'thead:first-child, tbody', function (e) {
         documentos_seleccionados = [];
 
         selectedData.each(function (value, index, data) {
-            documentos_seleccionados.push(value.doc_tipo_documento_id);
+            const url = $(value.vista_previa).attr('href')
+            const params = new URLSearchParams(url);
+            const accion = params.get('accion');
+
+            if (accion === 'vista_previa') {
+                documentos_seleccionados.push(value.doc_tipo_documento_id);
+            } else {
+                const rowIndex = table_tipos_documentos.rows().indexes().filter((idx) => {
+                    return table_tipos_documentos.row(idx).data() === value;
+                });
+
+                table_tipos_documentos.rows(rowIndex).deselect();
+                alert("Seleccione un documento cargado");
+            }
         });
 
         $('#documentos').val(documentos_seleccionados);
     }, 500);
+});
+
+$("#form-documentos").on('submit', function (e) {
+    if (documentos_seleccionados.length <= 1) {
+        e.preventDefault();
+        alert("Seleccione más de un documento para agruparlos");
+    }
 });
 
