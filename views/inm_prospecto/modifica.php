@@ -248,6 +248,8 @@
                             <?php echo $controlador->inputs->password_mi_cuenta_infonavit; ?>
 
                         </div>
+
+                        <?php include (new views())->ruta_templates . 'botons/submit/modifica_bd.php'; ?>
                     </form>
                 </div>
 
