@@ -331,10 +331,10 @@ class controlador_inm_prospecto extends _ctl_formato
                 return; //
             }
             $ruta_doc = $this->path_base . "$registro->doc_documento_ruta_relativa";
-            //$pdfCollection->addPdf($ruta_doc);
+            $pdfCollection->addPdf($ruta_doc);
         }
 
-        //$pdfMerger->merge($pdfCollection, $name_file, PdfMerger::MODE_DOWNLOAD);
+        $pdfMerger->merge($pdfCollection, $name_file, PdfMerger::MODE_DOWNLOAD);
 
         exit();
     }
