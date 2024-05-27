@@ -315,43 +315,34 @@ class controlador_inm_prospecto extends _ctl_formato
     }
 
 
-    final public function agrupa_documentos(bool $header, bool $ws = false): void
+    /**
+     * @throws FileNotFoundException
+     * @throws PdfReaderException
+     * @throws InvalidArgumentException
+     */
+    final public function agrupa_documentos(bool $header, bool $ws = false): array|string
     {
         $documentos = explode(',', $_POST['documentos']);
         $pdfCollection = new PdfCollection();
-        $fpdi = new Fpdi();
-        $pdfMerger = new PdfMerger($fpdi);
-
-        $name_file = 'union.pdf';
 
         foreach ($documentos as $documento) {
             $registro = (new inm_doc_prospecto($this->link))->registro(registro_id: $documento, retorno_obj: true);
             if (errores::$error) {
-                $this->retorno_error(mensaje: 'Error al obtener documento', data: $registro, header: $header, ws: $ws);
-                return; //
+                return $this->retorno_error(mensaje: 'Error al obtener documento', data: $registro, header: $header, ws: $ws);
             }
             $ruta_doc = $this->path_base . "$registro->doc_documento_ruta_relativa";
             $pdfCollection->addPdf($ruta_doc);
         }
 
-        $pdfMerger->merge($pdfCollection, $name_file, PdfMerger::MODE_DOWNLOAD);
+        $fpdi = new Fpdi();
+        $pdfMerger = new PdfMerger($fpdi);
 
-        exit();
+        $outputPath = 'documentos.pdf';
+        $pdfMerger->merge($pdfCollection, $outputPath, PdfMerger::MODE_DOWNLOAD);
+
+        return $documentos;
     }
 
-
-    function unir_pdfs($archivos, $salida) {
-        $pdfMerger = new PdfMerger();
-
-        foreach ($archivos as $file) {
-            $pdfMerger->addPDF($file, 'all');
-        }
-
-        // Combinar los PDFs y guardarlos en el archivo de salida
-        $pdfMerger->merge('file', $salida);
-
-        echo "PDFs merged into $salida";
-    }
 
     public function tipos_documentos(bool $header, bool $ws = false): array
     {
