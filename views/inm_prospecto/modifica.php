@@ -31,6 +31,8 @@
                             <?php echo $controlador->inputs->inm_ocupacion_id; ?>
                             <?php echo $controlador->inputs->telefono_casa; ?>
                             <?php echo $controlador->inputs->observaciones; ?>
+                            <?php include (new views())->ruta_templates . 'botons/submit/modifica_bd.php'; ?>
+
                         </div>
 
                         <?php echo $controlador->header_frontend->apartado_2; ?>
@@ -40,6 +42,8 @@
                             <?php echo $controlador->inputs->cel_com; ?>
                             <?php echo $controlador->inputs->correo_com; ?>
                             <?php echo $controlador->inputs->razon_social; ?>
+                            <?php include (new views())->ruta_templates . 'botons/submit/modifica_bd.php'; ?>
+
                         </div>
 
                         <?php echo $controlador->header_frontend->apartado_3; ?>
@@ -104,6 +108,8 @@
                             <?php echo $controlador->inputs->inm_destino_credito_id; ?>
                             <?php echo $controlador->inputs->es_segundo_credito; ?>
                             <?php echo $controlador->inputs->inm_plazo_credito_sc_id; ?>
+                            <?php include (new views())->ruta_templates . 'botons/submit/modifica_bd.php'; ?>
+
                         </div>
 
                         <?php echo $controlador->header_frontend->apartado_5; ?>
@@ -117,6 +123,7 @@
                             <?php echo $controlador->inputs->monto_final; ?>
                             <?php echo $controlador->inputs->descuento; ?>
                             <?php echo $controlador->inputs->puntos; ?>
+                            <?php include (new views())->ruta_templates . 'botons/submit/modifica_bd.php'; ?>
 
                         </div>
 
@@ -126,6 +133,8 @@
                             <?php echo $controlador->inputs->con_discapacidad; ?>
                             <?php echo $controlador->inputs->inm_tipo_discapacidad_id; ?>
                             <?php echo $controlador->inputs->inm_persona_discapacidad_id; ?>
+                            <?php include (new views())->ruta_templates . 'botons/submit/modifica_bd.php'; ?>
+
                         </div>
 
                         <?php echo $controlador->header_frontend->apartado_7; ?>
@@ -140,6 +149,8 @@
                             <?php echo $controlador->inputs->correo_empresa; ?>
                             <?php echo $controlador->inputs->direccion_empresa; ?>
                             <?php echo $controlador->inputs->area_empresa; ?>
+                            <?php include (new views())->ruta_templates . 'botons/submit/modifica_bd.php'; ?>
+
                         </div>
 
                         <?php echo $controlador->header_frontend->apartado_8; ?>
@@ -156,6 +167,8 @@
                             <?php echo $controlador->inputs->conyuge->inm_ocupacion_id; ?>
                             <?php echo $controlador->inputs->conyuge->telefono_casa; ?>
                             <?php echo $controlador->inputs->conyuge->telefono_celular; ?>
+                            <?php include (new views())->ruta_templates . 'botons/submit/modifica_bd.php'; ?>
+
                         </div>
 
                         <?php echo $controlador->header_frontend->apartado_9; ?>
