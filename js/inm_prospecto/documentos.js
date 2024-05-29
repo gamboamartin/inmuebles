@@ -72,7 +72,7 @@ modal.addEventListener('click', function (event) {
 
 let documentos_seleccionados = [];
 
-$("#table-inm_prospecto").on('click', 'thead:first-child, tbody', function (e) {
+$("#table-inm_prospecto").on('click', 'td:first-child,td:nth-child(2)', function (e) {
     let timer = null;
 
     clearTimeout(timer);
@@ -103,6 +103,39 @@ $("#table-inm_prospecto").on('click', 'thead:first-child, tbody', function (e) {
         $('#documentos').val(documentos_seleccionados);
     }, 500);
 });
+
+$("#table-inm_prospecto").on('click', 'tr:first-child', function (e) {
+    let timer = null;
+
+    clearTimeout(timer);
+
+    timer = setTimeout(() => {
+        let selectedData = table_tipos_documentos.rows({selected: true}).data();
+
+        documentos_seleccionados = [];
+
+        selectedData.each(function (value, index, data) {
+            const url = $(value.vista_previa).attr('href')
+            const params = new URLSearchParams(url);
+            const accion = params.get('accion');
+            const id = params.get('registro_id');
+
+            if (accion === 'vista_previa') {
+                documentos_seleccionados.push(id);
+            } else {
+                const rowIndex = table_tipos_documentos.rows().indexes().filter((idx) => {
+                    return table_tipos_documentos.row(idx).data() === value;
+                });
+
+                table_tipos_documentos.rows(rowIndex).deselect();
+            }
+        });
+
+        $('#documentos').val(documentos_seleccionados);
+    }, 500);
+});
+
+
 
 $("#form-documentos").on('submit', function (e) {
     if (documentos_seleccionados.length <= 1) {
