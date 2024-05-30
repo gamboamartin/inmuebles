@@ -61,12 +61,37 @@ class inm_doc_prospecto extends _modelo_parent
             return $this->error->error(mensaje: 'Error al insertar', data: $r_alta_bd);
         }
 
-        $r_alta_doc_etapa = $this->genera_documento_etapa(doc_documento_id: $r_alta_doc->registro_id,etapa: "ALTA");
+        $r_alta_doc_etapa = $this->genera_documento_etapa(doc_documento_id: $r_alta_doc->registro_id, etapa: "ALTA");
         if (errores::$error) {
             return $this->error->error(mensaje: 'Error al insertar etapa documento', data: $r_alta_bd);
         }
 
         return $r_alta_bd;
+    }
+
+    public function elimina_bd(int $id): array|stdClass
+    {
+        $registro = $this->registro(registro_id: $id);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al obtener registro', data: $registro);
+        }
+
+        $documento_etapa = (new doc_documento_etapa(link: $this->link))->elimina_con_filtro_and(filtro: array('doc_documento_id' => $registro['doc_documento_id']));
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al eliminar documento etapa', data: $documento_etapa);
+        }
+
+        $elimina = parent::elimina_bd($id);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al eliminar prospecto documento', data: $elimina);
+        }
+
+        $documento = (new doc_documento(link: $this->link))->elimina_bd(id: $registro['doc_documento_id']);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al eliminar documento', data: $documento);
+        }
+
+        return $elimina;
     }
 
     public function obtener_etapa(string $etapa): array|stdClass|int
