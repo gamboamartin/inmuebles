@@ -101,6 +101,7 @@ $("#table-inm_prospecto").on('click', 'td:first-child,td:nth-child(2)', function
         });
 
         $('#documentos').val(documentos_seleccionados);
+        $('#documentos-verificar').val(documentos_seleccionados);
     }, 500);
 });
 
@@ -115,6 +116,8 @@ $("#table-inm_prospecto").on('click', 'tr:first-child', function (e) {
         documentos_seleccionados = [];
 
         selectedData.each(function (value, index, data) {
+            console.log(value);
+
             const url = $(value.vista_previa).attr('href')
             const params = new URLSearchParams(url);
             const accion = params.get('accion');
@@ -132,6 +135,7 @@ $("#table-inm_prospecto").on('click', 'tr:first-child', function (e) {
         });
 
         $('#documentos').val(documentos_seleccionados);
+        $('#documentos-verificar').val(documentos_seleccionados);
     }, 500);
 });
 
@@ -141,6 +145,13 @@ $("#form-documentos").on('submit', function (e) {
     if (documentos_seleccionados.length <= 1) {
         e.preventDefault();
         alert("Seleccione más de un documento para agruparlos");
+    }
+});
+
+$("#form-documentos-verificar").on('submit', function (e) {
+    if (documentos_seleccionados.length < 1) {
+        e.preventDefault();
+        alert("Seleccione un documento para verificarlo");
     }
 });
 

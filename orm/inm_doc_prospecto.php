@@ -61,12 +61,15 @@ class inm_doc_prospecto extends _modelo_parent
             return $this->error->error(mensaje: 'Error al insertar', data: $r_alta_bd);
         }
 
-        $r_alta_doc_etapa = $this->genera_documento_etapa(doc_documento_id: $r_alta_doc->registro_id);
+        $r_alta_doc_etapa = $this->genera_documento_etapa(doc_documento_id: $r_alta_doc->registro_id,etapa: "ALTA");
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al insertar etapa documento', data: $r_alta_bd);
+        }
 
         return $r_alta_bd;
     }
 
-    private function obtener_etapa(): array|stdClass|int
+    public function obtener_etapa(string $etapa): array|stdClass|int
     {
         $proceso = (new pr_proceso(link: $this->link))->filtro_and(filtro: array('pr_proceso.descripcion' => 'PROSPECTO DOCUMENTO'));
         if (errores::$error) {
@@ -79,29 +82,29 @@ class inm_doc_prospecto extends _modelo_parent
         }
 
         $filtro['pr_proceso_id'] = $proceso->registros[0]['pr_proceso_id'];
-        $filtro['pr_etapa.descripcion'] = "ALTA";
-        $etapa = (new pr_etapa_proceso(link: $this->link))->filtro_and(filtro: $filtro);
+        $filtro['pr_etapa.descripcion'] = $etapa;
+        $pr_etapa = (new pr_etapa_proceso(link: $this->link))->filtro_and(filtro: $filtro);
         if (errores::$error) {
             return $this->error->error(mensaje: 'Error al filtrar relación de etapa proceso', data: $etapa);
         }
 
-        if ($etapa->n_registros <= 0) {
-            return $this->error->error(mensaje: 'Error no existe una relación para el proceso PROSPECTO DOCUMENTO con la etapa ALTA',
-                data: $etapa);
+        if ($pr_etapa->n_registros <= 0) {
+            return $this->error->error(mensaje: "Error no existe una relación para el proceso PROSPECTO DOCUMENTO con la etapa $etapa",
+                data: $pr_etapa);
         }
 
-        return $etapa->registros[0]['pr_etapa_proceso_id'];
+        return $pr_etapa->registros[0]['pr_etapa_proceso_id'];
     }
 
-    private function genera_documento_etapa(int $doc_documento_id): array|stdClass
+    public function genera_documento_etapa(int $doc_documento_id, string $etapa): array|stdClass
     {
-        $etapa = $this->obtener_etapa();
+        $pr_etapa = $this->obtener_etapa(etapa: $etapa);
         if (errores::$error) {
-            return $this->error->error(mensaje: 'Error al obtener etapa', data: $etapa);
+            return $this->error->error(mensaje: 'Error al obtener etapa', data: $pr_etapa);
         }
 
         $registro['doc_documento_id'] = $doc_documento_id;
-        $registro['pr_etapa_proceso_id'] = $etapa;
+        $registro['pr_etapa_proceso_id'] = $pr_etapa;
         $registro['fecha'] = date("Y-m-d");
         $alta = (new doc_documento_etapa(link: $this->link))->alta_registro(registro: $registro);
         if (errores::$error) {
