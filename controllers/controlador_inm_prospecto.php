@@ -54,6 +54,7 @@ class controlador_inm_prospecto extends _ctl_formato
     public string $link_modifica_direccion = '';
     public string $link_agrupa_documentos = '';
     public string $link_verifica_documentos = '';
+    public string $link_envia_documentos = '';
 
     public array $inm_conf_docs_prospecto = array();
 
@@ -585,6 +586,14 @@ class controlador_inm_prospecto extends _ctl_formato
             exit;
         }
         $this->link_verifica_documentos = $link;
+
+        $link = $this->obj_link->get_link(seccion: "inm_prospecto", accion: "envia_documentos");
+        if (errores::$error) {
+            $error = $this->errores->error(mensaje: 'Error al recuperar link envia_documentos', data: $link);
+            print_r($error);
+            exit;
+        }
+        $this->link_envia_documentos = $link;
 
         return $link;
     }

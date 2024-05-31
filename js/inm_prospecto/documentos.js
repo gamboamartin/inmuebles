@@ -102,6 +102,7 @@ $("#table-inm_prospecto").on('click', 'td:first-child,td:nth-child(2)', function
 
         $('#documentos').val(documentos_seleccionados);
         $('#documentos-verificar').val(documentos_seleccionados);
+        $('#documentos-enviar').val(documentos_seleccionados);
     }, 500);
 });
 
@@ -136,6 +137,7 @@ $("#table-inm_prospecto").on('click', 'tr:first-child', function (e) {
 
         $('#documentos').val(documentos_seleccionados);
         $('#documentos-verificar').val(documentos_seleccionados);
+        $('#documentos-enviar').val(documentos_seleccionados);
     }, 500);
 });
 
@@ -152,6 +154,13 @@ $("#form-documentos-verificar").on('submit', function (e) {
     if (documentos_seleccionados.length < 1) {
         e.preventDefault();
         alert("Seleccione un documento para verificarlo");
+    }
+});
+
+$("#form-documentos-enviar").on('submit', function (e) {
+    if (documentos_seleccionados.length < 1) {
+        e.preventDefault();
+        alert("Seleccione un documento para enviar");
     }
 });
 
