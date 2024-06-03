@@ -4,6 +4,9 @@ const columns_tipos_documentos = [
     {
         title: "Tipo documento",
         data: "doc_tipo_documento_descripcion"
+    },{
+        title: "Etapa",
+        data: "doc_etapa"
     },
     {
         title: "Descarga",
