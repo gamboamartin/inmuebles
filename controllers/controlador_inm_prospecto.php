@@ -345,6 +345,50 @@ class controlador_inm_prospecto extends _ctl_formato
         return $documentos;
     }
 
+    final public function envia_documentos(bool $header, bool $ws = false): array|string
+    {
+        $this->link->beginTransaction();
+
+        $siguiente_view = (new actions())->init_alta_bd();
+        if (errores::$error) {
+            $this->link->rollBack();
+            return $this->retorno_error(mensaje: 'Error al obtener siguiente view', data: $siguiente_view,
+                header: $header, ws: $ws);
+        }
+
+        $documentos = explode(',', $_POST['documentos']);
+        $r_alta_doc_etapa = new stdClass();
+
+        foreach ($documentos as $documento) {
+            $registro = (new inm_doc_prospecto($this->link))->registro(registro_id: $documento, retorno_obj: true);
+            if (errores::$error) {
+                return $this->retorno_error(mensaje: 'Error al obtener documento', data: $registro, header: $header, ws: $ws);
+            }
+
+            $r_alta_doc_etapa = (new inm_doc_prospecto($this->link))->
+            genera_documento_etapa(doc_documento_id: $registro->doc_documento_id,etapa: "VERIFICADO");
+            if (errores::$error) {
+                return $this->retorno_error(mensaje: 'Error al generar documento etapa',
+                    data: $r_alta_doc_etapa, header: $header, ws: $ws);
+            }
+        }
+
+        $this->link->commit();
+
+        if ($header) {
+            $this->retorno_base(registro_id: $this->registro_id, result: $r_alta_doc_etapa,
+                siguiente_view: "documentos", ws: $ws);
+        }
+        if ($ws) {
+            header('Content-Type: application/json');
+            echo json_encode($r_alta_doc_etapa, JSON_THROW_ON_ERROR);
+            exit;
+        }
+        $r_alta_doc_etapa->siguiente_view = "documentos";
+
+        return $r_alta_doc_etapa;
+    }
+
     final public function verifica_documentos(bool $header, bool $ws = false): array|string
     {
         $this->link->beginTransaction();
