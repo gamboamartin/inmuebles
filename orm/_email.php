@@ -12,6 +12,8 @@ class _email
 {
     public modelo $modelo;
 
+    public const ERROR_CORREO_NO_VALIDO = "El correo '%s' no es válido.";
+
     public function __construct(modelo $modelo)
     {
         $this->modelo = $modelo;
@@ -21,7 +23,8 @@ class _email
     {
         $validacion = $this->validar_correo($correo);
         if (!$validacion) {
-            return $this->modelo->error->error(mensaje: "El correo '$correo' no es válido.", data: $correo);
+            $mensaje_error = sprintf(self::ERROR_CORREO_NO_VALIDO, $correo);
+            return $this->modelo->error->error(mensaje: $mensaje_error, data: $correo);
         }
 
         $filtro = array();
