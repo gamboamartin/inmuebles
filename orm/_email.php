@@ -13,13 +13,16 @@ class _email
     public modelo $modelo;
 
     public const ERROR_CORREO_NO_VALIDO = "El correo '%s' no es válido.";
+    public const ERROR_FILTRO = "Error al filtrar al '%s'";
+    public const ERROR_VALIDACION = "Error al validar el correo '%s'";
+    public const ERROR_CORREO_NO_ENCONTRADO = "No se encontró el emisor con el correo '%s'";
 
     public function __construct(modelo $modelo)
     {
         $this->modelo = $modelo;
     }
 
-    public function emisor(string $correo): array
+    public function correo_validacion(string $correo, modelo $modelo, string $campo): array|stdClass
     {
         $validacion = $this->validar_correo($correo);
         if (!$validacion) {
@@ -29,34 +32,40 @@ class _email
 
         $filtro = array();
         $filtro['email'] = $correo;
-        $not_emisor = (new not_emisor(link: $this->modelo->link))->filtro_and(filtro: $filtro);
+        $datos = $modelo->filtro_and(filtro: $filtro);
         if (errores::$error) {
-            return $this->modelo->error->error(mensaje: "Error al filtrar al emisor", data: $not_emisor);
+            $mensaje_error = sprintf(self::ERROR_FILTRO, $campo);
+            return $this->modelo->error->error(mensaje: $mensaje_error, data: $datos);
         }
 
-        if ($not_emisor->nro_regisros == 0) {
-            return $this->modelo->error->error(mensaje: "No se encontró el emisor con el correo '$correo'",
-                data: $not_emisor);
+        return $datos;
+    }
+
+    public function emisor(string $correo): array
+    {
+        $datos = $this->correo_validacion(correo: $correo, modelo: (new not_emisor(link: $this->modelo->link)), campo: 'emisor');
+        if (errores::$error) {
+            $mensaje_error = sprintf(self::ERROR_VALIDACION, $correo);
+            return $this->modelo->error->error(mensaje: $mensaje_error, data: $datos);
         }
 
-        return $not_emisor->registros[0]['not_emisor_id'];
+        if ($datos->n_registros == 0) {
+            $mensaje_error = sprintf(self::ERROR_CORREO_NO_VALIDO, $correo);
+            return $this->modelo->error->error(mensaje: $mensaje_error, data: $datos);
+        }
+
+        return $datos->registros[0];
     }
 
     public function receptor(string $correo): array
     {
-        $validacion = $this->validar_correo($correo);
-        if (!$validacion) {
-            return $this->modelo->error->error(mensaje: "El correo '$correo' no es válido.", data: $correo);
-        }
-
-        $filtro = array();
-        $filtro['email'] = $correo;
-        $not_receptor = (new not_receptor(link: $this->modelo->link))->filtro_and(filtro: $filtro);
+        $datos = $this->correo_validacion(correo: $correo, modelo: (new not_receptor(link: $this->modelo->link)), campo: 'receptor');
         if (errores::$error) {
-            return $this->modelo->error->error(mensaje: "Error al filtrar al emisor", data: $not_receptor);
+            $mensaje_error = sprintf(self::ERROR_VALIDACION, $correo);
+            return $this->modelo->error->error(mensaje: $mensaje_error, data: $datos);
         }
 
-        if ($not_receptor->nro_regisros == 0) {
+        if ($datos->n_registros == 0) {
             $alta_not_receptor = (new not_receptor(link: $this->modelo->link))->alta_registro(
                 array(
                     'email' => $correo,
@@ -68,10 +77,10 @@ class _email
                 return $this->modelo->error->error(mensaje: "Error al insertar al receptor", data: $alta_not_receptor);
             }
 
-            return $alta_not_receptor->registro_id;
+            return (new not_receptor(link: $this->modelo->link))->registro(registro_id: $alta_not_receptor->registro_id);
         }
 
-        return $not_receptor->registros[0]['not_receptor_id'];
+        return $datos->registros[0];
     }
 
     public function validar_correo($correo): mixed
