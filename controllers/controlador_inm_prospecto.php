@@ -18,6 +18,7 @@ use gamboamartin\comercial\models\com_prospecto_etapa;
 use gamboamartin\errores\errores;
 use gamboamartin\inmuebles\html\inm_prospecto_html;
 use gamboamartin\inmuebles\models\_base_paquete;
+use gamboamartin\inmuebles\models\_email;
 use gamboamartin\inmuebles\models\_inm_prospecto;
 use gamboamartin\inmuebles\models\_upd_prospecto;
 use gamboamartin\inmuebles\models\inm_beneficiario;
@@ -348,7 +349,7 @@ class controlador_inm_prospecto extends _ctl_formato
     public function valida_campos(array $campos): array{
         $campos_validos = array('documentos', 'receptor', 'asunto', 'mensaje');
         $campos_faltantes = array_diff($campos_validos, array_keys($campos));
-        if (!empty($missing_fields)) {
+        if (!empty($campos_faltantes)) {
             $mensaje_error = 'Faltan los siguientes campos: ' . implode(', ', $campos_faltantes);
             return $this->errores->error(mensaje: $mensaje_error, data: $campos_faltantes);
         }
@@ -364,9 +365,12 @@ class controlador_inm_prospecto extends _ctl_formato
                 header: $header, ws: $ws);
         }
 
-
-
-
+        $validacion = (new _email($this->link))->validar_correo(correo: $campos_necesarios['receptor']);
+        if (!$validacion) {
+            $mensaje_error = sprintf(_email::ERROR_CORREO_NO_VALIDO, $campos_necesarios['receptor']);
+            return $this->retorno_error(mensaje: $mensaje_error, data: $campos_necesarios,
+                header: $header, ws: $ws);
+        }
 
         $this->link->beginTransaction();
 
@@ -377,7 +381,35 @@ class controlador_inm_prospecto extends _ctl_formato
                 header: $header, ws: $ws);
         }
 
-        $documentos = explode(',', $_POST['documentos']);
+        $receptor = (new _email($this->link))->receptor(correo: $campos_necesarios['receptor']);
+        if (errores::$error) {
+            $this->link->rollBack();
+            return $this->retorno_error(mensaje: 'Error al obtener receptor', data: $receptor,
+                header: $header, ws: $ws);
+        }
+
+        $emisor = (new _email($this->link))->emisor(correo: 'test@ivitec.mx');
+        if (errores::$error) {
+            $this->link->rollBack();
+            return $this->retorno_error(mensaje: 'Error al obtener emisor', data: $emisor,
+                header: $header, ws: $ws);
+        }
+
+        $mensaje = (new _email($this->link))->mensaje(asunto: $campos_necesarios['asunto'],
+            mensaje: $campos_necesarios['mensaje'], emisor: $emisor['not_emisor_id']);
+        if (errores::$error) {
+            $this->link->rollBack();
+            return $this->retorno_error(mensaje: 'Error al obtener mensaje', data: $mensaje,
+                header: $header, ws: $ws);
+        }
+
+        print_r($receptor); exit();
+
+
+
+
+
+        $documentos = explode(',', $campos_necesarios);
         $r_alta_doc_etapa = new stdClass();
 
         foreach ($documentos as $documento) {

@@ -92,7 +92,7 @@ class _email
             array(
                 'asunto' => $asunto,
                 'mensaje' => $mensaje,
-                'emisor' => $emisor,
+                'not_emisor_id' => $emisor,
                 'descripcion' => $asunto,
                 'codigo' => (new not_mensaje(link: $this->link))->get_codigo_aleatorio(10),
             ));

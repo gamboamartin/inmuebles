@@ -54,7 +54,7 @@ class _emailTest extends test
         errores::$error = false;
     }
 
-    public function test_emisor(): void
+    public function test_emisor(): array
     {
         $this->test_correo_validacion();
 
@@ -69,9 +69,11 @@ class _emailTest extends test
         $this->assertIsArray($resultado);
         $this->assertGreaterThan(0, $resultado);
         errores::$error = false;
+
+        return $resultado;
     }
 
-    public function test_receptor(): void
+    public function test_receptor(): array
     {
         $this->test_correo_validacion();
 
@@ -79,6 +81,20 @@ class _emailTest extends test
         $resultado = (new _email(link: $this->link))->receptor(correo: $correo);
         $this->assertIsArray($resultado);
         $this->assertGreaterThan(0, $resultado);
+        errores::$error = false;
+
+        return $resultado;
+    }
+
+    public function test_mensaje(): void
+    {
+        $emisor = $this->test_emisor();
+
+        $asunto = "asunto";
+        $mensaje = "mensaje";
+        $emisor = $emisor['not_emisor_id'];
+        $resultado = (new _email(link: $this->link))->mensaje(asunto: $asunto, mensaje: $mensaje, emisor: $emisor);
+        $this->assertIsArray($resultado);
         errores::$error = false;
     }
 }
