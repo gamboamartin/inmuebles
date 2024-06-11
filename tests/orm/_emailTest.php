@@ -86,7 +86,7 @@ class _emailTest extends test
         return $resultado;
     }
 
-    public function test_mensaje(): void
+    public function test_mensaje(): array
     {
         $emisor = $this->test_emisor();
 
@@ -94,6 +94,20 @@ class _emailTest extends test
         $mensaje = "mensaje";
         $emisor = $emisor['not_emisor_id'];
         $resultado = (new _email(link: $this->link))->mensaje(asunto: $asunto, mensaje: $mensaje, emisor: $emisor);
+        $this->assertIsArray($resultado);
+        errores::$error = false;
+
+        return $resultado;
+    }
+
+    public function test_mensaje_receptor(): void
+    {
+        $mensaje = $this->test_mensaje();
+        $receptor = $this->test_receptor();
+
+        $mensaje = $mensaje['not_mensaje_id'];
+        $receptor = $receptor['not_receptor_id'];
+        $resultado = (new _email(link: $this->link))->mensaje_receptor(mensaje: $mensaje, receptor: $receptor);
         $this->assertIsArray($resultado);
         errores::$error = false;
     }

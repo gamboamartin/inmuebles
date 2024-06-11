@@ -46,6 +46,9 @@
                 <form id="form-documentos-enviar" action="<?php echo $controlador->link_envia_documentos; ?>" method="post"
                       enctype="multipart/form-data">
                     <input type="hidden" id="documentos-enviar" name="documentos" required>
+                    <input type="hidden"  name="receptor" required value="test@gmail.com">
+                    <input type="hidden" name="asunto" required value="2">
+                    <input type="hidden" name="mensaje" required value="2">
                     <button id="enviar" class="btn btn-success">Enviar Documentos</button>
                 </form>
             </div>

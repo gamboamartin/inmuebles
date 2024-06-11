@@ -7,6 +7,7 @@ use gamboamartin\errores\errores;
 use gamboamartin\notificaciones\models\not_emisor;
 use gamboamartin\notificaciones\models\not_mensaje;
 use gamboamartin\notificaciones\models\not_receptor;
+use gamboamartin\notificaciones\models\not_rel_mensaje;
 use PDO;
 use stdClass;
 
@@ -88,13 +89,14 @@ class _email
 
     public function mensaje(string $asunto, string $mensaje, int $emisor): array
     {
+        $UUID = (new not_mensaje(link: $this->link))->get_codigo_aleatorio(10);
         $alta_not_mensaje = (new not_mensaje(link: $this->link))->alta_registro(
             array(
                 'asunto' => $asunto,
                 'mensaje' => $mensaje,
                 'not_emisor_id' => $emisor,
-                'descripcion' => $asunto,
-                'codigo' => (new not_mensaje(link: $this->link))->get_codigo_aleatorio(10),
+                'descripcion' => $asunto.$UUID,
+                'codigo' => $UUID,
             ));
         if (errores::$error) {
             $mensaje_error = sprintf(self::ERROR_AL_INSERTAR, 'mensaje');
@@ -102,6 +104,21 @@ class _email
         }
 
         return (new not_mensaje(link: $this->link))->registro(registro_id: $alta_not_mensaje->registro_id);
+    }
+
+    public function mensaje_receptor(int $mensaje, int $receptor): array
+    {
+        $alta_not_mensaje_receptor = (new not_rel_mensaje(link: $this->link))->alta_registro(
+            array(
+                'not_mensaje_id' => $mensaje,
+                'not_receptor_id' => $receptor,
+            ));
+        if (errores::$error) {
+            $mensaje_error = sprintf(self::ERROR_AL_INSERTAR, 'relación mensaje receptor');
+            return (new errores())->error(mensaje: $mensaje_error, data: $alta_not_mensaje_receptor);
+        }
+
+        return (new not_rel_mensaje(link: $this->link))->registro(registro_id: $alta_not_mensaje_receptor->registro_id);
     }
 
 
