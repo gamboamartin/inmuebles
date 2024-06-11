@@ -5,6 +5,7 @@ namespace gamboamartin\inmuebles\models;
 use base\orm\modelo;
 use gamboamartin\errores\errores;
 use gamboamartin\notificaciones\models\not_emisor;
+use gamboamartin\notificaciones\models\not_mensaje;
 use gamboamartin\notificaciones\models\not_receptor;
 use PDO;
 use stdClass;
@@ -72,7 +73,6 @@ class _email
                 array(
                     'email' => $correo,
                     'descripcion' => $correo,
-                    'descripcion' => $correo,
                     'codigo' => $correo,
                 ));
             if (errores::$error) {
@@ -85,6 +85,26 @@ class _email
 
         return $datos->registros[0];
     }
+
+    public function mensaje(string $asunto, string $mensaje, int $emisor): array
+    {
+        $alta_not_mensaje = (new not_mensaje(link: $this->link))->alta_registro(
+            array(
+                'asunto' => $asunto,
+                'mensaje' => $mensaje,
+                'emisor' => $emisor,
+                'descripcion' => $asunto,
+                'codigo' => (new not_mensaje(link: $this->link))->get_codigo_aleatorio(10),
+            ));
+        if (errores::$error) {
+            $mensaje_error = sprintf(self::ERROR_AL_INSERTAR, 'mensaje');
+            return (new errores())->error(mensaje: $mensaje_error, data: $alta_not_mensaje);
+        }
+
+        return (new not_mensaje(link: $this->link))->registro(registro_id: $alta_not_mensaje->registro_id);
+    }
+
+
 
     public function validar_correo($correo): mixed
     {
