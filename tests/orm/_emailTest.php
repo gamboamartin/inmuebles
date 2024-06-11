@@ -6,7 +6,6 @@ use gamboamartin\comercial\models\com_tipo_cliente;
 use gamboamartin\errores\errores;
 use gamboamartin\inmuebles\models\_email;
 use gamboamartin\notificaciones\models\not_emisor;
-use gamboamartin\notificaciones\models\not_receptor;
 use gamboamartin\test\test;
 
 use stdClass;

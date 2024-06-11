@@ -345,8 +345,29 @@ class controlador_inm_prospecto extends _ctl_formato
         return $documentos;
     }
 
+    public function valida_campos(array $campos): array{
+        $campos_validos = array('documentos', 'receptor', 'asunto', 'mensaje');
+        $campos_faltantes = array_diff($campos_validos, array_keys($campos));
+        if (!empty($missing_fields)) {
+            $mensaje_error = 'Faltan los siguientes campos: ' . implode(', ', $campos_faltantes);
+            return $this->errores->error(mensaje: $mensaje_error, data: $campos_faltantes);
+        }
+
+        return $campos;
+    }
+
     final public function envia_documentos(bool $header, bool $ws = false): array|string
     {
+        $campos_necesarios = $this->valida_campos($_POST);
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al validar campos', data: $campos_necesarios,
+                header: $header, ws: $ws);
+        }
+
+
+
+
+
         $this->link->beginTransaction();
 
         $siguiente_view = (new actions())->init_alta_bd();

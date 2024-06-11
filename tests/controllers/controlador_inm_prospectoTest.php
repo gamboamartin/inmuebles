@@ -251,6 +251,46 @@ class controlador_inm_prospectoTest extends test {
 
     }
 
+    public function test_envia_documentos(): void
+    {
+        errores::$error = false;
+
+        $file = "inm_prospecto.alta";
+
+        $ch = curl_init("http://localhost/inmuebles/index.php?seccion=inm_prospecto&accion=alta&adm_menu_id=64&session_id=1590259697&adm_menu_id=64");
+        $fp = fopen($file, "w");
+
+        curl_setopt($ch, CURLOPT_FILE, $fp);
+        curl_setopt($ch, CURLOPT_HEADER, 0);
+
+        curl_exec($ch);
+        curl_close($ch);
+        fclose($fp);
+
+        $data = file_get_contents($file);
+
+        //print_r($data);exit;
+
+
+        assertStringContainsStringIgnoringCase("data-live-search='true' id='com_agente_id' name='com_agente_id' required >", $data);
+        assertStringContainsStringIgnoringCase("<label class='control-label' for='com_tipo_prospecto_id'>Tipo de prospecto<", $data);
+        assertStringContainsStringIgnoringCase("/label><div class='controls'><select class='form-control selectpicker", $data);
+        assertStringContainsStringIgnoringCase("color-secondary com_tipo_prospecto_id ' data-live-search='true' id='com_tipo_prospecto_id' name='com_tipo_prospecto_id' required >", $data);
+        assertStringContainsStringIgnoringCase("<input type='text' name='nombre' value='' class='form-control' required id='nombre' placeholder='Nombre' ", $data);
+        assertStringContainsStringIgnoringCase("<label class='control-label' for='apellido_paterno'>Apellido Paterno</label><div class='controls'><input type=", $data);
+        assertStringContainsStringIgnoringCase("<label class='control-label' for='apellido_materno'>Apellido Materno</label><div class='controls'><input type=", $data);
+        assertStringContainsStringIgnoringCase("' id='lada_com' placeholder='Lada' pattern='[0-9]{2,3}' title='Lada' ", $data);
+        assertStringContainsStringIgnoringCase(" class='form-control' id='numero_com' placeholder='Numero' pattern='[0-9]{7,8}' title='Numero' />", $data);
+        assertStringContainsStringIgnoringCase("class='form-control' id='cel_com' placeholder='Cel' pattern='[1-9]{1}[0-9]{9}' title='Cel'", $data);
+        assertStringContainsStringIgnoringCase("_com' value='' class='form-control' id='correo_com' placeholder='Correo' pattern='[a-z0-9!#$%&'*+", $data);
+        assertStringContainsStringIgnoringCase("<input type='text' name='razon_social' value='' class='form", $data);
+        assertStringContainsStringIgnoringCase("placeholder='Observaciones' title='Observaciones' /></div>", $data);
+
+        unlink($file);
+        errores::$error = false;
+
+    }
+
 
 }
 
