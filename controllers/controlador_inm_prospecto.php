@@ -403,6 +403,14 @@ class controlador_inm_prospecto extends _ctl_formato
                 header: $header, ws: $ws);
         }
 
+        $mensaje_receptor = (new _email($this->link))->mensaje_receptor(mensaje: $mensaje['not_mensaje_id'],
+            receptor: $receptor['not_receptor_id']);
+        if (errores::$error) {
+            $this->link->rollBack();
+            return $this->retorno_error(mensaje: 'Error al obtener mensaje receptor', data: $mensaje_receptor,
+                header: $header, ws: $ws);
+        }
+
         print_r($receptor); exit();
 
 
@@ -490,7 +498,6 @@ class controlador_inm_prospecto extends _ctl_formato
     public function tipos_documentos(bool $header, bool $ws = false): array
     {
         $inm_conf_docs_prospecto = (new _inm_prospecto())->integra_inm_documentos(controler: $this);
-
         if (errores::$error) {
             return $this->retorno_error(mensaje: 'Error al integrar buttons', data: $inm_conf_docs_prospecto, header: $header, ws: $ws);
         }

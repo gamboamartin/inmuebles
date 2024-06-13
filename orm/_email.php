@@ -4,6 +4,7 @@ namespace gamboamartin\inmuebles\models;
 
 use base\orm\modelo;
 use gamboamartin\errores\errores;
+use gamboamartin\notificaciones\models\not_adjunto;
 use gamboamartin\notificaciones\models\not_emisor;
 use gamboamartin\notificaciones\models\not_mensaje;
 use gamboamartin\notificaciones\models\not_receptor;
@@ -95,7 +96,7 @@ class _email
                 'asunto' => $asunto,
                 'mensaje' => $mensaje,
                 'not_emisor_id' => $emisor,
-                'descripcion' => $asunto.$UUID,
+                'descripcion' => $asunto . $UUID,
                 'codigo' => $UUID,
             ));
         if (errores::$error) {
@@ -120,6 +121,32 @@ class _email
 
         return (new not_rel_mensaje(link: $this->link))->registro(registro_id: $alta_not_mensaje_receptor->registro_id);
     }
+
+    public function adjunto(int $mensaje, int $documento): array
+    {
+        $alta_not_adjunto = (new not_adjunto(link: $this->link))->alta_registro(
+            array(
+                'not_mensaje_id' => $mensaje,
+                'doc_documento_id' => $documento,
+            ));
+        if (errores::$error) {
+            $mensaje_error = sprintf(self::ERROR_AL_INSERTAR, 'adjunto');
+            return (new errores())->error(mensaje: $mensaje_error, data: $alta_not_adjunto);
+        }
+
+        return (new not_rel_mensaje(link: $this->link))->registro(registro_id: $alta_not_adjunto->registro_id);
+    }
+
+    public function adjuntos(int $mensaje, array $documentos): array
+    {
+        $resultado = array();
+        foreach ($documentos as $documento) {
+            $resultado[] = $this->adjunto(mensaje: $mensaje, documento: $documento);
+        }
+
+        return $resultado;
+    }
+
 
 
 

@@ -152,14 +152,13 @@ class _inm_prospecto{
 
 
 
-    private function inm_conf_docs_prospecto(controlador_inm_prospecto $controler, array $inm_docs_prospecto){
+    private function inm_conf_docs_prospecto(controlador_inm_prospecto $controler, array $inm_docs_prospecto, array $tipos_documentos){
         $inm_conf_docs_prospecto = (new _doctos())->documentos_de_prospecto(inm_prospecto_id: $controler->registro_id,
-            link:  $controler->link, todos: true);
+            link:  $controler->link, todos: true, tipos_documentos: $tipos_documentos);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al obtener configuraciones de documentos',
                 data:  $inm_conf_docs_prospecto);
         }
-
 
         foreach ($inm_conf_docs_prospecto as $indice=>$doc_tipo_documento){
             $inm_conf_docs_prospecto = $this->inm_docs_prospecto(controler: $controler,
@@ -259,16 +258,39 @@ class _inm_prospecto{
     }
 
     final public function integra_inm_documentos(controlador_inm_prospecto $controler){
+        $inm_prospecto = (new inm_prospecto(link: $controler->link))->registro(registro_id: $controler->registro_id);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al obtener inm_prospecto',data:  $inm_prospecto);
+        }
+
+        $inm_conf_docs_prospecto = (new inm_conf_docs_prospecto(link: $controler->link))->filtro_and(
+            columnas: ['doc_tipo_documento_id'],
+            filtro: array('inm_attr_tipo_credito_id' => $inm_prospecto['inm_attr_tipo_credito_id']));
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al obtener inm_conf_docs_prospecto',data:  $inm_conf_docs_prospecto);
+        }
+
+        $doc_ids = array_map(function($registro) {
+            return $registro['doc_tipo_documento_id'];
+        }, $inm_conf_docs_prospecto->registros);
+
+
         $inm_docs_prospecto = (new inm_doc_prospecto(link: $controler->link))->inm_docs_prospecto(
-            inm_prospecto_id: $controler->registro_id);
+            inm_prospecto: $controler->registro_id, tipos_documentos: $doc_ids);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al obtener inm_docs_prospecto',data:  $inm_docs_prospecto);
         }
-        $inm_docs_prospecto = $this->inm_conf_docs_prospecto(controler: $controler,inm_docs_prospecto:  $inm_docs_prospecto);
+
+        $inm_docs_prospecto = $this->inm_conf_docs_prospecto(controler: $controler,inm_docs_prospecto:  $inm_docs_prospecto,
+            tipos_documentos: $doc_ids);
 
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al integrar buttons',data:  $inm_docs_prospecto);
         }
+
+
+
+
         return $inm_docs_prospecto;
     }
 
