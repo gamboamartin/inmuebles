@@ -22,6 +22,7 @@ use gamboamartin\inmuebles\models\_email;
 use gamboamartin\inmuebles\models\_inm_prospecto;
 use gamboamartin\inmuebles\models\_upd_prospecto;
 use gamboamartin\inmuebles\models\inm_beneficiario;
+use gamboamartin\inmuebles\models\inm_conf_docs_prospecto;
 use gamboamartin\inmuebles\models\inm_doc_prospecto;
 use gamboamartin\inmuebles\models\inm_prospecto;
 use gamboamartin\inmuebles\models\inm_referencia_prospecto;
@@ -411,28 +412,18 @@ class controlador_inm_prospecto extends _ctl_formato
                 header: $header, ws: $ws);
         }
 
-        print_r($receptor); exit();
-
-
-
-
-
         $documentos = explode(',', $campos_necesarios);
         $r_alta_doc_etapa = new stdClass();
 
-        foreach ($documentos as $documento) {
-            $registro = (new inm_doc_prospecto($this->link))->registro(registro_id: $documento, retorno_obj: true);
-            if (errores::$error) {
-                return $this->retorno_error(mensaje: 'Error al obtener documento', data: $registro, header: $header, ws: $ws);
-            }
-
-            $r_alta_doc_etapa = (new inm_doc_prospecto($this->link))->
-            genera_documento_etapa(doc_documento_id: $registro->doc_documento_id,etapa: "VERIFICADO");
-            if (errores::$error) {
-                return $this->retorno_error(mensaje: 'Error al generar documento etapa',
-                    data: $r_alta_doc_etapa, header: $header, ws: $ws);
-            }
+        $mensaje_adjuntos = (new _email($this->link))->adjuntos(mensaje: $mensaje['not_mensaje_id'],
+            documentos: $documentos);
+        if (errores::$error) {
+            $this->link->rollBack();
+            return $this->retorno_error(mensaje: 'Error al obtener adjuntos', data: $mensaje_adjuntos,
+                header: $header, ws: $ws);
         }
+
+        print_r($mensaje_adjuntos); exit();
 
         $this->link->commit();
 
@@ -1285,6 +1276,22 @@ class controlador_inm_prospecto extends _ctl_formato
 
     final public function subir_documento(bool $header, bool $ws = false)
     {
+        $inm_prospecto = (new inm_prospecto(link: $this->link))->registro(registro_id: $this->registro_id);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al obtener inm_prospecto',data:  $inm_prospecto);
+        }
+
+        $inm_conf_docs_prospecto = (new inm_conf_docs_prospecto(link: $this->link))->filtro_and(
+            columnas: ['doc_tipo_documento_id'],
+            filtro: array('inm_attr_tipo_credito_id' => $inm_prospecto['inm_attr_tipo_credito_id']));
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al obtener inm_conf_docs_prospecto',data:  $inm_conf_docs_prospecto);
+        }
+
+        $doc_ids = array_map(function($registro) {
+            return $registro['doc_tipo_documento_id'];
+        }, $inm_conf_docs_prospecto->registros);
+
 
         $this->inputs = new stdClass();
 
@@ -1297,7 +1304,7 @@ class controlador_inm_prospecto extends _ctl_formato
         $this->inputs->inm_prospecto_id = $inm_prospecto_id;
 
         $doc_tipos_documentos = (new _doctos())->documentos_de_prospecto(inm_prospecto_id: $this->registro_id,
-            link: $this->link, todos: false);
+            link: $this->link, todos: false,tipos_documentos: $doc_ids);
         if (errores::$error) {
             return $this->retorno_error(mensaje: 'Error al obtener tipos de documento', data: $doc_tipos_documentos,
                 header: $header, ws: $ws);

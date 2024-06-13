@@ -152,6 +152,7 @@ class _doctos{
             return $this->error->error(mensaje: 'Error al Obtener tipos de documento',data:  $r_doc_tipo_documento);
         }
 
+
         return $r_doc_tipo_documento->registros;
     }
 
