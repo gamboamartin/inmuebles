@@ -34,7 +34,10 @@ const table_tipos_documentos = table('inm_prospecto', columns_tipos_documentos, 
 
 
 var modal = document.getElementById("myModal");
+var modalSend = document.getElementById("modalSnd");
 var closeBtn = document.getElementById("closeModalBtn");
+var openMdl = document.getElementById("enviar");
+var closeMdl = document.getElementById("closeModalSendBtn");
 
 $(document).on("click", "#table-inm_prospecto a[title='Vista Previa']", function (event) {
     event.preventDefault();
@@ -65,6 +68,12 @@ $(document).on("click", "#table-inm_prospecto a[title='Vista Previa']", function
 closeBtn.onclick = function () {
     $("#myModal .content").empty();
     modal.close();
+}
+openMdl.onclick = function () {
+    modalSend.showModal();
+}
+closeMdl.onclick = function () {
+    modalSend.close();
 }
 modal.addEventListener('click', function (event) {
     if (event.target === modal) {
