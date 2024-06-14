@@ -162,7 +162,7 @@ class controlador_inm_prospecto extends _ctl_formato
             'numero_nep', 'extension_nep', 'nss', 'curp', 'rfc', 'numero_exterior', 'numero_interior', 'observaciones',
             'fecha_nacimiento', 'sub_cuenta', 'monto_final', 'descuento', 'puntos', 'telefono_casa', 'correo_empresa',
             'correo_mi_cuenta_infonavit', 'password_mi_cuenta_infonavit', 'nss_extra', 'liga_red_social', 'area_empresa',
-            'texto_exterior', 'texto_interior','documentos','receptor','asunto','mensaje');
+            'texto_exterior', 'texto_interior', 'documentos', 'receptor', 'asunto', 'mensaje');
 
         $keys->selects = array();
 
@@ -260,7 +260,7 @@ class controlador_inm_prospecto extends _ctl_formato
         if (errores::$error) {
             return $this->retorno_error(mensaje: 'Error al integrar buttons', data: $inm_conf_docs_prospecto, header: $header, ws: $ws);
         }
-        $base = $this->base_upd(keys_selects:  array(), params: array(), params_ajustados: array());
+        $base = $this->base_upd(keys_selects: array(), params: array(), params_ajustados: array());
         if (errores::$error) {
             return $this->retorno_error(mensaje: 'Error al integrar base', data: $base, header: $header, ws: $ws);
         }
@@ -270,12 +270,11 @@ class controlador_inm_prospecto extends _ctl_formato
             return $this->retorno_error(mensaje: 'Error al integrar base', data: $base, header: $header, ws: $ws);
         }
 
-        $this->row_upd->asunto= "TU MENSAJE";
-        $this->row_upd->mensaje= "TU MENSAJE";
+        $this->row_upd->asunto = "TU MENSAJE";
+        $this->row_upd->mensaje = "TU MENSAJE";
         $this->inm_conf_docs_prospecto = $inm_conf_docs_prospecto;
 
         print_r($this->row_upd);
-
 
 
         return $inm_conf_docs_prospecto;
@@ -309,7 +308,7 @@ class controlador_inm_prospecto extends _ctl_formato
 
         $this->inputs->fecha = $fecha;
 
-        $registro = (new inm_prospecto(link:$this->link))->registro($this->registro_id);
+        $registro = (new inm_prospecto(link: $this->link))->registro($this->registro_id);
         if (errores::$error) {
             $this->retorno_error(mensaje: 'Error al generar link', data: $registro, header: $header, ws: $ws);
         }
@@ -362,7 +361,8 @@ class controlador_inm_prospecto extends _ctl_formato
         return $documentos;
     }
 
-    public function valida_campos(array $campos): array{
+    public function valida_campos(array $campos): array
+    {
         $campos_validos = array('documentos', 'receptor', 'asunto', 'mensaje');
         $campos_faltantes = array_diff($campos_validos, array_keys($campos));
         if (!empty($campos_faltantes)) {
@@ -438,7 +438,8 @@ class controlador_inm_prospecto extends _ctl_formato
                 header: $header, ws: $ws);
         }
 
-        print_r($mensaje_adjuntos); exit();
+        print_r($mensaje_adjuntos);
+        exit();
 
         $this->link->commit();
 
@@ -477,7 +478,7 @@ class controlador_inm_prospecto extends _ctl_formato
             }
 
             $r_alta_doc_etapa = (new inm_doc_prospecto($this->link))->
-            genera_documento_etapa(doc_documento_id: $registro->doc_documento_id,etapa: "VERIFICADO");
+            genera_documento_etapa(doc_documento_id: $registro->doc_documento_id, etapa: "VERIFICADO");
             if (errores::$error) {
                 return $this->retorno_error(mensaje: 'Error al generar documento etapa',
                     data: $r_alta_doc_etapa, header: $header, ws: $ws);
@@ -515,6 +516,17 @@ class controlador_inm_prospecto extends _ctl_formato
 
         header('Content-Type: application/json');
         echo json_encode($salida);
+        exit;
+    }
+
+    public function load_html(bool $header, bool $ws = false): array
+    {
+        echo $this->inputs->inm_producto_infonavit_id;
+        echo $this->inputs->inm_attr_tipo_credito_id;
+        echo $this->inputs->inm_destino_credito_id;
+        echo $this->inputs->es_segundo_credito;
+        echo $this->inputs->inm_plazo_credito_sc_id;
+
         exit;
     }
 
@@ -1312,18 +1324,18 @@ class controlador_inm_prospecto extends _ctl_formato
     final public function subir_documento(bool $header, bool $ws = false)
     {
         $inm_prospecto = (new inm_prospecto(link: $this->link))->registro(registro_id: $this->registro_id);
-        if(errores::$error){
-            return $this->error->error(mensaje: 'Error al obtener inm_prospecto',data:  $inm_prospecto);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al obtener inm_prospecto', data: $inm_prospecto);
         }
 
         $inm_conf_docs_prospecto = (new inm_conf_docs_prospecto(link: $this->link))->filtro_and(
             columnas: ['doc_tipo_documento_id'],
             filtro: array('inm_attr_tipo_credito_id' => $inm_prospecto['inm_attr_tipo_credito_id']));
-        if(errores::$error){
-            return $this->error->error(mensaje: 'Error al obtener inm_conf_docs_prospecto',data:  $inm_conf_docs_prospecto);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al obtener inm_conf_docs_prospecto', data: $inm_conf_docs_prospecto);
         }
 
-        $doc_ids = array_map(function($registro) {
+        $doc_ids = array_map(function ($registro) {
             return $registro['doc_tipo_documento_id'];
         }, $inm_conf_docs_prospecto->registros);
 
@@ -1339,7 +1351,7 @@ class controlador_inm_prospecto extends _ctl_formato
         $this->inputs->inm_prospecto_id = $inm_prospecto_id;
 
         $doc_tipos_documentos = (new _doctos())->documentos_de_prospecto(inm_prospecto_id: $this->registro_id,
-            link: $this->link, todos: false,tipos_documentos: $doc_ids);
+            link: $this->link, todos: false, tipos_documentos: $doc_ids);
         if (errores::$error) {
             return $this->retorno_error(mensaje: 'Error al obtener tipos de documento', data: $doc_tipos_documentos,
                 header: $header, ws: $ws);

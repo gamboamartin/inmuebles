@@ -102,6 +102,9 @@
                         <?php echo $controlador->header_frontend->apartado_4; ?>
                         <div id="apartado_4">
                             <?php echo $controlador->inputs->inm_institucion_hipotecaria_id; ?>
+                            <div class="contenido-credito">
+
+                            </div>
                             <?php include (new views())->ruta_templates . 'botons/submit/modifica_bd.php'; ?>
 
                         </div>
