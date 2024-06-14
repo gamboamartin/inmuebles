@@ -57,6 +57,7 @@
                             <?php echo $controlador->inputs->dp_calle_pertenece_id; ?>
                             <?php echo $controlador->inputs->texto_exterior; ?>
                             <?php echo $controlador->inputs->texto_interior; ?>
+                            <?php include (new views())->ruta_templates . 'botons/submit/modifica_bd.php'; ?>
 
                             <div class="col-md-12 table-responsive com_direccion_table">
                                 <table class="table table-striped">
@@ -178,6 +179,8 @@
                             <?php echo $controlador->inputs->beneficiario->nombre; ?>
                             <?php echo $controlador->inputs->beneficiario->apellido_paterno; ?>
                             <?php echo $controlador->inputs->beneficiario->apellido_materno; ?>
+                            <?php include (new views())->ruta_templates . 'botons/submit/modifica_bd.php'; ?>
+
                             <div class="col-md-12 table-responsive gt_beneficiario_table">
                                 <table class="table table-striped">
                                     <thead>
@@ -224,6 +227,8 @@
                             <?php echo $controlador->inputs->referencia->dp_calle_pertenece_id; ?>
                             <?php echo $controlador->inputs->referencia->numero_dom; ?>
                             <?php echo $controlador->inputs->referencia->inm_parentesco_id; ?>
+                            <?php include (new views())->ruta_templates . 'botons/submit/modifica_bd.php'; ?>
+
                             <div class="col-md-12 table-responsive">
                                 <table class="table table-striped">
                                     <thead>

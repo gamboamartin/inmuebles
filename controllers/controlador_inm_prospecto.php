@@ -890,7 +890,7 @@ class controlador_inm_prospecto extends _ctl_formato
             return $this->retorno_error(mensaje: 'Error al integrar base', data: $base, header: $header, ws: $ws);
         }
 
-        $this->acciones_headers['3'] = new  stdClass();
+        /*$this->acciones_headers['3'] = new  stdClass();
         $this->acciones_headers['3']->id_css_button_acc = 'inserta_domicilio';
         $this->acciones_headers['3']->style_button_acc = 'success';
         $this->acciones_headers['3']->tag_button_acc = 'Guardar';
@@ -903,7 +903,7 @@ class controlador_inm_prospecto extends _ctl_formato
         $this->acciones_headers['10'] = new  stdClass();
         $this->acciones_headers['10']->id_css_button_acc = 'inserta_referencia';
         $this->acciones_headers['10']->style_button_acc = 'success';
-        $this->acciones_headers['10']->tag_button_acc = 'Guardar';
+        $this->acciones_headers['10']->tag_button_acc = 'Guardar';*/
 
         $headers = (new \gamboamartin\inmuebles\controllers\_inm_prospecto())->headers_front(controlador: $this);
         if (errores::$error) {

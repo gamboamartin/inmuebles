@@ -95,14 +95,24 @@ btn_inserta_beneficiario.click(function () {
             "inm_tipo_beneficiario_id": beneficiario_inm_tipo_beneficiario_id_ct.val()
         },
     }).done(function (data) {  // Función que se ejecuta si todo ha ido bien
+        console.log(data);
         limpia_txt(beneficiario_nombre_ct);
         limpia_txt(beneficiario_apellido_paterno_ct);
         limpia_txt(beneficiario_apellido_materno_ct);
         beneficiario_inm_parentesco_id_ct.selectpicker('refresh');
         beneficiario_inm_tipo_beneficiario_id_ct.selectpicker('refresh');
-        window.location.reload()
 
-        console.log(data);
+        $('.gt_beneficiario_table > tbody').empty();
+        $.each(data, function (i, item) {
+            var rows = "<tr>" +
+                "<td id='id'>" + item.id + "</td>" +
+                "<td id='nombres'>" + item.Nombres + "</td>" +
+                "<td id='cargo'>" + item.Cargo + "</td>" +
+                "<td id='dpto'>" + item.Dpto + "</td>" +
+                "</tr>";
+            $('.gt_beneficiario_table> tbody').append(rows);
+        });
+
     }).fail(function (jqXHR, textStatus, errorThrown) { // Función que se ejecuta si algo ha ido mal
 
         alert('Error al ejecutar');
