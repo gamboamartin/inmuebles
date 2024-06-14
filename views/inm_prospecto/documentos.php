@@ -43,11 +43,7 @@
                     <input type="hidden" id="documentos-verificar" name="documentos" required>
                     <button id="verificar" class="btn btn-success">Verificar</button>
                 </form>
-                <form id="form-documentos-enviar" action="<?php echo $controlador->link_envia_documentos; ?>" method="post"
-                      enctype="multipart/form-data">
-                    <input type="hidden" id="documentos-enviar" name="documentos" required>
                     <button id="enviar" class="btn btn-success">Enviar Documentos</button>
-                </form>
             </div>
         </div>
     </div>
@@ -65,5 +61,21 @@
     <span class="close-btn" id="closeModalBtn">&times;</span>
     <h2>Vista Previa</h2>
     <div class="content">
+    </div>
+</dialog>
+
+<dialog id="modalSnd">
+    <span class="close-btn" id="closeModalSendBtn">&times;</span>
+    <h2>Enviar Documentos</h2>
+    <div class="content">
+        <form id="form-documentos-enviar" action="<?php echo $controlador->link_envia_documentos; ?>" method="post"
+              enctype="multipart/form-data">
+            <input type="hidden" id="documentos-enviar" name="documentos" required>
+            <?php echo $controlador->inputs->documentos;?>
+            <?php echo $controlador->inputs->receptor; ?>
+            <?php echo $controlador->inputs->asunto; ?>
+            <?php echo $controlador->inputs->mensaje; ?>
+            <button id="enviarDocs" class="btn btn-success">Enviar</button>
+        </form>
     </div>
 </dialog>

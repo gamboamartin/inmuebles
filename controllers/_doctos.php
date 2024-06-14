@@ -77,7 +77,7 @@ class _doctos{
         return $r_doc_tipo_documento->registros;
     }
 
-    final public function documentos_de_prospecto(int $inm_prospecto_id, PDO $link, bool $todos){
+    final public function documentos_de_prospecto(int $inm_prospecto_id, PDO $link, bool $todos, array $tipos_documentos){
 
         $inm_prospecto = (new inm_prospecto(link: $link))->registro(registro_id: $inm_prospecto_id,retorno_obj: true);
         if(errores::$error){
@@ -144,23 +144,13 @@ class _doctos{
             return $this->error->error(mensaje: 'Error al Obtener configuraciones',data:  $r_inm_conf_docs_prospecto);
         }
 
-
-        $confs = $r_inm_conf_docs_prospecto->registros;
-
-
-        $values_in = array();
-        foreach ($confs as $value){
-            $values_in[] = $value['doc_tipo_documento_id'];
-        }
         $in['llave'] = 'doc_tipo_documento.id';
-        $in['values'] = $values_in;
-
+        $in['values'] = $tipos_documentos;
         $r_doc_tipo_documento = (new doc_tipo_documento(link: $link))->filtro_and(in: $in);
 
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al Obtener tipos de documento',data:  $r_doc_tipo_documento);
         }
-
 
 
         return $r_doc_tipo_documento->registros;

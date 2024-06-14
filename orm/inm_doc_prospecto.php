@@ -150,16 +150,16 @@ class inm_doc_prospecto extends _modelo_parent
         return $descripcion;
     }
 
-    final public function inm_docs_prospecto(int $inm_prospecto_id)
+    final public function inm_docs_prospecto(int $inm_prospecto,array $tipos_documentos)
     {
-
-        $filtro['inm_prospecto.id'] = $inm_prospecto_id;
-        $r_inm_doc_prospecto = $this->filtro_and(filtro: $filtro);
+        $in['llave'] = 'doc_documento.doc_tipo_documento_id';
+        $in['values'] = $tipos_documentos;
+        $r_inm_doc_prospecto = $this->filtro_and(in: $in);
         if (errores::$error) {
             return $this->error->error(mensaje: 'Error al obtener documentos', data: $r_inm_doc_prospecto);
         }
+
         return $r_inm_doc_prospecto->registros;
     }
-
 
 }

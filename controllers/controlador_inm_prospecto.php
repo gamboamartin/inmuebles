@@ -18,9 +18,11 @@ use gamboamartin\comercial\models\com_prospecto_etapa;
 use gamboamartin\errores\errores;
 use gamboamartin\inmuebles\html\inm_prospecto_html;
 use gamboamartin\inmuebles\models\_base_paquete;
+use gamboamartin\inmuebles\models\_email;
 use gamboamartin\inmuebles\models\_inm_prospecto;
 use gamboamartin\inmuebles\models\_upd_prospecto;
 use gamboamartin\inmuebles\models\inm_beneficiario;
+use gamboamartin\inmuebles\models\inm_conf_docs_prospecto;
 use gamboamartin\inmuebles\models\inm_doc_prospecto;
 use gamboamartin\inmuebles\models\inm_prospecto;
 use gamboamartin\inmuebles\models\inm_referencia_prospecto;
@@ -160,7 +162,7 @@ class controlador_inm_prospecto extends _ctl_formato
             'numero_nep', 'extension_nep', 'nss', 'curp', 'rfc', 'numero_exterior', 'numero_interior', 'observaciones',
             'fecha_nacimiento', 'sub_cuenta', 'monto_final', 'descuento', 'puntos', 'telefono_casa', 'correo_empresa',
             'correo_mi_cuenta_infonavit', 'password_mi_cuenta_infonavit', 'nss_extra', 'liga_red_social', 'area_empresa',
-            'texto_exterior', 'texto_interior');
+            'texto_exterior', 'texto_interior','documentos','receptor','asunto','mensaje');
 
         $keys->selects = array();
 
@@ -258,12 +260,27 @@ class controlador_inm_prospecto extends _ctl_formato
         if (errores::$error) {
             return $this->retorno_error(mensaje: 'Error al integrar buttons', data: $inm_conf_docs_prospecto, header: $header, ws: $ws);
         }
+        $base = $this->base_upd(keys_selects:  array(), params: array(), params_ajustados: array());
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al integrar base', data: $base, header: $header, ws: $ws);
+        }
+        $keys_selects = array();
+        $base = $this->base_upd(keys_selects: $keys_selects, params: array(), params_ajustados: array());
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al integrar base', data: $base, header: $header, ws: $ws);
+        }
 
+        $this->row_upd->asunto= "TU MENSAJE";
+        $this->row_upd->mensaje= "TU MENSAJE";
         $this->inm_conf_docs_prospecto = $inm_conf_docs_prospecto;
+
+        print_r($this->row_upd);
+
 
 
         return $inm_conf_docs_prospecto;
     }
+
 
     public function etapa(bool $header, bool $ws = false): array|stdClass
     {
@@ -345,6 +362,100 @@ class controlador_inm_prospecto extends _ctl_formato
         return $documentos;
     }
 
+    public function valida_campos(array $campos): array{
+        $campos_validos = array('documentos', 'receptor', 'asunto', 'mensaje');
+        $campos_faltantes = array_diff($campos_validos, array_keys($campos));
+        if (!empty($campos_faltantes)) {
+            $mensaje_error = 'Faltan los siguientes campos: ' . implode(', ', $campos_faltantes);
+            return $this->errores->error(mensaje: $mensaje_error, data: $campos_faltantes);
+        }
+
+        return $campos;
+    }
+
+    final public function envia_documentos(bool $header, bool $ws = false): array|string
+    {
+        $campos_necesarios = $this->valida_campos($_POST);
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al validar campos', data: $campos_necesarios,
+                header: $header, ws: $ws);
+        }
+
+        $validacion = (new _email($this->link))->validar_correo(correo: $campos_necesarios['receptor']);
+        if (!$validacion) {
+            $mensaje_error = sprintf(_email::ERROR_CORREO_NO_VALIDO, $campos_necesarios['receptor']);
+            return $this->retorno_error(mensaje: $mensaje_error, data: $campos_necesarios,
+                header: $header, ws: $ws);
+        }
+
+        $this->link->beginTransaction();
+
+        $siguiente_view = (new actions())->init_alta_bd();
+        if (errores::$error) {
+            $this->link->rollBack();
+            return $this->retorno_error(mensaje: 'Error al obtener siguiente view', data: $siguiente_view,
+                header: $header, ws: $ws);
+        }
+
+        $receptor = (new _email($this->link))->receptor(correo: $campos_necesarios['receptor']);
+        if (errores::$error) {
+            $this->link->rollBack();
+            return $this->retorno_error(mensaje: 'Error al obtener receptor', data: $receptor,
+                header: $header, ws: $ws);
+        }
+
+        $emisor = (new _email($this->link))->emisor(correo: 'test@ivitec.mx');
+        if (errores::$error) {
+            $this->link->rollBack();
+            return $this->retorno_error(mensaje: 'Error al obtener emisor', data: $emisor,
+                header: $header, ws: $ws);
+        }
+
+        $mensaje = (new _email($this->link))->mensaje(asunto: $campos_necesarios['asunto'],
+            mensaje: $campos_necesarios['mensaje'], emisor: $emisor['not_emisor_id']);
+        if (errores::$error) {
+            $this->link->rollBack();
+            return $this->retorno_error(mensaje: 'Error al obtener mensaje', data: $mensaje,
+                header: $header, ws: $ws);
+        }
+
+        $mensaje_receptor = (new _email($this->link))->mensaje_receptor(mensaje: $mensaje['not_mensaje_id'],
+            receptor: $receptor['not_receptor_id']);
+        if (errores::$error) {
+            $this->link->rollBack();
+            return $this->retorno_error(mensaje: 'Error al obtener mensaje receptor', data: $mensaje_receptor,
+                header: $header, ws: $ws);
+        }
+
+        $documentos = explode(',', $campos_necesarios);
+        $r_alta_doc_etapa = new stdClass();
+
+        $mensaje_adjuntos = (new _email($this->link))->adjuntos(mensaje: $mensaje['not_mensaje_id'],
+            documentos: $documentos);
+        if (errores::$error) {
+            $this->link->rollBack();
+            return $this->retorno_error(mensaje: 'Error al obtener adjuntos', data: $mensaje_adjuntos,
+                header: $header, ws: $ws);
+        }
+
+        print_r($mensaje_adjuntos); exit();
+
+        $this->link->commit();
+
+        if ($header) {
+            $this->retorno_base(registro_id: $this->registro_id, result: $r_alta_doc_etapa,
+                siguiente_view: "documentos", ws: $ws);
+        }
+        if ($ws) {
+            header('Content-Type: application/json');
+            echo json_encode($r_alta_doc_etapa, JSON_THROW_ON_ERROR);
+            exit;
+        }
+        $r_alta_doc_etapa->siguiente_view = "documentos";
+
+        return $r_alta_doc_etapa;
+    }
+
     final public function verifica_documentos(bool $header, bool $ws = false): array|string
     {
         $this->link->beginTransaction();
@@ -393,7 +504,6 @@ class controlador_inm_prospecto extends _ctl_formato
     public function tipos_documentos(bool $header, bool $ws = false): array
     {
         $inm_conf_docs_prospecto = (new _inm_prospecto())->integra_inm_documentos(controler: $this);
-
         if (errores::$error) {
             return $this->retorno_error(mensaje: 'Error al integrar buttons', data: $inm_conf_docs_prospecto, header: $header, ws: $ws);
         }
@@ -691,6 +801,26 @@ class controlador_inm_prospecto extends _ctl_formato
         }
         $keys_selects = (new init())->key_select_txt(cols: 6, key: 'lada_com',
             keys_selects: $keys_selects, place_holder: 'Lada', required: false);
+        if (errores::$error) {
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $keys_selects);
+        }
+        $keys_selects = (new init())->key_select_txt(cols: 12, key: 'documentos',
+            keys_selects: $keys_selects, place_holder: 'Documentos');
+        if (errores::$error) {
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $keys_selects);
+        }
+        $keys_selects = (new init())->key_select_txt(cols: 12, key: 'receptor',
+            keys_selects: $keys_selects, place_holder: 'Receptor');
+        if (errores::$error) {
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $keys_selects);
+        }
+        $keys_selects = (new init())->key_select_txt(cols: 12, key: 'asunto',
+            keys_selects: $keys_selects, place_holder: 'Asunto');
+        if (errores::$error) {
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $keys_selects);
+        }
+        $keys_selects = (new init())->key_select_txt(cols: 12, key: 'mensaje',
+            keys_selects: $keys_selects, place_holder: 'Mensaje');
         if (errores::$error) {
             return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $keys_selects);
         }
@@ -1181,6 +1311,22 @@ class controlador_inm_prospecto extends _ctl_formato
 
     final public function subir_documento(bool $header, bool $ws = false)
     {
+        $inm_prospecto = (new inm_prospecto(link: $this->link))->registro(registro_id: $this->registro_id);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al obtener inm_prospecto',data:  $inm_prospecto);
+        }
+
+        $inm_conf_docs_prospecto = (new inm_conf_docs_prospecto(link: $this->link))->filtro_and(
+            columnas: ['doc_tipo_documento_id'],
+            filtro: array('inm_attr_tipo_credito_id' => $inm_prospecto['inm_attr_tipo_credito_id']));
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al obtener inm_conf_docs_prospecto',data:  $inm_conf_docs_prospecto);
+        }
+
+        $doc_ids = array_map(function($registro) {
+            return $registro['doc_tipo_documento_id'];
+        }, $inm_conf_docs_prospecto->registros);
+
 
         $this->inputs = new stdClass();
 
@@ -1193,7 +1339,7 @@ class controlador_inm_prospecto extends _ctl_formato
         $this->inputs->inm_prospecto_id = $inm_prospecto_id;
 
         $doc_tipos_documentos = (new _doctos())->documentos_de_prospecto(inm_prospecto_id: $this->registro_id,
-            link: $this->link, todos: false);
+            link: $this->link, todos: false,tipos_documentos: $doc_ids);
         if (errores::$error) {
             return $this->retorno_error(mensaje: 'Error al obtener tipos de documento', data: $doc_tipos_documentos,
                 header: $header, ws: $ws);
