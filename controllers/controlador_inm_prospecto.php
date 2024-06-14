@@ -521,6 +521,23 @@ class controlador_inm_prospecto extends _ctl_formato
 
     public function load_html(bool $header, bool $ws = false): array
     {
+        $r_modifica = $this->init_modifica();
+        if (errores::$error) {
+            return $this->retorno_error(
+                mensaje: 'Error al generar salida de template', data: $r_modifica, header: $header, ws: $ws);
+        }
+
+        $data = (new \gamboamartin\inmuebles\controllers\_inm_prospecto())->inputs_base(controlador: $this);
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al integrar datos para front', data: $data,
+                header: $header, ws: $ws);
+        }
+
+        $base = $this->base_upd(keys_selects: $data->keys_selects, params: array(), params_ajustados: array());
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al integrar base', data: $base, header: $header, ws: $ws);
+        }
+
         echo $this->inputs->inm_producto_infonavit_id;
         echo $this->inputs->inm_attr_tipo_credito_id;
         echo $this->inputs->inm_destino_credito_id;

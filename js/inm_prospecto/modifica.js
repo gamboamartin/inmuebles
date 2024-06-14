@@ -570,6 +570,37 @@ modal.addEventListener('click', function(event) {
 
 
 
+let sl_inm_institucion_hipotecaria = $("#inm_institucion_hipotecaria_id");
+sl_inm_institucion_hipotecaria.change(function () {
+    let id = $(this).val();
+
+    if (id === '') {
+        return;
+    }
+
+    var loaderOverlay = $('<div class="loader-overlay"><div class="loader"></div></div>');
+    $('#apartado_4 .contenido-credito').append(loaderOverlay);
+
+    let url = "index.php?seccion=inm_prospecto&ws=1&accion=load_html&registro_id=" + registro_id + "&ws=1&session_id=" + session_id;
+
+    $.ajax({
+        url: url,
+        type: 'GET',
+        success: function (data) {
+            $("#apartado_4 .contenido-credito").html(data);
+            console.log(data)
+
+        },
+        error: function (error) {
+            $("#apartado_4 .contenido-credito").html("<p>Error al cargar el contenido.</p>");
+        }
+    });
+
+
+});
+
+
+
 
 
 
