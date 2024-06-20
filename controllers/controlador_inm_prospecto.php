@@ -494,17 +494,31 @@ class controlador_inm_prospecto extends _ctl_formato
         $r_alta_doc_etapa = new stdClass();
 
         foreach ($documentos as $documento) {
-            $registro = (new inm_doc_prospecto($this->link))->registro(registro_id: $documento, retorno_obj: true);
+            $prospecto = (new inm_prospecto($this->link))->registro(registro_id: $this->registro_id);
             if (errores::$error) {
-                return $this->retorno_error(mensaje: 'Error al obtener documento', data: $registro, header: $header, ws: $ws);
+                return $this->retorno_error(mensaje: 'Error al obtener prospecto', data: $prospecto, header: $header, ws: $ws);
             }
 
-            $r_alta_doc_etapa = (new inm_doc_prospecto($this->link))->
-            genera_documento_etapa(doc_documento_id: $registro->doc_documento_id, etapa: "VERIFICADO");
-            if (errores::$error) {
-                return $this->retorno_error(mensaje: 'Error al generar documento etapa',
-                    data: $r_alta_doc_etapa, header: $header, ws: $ws);
+            if ($prospecto['inm_prospecto_etapa'] != "VERIFICADO") {
+                $registro = (new inm_doc_prospecto($this->link))->registro(registro_id: $documento, retorno_obj: true);
+                if (errores::$error) {
+                    return $this->retorno_error(mensaje: 'Error al obtener documento', data: $registro, header: $header, ws: $ws);
+                }
+
+                $r_alta_doc_etapa = (new inm_doc_prospecto($this->link))->
+                genera_documento_etapa(doc_documento_id: $registro->doc_documento_id, etapa: "VERIFICADO");
+                if (errores::$error) {
+                    return $this->retorno_error(mensaje: 'Error al generar documento etapa',
+                        data: $r_alta_doc_etapa, header: $header, ws: $ws);
+                }
+
+                $accion = (new inm_prospecto($this->link))->actualiza_etapa(com_prospecto_id: $this->registro_id,
+                    etapa: "VERIFICADO");
+                if (errores::$error) {
+                    return $this->retorno_error(mensaje: 'Error al actualizar etapa', data: $accion, header: $header, ws: $ws);
+                }
             }
+
         }
 
         $this->link->commit();

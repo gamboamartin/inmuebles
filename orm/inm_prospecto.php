@@ -157,6 +157,16 @@ class inm_prospecto extends _modelo_parent{
         return $r_modifica_nombre_completo_valida;
     }
 
+    public function actualiza_etapa(int $com_prospecto_id, string $etapa) : array|stdClass
+    {
+        $accion = $this->modifica_bd(registro: array('etapa'=>$etapa), id: $com_prospecto_id);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al actualizar etapa',data:  $accion);
+        }
+
+        return $accion;
+    }
+
     /**
      * Ajusta un registro de datos
      * @param stdClass $r_modifica Resultado de modificacion base

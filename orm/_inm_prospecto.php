@@ -291,9 +291,6 @@ class _inm_prospecto{
             return $this->error->error(mensaje: 'Error al integrar buttons',data:  $inm_docs_prospecto);
         }
 
-
-
-
         return $inm_docs_prospecto;
     }
 
