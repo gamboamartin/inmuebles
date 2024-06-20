@@ -1382,11 +1382,6 @@ class controlador_inm_prospecto extends _ctl_formato
             return $this->error->error(mensaje: 'Error al obtener inm_conf_docs_prospecto', data: $inm_conf_docs_prospecto);
         }
 
-        $doc_ids = array_map(function ($registro) {
-            return $registro['doc_tipo_documento_id'];
-        }, $inm_conf_docs_prospecto->registros);
-
-
         $this->inputs = new stdClass();
 
         $filtro['inm_prospecto.id'] = $this->registro_id;
@@ -1397,11 +1392,19 @@ class controlador_inm_prospecto extends _ctl_formato
         }
         $this->inputs->inm_prospecto_id = $inm_prospecto_id;
 
-        $doc_tipos_documentos = (new _doctos())->documentos_de_prospecto(inm_prospecto_id: $this->registro_id,
-            link: $this->link, todos: false, tipos_documentos: $doc_ids);
-        if (errores::$error) {
-            return $this->retorno_error(mensaje: 'Error al obtener tipos de documento', data: $doc_tipos_documentos,
-                header: $header, ws: $ws);
+        $doc_ids = array_map(function ($registro) {
+            return $registro['doc_tipo_documento_id'];
+        }, $inm_conf_docs_prospecto->registros);
+
+        $doc_tipos_documentos = array();
+
+        if (count($doc_ids) > 0) {
+            $doc_tipos_documentos = (new _doctos())->documentos_de_prospecto(inm_prospecto_id: $this->registro_id,
+                link: $this->link, todos: false, tipos_documentos: $doc_ids);
+            if (errores::$error) {
+                return $this->retorno_error(mensaje: 'Error al obtener tipos de documento', data: $doc_tipos_documentos,
+                    header: $header, ws: $ws);
+            }
         }
 
         $_doc_tipo_documento_id = -1;
