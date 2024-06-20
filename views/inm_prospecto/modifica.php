@@ -48,15 +48,14 @@
 
                         <?php echo $controlador->header_frontend->apartado_3; ?>
                         <div id="apartado_3">
-
-                            <?php echo $controlador->inputs->dp_pais_id; ?>
-                            <?php echo $controlador->inputs->dp_estado_id; ?>
-                            <?php echo $controlador->inputs->dp_municipio_id; ?>
-                            <?php echo $controlador->inputs->dp_cp_id; ?>
-                            <?php echo $controlador->inputs->dp_colonia_postal_id; ?>
-                            <?php echo $controlador->inputs->dp_calle_pertenece_id; ?>
-                            <?php echo $controlador->inputs->texto_exterior; ?>
-                            <?php echo $controlador->inputs->texto_interior; ?>
+                            <?php echo $controlador->inputs->direccion->dp_pais_id; ?>
+                            <?php echo $controlador->inputs->direccion->dp_estado_id; ?>
+                            <?php echo $controlador->inputs->direccion->dp_municipio_id; ?>
+                            <?php echo $controlador->inputs->direccion->cp; ?>
+                            <?php echo $controlador->inputs->direccion->colonia; ?>
+                            <?php echo $controlador->inputs->direccion->calle; ?>
+                            <?php echo $controlador->inputs->direccion->texto_exterior; ?>
+                            <?php echo $controlador->inputs->direccion->texto_interior; ?>
                             <?php include (new views())->ruta_templates . 'botons/submit/modifica_bd.php'; ?>
 
                             <div class="col-md-12 table-responsive com_direccion_table">

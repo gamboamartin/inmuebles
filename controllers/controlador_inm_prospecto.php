@@ -274,7 +274,7 @@ class controlador_inm_prospecto extends _ctl_formato
         $this->row_upd->mensaje = "TU MENSAJE";
         $this->inm_conf_docs_prospecto = $inm_conf_docs_prospecto;
 
-        print_r($this->row_upd);
+        //print_r($this->row_upd);
 
 
         return $inm_conf_docs_prospecto;
@@ -1089,6 +1089,14 @@ class controlador_inm_prospecto extends _ctl_formato
         }
 
         $this->inputs->beneficiario = $beneficiario;
+
+        $direccion = (new _direccion())->inputs_direccion(controler: $this);
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al obtener direccion', data: $direccion,
+                header: $header, ws: $ws);
+        }
+
+        $this->inputs->direccion = $direccion;
 
         $filtro['inm_prospecto.id'] = $this->registro_id;
 

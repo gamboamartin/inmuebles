@@ -225,6 +225,19 @@ let sl_referencia_dp_colonia_postal_id = $("#referencia_dp_colonia_postal_id");
 let sl_referencia_dp_calle_pertenece_id = $("#referencia_dp_calle_pertenece_id");
 
 
+let sl_direccion_dp_pais_id = $("#direccion_dp_pais_id");
+let sl_direccion_dp_estado_id = $("#direccion_dp_estado_id");
+let sl_direccion_dp_municipio_id = $("#direccion_dp_municipio_id");
+
+sl_direccion_dp_pais_id.change(function () {
+    let direccion_dp_pais_id = $(this).val();
+    dp_asigna_estados(direccion_dp_pais_id, '', '#direccion_dp_estado_id');
+});
+sl_direccion_dp_estado_id.change(function () {
+    let direccion_dp_estado_id = $(this).val();
+    dp_asigna_municipios(direccion_dp_estado_id, '', '#direccion_dp_municipio_id');
+});
+
 let nombre = '';
 let apellido_paterno = '';
 let apellido_materno = '';

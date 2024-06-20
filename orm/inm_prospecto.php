@@ -740,6 +740,11 @@ class inm_prospecto extends _modelo_parent{
 
 
     final public function transacciones_upd(int $inm_prospecto_id){
+        $result_direccion = (new _upd_prospecto())->transacciona_direccion(inm_prospecto_id: $inm_prospecto_id,link: $this->link);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al insertar direccion', data: $result_direccion);
+        }
+
         $result_conyuge = (new _upd_prospecto())->transacciona_conyuge(inm_prospecto_id: $inm_prospecto_id,link: $this->link);
         if (errores::$error) {
             return $this->error->error(mensaje: 'Error al insertar conyuge', data: $result_conyuge);
@@ -757,6 +762,7 @@ class inm_prospecto extends _modelo_parent{
         $data->result_conyuge = $result_conyuge;
         $data->result_beneficiario = $result_beneficiario;
         $data->result_referencia = $result_referencia;
+        $data->result_direccion = $result_direccion;
 
         return $data;
     }

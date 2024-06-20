@@ -351,5 +351,71 @@ class _upd_prospecto{
         return $datos;
 
     }
-    
+
+    final public function transacciona_direccion(int $inm_prospecto_id, PDO $link){
+        $datos = (new \gamboamartin\inmuebles\controllers\_inm_prospecto())->dato(existe: false,key_data: 'direccion');
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al obtener dato de direccion',data:  $datos);
+        }
+
+        if($datos->tiene_dato){
+            $result_direccion = $this->ajusta_direccion(datos: $datos,inm_prospecto_id: $inm_prospecto_id,link: $link);
+            if (errores::$error) {
+                return $this->error->error(mensaje: 'Error al insertar direccion', data: $result_direccion);
+            }
+            $datos->result_direccion = $result_direccion;
+        }
+        return $datos;
+
+    }
+
+    private function ajusta_direccion(stdClass $datos, int $inm_prospecto_id, PDO $link){
+
+        $r_inm_direccion_bd = $this->inserta_direccion(direccion: $datos->row,
+            inm_prospecto_id: $inm_prospecto_id,link: $link);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al insertar r_inm_beneficiario_bd', data: $r_inm_direccion_bd);
+        }
+        $datos = $r_inm_direccion_bd;
+
+        return $datos;
+    }
+
+    public function inserta_direccion(array $direccion, int $inm_prospecto_id, PDO $link): array|stdClass
+    {
+        $keys = array('cp','colonia','calle','texto_exterior');
+        $valida = $this->validacion->valida_existencia_keys(keys: $keys,registro:  $direccion);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al validar direccion',data:  $valida);
+        }
+
+        $keys = array('dp_municipio_id');
+        $valida = $this->validacion->valida_ids(keys: $keys,registro:  $direccion);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al validar beneficiario',data:  $valida);
+        }
+
+        $alta_direccion= (new com_direccion(link: $link))->alta_registro(registro: $direccion);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al insertar alta_direccion', data: $alta_direccion);
+        }
+
+        if($inm_prospecto_id <= 0){
+            return $this->error->error(mensaje: 'Error inm_prospecto_id debe ser mayor a 0',data:  $inm_prospecto_id);
+        }
+
+        $direccion_prospecto['inm_prospecto_id'] = $inm_prospecto_id;
+        $direccion_prospecto['com_direccion_id'] = $alta_direccion['registro_id'];
+
+        $alta_direccion_prosp= (new com_direccion_prospecto(link: $link))->alta_registro(registro: $direccion_prospecto);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al insertar alta_direccion', data: $alta_direccion_prosp);
+        }
+
+        $data = new stdClass();
+        $data->alta_direccion = $alta_direccion;
+
+
+        return $data;
+    }
 }
