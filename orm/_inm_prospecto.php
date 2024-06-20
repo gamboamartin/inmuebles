@@ -274,6 +274,9 @@ class _inm_prospecto{
             return $registro['doc_tipo_documento_id'];
         }, $inm_conf_docs_prospecto->registros);
 
+        if (count($doc_ids) <= 0) {
+            return array();
+        }
 
         $inm_docs_prospecto = (new inm_doc_prospecto(link: $controler->link))->inm_docs_prospecto(
             inm_prospecto: $controler->registro_id, tipos_documentos: $doc_ids);

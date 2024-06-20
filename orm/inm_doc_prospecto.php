@@ -150,11 +150,16 @@ class inm_doc_prospecto extends _modelo_parent
         return $descripcion;
     }
 
-    final public function inm_docs_prospecto(int $inm_prospecto,array $tipos_documentos)
+    final public function inm_docs_prospecto(int $inm_prospecto, array $tipos_documentos)
     {
-        $in['llave'] = 'doc_documento.doc_tipo_documento_id';
-        $in['values'] = $tipos_documentos;
-        $r_inm_doc_prospecto = $this->filtro_and(in: $in);
+        $in = array();
+
+        if (count($tipos_documentos) > 0) {
+            $in['llave'] = 'doc_documento.doc_tipo_documento_id';
+            $in['values'] = $tipos_documentos;
+        }
+
+        $r_inm_doc_prospecto = $this->filtro_and(filtro: array('inm_prospecto.id' => $inm_prospecto), in: $in);
         if (errores::$error) {
             return $this->error->error(mensaje: 'Error al obtener documentos', data: $r_inm_doc_prospecto);
         }
