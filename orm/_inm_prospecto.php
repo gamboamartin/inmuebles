@@ -265,7 +265,7 @@ class _inm_prospecto{
 
         $inm_conf_docs_prospecto = (new inm_conf_docs_prospecto(link: $controler->link))->filtro_and(
             columnas: ['doc_tipo_documento_id'],
-            filtro: array('inm_attr_tipo_credito_id' => $inm_prospecto['inm_attr_tipo_credito_id']));
+            filtro: array('inm_institucion_hipotecaria_id' => $inm_prospecto['inm_institucion_hipotecaria_id']));
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al obtener inm_conf_docs_prospecto',data:  $inm_conf_docs_prospecto);
         }
