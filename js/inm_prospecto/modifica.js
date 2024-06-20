@@ -592,7 +592,7 @@ modal.addEventListener('click', function(event) {
 });
 
 
-
+/*
 let sl_inm_institucion_hipotecaria = $("#inm_institucion_hipotecaria_id");
 sl_inm_institucion_hipotecaria.change(function () {
     let id = $(this).val();
@@ -620,7 +620,7 @@ sl_inm_institucion_hipotecaria.change(function () {
     });
 
 
-});
+});*/
 
 
 

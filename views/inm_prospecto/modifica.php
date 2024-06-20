@@ -102,6 +102,11 @@
                         <?php echo $controlador->header_frontend->apartado_4; ?>
                         <div id="apartado_4">
                             <?php echo $controlador->inputs->inm_institucion_hipotecaria_id; ?>
+                            <?php echo $controlador->inputs->inm_producto_infonavit_id; ?>
+                            <?php echo $controlador->inputs->inm_attr_tipo_credito_id; ?>
+                            <?php echo $controlador->inputs->inm_destino_credito_id; ?>
+                            <?php echo $controlador->inputs->es_segundo_credito; ?>
+                            <?php echo $controlador->inputs->inm_plazo_credito_sc_id; ?>
                             <div class="contenido-credito">
 
                             </div>
@@ -282,9 +287,9 @@
         <?php echo $controlador->inputs->dp_pais_id; ?>
         <?php echo $controlador->inputs->dp_estado_id; ?>
         <?php echo $controlador->inputs->dp_municipio_id; ?>
-        <?php echo $controlador->inputs->dp_cp_id; ?>
-        <?php echo $controlador->inputs->dp_colonia_postal_id; ?>
-        <?php echo $controlador->inputs->dp_calle_pertenece_id; ?>
+        <?php echo $controlador->inputs->cp; ?>
+        <?php echo $controlador->inputs->colonia; ?>
+        <?php echo $controlador->inputs->calle; ?>
         <?php echo $controlador->inputs->texto_exterior; ?>
         <?php echo $controlador->inputs->texto_interior; ?>
 
