@@ -143,19 +143,25 @@ class _upd_prospecto{
 
     public function inserta_domicilio(array $domicilio, int $inm_prospecto_id, PDO $link): array|stdClass
     {
-        $keys = array('dp_calle_pertenece_id');
+        $keys = array('cp','colonia','calle','texto_exterior');
         $valida = $this->validacion->valida_existencia_keys(keys: $keys,registro:  $domicilio);
         if(errores::$error){
-            return $this->error->error(mensaje: 'Error al validar campos',data:  $valida);
+            return $this->error->error(mensaje: 'Error al validar direccion',data:  $valida);
+        }
+
+        $keys = array('dp_municipio_id');
+        $valida = $this->validacion->valida_ids(keys: $keys,registro:  $domicilio);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al validar beneficiario',data:  $valida);
         }
 
         if($inm_prospecto_id <= 0){
             return $this->error->error(mensaje: 'Error inm_prospecto_id debe ser mayor a 0',data:  $inm_prospecto_id);
         }
 
-        $prospecto = (new inm_prospecto(link: $link))->registro(registro_id: $inm_prospecto_id);
+        $r_com_prospecto = (new inm_prospecto(link: $link))->registro(registro_id: $inm_prospecto_id);
         if(errores::$error){
-            return $this->error->error(mensaje: 'Error al obtener prospecto',data:  $prospecto);
+            return $this->error->error(mensaje: 'Error al validar beneficiario',data:  $valida);
         }
 
         $tipo_direccion = (new com_tipo_direccion(link: $link))->filtro_and();
@@ -167,25 +173,23 @@ class _upd_prospecto{
             return ['error' => 'No existe un tipo de dirección valido registrado en el sistema'] ;
         }
 
+        $alta_relacion = array();
         foreach ($tipo_direccion->registros as $value) {
-            $registro['com_tipo_direccion_id'] = $value['com_tipo_direccion_id'];
-            $registro['dp_calle_pertenece_id'] = $domicilio['dp_calle_pertenece_id'];
-            $registro['texto_interior'] = $domicilio['texto_interior'];
-            $registro['texto_exterior'] = $domicilio['texto_exterior'];
-            $alta_direccion = (new com_direccion(link: $link))->alta_registro(registro: $registro);
+            $domicilio['com_tipo_direccion_id'] = $value['com_tipo_direccion_id'];
+            $alta_direccion = (new com_direccion(link: $link))->alta_registro(registro: $domicilio);
             if (errores::$error) {
                 return $this->error->error(mensaje: 'Error al insertar alta_direccion', data: $alta_direccion);
             }
 
             $relacion['com_direccion_id'] = $alta_direccion->registro_id;
-            $relacion['com_prospecto_id'] = $prospecto['com_prospecto_id'];
+            $relacion['com_prospecto_id'] = $r_com_prospecto['com_prospecto_id'];
             $alta_relacion = (new com_direccion_prospecto(link: $link))->alta_registro(registro: $relacion);
             if (errores::$error) {
                 return $this->error->error(mensaje: 'Error al insertar alta_relacion', data: $alta_relacion);
             }
         }
 
-        return $prospecto;
+        return $alta_relacion;
     }
 
     /**
@@ -371,7 +375,7 @@ class _upd_prospecto{
 
     private function ajusta_direccion(stdClass $datos, int $inm_prospecto_id, PDO $link){
 
-        $r_inm_direccion_bd = $this->inserta_direccion(direccion: $datos->row,
+        $r_inm_direccion_bd = $this->inserta_domicilio(domicilio: $datos->row,
             inm_prospecto_id: $inm_prospecto_id,link: $link);
         if (errores::$error) {
             return $this->error->error(mensaje: 'Error al insertar r_inm_beneficiario_bd', data: $r_inm_direccion_bd);

@@ -84,9 +84,9 @@
                                             <td><?php echo $direccion['dp_pais_descripcion']; ?></td>
                                             <td><?php echo $direccion['dp_estado_descripcion']; ?></td>
                                             <td><?php echo $direccion['dp_municipio_descripcion']; ?></td>
-                                            <td><?php echo $direccion['dp_cp_descripcion']; ?></td>
-                                            <td><?php echo $direccion['dp_colonia_postal_descripcion']; ?></td>
-                                            <td><?php echo $direccion['dp_calle_pertenece_descripcion']; ?></td>
+                                            <td><?php echo $direccion['com_direccion_cp']; ?></td>
+                                            <td><?php echo $direccion['com_direccion_colonia']; ?></td>
+                                            <td><?php echo $direccion['com_direccion_calle']; ?></td>
                                             <td><?php echo $direccion['com_direccion_texto_exterior']; ?></td>
                                             <td><?php echo $direccion['com_direccion_texto_interior']; ?></td>
                                             <td data-id="<?php echo $direccion['com_direccion_id']; ?>"><?php echo $direccion['btn_mod']; ?></td>
