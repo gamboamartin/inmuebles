@@ -249,22 +249,22 @@ class controlador_inm_prospecto extends _ctl_formato
 
     final public function documentos(bool $header, bool $ws = false): array
     {
-
         $template = $this->modifica(header: false);
         if (errores::$error) {
             return $this->retorno_error(mensaje: 'Error al integrar base', data: $template, header: $header, ws: $ws);
         }
 
         $inm_conf_docs_prospecto = (new _inm_prospecto())->integra_inm_documentos(controler: $this);
-
         if (errores::$error) {
             return $this->retorno_error(mensaje: 'Error al integrar buttons', data: $inm_conf_docs_prospecto, header: $header, ws: $ws);
         }
-        $base = $this->base_upd(keys_selects: array(), params: array(), params_ajustados: array());
-        if (errores::$error) {
-            return $this->retorno_error(mensaje: 'Error al integrar base', data: $base, header: $header, ws: $ws);
+
+        $keys_selects = $this->init_selects_inputs();
+        if (errores::$error) {return $this->errores->error(mensaje: 'Error al inicializar selects', data: $keys_selects);
         }
-        $keys_selects = array();
+
+        $keys_selects['com_tipo_prospecto_id']->id_selected = $this->registro['com_tipo_prospecto_id'];
+
         $base = $this->base_upd(keys_selects: $keys_selects, params: array(), params_ajustados: array());
         if (errores::$error) {
             return $this->retorno_error(mensaje: 'Error al integrar base', data: $base, header: $header, ws: $ws);
@@ -330,6 +330,28 @@ class controlador_inm_prospecto extends _ctl_formato
 
 
         return $template;
+    }
+
+    private function init_selects(array $keys_selects, string $key, string $label, int|null $id_selected = -1, int $cols = 6,
+                                  bool  $con_registros = true, array $filtro = array()): array
+    {
+        $keys_selects = $this->key_select(cols: $cols, con_registros: $con_registros, filtro: $filtro, key: $key,
+            keys_selects: $keys_selects, id_selected: $id_selected, label: $label);
+        if (errores::$error) {
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $keys_selects);
+        }
+
+        return $keys_selects;
+    }
+
+    public function init_selects_inputs(): array{
+
+        $keys_selects = $this->init_selects(keys_selects: array(), key: "com_tipo_prospecto_id", label: "Tipo de Prospecto");
+        if(errores::$error){
+            return $this->errores->error(mensaje: 'Error al integrar selector',data:  $keys_selects);
+        }
+
+        return $keys_selects;
     }
 
 
