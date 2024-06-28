@@ -10,6 +10,7 @@
 namespace gamboamartin\inmuebles\controllers;
 
 use base\controller\init;
+use gamboamartin\administrador\models\adm_campo;
 use gamboamartin\calculo\calculo;
 use gamboamartin\comercial\models\com_direccion;
 use gamboamartin\comercial\models\com_direccion_prospecto;
@@ -23,6 +24,7 @@ use gamboamartin\inmuebles\models\_inm_prospecto;
 use gamboamartin\inmuebles\models\_upd_prospecto;
 use gamboamartin\inmuebles\models\inm_beneficiario;
 use gamboamartin\inmuebles\models\inm_conf_docs_prospecto;
+use gamboamartin\inmuebles\models\inm_conf_institucion_campo;
 use gamboamartin\inmuebles\models\inm_doc_prospecto;
 use gamboamartin\inmuebles\models\inm_prospecto;
 use gamboamartin\inmuebles\models\inm_referencia_prospecto;
@@ -1085,11 +1087,21 @@ class controlador_inm_prospecto extends _ctl_formato
             return $this->retorno_error(mensaje: 'Error al obtener registro prospecto', data: $registro_prospecto,
                 header: $header, ws: $ws);
         }
-        print_r($registro_prospecto);exit;
 
         if(isset($registro_prospecto['inm_institucion_hipotecaria_id'])){
-            $filtro_conf['inm_institucion_hipotecaria.id'] = $registro_prospecto['inm_institucion_hipotecaria_id'];
+            $filtro_campo['adm_seccion.descripcion'] = $this->seccion;
+            $campos_totales = (new adm_campo(link: $this->link))->filtro_and(filtro: $filtro_campo);
+            if (errores::$error) {
+                return $this->retorno_error(mensaje: 'Error al obtener campos totales', data: $campos_totales,
+                    header: $header, ws: $ws);
+            }
 
+            $filtro_conf['inm_institucion_hipotecaria.id'] = $registro_prospecto['inm_institucion_hipotecaria_id'];
+            $r_conf_institucion = (new inm_conf_institucion_campo(link: $this->link))->filtro_and(filtro: $filtro_conf);
+            if (errores::$error) {
+                return $this->retorno_error(mensaje: 'Error al obtener registros campos', data: $r_conf_institucion,
+                    header: $header, ws: $ws);
+            }
         }
 
         $base = $this->base_upd(keys_selects: $data->keys_selects, params: array(), params_ajustados: array());
