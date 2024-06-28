@@ -1080,6 +1080,18 @@ class controlador_inm_prospecto extends _ctl_formato
                 header: $header, ws: $ws);
         }
 
+        $registro_prospecto = (new inm_prospecto(link: $this->link))->registro(registro_id: $this->registro_id);
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al obtener registro prospecto', data: $registro_prospecto,
+                header: $header, ws: $ws);
+        }
+        print_r($registro_prospecto);exit;
+
+        if(isset($registro_prospecto['inm_institucion_hipotecaria_id'])){
+            $filtro_conf['inm_institucion_hipotecaria.id'] = $registro_prospecto['inm_institucion_hipotecaria_id'];
+
+        }
+
         $base = $this->base_upd(keys_selects: $data->keys_selects, params: array(), params_ajustados: array());
         if (errores::$error) {
             return $this->retorno_error(mensaje: 'Error al integrar base', data: $base, header: $header, ws: $ws);
