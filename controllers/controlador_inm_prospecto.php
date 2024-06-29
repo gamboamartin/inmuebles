@@ -1102,11 +1102,12 @@ class controlador_inm_prospecto extends _ctl_formato
                 return $this->retorno_error(mensaje: 'Error al obtener registros campos', data: $r_conf_institucion,
                     header: $header, ws: $ws);
             }
+            if($campos_totales->n_registros > 0 && $r_conf_institucion->n_registros > 0) {
+                foreach ($campos_totales->registros as $campo) {
+                    foreach ($r_conf_institucion->registros as $campo_real) {
+                        if ($campo['adm_campo_id'] !== $campo_real['adm_campo_id']) {
 
-            foreach ($campos_totales->registros as $campo){
-                foreach ($r_conf_institucion->registros as $campo_real){
-                    if($campo['adm_campo_id'] !== $r_conf_institucion->registros){
-
+                        }
                     }
                 }
             }
