@@ -310,6 +310,14 @@ class controlador_inm_prospecto extends _ctl_formato
 
         $this->inputs->fecha = $fecha;
 
+        $nombre = $this->html->input_text(cols: 12, disabled: false, name: 'observaciones', place_holder: 'Observaciones',
+            row_upd: new stdClass(), value_vacio: false, required: false);
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al obtener input',data:  $nombre,  header: $header, ws: $ws);
+        }
+
+        $this->inputs->nombre = $nombre;
+
         $registro = (new inm_prospecto(link: $this->link))->registro($this->registro_id);
         if (errores::$error) {
             $this->retorno_error(mensaje: 'Error al generar link', data: $registro, header: $header, ws: $ws);
