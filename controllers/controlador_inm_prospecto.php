@@ -1088,6 +1088,24 @@ class controlador_inm_prospecto extends _ctl_formato
                 header: $header, ws: $ws);
         }
 
+        $keys_selects = $this->key_selects_txt(keys_selects: $data->keys_selects);
+        if(errores::$error){
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        }
+
+        $inputs = $this->genera_inputs(keys_selects: $keys_selects);
+        if(errores::$error){
+            return $this->errores->error(mensaje: 'Error al obtener inputs',data:  $inputs);
+        }
+
+        /*foreach ($keys_selects as $key => $value) {
+            echo '<br>';
+            //print_r($key);
+            if(isset($value->place_holder))
+                print_r($value->place_holder);
+            else
+                print_r($value->label);
+        }exit;*/
         if(isset($registro_prospecto['inm_institucion_hipotecaria_id'])){
             $filtro_campo['adm_seccion.descripcion'] = $this->seccion;
             $campos_totales = (new adm_campo(link: $this->link))->filtro_and(filtro: $filtro_campo);
@@ -1097,26 +1115,43 @@ class controlador_inm_prospecto extends _ctl_formato
             }
 
             $filtro_conf['inm_institucion_hipotecaria.id'] = $registro_prospecto['inm_institucion_hipotecaria_id'];
-            $r_conf_institucion = (new inm_conf_institucion_campo(link: $this->link))->filtro_and(filtro: $filtro_conf);
-            if (errores::$error) {
-                return $this->retorno_error(mensaje: 'Error al obtener registros campos', data: $r_conf_institucion,
-                    header: $header, ws: $ws);
-            }
-            if($campos_totales->n_registros > 0 && $r_conf_institucion->n_registros > 0) {
+            if($campos_totales->n_registros > 0) {
+                $keys_ajustado = array();
                 foreach ($campos_totales->registros as $campo) {
-                    foreach ($r_conf_institucion->registros as $campo_real) {
-                        if ($campo['adm_campo_id'] !== $campo_real['adm_campo_id']) {
-
-                        }
+                    $filtro_conf['adm_campo.id'] = $campo['adm_campo_id'];
+                    $r_conf_institucion = (new inm_conf_institucion_campo(link: $this->link))->filtro_and(filtro: $filtro_conf);
+                    if (errores::$error) {
+                        return $this->retorno_error(mensaje: 'Error al obtener registros campos', data: $r_conf_institucion,
+                            header: $header, ws: $ws);
                     }
+
+                    if($r_conf_institucion->n_registros <= 0){
+                        $val = $campo['adm_campo_descripcion'];
+                        $this->inputs->$val = '';
+                    }/*else{
+                        if(isset($keys_selects[$r_conf_institucion->registros[0]['adm_campo_descripcion']])) {
+                            $keys_ajustado[$r_conf_institucion->registros[0]['adm_campo_descripcion']] =
+                                $keys_selects[$r_conf_institucion->registros[0]['adm_campo_descripcion']];
+                            if ($r_conf_institucion->registros[0]['adm_campo_es_foranea'] === 'activo') {
+                                $keys_ajustado[$r_conf_institucion->registros[0]['adm_campo_descripcion']]->cols =
+                                    $r_conf_institucion->registros[0]['inm_conf_institucion_campo_cols'];
+                                $keys_ajustado[$r_conf_institucion->registros[0]['adm_campo_descripcion']]->label =
+                                    $r_conf_institucion->registros[0]['inm_conf_institucion_campo_alias'];
+                            } else {
+                                $keys_ajustado[$r_conf_institucion->registros[0]['adm_campo_descripcion']]->cols =
+                                    $r_conf_institucion->registros[0]['inm_conf_institucion_campo_cols'];
+                                $keys_ajustado[$r_conf_institucion->registros[0]['adm_campo_descripcion']]->place_holder =
+                                    $r_conf_institucion->registros[0]['inm_conf_institucion_campo_alias'];
+                            }
+                        }
+                    }*/
                 }
             }
         }
-
-        $base = $this->base_upd(keys_selects: $data->keys_selects, params: array(), params_ajustados: array());
+       /* $base = $this->base_upd(keys_selects: $data->keys_selects, params: array(), params_ajustados: array());
         if (errores::$error) {
             return $this->retorno_error(mensaje: 'Error al integrar base', data: $base, header: $header, ws: $ws);
-        }
+        }*/
 
         /*$this->acciones_headers['3'] = new  stdClass();
         $this->acciones_headers['3']->id_css_button_acc = 'inserta_domicilio';
@@ -1243,7 +1278,6 @@ class controlador_inm_prospecto extends _ctl_formato
         }
 
         $this->referencias = $referencia_prospectos;
-
 
         return $r_modifica;
     }
