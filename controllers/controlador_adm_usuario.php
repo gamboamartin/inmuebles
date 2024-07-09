@@ -7,4 +7,4 @@
  *
  */
 namespace gamboamartin\inmuebles\controllers;
-class controlador_adm_usuario extends \gamboamartin\acl\controllers\controlador_adm_usuario {}
+class controlador_adm_usuario extends \gamboamartin\notificaciones\controllers\controlador_adm_usuario {}
