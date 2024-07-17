@@ -4,7 +4,10 @@ namespace gamboamartin\inmuebles\models;
 
 use base\orm\_modelo_parent;
 use gamboamartin\administrador\models\adm_usuario;
+use gamboamartin\comercial\models\com_direccion;
+use gamboamartin\comercial\models\com_direccion_prospecto;
 use gamboamartin\comercial\models\com_prospecto;
+use gamboamartin\comercial\models\com_tipo_direccion;
 use gamboamartin\errores\errores;
 use gamboamartin\proceso\models\pr_sub_proceso;
 use PDO;
@@ -13,7 +16,7 @@ use stdClass;
 class inm_prospecto_ubicacion extends _modelo_parent{
     public function __construct(PDO $link)
     {
-        $tabla = 'inm_prospecto';
+        $tabla = 'inm_prospecto_ubicacion';
         $columnas = array($tabla=>false,'com_prospecto'=>$tabla,'inm_producto_infonavit'=>$tabla,
             'inm_attr_tipo_credito'=>$tabla,'inm_destino_credito'=>$tabla,'inm_plazo_credito_sc'=>$tabla,
             'inm_tipo_discapacidad'=>$tabla,'inm_persona_discapacidad'=>$tabla,'inm_estado_civil'=>$tabla,
@@ -24,10 +27,7 @@ class inm_prospecto_ubicacion extends _modelo_parent{
             'dp_estado'=>'dp_municipio','dp_pais'=>'dp_estado','inm_sindicato'=>$tabla, 'inm_nacionalidad'=>$tabla,
             'inm_ocupacion'=>$tabla);
 
-        $campos_obligatorios = array('com_prospecto_id','razon_social','dp_calle_pertenece_id','rfc',
-            'numero_exterior','numero_interior','inm_sindicato_id','dp_municipio_nacimiento_id','fecha_nacimiento',
-            'monto_final','sub_cuenta','descuento','puntos','inm_nacionalidad_id','inm_ocupacion_id','telefono_casa',
-            'correo_empresa','nombre_completo_valida');
+        $campos_obligatorios = array();
 
         $columnas_extra= array();
 
@@ -61,14 +61,9 @@ class inm_prospecto_ubicacion extends _modelo_parent{
 
         $columnas_extra['usuario_permitido_id'] = $sql;
 
-        $atributos_criticos = array('com_prospecto_id','razon_social','dp_calle_pertenece_id','rfc',
-            'numero_exterior','numero_interior','inm_sindicato_id','dp_municipio_nacimiento_id','observaciones',
-            'fecha_nacimiento','monto_final','sub_cuenta','descuento','puntos','inm_nacionalidad_id',
-            'inm_ocupacion_id','telefono_casa','correo_empresa');
-
+        $atributos_criticos = array();
 
         $tipo_campos= array();
-
 
         $renombres = array();
 
@@ -749,29 +744,20 @@ class inm_prospecto_ubicacion extends _modelo_parent{
 
 
 
-    final public function transacciones_upd(int $inm_prospecto_id){
-        $result_direccion = (new _upd_prospecto())->transacciona_direccion(inm_prospecto_id: $inm_prospecto_id,link: $this->link);
+    final public function transacciones_upd(int $inm_prospecto_ubicacion_id){
+        $result_direccion = $this->transacciona_direccion(inm_prospecto_ubicacion_id: $inm_prospecto_ubicacion_id,
+            link: $this->link);
         if (errores::$error) {
             return $this->error->error(mensaje: 'Error al insertar direccion', data: $result_direccion);
         }
 
-        $result_conyuge = (new _upd_prospecto())->transacciona_conyuge(inm_prospecto_id: $inm_prospecto_id,link: $this->link);
+        /*$result_conyuge = (new _upd_prospecto())->transacciona_conyuge(inm_prospecto_id: $inm_prospecto_id,link: $this->link);
         if (errores::$error) {
             return $this->error->error(mensaje: 'Error al insertar conyuge', data: $result_conyuge);
-        }
+        }*/
 
-        $result_beneficiario = (new _upd_prospecto())->transacciona_beneficiario(inm_prospecto_id: $inm_prospecto_id,link: $this->link);
-        if (errores::$error) {
-            return $this->error->error(mensaje: 'Error al insertar beneficiario', data: $result_beneficiario);
-        }
-        $result_referencia = (new _upd_prospecto())->transacciona_referencia(inm_prospecto_id: $inm_prospecto_id,link: $this->link);
-        if (errores::$error) {
-            return $this->error->error(mensaje: 'Error al insertar referencia', data: $result_referencia);
-        }
         $data = new stdClass();
-        $data->result_conyuge = $result_conyuge;
-        $data->result_beneficiario = $result_beneficiario;
-        $data->result_referencia = $result_referencia;
+        //$data->result_conyuge = $result_conyuge;
         $data->result_direccion = $result_direccion;
 
         return $data;
@@ -844,4 +830,82 @@ class inm_prospecto_ubicacion extends _modelo_parent{
 
     }
 
+    private function ajusta_direccion(stdClass $datos, int $inm_prospecto_ubicacion_id, PDO $link){
+
+        $r_inm_direccion_bd = $this->inserta_domicilio(domicilio: $datos->row,
+            inm_prospecto_ubicacion_id: $inm_prospecto_ubicacion_id,link: $link);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al insertar r_inm_beneficiario_bd', data: $r_inm_direccion_bd);
+        }
+        $datos = $r_inm_direccion_bd;
+
+        return $datos;
+    }
+
+    final public function transacciona_direccion(int $inm_prospecto_ubicacion_id, PDO $link){
+        $datos = (new \gamboamartin\inmuebles\controllers\_inm_prospecto())->dato(existe: false,key_data: 'direccion');
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al obtener dato de direccion',data:  $datos);
+        }
+
+        if($datos->tiene_dato){
+            $result_direccion = $this->ajusta_direccion(datos: $datos,inm_prospecto_ubicacion_id: $inm_prospecto_ubicacion_id,link: $link);
+            if (errores::$error) {
+                return $this->error->error(mensaje: 'Error al insertar direccion', data: $result_direccion);
+            }
+            $datos->result_direccion = $result_direccion;
+        }
+        return $datos;
+
+    }
+
+    public function inserta_domicilio(array $domicilio, int $inm_prospecto_ubicacion_id, PDO $link): array|stdClass
+    {
+        $keys = array('cp','colonia','calle','texto_exterior');
+        $valida = $this->validacion->valida_existencia_keys(keys: $keys,registro:  $domicilio);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al validar direccion',data:  $valida);
+        }
+
+        $keys = array('dp_municipio_id');
+        $valida = $this->validacion->valida_ids(keys: $keys,registro:  $domicilio);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al validar beneficiario',data:  $valida);
+        }
+
+        if($inm_prospecto_ubicacion_id <= 0){
+            return $this->error->error(mensaje: 'Error inm_prospecto_ubicacion_id debe ser mayor a 0',data:  $inm_prospecto_ubicacion_id);
+        }
+
+        $r_com_prospecto = (new inm_prospecto_ubicacion(link: $link))->registro(registro_id: $inm_prospecto_ubicacion_id);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al validar beneficiario',data:  $valida);
+        }
+
+        $tipo_direccion = (new com_tipo_direccion(link: $link))->filtro_and();
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al obtener tipo_direccion',data:  $tipo_direccion);
+        }
+
+        if ($tipo_direccion->n_registros === 0) {
+            return ['error' => 'No existe un tipo de dirección valido registrado en el sistema'] ;
+        }
+
+        $alta_relacion = array();
+        foreach ($tipo_direccion->registros as $value) {
+            $domicilio['com_tipo_direccion_id'] = $value['com_tipo_direccion_id'];
+            $alta_direccion = (new com_direccion(link: $link))->alta_registro(registro: $domicilio);
+            if (errores::$error) {
+                return $this->error->error(mensaje: 'Error al insertar alta_direccion', data: $alta_direccion);
+            }
+
+            $relacion['com_direccion_id'] = $alta_direccion->registro_id;
+            $alta_relacion = $this->modifica_bd(registro: $relacion, id: $inm_prospecto_ubicacion_id);
+            if (errores::$error) {
+                return $this->error->error(mensaje: 'Error al insertar alta_relacion', data: $alta_relacion);
+            }
+        }
+
+        return $alta_relacion;
+    }
 }

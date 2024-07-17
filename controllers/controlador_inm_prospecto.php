@@ -1461,14 +1461,16 @@ class controlador_inm_prospecto extends _ctl_formato
     {
         $inm_prospecto = (new inm_prospecto(link: $this->link))->registro(registro_id: $this->registro_id);
         if (errores::$error) {
-            return $this->error->error(mensaje: 'Error al obtener inm_prospecto', data: $inm_prospecto);
+            return $this->retorno_error(mensaje: 'Error al obtener inm_prospecto', data: $inm_prospecto,
+                header: $header, ws: $ws);
         }
 
         $inm_conf_docs_prospecto = (new inm_conf_docs_prospecto(link: $this->link))->filtro_and(
             columnas: ['doc_tipo_documento_id'],
             filtro: array('inm_attr_tipo_credito_id' => $inm_prospecto['inm_attr_tipo_credito_id']));
         if (errores::$error) {
-            return $this->error->error(mensaje: 'Error al obtener inm_conf_docs_prospecto', data: $inm_conf_docs_prospecto);
+            return $this->retorno_error(mensaje: 'Error al obtener inm_conf_docs_prospecto', data: $inm_conf_docs_prospecto,
+                header: $header, ws: $ws);
         }
 
         $this->inputs = new stdClass();
