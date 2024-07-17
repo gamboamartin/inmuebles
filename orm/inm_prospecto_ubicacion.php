@@ -808,7 +808,7 @@ class inm_prospecto_ubicacion extends _modelo_parent{
 
     private function valida_prospecto_repetido_nombre(string $nombre_completo_valida)
     {
-        $filtro['inm_prospecto.nombre_completo_valida'] = $nombre_completo_valida;
+        $filtro['inm_prospecto_ubicacion.nombre_completo_valida'] = $nombre_completo_valida;
         $n_prospectos = $this->cuenta(filtro: $filtro);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al contar prospectos',data:  $n_prospectos);
