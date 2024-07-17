@@ -1070,10 +1070,26 @@ class controlador_inm_prospecto_ubicacion extends _ctl_formato
                 mensaje: 'Error al generar salida de template', data: $r_modifica, header: $header, ws: $ws);
         }
 
-        $data = (new \gamboamartin\inmuebles\controllers\_inm_prospecto())->inputs_base(controlador: $this);
-        if (errores::$error) {
-            return $this->retorno_error(mensaje: 'Error al integrar datos para front', data: $data,
+        $keys_selects = array();
+        $keys_selects = (new \gamboamartin\inmuebles\controllers\_inm_prospecto())->integra_keys_selects_comercial(
+            controlador: $this,keys_selects:  $keys_selects);
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al obtener registro prospecto', data: $keys_selects,
                 header: $header, ws: $ws);
+        }
+
+        $keys_selects = (new init())->key_select_txt(cols: 12, key: 'liga_red_social',
+            keys_selects: $keys_selects, place_holder: 'Liga Red Social', required: false);
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al maquetar key_selects', data: $keys_selects,
+                header: $header, ws: $ws);
+        }
+        $keys_selects['liga_red_social']->disabled = true;
+
+        $keys_selects = (new init())->key_select_txt(cols: 12, key: 'rfc',
+            keys_selects: $keys_selects, place_holder: 'RFC', required: false);
+        if (errores::$error) {
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $keys_selects);
         }
 
         $registro_prospecto = (new inm_prospecto_ubicacion(link: $this->link))->registro(registro_id: $this->registro_id);
@@ -1082,7 +1098,7 @@ class controlador_inm_prospecto_ubicacion extends _ctl_formato
                 header: $header, ws: $ws);
         }
 
-        $keys_selects = $this->key_selects_txt(keys_selects: $data->keys_selects);
+        $keys_selects = $this->key_selects_txt(keys_selects: $keys_selects);
         if(errores::$error){
             return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
@@ -1092,101 +1108,10 @@ class controlador_inm_prospecto_ubicacion extends _ctl_formato
             return $this->errores->error(mensaje: 'Error al obtener inputs',data:  $inputs);
         }
 
-        /*foreach ($keys_selects as $key => $value) {
-            echo '<br>';
-            //print_r($key);
-            if(isset($value->place_holder))
-                print_r($value->place_holder);
-            else
-                print_r($value->label);
-        }exit;*/
-        if(isset($registro_prospecto['inm_institucion_hipotecaria_id'])){
-            $filtro_campo['adm_seccion.descripcion'] = $this->seccion;
-            $campos_totales = (new adm_campo(link: $this->link))->filtro_and(filtro: $filtro_campo);
-            if (errores::$error) {
-                return $this->retorno_error(mensaje: 'Error al obtener campos totales', data: $campos_totales,
-                    header: $header, ws: $ws);
-            }
-
-            $filtro_conf['inm_institucion_hipotecaria.id'] = $registro_prospecto['inm_institucion_hipotecaria_id'];
-            if($campos_totales->n_registros > 0) {
-                $keys_ajustado = array();
-                foreach ($campos_totales->registros as $campo) {
-                    $filtro_conf['adm_campo.id'] = $campo['adm_campo_id'];
-                    $r_conf_institucion = (new inm_conf_institucion_campo(link: $this->link))->filtro_and(filtro: $filtro_conf);
-                    if (errores::$error) {
-                        return $this->retorno_error(mensaje: 'Error al obtener registros campos', data: $r_conf_institucion,
-                            header: $header, ws: $ws);
-                    }
-
-                    if($r_conf_institucion->n_registros <= 0){
-                        $val = $campo['adm_campo_descripcion'];
-                        $this->inputs->$val = '';
-                    }/*else{
-                        if(isset($keys_selects[$r_conf_institucion->registros[0]['adm_campo_descripcion']])) {
-                            $keys_ajustado[$r_conf_institucion->registros[0]['adm_campo_descripcion']] =
-                                $keys_selects[$r_conf_institucion->registros[0]['adm_campo_descripcion']];
-                            if ($r_conf_institucion->registros[0]['adm_campo_es_foranea'] === 'activo') {
-                                $keys_ajustado[$r_conf_institucion->registros[0]['adm_campo_descripcion']]->cols =
-                                    $r_conf_institucion->registros[0]['inm_conf_institucion_campo_cols'];
-                                $keys_ajustado[$r_conf_institucion->registros[0]['adm_campo_descripcion']]->label =
-                                    $r_conf_institucion->registros[0]['inm_conf_institucion_campo_alias'];
-                            } else {
-                                $keys_ajustado[$r_conf_institucion->registros[0]['adm_campo_descripcion']]->cols =
-                                    $r_conf_institucion->registros[0]['inm_conf_institucion_campo_cols'];
-                                $keys_ajustado[$r_conf_institucion->registros[0]['adm_campo_descripcion']]->place_holder =
-                                    $r_conf_institucion->registros[0]['inm_conf_institucion_campo_alias'];
-                            }
-                        }
-                    }*/
-                }
-            }
-        }
-       /* $base = $this->base_upd(keys_selects: $data->keys_selects, params: array(), params_ajustados: array());
-        if (errores::$error) {
-            return $this->retorno_error(mensaje: 'Error al integrar base', data: $base, header: $header, ws: $ws);
-        }*/
-
-        /*$this->acciones_headers['3'] = new  stdClass();
-        $this->acciones_headers['3']->id_css_button_acc = 'inserta_domicilio';
-        $this->acciones_headers['3']->style_button_acc = 'success';
-        $this->acciones_headers['3']->tag_button_acc = 'Guardar';
-
-        $this->acciones_headers['9'] = new  stdClass();
-        $this->acciones_headers['9']->id_css_button_acc = 'inserta_beneficiario';
-        $this->acciones_headers['9']->style_button_acc = 'success';
-        $this->acciones_headers['9']->tag_button_acc = 'Guardar';
-
-        $this->acciones_headers['10'] = new  stdClass();
-        $this->acciones_headers['10']->id_css_button_acc = 'inserta_referencia';
-        $this->acciones_headers['10']->style_button_acc = 'success';
-        $this->acciones_headers['10']->tag_button_acc = 'Guardar';*/
-
         $headers = (new \gamboamartin\inmuebles\controllers\_inm_prospecto())->headers_front(controlador: $this);
         if (errores::$error) {
             return $this->retorno_error(mensaje: 'Error al generar headers', data: $headers, header: $header, ws: $ws);
         }
-
-        $inputs = (new \gamboamartin\inmuebles\controllers\_inm_prospecto())->inputs_nacimiento(controlador: $this);
-        if (errores::$error) {
-            return $this->retorno_error(mensaje: 'Error al generar inputs', data: $inputs, header: $header, ws: $ws);
-        }
-
-        $conyuge = (new _conyuge())->inputs_conyuge(controler: $this);
-        if (errores::$error) {
-            return $this->retorno_error(mensaje: 'Error al obtener conyuge', data: $conyuge,
-                header: $header, ws: $ws);
-        }
-
-        $this->inputs->conyuge = $conyuge;
-
-        $beneficiario = (new _beneficiario())->inputs_beneficiario(controler: $this);
-        if (errores::$error) {
-            return $this->retorno_error(mensaje: 'Error al obtener beneficiario', data: $beneficiario,
-                header: $header, ws: $ws);
-        }
-
-        $this->inputs->beneficiario = $beneficiario;
 
         $direccion = (new _direccion())->inputs_direccion(controler: $this);
         if (errores::$error) {
@@ -1195,83 +1120,6 @@ class controlador_inm_prospecto_ubicacion extends _ctl_formato
         }
 
         $this->inputs->direccion = $direccion;
-
-        $filtro['inm_prospecto_ubicacion.id'] = $this->registro_id;
-
-        $r_inm_beneficiario = (new inm_beneficiario(link: $this->link))->filtro_and(filtro: $filtro);
-        if (errores::$error) {
-            return $this->retorno_error(mensaje: 'Error al obtener beneficiarios', data: $r_inm_beneficiario,
-                header: $header, ws: $ws);
-        }
-
-
-        $params = (new \gamboamartin\inmuebles\controllers\_inm_prospecto())->params_btn(accion_retorno: __FUNCTION__,
-            registro_id: $this->registro_id, seccion_retorno: $this->tabla);
-
-        if (errores::$error) {
-            return $this->retorno_error(mensaje: 'Error al obtener params', data: $params,
-                header: $header, ws: $ws);
-        }
-
-        $beneficiarios = $r_inm_beneficiario->registros;
-
-        $beneficiarios = (new \gamboamartin\inmuebles\controllers\_inm_prospecto())->rows(controlador: $this,
-            datas: $beneficiarios, params: $params, seccion_exe: 'inm_beneficiario');
-        if (errores::$error) {
-            return $this->retorno_error(mensaje: 'Error al obtener beneficiarios link del', data: $beneficiarios,
-                header: $header, ws: $ws);
-        }
-
-        $this->beneficiarios = $beneficiarios;
-
-        $direcciones = (new com_direccion_prospecto(link: $this->link))->filtro_and(filtro: array('com_prospecto_id' =>
-            $this->registro['com_prospecto_id']));
-        if (errores::$error) {
-            return $this->retorno_error(mensaje: 'Error al obtener direcciones', data: $direcciones,
-                header: $header, ws: $ws);
-        }
-
-
-        $direcciones_reg = (new \gamboamartin\inmuebles\controllers\_inm_prospecto())->rows_direccion(controlador: $this,
-            datas: $direcciones->registros, params: $params, seccion_exe: 'com_direccion', seccion_sec: 'com_direccion_prospecto');
-        if (errores::$error) {
-            return $this->retorno_error(mensaje: 'Error al obtener beneficiarios link del', data: $direcciones,
-                header: $header, ws: $ws);
-        }
-
-        $this->direcciones = $direcciones_reg;
-
-        $referencia = (new _referencia())->inputs_referencia(controler: $this);
-        if (errores::$error) {
-            return $this->retorno_error(mensaje: 'Error al obtener referencias', data: $referencia,
-                header: $header, ws: $ws);
-        }
-        $this->inputs->referencia = $referencia;
-
-        $r_inm_referencia_prospecto = (new inm_referencia_prospecto(link: $this->link))->filtro_and(filtro: $filtro);
-        if (errores::$error) {
-            return $this->retorno_error(mensaje: 'Error al obtener referencia_prospectos', data: $r_inm_referencia_prospecto,
-                header: $header, ws: $ws);
-        }
-
-        $params = (new \gamboamartin\inmuebles\controllers\_inm_prospecto())->params_btn(accion_retorno: __FUNCTION__,
-            registro_id: $this->registro_id, seccion_retorno: $this->tabla);
-
-        if (errores::$error) {
-            return $this->retorno_error(mensaje: 'Error al obtener params', data: $params,
-                header: $header, ws: $ws);
-        }
-
-        $referencia_prospectos = $r_inm_referencia_prospecto->registros;
-
-        $referencia_prospectos = (new \gamboamartin\inmuebles\controllers\_inm_prospecto())->rows(controlador: $this,
-            datas: $referencia_prospectos, params: $params, seccion_exe: 'inm_referencia_prospecto');
-        if (errores::$error) {
-            return $this->retorno_error(mensaje: 'Error al obtener beneficiarios link del', data: $referencia_prospectos,
-                header: $header, ws: $ws);
-        }
-
-        $this->referencias = $referencia_prospectos;
 
         return $r_modifica;
     }

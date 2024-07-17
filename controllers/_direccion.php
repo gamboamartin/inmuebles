@@ -15,7 +15,7 @@ class _direccion{
     public function __construct(){
         $this->error = new errores();
     }
-    final public function inputs_direccion(controlador_inm_prospecto $controler){
+    final public function inputs_direccion(controlador_inm_prospecto|controlador_inm_prospecto_ubicacion $controler){
 
         $direccion = new stdClass();
         $row_upd = new stdClass();

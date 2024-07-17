@@ -5,6 +5,7 @@ use base\controller\init;
 use gamboamartin\administrador\models\adm_usuario;
 use gamboamartin\errores\errores;
 use gamboamartin\inmuebles\models\inm_prospecto;
+use gamboamartin\inmuebles\models\inm_prospecto_ubicacion;
 use gamboamartin\validacion\validacion;
 use html\dp_estado_html;
 use html\dp_municipio_html;
@@ -152,7 +153,7 @@ class _inm_prospecto{
      * @param array $keys_selects parametros previos cargados
      * @return array
      */
-    private function genera_keys_selects(controlador_inm_prospecto $controlador, array $identificadores,
+    private function genera_keys_selects(controlador_inm_prospecto|controlador_inm_prospecto_ubicacion $controlador, array $identificadores,
                                          array $keys_selects): array
     {
         foreach ($identificadores as $identificador=>$data){
@@ -203,7 +204,7 @@ class _inm_prospecto{
      * @param controlador_inm_prospecto $controlador
      * @return array
      */
-    final public function headers_front(controlador_inm_prospecto $controlador): array
+    final public function headers_front(controlador_inm_prospecto|controlador_inm_prospecto_ubicacion $controlador): array
     {
         $headers = $this->headers_prospecto();
         if(errores::$error){
@@ -623,7 +624,7 @@ class _inm_prospecto{
      * @return array
      * @version 2.266.2
      */
-    private function integra_keys_selects_comercial(controlador_inm_prospecto $controlador, array $keys_selects): array
+    public function integra_keys_selects_comercial(controlador_inm_prospecto|controlador_inm_prospecto_ubicacion $controlador, array $keys_selects): array
     {
         $keys = array('com_agente_id','com_tipo_prospecto_id','com_medio_prospeccion_id', 'com_prospecto_id');
         $valida = $this->validacion->valida_ids(keys: $keys,registro:  $controlador->registro);
@@ -651,7 +652,7 @@ class _inm_prospecto{
      * @param array $keys_selects Parametros previos cargados
      * @return array
      */
-    private function keys_selects_comercial(controlador_inm_prospecto $controlador, array $filtro,
+    private function keys_selects_comercial(controlador_inm_prospecto|controlador_inm_prospecto_ubicacion $controlador, array $filtro,
                                            array $keys_selects): array
     {
         $keys = array('com_agente_id','com_tipo_prospecto_id','com_medio_prospeccion_id', 'com_prospecto_id');
