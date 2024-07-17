@@ -204,7 +204,7 @@ class controlador_inm_prospecto_ubicacion extends _ctl_formato
             'numero_nep', 'extension_nep', 'nss', 'curp', 'rfc', 'numero_exterior', 'numero_interior', 'observaciones',
             'fecha_nacimiento', 'sub_cuenta', 'monto_final', 'descuento', 'puntos', 'telefono_casa', 'correo_empresa',
             'correo_mi_cuenta_infonavit', 'password_mi_cuenta_infonavit', 'nss_extra', 'liga_red_social', 'area_empresa',
-            'texto_exterior', 'texto_interior', 'documentos', 'receptor', 'asunto', 'mensaje');
+            'texto_exterior', 'texto_interior', 'documentos', 'receptor', 'asunto', 'mensaje','manzana','lote','cuenta_predial');
 
         $keys->selects = array();
 
@@ -1088,6 +1088,24 @@ class controlador_inm_prospecto_ubicacion extends _ctl_formato
 
         $keys_selects = (new init())->key_select_txt(cols: 12, key: 'rfc',
             keys_selects: $keys_selects, place_holder: 'RFC', required: false);
+        if (errores::$error) {
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $keys_selects);
+        }
+
+        $keys_selects = (new init())->key_select_txt(cols: 6, key: 'manzana',
+            keys_selects: $keys_selects, place_holder: 'Manzana', required: false);
+        if (errores::$error) {
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $keys_selects);
+        }
+
+        $keys_selects = (new init())->key_select_txt(cols: 6, key: 'lote',
+            keys_selects: $keys_selects, place_holder: 'Lote', required: false);
+        if (errores::$error) {
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $keys_selects);
+        }
+
+        $keys_selects = (new init())->key_select_txt(cols: 12, key: 'cuenta_predial',
+            keys_selects: $keys_selects, place_holder: 'Cuenta Predial', required: false);
         if (errores::$error) {
             return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $keys_selects);
         }

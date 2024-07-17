@@ -51,6 +51,14 @@
                             <?php echo $controlador->inputs->direccion->calle; ?>
                             <?php echo $controlador->inputs->direccion->texto_exterior; ?>
                             <?php echo $controlador->inputs->direccion->texto_interior; ?>
+                            <?php include (new views())->ruta_templates . 'botons/submit/modifica_bd.php'; ?>
+                        </div>
+
+                        <?php echo $controlador->header_frontend->apartado_4; ?>
+                        <div id="apartado_4">
+                            <?php echo $controlador->inputs->manzana; ?>
+                            <?php echo $controlador->inputs->lote; ?>
+                            <?php echo $controlador->inputs->cuenta_predial; ?>
                         </div>
 
                         <?php include (new views())->ruta_templates . 'botons/submit/modifica_bd.php'; ?>
