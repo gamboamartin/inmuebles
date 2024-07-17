@@ -46,7 +46,7 @@ class _prospecto{
      * @return array
 
      */
-    private function asigna_datos_alta(inm_prospecto $modelo, array $registro): array
+    private function asigna_datos_alta(inm_prospecto|inm_prospecto_ubicacion $modelo, array $registro): array
     {
 
         $registro = $this->init_data_default(registro: $registro);
@@ -120,7 +120,7 @@ class _prospecto{
      * @return array
      * @version 2.189.1
      */
-    private function asigna_dp_calle_pertenece_id(inm_prospecto $modelo, array $registro): array
+    private function asigna_dp_calle_pertenece_id(inm_prospecto|inm_prospecto_ubicacion $modelo, array $registro): array
     {
         if(!isset($registro['dp_calle_pertenece_id'])){
             $dp_calle_pertenece_id = $this->dp_calle_pertenece_id(modelo: $modelo);
@@ -132,7 +132,7 @@ class _prospecto{
         return $registro;
     }
 
-    private function asigna_com_medio_prospeccion_id(inm_prospecto $modelo, array $registro): array
+    private function asigna_com_medio_prospeccion_id(inm_prospecto|inm_prospecto_ubicacion $modelo, array $registro): array
     {
         if(!isset($registro['com_medio_prospeccion_id'])){
             $com_medio_prospeccion_id = $this->com_medio_prospeccion_id(modelo: $modelo);
@@ -185,7 +185,7 @@ class _prospecto{
      * @return array|int
      * @version 2.188.1
      */
-    private function  dp_calle_pertenece_id(inm_prospecto $modelo): int|array
+    private function  dp_calle_pertenece_id(inm_prospecto|inm_prospecto_ubicacion $modelo): int|array
     {
         $dp_calle_pertenece_id = $modelo->id_preferido_detalle(entidad_preferida: 'dp_calle_pertenece');
         if(errores::$error){
@@ -637,10 +637,8 @@ class _prospecto{
      * @param array $registro registro previo de insersion
      * @return array
      */
-    final public function previo_alta(inm_prospecto $modelo, array $registro): array
+    final public function previo_alta(inm_prospecto|inm_prospecto_ubicacion $modelo, array $registro): array
     {
-
-
         $valida = $this->valida_alta_prospecto(registro: $registro);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al validar registro',data:  $valida);
@@ -656,9 +654,7 @@ class _prospecto{
             return $this->error->error(mensaje: 'Error al insertar com_prospecto',data:  $r_com_prospecto);
         }
 
-
         $registro['com_prospecto_id'] = $r_com_prospecto->registro_id;
-
 
         $registro = $this->integra_entidades_mayor_uso(link: $modelo->link,registro:  $registro);
         if(errores::$error){
@@ -667,14 +663,15 @@ class _prospecto{
 
         if(!isset($registro['dp_municipio_nacimiento_id'])){
             $registro['dp_municipio_nacimiento_id'] = 2469;
-
         }
 
-        $valida_prospecto_nombre_duplicado = $this->valida_prospecto_nombre_duplicado(
-            modelo: $modelo,registro:  $registro);
-        if(errores::$error){
-            return $this->error->error(mensaje: 'Error al validar si existe nombre de prospecto duplicado',
-                data:  $valida_prospecto_nombre_duplicado);
+        if(is_a($modelo, "inm_prospecto")){
+            $valida_prospecto_nombre_duplicado = $this->valida_prospecto_nombre_duplicado(
+                modelo: $modelo,registro:  $registro);
+            if(errores::$error){
+                return $this->error->error(mensaje: 'Error al validar si existe nombre de prospecto duplicado',
+                    data:  $valida_prospecto_nombre_duplicado);
+            }
         }
 
         return $registro;

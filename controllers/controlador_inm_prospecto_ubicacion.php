@@ -12,6 +12,7 @@ namespace gamboamartin\inmuebles\controllers;
 use base\controller\init;
 use gamboamartin\administrador\models\adm_campo;
 use gamboamartin\calculo\calculo;
+use gamboamartin\comercial\models\com_agente;
 use gamboamartin\comercial\models\com_direccion;
 use gamboamartin\comercial\models\com_direccion_prospecto;
 use gamboamartin\comercial\models\com_prospecto;
@@ -116,8 +117,31 @@ class controlador_inm_prospecto_ubicacion extends _ctl_formato
         }
 
         $keys_selects = array();
-        $keys_selects = (new _keys_selects())->keys_selects_prospecto(controler: $this, keys_selects: $keys_selects);
-        if (errores::$error) {
+
+        $id_selected = $this->id_selected_agente(link: $this->link);
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al maquetar key_selects', data: $keys_selects,
+                header: $header, ws: $ws);
+        }
+
+        $keys_selects = $this->key_select(cols:6, con_registros: true,filtro:  array(), key: 'com_agente_id',
+            keys_selects:$keys_selects, id_selected: $id_selected, label: 'Agente');
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al maquetar key_selects', data: $keys_selects,
+                header: $header, ws: $ws);
+        }
+
+        $com_tipo_prospecto_id = (new com_prospecto(link: $this->link))->id_preferido_detalle(
+            entidad_preferida: 'com_tipo_prospecto');
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al maquetar key_selects', data: $keys_selects,
+                header: $header, ws: $ws);
+        }
+
+        $keys_selects = $this->key_select(cols:6, con_registros: true,filtro:  array(),
+            key: 'com_tipo_prospecto_id', keys_selects:$keys_selects, id_selected: $com_tipo_prospecto_id,
+            label: 'Tipo de prospecto');
+        if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al maquetar key_selects', data: $keys_selects,
                 header: $header, ws: $ws);
         }
@@ -149,6 +173,21 @@ class controlador_inm_prospecto_ubicacion extends _ctl_formato
 
         return $r_alta;
     }
+
+    private function id_selected_agente(PDO $link): int|array
+    {
+        $com_agentes = (new com_agente(link: $link))->com_agentes_session();
+        if(errores::$error){
+            return $this->retorno_error(
+                mensaje: 'Error al obtener inputs', data: $com_agentes, header: false, ws: false);
+        }
+        $id_selected = -1;
+        if(count($com_agentes) > 0){
+            $id_selected = (int)$com_agentes[0]['com_agente_id'];
+        }
+        return $id_selected;
+    }
+
 
     /**
      * Inicializa los campos view para frontend
