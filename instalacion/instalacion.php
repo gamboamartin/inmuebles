@@ -337,7 +337,8 @@ class instalacion
 
         $columnas = new stdClass();
 
-        $campos_new = array('costo_directo','monto_opinion_promedio','costo');
+        $campos_new = array('costo_directo','monto_opinion_promedio','costo','adeudo_hipoteca','adeudo_predial',
+            'adeudo_agua','adeudo_luz','monto_devolucion');
 
         $columnas = $init->campos_double(campos: $columnas,campos_new:  $campos_new);
         if(errores::$error){
@@ -354,7 +355,12 @@ class instalacion
         $columnas->manzana = new stdClass();
         $columnas->etapa = new stdClass();
         $columnas->cuenta_predial = new stdClass();
+        $columnas->cuenta_agua = new stdClass();
         $columnas->n_opiniones_valor = new stdClass();
+        $columnas->nivel = new stdClass();
+        $columnas->recamaras = new stdClass();
+        $columnas->metros_terreno = new stdClass();
+        $columnas->metros_construccion = new stdClass();
 
         $columnas->razon_social = new stdClass();
         $columnas->razon_social->default = 'POR ASIGNAR';
@@ -373,7 +379,11 @@ class instalacion
 
         $columnas->nombre_completo_valida = new stdClass();
 
-        $add_colums = $init->add_columns(campos: $columnas,table:  'inm_prospecto');
+        $columnas->fecha_otorgamiento_credito = new stdClass();
+        $columnas->fecha_otorgamiento_credito->tipo_dato = 'DATE';
+        $columnas->fecha_otorgamiento_credito->default = '1900-01-01';
+
+        $add_colums = $init->add_columns(campos: $columnas,table:  'inm_prospecto_ubicacion');
         if(errores::$error){
             return (new errores())->error(mensaje: 'Error al agregar columnas', data:  $add_colums);
         }
@@ -384,8 +394,11 @@ class instalacion
         $foraneas['dp_calle_pertenece_id'] = new stdClass();
         $foraneas['com_tipo_prospecto_id'] = new stdClass();
         $foraneas['com_direccion_id'] = new stdClass();
+        $foraneas['inm_prototipo_id'] = new stdClass();
+        $foraneas['inm_complemento_id'] = new stdClass();
+        $foraneas['inm_estado_vivienda_id'] = new stdClass();
 
-        $result = $init->foraneas(foraneas: $foraneas,table:  'inm_prospecto');
+        $result = $init->foraneas(foraneas: $foraneas,table:  'inm_prospecto_ubicacion');
         if(errores::$error){
             return (new errores())->error(mensaje: 'Error al ajustar foranea', data:  $result);
         }
