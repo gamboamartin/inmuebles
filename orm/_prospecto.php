@@ -376,7 +376,7 @@ class _prospecto{
         $keys = array('inm_producto_infonavit_id','inm_attr_tipo_credito_id','inm_plazo_credito_sc_id',
             'inm_tipo_discapacidad_id','inm_persona_discapacidad_id','inm_estado_civil_id',
             'inm_institucion_hipotecaria_id','inm_sindicato_id','inm_destino_credito_id','inm_nacionalidad_id',
-            'inm_ocupacion_id');
+            'inm_ocupacion_id','inm_prototipo_id','inm_complemento_id','inm_estado_vivienda_id');
 
         foreach ($keys as $key){
             if(!isset($registro[$key])){
@@ -416,6 +416,15 @@ class _prospecto{
         }
         if((int)$registro['inm_ocupacion_id'] === -1){
             $registro['inm_ocupacion_id'] = 1;
+        }
+        if((int)$registro['inm_prototipo_id'] === -1){
+            $registro['inm_prototipo_id'] = 1;
+        }
+        if((int)$registro['inm_complemento_id'] === -1){
+            $registro['inm_complemento_id'] = 1;
+        }
+        if((int)$registro['inm_estado_vivienda_id'] === -1){
+            $registro['inm_estado_vivienda_id'] = 1;
         }
         return $registro;
     }
@@ -540,12 +549,10 @@ class _prospecto{
      * @return array
      * @version 2.200.1
      */
-    private function integra_entidades_mayor_uso(PDO $link, array $registro): array
+    private function integra_entidades_mayor_uso(inm_prospecto|inm_prospecto_ubicacion $modelo,
+                                                 array $registro, array $entidades): array
     {
-        $entidades = array('inm_producto_infonavit','inm_attr_tipo_credito','inm_destino_credito',
-            'inm_plazo_credito_sc','inm_tipo_discapacidad','inm_persona_discapacidad','inm_estado_civil',
-            'inm_institucion_hipotecaria','inm_sindicato','inm_nacionalidad','inm_ocupacion');
-        $modelo_preferido = (new inm_prospecto(link: $link));
+        $modelo_preferido = $modelo;
 
         $data = (new _ubicacion())->integra_ids_preferidos(data: new stdClass(),entidades:  $entidades,
             modelo_preferido:  $modelo_preferido);
@@ -637,7 +644,8 @@ class _prospecto{
      * @param array $registro registro previo de insersion
      * @return array
      */
-    final public function previo_alta(inm_prospecto|inm_prospecto_ubicacion $modelo, array $registro): array
+    final public function previo_alta(inm_prospecto|inm_prospecto_ubicacion $modelo, array $registro,
+                                      array $entidades): array
     {
         $valida = $this->valida_alta_prospecto(registro: $registro);
         if(errores::$error){
@@ -656,7 +664,8 @@ class _prospecto{
 
         $registro['com_prospecto_id'] = $r_com_prospecto->registro_id;
 
-        $registro = $this->integra_entidades_mayor_uso(link: $modelo->link,registro:  $registro);
+        $registro = $this->integra_entidades_mayor_uso(modelo: $modelo,registro:  $registro,
+            entidades: $entidades);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al maquetar row',data:  $registro);
         }

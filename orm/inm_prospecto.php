@@ -266,8 +266,10 @@ class inm_prospecto extends _modelo_parent{
             return $this->error->error(mensaje: 'Error al validar registro',data:  $valida);
         }
 
-
-        $registro = (new _prospecto())->previo_alta(modelo: $this, registro: $this->registro);
+        $entidades = array('inm_producto_infonavit','inm_attr_tipo_credito','inm_destino_credito',
+            'inm_plazo_credito_sc','inm_tipo_discapacidad','inm_persona_discapacidad','inm_estado_civil',
+            'inm_institucion_hipotecaria','inm_sindicato','inm_nacionalidad','inm_ocupacion');
+        $registro = (new _prospecto())->previo_alta(modelo: $this, registro: $this->registro, entidades: $entidades);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al maquetar row',data:  $registro);
         }

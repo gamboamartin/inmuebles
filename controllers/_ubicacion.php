@@ -5,6 +5,7 @@ use gamboamartin\errores\errores;
 use gamboamartin\inmuebles\html\inm_concepto_html;
 use gamboamartin\inmuebles\html\inm_ubicacion_html;
 use gamboamartin\inmuebles\models\inm_prospecto;
+use gamboamartin\inmuebles\models\inm_prospecto_ubicacion;
 use gamboamartin\inmuebles\models\inm_ubicacion;
 use stdClass;
 
@@ -181,12 +182,12 @@ class _ubicacion{
      * Integra el id preferido a un data
      * @param stdClass $data Data previo cargado
      * @param string $entidad Entidad
-     * @param inm_ubicacion|inm_prospecto $modelo_preferido modelo de ejecucion
+     * @param inm_ubicacion|inm_prospecto|inm_prospecto_ubicacion $modelo_preferido modelo de ejecucion
      * @return array|stdClass
      * @version 2.127.0
      */
     private function get_id_preferido(
-        stdClass $data, string $entidad, inm_ubicacion|inm_prospecto $modelo_preferido): array|stdClass
+        stdClass $data, string $entidad, inm_ubicacion|inm_prospecto|inm_prospecto_ubicacion $modelo_preferido): array|stdClass
     {
         $entidad = trim($entidad);
         if($entidad === ''){
@@ -304,12 +305,12 @@ class _ubicacion{
      * Integra los ids preferidos de una entidad
      * @param stdClass $data datos previos cargados
      * @param array $entidades Entidades preferidas a integrar
-     * @param inm_ubicacion|inm_prospecto $modelo_preferido Modelo de ejecucion
+     * @param inm_ubicacion|inm_prospecto|inm_prospecto_ubicacion $modelo_preferido Modelo de ejecucion
      * @return array|stdClass
      * @version 2.133.1
      */
     final public function integra_ids_preferidos(stdClass $data, array $entidades,
-                                            inm_ubicacion|inm_prospecto $modelo_preferido): array|stdClass
+                                            inm_ubicacion|inm_prospecto|inm_prospecto_ubicacion $modelo_preferido): array|stdClass
     {
         foreach ($entidades as $entidad){
             $entidad = trim($entidad);
