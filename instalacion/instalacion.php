@@ -324,6 +324,76 @@ class instalacion
         return $out;
     }
 
+    private function _add_inm_prospecto_ubicacion(PDO $link): array|stdClass
+    {
+        $out = new stdClass();
+        $init = (new _instalacion(link: $link));
+
+        $create = $init->create_table_new(table: 'inm_prospecto_ubicacion');
+        if(errores::$error){
+            return (new errores())->error(mensaje: 'Error al agregar tabla', data:  $create);
+        }
+        $out->create = $create;
+
+        $columnas = new stdClass();
+
+        $campos_new = array('costo_directo','monto_opinion_promedio','costo');
+
+        $columnas = $init->campos_double(campos: $columnas,campos_new:  $campos_new);
+        if(errores::$error){
+            return (new errores())->error(mensaje: 'Error al agregar campo double', data:  $columnas);
+        }
+
+        $columnas->nss = new stdClass();
+        $columnas->curp = new stdClass();
+        $columnas->nombre = new stdClass();
+        $columnas->apellido_paterno = new stdClass();
+        $columnas->apellido_materno = new stdClass();
+
+        $columnas->lote = new stdClass();
+        $columnas->manzana = new stdClass();
+        $columnas->etapa = new stdClass();
+        $columnas->cuenta_predial = new stdClass();
+        $columnas->n_opiniones_valor = new stdClass();
+
+        $columnas->razon_social = new stdClass();
+        $columnas->razon_social->default = 'POR ASIGNAR';
+
+        $columnas->rfc = new stdClass();
+        $columnas->rfc->default = 'XAXX010101000';
+
+        $columnas->numero_exterior = new stdClass();
+        $columnas->numero_exterior->default = 'SN';
+
+        $columnas->numero_interior = new stdClass();
+        $columnas->numero_interior->default = 'SN';
+
+        $columnas->observaciones = new stdClass();
+        $columnas->observaciones->tipo_dato = 'TEXT';
+
+        $columnas->nombre_completo_valida = new stdClass();
+
+        $add_colums = $init->add_columns(campos: $columnas,table:  'inm_prospecto');
+        if(errores::$error){
+            return (new errores())->error(mensaje: 'Error al agregar columnas', data:  $add_colums);
+        }
+        $out->add_colums_base = $add_colums;
+
+        $foraneas = array();
+        $foraneas['com_prospecto_id'] = new stdClass();
+        $foraneas['dp_calle_pertenece_id'] = new stdClass();
+        $foraneas['com_tipo_prospecto_id'] = new stdClass();
+        $foraneas['com_direccion_id'] = new stdClass();
+
+        $result = $init->foraneas(foraneas: $foraneas,table:  'inm_prospecto');
+        if(errores::$error){
+            return (new errores())->error(mensaje: 'Error al ajustar foranea', data:  $result);
+        }
+        $out->foraneas = $result;
+
+        return $out;
+    }
+
     private function _add_inm_rel_prospecto_cliente(PDO $link): array|stdClass
     {
         $out = new stdClass();
@@ -665,6 +735,49 @@ class instalacion
 
     }
 
+    private function inm_prospecto_ubicacion(PDO $link): array|stdClass
+    {
+        $out = new stdClass();
+
+        $create = $this->_add_inm_prospecto_ubicacion(link: $link);
+        if(errores::$error){
+            return (new errores())->error(mensaje: 'Error al agregar tabla', data:  $create);
+        }
+
+        $out->create = $create;
+
+        $adm_menu_descripcion = 'Ubicaciones';
+        $adm_sistema_descripcion = 'inmuebles';
+        $etiqueta_label = 'Prospecto Ubicacion';
+        $adm_seccion_pertenece_descripcion = 'inmuebles';
+        $adm_namespace_descripcion = 'gamboa.martin/inmuebles';
+        $adm_namespace_name = 'gamboamartin/inmuebles';
+
+        $acl = (new _adm())->integra_acl(adm_menu_descripcion: $adm_menu_descripcion,
+            adm_namespace_name: $adm_namespace_name, adm_namespace_descripcion: $adm_namespace_descripcion,
+            adm_seccion_descripcion: __FUNCTION__, adm_seccion_pertenece_descripcion: $adm_seccion_pertenece_descripcion,
+            adm_sistema_descripcion: $adm_sistema_descripcion, etiqueta_label: $etiqueta_label, link: $link);
+        if(errores::$error){
+            return (new errores())->error(mensaje: 'Error al obtener acl', data:  $acl);
+        }
+        $alta_accion = (new _adm())->inserta_accion_base(adm_accion_descripcion: 'documentos',
+            adm_seccion_descripcion:  __FUNCTION__, es_view: 'activo', icono: 'bi bi-collection-fill',link:  $link,
+            lista:  'activo',titulo:  'Documentos');
+        if(errores::$error){
+            return (new errores())->error(mensaje: 'Error al insertar accion',data:  $alta_accion);
+        }
+
+        $alta_accion = (new _adm())->inserta_accion_base(adm_accion_descripcion: 'integra_relacion',
+            adm_seccion_descripcion:  __FUNCTION__, es_view: 'activo', icono: 'bi bi-person-plus-fill',link:  $link,
+            lista:  'activo',titulo:  'Integra Relacion');
+        if(errores::$error){
+            return (new errores())->error(mensaje: 'Error al insertar accion',data:  $alta_accion);
+        }
+
+        return $out;
+
+    }
+
     private function inm_rel_prospecto_cliente(PDO $link): array|stdClass
     {
         $out = new stdClass();
@@ -775,6 +888,12 @@ class instalacion
             return (new errores())->error(mensaje: 'Error integrar inm_prospecto', data:  $inm_prospecto);
         }
         $out->inm_prospecto = $inm_prospecto;
+
+        $inm_prospecto_ubicacion = $this->inm_prospecto_ubicacion(link: $link);
+        if(errores::$error){
+            return (new errores())->error(mensaje: 'Error integrar inm_prospecto_ubicacion', data:  $inm_prospecto_ubicacion);
+        }
+        $out->inm_prospecto_ubicacion = $inm_prospecto_ubicacion;
 
         $inm_comprador = $this->inm_comprador(link: $link);
         if(errores::$error){
