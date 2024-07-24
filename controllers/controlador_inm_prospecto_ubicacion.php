@@ -1200,7 +1200,8 @@ class controlador_inm_prospecto_ubicacion extends _ctl_formato
 
         $this->inputs->fecha_otorgamiento_credito = $fecha_otorgamiento_credito;
 
-        $conyuge = (new _conyuge())->inputs_conyuge(controler: $this);
+        $class_upd = '_upd_prospecto_ubicacion';
+        $conyuge = (new _conyuge())->inputs_conyuge(controler: $this,class_upd: $class_upd);
         if (errores::$error) {
             return $this->retorno_error(mensaje: 'Error al obtener conyuge', data: $conyuge,
                 header: $header, ws: $ws);

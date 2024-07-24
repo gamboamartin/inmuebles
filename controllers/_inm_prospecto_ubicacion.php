@@ -66,7 +66,7 @@ class _inm_prospecto_ubicacion{
 
         if($inm_prospecto_id > 0) {
 
-            $existe_conyuge = (new inm_prospecto(link: $link))->existe_conyuge(inm_prospecto_id: $inm_prospecto_id);
+            $existe_conyuge = (new inm_prospecto_ubicacion(link: $link))->existe_conyuge(inm_prospecto_id: $inm_prospecto_id);
             if (errores::$error) {
                 return $this->error->error(mensaje: 'Error al validar si existe conyuge', data: $existe_conyuge);
             }

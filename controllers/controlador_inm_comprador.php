@@ -704,7 +704,8 @@ class controlador_inm_comprador extends _ctl_base {
         $controlador_inm_prospecto = (new controlador_inm_prospecto(link: $this->link));
         $controlador_inm_prospecto->registro_id = $inm_prospecto_id;
 
-        $conyuge = (new _conyuge())->inputs_conyuge(controler: $controlador_inm_prospecto);
+        $class_upd = '_upd_prospecto';
+        $conyuge = (new _conyuge())->inputs_conyuge(controler: $controlador_inm_prospecto,class_upd:$class_upd );
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al obtener conyuge',data:  $conyuge,
                 header: $header,ws:  $ws);

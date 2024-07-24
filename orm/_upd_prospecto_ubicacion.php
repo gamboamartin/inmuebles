@@ -85,27 +85,27 @@ class _upd_prospecto_ubicacion{
                                       bool $retorno_obj): array|stdClass
     {
         if($inm_prospecto_id<=0){
-            return $this->error->error(mensaje: 'Error inm_prospecto_id debe ser mayor a 0', data:  $inm_prospecto_id);
+            return $this->error->error(mensaje: 'Error inm_prospecto_ubicacion_id debe ser mayor a 0', data:  $inm_prospecto_id);
         }
         $filtro = array();
-        $filtro['inm_prospecto.id'] = $inm_prospecto_id;
+        $filtro['inm_prospecto_ubicacion.id'] = $inm_prospecto_id;
 
-        $r_inm_rel_conyuge_prospecto = (new inm_rel_conyuge_prospecto(link: $link))->filtro_and(filtro: $filtro);
+        $r_inm_rel_conyuge_prospecto_ubicacion = (new inm_rel_conyuge_prospecto_ubicacion(link: $link))->filtro_and(filtro: $filtro);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al obtener conyuge relacion',
-                data:  $r_inm_rel_conyuge_prospecto);
+                data:  $r_inm_rel_conyuge_prospecto_ubicacion);
         }
-        if($r_inm_rel_conyuge_prospecto->n_registros === 0){
-            return $this->error->error(mensaje: 'Error no existe relacion',data:  $r_inm_rel_conyuge_prospecto);
+        if($r_inm_rel_conyuge_prospecto_ubicacion->n_registros === 0){
+            return $this->error->error(mensaje: 'Error no existe relacion',data:  $r_inm_rel_conyuge_prospecto_ubicacion);
         }
-        if($r_inm_rel_conyuge_prospecto->n_registros > 1){
-            return $this->error->error(mensaje: 'Error de integridad',data:  $r_inm_rel_conyuge_prospecto);
+        if($r_inm_rel_conyuge_prospecto_ubicacion->n_registros > 1){
+            return $this->error->error(mensaje: 'Error de integridad',data:  $r_inm_rel_conyuge_prospecto_ubicacion);
         }
 
-        $inm_rel_conyuge_prospecto = $r_inm_rel_conyuge_prospecto->registros[0];
+        $inm_rel_conyuge_prospecto_ubicacion = $r_inm_rel_conyuge_prospecto_ubicacion->registros[0];
 
         $inm_conyuge = (new inm_conyuge(link: $link))->registro(
-            registro_id: $inm_rel_conyuge_prospecto['inm_conyuge_id'],columnas_en_bruto: $columnas_en_bruto,
+            registro_id: $inm_rel_conyuge_prospecto_ubicacion['inm_conyuge_id'],columnas_en_bruto: $columnas_en_bruto,
             retorno_obj: $retorno_obj);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al obtener conyuge',data:  $inm_conyuge);
@@ -236,6 +236,7 @@ class _upd_prospecto_ubicacion{
         if (errores::$error) {
             return $this->error->error(mensaje: 'Error al insertar conyuge', data: $r_inm_rel_conyuge_prospecto_bd);
         }
+
         $data = new stdClass();
         $data->alta_conyuge = $alta_conyuge;
         $data->inm_rel_conyuge_prospecto_ins = $inm_rel_conyuge_prospecto_ins;

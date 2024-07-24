@@ -1186,7 +1186,8 @@ class controlador_inm_prospecto extends _ctl_formato
             return $this->retorno_error(mensaje: 'Error al generar inputs', data: $inputs, header: $header, ws: $ws);
         }
 
-        $conyuge = (new _conyuge())->inputs_conyuge(controler: $this);
+        $class_upd = '_upd_prospecto';
+        $conyuge = (new _conyuge())->inputs_conyuge(controler: $this,class_upd: $class_upd);
         if (errores::$error) {
             return $this->retorno_error(mensaje: 'Error al obtener conyuge', data: $conyuge,
                 header: $header, ws: $ws);
