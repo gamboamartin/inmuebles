@@ -204,7 +204,10 @@ class controlador_inm_prospecto_ubicacion extends _ctl_formato
             'numero_nep', 'extension_nep', 'nss', 'curp', 'rfc', 'numero_exterior', 'numero_interior', 'observaciones',
             'fecha_nacimiento', 'sub_cuenta', 'monto_final', 'descuento', 'puntos', 'telefono_casa', 'correo_empresa',
             'correo_mi_cuenta_infonavit', 'password_mi_cuenta_infonavit', 'nss_extra', 'liga_red_social', 'area_empresa',
-            'texto_exterior', 'texto_interior', 'documentos', 'receptor', 'asunto', 'mensaje','manzana','lote','cuenta_predial');
+            'texto_exterior', 'texto_interior', 'documentos', 'receptor', 'asunto', 'mensaje','manzana','lote',
+            'cuenta_predial', 'adeudo_hipoteca','adeudo_predial', 'cuenta_agua', 'adeudo_agua',
+            'adeudo_luz','monto_devolucion', 'nivel','recamaras','metros_terreno', 'metros_construccion',
+            'fecha_otorgamiento_credito');
 
         $keys->selects = array();
 
@@ -216,14 +219,10 @@ class controlador_inm_prospecto_ubicacion extends _ctl_formato
 
         $init_data['inm_institucion_hipotecaria'] = "gamboamartin\\inmuebles";
         $init_data['inm_producto_infonavit'] = "gamboamartin\\inmuebles";
-        $init_data['inm_attr_tipo_credito'] = "gamboamartin\\inmuebles";
-        $init_data['inm_destino_credito'] = "gamboamartin\\inmuebles";
-        $init_data['inm_plazo_credito_sc'] = "gamboamartin\\inmuebles";
-        $init_data['inm_tipo_discapacidad'] = "gamboamartin\\inmuebles";
-        $init_data['inm_persona_discapacidad'] = "gamboamartin\\inmuebles";
-        $init_data['inm_sindicato'] = "gamboamartin\\inmuebles";
-        $init_data['inm_ocupacion'] = "gamboamartin\\inmuebles";
         $init_data['com_tipo_direccion'] = "gamboamartin\\comercial";
+        $init_data['inm_prototipo'] = "gamboamartin\\inmuebles";
+        $init_data['inm_complemento'] = "gamboamartin\\inmuebles";
+        $init_data['inm_estado_vivienda'] = "gamboamartin\\inmuebles";
 
         $init_data = (new _base_paquete())->init_data_domicilio(init_data: $init_data);
         if (errores::$error) {
@@ -1043,6 +1042,66 @@ class controlador_inm_prospecto_ubicacion extends _ctl_formato
             return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $keys_selects);
         }
 
+        $keys_selects = (new init())->key_select_txt(cols: 12, key: 'adeudo_hipoteca',
+            keys_selects: $keys_selects, place_holder: 'Adeudo Hipoteca', required: false);
+        if (errores::$error) {
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $keys_selects);
+        }
+
+        $keys_selects = (new init())->key_select_txt(cols: 6, key: 'adeudo_predial',
+            keys_selects: $keys_selects, place_holder: 'Adeudo Predial', required: false);
+        if (errores::$error) {
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $keys_selects);
+        }
+
+        $keys_selects = (new init())->key_select_txt(cols: 6, key: 'cuenta_agua',
+            keys_selects: $keys_selects, place_holder: 'Cuenta Agua', required: false);
+        if (errores::$error) {
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $keys_selects);
+        }
+
+        $keys_selects = (new init())->key_select_txt(cols: 6, key: 'adeudo_agua',
+            keys_selects: $keys_selects, place_holder: 'Adeudo Agua', required: false);
+        if (errores::$error) {
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $keys_selects);
+        }
+
+        $keys_selects = (new init())->key_select_txt(cols: 6, key: 'adeudo_luz',
+            keys_selects: $keys_selects, place_holder: 'Adeudo Luz', required: false);
+        if (errores::$error) {
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $keys_selects);
+        }
+
+        $keys_selects = (new init())->key_select_txt(cols: 6, key: 'monto_devolucion',
+            keys_selects: $keys_selects, place_holder: 'Monto Devolucion', required: false);
+        if (errores::$error) {
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $keys_selects);
+        }
+
+        $keys_selects = (new init())->key_select_txt(cols: 6, key: 'nivel',
+            keys_selects: $keys_selects, place_holder: 'Nivel', required: false);
+        if (errores::$error) {
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $keys_selects);
+        }
+
+        $keys_selects = (new init())->key_select_txt(cols: 6, key: 'recamaras',
+            keys_selects: $keys_selects, place_holder: 'Recamaras', required: false);
+        if (errores::$error) {
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $keys_selects);
+        }
+
+        $keys_selects = (new init())->key_select_txt(cols: 6, key: 'metros_terreno',
+            keys_selects: $keys_selects, place_holder: 'Metros Terreno', required: false);
+        if (errores::$error) {
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $keys_selects);
+        }
+
+        $keys_selects = (new init())->key_select_txt(cols: 6, key: 'metros_construccion',
+            keys_selects: $keys_selects, place_holder: 'Metros Construccion', required: false);
+        if (errores::$error) {
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $keys_selects);
+        }
+
         $keys_selects = (new init())->key_select_txt(cols: 12, key: 'telefono_casa',
             keys_selects: $keys_selects, place_holder: 'Telefono de Casa', required: false);
         if (errores::$error) {
@@ -1071,7 +1130,7 @@ class controlador_inm_prospecto_ubicacion extends _ctl_formato
         }
 
         $keys_selects = array();
-        $keys_selects = (new \gamboamartin\inmuebles\controllers\_inm_prospecto())->integra_keys_selects_comercial(
+        $keys_selects = (new \gamboamartin\inmuebles\controllers\_inm_prospecto_ubicacion())->integra_keys_selects_comercial(
             controlador: $this,keys_selects:  $keys_selects);
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al obtener registro prospecto', data: $keys_selects,
@@ -1104,7 +1163,7 @@ class controlador_inm_prospecto_ubicacion extends _ctl_formato
             return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $keys_selects);
         }
 
-        $keys_selects = (new init())->key_select_txt(cols: 12, key: 'cuenta_predial',
+        $keys_selects = (new init())->key_select_txt(cols: 6, key: 'cuenta_predial',
             keys_selects: $keys_selects, place_holder: 'Cuenta Predial', required: false);
         if (errores::$error) {
             return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $keys_selects);
@@ -1126,10 +1185,29 @@ class controlador_inm_prospecto_ubicacion extends _ctl_formato
             return $this->errores->error(mensaje: 'Error al obtener inputs',data:  $inputs);
         }
 
-        $headers = (new \gamboamartin\inmuebles\controllers\_inm_prospecto())->headers_front(controlador: $this);
+        $headers = (new \gamboamartin\inmuebles\controllers\_inm_prospecto_ubicacion())->headers_front(controlador: $this);
         if (errores::$error) {
             return $this->retorno_error(mensaje: 'Error al generar headers', data: $headers, header: $header, ws: $ws);
         }
+
+        $fecha_otorgamiento_credito = $this->html->input_fecha(cols: 12, row_upd: $this->row_upd, value_vacio: false,
+            name: 'fecha_otorgamiento_credito', place_holder: 'Fecha Otorgamiento Credito',
+            value: $this->row_upd->fecha_otorgamiento_credito);
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al obtener input',data:  $fecha_otorgamiento_credito,header: $header,
+                ws: $ws);
+        }
+
+        $this->inputs->fecha_otorgamiento_credito = $fecha_otorgamiento_credito;
+
+        $conyuge = (new _conyuge())->inputs_conyuge(controler: $this);
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al obtener conyuge', data: $conyuge,
+                header: $header, ws: $ws);
+        }
+
+        $this->inputs->conyuge = $conyuge;
+
 
         $direccion = (new _direccion())->inputs_direccion(controler: $this);
         if (errores::$error) {

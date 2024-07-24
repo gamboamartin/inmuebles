@@ -351,6 +351,11 @@ class instalacion
         $columnas->apellido_paterno = new stdClass();
         $columnas->apellido_materno = new stdClass();
 
+        $columnas->lada_com = new stdClass();
+        $columnas->numero_com = new stdClass();
+        $columnas->cel_com = new stdClass();
+        $columnas->correo_com = new stdClass();
+
         $columnas->lote = new stdClass();
         $columnas->manzana = new stdClass();
         $columnas->etapa = new stdClass();

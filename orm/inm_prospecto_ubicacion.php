@@ -398,9 +398,9 @@ class inm_prospecto_ubicacion extends _modelo_parent{
             return $this->error->error(mensaje: 'Error inm_prospecto_id es menor a 0',data:  $inm_prospecto_id);
         }
         $filtro = array();
-        $filtro['inm_prospecto.id'] = $inm_prospecto_id;
+        $filtro['inm_prospecto_ubicacion.id'] = $inm_prospecto_id;
 
-        $existe_conyuge = (new inm_rel_conyuge_prospecto(link: $this->link))->existe(filtro: $filtro);
+        $existe_conyuge = (new inm_rel_conyuge_prospecto_ubicacion(link: $this->link))->existe(filtro: $filtro);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al validar si existe conyuge',data:  $existe_conyuge);
         }
@@ -742,13 +742,13 @@ class inm_prospecto_ubicacion extends _modelo_parent{
             return $this->error->error(mensaje: 'Error al insertar direccion', data: $result_direccion);
         }
 
-        /*$result_conyuge = (new _upd_prospecto())->transacciona_conyuge(inm_prospecto_id: $inm_prospecto_id,link: $this->link);
+        $result_conyuge = (new _upd_prospecto_ubicacion())->transacciona_conyuge(inm_prospecto_ubicacion_id: $inm_prospecto_ubicacion_id,link: $this->link);
         if (errores::$error) {
             return $this->error->error(mensaje: 'Error al insertar conyuge', data: $result_conyuge);
-        }*/
+        }
 
         $data = new stdClass();
-        //$data->result_conyuge = $result_conyuge;
+        $data->result_conyuge = $result_conyuge;
         $data->result_direccion = $result_direccion;
 
         return $data;

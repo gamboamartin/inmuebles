@@ -16,14 +16,14 @@ class _conyuge{
     public function __construct(){
         $this->error = new errores();
     }
-    final public function inputs_conyuge(controlador_inm_prospecto $controler){
+    final public function inputs_conyuge(controlador_inm_prospecto|controlador_inm_prospecto_ubicacion $controler){
 
         $conyuge = new stdClass();
 
         $existe_conyuge = false;
         if($controler->registro_id > 0) {
 
-            $existe_conyuge = (new inm_prospecto(link: $controler->link))->existe_conyuge(
+            $existe_conyuge = $controler->modelo->existe_conyuge(
                 inm_prospecto_id: $controler->registro_id);
             if (errores::$error) {
                 return $this->error->error(mensaje: 'Error al validar si existe conyuge', data: $existe_conyuge);
