@@ -321,6 +321,39 @@ class controlador_inm_prospecto_ubicacion extends _ctl_formato
         return $inm_conf_docs_prospecto;
     }
 
+    final public function fotografias(bool $header, bool $ws = false): array
+    {
+        $template = $this->modifica(header: false);
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al integrar base', data: $template, header: $header, ws: $ws);
+        }
+
+        $inm_conf_docs_prospecto = (new _inm_prospecto())->integra_inm_documentos(controler: $this);
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al integrar buttons', data: $inm_conf_docs_prospecto, header: $header, ws: $ws);
+        }
+
+        $keys_selects = $this->init_selects_inputs();
+        if (errores::$error) {return $this->errores->error(mensaje: 'Error al inicializar selects', data: $keys_selects);
+        }
+
+        $keys_selects['com_tipo_prospecto_id']->id_selected = $this->registro['com_tipo_prospecto_id'];
+
+        $base = $this->base_upd(keys_selects: $keys_selects, params: array(), params_ajustados: array());
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al integrar base', data: $base, header: $header, ws: $ws);
+        }
+
+        $this->row_upd->asunto = "TU MENSAJE";
+        $this->row_upd->mensaje = "TU MENSAJE";
+        $this->inm_conf_docs_prospecto = $inm_conf_docs_prospecto;
+
+        //print_r($this->row_upd);
+
+
+        return $inm_conf_docs_prospecto;
+    }
+
 
     public function etapa(bool $header, bool $ws = false): array|stdClass
     {
