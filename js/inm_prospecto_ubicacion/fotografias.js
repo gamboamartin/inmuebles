@@ -43,3 +43,6 @@ modal.addEventListener('click', function (event) {
     }
 });
 
+$(document).on("click", "#elimina a", function (event) {
+    alert('hola');
+});

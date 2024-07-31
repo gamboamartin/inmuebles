@@ -16,7 +16,7 @@
                                     <?php echo $registro['input']; ?>
                                     <?php foreach ($registro['fotos'] as $foto){
                                             foreach ($foto as $img){?>
-                                                <div id="contenedor_img" class="col-lg-6 contenedor_img">
+                                                <div class="col-lg-6 contenedor_img">
                                                     <?php echo $img['input']; ?>
                                                     <a class="btn btn-danger" href="<?php echo $img['btn']; ?>">Elimina</a>.
                                                 </div>

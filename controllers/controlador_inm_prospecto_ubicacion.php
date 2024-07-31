@@ -363,7 +363,7 @@ class controlador_inm_prospecto_ubicacion extends _ctl_formato
 
                 $link_elimina_foto_bd = $this->obj_link->link_con_id(
                     accion: 'elimina_bd', link: $this->link, registro_id: $reg['inm_doc_prospecto_ubicacion_id'],
-                    seccion: 'inm_prospecto_ubicacion');
+                    seccion: 'inm_doc_prospecto_ubicacion');
                 if (errores::$error) {
                     $this->retorno_error(mensaje: 'Error al generar link', data: $link_elimina_foto_bd, header: $header, ws: $ws);
                 }
