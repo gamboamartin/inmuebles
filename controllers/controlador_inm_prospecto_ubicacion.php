@@ -25,8 +25,10 @@ use gamboamartin\inmuebles\models\_inm_prospecto;
 use gamboamartin\inmuebles\models\_upd_prospecto;
 use gamboamartin\inmuebles\models\inm_beneficiario;
 use gamboamartin\inmuebles\models\inm_conf_docs_prospecto;
+use gamboamartin\inmuebles\models\inm_conf_docs_prospecto_ubicacion;
 use gamboamartin\inmuebles\models\inm_conf_institucion_campo;
 use gamboamartin\inmuebles\models\inm_doc_prospecto;
+use gamboamartin\inmuebles\models\inm_doc_prospecto_ubicacion;
 use gamboamartin\inmuebles\models\inm_prospecto;
 use gamboamartin\inmuebles\models\inm_prospecto_ubicacion;
 use gamboamartin\inmuebles\models\inm_referencia_prospecto;
@@ -68,7 +70,7 @@ class controlador_inm_prospecto_ubicacion extends _ctl_formato
     public array $beneficiarios = array();
     public array $referencias = array();
     public array $acciones_headers = array();
-
+    public array $fotos = array();
 
     public function __construct(PDO      $link, html $html = new \gamboamartin\template_1\html(),
                                 stdClass $paths_conf = new stdClass())
@@ -328,32 +330,68 @@ class controlador_inm_prospecto_ubicacion extends _ctl_formato
             return $this->retorno_error(mensaje: 'Error al integrar base', data: $template, header: $header, ws: $ws);
         }
 
-        $inm_conf_docs_prospecto = (new _inm_prospecto())->integra_inm_documentos(controler: $this);
-        if (errores::$error) {
-            return $this->retorno_error(mensaje: 'Error al integrar buttons', data: $inm_conf_docs_prospecto, header: $header, ws: $ws);
+        $filtro['inm_conf_docs_prospecto_ubicacion.es_foto'] = 'activo';
+        $inm_conf_docs_prospecto_ubicacion = (new inm_conf_docs_prospecto_ubicacion(link: $this->link))->filtro_and(
+            columnas: ['doc_tipo_documento_id'], filtro: $filtro);
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al obtener inm_conf_docs_prospecto',
+                data:  $inm_conf_docs_prospecto_ubicacion,header: $header, ws: $ws);
         }
 
-        $keys_selects = $this->init_selects_inputs();
-        if (errores::$error) {return $this->errores->error(mensaje: 'Error al inicializar selects', data: $keys_selects);
+        $inputs_fotos = array();
+        foreach ($inm_conf_docs_prospecto_ubicacion->registros as $registro){
+            $filtro_foto['inm_doc_prospecto_ubicacion.es_foto'] = 'activo';
+            $filtro_foto['doc_tipo_documento.id'] = $registro['doc_tipo_documento_id'];
+            $filtro_foto['inm_prospecto_ubicacion.id'] = $this->registro_id;
+            $inm_doc_prospecto_ubicacion = (new inm_doc_prospecto_ubicacion(link: $this->link))->filtro_and(
+                filtro: $filtro_foto);
+            if(errores::$error){
+                return $this->retorno_error(mensaje: 'Error al obtener inm_conf_docs_prospecto',
+                    data:  $inm_doc_prospecto_ubicacion,header: $header, ws: $ws);
+            }
+
+            $fotos = array();
+            foreach ($inm_doc_prospecto_ubicacion->registros as $reg){
+                $foto = $this->img_btn_modal(src: $reg['doc_documento_ruta_absoluta'],
+                    css_id: $registro['doc_tipo_documento_id']);
+                if(errores::$error){
+                    return $this->retorno_error(mensaje: 'Error al obtener inm_conf_docs_prospecto',
+                        data:  $foto,header: $header, ws: $ws);
+                }
+                $fotos[$registro['doc_tipo_documento_id']][] = $foto;
+            }
+
+            $documento = $this->html->input_file(cols: 12, name: "fotos[$registro[doc_tipo_documento_id]]",
+                row_upd: new stdClass(), value_vacio: false);
+            if (errores::$error) {
+                return $this->retorno_error(
+                    mensaje: 'Error al obtener inputs', data: $documento, header: $header, ws: $ws);
+            }
+
+            $inputs_fotos[$registro['doc_tipo_documento_id']]['input'] = $documento;
+            $inputs_fotos[$registro['doc_tipo_documento_id']]['fotos'] = $fotos;
         }
 
-        $keys_selects['com_tipo_prospecto_id']->id_selected = $this->registro['com_tipo_prospecto_id'];
+        $this->fotos = $inputs_fotos;
 
-        $base = $this->base_upd(keys_selects: $keys_selects, params: array(), params_ajustados: array());
-        if (errores::$error) {
-            return $this->retorno_error(mensaje: 'Error al integrar base', data: $base, header: $header, ws: $ws);
-        }
-
-        $this->row_upd->asunto = "TU MENSAJE";
-        $this->row_upd->mensaje = "TU MENSAJE";
-        $this->inm_conf_docs_prospecto = $inm_conf_docs_prospecto;
-
-        //print_r($this->row_upd);
-
-
-        return $inm_conf_docs_prospecto;
+        return $template;
     }
 
+    public function img_btn_modal(string $src, int $css_id, array $class_css = array()): string|array
+    {
+        if($css_id<=0){
+            return $this->errores->error('Error $css_id debe ser mayor a 0',$css_id);
+        }
+
+        $class_html = '';
+        foreach ($class_css as $class){
+            $class_html.=' '.$class;
+        }
+
+        $img = '<img class="img-thumbnail '.$class_html.'" src="'.$src.'" ';
+        $img.= ' role="button" data-toggle="modal" data-target="#_'.$css_id.'">';
+        return $img;
+    }
 
     public function etapa(bool $header, bool $ws = false): array|stdClass
     {
