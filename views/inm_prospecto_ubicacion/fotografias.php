@@ -12,14 +12,16 @@
                     <form enctype="multipart/form-data" method="post" action="<?php echo $controlador->link_fotografia_bd; ?>" class="form-additional">
                         <?php include (new views())->ruta_templates."head/subtitulo.php"; ?>
                             <?php foreach ($controlador->fotos as $registro){ ?>
-                                <div class="col-lg-6">
+                                <div class="col-lg-6 contorno">
                                     <?php echo $registro['input']; ?>
-                                    <?php
-                                        foreach ($registro['fotos'] as $foto){
-                                            foreach ($foto as $img){
-                                                echo $img;
+                                    <?php foreach ($registro['fotos'] as $foto){
+                                            foreach ($foto as $img){?>
+                                                <div id="contenedor_img" class="col-lg-6 contenedor_img">
+                                                    <?php echo $img['input']; ?>
+                                                    <a class="btn btn-danger" href="<?php echo $img['btn']; ?>">Elimina</a>.
+                                                </div>
+                                    <?php       }
                                             }
-                                        }
                                     ?>
                                 </div>
                             <?php } ?>
@@ -35,3 +37,9 @@
 
 </main>
 
+<dialog id="myModal">
+    <span class="close-btn" id="closeModalBtn">&times;</span>
+    <h2>Vista Previa</h2>
+    <div class="content">
+    </div>
+</dialog>

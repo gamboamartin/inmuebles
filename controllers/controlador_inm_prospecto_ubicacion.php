@@ -360,7 +360,18 @@ class controlador_inm_prospecto_ubicacion extends _ctl_formato
                     return $this->retorno_error(mensaje: 'Error al obtener inm_conf_docs_prospecto',
                         data:  $foto,header: $header, ws: $ws);
                 }
-                $fotos[$registro['doc_tipo_documento_id']][] = $foto;
+
+                $link_elimina_foto_bd = $this->obj_link->link_con_id(
+                    accion: 'elimina_bd', link: $this->link, registro_id: $reg['inm_doc_prospecto_ubicacion_id'],
+                    seccion: 'inm_prospecto_ubicacion');
+                if (errores::$error) {
+                    $this->retorno_error(mensaje: 'Error al generar link', data: $link_elimina_foto_bd, header: $header, ws: $ws);
+                }
+
+                $contenedor = array();
+                $contenedor['input'] = $foto;
+                $contenedor['btn'] = $link_elimina_foto_bd;
+                $fotos[$registro['doc_tipo_documento_id']][] = $contenedor;
             }
 
             $documento = $this->html->input_file(cols: 12, name: "fotos[$registro[doc_tipo_documento_id]][]",
@@ -431,13 +442,17 @@ class controlador_inm_prospecto_ubicacion extends _ctl_formato
         if (errores::$error) {
             $this->retorno_error(mensaje: 'Error al generar link', data: $link_fotografia_bd, header: $header, ws: $ws);
         }
-        
+
         if($header) {
             header('Location:' . $link_fotografia_bd);
             exit;
         }
 
         return $result;
+    }
+
+    public function elimina_foto_bd(){
+
     }
 
     public function img_btn_modal(string $src, int $css_id, array $class_css = array()): string|array
@@ -452,7 +467,7 @@ class controlador_inm_prospecto_ubicacion extends _ctl_formato
         }
 
         $img = '<img class="img-thumbnail '.$class_html.'" src="'.$src.'" ';
-        $img.= ' role="button" data-toggle="modal" data-target="#_'.$css_id.'">';
+        $img.= ' role="button" data-toggle="modal" data-target="#img_'.$css_id.'">';
         return $img;
     }
 

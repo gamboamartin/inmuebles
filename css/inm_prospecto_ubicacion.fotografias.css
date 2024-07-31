@@ -1,3 +1,16 @@
 .imagen{
     width: 100%;
+    height: 250px;
+    object-fit: cover;
+    object-position: bottom;
+}
+
+.contorno{
+    padding: 10px;
+    border: 1px;
+}
+
+.contenedor_img{
+    background-color: #eeeeee;
+    padding: 7px !important;
 }
