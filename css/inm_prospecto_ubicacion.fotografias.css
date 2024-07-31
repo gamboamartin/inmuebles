@@ -6,8 +6,7 @@
 }
 
 .contorno{
-    padding: 10px;
-    border: 1px;
+    border: 2px solid #BFBFBF !important;
 }
 
 .contenedor_img{
