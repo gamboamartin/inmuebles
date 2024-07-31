@@ -70,7 +70,7 @@ class _base{
 
     /**
      * Genera el resultado de salida despues del commit
-     * @param controlador_inm_prospecto|controlador_inm_comprador $controlador Controlador en ejecucion
+     * @param controlador_inm_prospecto|controlador_inm_comprador|controlador_inm_prospecto_ubicacion $controlador Controlador en ejecucion
      * @param bool $header retorna resultado en web
      * @param mixed $result Resultado de transaccion
      * @param stdClass $retorno Datos de retorno finalizacion
@@ -78,7 +78,7 @@ class _base{
      * @return mixed|void
      * @version 2.253.1
      */
-    final public function out(controlador_inm_prospecto|controlador_inm_comprador $controlador, bool $header,
+    final public function out(controlador_inm_prospecto|controlador_inm_comprador|controlador_inm_prospecto_ubicacion $controlador, bool $header,
                               mixed $result, stdClass $retorno, bool $ws){
         if($header){
             if($retorno->id_retorno === -1) {

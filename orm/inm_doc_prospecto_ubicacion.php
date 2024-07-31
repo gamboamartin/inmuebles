@@ -38,8 +38,7 @@ class inm_doc_prospecto_ubicacion extends _modelo_parent
     public function alta_bd(array $keys_integra_ds = array('codigo', 'descripcion')): array|stdClass
     {
         $registro_doc['doc_tipo_documento_id'] = $this->registro['doc_tipo_documento_id'];
-        $file = $_FILES['documento'];
-
+        $file = $this->registro['documento'];
 
         $r_alta_doc = (new doc_documento(link: $this->link))->alta_documento(registro: $registro_doc, file: $file);
         if (errores::$error) {
@@ -145,7 +144,7 @@ class inm_doc_prospecto_ubicacion extends _modelo_parent
         $descripcion .= ' ' . $registro['doc_tipo_documento_id'];
         $descripcion .= ' ' . $r_alta_doc->registro_obj->doc_tipo_documento_descripcion;
         $descripcion .= ' ' . $r_alta_doc->registro_obj->doc_extension_descripcion;
-        $descripcion .= ' ' . $registro['inm_prospecto_id'];
+        $descripcion .= ' ' . $registro['inm_prospecto_ubicacion_id'];
         $descripcion .= ' ' . $r_alta_doc->registro_obj->doc_documento_nombre;
         return $descripcion;
     }
