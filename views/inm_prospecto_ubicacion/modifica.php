@@ -50,26 +50,9 @@
                             <?php echo $controlador->inputs->direccion->calle; ?>
                             <?php echo $controlador->inputs->direccion->texto_exterior; ?>
                             <?php echo $controlador->inputs->direccion->texto_interior; ?>
-                            <?php include (new views())->ruta_templates . 'botons/submit/modifica_bd.php'; ?>
-                        </div>
 
-                        <?php echo $controlador->header_frontend->apartado_4; ?>
-                        <div id="apartado_4">
                             <?php echo $controlador->inputs->inm_estado_vivienda_id; ?>
-                            <?php echo $controlador->inputs->adeudo_hipoteca; ?>
-                            <?php echo $controlador->inputs->cuenta_predial; ?>
-                            <?php echo $controlador->inputs->adeudo_predial; ?>
-                            <?php echo $controlador->inputs->cuenta_agua; ?>
-                            <?php echo $controlador->inputs->adeudo_agua; ?>
-                            <?php echo $controlador->inputs->adeudo_luz; ?>
-                            <?php echo $controlador->inputs->monto_devolucion; ?>
                             <?php echo $controlador->inputs->fecha_otorgamiento_credito; ?>
-                            <?php include (new views())->ruta_templates . 'botons/submit/modifica_bd.php'; ?>
-
-                        </div>
-
-                        <?php echo $controlador->header_frontend->apartado_5; ?>
-                        <div id="apartado_5">
                             <?php echo $controlador->inputs->inm_prototipo_id; ?>
                             <?php echo $controlador->inputs->inm_complemento_id; ?>
                             <?php echo $controlador->inputs->manzana; ?>
@@ -78,12 +61,24 @@
                             <?php echo $controlador->inputs->recamaras; ?>
                             <?php echo $controlador->inputs->metros_terreno; ?>
                             <?php echo $controlador->inputs->metros_construccion; ?>
+
+                            <?php include (new views())->ruta_templates . 'botons/submit/modifica_bd.php'; ?>
+                        </div>
+
+                        <?php echo $controlador->header_frontend->apartado_4; ?>
+                        <div id="apartado_4">
+                            <?php echo $controlador->inputs->adeudo_hipoteca; ?>
+                            <?php echo $controlador->inputs->cuenta_predial; ?>
+                            <?php echo $controlador->inputs->adeudo_predial; ?>
+                            <?php echo $controlador->inputs->cuenta_agua; ?>
+                            <?php echo $controlador->inputs->adeudo_agua; ?>
+                            <?php echo $controlador->inputs->adeudo_luz; ?>
+                            <?php echo $controlador->inputs->monto_devolucion; ?>
                             <?php include (new views())->ruta_templates . 'botons/submit/modifica_bd.php'; ?>
 
                         </div>
-
-                        <?php echo $controlador->header_frontend->apartado_6; ?>
-                        <div id="apartado_6">
+                        <?php echo $controlador->header_frontend->apartado_5; ?>
+                        <div id="apartado_5">
                             <?php echo $controlador->inputs->conyuge->nombre; ?>
                             <?php echo $controlador->inputs->conyuge->apellido_paterno; ?>
                             <?php echo $controlador->inputs->conyuge->apellido_materno; ?>

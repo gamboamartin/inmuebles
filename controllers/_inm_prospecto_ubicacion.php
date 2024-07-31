@@ -228,10 +228,9 @@ class _inm_prospecto_ubicacion{
         $headers = array();
         $headers['1'] = '1. DATOS PERSONALES';
         $headers['2'] = '2. DATOS DE CONTACTO';
-        $headers['3'] = '3. DOMICILIO';
+        $headers['3'] = '3. VIVIENDA';
         $headers['4'] = '4. ADEUDO';
-        $headers['5'] = '5. VIVIENDA';
-        $headers['6'] = '6. CONYUGE';
+        $headers['5'] = '5. CONYUGE';
 
         return $headers;
     }
