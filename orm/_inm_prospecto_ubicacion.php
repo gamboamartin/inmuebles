@@ -39,7 +39,7 @@ class _inm_prospecto_ubicacion{
             'id_retorno'=>$inm_prospecto_id);
 
         $inm_conf_docs_comprador = (new _inm_prospecto_ubicacion())->button(accion: 'elimina_bd', controler: $controler,
-            etiqueta: 'Elimina', indice: $indice, inm_doc_prospecto_id: $inm_doc_prospecto['inm_doc_prospecto_id'],
+            etiqueta: 'Elimina', indice: $indice, inm_doc_prospecto_id: $inm_doc_prospecto['inm_doc_prospecto_ubicacion_id'],
             inm_conf_docs_prospecto: $inm_conf_docs_prospecto, params: $params, style: 'danger');
 
         if(errores::$error){
@@ -52,7 +52,7 @@ class _inm_prospecto_ubicacion{
                                   array $inm_doc_prospecto){
 
         $inm_conf_docs_prospecto = $this->button(accion: 'descarga', controler: $controler,
-            etiqueta: 'Descarga', indice: $indice, inm_doc_prospecto_id: $inm_doc_prospecto['inm_doc_prospecto_id'],
+            etiqueta: 'Descarga', indice: $indice, inm_doc_prospecto_id: $inm_doc_prospecto['inm_doc_prospecto_ubicacion_id'],
             inm_conf_docs_prospecto: $inm_conf_docs_prospecto);
 
         if(errores::$error){
@@ -60,7 +60,7 @@ class _inm_prospecto_ubicacion{
         }
 
         $inm_conf_docs_prospecto = $this->button(accion: 'vista_previa', controler: $controler,
-            etiqueta: 'Vista Previa', indice: $indice, inm_doc_prospecto_id: $inm_doc_prospecto['inm_doc_prospecto_id'],
+            etiqueta: 'Vista Previa', indice: $indice, inm_doc_prospecto_id: $inm_doc_prospecto['inm_doc_prospecto_ubicacion_id'],
             inm_conf_docs_prospecto: $inm_conf_docs_prospecto, target: '_blank');
 
         if(errores::$error){
@@ -68,7 +68,7 @@ class _inm_prospecto_ubicacion{
         }
 
         $inm_conf_docs_prospecto = $this->button(accion: 'descarga_zip', controler: $controler,
-            etiqueta: 'ZIP', indice: $indice, inm_doc_prospecto_id: $inm_doc_prospecto['inm_doc_prospecto_id'],
+            etiqueta: 'ZIP', indice: $indice, inm_doc_prospecto_id: $inm_doc_prospecto['inm_doc_prospecto_ubicacion_id'],
             inm_conf_docs_prospecto: $inm_conf_docs_prospecto);
 
         if(errores::$error){

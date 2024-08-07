@@ -181,7 +181,7 @@ class _doctos{
         if($r_inm_prospecto_ubicacion_proceso->n_registros === 0){
 
             $filtro = array();
-            $filtro['pr_sub_proceso.descripcion'] = 'ALTA PROSPECTO';
+            $filtro['pr_sub_proceso.descripcion'] = 'ALTA PROSPECTO UBICACION';
             $filtro['adm_seccion.descripcion'] = 'inm_prospecto_ubicacion';
 
             $r_pr_sub_proceso = (new pr_sub_proceso(link: $link))->filtro_and(filtro: $filtro);
@@ -201,7 +201,7 @@ class _doctos{
 
             $inm_prospecto_proceso_ins['pr_sub_proceso_id'] = $pr_sub_proceso['pr_sub_proceso_id'];
             $inm_prospecto_proceso_ins['fecha'] = date('Y-m-d');
-            $inm_prospecto_proceso_ins['inm_prospecto_ubicacion_id'] = $inm_prospecto_ubicacion->inm_prospecto_id;
+            $inm_prospecto_proceso_ins['inm_prospecto_ubicacion_id'] = $inm_prospecto_ubicacion->inm_prospecto_ubicacion_id;
 
             $alta_inm_prospecto_proceso = (new inm_prospecto_ubicacion_proceso(link: $link))->alta_registro(registro: $inm_prospecto_proceso_ins);
             if(errores::$error){
@@ -219,7 +219,7 @@ class _doctos{
         //$filtro['inm_attr_tipo_credito.id'] = $inm_prospecto->inm_attr_tipo_credito_id;
         //$filtro['inm_destino_credito.id'] = $inm_prospecto->inm_destino_credito_id;
         //$filtro['inm_producto_infonavit.id'] = $inm_prospecto->inm_producto_infonavit_id;
-        $filtro['inm_conf_docs_prospecto.status'] = 'activo';
+        $filtro['inm_conf_docs_prospecto_ubicacion.status'] = 'activo';
         if(!$todos) {
             //$filtro['pr_sub_proceso.id'] = $inm_prospecto_proceso['pr_sub_proceso_id'];
         }

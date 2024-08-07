@@ -56,7 +56,7 @@ class inm_prospecto_ubicacion_proceso extends _modelo_base_paquete {
 
         $row_udp['proceso'] = $r_alta_bd->registro_obj->pr_sub_proceso_descripcion;
         $upd = (new inm_prospecto(link: $this->link))->modifica_bd(registro: $row_udp,
-            id: $r_alta_bd->registro_obj->inm_prospecto_id);
+            id: $r_alta_bd->registro_obj->inm_prospecto_ubicacion_id);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al actualizar etapa', data: $upd);
         }
