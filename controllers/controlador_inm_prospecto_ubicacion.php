@@ -322,7 +322,6 @@ class controlador_inm_prospecto_ubicacion extends _ctl_formato
 
         //print_r($this->row_upd);
 
-
         return $inm_conf_docs_prospecto;
     }
 
@@ -741,7 +740,7 @@ class controlador_inm_prospecto_ubicacion extends _ctl_formato
 
     public function tipos_documentos(bool $header, bool $ws = false): array
     {
-        $inm_conf_docs_prospecto = (new _inm_prospecto())->integra_inm_documentos(controler: $this);
+        $inm_conf_docs_prospecto = (new _inm_prospecto())->integra_inm_documentos_ubicacion(controler: $this);
         if (errores::$error) {
             return $this->retorno_error(mensaje: 'Error al integrar buttons', data: $inm_conf_docs_prospecto, header: $header, ws: $ws);
         }
