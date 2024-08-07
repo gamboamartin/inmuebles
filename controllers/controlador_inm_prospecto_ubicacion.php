@@ -369,6 +369,7 @@ class controlador_inm_prospecto_ubicacion extends _ctl_formato
                 }
 
                 $contenedor = array();
+                $contenedor['doc_documento_id'] = $reg['doc_documento_id'];
                 $contenedor['input'] = $foto;
                 $contenedor['btn'] = $link_elimina_foto_bd;
                 $fotos[$registro['doc_tipo_documento_id']][] = $contenedor;
@@ -382,6 +383,7 @@ class controlador_inm_prospecto_ubicacion extends _ctl_formato
                     mensaje: 'Error al obtener inputs', data: $documento, header: $header, ws: $ws);
             }
 
+            $inputs_fotos[$registro['doc_tipo_documento_id']]['doc_tipo_documento_id'] = $registro['doc_tipo_documento_id'];
             $inputs_fotos[$registro['doc_tipo_documento_id']]['input'] = $documento;
             $inputs_fotos[$registro['doc_tipo_documento_id']]['fotos'] = $fotos;
         }

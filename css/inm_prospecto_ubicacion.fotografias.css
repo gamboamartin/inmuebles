@@ -7,9 +7,12 @@
 
 .contorno{
     border: 2px solid #BFBFBF !important;
+    padding: 10px !important;
 }
 
 .contenedor_img{
     background-color: #eeeeee;
     padding: 7px !important;
+    margin: 10px 0 !important;
+    z-index: 1;
 }
