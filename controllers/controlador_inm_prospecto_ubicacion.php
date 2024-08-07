@@ -1540,30 +1540,32 @@ class controlador_inm_prospecto_ubicacion extends _ctl_formato
 
         exit;
     }
-/*
+
     final public function subir_documento(bool $header, bool $ws = false)
     {
-        $inm_prospecto_ubicacion = (new inm_prospecto_ubicacion(link: $this->link))->registro(registro_id: $this->registro_id);
+        $inm_prospecto = (new inm_prospecto_ubicacion(link: $this->link))->registro(registro_id: $this->registro_id);
         if (errores::$error) {
-            return $this->error->error(mensaje: 'Error al obtener inm_prospecto_ubicacion', data: $inm_prospecto_ubicacion);
+            return $this->retorno_error(mensaje: 'Error al obtener inm_prospecto', data: $inm_prospecto,
+                header: $header, ws: $ws);
         }
 
-        $inm_conf_docs_prospecto = (new inm_conf_docs_prospecto(link: $this->link))->filtro_and(
+        $inm_conf_docs_prospecto = (new inm_conf_docs_prospecto_ubicacion(link: $this->link))->filtro_and(
             columnas: ['doc_tipo_documento_id'],
-            filtro: array('inm_attr_tipo_credito_id' => $inm_prospecto_ubicacion['inm_attr_tipo_credito_id']));
+            filtro: array());
         if (errores::$error) {
-            return $this->error->error(mensaje: 'Error al obtener inm_conf_docs_prospecto', data: $inm_conf_docs_prospecto);
+            return $this->retorno_error(mensaje: 'Error al obtener inm_conf_docs_prospecto', data: $inm_conf_docs_prospecto,
+                header: $header, ws: $ws);
         }
 
         $this->inputs = new stdClass();
 
         $filtro['inm_prospecto_ubicacion.id'] = $this->registro_id;
-        $inm_prospecto_ubicacion_id = (new inm_prospecto_ubicacion_html(html: $this->html_base))->select_inm_prospecto_ubicacion_id(
+        $inm_prospecto_id = (new inm_prospecto_ubicacion_html(html: $this->html_base))->select_inm_prospecto_ubicacion_id(
             cols: 12, con_registros: true, id_selected: $this->registro_id, link: $this->link, filtro: $filtro);
         if (errores::$error) {
-            return $this->retorno_error(mensaje: 'Error al generar input', data: $inm_prospecto_ubicacion_id, header: $header, ws: $ws);
+            return $this->retorno_error(mensaje: 'Error al generar input', data: $inm_prospecto_id, header: $header, ws: $ws);
         }
-        $this->inputs->inm_prospecto_ubicacion_id = $inm_prospecto_ubicacion_id;
+        $this->inputs->inm_prospecto_id = $inm_prospecto_id;
 
         $doc_ids = array_map(function ($registro) {
             return $registro['doc_tipo_documento_id'];
@@ -1572,7 +1574,7 @@ class controlador_inm_prospecto_ubicacion extends _ctl_formato
         $doc_tipos_documentos = array();
 
         if (count($doc_ids) > 0) {
-            $doc_tipos_documentos = (new _doctos())->documentos_de_prospecto(inm_prospecto_ubicacion_id: $this->registro_id,
+            $doc_tipos_documentos = (new _doctos())->documentos_de_prospecto_ubicacion(inm_prospecto_ubicacion_id: $this->registro_id,
                 link: $this->link, todos: false, tipos_documentos: $doc_ids);
             if (errores::$error) {
                 return $this->retorno_error(mensaje: 'Error al obtener tipos de documento', data: $doc_tipos_documentos,
@@ -1591,7 +1593,7 @@ class controlador_inm_prospecto_ubicacion extends _ctl_formato
             cols: 12, con_registros: true, id_selected: $_doc_tipo_documento_id, link: $this->link, filtro: $filtro,
             registros: $doc_tipos_documentos);
         if (errores::$error) {
-            return $this->retorno_error(mensaje: 'Error al generar input', data: $inm_prospecto_ubicacion_id, header: $header, ws: $ws);
+            return $this->retorno_error(mensaje: 'Error al generar input', data: $inm_prospecto_id, header: $header, ws: $ws);
         }
         $this->inputs->doc_tipo_documento_id = $doc_tipo_documento_id;
 
@@ -1603,7 +1605,7 @@ class controlador_inm_prospecto_ubicacion extends _ctl_formato
 
         $this->inputs->documento = $documento;
 
-        $link_alta_doc = $this->obj_link->link_alta_bd(link: $this->link, seccion: 'inm_doc_prospecto');
+        $link_alta_doc = $this->obj_link->link_alta_bd(link: $this->link, seccion: 'inm_doc_prospecto_ubicacion');
         if (errores::$error) {
             return $this->retorno_error(
                 mensaje: 'Error al generar link', data: $link_alta_doc, header: $header, ws: $ws);
@@ -1636,7 +1638,6 @@ class controlador_inm_prospecto_ubicacion extends _ctl_formato
 
     }
 
-*/
     public function valida_prioridad(bool $header, bool $ws = false)
     {
         $inm_prospecto_ubicacion_id = (new inm_prospecto_ubicacion(link: $this->link))->valida_prioridad_campo($_GET);

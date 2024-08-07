@@ -17,7 +17,7 @@
                     <?php include (new views())->ruta_templates."head/subtitulo.php"; ?>
                     <?php include (new views())->ruta_templates."mensajes.php"; ?>
 
-                    <?php echo $controlador->inputs->inm_prospecto_id; ?>
+                    <?php echo $controlador->inputs->inm_prospecto_ubicacion_id; ?>
                     <?php echo $controlador->inputs->doc_tipo_documento_id; ?>
                     <?php echo $controlador->inputs->documento; ?>
                     <?php echo $controlador->inputs->btn_action_next; ?>
