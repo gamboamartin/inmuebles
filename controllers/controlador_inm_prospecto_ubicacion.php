@@ -25,6 +25,7 @@ use gamboamartin\inmuebles\models\_inm_prospecto;
 use gamboamartin\inmuebles\models\_upd_prospecto;
 use gamboamartin\inmuebles\models\inm_beneficiario;
 use gamboamartin\inmuebles\models\inm_conf_docs_prospecto;
+use gamboamartin\inmuebles\models\_inm_prospecto_ubicacion;
 use gamboamartin\inmuebles\models\inm_conf_docs_prospecto_ubicacion;
 use gamboamartin\inmuebles\models\inm_conf_institucion_campo;
 use gamboamartin\inmuebles\models\inm_doc_prospecto;
@@ -299,7 +300,7 @@ class controlador_inm_prospecto_ubicacion extends _ctl_formato
             return $this->retorno_error(mensaje: 'Error al integrar base', data: $template, header: $header, ws: $ws);
         }
 
-        $inm_conf_docs_prospecto = (new _inm_prospecto())->integra_inm_documentos(controler: $this);
+        $inm_conf_docs_prospecto = (new _inm_prospecto_ubicacion())->integra_inm_documentos(controler: $this);
         if (errores::$error) {
             return $this->retorno_error(mensaje: 'Error al integrar buttons', data: $inm_conf_docs_prospecto, header: $header, ws: $ws);
         }

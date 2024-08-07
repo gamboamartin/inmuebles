@@ -149,7 +149,7 @@ class inm_doc_prospecto_ubicacion extends _modelo_parent
         return $descripcion;
     }
 
-    final public function inm_docs_prospecto(int $inm_prospecto, array $tipos_documentos)
+    final public function inm_docs_prospecto_ubicacion(int $inm_prospecto_ubicacion, array $tipos_documentos)
     {
         $in = array();
 
@@ -158,7 +158,7 @@ class inm_doc_prospecto_ubicacion extends _modelo_parent
             $in['values'] = $tipos_documentos;
         }
 
-        $r_inm_doc_prospecto = $this->filtro_and(filtro: array('inm_prospecto.id' => $inm_prospecto), in: $in);
+        $r_inm_doc_prospecto = $this->filtro_and(filtro: array('inm_prospecto_ubicacion.id' => $inm_prospecto_ubicacion), in: $in);
         if (errores::$error) {
             return $this->error->error(mensaje: 'Error al obtener documentos', data: $r_inm_doc_prospecto);
         }

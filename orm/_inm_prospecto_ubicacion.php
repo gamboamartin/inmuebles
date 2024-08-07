@@ -5,6 +5,7 @@ use gamboamartin\errores\errores;
 use gamboamartin\inmuebles\controllers\_doctos;
 use gamboamartin\inmuebles\controllers\controlador_inm_comprador;
 use gamboamartin\inmuebles\controllers\controlador_inm_prospecto;
+use gamboamartin\inmuebles\controllers\controlador_inm_prospecto_ubicacion;
 use gamboamartin\validacion\validacion;
 use stdClass;
 
@@ -17,7 +18,7 @@ class _inm_prospecto_ubicacion{
     }
 
 
-    private function button(string $accion, controlador_inm_prospecto $controler, string $etiqueta, int $indice,
+    private function button(string $accion, controlador_inm_prospecto_ubicacion $controler, string $etiqueta, int $indice,
                                  int $inm_doc_prospecto_id, array $inm_conf_docs_prospecto, array $params = array(),
                                  string $style = 'success', string $target = ''): array
     {
@@ -31,7 +32,7 @@ class _inm_prospecto_ubicacion{
         return $inm_conf_docs_prospecto;
     }
 
-    final public function button_del(controlador_inm_prospecto $controler, int $indice, int $inm_prospecto_id,
+    final public function button_del(controlador_inm_prospecto_ubicacion $controler, int $indice, int $inm_prospecto_id,
                                 array $inm_conf_docs_prospecto, array $inm_doc_prospecto){
 
         $params = array('accion_retorno'=>'documentos','seccion_retorno'=>$controler->seccion,
@@ -47,7 +48,7 @@ class _inm_prospecto_ubicacion{
         return $inm_conf_docs_comprador;
     }
 
-    private function buttons(controlador_inm_prospecto $controler, int $indice, array $inm_conf_docs_prospecto,
+    private function buttons(controlador_inm_prospecto_ubicacion $controler, int $indice, array $inm_conf_docs_prospecto,
                                   array $inm_doc_prospecto){
 
         $inm_conf_docs_prospecto = $this->button(accion: 'descarga', controler: $controler,
@@ -76,7 +77,7 @@ class _inm_prospecto_ubicacion{
         return $inm_conf_docs_prospecto;
     }
 
-    private function buttons_base(controlador_inm_prospecto $controler, int $indice, int $inm_prospecto_id,
+    private function buttons_base(controlador_inm_prospecto_ubicacion $controler, int $indice, int $inm_prospecto_id,
                                   array $inm_conf_docs_prospecto, array $inm_doc_prospecto): array
     {
         $inm_conf_docs_prospecto = $this->buttons(controler: $controler,indice:  $indice,
@@ -127,7 +128,7 @@ class _inm_prospecto_ubicacion{
 
     }
 
-    private function doc_existente(controlador_inm_prospecto $controler, array $doc_tipo_documento, int $indice,
+    private function doc_existente(controlador_inm_prospecto_ubicacion $controler, array $doc_tipo_documento, int $indice,
                                         array $inm_conf_docs_prospecto, array $inm_doc_prospecto){
 
         $existe = false;
@@ -152,8 +153,8 @@ class _inm_prospecto_ubicacion{
 
 
 
-    private function inm_conf_docs_prospecto(controlador_inm_prospecto $controler, array $inm_docs_prospecto, array $tipos_documentos){
-        $inm_conf_docs_prospecto = (new _doctos())->documentos_de_prospecto(inm_prospecto_id: $controler->registro_id,
+    private function inm_conf_docs_prospecto(controlador_inm_prospecto_ubicacion $controler, array $inm_docs_prospecto, array $tipos_documentos){
+        $inm_conf_docs_prospecto = (new _doctos())->documentos_de_prospecto_ubicacion(inm_prospecto_ubicacion_id: $controler->registro_id,
             link:  $controler->link, todos: true, tipos_documentos: $tipos_documentos);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al obtener configuraciones de documentos',
@@ -172,7 +173,7 @@ class _inm_prospecto_ubicacion{
         return $inm_conf_docs_prospecto;
     }
 
-    private function inm_docs_prospecto(controlador_inm_prospecto $controler, array $doc_tipo_documento,
+    private function inm_docs_prospecto(controlador_inm_prospecto_ubicacion $controler, array $doc_tipo_documento,
                                              int $indice, array $inm_conf_docs_prospecto,array $inm_docs_prospecto){
         $existe = false;
         foreach ($inm_docs_prospecto as $inm_doc_prospecto){
@@ -237,7 +238,7 @@ class _inm_prospecto_ubicacion{
         return $inm_conf_docs_prospecto;
     }
 
-    private function integra_data(controlador_inm_prospecto $controler, array $doc_tipo_documento,
+    private function integra_data(controlador_inm_prospecto_ubicacion $controler, array $doc_tipo_documento,
                                        int $indice, array $inm_conf_docs_prospecto){
         $params = array('doc_tipo_documento_id'=>$doc_tipo_documento['doc_tipo_documento_id']);
 
@@ -257,15 +258,15 @@ class _inm_prospecto_ubicacion{
         return $inm_conf_docs_prospecto;
     }
 
-    final public function integra_inm_documentos(controlador_inm_prospecto $controler){
-        $inm_prospecto = (new inm_prospecto(link: $controler->link))->registro(registro_id: $controler->registro_id);
+    final public function integra_inm_documentos(controlador_inm_prospecto_ubicacion $controler){
+        $inm_prospecto = (new inm_prospecto_ubicacion(link: $controler->link))->registro(registro_id: $controler->registro_id);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al obtener inm_prospecto',data:  $inm_prospecto);
         }
 
-        $inm_conf_docs_prospecto = (new inm_conf_docs_prospecto(link: $controler->link))->filtro_and(
+        $inm_conf_docs_prospecto = (new inm_conf_docs_prospecto_ubicacion(link: $controler->link))->filtro_and(
             columnas: ['doc_tipo_documento_id'],
-            filtro: array('inm_institucion_hipotecaria_id' => $inm_prospecto['inm_institucion_hipotecaria_id']));
+            filtro: array());
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al obtener inm_conf_docs_prospecto',data:  $inm_conf_docs_prospecto);
         }
@@ -278,8 +279,8 @@ class _inm_prospecto_ubicacion{
             return array();
         }
 
-        $inm_docs_prospecto = (new inm_doc_prospecto(link: $controler->link))->inm_docs_prospecto(
-            inm_prospecto: $controler->registro_id, tipos_documentos: $doc_ids);
+        $inm_docs_prospecto = (new inm_doc_prospecto_ubicacion(link: $controler->link))->inm_docs_prospecto_ubicacion(
+            inm_prospecto_ubicacion: $controler->registro_id, tipos_documentos: $doc_ids);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al obtener inm_docs_prospecto',data:  $inm_docs_prospecto);
         }
