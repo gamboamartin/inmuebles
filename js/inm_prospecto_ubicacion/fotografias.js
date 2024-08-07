@@ -5,54 +5,42 @@ var modal = document.getElementById("myModal");
 var closeBtn = document.getElementById("closeModalBtn");
 var getValue = $(this).attr("data-target");
 
-$(document).on("click", "img[class='imagen']", function (event) {
-    alert('hola');
-    event.preventDefault();
-    var url = $(this).attr("href");
-
-    var loaderOverlay = $('<div class="loader-overlay"><div class="loader"></div></div>');
-    $('body').append(loaderOverlay);
-
-    $.ajax({
-        url: url,
-        type: 'GET',
-        success: function (data) {
-            var tempDiv = $("<div>").html(data);
-            var viewContent = tempDiv.find(".view");
-
-            $("#myModal .content").html(viewContent);
-            modal.showModal();
-            loaderOverlay.remove();
-        },
-        error: function () {
-            $("#myModal .content").html("<p>Error al cargar el contenido.</p>");
-            modal.showModal();
-            loaderOverlay.remove();
-        }
-    });
+$(".imagen").on("click", function() {
+    $('.imagen_modal').attr("src", $(this).attr("src"));
+    $("#myModal").fadeIn();
 });
 
-closeBtn.onclick = function () {
-    $("#myModal .content").empty();
-    modal.close();
-}
+$(".close-button").on("click", function() {
+    $("#myModal").fadeOut();
+});
 
-modal.addEventListener('click', function (event) {
-    if (event.target === modal) {
-        $("#myModal .content").empty();
-        modal.close();
+$(window).on("click", function(event) {
+    if ($(event.target).is("#myModal")) {
+        $("#myModal").fadeOut();
     }
-});
-
-$(document).on("click", "#elimina a", function (event) {
-    alert('hola');
 });
 
 let doc_documento_id = -1;
 let doc_tipo_documento_id = -1;
 let alto = 0;
-let alto_contenedor = 0;
-let alto_base = 0;
+
+$(".elimina_img").on("click", function() {
+    let inm_doc_prospecto_ubicacion_id = $(this).data('inm_doc_prospecto_ubicacion_id');
+
+    $.ajax({
+        type: "POST",
+        data: {id:inm_doc_prospecto_ubicacion_id},
+        url: 'index.php?seccion=inm_doc_prospecto_ubicacion&accion=elimina_bd&ws=1&registro_id='+inm_doc_prospecto_ubicacion_id+'&session_id='+session_id,
+        success: function(data_r) {
+            console.log(data_r);
+        },
+        error: function() {
+            alert("No se ha podido obtener la información");
+        }
+    });
+    $(this).closest(".contenedor_img").remove();
+
+});
 
 $( ".contenedor_img" ).draggable({
     start: function( event, ui ) {

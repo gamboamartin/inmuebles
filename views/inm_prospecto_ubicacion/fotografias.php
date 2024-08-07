@@ -18,7 +18,8 @@
                                             foreach ($foto as $img){?>
                                                 <div class="col-lg-6 contenedor_img" data-doc_documento_id ="<?php echo $img['doc_documento_id']; ?>">
                                                     <?php echo $img['input']; ?>
-                                                    <a class="btn btn-danger" href="<?php echo $img['btn']; ?>">Elimina</a>.
+                                                    <a class="btn btn-danger elimina_img"  data-inm_doc_prospecto_ubicacion_id =
+                                                    "<?php echo $img['inm_doc_prospecto_ubicacion_id']; ?>">Elimina</a>.
                                                 </div>
                                     <?php       }
                                             }
@@ -37,9 +38,9 @@
 
 </main>
 
-<dialog id="myModal">
-    <span class="close-btn" id="closeModalBtn">&times;</span>
-    <h2>Vista Previa</h2>
-    <div class="content">
+<div id="myModal" class="modal">
+    <div class="modal-content">
+        <span class="close-button">&times;</span>
+        <img class="imagen_modal">
     </div>
-</dialog>
+</div>

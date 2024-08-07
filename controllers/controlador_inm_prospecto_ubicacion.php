@@ -371,7 +371,7 @@ class controlador_inm_prospecto_ubicacion extends _ctl_formato
                 $contenedor = array();
                 $contenedor['doc_documento_id'] = $reg['doc_documento_id'];
                 $contenedor['input'] = $foto;
-                $contenedor['btn'] = $link_elimina_foto_bd;
+                $contenedor['inm_doc_prospecto_ubicacion_id'] = $reg['inm_doc_prospecto_ubicacion_id'];
                 $fotos[$registro['doc_tipo_documento_id']][] = $contenedor;
             }
 
