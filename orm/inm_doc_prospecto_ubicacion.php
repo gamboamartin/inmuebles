@@ -158,7 +158,8 @@ class inm_doc_prospecto_ubicacion extends _modelo_parent
             $in['values'] = $tipos_documentos;
         }
 
-        $r_inm_doc_prospecto = $this->filtro_and(filtro: array('inm_prospecto_ubicacion.id' => $inm_prospecto_ubicacion), in: $in);
+        $r_inm_doc_prospecto = $this->filtro_and(filtro: array('inm_prospecto_ubicacion.id' => $inm_prospecto_ubicacion,
+            'inm_doc_prospecto_ubicacion.es_foto' => 'inactivo'), in: $in);
         if (errores::$error) {
             return $this->error->error(mensaje: 'Error al obtener documentos', data: $r_inm_doc_prospecto);
         }

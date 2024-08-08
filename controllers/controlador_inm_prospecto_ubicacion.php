@@ -428,7 +428,7 @@ class controlador_inm_prospecto_ubicacion extends _ctl_formato
                     $registro['doc_tipo_documento_id'] = $key;
                     $registro['inm_prospecto_ubicacion_id'] = $this->registro_id;
                     $registro['es_foto'] = 'activo';
-                    $registro['documento'] = $valor;
+                    $_FILES['documento'] = $valor;
                     $result = $inm_doc_prospecto_ubicacion->alta_registro(registro: $registro);
                     if (errores::$error) {
                         $this->link->rollBack();
