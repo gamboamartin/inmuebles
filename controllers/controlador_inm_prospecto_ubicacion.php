@@ -228,6 +228,7 @@ class controlador_inm_prospecto_ubicacion extends _ctl_formato
         $init_data['inm_prototipo'] = "gamboamartin\\inmuebles";
         $init_data['inm_complemento'] = "gamboamartin\\inmuebles";
         $init_data['inm_estado_vivienda'] = "gamboamartin\\inmuebles";
+        $init_data['inm_prospecto_ubicacion'] = "gamboamartin\\inmuebles";
 
         $init_data = (new _base_paquete())->init_data_domicilio(init_data: $init_data);
         if (errores::$error) {
@@ -321,7 +322,6 @@ class controlador_inm_prospecto_ubicacion extends _ctl_formato
         $this->inm_conf_docs_prospecto = $inm_conf_docs_prospecto;
 
         //print_r($this->row_upd);
-
 
         return $inm_conf_docs_prospecto;
     }
@@ -552,6 +552,11 @@ class controlador_inm_prospecto_ubicacion extends _ctl_formato
             return $this->errores->error(mensaje: 'Error al integrar selector',data:  $keys_selects);
         }
 
+        $keys_selects = $this->init_selects(keys_selects: $keys_selects, key: "inm_prospecto_ubicacion_id ", label: "Prospecto Ubicacion");
+        if(errores::$error){
+            return $this->errores->error(mensaje: 'Error al integrar selector',data:  $keys_selects);
+        }
+
         return $keys_selects;
     }
 
@@ -741,7 +746,7 @@ class controlador_inm_prospecto_ubicacion extends _ctl_formato
 
     public function tipos_documentos(bool $header, bool $ws = false): array
     {
-        $inm_conf_docs_prospecto = (new _inm_prospecto())->integra_inm_documentos(controler: $this);
+        $inm_conf_docs_prospecto = (new _inm_prospecto())->integra_inm_documentos_ubicacion(controler: $this);
         if (errores::$error) {
             return $this->retorno_error(mensaje: 'Error al integrar buttons', data: $inm_conf_docs_prospecto, header: $header, ws: $ws);
         }
@@ -1565,7 +1570,7 @@ class controlador_inm_prospecto_ubicacion extends _ctl_formato
         if (errores::$error) {
             return $this->retorno_error(mensaje: 'Error al generar input', data: $inm_prospecto_id, header: $header, ws: $ws);
         }
-        $this->inputs->inm_prospecto_id = $inm_prospecto_id;
+        $this->inputs->inm_prospecto_ubicacion_id  = $inm_prospecto_id;
 
         $doc_ids = array_map(function ($registro) {
             return $registro['doc_tipo_documento_id'];

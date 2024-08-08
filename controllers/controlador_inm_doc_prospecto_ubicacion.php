@@ -15,6 +15,7 @@ use gamboamartin\inmuebles\html\inm_doc_prospecto_ubicacion_html;
 use gamboamartin\inmuebles\models\inm_doc_prospecto;
 use gamboamartin\inmuebles\models\inm_doc_prospecto_ubicacion;
 use gamboamartin\inmuebles\models\inm_prospecto;
+use gamboamartin\inmuebles\models\inm_prospecto_ubicacion;
 use gamboamartin\system\links_menu;
 use gamboamartin\template\html;
 use PDO;
@@ -113,7 +114,6 @@ class controlador_inm_doc_prospecto_ubicacion extends _ctl_formato {
 
     public function descarga(bool $header, bool $ws = false): array|string
     {
-
         $registro = $this->modelo->registro(registro_id: $this->registro_id, retorno_obj: true);
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al obtener documento',data:  $registro,header:  $header,
@@ -207,9 +207,9 @@ class controlador_inm_doc_prospecto_ubicacion extends _ctl_formato {
 
     private function name_doc(stdClass $registro): string
     {
-        $name = $registro->inm_prospecto_id.".".$registro->inm_prospecto_nombre;
-        $name .= ".".$registro->inm_prospecto_apellido_paterno;
-        $name .= ".".$registro->inm_prospecto_apellido_materno.".".$registro->doc_tipo_documento_codigo;
+        $name = $registro->inm_prospecto_ubicacion_id.".".$registro->inm_prospecto_ubicacion_nombre;
+        $name .= ".".$registro->inm_prospecto_ubicacion_apellido_paterno;
+        $name .= ".".$registro->inm_prospecto_ubicacion_apellido_materno;
         return $name;
     }
 
@@ -250,15 +250,14 @@ class controlador_inm_doc_prospecto_ubicacion extends _ctl_formato {
 
     public function vista_previa(bool $header, bool $ws = false): array|string|stdClass
     {
-
         $registro = $this->modelo->registro(registro_id: $this->registro_id, retorno_obj: true);
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al obtener documento',data:  $registro,header:  $header,
                 ws:  $ws);
         }
 
-        $com_prospecto = (new inm_prospecto(link: $this->link))->get_com_prospecto(
-            inm_prospecto_id: $registro->inm_prospecto_id, retorno_obj: true);
+        $com_prospecto = (new inm_prospecto_ubicacion(link: $this->link))->get_com_prospecto(
+            inm_prospecto_id: $registro->inm_prospecto_ubicacion_id, retorno_obj: true);
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al obtener prospecto',data:  $com_prospecto,header:  $header,
                 ws:  $ws);
@@ -276,13 +275,13 @@ class controlador_inm_doc_prospecto_ubicacion extends _ctl_formato {
         }
 
         $row_upd = new stdClass();
-        $row_upd->nss = $registro->inm_prospecto_nss;
+        $row_upd->nss = $registro->inm_prospecto_ubicacion_nss;
         $row_upd->com_tipo_cliente_descripcion = $com_prospecto->com_tipo_prospecto_descripcion;
-        $row_upd->curp = $registro->inm_prospecto_curp;
+        $row_upd->curp = $registro->inm_prospecto_ubicacion_curp;
         $row_upd->rfc = $com_prospecto->com_prospecto_rfc;
-        $row_upd->apellido_paterno = $registro->inm_prospecto_apellido_paterno;
-        $row_upd->apellido_materno = $registro->inm_prospecto_apellido_materno;
-        $row_upd->nombre = $registro->inm_prospecto_nombre;
+        $row_upd->apellido_paterno = $registro->inm_prospecto_ubicacion_apellido_paterno;
+        $row_upd->apellido_materno = $registro->inm_prospecto_ubicacion_apellido_materno;
+        $row_upd->nombre = $registro->inm_prospecto_ubicacion_nombre;
 
 
         $com_tipo_prospecto_descripcion = $this->html->input_text_required(cols: 12,disabled: true,

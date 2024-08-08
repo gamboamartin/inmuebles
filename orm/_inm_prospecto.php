@@ -5,6 +5,7 @@ use gamboamartin\errores\errores;
 use gamboamartin\inmuebles\controllers\_doctos;
 use gamboamartin\inmuebles\controllers\controlador_inm_comprador;
 use gamboamartin\inmuebles\controllers\controlador_inm_prospecto;
+use gamboamartin\inmuebles\controllers\controlador_inm_prospecto_ubicacion;
 use gamboamartin\validacion\validacion;
 use stdClass;
 
@@ -31,6 +32,20 @@ class _inm_prospecto{
         return $inm_conf_docs_prospecto;
     }
 
+    private function button_ubicacion(string $accion, controlador_inm_prospecto_ubicacion $controler, string $etiqueta, int $indice,
+                            int $inm_doc_prospecto_id, array $inm_conf_docs_prospecto, array $params = array(),
+                            string $style = 'success', string $target = ''): array
+    {
+        $button = $controler->html->button_href(accion: $accion, etiqueta: $etiqueta,
+            registro_id: $inm_doc_prospecto_id, seccion: 'inm_doc_prospecto_ubicacion', style: $style, params: $params,
+            target: $target);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al integrar button',data:  $button);
+        }
+        $inm_conf_docs_prospecto[$indice][$accion] = $button;
+        return $inm_conf_docs_prospecto;
+    }
+
     final public function button_del(controlador_inm_prospecto $controler, int $indice, int $inm_prospecto_id,
                                 array $inm_conf_docs_prospecto, array $inm_doc_prospecto){
 
@@ -41,6 +56,21 @@ class _inm_prospecto{
             etiqueta: 'Elimina', indice: $indice, inm_doc_prospecto_id: $inm_doc_prospecto['inm_doc_prospecto_id'],
             inm_conf_docs_prospecto: $inm_conf_docs_prospecto, params: $params, style: 'danger');
 
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al integrar button',data:  $inm_conf_docs_comprador);
+        }
+        return $inm_conf_docs_comprador;
+    }
+
+    final public function button_del_ubicacion(controlador_inm_prospecto_ubicacion $controler, int $indice, int $inm_prospecto_id,
+                                     array $inm_conf_docs_prospecto, array $inm_doc_prospecto){
+
+        $params = array('accion_retorno'=>'documentos','seccion_retorno'=>$controler->seccion,
+            'id_retorno'=>$inm_prospecto_id);
+
+        $inm_conf_docs_comprador = (new _inm_prospecto())->button_ubicacion(accion: 'elimina_bd', controler: $controler,
+            etiqueta: 'Elimina', indice: $indice, inm_doc_prospecto_id: $inm_doc_prospecto['inm_doc_prospecto_ubicacion_id'],
+            inm_conf_docs_prospecto: $inm_conf_docs_prospecto, params: $params, style: 'danger');
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al integrar button',data:  $inm_conf_docs_comprador);
         }
@@ -76,6 +106,33 @@ class _inm_prospecto{
         return $inm_conf_docs_prospecto;
     }
 
+    private function buttons_ubicacion(controlador_inm_prospecto_ubicacion $controler, int $indice, array $inm_conf_docs_prospecto,
+                             array $inm_doc_prospecto){
+
+        $inm_conf_docs_prospecto = $this->button_ubicacion(accion: 'descarga', controler: $controler,
+            etiqueta: 'Descarga', indice: $indice, inm_doc_prospecto_id: $inm_doc_prospecto['inm_doc_prospecto_ubicacion_id'],
+            inm_conf_docs_prospecto: $inm_conf_docs_prospecto);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al integrar button',data:  $inm_conf_docs_prospecto);
+        }
+
+        $inm_conf_docs_prospecto = $this->button_ubicacion(accion: 'vista_previa', controler: $controler,
+            etiqueta: 'Vista Previa', indice: $indice, inm_doc_prospecto_id: $inm_doc_prospecto['inm_doc_prospecto_ubicacion_id'],
+            inm_conf_docs_prospecto: $inm_conf_docs_prospecto, target: '_blank');
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al integrar button',data:  $inm_conf_docs_prospecto);
+        }
+
+        $inm_conf_docs_prospecto = $this->button_ubicacion(accion: 'descarga_zip', controler: $controler,
+            etiqueta: 'ZIP', indice: $indice, inm_doc_prospecto_id: $inm_doc_prospecto['inm_doc_prospecto_ubicacion_id'],
+            inm_conf_docs_prospecto: $inm_conf_docs_prospecto);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al integrar button',data:  $inm_conf_docs_prospecto);
+        }
+
+        return $inm_conf_docs_prospecto;
+    }
+
     private function buttons_base(controlador_inm_prospecto $controler, int $indice, int $inm_prospecto_id,
                                   array $inm_conf_docs_prospecto, array $inm_doc_prospecto): array
     {
@@ -90,6 +147,25 @@ class _inm_prospecto{
             inm_prospecto_id:  $inm_prospecto_id,inm_conf_docs_prospecto:  $inm_conf_docs_prospecto,
             inm_doc_prospecto:  $inm_doc_prospecto);
 
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al integrar button',data:  $inm_conf_docs_prospecto);
+        }
+
+        return $inm_conf_docs_prospecto;
+    }
+
+    private function buttons_base_ubicacion(controlador_inm_prospecto_ubicacion $controler, int $indice, int $inm_prospecto_id,
+                                  array $inm_conf_docs_prospecto, array $inm_doc_prospecto): array
+    {
+        $inm_conf_docs_prospecto = $this->buttons_ubicacion(controler: $controler,indice:  $indice,
+            inm_conf_docs_prospecto:  $inm_conf_docs_prospecto,inm_doc_prospecto:  $inm_doc_prospecto);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al integrar button',data:  $inm_conf_docs_prospecto);
+        }
+
+        $inm_conf_docs_prospecto = $this->button_del_ubicacion(controler: $controler,indice:  $indice,
+            inm_prospecto_id:  $inm_prospecto_id,inm_conf_docs_prospecto:  $inm_conf_docs_prospecto,
+            inm_doc_prospecto:  $inm_doc_prospecto);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al integrar button',data:  $inm_conf_docs_prospecto);
         }
@@ -150,7 +226,27 @@ class _inm_prospecto{
         return $data;
     }
 
+    private function doc_existente_ubicacion(controlador_inm_prospecto_ubicacion $controler, array $doc_tipo_documento,
+                                             int $indice, array $inm_conf_docs_prospecto, array $inm_doc_prospecto){
 
+        $existe = false;
+        if($doc_tipo_documento['doc_tipo_documento_id'] === $inm_doc_prospecto['doc_tipo_documento_id']){
+
+            $existe = true;
+
+            $inm_conf_docs_prospecto = $this->buttons_base_ubicacion(
+                controler: $controler,indice:  $indice,inm_prospecto_id:  $controler->registro_id,
+                inm_conf_docs_prospecto:  $inm_conf_docs_prospecto,inm_doc_prospecto:  $inm_doc_prospecto);
+            if(errores::$error){
+                return $this->error->error(mensaje: 'Error al integrar button',data:  $inm_conf_docs_prospecto);
+            }
+        }
+
+        $data = new stdClass();
+        $data->existe = $existe;
+        $data->inm_conf_docs_prospecto = $inm_conf_docs_prospecto;
+        return $data;
+    }
 
     private function inm_conf_docs_prospecto(controlador_inm_prospecto $controler, array $inm_docs_prospecto, array $tipos_documentos){
         $inm_conf_docs_prospecto = (new _doctos())->documentos_de_prospecto(inm_prospecto_id: $controler->registro_id,
@@ -171,6 +267,29 @@ class _inm_prospecto{
         }
         return $inm_conf_docs_prospecto;
     }
+
+    private function inm_conf_docs_prospecto_ubicacion(controlador_inm_prospecto_ubicacion $controler,
+                                                       array $inm_docs_prospecto_ubicacion, array $tipos_documentos){
+        $inm_conf_docs_prospecto = (new _doctos())->documentos_de_prospecto_ubicacion(
+            inm_prospecto_ubicacion_id: $controler->registro_id, link:  $controler->link, todos: true,
+            tipos_documentos: $tipos_documentos);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al obtener configuraciones de documentos',
+                data:  $inm_conf_docs_prospecto);
+        }
+
+        foreach ($inm_conf_docs_prospecto as $indice=>$doc_tipo_documento){
+            $inm_conf_docs_prospecto = $this->inm_docs_prospecto_ubicacion(controler: $controler,
+                doc_tipo_documento:  $doc_tipo_documento,indice:  $indice,
+                inm_conf_docs_prospecto:  $inm_conf_docs_prospecto,inm_docs_prospecto:  $inm_docs_prospecto_ubicacion);
+            if(errores::$error){
+                return $this->error->error(mensaje: 'Error al integrar buttons',data:  $inm_conf_docs_prospecto);
+            }
+        }
+
+        return $inm_conf_docs_prospecto;
+    }
+
 
     private function inm_docs_prospecto(controlador_inm_prospecto $controler, array $doc_tipo_documento,
                                              int $indice, array $inm_conf_docs_prospecto,array $inm_docs_prospecto){
@@ -204,6 +323,37 @@ class _inm_prospecto{
         return $inm_conf_docs_prospecto;
     }
 
+    private function inm_docs_prospecto_ubicacion(controlador_inm_prospecto_ubicacion $controler, array $doc_tipo_documento,
+                                        int $indice, array $inm_conf_docs_prospecto,array $inm_docs_prospecto){
+        $existe = false;
+        foreach ($inm_docs_prospecto as $inm_doc_prospecto){
+
+            $existe_doc_prospecto = $this->doc_existente_ubicacion(controler: $controler,
+                doc_tipo_documento:  $doc_tipo_documento,indice:  $indice,
+                inm_conf_docs_prospecto:  $inm_conf_docs_prospecto,inm_doc_prospecto:  $inm_doc_prospecto);
+            if(errores::$error){
+                return $this->error->error(mensaje: 'Error al integrar datos',data:  $existe_doc_prospecto);
+            }
+
+            $inm_conf_docs_prospecto = $existe_doc_prospecto->inm_conf_docs_prospecto;
+            $existe = $existe_doc_prospecto->existe;
+            if($existe){
+                break;
+            }
+        }
+
+        if(!$existe){
+            $inm_conf_docs_prospecto = $this->integra_data_ubicacion(controler: $controler,
+                doc_tipo_documento:  $doc_tipo_documento,indice:  $indice,
+                inm_conf_docs_prospecto:  $inm_conf_docs_prospecto);
+
+            if(errores::$error){
+                return $this->error->error(mensaje: 'Error al integrar button',data:  $inm_conf_docs_prospecto);
+            }
+        }
+
+        return $inm_conf_docs_prospecto;
+    }
 
     /**
      * Genera un registro para la insersion de una relacion entre conyuge y prospecto
@@ -257,6 +407,26 @@ class _inm_prospecto{
         return $inm_conf_docs_prospecto;
     }
 
+    private function integra_data_ubicacion(controlador_inm_prospecto_ubicacion $controler, array $doc_tipo_documento,
+                                  int $indice, array $inm_conf_docs_prospecto){
+        $params = array('doc_tipo_documento_id'=>$doc_tipo_documento['doc_tipo_documento_id']);
+
+        $button = $controler->html->button_href(accion: 'subir_documento',etiqueta:
+            'Subir Documento',registro_id:  $controler->registro_id,
+            seccion:  'inm_prospecto_ubicacion',style:  'warning', params: $params);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al integrar button',data:  $button);
+        }
+
+        $inm_conf_docs_prospecto = $this->integra_button_default(button: $button,
+            indice:  $indice,inm_conf_docs_prospecto:  $inm_conf_docs_prospecto);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al integrar button',data:  $inm_conf_docs_prospecto);
+        }
+
+        return $inm_conf_docs_prospecto;
+    }
+
     final public function integra_inm_documentos(controlador_inm_prospecto $controler){
         $inm_prospecto = (new inm_prospecto(link: $controler->link))->registro(registro_id: $controler->registro_id);
         if(errores::$error){
@@ -294,6 +464,39 @@ class _inm_prospecto{
         return $inm_docs_prospecto;
     }
 
+    final public function integra_inm_documentos_ubicacion(controlador_inm_prospecto_ubicacion $controler){
+        $inm_prospecto = (new inm_prospecto_ubicacion(link: $controler->link))->registro(registro_id: $controler->registro_id);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al obtener inm_prospecto_ubicacion',data:  $inm_prospecto);
+        }
 
+        $inm_conf_docs_prospecto = (new inm_conf_docs_prospecto_ubicacion(link: $controler->link))->filtro_and(
+            columnas: ['doc_tipo_documento_id']);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al obtener inm_conf_docs_prospecto',data:  $inm_conf_docs_prospecto);
+        }
+
+        $doc_ids = array_map(function($registro) {
+            return $registro['doc_tipo_documento_id'];
+        }, $inm_conf_docs_prospecto->registros);
+
+        if (count($doc_ids) <= 0) {
+            return array();
+        }
+
+        $inm_docs_prospecto = (new inm_doc_prospecto_ubicacion(link: $controler->link))->inm_docs_prospecto_ubicacion(
+            inm_prospecto_ubicacion: $controler->registro_id, tipos_documentos: $doc_ids);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al obtener inm_docs_prospecto',data:  $inm_docs_prospecto);
+        }
+
+        $inm_docs_prospecto = $this->inm_conf_docs_prospecto_ubicacion(controler: $controler,
+            inm_docs_prospecto_ubicacion:  $inm_docs_prospecto,tipos_documentos: $doc_ids);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al integrar buttons',data:  $inm_docs_prospecto);
+        }
+
+        return $inm_docs_prospecto;
+    }
 
 }
