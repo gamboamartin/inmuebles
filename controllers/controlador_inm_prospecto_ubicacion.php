@@ -228,6 +228,7 @@ class controlador_inm_prospecto_ubicacion extends _ctl_formato
         $init_data['inm_prototipo'] = "gamboamartin\\inmuebles";
         $init_data['inm_complemento'] = "gamboamartin\\inmuebles";
         $init_data['inm_estado_vivienda'] = "gamboamartin\\inmuebles";
+        $init_data['inm_prospecto_ubicacion'] = "gamboamartin\\inmuebles";
 
         $init_data = (new _base_paquete())->init_data_domicilio(init_data: $init_data);
         if (errores::$error) {
@@ -547,6 +548,11 @@ class controlador_inm_prospecto_ubicacion extends _ctl_formato
     public function init_selects_inputs(): array{
 
         $keys_selects = $this->init_selects(keys_selects: array(), key: "com_tipo_prospecto_id", label: "Tipo de Prospecto");
+        if(errores::$error){
+            return $this->errores->error(mensaje: 'Error al integrar selector',data:  $keys_selects);
+        }
+
+        $keys_selects = $this->init_selects(keys_selects: $keys_selects, key: "inm_prospecto_ubicacion_id ", label: "Prospecto Ubicacion");
         if(errores::$error){
             return $this->errores->error(mensaje: 'Error al integrar selector',data:  $keys_selects);
         }
@@ -1564,7 +1570,7 @@ class controlador_inm_prospecto_ubicacion extends _ctl_formato
         if (errores::$error) {
             return $this->retorno_error(mensaje: 'Error al generar input', data: $inm_prospecto_id, header: $header, ws: $ws);
         }
-        $this->inputs->inm_prospecto_id = $inm_prospecto_id;
+        $this->inputs->inm_prospecto_ubicacion_id  = $inm_prospecto_id;
 
         $doc_ids = array_map(function ($registro) {
             return $registro['doc_tipo_documento_id'];
