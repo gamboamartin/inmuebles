@@ -264,9 +264,10 @@ class _inm_prospecto_ubicacion{
             return $this->error->error(mensaje: 'Error al obtener inm_prospecto',data:  $inm_prospecto);
         }
 
+        $filtro['inm_conf_docs_prospecto_ubicacion.es_foto'] = 'inactivo';
         $inm_conf_docs_prospecto = (new inm_conf_docs_prospecto_ubicacion(link: $controler->link))->filtro_and(
             columnas: ['doc_tipo_documento_id'],
-            filtro: array());
+            filtro: $filtro);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al obtener inm_conf_docs_prospecto',data:  $inm_conf_docs_prospecto);
         }
