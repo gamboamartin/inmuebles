@@ -482,7 +482,7 @@ class controlador_inm_prospecto_ubicacion extends _ctl_formato
         }
 
         $filtro = array();
-        $filtro['pr_proceso.descripcion'] = 'PROSPECCION';
+        $filtro['pr_proceso.descripcion'] = 'PROSPECTO UBICACION';
         $columns_ds[] = 'pr_etapa_descripcion';
 
         $pr_etapa_proceso_id = (new pr_etapa_proceso_html(html: $this->html_base))->select_pr_etapa_proceso_id(
@@ -509,7 +509,7 @@ class controlador_inm_prospecto_ubicacion extends _ctl_formato
 
         $this->inputs->observaciones = $observaciones;
 
-        $registro = (new inm_prospecto(link: $this->link))->registro($this->registro_id);
+        $registro = (new inm_prospecto_ubicacion(link: $this->link))->registro($this->registro_id);
         if (errores::$error) {
             $this->retorno_error(mensaje: 'Error al generar link', data: $registro, header: $header, ws: $ws);
         }
