@@ -39,7 +39,7 @@ var closeBtn = document.getElementById("closeModalBtn");
 var openMdl = document.getElementById("enviar");
 var closeMdl = document.getElementById("closeModalSendBtn");
 
-$(document).on("click", "#table-inm_prospecto a[title='Vista Previa']", function (event) {
+$(document).on("click", "#table-inm_prospecto_ubicacion a[title='Vista Previa']", function (event) {
     event.preventDefault();
     var url = $(this).attr("href");
 
@@ -84,7 +84,7 @@ modal.addEventListener('click', function (event) {
 
 let documentos_seleccionados = [];
 
-$("#table-inm_prospecto").on('click', 'td:first-child,td:nth-child(2)', function (e) {
+$("#table-inm_prospecto_ubicacion").on('click', 'td:first-child,td:nth-child(2)', function (e) {
     let timer = null;
 
     clearTimeout(timer);
@@ -118,7 +118,7 @@ $("#table-inm_prospecto").on('click', 'td:first-child,td:nth-child(2)', function
     }, 500);
 });
 
-$("#table-inm_prospecto").on('click', 'tr:first-child', function (e) {
+$("#table-inm_prospecto_ubicacion").on('click', 'tr:first-child', function (e) {
     let timer = null;
 
     clearTimeout(timer);

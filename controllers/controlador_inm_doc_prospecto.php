@@ -111,7 +111,6 @@ class controlador_inm_doc_prospecto extends _ctl_formato {
 
     public function descarga(bool $header, bool $ws = false): array|string
     {
-
         $registro = $this->modelo->registro(registro_id: $this->registro_id, retorno_obj: true);
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al obtener documento',data:  $registro,header:  $header,
