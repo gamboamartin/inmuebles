@@ -508,6 +508,20 @@ class instalacion
         return $out;
     }
 
+    private function _add_inm_attr_tipo_credito(PDO $link): array|stdClass
+    {
+        $out = new stdClass();
+        $init = (new _instalacion(link: $link));
+
+        $create = $init->create_table_new(table: 'inm_attr_tipo_credito');
+        if(errores::$error){
+            return (new errores())->error(mensaje: 'Error al agregar tabla', data:  $create);
+        }
+        $out->create = $create;
+
+        return $out;
+    }
+
     private function inm_comprador(PDO $link): array|stdClass
     {
         $out = new stdClass();
@@ -987,6 +1001,63 @@ class instalacion
 
     }
 
+    private function inm_attr_tipo_credito(PDO $link): array|stdClass
+    {
+        $out = new stdClass();
+        $init = (new _instalacion(link: $link));
+
+        $create = $this->_add_inm_attr_tipo_credito(link: $link);
+        if(errores::$error){
+            return (new errores())->error(mensaje: 'Error al agregar tabla', data:  $create);
+        }
+        $out->create = $create;
+
+        $columnas = new stdClass();
+        $add_colums = $init->add_columns(campos: $columnas,table:  __FUNCTION__);
+        if(errores::$error){
+            return (new errores())->error(mensaje: 'Error al agregar columnas', data:  $add_colums);
+        }
+        $out->add_colums_base = $add_colums;
+
+        $columnas = new stdClass();
+        $columnas->x = new stdClass();
+        $columnas->y = new stdClass();
+
+        $add_colums = $init->add_columns(campos: $columnas,table:  __FUNCTION__);
+        if(errores::$error){
+            return (new errores())->error(mensaje: 'Error al agregar columnas', data:  $add_colums);
+        }
+        $out->add_colums_entidad = $add_colums;
+
+        $foraneas = array();
+        $foraneas['inm_tipo_credito'] = new stdClass();
+
+        $result = $init->foraneas(foraneas: $foraneas,table:  __FUNCTION__);
+        if(errores::$error){
+            return (new errores())->error(mensaje: 'Error al ajustar foranea', data:  $result);
+        }
+        $out->foraneas = $result;
+
+        $adm_menu_descripcion = 'Parametros Infonavit';
+        $adm_sistema_descripcion = 'inmuebles';
+        $etiqueta_label = 'Atributo Tipo De Credito';
+        $adm_seccion_pertenece_descripcion = 'inmuebles';
+        $adm_namespace_descripcion = 'gamboa.martin/inmuebles';
+        $adm_namespace_name = 'gamboamartin/inmuebles';
+
+        $acl = (new _adm())->integra_acl(adm_menu_descripcion: $adm_menu_descripcion,
+            adm_namespace_name: $adm_namespace_name, adm_namespace_descripcion: $adm_namespace_descripcion,
+            adm_seccion_descripcion: __FUNCTION__, adm_seccion_pertenece_descripcion: $adm_seccion_pertenece_descripcion,
+            adm_sistema_descripcion: $adm_sistema_descripcion, etiqueta_label: $etiqueta_label, link: $link);
+        if(errores::$error){
+            return (new errores())->error(mensaje: 'Error al obtener acl', data:  $acl);
+        }
+
+
+        return $out;
+
+    }
+
     private function inm_condicion_vivienda(PDO $link): array|stdClass
     {
         $out = new stdClass();
@@ -1033,17 +1104,23 @@ class instalacion
         }
         $out->inm_prototipo = $inm_prototipo;
         
-        $inm_prototipo = $this->inm_complemento(link: $link);
+        $inm_complemento = $this->inm_complemento(link: $link);
         if(errores::$error){
-            return (new errores())->error(mensaje: 'Error integrar inm_complemento', data:  $inm_prototipo);
+            return (new errores())->error(mensaje: 'Error integrar inm_complemento', data:  $inm_complemento);
         }
-        $out->inm_prototipo = $inm_prototipo;
+        $out->inm_complemento = $inm_complemento;
 
         $inm_estado_vivienda = $this->inm_estado_vivienda(link: $link);
         if(errores::$error){
             return (new errores())->error(mensaje: 'Error integrar inm_estado_vivienda', data:  $inm_estado_vivienda);
         }
         $out->inm_estado_vivienda = $inm_estado_vivienda;
+
+        $inm_attr_tipo_credito = $this->inm_attr_tipo_credito(link: $link);
+        if(errores::$error){
+            return (new errores())->error(mensaje: 'Error integrar inm_attr_tipo_credito', data:  $inm_attr_tipo_credito);
+        }
+        $out->inm_attr_tipo_credito = $inm_attr_tipo_credito;
 
         $inm_condicion_vivienda = $this->inm_condicion_vivienda(link: $link);
         if(errores::$error){
