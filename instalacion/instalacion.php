@@ -535,6 +535,20 @@ class instalacion
         return $out;
     }
 
+    private function _add_inm_co_acreditado(PDO $link): array|stdClass
+    {
+        $out = new stdClass();
+        $init = (new _instalacion(link: $link));
+
+        $create = $init->create_table_new(table: 'inm_co_acreditado');
+        if(errores::$error){
+            return (new errores())->error(mensaje: 'Error al agregar tabla', data:  $create);
+        }
+        $out->create = $create;
+
+        return $out;
+    }
+
     private function inm_comprador(PDO $link): array|stdClass
     {
         $out = new stdClass();
@@ -1131,6 +1145,69 @@ class instalacion
 
     }
 
+    private function inm_co_acreditado(PDO $link): array|stdClass
+    {
+        $out = new stdClass();
+        $init = (new _instalacion(link: $link));
+
+        $create = $this->_add_inm_co_acreditado(link: $link);
+        if(errores::$error){
+            return (new errores())->error(mensaje: 'Error al agregar tabla', data:  $create);
+        }
+        $out->create = $create;
+
+        $columnas = new stdClass();
+        $add_colums = $init->add_columns(campos: $columnas,table:  __FUNCTION__);
+        if(errores::$error){
+            return (new errores())->error(mensaje: 'Error al agregar columnas', data:  $add_colums);
+        }
+        $out->add_colums_base = $add_colums;
+
+        $columnas = new stdClass();
+        $columnas->nss = new stdClass();
+        $columnas->curp = new stdClass();
+        $columnas->rfc = new stdClass();
+        $columnas->apellido_paterno = new stdClass();
+        $columnas->apellido_materno = new stdClass();
+        $columnas->nombre = new stdClass();
+        $columnas->lada = new stdClass();
+        $columnas->numero = new stdClass();
+        $columnas->celular = new stdClass();
+        $columnas->genero = new stdClass();
+        $columnas->correo = new stdClass();
+        $columnas->nombre_empresa = new stdClass();
+        $columnas->nrp = new stdClass();
+        $columnas->lada_nep = new stdClass();
+        $columnas->numero_nep = new stdClass();
+        $columnas->extension_nep = new stdClass();
+
+        $add_colums = $init->add_columns(campos: $columnas,table:  __FUNCTION__);
+        if(errores::$error){
+            return (new errores())->error(mensaje: 'Error al agregar columnas', data:  $add_colums);
+        }
+        $out->add_colums_entidad = $add_colums;
+
+
+        $adm_menu_descripcion = 'Parametros Infonavit';
+        $adm_sistema_descripcion = 'inmuebles';
+        $etiqueta_label = 'Co Acreditado';
+        $adm_seccion_pertenece_descripcion = 'inmuebles';
+        $adm_namespace_descripcion = 'gamboa.martin/inmuebles';
+        $adm_namespace_name = 'gamboamartin/inmuebles';
+
+        $acl = (new _adm())->integra_acl(adm_menu_descripcion: $adm_menu_descripcion,
+            adm_namespace_name: $adm_namespace_name, adm_namespace_descripcion: $adm_namespace_descripcion,
+            adm_seccion_descripcion: __FUNCTION__, adm_seccion_pertenece_descripcion: $adm_seccion_pertenece_descripcion,
+            adm_sistema_descripcion: $adm_sistema_descripcion, etiqueta_label: $etiqueta_label, link: $link);
+        if(errores::$error){
+            return (new errores())->error(mensaje: 'Error al obtener acl', data:  $acl);
+        }
+
+
+        return $out;
+
+    }
+
     private function inm_condicion_vivienda(PDO $link): array|stdClass
     {
         $out = new stdClass();
@@ -1200,6 +1277,12 @@ class instalacion
             return (new errores())->error(mensaje: 'Error integrar inm_beneficiario', data:  $inm_beneficiario);
         }
         $out->inm_beneficiario = $inm_beneficiario;
+
+        $inm_co_acreditado = $this->inm_co_acreditado(link: $link);
+        if(errores::$error){
+            return (new errores())->error(mensaje: 'Error integrar inm_co_acreditado', data:  $inm_co_acreditado);
+        }
+        $out->inm_co_acreditado = $inm_co_acreditado;
 
         $inm_condicion_vivienda = $this->inm_condicion_vivienda(link: $link);
         if(errores::$error){
