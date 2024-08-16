@@ -577,6 +577,20 @@ class instalacion
         return $out;
     }
 
+    private function _add_inm_concepto(PDO $link): array|stdClass
+    {
+        $out = new stdClass();
+        $init = (new _instalacion(link: $link));
+
+        $create = $init->create_table_new(table: 'inm_concepto');
+        if(errores::$error){
+            return (new errores())->error(mensaje: 'Error al agregar tabla', data:  $create);
+        }
+        $out->create = $create;
+
+        return $out;
+    }
+
     private function inm_comprador(PDO $link): array|stdClass
     {
         $out = new stdClass();
@@ -1274,7 +1288,7 @@ class instalacion
         $out->foraneas = $result;
 
 
-        $adm_menu_descripcion = 'Parametros Infonavit';
+        $adm_menu_descripcion = 'Generales';
         $adm_sistema_descripcion = 'inmuebles';
         $etiqueta_label = 'Comprador Etapa';
         $adm_seccion_pertenece_descripcion = 'inmuebles';
@@ -1335,6 +1349,47 @@ class instalacion
         $adm_menu_descripcion = 'Clientes';
         $adm_sistema_descripcion = 'inmuebles';
         $etiqueta_label = 'Comprador proceso';
+        $adm_seccion_pertenece_descripcion = 'inmuebles';
+        $adm_namespace_descripcion = 'gamboa.martin/inmuebles';
+        $adm_namespace_name = 'gamboamartin/inmuebles';
+
+        $acl = (new _adm())->integra_acl(adm_menu_descripcion: $adm_menu_descripcion,
+            adm_namespace_name: $adm_namespace_name, adm_namespace_descripcion: $adm_namespace_descripcion,
+            adm_seccion_descripcion: __FUNCTION__, adm_seccion_pertenece_descripcion: $adm_seccion_pertenece_descripcion,
+            adm_sistema_descripcion: $adm_sistema_descripcion, etiqueta_label: $etiqueta_label, link: $link);
+        if(errores::$error){
+            return (new errores())->error(mensaje: 'Error al obtener acl', data:  $acl);
+        }
+
+
+        return $out;
+
+    }
+
+    private function inm_concepto(PDO $link): array|stdClass
+    {
+        $out = new stdClass();
+        $init = (new _instalacion(link: $link));
+
+        $create = $this->_add_inm_concepto(link: $link);
+        if(errores::$error){
+            return (new errores())->error(mensaje: 'Error al agregar tabla', data:  $create);
+        }
+        $out->create = $create;
+
+        $foraneas = array();
+        $foraneas['inm_tipo_concepto_id'] = new stdClass();
+
+        $result = $init->foraneas(foraneas: $foraneas,table:  __FUNCTION__);
+        if(errores::$error){
+            return (new errores())->error(mensaje: 'Error al ajustar foranea', data:  $result);
+        }
+        $out->foraneas = $result;
+
+
+        $adm_menu_descripcion = 'Costos';
+        $adm_sistema_descripcion = 'inmuebles';
+        $etiqueta_label = 'Concepto';
         $adm_seccion_pertenece_descripcion = 'inmuebles';
         $adm_namespace_descripcion = 'gamboa.martin/inmuebles';
         $adm_namespace_name = 'gamboamartin/inmuebles';
@@ -1415,6 +1470,12 @@ class instalacion
             return (new errores())->error(mensaje: 'Error integrar inm_comprador_proceso', data:  $inm_comprador_proceso);
         }
         $out->inm_comprador_proceso = $inm_comprador_proceso;
+
+        $inm_concepto = $this->inm_concepto(link: $link);
+        if(errores::$error){
+            return (new errores())->error(mensaje: 'Error integrar inm_concepto', data:  $inm_concepto);
+        }
+        $out->inm_concepto = $inm_concepto;
 
         $inm_estado_vivienda = $this->inm_estado_vivienda(link: $link);
         if(errores::$error){
