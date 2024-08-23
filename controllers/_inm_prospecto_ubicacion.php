@@ -455,7 +455,7 @@ class _inm_prospecto_ubicacion{
      * @param controlador_inm_prospecto $controlador Controlador en ejecucion
      * @return array|stdClass
      */
-    final public function inputs_base(controlador_inm_prospecto $controlador): array|stdClass
+    final public function inputs_base(controlador_inm_prospecto_ubicacion $controlador): array|stdClass
     {
         $valida = $this->valida_base(controlador: $controlador);
         if(errores::$error){

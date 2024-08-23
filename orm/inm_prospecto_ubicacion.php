@@ -29,6 +29,15 @@ class inm_prospecto_ubicacion extends _modelo_parent{
 
         $columnas_extra= array();
 
+        $sql = "( IFNULL ((SELECT
+                    pr_etapa_actual.descripcion 
+                    FROM pr_etapa AS pr_etapa_actual 
+                    LEFT JOIN com_prospecto_etapa AS com_prospecto_etapa_sel ON  com_prospecto_etapa_sel.com_prospecto_id = com_prospecto.id
+                    LEFT JOIN pr_etapa_proceso AS pr_etapa_proceso_sel ON  com_prospecto_etapa_sel.pr_etapa_proceso_id = pr_etapa_proceso_sel.id
+                     WHERE  pr_etapa_actual.id = pr_etapa_proceso_sel.pr_etapa_id ORDER BY com_prospecto_etapa_sel.fecha DESC LIMIT 1), -1) )";
+
+        $columnas_extra['pr_etapa_descripcion'] = $sql;
+
         if(!isset($_SESSION['usuario_id'])){
             $error = (new errores())->error(mensaje: 'Error $_SESSION[usuario_id] no existe',data:  $_SESSION);
             print_r($error);
