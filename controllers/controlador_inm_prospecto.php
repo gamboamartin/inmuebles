@@ -727,6 +727,7 @@ class controlador_inm_prospecto extends _ctl_formato
         $columns["inm_prospecto_fecha_alta"]["titulo"] = "Fecha Alta";
         $columns["com_agente_id"]["titulo"] = "Agente Id";
         $columns["com_agente_descripcion"]["titulo"] = "Agente";
+        $columns["pr_etapa_descripcion"]["titulo"] = "Etapa";
 
 
         $filtro = array("inm_prospecto.id", "inm_prospecto.razon_social", 'inm_prospecto.nss', 'inm_prospecto.rfc',
