@@ -787,6 +787,20 @@ class instalacion
         return $out;
     }
 
+    private function _add_inm_prospecto_proceso(PDO $link): array|stdClass
+    {
+        $out = new stdClass();
+        $init = (new _instalacion(link: $link));
+
+        $create = $init->create_table_new(table: 'inm_prospecto_proceso');
+        if(errores::$error){
+            return (new errores())->error(mensaje: 'Error al agregar tabla', data:  $create);
+        }
+        $out->create = $create;
+
+        return $out;
+    }
+
     private function _add_inm_producto_infonavit(PDO $link): array|stdClass
     {
         $out = new stdClass();
@@ -2427,6 +2441,64 @@ class instalacion
 
     }
 
+    private function inm_prospecto_proceso(PDO $link): array|stdClass
+    {
+        $out = new stdClass();
+        $init = (new _instalacion(link: $link));
+
+        $create = $this->_add_inm_prospecto_proceso(link: $link);
+        if(errores::$error){
+            return (new errores())->error(mensaje: 'Error al agregar tabla', data:  $create);
+        }
+        $out->create = $create;
+
+        $columnas = new stdClass();
+        $add_colums = $init->add_columns(campos: $columnas,table:  __FUNCTION__);
+        if(errores::$error){
+            return (new errores())->error(mensaje: 'Error al agregar columnas', data:  $add_colums);
+        }
+        $out->add_colums_base = $add_colums;
+
+        $columnas = new stdClass();
+        $columnas->fecha = new stdClass();
+
+        $add_colums = $init->add_columns(campos: $columnas,table:  __FUNCTION__);
+        if(errores::$error){
+            return (new errores())->error(mensaje: 'Error al agregar columnas', data:  $add_colums);
+        }
+        $out->add_colums_entidad = $add_colums;
+
+        $foraneas = array();
+        $foraneas['pr_sub_proceso_id'] = new stdClass();
+        $foraneas['inm_prospecto_id'] = new stdClass();
+
+        $result = $init->foraneas(foraneas: $foraneas,table:  __FUNCTION__);
+        if(errores::$error){
+            return (new errores())->error(mensaje: 'Error al ajustar foranea', data:  $result);
+        }
+        $out->foraneas = $result;
+
+
+        $adm_menu_descripcion = 'Clientes';
+        $adm_sistema_descripcion = 'inmuebles';
+        $etiqueta_label = 'Prospecto Proceso';
+        $adm_seccion_pertenece_descripcion = 'inmuebles';
+        $adm_namespace_descripcion = 'gamboa.martin/inmuebles';
+        $adm_namespace_name = 'gamboamartin/inmuebles';
+
+        $acl = (new _adm())->integra_acl(adm_menu_descripcion: $adm_menu_descripcion,
+            adm_namespace_name: $adm_namespace_name, adm_namespace_descripcion: $adm_namespace_descripcion,
+            adm_seccion_descripcion: __FUNCTION__, adm_seccion_pertenece_descripcion: $adm_seccion_pertenece_descripcion,
+            adm_sistema_descripcion: $adm_sistema_descripcion, etiqueta_label: $etiqueta_label, link: $link);
+        if(errores::$error){
+            return (new errores())->error(mensaje: 'Error al obtener acl', data:  $acl);
+        }
+
+
+        return $out;
+
+    }
+
     private function inm_producto_infonavit(PDO $link): array|stdClass
     {
         $out = new stdClass();
@@ -2756,6 +2828,18 @@ class instalacion
             return (new errores())->error(mensaje: 'Error integrar inm_precio', data:  $inm_precio);
         }
         $out->inm_precio = $inm_precio;
+
+        $inm_prospecto_proceso = $this->inm_prospecto_proceso(link: $link);
+        if(errores::$error){
+            return (new errores())->error(mensaje: 'Error integrar inm_prospecto_proceso', data:  $inm_prospecto_proceso);
+        }
+        $out->inm_prospecto_proceso = $inm_prospecto_proceso;
+
+        $inm_prospecto_proceso = $this->inm_prospecto_proceso(link: $link);
+        if(errores::$error){
+            return (new errores())->error(mensaje: 'Error integrar inm_prospecto_proceso', data:  $inm_prospecto_proceso);
+        }
+        $out->inm_prospecto_proceso = $inm_prospecto_proceso;
 
         $inm_producto_infonavit = $this->inm_producto_infonavit(link: $link);
         if(errores::$error){
