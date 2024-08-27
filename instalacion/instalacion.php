@@ -787,6 +787,20 @@ class instalacion
         return $out;
     }
 
+    private function _add_inm_rel_ubi_comp(PDO $link): array|stdClass
+    {
+        $out = new stdClass();
+        $init = (new _instalacion(link: $link));
+
+        $create = $init->create_table_new(table: 'inm_rel_ubi_comp');
+        if(errores::$error){
+            return (new errores())->error(mensaje: 'Error al agregar tabla', data:  $create);
+        }
+        $out->create = $create;
+
+        return $out;
+    }
+
     private function _add_inm_rel_conyuge_prospecto_ubicacion(PDO $link): array|stdClass
     {
         $out = new stdClass();
@@ -2539,6 +2553,64 @@ class instalacion
 
     }
 
+    private function inm_rel_ubi_comp(PDO $link): array|stdClass
+    {
+        $out = new stdClass();
+        $init = (new _instalacion(link: $link));
+
+        $create = $this->_add_inm_rel_ubi_comp(link: $link);
+        if(errores::$error){
+            return (new errores())->error(mensaje: 'Error al agregar tabla', data:  $create);
+        }
+        $out->create = $create;
+
+        $columnas = new stdClass();
+        $add_colums = $init->add_columns(campos: $columnas,table:  __FUNCTION__);
+        if(errores::$error){
+            return (new errores())->error(mensaje: 'Error al agregar columnas', data:  $add_colums);
+        }
+        $out->add_colums_base = $add_colums;
+
+        $columnas = new stdClass();
+        $columnas->precio_operacion = new stdClass();
+
+        $add_colums = $init->add_columns(campos: $columnas,table:  __FUNCTION__);
+        if(errores::$error){
+            return (new errores())->error(mensaje: 'Error al agregar columnas', data:  $add_colums);
+        }
+        $out->add_colums_entidad = $add_colums;
+
+        $foraneas = array();
+        $foraneas['inm_ubicacion_id'] = new stdClass();
+        $foraneas['inm_comprador_id'] = new stdClass();
+
+        $result = $init->foraneas(foraneas: $foraneas,table:  __FUNCTION__);
+        if(errores::$error){
+            return (new errores())->error(mensaje: 'Error al ajustar foranea', data:  $result);
+        }
+        $out->foraneas = $result;
+
+
+        $adm_menu_descripcion = 'Ubicaciones';
+        $adm_sistema_descripcion = 'inmuebles';
+        $etiqueta_label = 'ubi comp';
+        $adm_seccion_pertenece_descripcion = 'inmuebles';
+        $adm_namespace_descripcion = 'gamboa.martin/inmuebles';
+        $adm_namespace_name = 'gamboamartin/inmuebles';
+
+        $acl = (new _adm())->integra_acl(adm_menu_descripcion: $adm_menu_descripcion,
+            adm_namespace_name: $adm_namespace_name, adm_namespace_descripcion: $adm_namespace_descripcion,
+            adm_seccion_descripcion: __FUNCTION__, adm_seccion_pertenece_descripcion: $adm_seccion_pertenece_descripcion,
+            adm_sistema_descripcion: $adm_sistema_descripcion, etiqueta_label: $etiqueta_label, link: $link);
+        if(errores::$error){
+            return (new errores())->error(mensaje: 'Error al obtener acl', data:  $acl);
+        }
+
+
+        return $out;
+
+    }
+
     private function inm_rel_conyuge_prospecto_ubicacion(PDO $link): array|stdClass
     {
         $out = new stdClass();
@@ -3299,6 +3371,12 @@ class instalacion
             return (new errores())->error(mensaje: 'Error integrar inm_precio', data:  $inm_precio);
         }
         $out->inm_precio = $inm_precio;
+
+        $inm_rel_ubi_comp = $this->inm_rel_ubi_comp(link: $link);
+        if(errores::$error){
+            return (new errores())->error(mensaje: 'Error integrar inm_rel_ubi_comp', data:  $inm_rel_ubi_comp);
+        }
+        $out->inm_rel_ubi_comp = $inm_rel_ubi_comp;
 
         $inm_rel_conyuge_prospecto_ubicacion = $this->inm_rel_conyuge_prospecto_ubicacion(link: $link);
         if(errores::$error){
