@@ -787,6 +787,20 @@ class instalacion
         return $out;
     }
 
+    private function _add_inm_tipo_ubicacion(PDO $link): array|stdClass
+    {
+        $out = new stdClass();
+        $init = (new _instalacion(link: $link));
+
+        $create = $init->create_table_new(table: 'inm_tipo_ubicacion');
+        if(errores::$error){
+            return (new errores())->error(mensaje: 'Error al agregar tabla', data:  $create);
+        }
+        $out->create = $create;
+
+        return $out;
+    }
+
     private function _add_inm_tipo_inmobiliaria(PDO $link): array|stdClass
     {
         $out = new stdClass();
@@ -2606,6 +2620,37 @@ class instalacion
         $adm_menu_descripcion = 'Parametros Infonavit';
         $adm_sistema_descripcion = 'inmuebles';
         $etiqueta_label = 'Precio';
+        $adm_seccion_pertenece_descripcion = 'inmuebles';
+        $adm_namespace_descripcion = 'gamboa.martin/inmuebles';
+        $adm_namespace_name = 'gamboamartin/inmuebles';
+
+        $acl = (new _adm())->integra_acl(adm_menu_descripcion: $adm_menu_descripcion,
+            adm_namespace_name: $adm_namespace_name, adm_namespace_descripcion: $adm_namespace_descripcion,
+            adm_seccion_descripcion: __FUNCTION__, adm_seccion_pertenece_descripcion: $adm_seccion_pertenece_descripcion,
+            adm_sistema_descripcion: $adm_sistema_descripcion, etiqueta_label: $etiqueta_label, link: $link);
+        if(errores::$error){
+            return (new errores())->error(mensaje: 'Error al obtener acl', data:  $acl);
+        }
+
+
+        return $out;
+
+    }
+
+    private function inm_tipo_ubicacion(PDO $link): array|stdClass
+    {
+        $out = new stdClass();
+        $init = (new _instalacion(link: $link));
+
+        $create = $this->_add_inm_tipo_ubicacion(link: $link);
+        if(errores::$error){
+            return (new errores())->error(mensaje: 'Error al agregar tabla', data:  $create);
+        }
+        $out->create = $create;
+
+        $adm_menu_descripcion = 'Ubicaciones';
+        $adm_sistema_descripcion = 'inmuebles';
+        $etiqueta_label = 'tipo ubicacion';
         $adm_seccion_pertenece_descripcion = 'inmuebles';
         $adm_namespace_descripcion = 'gamboa.martin/inmuebles';
         $adm_namespace_name = 'gamboamartin/inmuebles';
