@@ -7,4 +7,4 @@
  *
  */
 namespace gamboamartin\inmuebles\controllers;
-class controlador_gt_proveedor extends  {}
+class controlador_gt_proveedor extends \gamboamartin\gastos\controllers\controlador_gt_proveedor {}
