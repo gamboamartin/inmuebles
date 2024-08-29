@@ -20,6 +20,7 @@ use gamboamartin\inmuebles\models\inm_beneficiario;
 use gamboamartin\inmuebles\models\inm_comprador;
 use gamboamartin\inmuebles\models\inm_referencia;
 use gamboamartin\inmuebles\models\inm_referencia_prospecto;
+use gamboamartin\inmuebles\models\inm_rel_cliente_valuador;
 use gamboamartin\inmuebles\models\inm_ubicacion;
 use gamboamartin\system\_ctl_base;
 use gamboamartin\system\links_menu;
@@ -34,12 +35,14 @@ use stdClass;
 class controlador_inm_comprador extends _ctl_base {
 
     public array $inm_ubicaciones = array();
+    public array $inm_clientes_valuadores = array();
     public array $inm_co_acreditados = array();
     public array $inm_conf_docs_comprador = array();
 
     public string $link_inm_doc_comprador_alta_bd = '';
 
     public string $link_rel_ubi_comp_alta_bd = '';
+    public string $link_inm_rel_cliente_valuador_alta_bd = '';
     public string $link_inm_rel_co_acred_alta_bd = '';
     public string $link_asigna_nuevo_co_acreditado_bd = '';
 
@@ -319,26 +322,43 @@ class controlador_inm_comprador extends _ctl_base {
                 mensaje: 'Error al obtener registro',data:  $registro,header: $header,ws: $ws);
         }
 
-        $keys_selects = (new _keys_selects())->key_selects_asigna_ubicacion(controler: $this);
+        $columns_ds = array('inm_valuador_descripcion','gt_proveedor_razon_social');
+        $keys_selects = $this->key_select(cols:6, con_registros: true,filtro:  array(), key: 'inm_valuador_id',
+            keys_selects: array(), id_selected: -1, label: 'Valuador', columns_ds : $columns_ds);
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects,
                 header: $header,ws:  $ws);
         }
 
+        $columns_ds = array('com_cliente_rfc','com_cliente_razon_social');
+        $keys_selects = $this->key_select(cols:6, con_registros: true,filtro:  array(), key: 'com_cliente_id',
+            keys_selects:$keys_selects, id_selected: $registro->com_cliente_id, label: 'Cliente',
+            columns_ds : $columns_ds,disabled: true);
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects,
+                header: $header,ws:  $ws);
+        }
 
         $base = $this->base_upd(keys_selects: $keys_selects, params: array(),params_ajustados: array());
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al integrar base',data:  $base, header: $header,ws:  $ws);
         }
 
-        $inm_ubicaciones = (new _inm_comprador())->inm_ubicaciones(inm_comprador_id: $this->registro_id,
-            link:  $this->link);
+        $link_inm_rel_cliente_valuador_alta_bd = $this->obj_link->link_alta_bd(link: $this->link,seccion: 'inm_rel_cliente_valuador');
         if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al obtener compradores',data:  $inm_ubicaciones,
+            return $this->retorno_error(mensaje: 'Error al generar link',data:  $link_inm_rel_cliente_valuador_alta_bd,
                 header: $header,ws:  $ws);
         }
 
-        $this->inm_ubicaciones = $inm_ubicaciones;
+        $this->link_inm_rel_cliente_valuador_alta_bd = $link_inm_rel_cliente_valuador_alta_bd;
+        $filtro['com_cliente.id'] = $registro->com_cliente_id;
+        $inm_clientes_valuadores = (new inm_rel_cliente_valuador($this->link))->filtro_and(filtro: $filtro);
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al obtener compradores',data:  $inm_clientes_valuadores,
+                header: $header,ws:  $ws);
+        }
+
+        $this->inm_clientes_valuadores = $inm_clientes_valuadores;
 
         return $r_modifica;
     }
