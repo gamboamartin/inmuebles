@@ -44,6 +44,15 @@ class controlador_inm_valuador extends _ctl_formato {
                 mensaje: 'Error al inicializar alta',data:  $r_alta, header: $header,ws:  $ws);
         }
         $keys_selects = array();
+
+        $columns_ds = array('gt_proveedor_rfc','gt_proveedor_razon_social');
+        $keys_selects = $this->key_select(cols:6, con_registros: true,filtro:  array(), key: 'gt_proveedor_id',
+            keys_selects: array(), id_selected: -1, label: 'Proveedor', columns_ds : $columns_ds);
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects,
+                header: $header,ws:  $ws);
+        }
+
         $inputs = $this->inputs(keys_selects: $keys_selects);
         if(errores::$error){
             return $this->retorno_error(
@@ -60,6 +69,7 @@ class controlador_inm_valuador extends _ctl_formato {
         $keys->selects = array();
 
         $init_data = array();
+        $init_data['gt_proveedor'] = "gamboamartin\\gastos";
         $campos_view = $this->campos_view_base(init_data: $init_data,keys:  $keys);
 
         if(errores::$error){
@@ -82,6 +92,19 @@ class controlador_inm_valuador extends _ctl_formato {
         }
 
         $keys_selects = array();
+        $registro = $this->modelo->registro(registro_id: $this->registro_id,retorno_obj: true);
+        if(errores::$error){
+            return $this->retorno_error(
+                mensaje: 'Error al obtener registro',data:  $registro,header: $header,ws: $ws);
+        }
+
+        $columns_ds = array('gt_proveedor_rfc','gt_proveedor_razon_social');
+        $keys_selects = $this->key_select(cols:6, con_registros: true,filtro:  array(), key: 'gt_proveedor_id',
+            keys_selects: array(), id_selected: $registro->gt_proveedor_id, label: 'Proveedor', columns_ds : $columns_ds);
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects,
+                header: $header,ws:  $ws);
+        }
         $base = $this->base_upd(keys_selects: $keys_selects, params: array(),params_ajustados: array());
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al integrar base',data:  $base, header: $header,ws:  $ws);
