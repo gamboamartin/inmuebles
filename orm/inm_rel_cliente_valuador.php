@@ -6,11 +6,11 @@ use base\orm\_modelo_parent;
 use PDO;
 
 
-class inm_valuador extends _modelo_parent{
+class inm_rel_cliente_valuador extends _modelo_parent{
     public function __construct(PDO $link)
     {
-        $tabla = 'inm_valuador';
-        $columnas = array($tabla=>false,'gt_proveedor'=>$tabla);
+        $tabla = 'inm_rel_cliente_valuador';
+        $columnas = array($tabla=>false,'inm_valuador'=>$tabla,'com_cliente'=>$tabla);
 
         $campos_obligatorios = array();
 
