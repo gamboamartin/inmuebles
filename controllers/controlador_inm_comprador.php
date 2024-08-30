@@ -21,6 +21,7 @@ use gamboamartin\inmuebles\models\inm_comprador;
 use gamboamartin\inmuebles\models\inm_referencia;
 use gamboamartin\inmuebles\models\inm_referencia_prospecto;
 use gamboamartin\inmuebles\models\inm_rel_cliente_valuador;
+use gamboamartin\inmuebles\models\inm_rel_comprador_com_cliente;
 use gamboamartin\inmuebles\models\inm_ubicacion;
 use gamboamartin\system\_ctl_base;
 use gamboamartin\system\links_menu;
@@ -316,14 +317,15 @@ class controlador_inm_comprador extends _ctl_base {
                 mensaje: 'Error al generar salida de template',data:  $r_modifica,header: $header,ws: $ws);
         }
 
-        $registro = $this->modelo->registro(registro_id: $this->registro_id,retorno_obj: true);
+        $filtro_rel['inm_comprador.id'] = $this->registro_id;
+        $registro = (new inm_rel_comprador_com_cliente($this->link))->filtro_and(filtro: $filtro_rel);
         if(errores::$error){
             return $this->retorno_error(
                 mensaje: 'Error al obtener registro',data:  $registro,header: $header,ws: $ws);
         }
 
-        $columns_ds = array('inm_valuador_descripcion','gt_proveedor_razon_social');
-        $keys_selects = $this->key_select(cols:6, con_registros: true,filtro:  array(), key: 'inm_valuador_id',
+        $columns_ds = array('inm_valuador_descripcion');
+        $keys_selects = $this->key_select(cols:12, con_registros: true,filtro:  array(), key: 'inm_valuador_id',
             keys_selects: array(), id_selected: -1, label: 'Valuador', columns_ds : $columns_ds);
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects,
@@ -331,9 +333,9 @@ class controlador_inm_comprador extends _ctl_base {
         }
 
         $columns_ds = array('com_cliente_rfc','com_cliente_razon_social');
-        $keys_selects = $this->key_select(cols:6, con_registros: true,filtro:  array(), key: 'com_cliente_id',
-            keys_selects:$keys_selects, id_selected: $registro->com_cliente_id, label: 'Cliente',
-            columns_ds : $columns_ds,disabled: true);
+        $keys_selects = $this->key_select(cols:12, con_registros: true,filtro:  array(), key: 'com_cliente_id',
+            keys_selects:$keys_selects, id_selected: $registro->registros[0]['com_cliente_id'], label: 'Cliente',
+            columns_ds : $columns_ds);
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects,
                 header: $header,ws:  $ws);
@@ -351,14 +353,13 @@ class controlador_inm_comprador extends _ctl_base {
         }
 
         $this->link_inm_rel_cliente_valuador_alta_bd = $link_inm_rel_cliente_valuador_alta_bd;
-        $filtro['com_cliente.id'] = $registro->com_cliente_id;
+        $filtro['com_cliente.id'] = $registro->registros[0]['com_cliente_id'];
         $inm_clientes_valuadores = (new inm_rel_cliente_valuador($this->link))->filtro_and(filtro: $filtro);
         if(errores::$error){
             return $this->retorno_error(mensaje: 'Error al obtener compradores',data:  $inm_clientes_valuadores,
                 header: $header,ws:  $ws);
         }
-
-        $this->inm_clientes_valuadores = $inm_clientes_valuadores;
+        $this->inm_clientes_valuadores = (array)$inm_clientes_valuadores->registros;
 
         return $r_modifica;
     }
@@ -393,6 +394,8 @@ class controlador_inm_comprador extends _ctl_base {
         $init_data['inm_sindicato'] = "gamboamartin\\inmuebles";
         $init_data['inm_nacionalidad'] = "gamboamartin\\inmuebles";
         $init_data['inm_ocupacion'] = "gamboamartin\\inmuebles";
+        $init_data['inm_valuador'] = "gamboamartin\\inmuebles";
+        $init_data['com_cliente'] = "gamboamartin\\comercial";
 
         $init_data = (new _base_paquete())->init_data_domicilio(init_data: $init_data);
         if(errores::$error){

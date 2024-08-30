@@ -216,7 +216,7 @@ class controlador_inm_prospecto_ubicacion extends _ctl_formato
             'texto_exterior', 'texto_interior', 'documentos', 'receptor', 'asunto', 'mensaje','manzana','lote',
             'cuenta_predial', 'adeudo_hipoteca','adeudo_predial', 'cuenta_agua', 'adeudo_agua',
             'adeudo_luz','monto_devolucion', 'nivel','recamaras','metros_terreno', 'metros_construccion',
-            'fecha_otorgamiento_credito');
+            'fecha_otorgamiento_credito','cp','colonia','calle');
 
         $keys->selects = array();
 
@@ -233,6 +233,9 @@ class controlador_inm_prospecto_ubicacion extends _ctl_formato
         $init_data['inm_complemento'] = "gamboamartin\\inmuebles";
         $init_data['inm_estado_vivienda'] = "gamboamartin\\inmuebles";
         $init_data['inm_prospecto_ubicacion'] = "gamboamartin\\inmuebles";
+        $init_data['dp_pais'] = "gamboamartin\\direccion_postal";
+        $init_data['dp_estado'] = "gamboamartin\\direccion_postal";
+        $init_data['dp_municipio'] = "gamboamartin\\direccion_postal";
 
         $init_data = (new _base_paquete())->init_data_domicilio(init_data: $init_data);
         if (errores::$error) {
@@ -1197,13 +1200,31 @@ class controlador_inm_prospecto_ubicacion extends _ctl_formato
             return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $keys_selects);
         }
 
-        $keys_selects = (new init())->key_select_txt(cols: 12, key: 'numero_exterior',
+        $keys_selects = (new init())->key_select_txt(cols: 6, key: 'cp',
+            keys_selects: $keys_selects, place_holder: 'CP', required: false);
+        if (errores::$error) {
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $keys_selects);
+        }
+
+        $keys_selects = (new init())->key_select_txt(cols: 12, key: 'colonia',
+            keys_selects: $keys_selects, place_holder: 'Colonia', required: false);
+        if (errores::$error) {
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $keys_selects);
+        }
+
+        $keys_selects = (new init())->key_select_txt(cols: 12, key: 'calle',
+            keys_selects: $keys_selects, place_holder: 'Calle', required: false);
+        if (errores::$error) {
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $keys_selects);
+        }
+
+        $keys_selects = (new init())->key_select_txt(cols: 6, key: 'numero_exterior',
             keys_selects: $keys_selects, place_holder: 'Numero Ext', required: false);
         if (errores::$error) {
             return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $keys_selects);
         }
 
-        $keys_selects = (new init())->key_select_txt(cols: 12, key: 'numero_interior',
+        $keys_selects = (new init())->key_select_txt(cols: 6, key: 'numero_interior',
             keys_selects: $keys_selects, place_holder: 'Numero Int', required: false);
         if (errores::$error) {
             return $this->errores->error(mensaje: 'Error al maquetar key_selects', data: $keys_selects);

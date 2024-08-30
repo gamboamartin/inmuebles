@@ -42,14 +42,14 @@
 
                         <?php echo $controlador->header_frontend->apartado_3; ?>
                         <div id="apartado_3">
-                            <?php echo $controlador->inputs->direccion->dp_pais_id; ?>
-                            <?php echo $controlador->inputs->direccion->dp_estado_id; ?>
-                            <?php echo $controlador->inputs->direccion->dp_municipio_id; ?>
-                            <?php echo $controlador->inputs->direccion->cp; ?>
-                            <?php echo $controlador->inputs->direccion->colonia; ?>
-                            <?php echo $controlador->inputs->direccion->calle; ?>
-                            <?php echo $controlador->inputs->direccion->texto_exterior; ?>
-                            <?php echo $controlador->inputs->direccion->texto_interior; ?>
+                            <?php echo $controlador->inputs->dp_pais_id; ?>
+                            <?php echo $controlador->inputs->dp_estado_id; ?>
+                            <?php echo $controlador->inputs->dp_municipio_id; ?>
+                            <?php echo $controlador->inputs->cp; ?>
+                            <?php echo $controlador->inputs->colonia; ?>
+                            <?php echo $controlador->inputs->calle; ?>
+                            <?php echo $controlador->inputs->texto_exterior; ?>
+                            <?php echo $controlador->inputs->texto_interior; ?>
 
                             <?php echo $controlador->inputs->inm_estado_vivienda_id; ?>
                             <?php echo $controlador->inputs->fecha_otorgamiento_credito; ?>

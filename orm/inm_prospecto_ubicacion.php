@@ -20,9 +20,7 @@ class inm_prospecto_ubicacion extends _modelo_parent{
         $columnas = array($tabla=>false,'com_prospecto'=>$tabla, 'inm_prototipo' => $tabla,'inm_complemento'=>$tabla,
             'inm_estado_vivienda'=>$tabla,
             'com_agente'=>'com_prospecto','com_tipo_prospecto'=>'com_prospecto',
-            'com_medio_prospeccion'=>'com_prospecto', 'adm_usuario'=>'com_agente','dp_calle_pertenece'=>$tabla,
-            'dp_colonia_postal'=>'dp_calle_pertenece', 'dp_calle'=>'dp_calle_pertenece',
-            'dp_colonia'=>'dp_colonia_postal','dp_cp'=>'dp_colonia_postal', 'dp_municipio'=>'dp_cp',
+            'com_medio_prospeccion'=>'com_prospecto', 'adm_usuario'=>'com_agente', 'dp_municipio'=>$tabla,
             'dp_estado'=>'dp_municipio','dp_pais'=>'dp_estado');
 
         $campos_obligatorios = array();

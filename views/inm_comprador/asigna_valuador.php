@@ -1,7 +1,6 @@
 <?php /** @var  gamboamartin\inmuebles\controllers\controlador_inm_ubicacion $controlador  controlador en ejecucion */ ?>
 <?php use config\views; ?>
 
-<?php echo $controlador->inputs->registro_id; ?>
 <main class="main section-color-primary">
     <div class="container">
 
