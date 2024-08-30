@@ -48,8 +48,8 @@
                             <?php echo $controlador->inputs->cp; ?>
                             <?php echo $controlador->inputs->colonia; ?>
                             <?php echo $controlador->inputs->calle; ?>
-                            <?php echo $controlador->inputs->texto_exterior; ?>
-                            <?php echo $controlador->inputs->texto_interior; ?>
+                            <?php echo $controlador->inputs->numero_exterior; ?>
+                            <?php echo $controlador->inputs->numero_interior; ?>
 
                             <?php echo $controlador->inputs->inm_estado_vivienda_id; ?>
                             <?php echo $controlador->inputs->fecha_otorgamiento_credito; ?>

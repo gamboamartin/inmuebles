@@ -286,7 +286,7 @@ class _inm_prospecto_ubicacion{
         $identificadores['dp_municipio_id']['title'] = 'Municipio';
         $identificadores['dp_municipio_id']['cols'] = 6;
         $identificadores['dp_municipio_id']['disabled'] = false;
-        $identificadores['dp_municipio_id']['columns_ds'] = array('dp_municipip_descripcion');
+        $identificadores['dp_municipio_id']['columns_ds'] = array('dp_municipio_descripcion');
 
         $identificadores['dp_estado_id']['title'] = 'Estado';
         $identificadores['dp_estado_id']['cols'] = 6;
@@ -296,7 +296,7 @@ class _inm_prospecto_ubicacion{
         $identificadores['dp_pais_id']['title'] = 'Pais';
         $identificadores['dp_pais_id']['cols'] = 6;
         $identificadores['dp_pais_id']['disabled'] = false;
-        $identificadores['dp_pais_id']['columns_ds'] = array('dp_municipio_descripcion');
+        $identificadores['dp_pais_id']['columns_ds'] = array('dp_pais_descripcion');
 
         return $identificadores;
     }
