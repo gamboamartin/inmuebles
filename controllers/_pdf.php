@@ -252,7 +252,7 @@ class _pdf{
 
     private function domicilio(stdClass $data): string
     {
-        $domicilio = $data->com_cliente['dp_calle_descripcion'].' '.$data->com_cliente['com_cliente_numero_exterior'];
+        $domicilio = $data->com_cliente['com_cliente_calle'].' '.$data->com_cliente['com_cliente_numero_exterior'];
         $domicilio .= $data->com_cliente['com_cliente_numero_interior'];
 
         return $domicilio;
