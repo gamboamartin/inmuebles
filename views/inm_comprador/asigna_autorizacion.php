@@ -17,11 +17,8 @@
                     <?php include (new views())->ruta_templates."head/subtitulo.php"; ?>
                     <?php include (new views())->ruta_templates."mensajes.php"; ?>
 
-                    <?php echo $controlador->inputs->com_cliente_id; ?>
-                    <?php echo $controlador->inputs->mts_terrenos; ?>
-                    <?php echo $controlador->inputs->mts_construidos; ?>
-                    <?php echo $controlador->inputs->valor_avaluo; ?>
-                    <?php echo $controlador->inputs->documento; ?>
+                    <?php echo $controlador->inputs->documento_sic; ?>
+                    <?php echo $controlador->inputs->documento_constancia_credito; ?>
 
                     <?php echo $controlador->inputs->btn_action_next; ?>
                     <?php echo $controlador->inputs->id_retorno; ?>
