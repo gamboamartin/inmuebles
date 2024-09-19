@@ -821,7 +821,7 @@ class controlador_inm_comprador extends _ctl_base {
             'rfc','apellido_paterno','apellido_materno','nombre','numero_exterior','numero_interior','telefono',
             'nombre_empresa_patron','nrp_nep','lada_nep','numero_nep','extension_nep','lada_com','numero_com',
             'cel_com','genero','correo_com','fecha_nacimiento','sub_cuenta','monto_final','descuento','puntos',
-            'telefono_casa','correo_empresa','mts_construidos','mts_terrenos','valor_avaluo','numero_escritura');
+            'telefono_casa','correo_empresa','mts_construidos','mts_terrenos','valor_avaluo','numero_escritura','isr');
         $keys->selects = array();
 
 
