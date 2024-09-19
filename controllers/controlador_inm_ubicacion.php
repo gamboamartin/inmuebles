@@ -199,14 +199,14 @@ class controlador_inm_ubicacion extends _ctl_base {
                 mensaje: 'Error al generar salida de template', data: $r_modifica, header: $header, ws: $ws);
         }
 
-        $documento_rppc = $this->html->input_file(cols: 12, name: 'rppc', row_upd: new stdClass(), value_vacio: false,
-            place_holder: 'RPPC');
+        $documento_poder = $this->html->input_file(cols: 12, name: 'poder', row_upd: new stdClass(), value_vacio: false,
+            place_holder: 'Poder');
         if (errores::$error) {
             return $this->retorno_error(
-                mensaje: 'Error al obtener inputs', data: $documento_rppc, header: $header, ws: $ws);
+                mensaje: 'Error al obtener inputs', data: $documento_poder, header: $header, ws: $ws);
         }
 
-        $this->inputs->documento_rppc = $documento_rppc;
+        $this->inputs->documento_poder = $documento_poder;
 
         $data_row = $this->modelo->registro(registro_id: $this->registro_id,retorno_obj: true);
         if(errores::$error){
@@ -220,6 +220,20 @@ class controlador_inm_ubicacion extends _ctl_base {
             return $this->retorno_error(mensaje: 'Error al obtener keys_selects', data:  $keys_selects, header: $header,ws:  $ws);
         }
 
+        $keys_selects = (new init())->key_select_txt(cols: 6,key: 'numero_escritura_poder', keys_selects:$keys_selects,
+            place_holder: 'No. Escritura Poder');
+        if(errores::$error){
+            return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
+        }
+
+        $fecha = $this->html->input_fecha(cols: 6, row_upd: $this->row_upd, value_vacio: false,
+            name: 'fecha_poder', place_holder: 'Fecha Poder');
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al integrar fecha',
+                data:  $fecha, header: $header,ws: $ws);
+        }
+
+        $this->inputs->fecha_poder = $fecha;
 
         $base = $this->base_upd(keys_selects: $keys_selects, params: array(),params_ajustados: array());
         if(errores::$error){
@@ -248,8 +262,7 @@ class controlador_inm_ubicacion extends _ctl_base {
         }
 
         $documento_poliza_firmada = $this->html->input_file(cols: 12, name: 'poliza_firmada', row_upd: new stdClass(),
-            value_vacio: false,
-            place_holder: 'RPPC');
+            value_vacio: false, place_holder: 'Poliza Firmada');
         if (errores::$error) {
             return $this->retorno_error(
                 mensaje: 'Error al obtener inputs', data: $documento_poliza_firmada, header: $header, ws: $ws);
@@ -295,10 +308,20 @@ class controlador_inm_ubicacion extends _ctl_base {
             return $this->retorno_error(
                 mensaje: 'Error al generar salida de template', data: $r_modifica, header: $header, ws: $ws);
         }
-        $keys_selects = array();
 
-        $keys_selects = (new init())->key_select_txt(cols: 6,key: 'nombre_beneficiario', keys_selects:$keys_selects,
-            place_holder: 'Nombre  Beneficiario');
+        $data_row = $this->modelo->registro(registro_id: $this->registro_id,retorno_obj: true);
+        if(errores::$error){
+            return $this->retorno_error(
+                mensaje: 'Error al obtener registro',data:  $data_row,header: $header,ws: $ws);
+        }
+
+        $keys_selects = (new _ubicacion())->keys_selects_base(controler: $this,data_row:  $data_row, disableds: array());
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al obtener keys_selects', data:  $keys_selects, header: $header,ws:  $ws);
+        }
+
+        $keys_selects = (new init())->key_select_txt(cols: 12,key: 'nombre_beneficiario', keys_selects:$keys_selects,
+            place_holder: 'Nombre Beneficiario');
         if(errores::$error){
             return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
@@ -314,18 +337,6 @@ class controlador_inm_ubicacion extends _ctl_base {
         if(errores::$error){
             return $this->errores->error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects);
         }
-
-        $data_row = $this->modelo->registro(registro_id: $this->registro_id,retorno_obj: true);
-        if(errores::$error){
-            return $this->retorno_error(
-                mensaje: 'Error al obtener registro',data:  $data_row,header: $header,ws: $ws);
-        }
-
-        $keys_selects = (new _ubicacion())->keys_selects_base(controler: $this,data_row:  $data_row, disableds: array());
-        if(errores::$error){
-            return $this->retorno_error(mensaje: 'Error al obtener keys_selects', data:  $keys_selects, header: $header,ws:  $ws);
-        }
-
 
         $base = $this->base_upd(keys_selects: $keys_selects, params: array(),params_ajustados: array());
         if(errores::$error){
@@ -349,7 +360,7 @@ class controlador_inm_ubicacion extends _ctl_base {
     {
         $keys = new stdClass();
         $keys->inputs = array('descripcion', 'manzana', 'lote','costo_directo','numero_exterior','numero_interior',
-            'cuenta_predial','codigo','nombre_beneficiario','no_cheque','monto','numero_escritura','fecha_poder');
+            'cuenta_predial','codigo','nombre_beneficiario','numero_cheque','monto','numero_escritura_poder');
         $keys->selects = array();
 
 

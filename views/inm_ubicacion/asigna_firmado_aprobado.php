@@ -19,9 +19,9 @@
 
                     <?php echo $controlador->inputs->documento_poliza_firmada; ?>
 
-                    <?php echo $controlador->inputs->btn_action_next; ?>
-                    <?php echo $controlador->inputs->id_retorno; ?>
-                    <?php echo $controlador->inputs->seccion_retorno; ?>
+                    <?php //echo $controlador->inputs->btn_action_next; ?>
+                    <?php //echo $controlador->inputs->id_retorno; ?>
+                    <?php //echo $controlador->inputs->seccion_retorno; ?>
 
                     <?php include (new views())->ruta_templates.'botons/submit/alta_bd.php';?>
                     </form>
