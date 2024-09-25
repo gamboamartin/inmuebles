@@ -2813,7 +2813,7 @@ class instalacion
         $out->foraneas = $result;
 
 
-        $adm_menu_descripcion = 'Ubicacion';
+        $adm_menu_descripcion = 'Ubicaciones';
         $adm_sistema_descripcion = 'inmuebles';
         $etiqueta_label = 'ubicacion etapa';
         $adm_seccion_pertenece_descripcion = 'inmuebles';
