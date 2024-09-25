@@ -220,6 +220,15 @@ class controlador_inm_ubicacion extends _ctl_base {
             return $this->retorno_error(mensaje: 'Error al obtener keys_selects', data:  $keys_selects, header: $header,ws:  $ws);
         }
 
+        $columns_ds = array('inm_notaria_id','inm_notaria_descripcion');
+        $keys_selects = $this->key_select(cols:12, con_registros: true,filtro:  array(), key: 'inm_notaria_id',
+            keys_selects:$keys_selects, id_selected: -1, label: 'Notaria',
+            columns_ds : $columns_ds);
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al maquetar key_selects',data:  $keys_selects,
+                header: $header,ws:  $ws);
+        }
+
         $keys_selects = (new init())->key_select_txt(cols: 6,key: 'numero_escritura_poder', keys_selects:$keys_selects,
             place_holder: 'No. Escritura Poder');
         if(errores::$error){
@@ -373,6 +382,7 @@ class controlador_inm_ubicacion extends _ctl_base {
         $init_data['dp_calle_pertenece'] = "gamboamartin\\direccion_postal";
 
         $init_data['inm_tipo_ubicacion'] = "gamboamartin\\inmuebles";
+        $init_data['inm_notaria'] = "gamboamartin\\inmuebles";
         $campos_view = $this->campos_view_base(init_data: $init_data,keys:  $keys);
 
         if(errores::$error){

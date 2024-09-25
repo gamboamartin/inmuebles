@@ -17,6 +17,7 @@
                     <?php include (new views())->ruta_templates."head/subtitulo.php"; ?>
                     <?php include (new views())->ruta_templates."mensajes.php"; ?>
 
+                    <?php echo $controlador->inputs->inm_notaria_id; ?>
                     <?php echo $controlador->inputs->documento_poder; ?>
                     <?php echo $controlador->inputs->numero_escritura_poder; ?>
                     <?php echo $controlador->inputs->fecha_poder; ?>
