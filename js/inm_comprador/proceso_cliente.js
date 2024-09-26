@@ -12,9 +12,9 @@ function cambiarPestanna(pestannas,pestanna) {
 
     i=0;
 
-    while (typeof listacPestannas.getElementsByTagName('div')[i] != 'undefined'){
+    while (typeof listacPestannas.getElementsByClassName('conten')[i] != 'undefined'){
         $(document).ready(function(){
-            $(listacPestannas.getElementsByTagName('div')[i]).css('display','none');
+            $(listacPestannas.getElementsByClassName('conten')[i]).css('display','none');
             $(listaPestannas.getElementsByTagName('li')[i]).css('background','');
             $(listaPestannas.getElementsByTagName('li')[i]).css('padding-bottom','');
         });

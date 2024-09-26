@@ -29,34 +29,53 @@
                     </div>
                     <body onload="javascript:cambiarPestanna(pestanas,pestana1);">
                     <div id="contenidopestanas">
-                        <div id="cpestana1">
-                            Contenido de la pestaña 1
+                        <div class="conten" id="cpestana1">
+                            <form method="post" action="<?php echo $controlador->link_rel_ubi_comp_alta_bd; ?>" class="form-additional">
+
+                                <?php echo $controlador->inputs->inm_ubicacion_id; ?>
+                                <?php echo $controlador->inputs->precio_operacion; ?>
+
+                                <?php echo $controlador->inputs->com_tipo_cliente_id; ?>
+                                <?php echo $controlador->inputs->nss; ?>
+                                <?php echo $controlador->inputs->curp; ?>
+                                <?php echo $controlador->inputs->rfc; ?>
+                                <?php echo $controlador->inputs->apellido_paterno; ?>
+                                <?php echo $controlador->inputs->apellido_materno; ?>
+                                <?php echo $controlador->inputs->nombre; ?>
+                                <?php echo $controlador->inputs->inm_comprador_id; ?>
+                                <?php echo $controlador->inputs->inm_comprador_id; ?>
+                                <?php echo $controlador->inputs->seccion_retorno; ?>
+                                <?php echo $controlador->inputs->btn_action_next; ?>
+                                <?php echo $controlador->inputs->id_retorno; ?>
+
+                                <?php include (new views())->ruta_templates.'botons/submit/alta_bd.php';?>
+                            </form>
                         </div>
-                        <div id="cpestana2">
+                        <div class="conten" id="cpestana2">
                             Contenido de la pestaña 2
                         </div>
-                        <div id="cpestana3">
+                        <div class="conten" id="cpestana3">
                             Contenido de la pestaña 1
                         </div>
-                        <div id="cpestana4">
+                        <div class="conten" id="cpestana4">
                             Contenido de la pestaña 2
                         </div>
-                        <div id="cpestana5">
+                        <div class="conten" id="cpestana5">
                             Contenido de la pestaña 1
                         </div>
-                        <div id="cpestana6">
+                        <div class="conten" id="cpestana6">
                             Contenido de la pestaña 2
                         </div>
-                        <div id="cpestana7">
+                        <div class="conten" id="cpestana7">
                             Contenido de la pestaña 1
                         </div>
-                        <div id="cpestana8">
+                        <div class="conten" id="cpestana8">
                             Contenido de la pestaña 2
                         </div>
-                        <div id="cpestana9">
+                        <div class="conten" id="cpestana9">
                             Contenido de la pestaña 1
                         </div>
-                        <div id="cpestana10">
+                        <div class="conten" id="cpestana10">
                             Contenido de la pestaña 2
                         </div>
 
