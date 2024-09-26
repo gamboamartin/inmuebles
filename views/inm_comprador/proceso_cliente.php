@@ -24,7 +24,6 @@
                             <li id="pestana7"><a href='javascript:cambiarPestanna(pestanas,pestana7);'>POR FIRMAR</a></li>
                             <li id="pestana8"><a href='javascript:cambiarPestanna(pestanas,pestana8);'>ESCRITURADO</a></li>
                             <li id="pestana9"><a href='javascript:cambiarPestanna(pestanas,pestana9);'>COTEJADO</a></li>
-                            <li id="pestana10"><a href='javascript:cambiarPestanna(pestanas,pestana10);'>COTEJO APROBADO</a></li>
                         </ul>
                     </div>
                     <body onload="javascript:cambiarPestanna(pestanas,pestana1);">
@@ -52,33 +51,65 @@
                             </form>
                         </div>
                         <div class="conten" id="cpestana2">
-                            Contenido de la pestaña 2
+                            <form method="post" action="<?php echo $controlador->link_inm_rel_cliente_valuador_alta_bd; ?>"
+                                  class="form-additional">
+                                <?php echo $controlador->inputs->com_cliente_id; ?>
+                                <?php echo $controlador->inputs->inm_valuador_id; ?>
+                                <?php include (new views())->ruta_templates.'botons/submit/alta_bd.php';?>
+                            </form>
                         </div>
                         <div class="conten" id="cpestana3">
-                            Contenido de la pestaña 1
+                            <form method="post" action="<?php echo $controlador->link_asigna_avaluo_bd; ?>"
+                                  class="form-additional" enctype="multipart/form-data">
+                                <?php echo $controlador->inputs->com_cliente_id; ?>
+                                <?php echo $controlador->inputs->mts_terrenos; ?>
+                                <?php echo $controlador->inputs->mts_construidos; ?>
+                                <?php echo $controlador->inputs->valor_avaluo; ?>
+                                <?php echo $controlador->inputs->documento; ?>
+
+                                <?php include (new views())->ruta_templates.'botons/submit/alta_bd.php';?>
+                            </form>
                         </div>
                         <div class="conten" id="cpestana4">
-                            Contenido de la pestaña 2
-                        </div>
+                            <?php echo $controlador->inputs->com_cliente_id; ?>
+
+                            <a role="button" title="Solicitud Infonavit" href="index.php?seccion=inm_comprador&amp;accion=solicitud_infonavit&amp;registro_id=55&amp;session_id=5514223136&amp;adm_menu_id=45" class="btn btn-warning " style="margin-left: 2px; margin-bottom: 2px; ">Solicitud Infonavit</a>                        </div>
                         <div class="conten" id="cpestana5">
-                            Contenido de la pestaña 1
-                        </div>
+                            <form method="post" action="<?php echo $controlador->link_asigna_avaluo_bd; ?>"
+                                  class="form-additional" enctype="multipart/form-data">
+
+                                <?php echo $controlador->inputs->documento_sic; ?>
+                                <?php echo $controlador->inputs->documento_constancia_credito; ?>
+
+                                <?php include (new views())->ruta_templates.'botons/submit/alta_bd.php';?>
+                            </form>                        </div>
                         <div class="conten" id="cpestana6">
-                            Contenido de la pestaña 2
-                        </div>
+                            <form method="post" action="<?php echo $controlador->link_asigna_firma_bd; ?>"
+                                  class="form-additional" enctype="multipart/form-data">
+                                <?php echo $controlador->inputs->documento_anexos; ?>
+                                <?php echo $controlador->inputs->documento_instruccion_credito; ?>
+                                <?php echo $controlador->inputs->documento_notificacion_descuento; ?>
+                                <?php echo $controlador->inputs->documento_isr_notaria; ?>
+                                <?php echo $controlador->inputs->isr; ?>
+                                <?php include (new views())->ruta_templates.'botons/submit/alta_bd.php';?>
+                            </form>                        </div>
                         <div class="conten" id="cpestana7">
-                            Contenido de la pestaña 1
-                        </div>
+                            <form method="post" action="<?php echo $controlador->link_asigna_escritura_bd; ?>"
+                                  class="form-additional" enctype="multipart/form-data">
+                                <?php echo $controlador->inputs->documento_validacion_poder; ?>
+                                <?php echo $controlador->inputs->documento_acuse_patron; ?>
+                                <?php echo $controlador->inputs->documento_escrituras; ?>
+                                <?php echo $controlador->inputs->numero_escritura; ?>
+                                <?php echo $controlador->inputs->fecha; ?>
+
+                                <?php include (new views())->ruta_templates.'botons/submit/alta_bd.php';?>
+                            </form>                        </div>
                         <div class="conten" id="cpestana8">
                             Contenido de la pestaña 2
                         </div>
                         <div class="conten" id="cpestana9">
                             Contenido de la pestaña 1
                         </div>
-                        <div class="conten" id="cpestana10">
-                            Contenido de la pestaña 2
-                        </div>
-
 
                 </div>
             </div>
