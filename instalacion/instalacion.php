@@ -832,15 +832,6 @@ class instalacion
         }
         $out->create = $create;
 
-        $foraneas = array();
-        $foraneas['gt_proveedor_id'] = new stdClass();
-
-        $result = $init->foraneas(foraneas: $foraneas,table:  __FUNCTION__);
-        if(errores::$error){
-            return (new errores())->error(mensaje: 'Error al ajustar foranea', data:  $result);
-        }
-        $out->foraneas = $result;
-
         return $out;
     }
 
@@ -2763,6 +2754,14 @@ class instalacion
         }
         $out->create = $create;
 
+        $foraneas = array();
+        $foraneas['gt_proveedor_id'] = new stdClass();
+
+        $result = $init->foraneas(foraneas: $foraneas,table:  __FUNCTION__);
+        if(errores::$error){
+            return (new errores())->error(mensaje: 'Error al ajustar foranea', data:  $result);
+        }
+        $out->foraneas = $result;
 
         $adm_menu_descripcion = 'Ubicaciones ';
         $adm_sistema_descripcion = 'inmuebles';
