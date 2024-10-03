@@ -1,0 +1,31 @@
+#pestanas {
+    float: top;
+}
+
+#pestanas ul{
+    margin-left: -40px;
+}
+
+#pestanas li{
+    list-style-type: none;
+    float: left;
+    text-align: center;
+    margin: 0px 2px -2px -0px;
+    background: #232F5C;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    padding: 10px;
+}
+
+#pestanas a:link{
+    text-decoration: none;
+    color: white;
+}
+
+#contenidopestanas{
+    clear: both;
+    padding: 20px 0px 20px 20px;
+    border-radius: 5px;
+    border-top-left-radius: 0px;
+    width: 1025px;
+}

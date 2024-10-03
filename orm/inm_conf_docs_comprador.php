@@ -17,13 +17,12 @@ class inm_conf_docs_comprador extends _modelo_parent{
             'inm_destino_credito'=>$tabla, 'inm_producto_infonavit'=>$tabla,'pr_sub_proceso'=>$tabla,
             'pr_proceso'=>'pr_sub_proceso');
 
-        $campos_obligatorios = array('doc_tipo_documento_id','inm_attr_tipo_credito_id','inm_destino_credito_id',
+        $campos_obligatorios = array('doc_tipo_documento_id','inm_destino_credito_id',
             'inm_producto_infonavit_id','es_obligatorio','pr_sub_proceso_id');
 
         $columnas_extra= array();
 
-        $atributos_criticos = array('doc_tipo_documento_id','inm_attr_tipo_credito_id','inm_destino_credito_id',
-            'inm_producto_infonavit_id','es_obligatorio','pr_sub_proceso_id');
+        $atributos_criticos = array('doc_tipo_documento_id');
 
         $renombres = array();
 
