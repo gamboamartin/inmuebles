@@ -340,6 +340,23 @@ class _pdf{
         return $pdf;
     }
 
+    private function genera_hoja_avaluo_1(stdClass $data, string $path_base){
+        $pdf = $this->add_template(file_plantilla: 'templates/solicitud_avaluo.pdf',page:  1,
+            path_base:  $path_base,plantilla_cargada:  false);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al agregar template', data: $pdf);
+        }
+        $pdf->SetFont('Arial', 'B', 15);
+        $pdf->SetTextColor(0, 0, 0);
+
+        $pdf_exe = $this->hoja_avaluo_1(data: $data);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al escribir en pdf', data: $pdf_exe);
+        }
+
+        return $pdf;
+    }
+
     private function genera_hoja_2(stdClass $data, PDO $link, string $path_base){
         $pdf = $this->add_template(file_plantilla: 'templates/solicitud_infonavit.pdf',page:  2,
             path_base:  $path_base,plantilla_cargada:  true);
@@ -413,6 +430,49 @@ class _pdf{
 
         return $x;
 
+    }
+
+    private function hoja_avaluo_1(stdClass $data){
+        /**
+         * 1. CRÉDITO SOLICITADO
+         */
+
+
+        $pdf = $this->apartado_1(data: $data);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al escribir en pdf', data: $pdf);
+        }
+
+        /**
+         * 2. DATOS PARA DETERMINAR EL MONTO DE CRÉDITO
+         */
+
+        $pdf->SetFont('Arial', 'B', 10);
+
+        $pdf = $this->apartado_2(data: $data);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al escribir en pdf', data: $pdf);
+        }
+
+        /**
+         * 3. DATOS DE LA VIVIENDA/TERRENO DESTINO DEL CRÉDITO
+         */
+
+
+        $pdf = $this->apartado_3(data: $data);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al escribir en pdf', data: $pdf);
+        }
+
+        /**
+         * 4. DATOS DE LA EMPRESA O PATRÓN
+         */
+
+        $pdf = $this->apartado_4(data: $data);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al escribir en pdf', data: $pdf);
+        }
+        return $pdf;
     }
 
     private function hoja_1(stdClass $data){
@@ -535,6 +595,15 @@ class _pdf{
         return $pdf_exe;
     }
 
+    private function hojas_avaluo(stdClass $data, modelo $modelo, string $path_base){
+        $pdf_exe = $this->genera_hoja_avaluo_1(data: $data,path_base: $path_base);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al escribir en pdf', data: $pdf_exe);
+        }
+
+        return $pdf_exe;
+    }
+
 
     private function keys_cliente(): array
     {
@@ -616,6 +685,21 @@ class _pdf{
             return $this->error->error(mensaje: 'Error al escribir en pdf', data: $pdf_exe);
         }
         $this->pdf->Output('solicitud.pdf', 'I');
+        return $this->pdf;
+    }
+
+    final public function solicitud_avaluo(int $inm_comprador_id, string $path_base, modelo $modelo){
+
+        $data = (new inm_comprador(link: $modelo->link))->data_pdf(inm_comprador_id: $inm_comprador_id);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al obtener datos', data: $data);
+        }
+
+        $pdf_exe = $this->hojas_avaluo(data: $data, modelo: $modelo, path_base: $path_base);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al escribir en pdf', data: $pdf_exe);
+        }
+        $this->pdf->Output('solicitud_avaluo.pdf', 'I');
         return $this->pdf;
     }
 

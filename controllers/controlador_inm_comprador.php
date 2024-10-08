@@ -1383,6 +1383,22 @@ class controlador_inm_comprador extends _ctl_base {
 
     }
 
+    public function solicitud_avaluo(bool $header, bool $ws = false)
+    {
+
+        $pdf = new Fpdi();
+        $_pdf = new _pdf(pdf: $pdf);
+
+        $pdf_exe = $_pdf->solicitud_avaluo(inm_comprador_id: $this->registro_id,path_base:  $this->path_base,
+            modelo:  $this->modelo);
+        if (errores::$error) {
+            return $this->retorno_error(mensaje: 'Error al escribir en pdf', data: $pdf_exe, header: $header, ws: $ws);
+        }
+
+        exit;
+    }
+
+
     public function solicitud_infonavit(bool $header, bool $ws = false)
     {
 
