@@ -77,6 +77,25 @@ class _pdf{
         return $pdf;
     }
 
+    private function apartado_avaluo_1(stdClass $data): Fpdi|array
+    {
+        $valida = (new valida())->valida_existencia_keys(keys: array('inm_comprador'),registro:  $data);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al validar datos', data: $valida);
+        }
+        if(!is_array($data->inm_comprador)){
+            return $this->error->error(mensaje: 'Error $data->inm_comprador no es un array', data: $data);
+        }
+
+        $pdf = $this->write( valor: $data->imp_rel_ubi_comp['inm_rel_ubi_comp_precio_operacion'],
+            x: 0, y: 0);
+        if (errores::$error) {
+            return $this->error->error(mensaje: 'Error al escribir en pdf', data: $pdf);
+        }
+
+        return $pdf;
+    }
+
     /**
      * Escribe los datos del apartado 2 de la solicitud de infonavit
      * @param stdClass $data datos de cliente
@@ -438,40 +457,11 @@ class _pdf{
          */
 
 
-        $pdf = $this->apartado_1(data: $data);
+        $pdf = $this->apartado_avaluo_1(data: $data);
         if (errores::$error) {
             return $this->error->error(mensaje: 'Error al escribir en pdf', data: $pdf);
         }
 
-        /**
-         * 2. DATOS PARA DETERMINAR EL MONTO DE CRÉDITO
-         */
-
-        $pdf->SetFont('Arial', 'B', 10);
-
-        $pdf = $this->apartado_2(data: $data);
-        if (errores::$error) {
-            return $this->error->error(mensaje: 'Error al escribir en pdf', data: $pdf);
-        }
-
-        /**
-         * 3. DATOS DE LA VIVIENDA/TERRENO DESTINO DEL CRÉDITO
-         */
-
-
-        $pdf = $this->apartado_3(data: $data);
-        if (errores::$error) {
-            return $this->error->error(mensaje: 'Error al escribir en pdf', data: $pdf);
-        }
-
-        /**
-         * 4. DATOS DE LA EMPRESA O PATRÓN
-         */
-
-        $pdf = $this->apartado_4(data: $data);
-        if (errores::$error) {
-            return $this->error->error(mensaje: 'Error al escribir en pdf', data: $pdf);
-        }
         return $pdf;
     }
 
