@@ -44,27 +44,25 @@ liga_red_social.change(function (){
     razon_social_ct.prop('required', false);
 });
 
-let btn_valida = $(".btn-success");
+document.getElementById("form_inm_prospecto_alta").addEventListener("submit", valida_registro);
 
-btn_valida.click(function() {
+function valida_registro(event) {
+    event.preventDefault();
 
+    const form = document.getElementById("form_inm_prospecto_alta");
 
-});
-
-function valida_registro( ){
     let url = "index.php?seccion=inm_prospecto&ws=1&accion=valida_prioridad&liga_red_social="+liga_red_social.val()+"&lada_com="+lada_com_ct.val()+"&numero_com="+numero_com_ct.val()+"&cel_com="+cel_com_ct.val()+"&correo_com="+correo_com_ct.val()+"&session_id="+session_id;
-
     $.ajax({
         type: 'GET',
         url: url,
     }).done(function( data ) {  // Función que se ejecuta si todo ha ido bien
-        console.log(data);
         if(data.resultado_completo){
             alert('No hay datos de contacto');
+        }else{
+            form.submit();
         }
     }).fail(function (jqXHR, textStatus, errorThrown){ // Función que se ejecuta si algo ha ido mal
         alert('Error al ejecutar');
-        console.log("The following error occured: "+ textStatus +" "+ errorThrown);
     });
 }
 nombre_ct.change(function() {
