@@ -12,6 +12,7 @@ namespace gamboamartin\inmuebles\controllers;
 use base\controller\init;
 use gamboamartin\administrador\models\adm_campo;
 use gamboamartin\calculo\calculo;
+use gamboamartin\comercial\models\com_agente;
 use gamboamartin\comercial\models\com_direccion;
 use gamboamartin\comercial\models\com_direccion_prospecto;
 use gamboamartin\comercial\models\com_prospecto;
@@ -409,14 +410,25 @@ class controlador_inm_prospecto extends _ctl_formato
             cols: 12, con_registros: true, id_selected: -1, link: $this->link, columns_ds: $columns_ds,
             filtro: $filtro, label: 'Etapa');
         if (errores::$error) {
-            $this->retorno_error(mensaje: 'Error al obtener selector de etapa', data: $pr_etapa_proceso_id, header: $header, ws: $ws);
+            return $this->retorno_error(mensaje: 'Error al obtener selector de etapa', data: $pr_etapa_proceso_id, header: $header, ws: $ws);
+        }
+
+        $com_agentes = (new com_agente(link: $this->link))->com_agentes_session();
+        if(errores::$error){
+            return $this->retorno_error(mensaje: 'Error al obtener agentes',data:  $com_agentes, header: $header, ws: $ws);
+        }
+
+        $disabled = false;
+        if(count($com_agentes) > 0){
+            $disabled = true;
         }
 
         $this->inputs->pr_etapa_proceso_id = $pr_etapa_proceso_id;
-        $hoy = date('Y-m-d');
-        $fecha = $this->html->input_fecha(cols: 12, row_upd: new stdClass(), value_vacio: false, value: $hoy);
+        $hoy = date('Y-m-d\TH:i:s');
+        $fecha = $this->html->input_fecha(cols: 12, row_upd: new stdClass(), value_vacio: false, disabled: $disabled,
+            value: $hoy, value_hora: true);
         if (errores::$error) {
-            $this->retorno_error(mensaje: 'Error al generar input fecha', data: $fecha, header: $header, ws: $ws);
+            return $this->retorno_error(mensaje: 'Error al generar input fecha', data: $fecha, header: $header, ws: $ws);
         }
 
         $this->inputs->fecha = $fecha;
@@ -431,24 +443,23 @@ class controlador_inm_prospecto extends _ctl_formato
 
         $registro = (new inm_prospecto(link: $this->link))->registro($this->registro_id);
         if (errores::$error) {
-            $this->retorno_error(mensaje: 'Error al generar link', data: $registro, header: $header, ws: $ws);
+            return $this->retorno_error(mensaje: 'Error al generar link', data: $registro, header: $header, ws: $ws);
         }
 
         $link_alta_etapa = $this->obj_link->link_con_id(
             accion: 'etapa_bd', link: $this->link, registro_id: $registro['com_prospecto_id'], seccion: 'com_prospecto');
         if (errores::$error) {
-            $this->retorno_error(mensaje: 'Error al generar link', data: $link_alta_etapa, header: $header, ws: $ws);
+            return $this->retorno_error(mensaje: 'Error al generar link', data: $link_alta_etapa, header: $header, ws: $ws);
         }
 
         $this->link_alta_etapa = $link_alta_etapa;
 
         $etapas = (new com_prospecto(link: $this->link))->etapas(com_prospecto_id: $registro['com_prospecto_id']);
         if (errores::$error) {
-            $this->retorno_error(mensaje: 'Error al obtener etapas', data: $etapas, header: $header, ws: $ws);
+            return $this->retorno_error(mensaje: 'Error al obtener etapas', data: $etapas, header: $header, ws: $ws);
         }
 
         $this->etapas = $etapas;
-
 
         return $template;
     }
